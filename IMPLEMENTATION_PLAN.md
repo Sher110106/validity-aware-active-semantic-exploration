@@ -23,7 +23,7 @@ Full technical detail (every fix, every deviation, exact evidence) lives in `run
 **In progress / next:**
 - Integrate the offline validator/calibration/risk score into the Linux policy path using the frozen v3 cache; do not start the full scene/seed matrix until that extension replay is checkable.
 - Keep the v3 cached validator/evaluator JSON as the extension-run manifest input; v3 stages 0-4 now have navigation, evaluator, and validation artifacts.
-- Generate reference graphs for the remaining three scenes only after the 25m cost/reliability check justifies scaling; the LLM-free frontier method is already proven on scene 00069.
+- Generate reference graphs for the remaining three scenes only after the cached extension replay justifies scaling; the LLM-free frontier method is already proven on scene 00069.
 
 **Not started:** Phase 7's full matrix (4 scenes × seeds 43/44, frontier baseline), Linux integration of Phase 8's code, and Phase 13's final evaluation.
 
@@ -547,7 +547,7 @@ Escalate in this order:
 - [~] 00069 / seed 42 / official ASP completes. — The full 7-item gate remains verified only on Gemini. The current OpenRouter/DeepSeek backend now has a clean bounded 25 m probe (five completed checkpoints; 250 calls), but later checkpoints dropped ensemble members and the 120 m run is not complete.
 - [x] Raw artifacts and run manifest saved. — Clean stage-0 artifacts, prompt/response log, manifest, navigation stats, and evaluator JSON are preserved under `scene00069_seed42_clean_20260913_v3` on tyrone and the small report subset is mirrored under `tyrone_mirror/`.
 - [~] Independent evaluator reproduces baseline metrics. — Evaluator is unit-tested and scored all five v3 checkpoints against the exhaustive 00069 frontier reference; the path-normalized 0–25.275 m AUC is P=0.671, R=0.241, F1=0.352, normalized GED=1.075. This is one early checkpoint run, not a scale validation.
-- [ ] All four scenes run with seed 42. — Only scene 00069 attempted, stage 0 only.
+- [ ] All four scenes run with seed 42. — Only scene 00069 attempted, through the bounded 25 m checkpoint.
 - [ ] Seeds 43 and 44 run without selective omission.
 - [~] Validator passes unit and cached-completion checks. — Offline validator, strict wire-format checks, fail-soft frontier metadata, fixture replay, and v3 cached replays pass (24 tests); ROS/ASP integration is pending on `tyrone`.
 - [~] Calibration uses only calibration scenes. — Leave-one-scene-out isotonic implementation and tests are present in `tools/asp_offline/`; fitting against the real four-scene corpus is pending.
@@ -560,7 +560,7 @@ Escalate in this order:
 2. Compare v3 survivor/removed-node rates and evaluator AUCs across official ASP, filter-only, calibration-only, and combined policies using shared completions.
 3. Only after that replay is checkable, generate the other three reference graphs and decide whether the four-scene matrix is justified.
 
-Offline development completed while the Linux host was unavailable: run `PYTHONPATH=tools python3 -m unittest discover -s tools/tests -v` and use the fixture commands in `tools/asp_offline/README.md` to smoke-test the seams. These components should be copied or mounted into the author checkout for the next integration session; no claim of a completed ASP simulation or scored scene is made by this offline work.
+Offline development and a bounded Linux baseline are complete for the current rung: run `PYTHONPATH=tools python3 -m unittest discover -s tools/tests -v` and use the fixture commands in `tools/asp_offline/README.md` to smoke-test the seams. The next integration session should mount the frozen v3 cache into the author checkout; no claim of a completed 120 m matrix or extension comparison is made yet.
 
 The existing IMPLEMENTATION_RESEARCH.md is the technical contract for the proposed validator, calibration, score, metrics, and guardrails. This file is the operational sequence for reproducing the author's simulation first.
 
