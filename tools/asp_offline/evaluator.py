@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
@@ -11,13 +12,62 @@ from .validator import _edges, _nodes
 
 
 def area_under_curve(rows: Sequence[Mapping[str, Any]], metric: str, *, budget_m: Optional[float] = None) -> float:
-    """Trapezoidal AUC over path distance, normalized by the path budget."""
-    points = [(float(r.get("path_m", r.get("checkpoint", 0.0))), float(r[metric])) for r in rows if metric in r]
+    """Trapezoidal AUC over path distance, normalized by the path budget.
+
+    When a budget is supplied, points beyond it are excluded and the curve is
+    linearly interpolated (or held at the nearest value) at both 0 and the
+    budget. This keeps a malformed/overlong replay from inflating a
+    preregistered 0--120 m AUC.
+    """
+    points = []
+    for row in rows:
+        if metric not in row:
+            continue
+        try:
+            x = float(row.get("path_m", row.get("checkpoint", 0.0)))
+            y = float(row[metric])
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(x) and math.isfinite(y):
+            points.append((x, y))
     if len(points) < 2:
         return 0.0
     points.sort(key=lambda p: p[0])
+    if budget_m is not None:
+        budget = float(budget_m)
+        if not math.isfinite(budget) or budget <= 0:
+            return 0.0
+
+        def at(x: float) -> float:
+            if x <= points[0][0]:
+                return points[0][1]
+            for (x0, y0), (x1, y1) in zip(points, points[1:]):
+                if x <= x1:
+                    if x1 == x0:
+                        return y1
+                    fraction = (x - x0) / (x1 - x0)
+                    return y0 + fraction * (y1 - y0)
+            return points[-1][1]
+
+        clipped = [(x, y) for x, y in points if 0.0 <= x <= budget]
+        if not clipped or clipped[0][0] > 0.0:
+            clipped.insert(0, (0.0, at(0.0)))
+        elif clipped[0][0] < 0.0:  # defensive; the filter above normally prevents this
+            clipped[0] = (0.0, at(0.0))
+        if clipped[-1][0] < budget:
+            clipped.append((budget, at(budget)))
+        else:
+            clipped[-1] = (budget, at(budget))
+        # Collapse duplicate checkpoints after clipping (for example, when a
+        # source replay contains two rows at the budget boundary).
+        deduped = {}
+        for x, y in clipped:
+            deduped[x] = y
+        points = sorted(deduped.items())
+        denominator = budget
+    else:
+        denominator = points[-1][0]
     area = sum((x1 - x0) * (y0 + y1) / 2.0 for (x0, y0), (x1, y1) in zip(points, points[1:]))
-    denominator = float(budget_m) if budget_m is not None else points[-1][0]
     return area / denominator if denominator > 0 else 0.0
 
 

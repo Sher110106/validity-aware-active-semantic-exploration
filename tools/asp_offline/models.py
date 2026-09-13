@@ -79,11 +79,13 @@ class ValidationIssue:
     node_id: Optional[str] = None
     severity: str = "remove"
     original_support: Optional[float] = None
+    reference_match: Optional[bool] = None
 
     def as_dict(self) -> Dict[str, Any]:
         return {"code": self.code, "message": self.message,
                 "node_id": self.node_id, "severity": self.severity,
-                "original_support": self.original_support}
+                "original_support": self.original_support,
+                "reference_match": self.reference_match}
 
 
 @dataclass

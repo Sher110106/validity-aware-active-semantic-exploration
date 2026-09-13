@@ -12,11 +12,18 @@ def score_viewpoint(
     distance_m: float,
     visible_predictions: Iterable[float] = (),
     lambda_room: float = 1.0,
-    lambda_distance: float = 1.0,
+    lambda_distance: float = 0.2,
     beta: float = 0.0,
     calibrator: Optional[Callable[[float], float]] = None,
 ) -> float:
-    """Compute U(x)=I_object+lambda_room I_room-lambda_d d-beta R."""
+    """Compute U(x)=I_object+lambda_room I_room-lambda_d d-beta R.
+
+    lambda_room/lambda_distance default to the author's own values, not
+    invented ones - read from active_semantic_perception/exploration/
+    config/pipeline_config.yaml on tyrone: UNCERTAINTY_ROOM_WEIGHT=1.0,
+    MOVE_COST_LAMBDA=0.2. beta is the proposed risk term's own weight
+    (not an ASP parameter - 0.0 recovers plain ASP scoring, matching the
+    plan's "calibration-only" ablation)."""
     supports = list(visible_predictions)
     if calibrator is not None:
         supports = [calibrator(s) for s in supports]
