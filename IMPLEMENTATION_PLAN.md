@@ -545,7 +545,7 @@ Escalate in this order:
 - [x] Habitat-Sim v0.3.3 imports with intended flags. — `HEADLESS=1` deviation (tyrone has no attached display), verified real (non-black) rendering after a separate Docker/EGL fix (DEVIATIONS.md #11).
 - [x] YOSO weights and all four HM3D scenes registered.
 - [~] 00069 / seed 42 / official ASP completes. — The full 7-item gate remains verified only on Gemini. The current OpenRouter/DeepSeek backend now has a clean bounded 25 m probe (five completed checkpoints; 250 calls), but later checkpoints dropped ensemble members and the 120 m run is not complete.
-- [x] Raw artifacts and run manifest saved. — Clean stage-0 artifacts, prompt/response log, manifest, navigation stats, and evaluator JSON are preserved under `scene00069_seed42_clean_20260913_v3` on tyrone and the small report subset is mirrored under `tyrone_mirror/`.
+- [x] Raw artifacts and run manifest saved. — Clean stage-0 artifacts and the bounded v3 checkpoint artifacts, prompt/response logs, manifests, navigation stats, and evaluator JSON are preserved on tyrone; the small report subsets are mirrored under `tyrone_mirror/`.
 - [~] Independent evaluator reproduces baseline metrics. — Evaluator is unit-tested and scored all five v3 checkpoints against the exhaustive 00069 frontier reference; the path-normalized 0–25.275 m AUC is P=0.671, R=0.241, F1=0.352, normalized GED=1.075. This is one early checkpoint run, not a scale validation.
 - [ ] All four scenes run with seed 42. — Only scene 00069 attempted, through the bounded 25 m checkpoint.
 - [ ] Seeds 43 and 44 run without selective omission.
