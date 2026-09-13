@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
 
 from .geometry import distance
 from .models import Graph, Node
@@ -67,7 +67,7 @@ def evaluate_graph(predicted: Mapping[str, Any], reference: Mapping[str, Any]) -
             "object_tp": float(object_tp), "room_tp": float(room_tp)}
 
 
-def evaluate_run(run_dir: str | Path, reference_graph: str | Path | Mapping[str, Any]) -> List[Dict[str, Any]]:
+def evaluate_run(run_dir: Union[str, Path], reference_graph: Union[str, Path, Mapping[str, Any]]) -> List[Dict[str, Any]]:
     """Evaluate JSON checkpoint graphs in a cached run directory."""
     run_path = Path(run_dir)
     if isinstance(reference_graph, Mapping):
