@@ -1,0 +1,3 @@
+```yaml
+{"nodes":[{"id":"room0","type":"room","label":"living","center":[0,0,0],"dimensions":[10,3,10]},{"id":"wall0","type":"structure","label":"wall","center":[4,0,0],"dimensions":[0.2,3,10]},{"id":"chair0","type":"object","label":"chair","center":[0,0,0],"dimensions":[1,1,1],"room_id":"room0","support":0.75}],"edges":[{"source":"chair0","target":"room0"}]}
+```
