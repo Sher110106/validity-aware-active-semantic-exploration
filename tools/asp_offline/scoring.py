@@ -22,8 +22,20 @@ def score_viewpoint(
     invented ones - read from active_semantic_perception/exploration/
     config/pipeline_config.yaml on tyrone: UNCERTAINTY_ROOM_WEIGHT=1.0,
     MOVE_COST_LAMBDA=0.2. beta is the proposed risk term's own weight
-    (not an ASP parameter - 0.0 recovers plain ASP scoring, matching the
-    plan's "calibration-only" ablation)."""
+    (not an ASP parameter - 0.0 recovers plain ASP scoring).
+
+    `calibrator` is an uncalibrated-support passthrough when None: `supports`
+    is used as raw ensemble support s_j (fraction of K completions
+    containing a node), with no monotone map applied. A real calibrator
+    only reaches this argument via `fit_leave_one_scene_out`
+    (calibration.py), which requires reference graphs for at least 4
+    scenes rotated 3-vs-1 per IMPLEMENTATION_RESEARCH.md section 4.2 - as
+    of 2026-09-14 only one scene (00069) has one, so `fit_leave_one_scene_out`
+    raises rather than silently fitting on too few scenes (see its
+    docstring). Any run that passes calibrator=None is reporting an
+    UNCALIBRATED support-threshold policy, not the paper's proposed
+    calibration - label it that way in any output/report, never as
+    "calibration-only"."""
     supports = list(visible_predictions)
     if calibrator is not None:
         supports = [calibrator(s) for s in supports]

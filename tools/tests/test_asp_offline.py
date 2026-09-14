@@ -11,6 +11,7 @@ from asp_offline.author_io import normalize_author_graph
 from asp_offline.evaluator import area_under_curve, evaluate_graph, evaluate_run
 from asp_offline.models import ValidationIssue
 from asp_offline.scoring import score_viewpoint
+from asp_offline.support_policy import support_filtered_graph, support_scores
 from asp_offline.validator import ValidationConfig, label_against_reference, validate_completion, validate_ensemble
 
 
@@ -252,6 +253,47 @@ class EvaluatorTests(unittest.TestCase):
     def test_path_auc_ignores_rows_beyond_budget(self):
         rows = [{"path_m": 0, "object_f1": 0.0}, {"path_m": 120, "object_f1": 1.0}, {"path_m": 240, "object_f1": 1.0}]
         self.assertAlmostEqual(area_under_curve(rows, "object_f1", budget_m=120), 0.5)
+
+
+class SupportPolicyTests(unittest.TestCase):
+    """IMPLEMENTATION_PLAN.md section 17 step 2's support-threshold-only and
+    filter+support-threshold ablation variants (extension_policy_replay.py) -
+    NOT calibration (see support_policy.py and scoring.py docstrings for why
+    real leave-one-scene-out calibration isn't computable yet)."""
+
+    OBSERVED = {"nodes": [{"id": "room0", "type": "room", "label": "living", "center": [0, 0, 0], "dimensions": [10, 3, 10], "observed": True}], "edges": []}
+
+    def _completion(self, node):
+        return {"nodes": self.OBSERVED["nodes"] + [node], "edges": []}
+
+    def test_well_agreed_node_survives_a_mid_threshold(self):
+        chair_a = self._completion({"id": "chair_a", "type": "object", "label": "chair", "center": [1, 1, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        chair_b = self._completion({"id": "chair_b", "type": "object", "label": "chair", "center": [1.1, 1, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        lamp = self._completion({"id": "lamp_a", "type": "object", "label": "lamp", "center": [5, 5, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        ensemble = [chair_a, chair_b, lamp]
+
+        chair_support = support_scores(chair_a, ensemble)
+        self.assertAlmostEqual(chair_support[0].support, 2 / 3)
+        lamp_support = support_scores(lamp, ensemble)
+        self.assertAlmostEqual(lamp_support[0].support, 1 / 3)
+
+    def test_threshold_between_the_two_supports_separates_them(self):
+        chair_a = self._completion({"id": "chair_a", "type": "object", "label": "chair", "center": [1, 1, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        chair_b = self._completion({"id": "chair_b", "type": "object", "label": "chair", "center": [1.1, 1, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        lamp = self._completion({"id": "lamp_a", "type": "object", "label": "lamp", "center": [5, 5, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        ensemble = [chair_a, chair_b, lamp]
+
+        kept_chair = support_filtered_graph(self.OBSERVED, chair_a, ensemble, tau=0.5)
+        self.assertIn("chair_a", {n["id"] for n in kept_chair["nodes"]})
+
+        dropped_lamp = support_filtered_graph(self.OBSERVED, lamp, ensemble, tau=0.5)
+        self.assertNotIn("lamp_a", {n["id"] for n in dropped_lamp["nodes"]})
+        self.assertEqual(dropped_lamp["support_threshold"], {"tau": 0.5, "kept": 0, "dropped": 1})
+
+    def test_tau_zero_keeps_every_predicted_node(self):
+        lamp = self._completion({"id": "lamp_a", "type": "object", "label": "lamp", "center": [5, 5, 0], "dimensions": [1, 1, 1], "room_id": "room0"})
+        graph = support_filtered_graph(self.OBSERVED, lamp, [lamp], tau=0.0)
+        self.assertIn("lamp_a", {n["id"] for n in graph["nodes"]})
 
 
 if __name__ == "__main__":
