@@ -1,0 +1,17 @@
+{
+  "order": "seed-major",
+  "runs": [
+    {"scene": "00069", "seed": 42},
+    {"scene": "00573", "seed": 42},
+    {"scene": "00853", "seed": 42},
+    {"scene": "00871", "seed": 42},
+    {"scene": "00069", "seed": 43},
+    {"scene": "00573", "seed": 43},
+    {"scene": "00853", "seed": 43},
+    {"scene": "00871", "seed": 43},
+    {"scene": "00069", "seed": 44},
+    {"scene": "00573", "seed": 44},
+    {"scene": "00853", "seed": 44},
+    {"scene": "00871", "seed": 44}
+  ]
+}

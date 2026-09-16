@@ -1,0 +1,14 @@
+[Unit]
+Description=ASP 12-run matrix supervisor
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/sher/active-semantic-perception-workspace
+ExecStart=/usr/bin/python3 /home/sher/active-semantic-perception-workspace/tools/matrix_supervisor/supervisor.py --daemon
+Restart=always
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,15 @@
+{
+  "ambiguous_stall_seconds": 1800,
+  "display": 99,
+  "future_max_calls": 3000,
+  "graceful_stop_seconds": 180,
+  "max_attempts": 2,
+  "max_tokens": 16000,
+  "min_free_disk_gb": 25.0,
+  "paused": false,
+  "poll_seconds": 60,
+  "reasoning_effort": "low",
+  "resume_generation": 1,
+  "startup_grace_seconds": 180,
+  "target_path_m": 120.0
+}
