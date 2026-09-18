@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "prospective motion event",
+  "type": "object",
+  "required": ["event_id", "previous_pose", "requested_pose", "taxonomy", "controller_mode"],
+  "properties": {
+    "event_id": {"type": "string"},
+    "previous_pose": {"$ref": "#/$defs/pose"},
+    "requested_pose": {"$ref": "#/$defs/pose"},
+    "result_pose": {"anyOf": [{"$ref": "#/$defs/pose"}, {"type": "null"}]},
+    "taxonomy": {"enum": ["planner_failure", "object_box_overlap", "navmesh_audit_rejection", "navmesh_audit_clipping", "physical_contact", "blocked_motion", "unknown"]},
+    "controller_mode": {"enum": ["passive", "collision_aware_experiment"]}
+  },
+  "$defs": {"pose": {"type": "object", "required": ["position"], "properties": {"position": {"type": "array", "minItems": 3, "maxItems": 3}, "rotation": {"type": ["array", "null"]}}}}
+}
