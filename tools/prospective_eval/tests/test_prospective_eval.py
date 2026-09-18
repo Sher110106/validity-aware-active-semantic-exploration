@@ -107,6 +107,16 @@ class Tests(unittest.TestCase):
         adapter = FakeAdapter()
         with self.assertRaises(RuntimeError): BranchRunner(adapter).run_pair(lambda: setattr(adapter, "external", "changed"), lambda: None)
 
+    def test_append_log_refuses_symlink_even_when_target_is_inside_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            real = root / "other.jsonl"
+            real.write_text("")
+            link = root / "events.jsonl"
+            link.symlink_to(real)
+            with self.assertRaises(ValueError):
+                AppendOnlyLog(str(link), root=directory)
+
     def test_append_log_chain_and_tamper_detection(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "events.jsonl"

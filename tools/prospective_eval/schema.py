@@ -199,7 +199,10 @@ class AppendOnlyLog:
 
     def __init__(self, path: str, *, root: str) -> None:
         import fcntl
-        self.path = Path(path).resolve()
+        unresolved = Path(path)
+        if unresolved.exists() and unresolved.is_symlink():
+            raise ValueError("refusing symlink log")
+        self.path = unresolved.resolve()
         self.root = Path(root).resolve()
         if self.root not in self.path.parents:
             raise ValueError("log path must be contained by root")
