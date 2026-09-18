@@ -103,7 +103,7 @@ def _secure_parent(path: Path) -> None:
         current /= component
         if current.exists() and current.is_symlink(): raise ContractError("symlink in secure path")
         current.mkdir(exist_ok=True)
-        if not stat.S_ISDIR(current.stat(follow_symlinks=False).st_mode): raise ContractError("parent is not directory")
+        if not stat.S_ISDIR(os.lstat(current).st_mode): raise ContractError("parent is not directory")
 
 
 def secure_attempt(root: Path, campaign: str, scene: str, seed: int, policy: str, attempt: int) -> Path:
@@ -139,7 +139,7 @@ def validate_artifacts(run_dir: Path, required: tuple[str, ...]) -> tuple[bool, 
     except (OSError, ContractError) as exc: return False, str(exc)
     for relative in required:
         path = run_dir / relative
-        if path.is_symlink() or not path.is_file() or not stat.S_ISREG(path.stat(follow_symlinks=False).st_mode): return False, f"unsafe artifact: {relative}"
+        if path.is_symlink() or not path.is_file() or not stat.S_ISREG(os.lstat(path).st_mode): return False, f"unsafe artifact: {relative}"
         if hashlib.sha256(path.read_bytes()).hexdigest() != hashes[relative]: return False, f"artifact hash mismatch: {relative}"
     return True, "validated"
 
