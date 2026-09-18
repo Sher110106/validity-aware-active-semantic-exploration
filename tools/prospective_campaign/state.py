@@ -82,7 +82,9 @@ class CampaignSupervisor:
             return False
         if member in self.state.completed_members:
             return True  # already certified; idempotent no-op, no duplicate event
-        if self.state.phase != Phase.RUNNING:
+        if self.state.phase not in (Phase.RUNNING.value, Phase.RESERVED.value):
+            # RUNNING: no member certified yet. RESERVED: exactly one is; the
+            # other must still be certifiable or a pair could never complete.
             return False
         ok, _ = validate_artifacts(run_path, required)
         if not ok: return False

@@ -141,6 +141,29 @@ class TestCampaign(unittest.TestCase):
             event_lines = (root / 'events.jsonl').read_text().splitlines()
             self.assertEqual(len(event_lines), 2)  # reserve + one complete, no duplicate
 
+    def test_certify_member_reaches_complete_for_both_ordered_members(self):
+        # Regression: certify_member used to gate on phase == RUNNING, but the
+        # first certification moves the pair to RESERVED -- which meant the
+        # second, different member could never be certified and a pair could
+        # never reach COMPLETE.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            status_path = root / 'status.json'
+            events = EventLog(root / 'events.jsonl')
+            events.append('reserve', sequence=0, run_id='run', allocation_id='alloc')
+            state = PairState(2, 'campaign', 'block', 'pair', 'run', 1, 'alloc', 'a' * 64, 'b' * 64,
+                              (BASELINE, EXPERIMENTAL), (), Phase.RUNNING.value, 0)
+            save_state(status_path, state)
+            supervisor = CampaignSupervisor(status_path, events, runner=None)
+            for policy in (BASELINE, EXPERIMENTAL):
+                run = root / policy
+                artifact = run / 'trajectory.json'; run.mkdir(); artifact.write_text('ok')
+                digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+                (run / 'ARTIFACTS.sha256').write_text(f'{digest}  trajectory.json\n')
+                self.assertTrue(supervisor.certify_member(run, ('trajectory.json',), policy))
+            self.assertEqual(supervisor.state.phase, Phase.COMPLETE.value)
+            self.assertEqual(set(supervisor.state.completed_members), {BASELINE, EXPERIMENTAL})
+
     def test_event_allowlist_and_chaining(self):
         with tempfile.TemporaryDirectory() as tmp:
             log = EventLog(Path(tmp) / 'events.jsonl'); log.append('reserve', sequence=0, run_id='run', allocation_id='alloc')
