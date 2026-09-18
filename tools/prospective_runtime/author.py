@@ -36,8 +36,13 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
     contents = list(initial_contents)
     for turn in range(max_turns):
         request = request_for_turn(contents, seed=seed_for_turn(turn), max_output_tokens=max_output_tokens, tools=tools)
-        turn_context = RequestContext(context.allocation_id, context.run_id, context.stage_id,
-                                      context.member_id, f"{context.turn_id}:{turn}", context.trusted_input_token_bound)
+        turn_context = RequestContext(
+            allocation_id=context.allocation_id, campaign_id=context.campaign_id,
+            phase_id=context.phase_id, run_id=context.run_id, stage_id=context.stage_id,
+            member_id=context.member_id, turn_id=f"{context.turn_id}:{turn}",
+            attempt_id=f"{context.attempt_id}:{turn}",
+            trusted_input_token_bound=context.trusted_input_token_bound,
+        )
         response = transport.generate(request, context=turn_context)
         if not response.function_calls:
             return response

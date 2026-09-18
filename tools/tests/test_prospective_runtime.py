@@ -31,8 +31,9 @@ def member(name: str, *, observed=OBSERVED):
 
 
 def make_context(**overrides) -> RequestContext:
-    values = dict(allocation_id="alloc", run_id="run", stage_id="stage",
-                  member_id="member", turn_id="turn", trusted_input_token_bound=10)
+    values = dict(allocation_id="alloc", campaign_id="campaign", phase_id="engineering",
+                  run_id="run", stage_id="stage", member_id="member", turn_id="turn",
+                  attempt_id="attempt", trusted_input_token_bound=10)
     values.update(overrides)
     return RequestContext(**values)
 
@@ -42,8 +43,10 @@ class RecordingBroker:
         self.calls: list[str] = []
         self.reservation_id = "reservation-1"
 
-    def reserve(self, *, context, request_hash):
+    def reserve(self, *, context, request_hash, max_output_tokens):
         self.calls.append("reserve")
+        self.last_max_output_tokens = max_output_tokens
+        self.contexts = getattr(self, "contexts", []) + [context]
         return types.SimpleNamespace(reservation_id=self.reservation_id, request_hash=request_hash)
 
     def dispatch(self, *, reservation, receipt):
@@ -148,8 +151,8 @@ class TransportTests(unittest.TestCase):
 
     def test_reservation_hash_mismatch_is_rejected(self):
         class MismatchedBroker(RecordingBroker):
-            def reserve(self, *, context, request_hash):
-                super().reserve(context=context, request_hash=request_hash)
+            def reserve(self, *, context, request_hash, max_output_tokens):
+                super().reserve(context=context, request_hash=request_hash, max_output_tokens=max_output_tokens)
                 return types.SimpleNamespace(reservation_id=self.reservation_id, request_hash="wrong")
 
         broker = MismatchedBroker()
@@ -168,8 +171,21 @@ class TransportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             make_context(run_id="").validate()
         with self.assertRaises(ValueError):
+            make_context(campaign_id="").validate()
+        with self.assertRaises(ValueError):
+            make_context(attempt_id="").validate()
+        with self.assertRaises(ValueError):
             make_context(trusted_input_token_bound=-1).validate()
+        with self.assertRaises(ValueError):
+            make_context(retry_of="").validate()
         make_context().validate()
+        make_context(retry_of="attempt-0").validate()
+
+    def test_broker_reserve_receives_the_exact_max_output_tokens(self):
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: gemini_payload())
+        transport.generate(make_request(max_output_tokens=42), context=make_context())
+        self.assertEqual(broker.last_max_output_tokens, 42)
 
     def test_request_shape_is_strictly_author_faithful(self):
         broker = RecordingBroker()
@@ -240,6 +256,25 @@ class AuthorTests(unittest.TestCase):
         )
         self.assertEqual(result.text, "done")
         self.assertEqual(executed, ["move"])
+
+    def test_run_author_turns_gives_every_turn_a_unique_attempt_and_turn_id(self):
+        # attempt_id feeds the real ledger's UNIQUE(campaign_id, attempt_id)
+        # constraint -- a repeated attempt_id across turns would make the
+        # second turn's reservation collide with the first's.
+        broker = RecordingBroker()
+        responses = [gemini_payload(), gemini_payload(), gemini_payload(candidates=[{
+            "finishReason": "STOP", "content": {"role": "model", "parts": [{"text": "done"}]},
+        }])]
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: responses.pop(0))
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=make_context(), seed_for_turn=lambda turn: turn,
+            max_output_tokens=10, execute_tool=lambda call: {"ok": True},
+        )
+        attempt_ids = [c.attempt_id for c in broker.contexts]
+        turn_ids = [c.turn_id for c in broker.contexts]
+        self.assertEqual(len(attempt_ids), len(set(attempt_ids)))
+        self.assertEqual(len(turn_ids), len(set(turn_ids)))
 
     def test_run_author_turns_requires_executor_for_function_calls(self):
         broker = RecordingBroker()
