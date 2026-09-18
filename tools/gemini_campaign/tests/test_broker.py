@@ -6,19 +6,19 @@ import threading
 import unittest
 from pathlib import Path
 
-from tools.gemini_campaign.adapter import Broker, TransportFailure, parse_response
-from tools.gemini_campaign.config import (
+from gemini_campaign.adapter import Broker, TransportFailure, parse_response
+from gemini_campaign.config import (
     MODEL_ID,
     NORMAL_CEILING_MICROUSD,
     OUTPUT_LIMIT,
     THINKING_LEVEL,
     cost_microdollars,
 )
-from tools.gemini_campaign.credentials import load_credential
-from tools.gemini_campaign.errors import AccountingHalt, CredentialError, LedgerError, PolicyError
-from tools.gemini_campaign.events import append_event
-from tools.gemini_campaign.estimator import NativeCount, conservative_input_bound, request_hash
-from tools.gemini_campaign.ledger import Ledger, RecoveryControl
+from gemini_campaign.credentials import load_credential
+from gemini_campaign.errors import AccountingHalt, CredentialError, LedgerError, PolicyError
+from gemini_campaign.events import append_event
+from gemini_campaign.estimator import NativeCount, conservative_input_bound, request_hash
+from gemini_campaign.ledger import Ledger, RecoveryControl
 
 META = dict(campaign_id="campaign", phase_id="engineering", run_id="run", stage_id="stage", member_id="member", tool_turn_id="turn")
 
