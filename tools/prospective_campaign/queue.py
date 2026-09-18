@@ -37,6 +37,17 @@ class Pair:
         return f"{self.scene}-seed{self.seed}-{self.order}-{self.horizon_m}m"
 
     @property
+    def slug(self) -> str:
+        """A `control.SLUG`-safe form of `id`, for use as e.g. PairState.pair_id.
+
+        `id`'s arrow (O→E / E→O) is not ASCII and fails control.py's
+        `^[a-z0-9][a-z0-9_-]{0,63}$` identifier regex, so nothing in this
+        package can pass `id` itself into save_state()/CampaignLedgerAdapter.
+        """
+        direction = "o2e" if self.order == "O→E" else "e2o"
+        return f"{self.scene}-seed{self.seed}-{direction}-{self.horizon_m}m"
+
+    @property
     def policies(self) -> tuple[str, str]:
         return (BASELINE, EXPERIMENTAL) if self.order == 'O→E' else (EXPERIMENTAL, BASELINE)
 
