@@ -9,7 +9,7 @@ from the environment.
 
 **The pinned checkout is never touched.** This overlay only ever gets
 applied to a *sibling* checkout of the same pinned commit
-(`f1ea141b1886d33ab8f4e4b791db4d3c92150b27`), created once via:
+(`f1ea141b1886d33ab8f4e4b791db4d3c92150b27`):
 
 ```sh
 AC=/home/sher/active-semantic-perception-workspace/catkin_ws/src/active_semantic_perception
@@ -17,6 +17,25 @@ SIB=/home/sher/active-semantic-perception-workspace/catkin_ws/src/active_semanti
 git clone "$AC" "$SIB"
 cd "$SIB" && git checkout f1ea141b1886d33ab8f4e4b791db4d3c92150b27
 ```
+
+**A plain `git clone` + `checkout` is not enough by itself.** The pinned
+checkout carries its own uncommitted, documented working-tree deviations
+(`DEVIATIONS.md` #41/#42 and others -- crash fixes applied directly to the
+live checkout, deliberately never committed, so the git commit stays a
+clean provenance reference) -- that is the actual operative baseline the
+pipeline runs with day to day, not `git show <pinned commit>` in
+isolation. Before treating a fresh sibling clone as ready: `git status`/
+`git diff HEAD` in the *pinned* checkout to see what's currently
+uncommitted there, and copy those same files into the sibling (as of this
+writing: `exploration/config/frontier_config.yaml`,
+`exploration/config/pipeline_config.yaml`,
+`mapping/clio/clio_ros/launch/realsense.launch` -- see
+`PROSPECTIVE_SIBLING_NOTES.md` in the sibling itself for exactly when this
+was last done and what was copied). `exploration/scripts/llm_completion.py`
+does **not** need this same manual sync -- `pinned_reference/llm_completion.py`
+in this overlay directory was already captured from that same live
+working tree (hash `029d0413...`), not from the bare git commit, so it
+already reflects those deviations; the overlay is built on top of it.
 
 ## What changed, and why only this
 
