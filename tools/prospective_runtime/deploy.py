@@ -17,6 +17,13 @@ def deploy(source: Union[str, Path], destination: Union[str, Path], files: List[
         actual = file_sha256(src)
         if expected.get(rel) != actual:
             raise ValueError(f"source hash drift: {rel}")
+        target = destination / rel
+        if target.exists() or target.is_symlink():
+            raise ValueError(f"destination file already exists: {rel}")
+        for parent in target.parents:
+            if parent == destination: break
+            if parent.is_symlink():
+                raise ValueError(f"destination path traverses a symlink: {rel}")
     if dry_run: return
     for rel in files:
         target = destination / rel
