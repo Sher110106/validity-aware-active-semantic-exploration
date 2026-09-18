@@ -276,6 +276,32 @@ class AuthorTests(unittest.TestCase):
         self.assertEqual(len(attempt_ids), len(set(attempt_ids)))
         self.assertEqual(len(turn_ids), len(set(turn_ids)))
 
+    def test_run_author_turns_echoes_the_function_call_id_in_its_response(self):
+        # google.genai.types.FunctionCall/FunctionResponse both carry `id`,
+        # required to correlate a response when a turn has more than one
+        # parallel call (verified against the real SDK's field shape).
+        broker = RecordingBroker()
+        responses = [gemini_payload(candidates=[{"finishReason": "STOP", "content": {"role": "model", "parts": [
+            {"functionCall": {"name": "move", "args": {"x": 1}, "id": "call-1"}},
+        ]}}]), gemini_payload(candidates=[{"finishReason": "STOP", "content": {"role": "model", "parts": [
+            {"text": "done"},
+        ]}}])]
+        captured_bodies = []
+
+        def http(*args, **kwargs):
+            captured_bodies.append(json.loads(kwargs["body"]))
+            return responses.pop(0)
+
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=http)
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=make_context(), seed_for_turn=lambda turn: turn,
+            max_output_tokens=10, execute_tool=lambda call: {"ok": True},
+        )
+        second_request_contents = captured_bodies[1]["contents"]
+        function_response_part = second_request_contents[-1]["parts"][0]["functionResponse"]
+        self.assertEqual(function_response_part["id"], "call-1")
+
     def test_run_author_turns_requires_executor_for_function_calls(self):
         broker = RecordingBroker()
         transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: gemini_payload())

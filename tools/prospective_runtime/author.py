@@ -25,7 +25,16 @@ def _function_response(call: Mapping[str, Any], result: Mapping[str, Any]) -> di
     name = call.get("name")
     if not isinstance(name, str) or not name or not isinstance(result, Mapping):
         raise ValueError("tool result must have an exact function name and structured response")
-    return {"name": name, "response": dict(result)}
+    response: dict[str, Any] = {"name": name, "response": dict(result)}
+    call_id = call.get("id")
+    if call_id is not None:
+        # Required to correlate a FunctionResponse with its FunctionCall when
+        # a turn contains more than one parallel call (google.genai.types
+        # FunctionCall/FunctionResponse both carry `id`, serialized as-is).
+        if not isinstance(call_id, str) or not call_id:
+            raise ValueError("function call id must be a non-empty string when present")
+        response["id"] = call_id
+    return response
 
 
 def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapping[str, Any]], *,
