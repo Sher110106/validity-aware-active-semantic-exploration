@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2160" viewBox="0 0 1600 2160">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#24211d}.title{font-size:38px;font-weight:700}.panel{font-size:25px;font-weight:700}.axis{font-size:17px}.note{font-size:15px;fill:#5d574f}.legend{font-size:17px}</style>
+<text class="title" x="70" y="65">LOSO reliability — object hypotheses</text>
+<circle cx="82" cy="112" r="7" fill="#77736d"/><text class="legend" x="99" y="118">Raw support</text>
+<rect x="250" y="105" width="14" height="14" fill="#2563a6"/><text class="legend" x="275" y="118">LOSO calibrated</text>
+<line x1="475" y1="112" x2="515" y2="112" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/><text class="legend" x="525" y="118">Perfect calibration</text>
+<text class="panel" x="70" y="180">00069</text>
+<rect x="165" y="225" width="455" height="455" fill="#ffffff" stroke="#d8d1c7" stroke-width="2"/>
+<line x1="165.00" y1="225" x2="165.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="680.00" x2="620" y2="680.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="165.00" y="708">0.0</text>
+<text class="axis" text-anchor="end" x="153" y="686.00">0.0</text>
+<line x1="256.00" y1="225" x2="256.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="589.00" x2="620" y2="589.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="256.00" y="708">0.2</text>
+<text class="axis" text-anchor="end" x="153" y="595.00">0.2</text>
+<line x1="347.00" y1="225" x2="347.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="498.00" x2="620" y2="498.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="347.00" y="708">0.4</text>
+<text class="axis" text-anchor="end" x="153" y="504.00">0.4</text>
+<line x1="438.00" y1="225" x2="438.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="407.00" x2="620" y2="407.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="438.00" y="708">0.6</text>
+<text class="axis" text-anchor="end" x="153" y="413.00">0.6</text>
+<line x1="529.00" y1="225" x2="529.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="316.00" x2="620" y2="316.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="529.00" y="708">0.8</text>
+<text class="axis" text-anchor="end" x="153" y="322.00">0.8</text>
+<line x1="620.00" y1="225" x2="620.00" y2="680" stroke="#ece7df"/>
+<line x1="165" y1="225.00" x2="620" y2="225.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="620.00" y="708">1.0</text>
+<text class="axis" text-anchor="end" x="153" y="231.00">1.0</text>
+<line x1="165" y1="680" x2="620" y2="225" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/>
+<text class="axis" text-anchor="middle" x="392.5" y="738">Mean predicted probability</text>
+<text class="axis" text-anchor="middle" transform="translate(103,452.5) rotate(-90)">Observed positive fraction</text>
+<circle cx="278.75" cy="676.20" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=359</title></circle>
+<circle cx="392.50" cy="680.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=27</title></circle>
+<circle cx="506.25" cy="680.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=5</title></circle>
+<circle cx="620.00" cy="680.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=2</title></circle>
+<rect x="159.62" y="668.51" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=391</title></rect>
+<rect x="409.78" y="672.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=2</title></rect>
+<text class="note" x="644" y="255">n = 393</text>
+<text class="note" x="644" y="280">positive rate = 0.0076</text>
+<text class="note" x="644" y="305">raw Brier = 0.0903</text>
+<text class="note" x="644" y="330">raw ECE = 0.2697</text>
+<text class="note" x="644" y="355">cal Brier = 0.0092</text>
+<text class="note" x="644" y="380">cal ECE = 0.0047</text>
+<text class="note" x="644" y="405">train-rate Brier = 0.0076</text>
+<text class="panel" x="830" y="180">00573</text>
+<rect x="925" y="225" width="455" height="455" fill="#ffffff" stroke="#d8d1c7" stroke-width="2"/>
+<line x1="925.00" y1="225" x2="925.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="680.00" x2="1380" y2="680.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="925.00" y="708">0.0</text>
+<text class="axis" text-anchor="end" x="913" y="686.00">0.0</text>
+<line x1="1016.00" y1="225" x2="1016.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="589.00" x2="1380" y2="589.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1016.00" y="708">0.2</text>
+<text class="axis" text-anchor="end" x="913" y="595.00">0.2</text>
+<line x1="1107.00" y1="225" x2="1107.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="498.00" x2="1380" y2="498.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1107.00" y="708">0.4</text>
+<text class="axis" text-anchor="end" x="913" y="504.00">0.4</text>
+<line x1="1198.00" y1="225" x2="1198.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="407.00" x2="1380" y2="407.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1198.00" y="708">0.6</text>
+<text class="axis" text-anchor="end" x="913" y="413.00">0.6</text>
+<line x1="1289.00" y1="225" x2="1289.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="316.00" x2="1380" y2="316.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1289.00" y="708">0.8</text>
+<text class="axis" text-anchor="end" x="913" y="322.00">0.8</text>
+<line x1="1380.00" y1="225" x2="1380.00" y2="680" stroke="#ece7df"/>
+<line x1="925" y1="225.00" x2="1380" y2="225.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1380.00" y="708">1.0</text>
+<text class="axis" text-anchor="end" x="913" y="231.00">1.0</text>
+<line x1="925" y1="680" x2="1380" y2="225" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/>
+<text class="axis" text-anchor="middle" x="1152.5" y="738">Mean predicted probability</text>
+<text class="axis" text-anchor="middle" transform="translate(863,452.5) rotate(-90)">Observed positive fraction</text>
+<circle cx="1038.75" cy="676.99" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=605</title></circle>
+<circle cx="1152.50" cy="664.58" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=59</title></circle>
+<circle cx="1266.25" cy="680.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=7</title></circle>
+<circle cx="1380.00" cy="680.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=2</title></circle>
+<rect x="919.12" y="667.93" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=671</title></rect>
+<rect x="1047.00" y="672.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=2</title></rect>
+<text class="note" x="1404" y="255">n = 673</text>
+<text class="note" x="1404" y="280">positive rate = 0.0089</text>
+<text class="note" x="1404" y="305">raw Brier = 0.0899</text>
+<text class="note" x="1404" y="330">raw ECE = 0.2704</text>
+<text class="note" x="1404" y="355">cal Brier = 0.0091</text>
+<text class="note" x="1404" y="380">cal ECE = 0.0051</text>
+<text class="note" x="1404" y="405">train-rate Brier = 0.0089</text>
+<text class="panel" x="70" y="830">00853</text>
+<rect x="165" y="875" width="455" height="455" fill="#ffffff" stroke="#d8d1c7" stroke-width="2"/>
+<line x1="165.00" y1="875" x2="165.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="1330.00" x2="620" y2="1330.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="165.00" y="1358">0.0</text>
+<text class="axis" text-anchor="end" x="153" y="1336.00">0.0</text>
+<line x1="256.00" y1="875" x2="256.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="1239.00" x2="620" y2="1239.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="256.00" y="1358">0.2</text>
+<text class="axis" text-anchor="end" x="153" y="1245.00">0.2</text>
+<line x1="347.00" y1="875" x2="347.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="1148.00" x2="620" y2="1148.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="347.00" y="1358">0.4</text>
+<text class="axis" text-anchor="end" x="153" y="1154.00">0.4</text>
+<line x1="438.00" y1="875" x2="438.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="1057.00" x2="620" y2="1057.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="438.00" y="1358">0.6</text>
+<text class="axis" text-anchor="end" x="153" y="1063.00">0.6</text>
+<line x1="529.00" y1="875" x2="529.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="966.00" x2="620" y2="966.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="529.00" y="1358">0.8</text>
+<text class="axis" text-anchor="end" x="153" y="972.00">0.8</text>
+<line x1="620.00" y1="875" x2="620.00" y2="1330" stroke="#ece7df"/>
+<line x1="165" y1="875.00" x2="620" y2="875.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="620.00" y="1358">1.0</text>
+<text class="axis" text-anchor="end" x="153" y="881.00">1.0</text>
+<line x1="165" y1="1330" x2="620" y2="875" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/>
+<text class="axis" text-anchor="middle" x="392.5" y="1388">Mean predicted probability</text>
+<text class="axis" text-anchor="middle" transform="translate(103,1102.5) rotate(-90)">Observed positive fraction</text>
+<circle cx="278.75" cy="1328.58" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=642</title></circle>
+<circle cx="392.50" cy="1330.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=50</title></circle>
+<circle cx="506.25" cy="1330.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=11</title></circle>
+<rect x="160.29" y="1320.71" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=703</title></rect>
+<text class="note" x="644" y="905">n = 703</text>
+<text class="note" x="644" y="930">positive rate = 0.0028</text>
+<text class="note" x="644" y="955">raw Brier = 0.0851</text>
+<text class="note" x="644" y="980">raw ECE = 0.2728</text>
+<text class="note" x="644" y="1005">cal Brier = 0.0029</text>
+<text class="note" x="644" y="1030">cal ECE = 0.0044</text>
+<text class="note" x="644" y="1055">train-rate Brier = 0.0028</text>
+<text class="panel" x="830" y="830">00871</text>
+<rect x="925" y="875" width="455" height="455" fill="#ffffff" stroke="#d8d1c7" stroke-width="2"/>
+<line x1="925.00" y1="875" x2="925.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="1330.00" x2="1380" y2="1330.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="925.00" y="1358">0.0</text>
+<text class="axis" text-anchor="end" x="913" y="1336.00">0.0</text>
+<line x1="1016.00" y1="875" x2="1016.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="1239.00" x2="1380" y2="1239.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1016.00" y="1358">0.2</text>
+<text class="axis" text-anchor="end" x="913" y="1245.00">0.2</text>
+<line x1="1107.00" y1="875" x2="1107.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="1148.00" x2="1380" y2="1148.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1107.00" y="1358">0.4</text>
+<text class="axis" text-anchor="end" x="913" y="1154.00">0.4</text>
+<line x1="1198.00" y1="875" x2="1198.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="1057.00" x2="1380" y2="1057.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1198.00" y="1358">0.6</text>
+<text class="axis" text-anchor="end" x="913" y="1063.00">0.6</text>
+<line x1="1289.00" y1="875" x2="1289.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="966.00" x2="1380" y2="966.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1289.00" y="1358">0.8</text>
+<text class="axis" text-anchor="end" x="913" y="972.00">0.8</text>
+<line x1="1380.00" y1="875" x2="1380.00" y2="1330" stroke="#ece7df"/>
+<line x1="925" y1="875.00" x2="1380" y2="875.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="1380.00" y="1358">1.0</text>
+<text class="axis" text-anchor="end" x="913" y="881.00">1.0</text>
+<line x1="925" y1="1330" x2="1380" y2="875" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/>
+<text class="axis" text-anchor="middle" x="1152.5" y="1388">Mean predicted probability</text>
+<text class="axis" text-anchor="middle" transform="translate(863,1102.5) rotate(-90)">Observed positive fraction</text>
+<circle cx="1038.75" cy="1328.12" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=969</title></circle>
+<circle cx="1152.50" cy="1330.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=63</title></circle>
+<circle cx="1266.25" cy="1330.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=11</title></circle>
+<circle cx="1380.00" cy="1330.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=1</title></circle>
+<rect x="919.97" y="1320.26" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=1043</title></rect>
+<rect x="1123.82" y="1322.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=1</title></rect>
+<text class="note" x="1404" y="905">n = 1044</text>
+<text class="note" x="1404" y="930">positive rate = 0.0038</text>
+<text class="note" x="1404" y="955">raw Brier = 0.0819</text>
+<text class="note" x="1404" y="980">raw ECE = 0.2672</text>
+<text class="note" x="1404" y="1005">cal Brier = 0.0040</text>
+<text class="note" x="1404" y="1030">cal ECE = 0.0031</text>
+<text class="note" x="1404" y="1055">train-rate Brier = 0.0038</text>
+<text class="panel" x="70" y="1480">Pooled held-out</text>
+<rect x="165" y="1525" width="455" height="455" fill="#ffffff" stroke="#d8d1c7" stroke-width="2"/>
+<line x1="165.00" y1="1525" x2="165.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1980.00" x2="620" y2="1980.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="165.00" y="2008">0.0</text>
+<text class="axis" text-anchor="end" x="153" y="1986.00">0.0</text>
+<line x1="256.00" y1="1525" x2="256.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1889.00" x2="620" y2="1889.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="256.00" y="2008">0.2</text>
+<text class="axis" text-anchor="end" x="153" y="1895.00">0.2</text>
+<line x1="347.00" y1="1525" x2="347.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1798.00" x2="620" y2="1798.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="347.00" y="2008">0.4</text>
+<text class="axis" text-anchor="end" x="153" y="1804.00">0.4</text>
+<line x1="438.00" y1="1525" x2="438.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1707.00" x2="620" y2="1707.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="438.00" y="2008">0.6</text>
+<text class="axis" text-anchor="end" x="153" y="1713.00">0.6</text>
+<line x1="529.00" y1="1525" x2="529.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1616.00" x2="620" y2="1616.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="529.00" y="2008">0.8</text>
+<text class="axis" text-anchor="end" x="153" y="1622.00">0.8</text>
+<line x1="620.00" y1="1525" x2="620.00" y2="1980" stroke="#ece7df"/>
+<line x1="165" y1="1525.00" x2="620" y2="1525.00" stroke="#ece7df"/>
+<text class="axis" text-anchor="middle" x="620.00" y="2008">1.0</text>
+<text class="axis" text-anchor="end" x="153" y="1531.00">1.0</text>
+<line x1="165" y1="1980" x2="620" y2="1525" stroke="#c7bfb5" stroke-width="3" stroke-dasharray="8 7"/>
+<text class="axis" text-anchor="middle" x="392.5" y="2038">Mean predicted probability</text>
+<text class="axis" text-anchor="middle" transform="translate(103,1752.5) rotate(-90)">Observed positive fraction</text>
+<circle cx="278.75" cy="1977.70" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=2575</title></circle>
+<circle cx="392.50" cy="1975.43" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=199</title></circle>
+<circle cx="506.25" cy="1980.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=34</title></circle>
+<circle cx="620.00" cy="1980.00" r="8" fill="#77736d" stroke="#fff" stroke-width="2"><title>n=5</title></circle>
+<rect x="159.80" y="1969.57" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=2808</title></rect>
+<rect x="287.00" y="1972.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=2</title></rect>
+<rect x="363.82" y="1972.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=1</title></rect>
+<rect x="409.78" y="1972.00" width="16" height="16" fill="#2563a6" stroke="#fff" stroke-width="2"><title>n=2</title></rect>
+<text class="note" x="644" y="1555">n = 2813</text>
+<text class="note" x="644" y="1580">positive rate = 0.0053</text>
+<text class="note" x="644" y="1605">raw Brier = 0.0858</text>
+<text class="note" x="644" y="1630">raw ECE = 0.2697</text>
+<text class="note" x="644" y="1655">cal Brier = 0.0057</text>
+<text class="note" x="644" y="1680">cal ECE = 0.0016</text>
+<text class="note" x="644" y="1705">train-rate Brier = 0.0053</text>
+</svg>

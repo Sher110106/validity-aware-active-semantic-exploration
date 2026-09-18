@@ -1,0 +1,146 @@
+{
+  "00069": {
+    "status": {
+      "method": "isotonic_leave_one_scene_out",
+      "fitted_on_scenes": [
+        "00573",
+        "00853",
+        "00871"
+      ],
+      "held_out": true,
+      "held_out_scene": "00069",
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "n_training_samples": 2434,
+      "n_training_positives": 19,
+      "by_kind": {
+        "room": {
+          "n_training_samples": 14,
+          "n_training_positives": 7
+        },
+        "object": {
+          "n_training_samples": 2420,
+          "n_training_positives": 12
+        }
+      },
+      "by_kind_note": "n_training_samples/n_training_positives above are POOLED (room+object together) and describe the fitted calibrator's own training set. by_kind splits the same training samples by Hypothesis.kind for diagnostic honesty only - the fitted calibrator itself is still the pooled one (see fit_loso_calibrator's docstring, audit finding H1).",
+      "status": "LOSO_CALIBRATED"
+    },
+    "elapsed_s": 12.49742317199707,
+    "calibrated_prob_at_support": {
+      "0.0": 0.004957187922487607,
+      "0.25": 0.004957187922487607,
+      "0.5": 0.011428571428571429,
+      "0.75": 0.03225806451612903,
+      "1.0": 0.5555555555555556
+    }
+  },
+  "00573": {
+    "status": {
+      "method": "isotonic_leave_one_scene_out",
+      "fitted_on_scenes": [
+        "00069",
+        "00853",
+        "00871"
+      ],
+      "held_out": true,
+      "held_out_scene": "00573",
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "n_training_samples": 2149,
+      "n_training_positives": 12,
+      "by_kind": {
+        "room": {
+          "n_training_samples": 9,
+          "n_training_positives": 3
+        },
+        "object": {
+          "n_training_samples": 2140,
+          "n_training_positives": 9
+        }
+      },
+      "by_kind_note": "n_training_samples/n_training_positives above are POOLED (room+object together) and describe the fitted calibrator's own training set. by_kind splits the same training samples by Hypothesis.kind for diagnostic honesty only - the fitted calibrator itself is still the pooled one (see fit_loso_calibrator's docstring, audit finding H1).",
+      "status": "LOSO_CALIBRATED"
+    },
+    "elapsed_s": 12.416215181350708,
+    "calibrated_prob_at_support": {
+      "0.0": 0.004668534080298786,
+      "0.25": 0.004668534080298786,
+      "0.5": 0.004668534080298786,
+      "0.75": 0.004668534080298786,
+      "1.0": 0.2857142857142857
+    }
+  },
+  "00853": {
+    "status": {
+      "method": "isotonic_leave_one_scene_out",
+      "fitted_on_scenes": [
+        "00069",
+        "00573",
+        "00871"
+      ],
+      "held_out": true,
+      "held_out_scene": "00853",
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "n_training_samples": 2124,
+      "n_training_positives": 21,
+      "by_kind": {
+        "room": {
+          "n_training_samples": 14,
+          "n_training_positives": 8
+        },
+        "object": {
+          "n_training_samples": 2110,
+          "n_training_positives": 13
+        }
+      },
+      "by_kind_note": "n_training_samples/n_training_positives above are POOLED (room+object together) and describe the fitted calibrator's own training set. by_kind splits the same training samples by Hypothesis.kind for diagnostic honesty only - the fitted calibrator itself is still the pooled one (see fit_loso_calibrator's docstring, audit finding H1).",
+      "status": "LOSO_CALIBRATED"
+    },
+    "elapsed_s": 12.385643243789673,
+    "calibrated_prob_at_support": {
+      "0.0": 0.006198347107438017,
+      "0.25": 0.006198347107438017,
+      "0.5": 0.013245033112582781,
+      "0.75": 0.04,
+      "1.0": 0.5
+    }
+  },
+  "00871": {
+    "status": {
+      "method": "isotonic_leave_one_scene_out",
+      "fitted_on_scenes": [
+        "00069",
+        "00573",
+        "00853"
+      ],
+      "held_out": true,
+      "held_out_scene": "00871",
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "n_training_samples": 1780,
+      "n_training_positives": 17,
+      "by_kind": {
+        "room": {
+          "n_training_samples": 11,
+          "n_training_positives": 6
+        },
+        "object": {
+          "n_training_samples": 1769,
+          "n_training_positives": 11
+        }
+      },
+      "by_kind_note": "n_training_samples/n_training_positives above are POOLED (room+object together) and describe the fitted calibrator's own training set. by_kind splits the same training samples by Hypothesis.kind for diagnostic honesty only - the fitted calibrator itself is still the pooled one (see fit_loso_calibrator's docstring, audit finding H1).",
+      "status": "LOSO_CALIBRATED"
+    },
+    "elapsed_s": 12.437778949737549,
+    "calibrated_prob_at_support": {
+      "0.0": 0.005600497822028625,
+      "0.25": 0.005600497822028625,
+      "0.5": 0.014492753623188406,
+      "0.75": 0.041666666666666664,
+      "1.0": 0.45454545454545453
+    }
+  }
+}

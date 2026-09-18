@@ -1,0 +1,94 @@
+{
+  "00069": {
+    "isomorphism_verified_on_real_data": true,
+    "calibrated_tau_by_raw_support": {
+      "0.25": 0.004957187922487607,
+      "0.5": 0.011428571428571429,
+      "0.75": 0.03225806451612903,
+      "1.0": 0.5555555555555556
+    },
+    "calibration_status": {
+      "method": "isotonic_pava_pooled",
+      "fitted_on_scenes": [
+        "00573",
+        "00853",
+        "00871"
+      ],
+      "held_out": true,
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "status": "LOSO_CALIBRATED",
+      "n_training_samples": 2434,
+      "n_training_positives": 19
+    }
+  },
+  "00573": {
+    "isomorphism_verified_on_real_data": false,
+    "calibrated_tau_by_raw_support": {
+      "0.25": 0.004668534080298786,
+      "0.5": 0.004668534080298786,
+      "0.75": 0.004668534080298786,
+      "1.0": 0.2857142857142857
+    },
+    "calibration_status": {
+      "method": "isotonic_pava_pooled",
+      "fitted_on_scenes": [
+        "00069",
+        "00853",
+        "00871"
+      ],
+      "held_out": true,
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "status": "LOSO_CALIBRATED",
+      "n_training_samples": 2149,
+      "n_training_positives": 12
+    }
+  },
+  "00853": {
+    "isomorphism_verified_on_real_data": true,
+    "calibrated_tau_by_raw_support": {
+      "0.25": 0.006198347107438017,
+      "0.5": 0.013245033112582781,
+      "0.75": 0.04,
+      "1.0": 0.5
+    },
+    "calibration_status": {
+      "method": "isotonic_pava_pooled",
+      "fitted_on_scenes": [
+        "00069",
+        "00573",
+        "00871"
+      ],
+      "held_out": true,
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "status": "LOSO_CALIBRATED",
+      "n_training_samples": 2124,
+      "n_training_positives": 21
+    }
+  },
+  "00871": {
+    "isomorphism_verified_on_real_data": true,
+    "calibrated_tau_by_raw_support": {
+      "0.25": 0.005600497822028625,
+      "0.5": 0.014492753623188406,
+      "0.75": 0.041666666666666664,
+      "1.0": 0.45454545454545453
+    },
+    "calibration_status": {
+      "method": "isotonic_pava_pooled",
+      "fitted_on_scenes": [
+        "00069",
+        "00573",
+        "00853"
+      ],
+      "held_out": true,
+      "loso_scenes_available": 4,
+      "loso_scenes_required": 4,
+      "status": "LOSO_CALIBRATED",
+      "n_training_samples": 1780,
+      "n_training_positives": 17
+    }
+  }
+}

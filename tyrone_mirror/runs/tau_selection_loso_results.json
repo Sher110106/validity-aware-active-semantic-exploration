@@ -1,0 +1,162 @@
+{
+  "00069": {
+    "train_scenes": [
+      "00573",
+      "00853",
+      "00871"
+    ],
+    "train_mean_object_f1_by_tau": {
+      "0.0": 0.22037549261163844,
+      "0.5": 0.24476734251314594,
+      "0.75": 0.246752481529021,
+      "1.0": 0.24712362319604364
+    },
+    "train_mean_normalized_ged_by_tau": {
+      "0.0": 0.9944593613856577,
+      "0.5": 0.9315182722729247,
+      "0.75": 0.9268224452767978,
+      "1.0": 0.9260537488650331
+    },
+    "selected_tau_by_f1": 1.0,
+    "selected_tau_by_ged": 1.0,
+    "criteria_agree": true,
+    "held_out_performance_at_f1_selected_tau": {
+      "object_precision": 0.679816032903047,
+      "object_recall": 0.24520732469155063,
+      "object_f1": 0.3570555002722623,
+      "normalized_ged": 0.8971384622098098
+    },
+    "held_out_performance_at_ged_selected_tau": {
+      "object_precision": 0.679816032903047,
+      "object_recall": 0.24520732469155063,
+      "object_f1": 0.3570555002722623,
+      "normalized_ged": 0.8971384622098098
+    },
+    "held_out_official_performance": {
+      "object_precision": 0.49045134314207933,
+      "object_recall": 0.24613950491956874,
+      "object_f1": 0.3256438257368747,
+      "normalized_ged": 0.961313056379822
+    }
+  },
+  "00573": {
+    "train_scenes": [
+      "00069",
+      "00853",
+      "00871"
+    ],
+    "train_mean_object_f1_by_tau": {
+      "0.0": 0.276787303225453,
+      "0.5": 0.30529485162002534,
+      "0.75": 0.30741315143706455,
+      "1.0": 0.3077379170647106
+    },
+    "train_mean_normalized_ged_by_tau": {
+      "0.0": 0.9734548451371386,
+      "0.5": 0.911185719129555,
+      "0.75": 0.907144697324244,
+      "1.0": 0.9064781686253737
+    },
+    "selected_tau_by_f1": 1.0,
+    "selected_tau_by_ged": 1.0,
+    "criteria_agree": true,
+    "held_out_performance_at_f1_selected_tau": {
+      "object_precision": 0.6597060833902936,
+      "object_recall": 0.10600575512856188,
+      "object_f1": 0.17521261866626145,
+      "normalized_ged": 0.955865202928788
+    },
+    "held_out_performance_at_ged_selected_tau": {
+      "object_precision": 0.6597060833902936,
+      "object_recall": 0.10600575512856188,
+      "object_f1": 0.17521261866626145,
+      "normalized_ged": 0.955865202928788
+    },
+    "held_out_official_performance": {
+      "object_precision": 0.32473945832910145,
+      "object_recall": 0.10720474024567563,
+      "object_f1": 0.1564083938954311,
+      "normalized_ged": 1.024326605125379
+    }
+  },
+  "00853": {
+    "train_scenes": [
+      "00069",
+      "00573",
+      "00871"
+    ],
+    "train_mean_object_f1_by_tau": {
+      "0.0": 0.26044875209629736,
+      "0.5": 0.28589097501968935,
+      "0.75": 0.28791589510728516,
+      "1.0": 0.28826754891832745
+    },
+    "train_mean_normalized_ged_by_tau": {
+      "0.0": 0.9814077447673787,
+      "0.5": 0.9202376561995198,
+      "0.75": 0.9158181345234654,
+      "1.0": 0.9151063462339387
+    },
+    "selected_tau_by_f1": 1.0,
+    "selected_tau_by_ged": 1.0,
+    "criteria_agree": true,
+    "held_out_performance_at_f1_selected_tau": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9299806701030929
+    },
+    "held_out_performance_at_ged_selected_tau": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9299806701030929
+    },
+    "held_out_official_performance": {
+      "object_precision": 0.4398388731639418,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.20542404728289798,
+      "normalized_ged": 1.0004679062346586
+    }
+  },
+  "00871": {
+    "train_scenes": [
+      "00069",
+      "00573",
+      "00853"
+    ],
+    "train_mean_object_f1_by_tau": {
+      "0.0": 0.22915875563840127,
+      "0.5": 0.2528355106097046,
+      "0.75": 0.2549474297843182,
+      "1.0": 0.2552972806813116
+    },
+    "train_mean_normalized_ged_by_tau": {
+      "0.0": 0.9953691892466199,
+      "0.5": 0.9331793965979346,
+      "0.75": 0.928371446033518,
+      "1.0": 0.9276614450805636
+    },
+    "selected_tau_by_f1": 1.0,
+    "selected_tau_by_ged": 1.0,
+    "criteria_agree": true,
+    "held_out_performance_at_f1_selected_tau": {
+      "object_precision": 0.7958478564913348,
+      "object_recall": 0.21743234323432317,
+      "object_f1": 0.3325345278164585,
+      "normalized_ged": 0.8923153735632186
+    },
+    "held_out_performance_at_ged_selected_tau": {
+      "object_precision": 0.7958478564913348,
+      "object_recall": 0.21743234323432317,
+      "object_f1": 0.3325345278164585,
+      "normalized_ged": 0.8923153735632186
+    },
+    "held_out_official_performance": {
+      "object_precision": 0.511723013338618,
+      "object_recall": 0.2181831683168314,
+      "object_f1": 0.30025988340587606,
+      "normalized_ged": 0.9561087164750961
+    }
+  }
+}

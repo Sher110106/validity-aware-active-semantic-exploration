@@ -1,0 +1,5535 @@
+{
+  "schema": "asp_phase13_diagnostics_v5",
+  "scope": {
+    "matrix": "3 scenes x seed 42 x 120 m",
+    "calibration": "4-scene leave-one-scene-out corpus",
+    "reliability_bin_count": 10
+  },
+  "calibration": {
+    "method": "leave_one_scene_out_isotonic",
+    "fit_population": "pooled_room_and_object_hypotheses",
+    "evaluation": "held_out_predictions_only",
+    "baseline": "constant probability equal to the matching subset's prevalence in the other three training scenes; no held-out labels enter it",
+    "ece_definition": {
+      "bins": 10,
+      "mode": "equal_width",
+      "intervals": "[lower, upper), except final bin includes 1.0",
+      "formula": "sum_bin(n_bin / n * abs(mean_prediction - fraction_positive))"
+    },
+    "caveat": "The fitted map is pooled across room and object hypotheses. Object/room splits below diagnose that pooled map; they are not separately fitted per-kind calibrators.",
+    "per_scene": {
+      "00069": {
+        "trained_on_scenes": [
+          "00573",
+          "00853",
+          "00871"
+        ],
+        "subsets": {
+          "overall": {
+            "raw": {
+              "status": "measured",
+              "n": 395,
+              "positives": 4,
+              "positive_rate": 0.010126582278481013,
+              "brier": 0.09240506329113925,
+              "ece": 0.2708860759493671,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 359,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.008356545961002786,
+                  "absolute_gap": 0.2416434540389972
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 27,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 5,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 4,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.25,
+                  "absolute_gap": 0.75
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 395,
+              "positives": 4,
+              "positive_rate": 0.010126582278481013,
+              "brier": 0.01040826599867325,
+              "ece": 0.004994253182017966,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 391,
+                  "mean_prediction": 0.005753177021291881,
+                  "fraction_positive": 0.0076726342710997444,
+                  "absolute_gap": 0.001919457249807863
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 4,
+                  "mean_prediction": 0.5555555555555556,
+                  "fraction_positive": 0.25,
+                  "absolute_gap": 0.3055555555555556
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 395,
+              "positives": 4,
+              "positive_rate": 0.010126582278481013,
+              "brier": 0.010029419338222002,
+              "ece": 0.00232050175259773,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 395,
+                  "mean_prediction": 0.007806080525883283,
+                  "fraction_positive": 0.010126582278481013,
+                  "absolute_gap": 0.00232050175259773
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.0078060805258833195,
+            "brier_delta_calibrated_minus_raw": -0.08199679729246599,
+            "ece_delta_calibrated_minus_raw": -0.26589182276734913,
+            "brier_delta_calibrated_minus_training_prevalence": 0.0003788466604512479
+          },
+          "object": {
+            "raw": {
+              "status": "measured",
+              "n": 393,
+              "positives": 3,
+              "positive_rate": 0.007633587786259542,
+              "brier": 0.09033078880407125,
+              "ece": 0.2697201017811705,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 359,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.008356545961002786,
+                  "absolute_gap": 0.2416434540389972
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 27,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 5,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 2,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 1.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 393,
+              "positives": 3,
+              "positive_rate": 0.007633587786259542,
+              "brier": 0.009173262671678771,
+              "ece": 0.004736943755180625,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 391,
+                  "mean_prediction": 0.005753177021291881,
+                  "fraction_positive": 0.0076726342710997444,
+                  "absolute_gap": 0.001919457249807863
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.5555555555555556,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5555555555555556
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 393,
+              "positives": 3,
+              "positive_rate": 0.007633587786259542,
+              "brier": 0.007582471267813786,
+              "ece": 0.0026749101003091013,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 393,
+                  "mean_prediction": 0.00495867768595044,
+                  "fraction_positive": 0.007633587786259542,
+                  "absolute_gap": 0.0026749101003091013
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.0049586776859504135,
+            "brier_delta_calibrated_minus_raw": -0.08115752613239248,
+            "ece_delta_calibrated_minus_raw": -0.2649831580259899,
+            "brier_delta_calibrated_minus_training_prevalence": 0.0015907914038649851
+          },
+          "room": {
+            "raw": {
+              "status": "measured",
+              "n": 2,
+              "positives": 1,
+              "positive_rate": 0.5,
+              "brier": 0.5,
+              "ece": 0.5,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 2,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.5
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 2,
+              "positives": 1,
+              "positive_rate": 0.5,
+              "brier": 0.25308641975308643,
+              "ece": 0.05555555555555558,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.5555555555555556,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.05555555555555558
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 2,
+              "positives": 1,
+              "positive_rate": 0.5,
+              "brier": 0.25,
+              "ece": 0.0,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.0
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.5,
+            "brier_delta_calibrated_minus_raw": -0.24691358024691357,
+            "ece_delta_calibrated_minus_raw": -0.4444444444444444,
+            "brier_delta_calibrated_minus_training_prevalence": 0.0030864197530864335
+          }
+        }
+      },
+      "00573": {
+        "trained_on_scenes": [
+          "00069",
+          "00853",
+          "00871"
+        ],
+        "subsets": {
+          "overall": {
+            "raw": {
+              "status": "measured",
+              "n": 680,
+              "positives": 11,
+              "positive_rate": 0.016176470588235296,
+              "brier": 0.08952205882352941,
+              "ece": 0.26838235294117646,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 606,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.006600660066006601,
+                  "absolute_gap": 0.2433993399339934
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 60,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.03333333333333333,
+                  "absolute_gap": 0.4666666666666667
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 8,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.125,
+                  "absolute_gap": 0.625
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 6,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.6666666666666666,
+                  "absolute_gap": 0.33333333333333337
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 680,
+              "positives": 11,
+              "positive_rate": 0.016176470588235296,
+              "brier": 0.013460900187320882,
+              "ece": 0.009028121052342521,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 674,
+                  "mean_prediction": 0.004668534080298771,
+                  "fraction_positive": 0.010385756676557863,
+                  "absolute_gap": 0.005717222596259092
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 6,
+                  "mean_prediction": 0.28571428571428564,
+                  "fraction_positive": 0.6666666666666666,
+                  "absolute_gap": 0.380952380952381
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 680,
+              "positives": 11,
+              "positive_rate": 0.016176470588235296,
+              "brier": 0.016026992978434733,
+              "ece": 0.01059247803355862,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 680,
+                  "mean_prediction": 0.005583992554676675,
+                  "fraction_positive": 0.016176470588235296,
+                  "absolute_gap": 0.01059247803355862
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.005583992554676594,
+            "brier_delta_calibrated_minus_raw": -0.07606115863620853,
+            "ece_delta_calibrated_minus_raw": -0.25935423188883394,
+            "brier_delta_calibrated_minus_training_prevalence": -0.0025660927911138505
+          },
+          "object": {
+            "raw": {
+              "status": "measured",
+              "n": 673,
+              "positives": 6,
+              "positive_rate": 0.008915304606240713,
+              "brier": 0.08989598811292719,
+              "ece": 0.2704309063893016,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 605,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.006611570247933884,
+                  "absolute_gap": 0.24338842975206612
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 59,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.03389830508474576,
+                  "absolute_gap": 0.4661016949152542
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 7,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 2,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 1.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 673,
+              "positives": 6,
+              "positive_rate": 0.008915304606240713,
+              "brier": 0.009096385562224054,
+              "ece": 0.005109720956237884,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 671,
+                  "mean_prediction": 0.004668534080298771,
+                  "fraction_positive": 0.00894187779433681,
+                  "absolute_gap": 0.004273343714038039
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.2857142857142857,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.2857142857142857
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 673,
+              "positives": 6,
+              "positive_rate": 0.008915304606240713,
+              "brier": 0.008858003197071253,
+              "ece": 0.00470969712960523,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 673,
+                  "mean_prediction": 0.004205607476635483,
+                  "fraction_positive": 0.008915304606240713,
+                  "absolute_gap": 0.00470969712960523
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.004205607476635514,
+            "brier_delta_calibrated_minus_raw": -0.08079960255070313,
+            "ece_delta_calibrated_minus_raw": -0.2653211854330637,
+            "brier_delta_calibrated_minus_training_prevalence": 0.00023838236515280088
+          },
+          "room": {
+            "raw": {
+              "status": "measured",
+              "n": 7,
+              "positives": 5,
+              "positive_rate": 0.7142857142857143,
+              "brier": 0.05357142857142857,
+              "ece": 0.14285714285714285,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.25
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 1.0,
+                  "absolute_gap": 0.25
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 4,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 1.0,
+                  "absolute_gap": 0.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 7,
+              "positives": 5,
+              "positive_rate": 0.7142857142857143,
+              "brier": 0.433077806285913,
+              "ece": 0.5490196078431373,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 3,
+                  "mean_prediction": 0.004668534080298786,
+                  "fraction_positive": 0.3333333333333333,
+                  "absolute_gap": 0.32866479925303455
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 4,
+                  "mean_prediction": 0.2857142857142857,
+                  "fraction_positive": 1.0,
+                  "absolute_gap": 0.7142857142857143
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 7,
+              "positives": 5,
+              "positive_rate": 0.7142857142857143,
+              "brier": 0.3492063492063493,
+              "ece": 0.380952380952381,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 7,
+                  "mean_prediction": 0.3333333333333333,
+                  "fraction_positive": 0.7142857142857143,
+                  "absolute_gap": 0.380952380952381
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.3333333333333333,
+            "brier_delta_calibrated_minus_raw": 0.3795063777144845,
+            "ece_delta_calibrated_minus_raw": 0.40616246498599445,
+            "brier_delta_calibrated_minus_training_prevalence": 0.08387145707956373
+          }
+        }
+      },
+      "00853": {
+        "trained_on_scenes": [
+          "00069",
+          "00573",
+          "00871"
+        ],
+        "subsets": {
+          "overall": {
+            "raw": {
+              "status": "measured",
+              "n": 705,
+              "positives": 2,
+              "positive_rate": 0.0028368794326241137,
+              "brier": 0.08661347517730496,
+              "ece": 0.27411347517730494,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 642,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.003115264797507788,
+                  "absolute_gap": 0.2468847352024922
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 51,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 11,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 1,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 1.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 705,
+              "positives": 2,
+              "positive_rate": 0.0028368794326241137,
+              "brier": 0.0032289629943077526,
+              "ece": 0.005099057491797041,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 704,
+                  "mean_prediction": 0.007236982289370616,
+                  "fraction_positive": 0.002840909090909091,
+                  "absolute_gap": 0.004396073198461525
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 705,
+              "positives": 2,
+              "positive_rate": 0.0028368794326241137,
+              "brier": 0.002878535827385826,
+              "ece": 0.007050126217093255,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 705,
+                  "mean_prediction": 0.00988700564971737,
+                  "fraction_positive": 0.0028368794326241137,
+                  "absolute_gap": 0.007050126217093255
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.009887005649717515,
+            "brier_delta_calibrated_minus_raw": -0.08338451218299721,
+            "ece_delta_calibrated_minus_raw": -0.2690144176855079,
+            "brier_delta_calibrated_minus_training_prevalence": 0.00035042716692192675
+          },
+          "object": {
+            "raw": {
+              "status": "measured",
+              "n": 703,
+              "positives": 2,
+              "positive_rate": 0.002844950213371266,
+              "brier": 0.08508179231863443,
+              "ece": 0.2727596017069701,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 642,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.003115264797507788,
+                  "absolute_gap": 0.2468847352024922
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 50,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 11,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 703,
+              "positives": 2,
+              "positive_rate": 0.002844950213371266,
+              "brier": 0.002882280910504711,
+              "ece": 0.00438348577326363,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 703,
+                  "mean_prediction": 0.007228435986634895,
+                  "fraction_positive": 0.002844950213371266,
+                  "absolute_gap": 0.00438348577326363
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 703,
+              "positives": 2,
+              "positive_rate": 0.002844950213371266,
+              "brier": 0.002847853569381766,
+              "ece": 0.0033161872273870362,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 703,
+                  "mean_prediction": 0.006161137440758303,
+                  "fraction_positive": 0.002844950213371266,
+                  "absolute_gap": 0.0033161872273870367
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.006161137440758294,
+            "brier_delta_calibrated_minus_raw": -0.08219951140812971,
+            "ece_delta_calibrated_minus_raw": -0.26837611593370647,
+            "brier_delta_calibrated_minus_training_prevalence": 3.4427341122945064e-05
+          },
+          "room": {
+            "raw": {
+              "status": "measured",
+              "n": 2,
+              "positives": 0,
+              "positive_rate": 0.0,
+              "brier": 0.625,
+              "ece": 0.75,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 1,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 1.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 2,
+              "positives": 0,
+              "positive_rate": 0.0,
+              "brier": 0.12508771545107672,
+              "ece": 0.25662251655629137,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.013245033112582781,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.013245033112582781
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 2,
+              "positives": 0,
+              "positive_rate": 0.0,
+              "brier": 0.32653061224489793,
+              "ece": 0.5714285714285714,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.5714285714285714,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5714285714285714
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.5714285714285714,
+            "brier_delta_calibrated_minus_raw": -0.4999122845489233,
+            "ece_delta_calibrated_minus_raw": -0.49337748344370863,
+            "brier_delta_calibrated_minus_training_prevalence": -0.2014428967938212
+          }
+        }
+      },
+      "00871": {
+        "trained_on_scenes": [
+          "00069",
+          "00573",
+          "00853"
+        ],
+        "subsets": {
+          "overall": {
+            "raw": {
+              "status": "measured",
+              "n": 1049,
+              "positives": 6,
+              "positive_rate": 0.005719733079122974,
+              "brier": 0.0828765490943756,
+              "ece": 0.2666825548141087,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 971,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.005149330587023687,
+                  "absolute_gap": 0.2448506694129763
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 64,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 12,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 2,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.5
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 1049,
+              "positives": 6,
+              "positive_rate": 0.005719733079122974,
+              "brier": 0.00525534710653776,
+              "ece": 0.0018651369952171993,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 1047,
+                  "mean_prediction": 0.006557420837701769,
+                  "fraction_positive": 0.004775549188156638,
+                  "absolute_gap": 0.0017818716495451303
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.45454545454545453,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.04545454545454547
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 1049,
+              "positives": 6,
+              "positive_rate": 0.005719733079122974,
+              "brier": 0.0057016929812981005,
+              "ece": 0.0038308287186298346,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 1049,
+                  "mean_prediction": 0.009550561797752809,
+                  "fraction_positive": 0.005719733079122974,
+                  "absolute_gap": 0.003830828718629835
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.009550561797752809,
+            "brier_delta_calibrated_minus_raw": -0.07762120198783784,
+            "ece_delta_calibrated_minus_raw": -0.2648174178188915,
+            "brier_delta_calibrated_minus_training_prevalence": -0.00044634587476034045
+          },
+          "object": {
+            "raw": {
+              "status": "measured",
+              "n": 1044,
+              "positives": 4,
+              "positive_rate": 0.0038314176245210726,
+              "brier": 0.08189655172413793,
+              "ece": 0.2672413793103448,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 969,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.0041279669762641896,
+                  "absolute_gap": 0.2458720330237358
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 63,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 11,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 1,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 1.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 1044,
+              "positives": 4,
+              "positive_rate": 0.0038314176245210726,
+              "brier": 0.004046485217504533,
+              "ece": 0.0031157132717292094,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 1043,
+                  "mean_prediction": 0.006517985811255839,
+                  "fraction_positive": 0.003835091083413231,
+                  "absolute_gap": 0.002682894727842608
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.45454545454545453,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.45454545454545453
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 1044,
+              "positives": 4,
+              "positive_rate": 0.0038314176245210726,
+              "brier": 0.003822434604949015,
+              "ece": 0.002386784749701693,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 1044,
+                  "mean_prediction": 0.0062182023742227656,
+                  "fraction_positive": 0.0038314176245210726,
+                  "absolute_gap": 0.002386784749701693
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.006218202374222725,
+            "brier_delta_calibrated_minus_raw": -0.0778500665066334,
+            "ece_delta_calibrated_minus_raw": -0.2641256660386156,
+            "brier_delta_calibrated_minus_training_prevalence": 0.0002240506125555184
+          },
+          "room": {
+            "raw": {
+              "status": "measured",
+              "n": 5,
+              "positives": 2,
+              "positive_rate": 0.4,
+              "brier": 0.2875,
+              "ece": 0.35,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 2,
+                  "mean_prediction": 0.25,
+                  "fraction_positive": 0.5,
+                  "absolute_gap": 0.25
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.5,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.5
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.75,
+                  "fraction_positive": 0.0,
+                  "absolute_gap": 0.75
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 1,
+                  "mean_prediction": 1.0,
+                  "fraction_positive": 1.0,
+                  "absolute_gap": 0.0
+                }
+              ]
+            },
+            "calibrated": {
+              "status": "measured",
+              "n": 5,
+              "positives": 2,
+              "positive_rate": 0.4,
+              "brier": 0.257665709536674,
+              "ece": 0.29561882590412664,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 4,
+                  "mean_prediction": 0.01684010398347808,
+                  "fraction_positive": 0.25,
+                  "absolute_gap": 0.23315989601652193
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 1,
+                  "mean_prediction": 0.45454545454545453,
+                  "fraction_positive": 1.0,
+                  "absolute_gap": 0.5454545454545454
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence_baseline": {
+              "status": "measured",
+              "n": 5,
+              "positives": 2,
+              "positive_rate": 0.4,
+              "brier": 0.2611570247933884,
+              "ece": 0.1454545454545454,
+              "bins": [
+                {
+                  "index": 0,
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 1,
+                  "lower": 0.1,
+                  "upper": 0.2,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 2,
+                  "lower": 0.2,
+                  "upper": 0.3,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 3,
+                  "lower": 0.3,
+                  "upper": 0.4,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 4,
+                  "lower": 0.4,
+                  "upper": 0.5,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 5,
+                  "lower": 0.5,
+                  "upper": 0.6,
+                  "upper_inclusive": false,
+                  "count": 5,
+                  "mean_prediction": 0.5454545454545454,
+                  "fraction_positive": 0.4,
+                  "absolute_gap": 0.1454545454545454
+                },
+                {
+                  "index": 6,
+                  "lower": 0.6,
+                  "upper": 0.7,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 7,
+                  "lower": 0.7,
+                  "upper": 0.8,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 8,
+                  "lower": 0.8,
+                  "upper": 0.9,
+                  "upper_inclusive": false,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                },
+                {
+                  "index": 9,
+                  "lower": 0.9,
+                  "upper": 1.0,
+                  "upper_inclusive": true,
+                  "count": 0,
+                  "mean_prediction": null,
+                  "fraction_positive": null,
+                  "absolute_gap": null
+                }
+              ]
+            },
+            "training_prevalence": 0.5454545454545454,
+            "brier_delta_calibrated_minus_raw": -0.029834290463325974,
+            "ece_delta_calibrated_minus_raw": -0.05438117409587334,
+            "brier_delta_calibrated_minus_training_prevalence": -0.0034913152567144223
+          }
+        }
+      }
+    },
+    "aggregate": {
+      "overall": {
+        "raw": {
+          "status": "measured",
+          "n": 2829,
+          "positives": 23,
+          "positive_rate": 0.008130081300813009,
+          "brier": 0.08673559561682573,
+          "ece": 0.2695298692117356,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 2578,
+              "mean_prediction": 0.25,
+              "fraction_positive": 0.005430566330488751,
+              "absolute_gap": 0.24456943366951125
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 202,
+              "mean_prediction": 0.5,
+              "fraction_positive": 0.009900990099009901,
+              "absolute_gap": 0.4900990099009901
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 36,
+              "mean_prediction": 0.75,
+              "fraction_positive": 0.027777777777777776,
+              "absolute_gap": 0.7222222222222222
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 13,
+              "mean_prediction": 1.0,
+              "fraction_positive": 0.46153846153846156,
+              "absolute_gap": 0.5384615384615384
+            }
+          ]
+        },
+        "calibrated": {
+          "status": "measured",
+          "n": 2829,
+          "positives": 23,
+          "positive_rate": 0.008130081300813009,
+          "brier": 0.007442189898408925,
+          "ece": 0.0015748974666252103,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 2816,
+              "mean_prediction": 0.006163543797669432,
+              "fraction_positive": 0.006036931818181818,
+              "absolute_gap": 0.00012661197948761384
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 6,
+              "mean_prediction": 0.28571428571428564,
+              "fraction_positive": 0.6666666666666666,
+              "absolute_gap": 0.380952380952381
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 2,
+              "mean_prediction": 0.45454545454545453,
+              "fraction_positive": 0.5,
+              "absolute_gap": 0.04545454545454547
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 5,
+              "mean_prediction": 0.5444444444444445,
+              "fraction_positive": 0.2,
+              "absolute_gap": 0.3444444444444445
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "training_prevalence_baseline": {
+          "status": "measured",
+          "n": 2829,
+          "positives": 23,
+          "positive_rate": 0.008130081300813009,
+          "brier": 0.00808427697406275,
+          "ece": 0.0003073153247780489,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 2829,
+              "mean_prediction": 0.008437396625591058,
+              "fraction_positive": 0.008130081300813009,
+              "absolute_gap": 0.0003073153247780489
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "brier_delta_calibrated_minus_raw": -0.07929340571841681,
+        "ece_delta_calibrated_minus_raw": -0.2679549717451104,
+        "brier_delta_calibrated_minus_training_prevalence": -0.0006420870756538256
+      },
+      "object": {
+        "raw": {
+          "status": "measured",
+          "n": 2813,
+          "positives": 15,
+          "positive_rate": 0.005332385353714895,
+          "brier": 0.08578474937788838,
+          "ece": 0.2697298258087451,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 2575,
+              "mean_prediction": 0.25,
+              "fraction_positive": 0.005048543689320388,
+              "absolute_gap": 0.2449514563106796
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 199,
+              "mean_prediction": 0.5,
+              "fraction_positive": 0.010050251256281407,
+              "absolute_gap": 0.4899497487437186
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 34,
+              "mean_prediction": 0.75,
+              "fraction_positive": 0.0,
+              "absolute_gap": 0.75
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 5,
+              "mean_prediction": 1.0,
+              "fraction_positive": 0.0,
+              "absolute_gap": 1.0
+            }
+          ]
+        },
+        "calibrated": {
+          "status": "measured",
+          "n": 2813,
+          "positives": 15,
+          "positive_rate": 0.005332385353714895,
+          "brier": 0.005679962232671779,
+          "ece": 0.0015638156487859383,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 2808,
+              "mean_prediction": 0.006147410357175822,
+              "fraction_positive": 0.005341880341880342,
+              "absolute_gap": 0.0008055300152954798
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 2,
+              "mean_prediction": 0.2857142857142857,
+              "fraction_positive": 0.0,
+              "absolute_gap": 0.2857142857142857
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 1,
+              "mean_prediction": 0.45454545454545453,
+              "fraction_positive": 0.0,
+              "absolute_gap": 0.45454545454545453
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 2,
+              "mean_prediction": 0.5555555555555556,
+              "fraction_positive": 0.0,
+              "absolute_gap": 0.5555555555555556
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "training_prevalence_baseline": {
+          "status": "measured",
+          "n": 2813,
+          "positives": 15,
+          "positive_rate": 0.005332385353714895,
+          "brier": 0.005308926465241067,
+          "ece": 0.00021408356270731944,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 2813,
+              "mean_prediction": 0.005546468916422215,
+              "fraction_positive": 0.005332385353714895,
+              "absolute_gap": 0.00021408356270731944
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "brier_delta_calibrated_minus_raw": -0.0801047871452166,
+        "ece_delta_calibrated_minus_raw": -0.26816601015995917,
+        "brier_delta_calibrated_minus_training_prevalence": 0.00037103576743071146
+      },
+      "room": {
+        "raw": {
+          "status": "measured",
+          "n": 16,
+          "positives": 8,
+          "positive_rate": 0.5,
+          "brier": 0.25390625,
+          "ece": 0.265625,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 3,
+              "mean_prediction": 0.25,
+              "fraction_positive": 0.3333333333333333,
+              "absolute_gap": 0.08333333333333331
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 3,
+              "mean_prediction": 0.5,
+              "fraction_positive": 0.0,
+              "absolute_gap": 0.5
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 2,
+              "mean_prediction": 0.75,
+              "fraction_positive": 0.5,
+              "absolute_gap": 0.25
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 8,
+              "mean_prediction": 1.0,
+              "fraction_positive": 0.75,
+              "absolute_gap": 0.25
+            }
+          ]
+        },
+        "calibrated": {
+          "status": "measured",
+          "n": 16,
+          "positives": 8,
+          "positive_rate": 0.5,
+          "brier": 0.31726384138081803,
+          "ece": 0.3699435914013202,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 8,
+              "mean_prediction": 0.01182638141092393,
+              "fraction_positive": 0.25,
+              "absolute_gap": 0.23817361858907607
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 4,
+              "mean_prediction": 0.2857142857142857,
+              "fraction_positive": 1.0,
+              "absolute_gap": 0.7142857142857143
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 1,
+              "mean_prediction": 0.45454545454545453,
+              "fraction_positive": 1.0,
+              "absolute_gap": 0.5454545454545454
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 3,
+              "mean_prediction": 0.5370370370370371,
+              "fraction_positive": 0.3333333333333333,
+              "absolute_gap": 0.20370370370370378
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "training_prevalence_baseline": {
+          "status": "measured",
+          "n": 16,
+          "positives": 8,
+          "positive_rate": 0.5,
+          "brier": 0.30645567455632394,
+          "ece": 0.2835497835497835,
+          "bins": [
+            {
+              "index": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 7,
+              "mean_prediction": 0.3333333333333333,
+              "fraction_positive": 0.7142857142857143,
+              "absolute_gap": 0.380952380952381
+            },
+            {
+              "index": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 9,
+              "mean_prediction": 0.541125541125541,
+              "fraction_positive": 0.3333333333333333,
+              "absolute_gap": 0.2077922077922077
+            },
+            {
+              "index": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            },
+            {
+              "index": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 0,
+              "mean_prediction": null,
+              "fraction_positive": null,
+              "absolute_gap": null
+            }
+          ]
+        },
+        "brier_delta_calibrated_minus_raw": 0.06335759138081803,
+        "ece_delta_calibrated_minus_raw": 0.10431859140132022,
+        "brier_delta_calibrated_minus_training_prevalence": 0.010808166824494092
+      }
+    }
+  },
+  "validation": {
+    "per_scene": {
+      "00069": {
+        "run_dir": "/workspace/runs/scene00069_seed42_matrix120m",
+        "reference": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+        "stages": 28,
+        "excluded_incomplete_stage_directories": 1,
+        "stage_tracks": 56,
+        "aggregate": {
+          "accepted_completions": 197,
+          "available_completions": 201,
+          "expected_completions": 224,
+          "missing_completions": 23,
+          "object_false_positives_after": 1773,
+          "object_false_positives_before": 2577,
+          "object_predicted_nodes_after": 1782,
+          "object_predicted_nodes_before": 2588,
+          "object_true_positives_after": 9,
+          "object_true_positives_before": 11,
+          "predicted_nodes": 2933,
+          "rejected_completions": 4,
+          "room_false_positives_after": 98,
+          "room_false_positives_before": 236,
+          "room_predicted_nodes_after": 158,
+          "room_predicted_nodes_before": 345,
+          "room_true_positives_after": 60,
+          "room_true_positives_before": 109,
+          "structurally_invalid_predicted_nodes": 966,
+          "surviving_predicted_nodes": 1940,
+          "validator_excluded_predicted_nodes": 993,
+          "completion_availability_rate": 0.8973214285714286,
+          "accepted_completion_rate_of_expected": 0.8794642857142857,
+          "accepted_completion_rate_of_available": 0.9800995024875622,
+          "predicted_node_survival_rate": 0.6614387998636209,
+          "object_true_positive_retention": 0.8181818181818182,
+          "room_true_positive_retention": 0.5504587155963303,
+          "object_false_positive_removal_rate": 0.3119906868451688,
+          "room_false_positive_removal_rate": 0.5847457627118644,
+          "mean_pairwise_semantic_jaccard_diversity_before": 0.6175574039220937,
+          "mean_pairwise_semantic_jaccard_diversity_after": 0.7377880411611338,
+          "defined_diversity_tracks_before": 56,
+          "defined_diversity_tracks_after": 56
+        },
+        "issue_counts": {
+          "aabb_conflict": 587,
+          "edge_schema": 4,
+          "impassable_crossing": 397,
+          "object_parent": 20,
+          "room_containment": 2,
+          "unique_identifier": 4
+        },
+        "definitions": {
+          "completion_validity": "accepted completions / expected four-member scene-track slots; missing members remain in the denominator",
+          "survivor_recall": "sum of evaluator-matched true positives in predicted-only graphs after validation / sum before validation; the unchanged observed map is excluded and matching is recomputed after filtering so an equivalent surviving duplicate can replace a removed node",
+          "diversity": "mean pairwise Jaccard distance between per-completion sets of case-folded (kind, label), macro-averaged over stage-tracks",
+          "defined_diversity_tracks": "number of stage-tracks with at least two available completions; only these tracks define a pairwise diversity value and are used to weight the cross-scene aggregate"
+        }
+      },
+      "00573": {
+        "run_dir": "/workspace/runs/scene00573_seed42_matrix120m",
+        "reference": "/workspace/runs/scene00573_frontier_reference/stages/53/habitat_scene_graph_original_graph0.yaml",
+        "stages": 34,
+        "excluded_incomplete_stage_directories": 1,
+        "stage_tracks": 68,
+        "aggregate": {
+          "accepted_completions": 246,
+          "available_completions": 255,
+          "expected_completions": 272,
+          "missing_completions": 17,
+          "object_false_positives_after": 2345,
+          "object_false_positives_before": 3520,
+          "object_predicted_nodes_after": 2365,
+          "object_predicted_nodes_before": 3547,
+          "object_true_positives_after": 20,
+          "object_true_positives_before": 27,
+          "predicted_nodes": 4008,
+          "rejected_completions": 9,
+          "room_false_positives_after": 144,
+          "room_false_positives_before": 343,
+          "room_predicted_nodes_after": 182,
+          "room_predicted_nodes_before": 461,
+          "room_true_positives_after": 38,
+          "room_true_positives_before": 118,
+          "structurally_invalid_predicted_nodes": 1373,
+          "surviving_predicted_nodes": 2547,
+          "validator_excluded_predicted_nodes": 1461,
+          "completion_availability_rate": 0.9375,
+          "accepted_completion_rate_of_expected": 0.9044117647058824,
+          "accepted_completion_rate_of_available": 0.9647058823529412,
+          "predicted_node_survival_rate": 0.6354790419161677,
+          "object_true_positive_retention": 0.7407407407407407,
+          "room_true_positive_retention": 0.3220338983050847,
+          "object_false_positive_removal_rate": 0.3338068181818182,
+          "room_false_positive_removal_rate": 0.5801749271137027,
+          "mean_pairwise_semantic_jaccard_diversity_before": 0.6280232128279029,
+          "mean_pairwise_semantic_jaccard_diversity_after": 0.7470864830284502,
+          "defined_diversity_tracks_before": 67,
+          "defined_diversity_tracks_after": 67
+        },
+        "issue_counts": {
+          "aabb_conflict": 802,
+          "edge_schema": 48,
+          "impassable_crossing": 533,
+          "object_parent": 99,
+          "unique_identifier": 9
+        },
+        "definitions": {
+          "completion_validity": "accepted completions / expected four-member scene-track slots; missing members remain in the denominator",
+          "survivor_recall": "sum of evaluator-matched true positives in predicted-only graphs after validation / sum before validation; the unchanged observed map is excluded and matching is recomputed after filtering so an equivalent surviving duplicate can replace a removed node",
+          "diversity": "mean pairwise Jaccard distance between per-completion sets of case-folded (kind, label), macro-averaged over stage-tracks",
+          "defined_diversity_tracks": "number of stage-tracks with at least two available completions; only these tracks define a pairwise diversity value and are used to weight the cross-scene aggregate"
+        }
+      },
+      "00853": {
+        "run_dir": "/workspace/runs/scene00853_seed42_matrix120m",
+        "reference": "/workspace/runs/scene00853_frontier_reference/stages/33/habitat_scene_graph_original_graph0.yaml",
+        "stages": 32,
+        "excluded_incomplete_stage_directories": 1,
+        "stage_tracks": 64,
+        "aggregate": {
+          "accepted_completions": 224,
+          "available_completions": 230,
+          "expected_completions": 256,
+          "missing_completions": 26,
+          "object_false_positives_after": 2121,
+          "object_false_positives_before": 3020,
+          "object_predicted_nodes_after": 2137,
+          "object_predicted_nodes_before": 3043,
+          "object_true_positives_after": 16,
+          "object_true_positives_before": 23,
+          "predicted_nodes": 3421,
+          "rejected_completions": 6,
+          "room_false_positives_after": 109,
+          "room_false_positives_before": 292,
+          "room_predicted_nodes_after": 149,
+          "room_predicted_nodes_before": 378,
+          "room_true_positives_after": 40,
+          "room_true_positives_before": 86,
+          "structurally_invalid_predicted_nodes": 1099,
+          "surviving_predicted_nodes": 2286,
+          "validator_excluded_predicted_nodes": 1135,
+          "completion_availability_rate": 0.8984375,
+          "accepted_completion_rate_of_expected": 0.875,
+          "accepted_completion_rate_of_available": 0.9739130434782609,
+          "predicted_node_survival_rate": 0.668225665010231,
+          "object_true_positive_retention": 0.6956521739130435,
+          "room_true_positive_retention": 0.46511627906976744,
+          "object_false_positive_removal_rate": 0.297682119205298,
+          "room_false_positive_removal_rate": 0.6267123287671232,
+          "mean_pairwise_semantic_jaccard_diversity_before": 0.6607518388179727,
+          "mean_pairwise_semantic_jaccard_diversity_after": 0.7801878352184006,
+          "defined_diversity_tracks_before": 64,
+          "defined_diversity_tracks_after": 64
+        },
+        "issue_counts": {
+          "aabb_conflict": 601,
+          "edge_endpoint": 12,
+          "edge_schema": 34,
+          "impassable_crossing": 397,
+          "object_parent": 129,
+          "unique_identifier": 6
+        },
+        "definitions": {
+          "completion_validity": "accepted completions / expected four-member scene-track slots; missing members remain in the denominator",
+          "survivor_recall": "sum of evaluator-matched true positives in predicted-only graphs after validation / sum before validation; the unchanged observed map is excluded and matching is recomputed after filtering so an equivalent surviving duplicate can replace a removed node",
+          "diversity": "mean pairwise Jaccard distance between per-completion sets of case-folded (kind, label), macro-averaged over stage-tracks",
+          "defined_diversity_tracks": "number of stage-tracks with at least two available completions; only these tracks define a pairwise diversity value and are used to weight the cross-scene aggregate"
+        }
+      }
+    },
+    "aggregate": {
+      "accepted_completions": 667,
+      "available_completions": 686,
+      "expected_completions": 752,
+      "missing_completions": 66,
+      "object_false_positives_after": 6239,
+      "object_false_positives_before": 9117,
+      "object_predicted_nodes_after": 6284,
+      "object_predicted_nodes_before": 9178,
+      "object_true_positives_after": 45,
+      "object_true_positives_before": 61,
+      "predicted_nodes": 10362,
+      "rejected_completions": 19,
+      "room_false_positives_after": 351,
+      "room_false_positives_before": 871,
+      "room_predicted_nodes_after": 489,
+      "room_predicted_nodes_before": 1184,
+      "room_true_positives_after": 138,
+      "room_true_positives_before": 313,
+      "structurally_invalid_predicted_nodes": 3438,
+      "surviving_predicted_nodes": 6773,
+      "validator_excluded_predicted_nodes": 3589,
+      "completion_availability_rate": 0.9122340425531915,
+      "accepted_completion_rate_of_expected": 0.886968085106383,
+      "accepted_completion_rate_of_available": 0.9723032069970845,
+      "predicted_node_survival_rate": 0.6536382937656823,
+      "object_true_positive_retention": 0.7377049180327869,
+      "room_true_positive_retention": 0.44089456869009586,
+      "object_false_positive_removal_rate": 0.3156740155752989,
+      "room_false_positive_removal_rate": 0.5970149253731343,
+      "mean_pairwise_semantic_jaccard_diversity_before": 0.6360903078259732,
+      "mean_pairwise_semantic_jaccard_diversity_after": 0.7556307279246378,
+      "defined_diversity_tracks_before": 187,
+      "defined_diversity_tracks_after": 187
+    },
+    "issue_counts": {
+      "aabb_conflict": 1990,
+      "edge_endpoint": 12,
+      "edge_schema": 86,
+      "impassable_crossing": 1327,
+      "object_parent": 248,
+      "room_containment": 2,
+      "unique_identifier": 19
+    }
+  },
+  "guardrails": {
+    "policy_under_test": "filter_plus_support_threshold_calibrated_tau_1.0",
+    "thresholds": {
+      "maximum_absolute_object_f1_auc_loss": 0.05,
+      "maximum_relative_normalized_ged_auc_increase": 0.1,
+      "path_budget_m": 120.0
+    },
+    "per_scene": {
+      "00069": {
+        "official_object_f1_auc": 0.47893797097553314,
+        "combined_object_f1_auc": 0.5217935919758052,
+        "absolute_f1_loss": -0.04285562100027207,
+        "f1_passed": true,
+        "official_normalized_ged_auc": 0.896941056310711,
+        "combined_normalized_ged_auc": 0.8253830422794106,
+        "relative_ged_increase": -0.07978006305746786,
+        "ged_passed": true,
+        "static_quality_passed": true
+      },
+      "00573": {
+        "official_object_f1_auc": 0.3979635778280782,
+        "combined_object_f1_auc": 0.43496638333921406,
+        "absolute_f1_loss": -0.03700280551113588,
+        "f1_passed": true,
+        "official_normalized_ged_auc": 0.957557764325188,
+        "combined_normalized_ged_auc": 0.8876294584424077,
+        "relative_ged_increase": -0.07302776760633373,
+        "ged_passed": true,
+        "static_quality_passed": true
+      },
+      "00853": {
+        "official_object_f1_auc": 0.4578203356657667,
+        "combined_object_f1_auc": 0.4956552012801306,
+        "absolute_f1_loss": -0.03783486561436389,
+        "f1_passed": true,
+        "official_normalized_ged_auc": 0.8560894803991912,
+        "combined_normalized_ged_auc": 0.7929668554504452,
+        "relative_ged_increase": -0.07373367667047159,
+        "ged_passed": true,
+        "static_quality_passed": true
+      }
+    },
+    "static_quality_gate": {
+      "passed": true
+    },
+    "invalid_hypothesis_gate": {
+      "passed": true,
+      "validator_excluded_predicted_nodes": 3589
+    },
+    "false_positive_detour_gate": {
+      "status": "not_identifiable",
+      "passed": null,
+      "reason": "Counterfactual policies selected stage-local poses but never navigated. The replay omits the live reachability gate and records no cumulative counterfactual path, so false-positive detour distance cannot be measured.",
+      "prohibited_substitutes": [
+        "selected-pose displacement from official",
+        "zero novel objects visible at a selected pose",
+        "A* planning failures on the official trajectory"
+      ]
+    },
+    "combined_usefulness_claim": {
+      "passed": false,
+      "status": "not_established_missing_required_trajectory_outcome",
+      "reason": "The preregistered claim requires all conditions. Static quality and invalid-hypothesis checks cannot substitute for an unmeasured detour condition."
+    }
+  },
+  "trajectory_diagnostics": {
+    "live_official_runs": {
+      "00069": {
+        "run_dir": "/workspace/runs/scene00069_seed42_matrix120m",
+        "log": "/workspace/runs/scene00069_seed42_matrix120m/logs/exploration_pipeline.log",
+        "completed_stage_records": 28,
+        "final_recorded_path_m": 125.32500000000331,
+        "planner_failures": {
+          "astar_failed": 13,
+          "empty_mid_level_path": 13,
+          "interpretation": "planner failures, not robot-contact events"
+        },
+        "robot_collisions": {
+          "status": "not_instrumented",
+          "count": null,
+          "reason": "The pinned controller advances with agent.set_state and unconditionally increments path length; artifacts contain no contact, blocked-step, or collision sensor field. LLM check_collision text concerns proposed object boxes, not robot motion."
+        },
+        "api_calls": {
+          "counter": 1922,
+          "logged_records": 1922,
+          "aggregate_request_seconds": 33434.72391939163,
+          "duration_note": "sum of per-request durations; concurrent calls make this larger than wall time"
+        },
+        "api_cost": {
+          "status": "unavailable_no_cost_or_token_usage_fields",
+          "recorded_cost": null,
+          "records_with_cost": 0
+        }
+      },
+      "00573": {
+        "run_dir": "/workspace/runs/scene00573_seed42_matrix120m",
+        "log": "/workspace/runs/scene00573_seed42_matrix120m/logs/exploration_pipeline.log",
+        "completed_stage_records": 34,
+        "final_recorded_path_m": 121.87500000000318,
+        "planner_failures": {
+          "astar_failed": 10,
+          "empty_mid_level_path": 10,
+          "interpretation": "planner failures, not robot-contact events"
+        },
+        "robot_collisions": {
+          "status": "not_instrumented",
+          "count": null,
+          "reason": "The pinned controller advances with agent.set_state and unconditionally increments path length; artifacts contain no contact, blocked-step, or collision sensor field. LLM check_collision text concerns proposed object boxes, not robot motion."
+        },
+        "api_calls": {
+          "counter": 2445,
+          "logged_records": 2444,
+          "aggregate_request_seconds": 28938.225647449493,
+          "duration_note": "sum of per-request durations; concurrent calls make this larger than wall time"
+        },
+        "api_cost": {
+          "status": "unavailable_no_cost_or_token_usage_fields",
+          "recorded_cost": null,
+          "records_with_cost": 0
+        }
+      },
+      "00853": {
+        "run_dir": "/workspace/runs/scene00853_seed42_matrix120m",
+        "log": "/workspace/runs/scene00853_seed42_matrix120m/logs/exploration_pipeline.log",
+        "completed_stage_records": 32,
+        "final_recorded_path_m": 126.07500000000334,
+        "planner_failures": {
+          "astar_failed": 15,
+          "empty_mid_level_path": 15,
+          "interpretation": "planner failures, not robot-contact events"
+        },
+        "robot_collisions": {
+          "status": "not_instrumented",
+          "count": null,
+          "reason": "The pinned controller advances with agent.set_state and unconditionally increments path length; artifacts contain no contact, blocked-step, or collision sensor field. LLM check_collision text concerns proposed object boxes, not robot motion."
+        },
+        "api_calls": {
+          "counter": 2053,
+          "logged_records": 2053,
+          "aggregate_request_seconds": 127677.81117129326,
+          "duration_note": "sum of per-request durations; concurrent calls make this larger than wall time"
+        },
+        "api_cost": {
+          "status": "unavailable_no_cost_or_token_usage_fields",
+          "recorded_cost": null,
+          "records_with_cost": 0
+        }
+      }
+    },
+    "counterfactual_decision_replay": {
+      "00069": {
+        "scene_id": "00069",
+        "stages": 28,
+        "error_stages": [],
+        "contains_counterfactual_trajectory_or_collision_field": false,
+        "false_positive_detours": {
+          "status": "not_identifiable",
+          "reason": "stage-independent selected poses are not executed cumulative paths"
+        },
+        "collisions": {
+          "status": "not_identifiable",
+          "reason": "no counterfactual policy entered the live controller or simulator"
+        }
+      },
+      "00573": {
+        "scene_id": "00573",
+        "stages": 34,
+        "error_stages": [],
+        "contains_counterfactual_trajectory_or_collision_field": false,
+        "false_positive_detours": {
+          "status": "not_identifiable",
+          "reason": "stage-independent selected poses are not executed cumulative paths"
+        },
+        "collisions": {
+          "status": "not_identifiable",
+          "reason": "no counterfactual policy entered the live controller or simulator"
+        }
+      },
+      "00853": {
+        "scene_id": "00853",
+        "stages": 32,
+        "error_stages": [],
+        "contains_counterfactual_trajectory_or_collision_field": false,
+        "false_positive_detours": {
+          "status": "not_identifiable",
+          "reason": "stage-independent selected poses are not executed cumulative paths"
+        },
+        "collisions": {
+          "status": "not_identifiable",
+          "reason": "no counterfactual policy entered the live controller or simulator"
+        }
+      }
+    },
+    "false_positive_detours": {
+      "status": "not_identifiable_from_frozen_corpus",
+      "value": null
+    },
+    "robot_collisions": {
+      "status": "not_instrumented_in_live_or_replay_artifacts",
+      "value": null
+    }
+  },
+  "provenance": {
+    "workspace_root": "/workspace",
+    "tool_sha256": "d68833fbe1a50b1332fea0e1be946b86a2727696997f50538368f42773fc0176",
+    "input_sha256": {
+      "matrix.00069.reference": "b644bcdbee2c795f447f7ca61220b90ed2e8e6255eb774bca7e432058611c2a6",
+      "matrix.00069.static": "fd5835fa3f0d8b35306e5cf0e253ec243d8e3648d76fcbcf6ad826554a6e0417",
+      "matrix.00069.decision": "2bf723835ba79c309b31224eabd7948c52ef2e96eb91b57768747157e6051417",
+      "matrix.00573.reference": "53cc04ce91dfd1e758534cd2948c184e45960a5152222560d5a40422dd6c8bc8",
+      "matrix.00573.static": "8e1dcc65a545c6316f51fe68526a885b8d8ab596a099ac58c056599300e9804c",
+      "matrix.00573.decision": "50dff66df993a0051ac8d53203c19bc44f9a1f74decd2f9748886eb920286d79",
+      "matrix.00853.reference": "7044fa0e560a9f3272613fcb64b8f4f7df50a6ca06abee7a84bbbb7337ddbd25",
+      "matrix.00853.static": "ee27f82365549cd29d04f79feef0c7ae26d2ac02b7f90f873a81c1630a2c2a15",
+      "matrix.00853.decision": "3e475f5086be2b4e5d0309c9be47bc9d592f1eb8725a4f64ace9bd166752c3cb",
+      "calibration.00069.reference": "b644bcdbee2c795f447f7ca61220b90ed2e8e6255eb774bca7e432058611c2a6",
+      "calibration.00573.reference": "53cc04ce91dfd1e758534cd2948c184e45960a5152222560d5a40422dd6c8bc8",
+      "calibration.00853.reference": "7044fa0e560a9f3272613fcb64b8f4f7df50a6ca06abee7a84bbbb7337ddbd25",
+      "calibration.00871.reference": "59af3076fb21f95e20df575df4f45ea1967d3409bd3165809663a77a309c5605"
+    }
+  },
+  "runtime_seconds": 141.31675620100577
+}
