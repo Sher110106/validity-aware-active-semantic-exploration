@@ -6,17 +6,17 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.prospective_eval.auditor import (
+from prospective_eval.auditor import (
     EngineEventReceipt,
     PassiveNavmeshAuditor,
     RealizedMotion,
     taxonomy_for_realized_motion,
 )
-from tools.prospective_eval.classification import EvidencePolicy, classify_reference, import_confirmed_false_positive
-from tools.prospective_eval.detour import BranchEvidence, InterventionEvidence, PathSample, evaluate_intervention, paired_policy_comparison
-from tools.prospective_eval.instrumentation import PassiveMotionRecorder
-from tools.prospective_eval.runner import AdapterCapabilities, BranchRunner, SnapshotManifest
-from tools.prospective_eval.schema import (
+from prospective_eval.classification import EvidencePolicy, classify_reference, import_confirmed_false_positive
+from prospective_eval.detour import BranchEvidence, InterventionEvidence, PathSample, evaluate_intervention, paired_policy_comparison
+from prospective_eval.instrumentation import PassiveMotionRecorder
+from prospective_eval.runner import AdapterCapabilities, BranchRunner, SnapshotManifest
+from prospective_eval.schema import (
     AppendOnlyLog, Classification, ControllerMode, EvidenceReceipt, EventTaxonomy, MotionEvent, MotionOutcome, Pose,
 )
 
