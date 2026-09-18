@@ -163,6 +163,15 @@ class LedgerTests(unittest.TestCase):
                 ledger.settle(reservation.request_id, **fields)
         self.assertEqual(ledger.summary()["unresolved_requests"], 1)
 
+    def test_allocate_accepts_idempotent_caller_supplied_id(self):
+        ledger = self.make_ledger()
+        allocation = ledger.allocate(campaign_id="campaign", phase_id="engineering",
+                                     amount_microusd=1000, allocation_id="block-1")
+        self.assertEqual(allocation.allocation_id, "block-1")
+        with self.assertRaises(AccountingHalt):
+            ledger.allocate(campaign_id="campaign", phase_id="engineering",
+                            amount_microusd=1000, allocation_id="block-1")
+
     def test_corrupt_or_unsupported_db_fails_closed(self):
         path = tempfile.mktemp()
         Path(path).write_text("not sqlite")
