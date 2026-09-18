@@ -33,6 +33,14 @@ class TestCampaign(unittest.TestCase):
         self.assertEqual(queue[1].policies, (EXPERIMENTAL, BASELINE))
         with self.assertRaises(ContractError): Pair('00069', 42, 'E→O', 120)
 
+    def test_pair_slug_is_a_valid_slug_and_distinct_by_direction(self):
+        from prospective_campaign.control import SLUG
+        queue = deterministic_queue(25)
+        self.assertTrue(all(SLUG.fullmatch(p.slug) for p in queue))
+        self.assertEqual(len({p.slug for p in queue}), len(queue))
+        o_to_e, e_to_o = Pair('00069', 42, 'O→E', 25), Pair('00069', 43, 'E→O', 25)
+        self.assertNotEqual(o_to_e.slug, e_to_o.slug)
+
     def test_block_is_exact_and_transactional(self):
         pairs = deterministic_queue(25)[:3]
         validate_block(pairs, 42, 25)
