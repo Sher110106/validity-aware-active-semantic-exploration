@@ -1,10 +1,21 @@
-"""Deterministic queue and outcome-blind pair/block admission."""
+"""Deterministic, order-aware queue and transactional block admission."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Protocol
 
-from .contract import EXPERIMENTAL, BASELINE, HORIZONS, SCENES, SEEDS
+from .contract import BASELINE, EXPERIMENTAL, HORIZON_M, SCENES, SEEDS, ContractError
+
+
+ORDERS = {42: (('00069', 'O→E'), ('00573', 'E→O'), ('00853', 'O→E')),
+          43: (('00573', 'E→O'), ('00853', 'O→E'), ('00069', 'E→O')),
+          44: (('00853', 'O→E'), ('00069', 'E→O'), ('00573', 'O→E'))}
+
+
+def _strict_horizon(value: int) -> int:
+    if type(value) is not int or value not in HORIZON_M:
+        raise ContractError("horizon_m must be one of the preregistered path budgets")
+    return value
 
 
 @dataclass(frozen=True)
@@ -12,30 +23,33 @@ class Pair:
     scene: str
     seed: int
     order: str
-    horizon: int
+    horizon_m: int
+
+    def __post_init__(self):
+        if self.scene not in SCENES or self.seed not in SEEDS or self.order not in ('O→E', 'E→O'):
+            raise ContractError("invalid pair identity")
+        _strict_horizon(self.horizon_m)
+        if (self.scene, self.order) not in ORDERS[self.seed]:
+            raise ContractError("scene/order is not the fixed queue order")
 
     @property
     def id(self) -> str:
-        return f"{self.scene}-seed{self.seed}-{self.order}-{self.horizon}m"
+        return f"{self.scene}-seed{self.seed}-{self.order}-{self.horizon_m}m"
 
     @property
     def policies(self) -> tuple[str, str]:
-        return (BASELINE, EXPERIMENTAL)
+        return (BASELINE, EXPERIMENTAL) if self.order == 'O→E' else (EXPERIMENTAL, BASELINE)
 
 
-def deterministic_queue(horizon: int = 120) -> tuple[Pair, ...]:
-    orders = {
-        42: (("00069", "O→E"), ("00573", "E→O"), ("00853", "O→E")),
-        43: (("00573", "E→O"), ("00853", "O→E"), ("00069", "E→O")),
-        44: (("00853", "O→E"), ("00069", "E→O"), ("00573", "O→E")),
-    }
-    return tuple(Pair(scene, seed, order, horizon) for seed in SEEDS for scene, order in orders[seed])
+def deterministic_queue(horizon_m: int = 120) -> tuple[Pair, ...]:
+    _strict_horizon(horizon_m)
+    return tuple(Pair(scene, seed, order, horizon_m) for seed in SEEDS for scene, order in ORDERS[seed])
 
 
-class BudgetBroker(Protocol):
-    def available(self) -> float: ...
-    def reserve(self, reservation_id: str, amount: float) -> bool: ...
-    def release(self, reservation_id: str) -> None: ...
+class GeminiLedger(Protocol):
+    def available_micro_usd(self) -> int: ...
+    def reserve_block(self, allocation_id: str, amount_micro_usd: int) -> bool: ...
+    def draw(self, allocation_id: str, request_id: str, amount_micro_usd: int) -> bool: ...
 
 
 class TechnicalHealth(Protocol):
@@ -46,49 +60,59 @@ class TechnicalHealth(Protocol):
 class Admission:
     admitted: bool
     reason: str
-    reservation_id: str | None = None
-    amount: float = 0.0
+    allocation_id: str | None = None
+    amount_micro_usd: int = 0
 
 
-def choose_horizon(remaining: float, worst_case_pair_cost: float) -> int | None:
-    """Choose before outcomes: largest ladder rung whose full pair is affordable."""
-    if worst_case_pair_cost <= 0:
-        raise ValueError("worst_case_pair_cost must be positive")
-    for horizon in HORIZONS:
-        if worst_case_pair_cost * horizon / 120.0 <= remaining:
+def validate_block(pairs: tuple[Pair, ...], seed: int, horizon_m: int) -> None:
+    _strict_horizon(horizon_m)
+    expected = tuple(Pair(scene, seed, order, horizon_m) for scene, order in ORDERS[seed])
+    if pairs != expected or len({p.scene for p in pairs}) != 3 or len({p.id for p in pairs}) != 3:
+        raise ContractError("block must contain exactly the three unique scenes in fixed order")
+
+
+def choose_horizon_m(available_micro_usd: int, prior_block_micro_usd: dict[int, int],
+                     pilot_multiplier_num: int, pilot_multiplier_den: int,
+                     unresolved_micro_usd: int = 0) -> int | None:
+    """Select common block path budget before outcomes, including unresolved spend."""
+    if type(available_micro_usd) is not int or type(unresolved_micro_usd) is not int:
+        raise ContractError("money must be integer microUSD")
+    if pilot_multiplier_num <= 0 or pilot_multiplier_den <= 0:
+        raise ContractError("invalid pilot multiplier")
+    for horizon in HORIZON_M:
+        base = prior_block_micro_usd.get(horizon)
+        if base is None:
+            continue
+        worst = (base * pilot_multiplier_num + pilot_multiplier_den - 1) // pilot_multiplier_den
+        if worst + unresolved_micro_usd <= available_micro_usd:
             return horizon
     return None
 
 
 class PairAdmissionController:
-    def __init__(self, broker: BudgetBroker, health: TechnicalHealth, *, cost_per_120m: float):
-        self.broker, self.health = broker, health
-        self.cost_per_120m = cost_per_120m
-        self.reserved: set[str] = set()
+    def __init__(self, ledger: GeminiLedger, health: TechnicalHealth, *, worst_block_micro_usd: int):
+        self.ledger, self.health, self.worst_block_micro_usd = ledger, health, worst_block_micro_usd
 
-    def admit_pair(self, pair: Pair) -> Admission:
-        # Only budget and technical health are consulted; no score/result argument exists.
+    def admit_block(self, pairs: tuple[Pair, ...], *, allocation_id: str) -> Admission:
         if not self.health.healthy():
             return Admission(False, "technical health is not healthy")
-        amount = self.cost_per_120m * pair.horizon / 120.0
-        reservation = f"pair:{pair.id}"
-        if reservation in self.reserved:
-            return Admission(False, "pair already reserved", reservation, amount)
-        if self.broker.available() < amount:
-            return Admission(False, "full pair does not fit conservative budget")
-        if not self.broker.reserve(reservation, amount):
-            return Admission(False, "budget broker rejected full-pair reservation")
-        self.reserved.add(reservation)
-        return Admission(True, "full pair reserved", reservation, amount)
-
-    def admit_block(self, pairs: tuple[Pair, ...]) -> Admission:
-        if not pairs:
-            return Admission(False, "empty block")
-        if not self.health.healthy():
-            return Admission(False, "technical health is not healthy")
-        amount = sum(self.cost_per_120m * p.horizon / 120.0 for p in pairs)
-        reservation = "block:" + ",".join(p.id for p in pairs)
-        if self.broker.available() < amount or not self.broker.reserve(reservation, amount):
+        validate_block(pairs, pairs[0].seed if pairs else -1, pairs[0].horizon_m if pairs else -1)
+        amount = self.worst_block_micro_usd
+        if self.ledger.available_micro_usd() < amount:
             return Admission(False, "complete block does not fit conservative budget")
-        self.reserved.add(reservation)
-        return Admission(True, "complete block reserved", reservation, amount)
+        if not self.ledger.reserve_block(allocation_id, amount):
+            return Admission(False, "ledger rejected transactional block reservation")
+        return Admission(True, "complete block reserved", allocation_id, amount)
+
+
+def allocate_block_costs(remaining_micro_usd: int, block_costs: tuple[int, ...]) -> tuple[int, ...]:
+    """Sequentially decrement each admitted block; never report future blocks as fitting."""
+    if any(type(x) is not int or x < 0 for x in block_costs):
+        raise ContractError("invalid block cost")
+    accepted = []
+    for cost in block_costs:
+        if cost <= remaining_micro_usd:
+            accepted.append(cost); remaining_micro_usd -= cost
+        else:
+            break
+    return tuple(accepted)

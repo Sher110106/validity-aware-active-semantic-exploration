@@ -1,142 +1,126 @@
 import hashlib
 import json
+import math
+import os
 import tempfile
 import unittest
 from pathlib import Path
 
-from prospective_campaign.budget import FakeBudgetBroker
+from prospective_campaign.budget import FakeGeminiLedger
 from prospective_campaign.claims import claim_gate
-from prospective_campaign.contract import EXPERIMENTAL, MODEL, THINKING_LEVEL
-from prospective_campaign.control import (Control, EventLog, atomic_json, can_continue,
-                                           isolated_attempt, validate_artifacts, validate_control,
-                                           write_completion_marker)
+from prospective_campaign.contract import BASELINE, EXPERIMENTAL, ContractError
+from prospective_campaign.control import (Control, EventLog, Telemetry, atomic_json,
+                                           parse_hash_file, secure_attempt, validate_artifacts,
+                                           validate_telemetry)
 from prospective_campaign.manifest import build_manifest
-from prospective_campaign.queue import Pair, PairAdmissionController, deterministic_queue, choose_horizon
+from prospective_campaign.queue import (Pair, PairAdmissionController, allocate_block_costs,
+                                        deterministic_queue, validate_block)
 from prospective_campaign.scope import decide_scope
-from prospective_campaign.state import CampaignSupervisor, Phase
+from prospective_campaign.state import PairState, load_state, save_state
 
 
-class FakeRunner:
-    def __init__(self): self.launched = False
-    def connectivity_ok(self): return True
-    def technical_health(self): return True
-    def launch(self, *args, **kwargs): self.launched = True
-    def stop(self, run_path): return True
-    def detour_metrics(self, run_path): return None
-
-
-class Unhealthy:
-    def healthy(self): return False
-
-
-class Healthy:
+class Health:
     def healthy(self): return True
 
 
-class CampaignTests(unittest.TestCase):
-    def test_queue_is_preregistered_in_exact_order(self):
-        self.assertEqual([(p.seed, p.scene, p.order) for p in deterministic_queue()], [
-            (42, "00069", "O→E"), (42, "00573", "E→O"), (42, "00853", "O→E"),
-            (43, "00573", "E→O"), (43, "00853", "O→E"), (43, "00069", "E→O"),
-            (44, "00853", "O→E"), (44, "00069", "E→O"), (44, "00573", "O→E")])
+class TestCampaign(unittest.TestCase):
+    def test_order_execution_and_policy_order(self):
+        queue = deterministic_queue()
+        self.assertEqual([(x.seed, x.scene, x.order) for x in queue], [
+            (42, '00069', 'O→E'), (42, '00573', 'E→O'), (42, '00853', 'O→E'),
+            (43, '00573', 'E→O'), (43, '00853', 'O→E'), (43, '00069', 'E→O'),
+            (44, '00853', 'O→E'), (44, '00069', 'E→O'), (44, '00573', 'O→E')])
+        self.assertEqual(queue[1].policies, (EXPERIMENTAL, BASELINE))
+        with self.assertRaises(ContractError): Pair('00069', 42, 'E→O', 120)
 
-    def test_pair_reservation_is_full_pair_and_outcome_blind(self):
-        broker = FakeBudgetBroker(10)
-        controller = PairAdmissionController(broker, Healthy(), cost_per_120m=8)
-        result = controller.admit_pair(Pair("00069", 42, "O→E", 120))
-        self.assertTrue(result.admitted)
-        self.assertEqual(8, result.amount)
-        self.assertFalse(controller.admit_pair(Pair("00573", 42, "E→O", 120)).admitted)
-        self.assertFalse(PairAdmissionController(broker, Unhealthy(), cost_per_120m=1)
-                         .admit_pair(Pair("00853", 42, "O→E", 25)).admitted)
+    def test_block_is_exact_and_transactional(self):
+        pairs = deterministic_queue(25)[:3]
+        validate_block(pairs, 42, 25)
+        with self.assertRaises(ContractError): validate_block(pairs[:2], 42, 25)
+        ledger = FakeGeminiLedger(190_000_000)
+        admission = PairAdmissionController(ledger, Health(), worst_block_micro_usd=64_820_000).admit_block(pairs, allocation_id='a1')
+        self.assertTrue(admission.admitted)
+        self.assertFalse(ledger.reserve_block('a1', 1))
+        self.assertTrue(ledger.draw('a1', 'req1', 1_000_000))
+        with self.assertRaises(RuntimeError): ledger.release('a1')
 
-    def test_horizon_ladder_is_descending_and_selected_before_results(self):
-        self.assertEqual(choose_horizon(10, 8), 120)
-        self.assertEqual(choose_horizon(4, 8), 50)
-        self.assertIsNone(choose_horizon(0.1, 8))
+    def test_integer_scope_and_sequential_decrement(self):
+        decision = decide_scope(pilot_cost_micro_usd=1_540_000, available_after_pilot_micro_usd=198_460_000,
+                                candidate_block_costs_micro_usd=(117_620_000, 117_620_000), selected_horizon_m=50,
+                                unresolved_micro_usd=10_000_000)
+        self.assertEqual(decision.admitted_block_costs_micro_usd, (117_620_000,))
+        self.assertIsInstance(decision.admitted_block_costs_micro_usd[0], int)
+        self.assertEqual(allocate_block_costs(200, (100, 101)), (100,))
 
-    def test_control_rejects_unknown_or_wrong_hashes(self):
-        with self.assertRaises(ValueError):
-            validate_control({"paused": False, "approved_hashes": ("wrong",)}, ("right",))
-        with self.assertRaises(ValueError):
-            validate_control({"paused": False, "approved_hashes": (), "extra": 1}, ())
+    def test_missing_telemetry_fails_closed(self):
+        with self.assertRaises(ContractError): validate_telemetry(Telemetry(None, True, 100, 1, 1, True))
 
-    def test_atomic_status_and_append_only_events(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "status.json"
-            atomic_json(path, {"phase": "ready"})
-            self.assertEqual(json.loads(path.read_text())["phase"], "ready")
-            log = EventLog(Path(tmp) / "events.jsonl")
-            log.append("ready")
-            log.append("paused", reason="technical")
-            self.assertEqual(len((Path(tmp) / "events.jsonl").read_text().splitlines()), 2)
-
-    def test_connectivity_and_limits_fail_closed(self):
-        control = Control(approved_hashes=())
-        self.assertEqual(can_continue(connectivity_ok=False, disk_gb=100, stalled=False,
-                                      runtime_exceeded=False, control=control)[0], False)
-        self.assertEqual(can_continue(connectivity_ok=True, disk_gb=24, stalled=False,
-                                      runtime_exceeded=False, control=control)[0], False)
-        self.assertEqual(can_continue(connectivity_ok=True, disk_gb=100, stalled=False,
-                                      runtime_exceeded=False, spend_known=False, control=control)[0], False)
-
-    def test_supervisor_pause_and_completion_state_machine(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); runner = FakeRunner()
-            supervisor = CampaignSupervisor(root / "status.json", EventLog(root / "events.jsonl"), runner)
-            paused = Control(paused=True, approved_hashes=())
-            self.assertFalse(supervisor.start(root / "run", scene="00069", seed=42,
-                                              policy=EXPERIMENTAL, horizon=25, control=paused))
-            self.assertEqual(supervisor.state.phase, Phase.PAUSED)
-            supervisor.state = supervisor.state.__class__(Phase.READY, 1, "")
-            run = root / "run"; run.mkdir()
-            self.assertTrue(supervisor.start(run, scene="00069", seed=42, policy=EXPERIMENTAL,
-                                             horizon=25, control=Control(approved_hashes=())))
-            self.assertTrue(runner.launched)
-
-    def test_retries_use_new_isolated_attempt_and_partial_is_not_complete(self):
+    def test_secure_paths_and_symlinks(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            first = isolated_attempt(root, "paired_v5", "00069", 42, "official_asp", 1)
-            second = isolated_attempt(root, "paired_v5", "00069", 42, "official_asp", 2)
-            self.assertNotEqual(first, second)
-            (first / "trajectory.json").write_text("partial")
-            self.assertFalse(validate_artifacts(first, ("trajectory.json",))[0])
+            secure_attempt(root, 'paired_v5', '00069', 42, BASELINE, 1)
+            with self.assertRaises(ContractError): secure_attempt(root, '..', '00069', 42, BASELINE, 1)
+            link = root / 'runs' / 'prospective_gemini' / 'paired_v5' / '00573'
+            link.parent.mkdir(parents=True, exist_ok=True); link.symlink_to(root)
+            with self.assertRaises(ContractError): secure_attempt(root, 'paired_v5', '00573', 42, BASELINE, 1)
 
-    def test_completion_marker_requires_hash_validated_artifacts(self):
+    def test_hash_parser_rejects_malformed_traversal_duplicate_and_symlink(self):
         with tempfile.TemporaryDirectory() as tmp:
-            run = Path(tmp)
-            artifact = run / "trajectory.json"
-            artifact.write_text("complete")
+            root = Path(tmp); hashes = root / 'ARTIFACTS.sha256'; digest = 'a' * 64
+            hashes.write_text(f'{digest}  good.json\n')
+            self.assertEqual(parse_hash_file(hashes, ('good.json',))['good.json'], digest)
+            for text in (f'{digest} bad.json\n', f'{digest}  ../bad.json\n', f'{digest}  good.json\n{digest}  good.json\n'):
+                hashes.write_text(text)
+                with self.assertRaises(ContractError): parse_hash_file(hashes, ('good.json',))
+            target = root / 'real'; target.write_text('x'); hashes.unlink(); hashes.symlink_to(target)
+            with self.assertRaises(ContractError): parse_hash_file(hashes, ('good.json',))
+
+    def test_artifact_requires_every_hash_and_regular_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            run = Path(tmp); artifact = run / 'trajectory.json'; artifact.write_text('ok')
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            (run / "ARTIFACTS.sha256").write_text(f"{digest}  trajectory.json\n")
-            write_completion_marker(run, required=("trajectory.json",))
-            self.assertTrue((run / "COMPLETE.json").exists())
+            (run / 'ARTIFACTS.sha256').write_text(f'{digest}  trajectory.json\n')
+            self.assertTrue(validate_artifacts(run, ('trajectory.json',))[0])
+            (run / 'ARTIFACTS.sha256').write_text('0' * 64 + '  trajectory.json\n')
+            self.assertFalse(validate_artifacts(run, ('trajectory.json',))[0])
 
-    def test_manifest_redacts_secret_values_and_records_contract(self):
-        manifest = build_manifest(source_tag="v5", author_commit="abc", environment={"api_key": "do-not-write"},
-                                  hashes={name: "h" for name in ("scene", "reference", "navmesh", "calibrator", "prompt", "policy")}, model=MODEL, thinking_level=THINKING_LEVEL,
-                                  seed=42, start_state="s", budget_ledger_id="ledger", controller_mode="dry",
-                                  audit_mode="strict")
-        self.assertEqual(manifest["environment"]["api_key"], "[REDACTED]")
-        self.assertEqual(manifest["model"], "gemini-3.8-flash")
-        self.assertNotIn("do-not-write", json.dumps(manifest))
+    def test_crash_reload_and_wrong_start_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'status.json'
+            state = PairState(2, 'campaign', 'block', 'pair', 'run', 1, 'alloc', 'a'*64, 'b'*64,
+                              (BASELINE, EXPERIMENTAL), (), 'reserved', 1)
+            save_state(path, state); self.assertEqual(load_state(path), state)
+            raw = json.loads(path.read_text()); raw['start_state_hash'] = 'c' * 64; path.write_text(json.dumps(raw))
+            self.assertNotEqual(load_state(path).start_state_hash, state.start_state_hash)
+            raw['attempt'] = 3; path.write_text(json.dumps(raw))
+            with self.assertRaises(ContractError): load_state(path)
 
-    def test_claim_gates(self):
-        self.assertEqual(claim_gate(complete_pairs=2, complete_block=False, invalid_hypothesis_ok=True,
-                                    fp_detour_reduction=.2, baseline_detour=1, f1_loss=0, ged_increase=0)["status"], "descriptive_only")
-        self.assertEqual(claim_gate(complete_pairs=6, complete_block=True, invalid_hypothesis_ok=True,
-                                    fp_detour_reduction=None, baseline_detour=1, f1_loss=0, ged_increase=0)["status"], "not_identifiable")
-        self.assertEqual(claim_gate(complete_pairs=6, complete_block=True, invalid_hypothesis_ok=True,
-                                    fp_detour_reduction=.2, baseline_detour=1, f1_loss=.05, ged_increase=.1)["status"], "established")
+    def test_manifest_allowlist_and_leakage_rejection(self):
+        kwargs = dict(source_tag='authoritative-v5-2026-09-17', author_commit='a'*64, container_digest='b'*64,
+                      environment_tag='container-ubuntu20', hashes={x: 'c'*64 for x in ('scene','reference','navmesh','calibrator','prompt','policy')},
+                      model='gemini-3.8-flash', thinking_level='medium', policy=EXPERIMENTAL, controller_mode='unattended',
+                      audit_mode='strict', scene='00069', seed=42, start_state_hash='d'*64, horizon_m=25,
+                      budget_ledger_id='ledger', allocation_id='alloc')
+        manifest = build_manifest(**kwargs); self.assertNotIn('environment', manifest)
+        kwargs['environment_tag'] = 'credential=secret'
+        with self.assertRaises(ContractError): build_manifest(**kwargs)
+        kwargs['environment_tag'] = 'safe'; kwargs['model'] = 'other'
+        with self.assertRaises(ContractError): build_manifest(**kwargs)
 
-    def test_scope_decision_is_cost_adaptive_and_terminal(self):
-        decision = decide_scope(pilot_cost=18, available_after_pilot=162,
-                                worst_case_pair_cost=40, horizon=120)
-        self.assertTrue(decision.seed42_block_fits)
-        self.assertFalse(decision.seed43_block_fits)
-        self.assertEqual(decision.terminal_reason, "seed42 then complete seed blocks only while each block fits")
+    def test_claim_metrics_are_finite_and_policy_specific(self):
+        args = dict(complete_pairs=3, complete_block=True, invalid_hypothesis_ok=True, detour_receipt_valid=True,
+                    fp_detour_reduction=.2, baseline_detour=1, f1_loss=.01, ged_increase=.01)
+        self.assertEqual(claim_gate(experimental_policy=EXPERIMENTAL, **args)['status'], 'established')
+        args['fp_detour_reduction'] = math.nan
+        self.assertNotEqual(claim_gate(experimental_policy=EXPERIMENTAL, **args)['status'], 'established')
+        args['fp_detour_reduction'] = .2
+        self.assertEqual(claim_gate(experimental_policy='beta_r', **args)['status'], 'not_established')
+
+    def test_event_allowlist_and_chaining(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            log = EventLog(Path(tmp) / 'events.jsonl'); log.append('reserve', sequence=0, run_id='run', allocation_id='alloc')
+            log.append('launch_intent', sequence=1, run_id='run', allocation_id='alloc')
+            with self.assertRaises(ContractError): log.append('leak', sequence=2, run_id='run', allocation_id='alloc')
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == '__main__': unittest.main()

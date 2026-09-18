@@ -15,13 +15,23 @@ test of that policy. DeepSeek LOSO probabilities are not Gemini probabilities.
 
 ## Fixed facts
 
-- Model: `gemini-3.8-flash`, exact source tag `authoritative-v5-2026-09-17`.
+- Model: `gemini-3.8-flash`, exact source tag `authoritative-v5-2026-09-17`,
+  standard rates $0.75/M input + $3.75/M candidate output. Thinking-token cost
+  remains unresolved and is included conservatively after the pilot.
 - Reasoning: `thinking_level=medium`; no fallback.
 - User cap $200; broker ceiling $190 = normal $180 + recovery $10; $10 margin.
 - No paid calls, credentials, Tailscale, or launched runs in this branch.
 - Queue is fixed seed-major by the order in `tools/prospective_campaign/queue.py`.
-- Horizons are chosen from 120/75/50/25 minutes before outcomes and are common
-  to every pair in a complete three-scene seed block.
+- Horizons are cumulative path-distance budgets `horizon_m` from 120/75/50/25
+  meters, never minutes, selected before outcomes and common to every pair in a
+  complete three-scene seed block. Wall-clock runtime is independent.
+- Pilot: paired scene 00069 seed 42, exactly one planning/navigation stage,
+  then stop; excluded from confirmatory tables.
+- Historical prior: one-policy 120m three-scene costs $194.46 ($62.52 +
+  $71.49 + $60.46), one-policy 25m costs $11.693/$8.7299/$11.9878, a paired
+  25m block costs about $64.82, and the one-stage pair costs about $1.54.
+  These exclude unknown Gemini thinking tokens; 75m/120m paired blocks are
+  ruled out under $200, while 50m ($117.62 base) may be rejected after pilot.
 
 ## Non-goals and limitations
 
@@ -48,6 +58,6 @@ detour instrumentation is `not_identifiable`; incomplete pairs are excluded.
 
 ## Feedback loop
 
-Run the focused unittest suite after each control-plane change (under one
-second); run repository tests, `compileall`, diff inspection, and secret scan
+Run `PYTHONPATH=tools python3 -m unittest discover -s tools/prospective_campaign/tests`
+after each control-plane change; run repository tests, `compileall`, diff inspection, and secret scan
 before commit. These validate orchestration without paid APIs or live runs.
