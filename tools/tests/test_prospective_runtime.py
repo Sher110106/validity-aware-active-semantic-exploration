@@ -469,7 +469,12 @@ class PassiveNavTests(unittest.TestCase):
         self.assertIsNone(records[0]["contact"])
 
     def test_missing_habitat_sim_fails_soft_to_none_without_crashing(self):
-        sys.modules.pop("habitat_sim", None)
+        # sys.modules[name] = None is the documented way to force ImportError
+        # regardless of whether a real habitat_sim is actually installed and
+        # importable elsewhere on sys.path (as it is in the real deployment
+        # container) -- a plain .pop() only fakes absence when nothing else
+        # can satisfy the import, which isn't true there.
+        sys.modules["habitat_sim"] = None
         agent, simulator = self._agent_and_simulator([(0.0, 0.0, 0.0)])
         records = []
         adapter = HabitatPassiveAdapter(agent, simulator, logger=records.append)
