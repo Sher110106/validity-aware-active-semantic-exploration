@@ -78,7 +78,11 @@ class CampaignSupervisor:
         return True
 
     def certify_member(self, run_path: Path, required: tuple[str, ...], member: str) -> bool:
-        if self.state is None or self.state.phase != Phase.RUNNING or member not in self.state.ordered_policies:
+        if self.state is None or member not in self.state.ordered_policies:
+            return False
+        if member in self.state.completed_members:
+            return True  # already certified; idempotent no-op, no duplicate event
+        if self.state.phase != Phase.RUNNING:
             return False
         ok, _ = validate_artifacts(run_path, required)
         if not ok: return False

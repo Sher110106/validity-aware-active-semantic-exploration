@@ -16,7 +16,7 @@ from prospective_campaign.manifest import build_manifest
 from prospective_campaign.queue import (Pair, PairAdmissionController, allocate_block_costs,
                                         deterministic_queue, validate_block)
 from prospective_campaign.scope import decide_scope
-from prospective_campaign.state import PairState, load_state, save_state
+from prospective_campaign.state import CampaignSupervisor, Phase, PairState, load_state, save_state
 
 
 class Health:
@@ -115,6 +115,31 @@ class TestCampaign(unittest.TestCase):
         self.assertNotEqual(claim_gate(experimental_policy=EXPERIMENTAL, **args)['status'], 'established')
         args['fp_detour_reduction'] = .2
         self.assertEqual(claim_gate(experimental_policy='beta_r', **args)['status'], 'not_established')
+
+    def test_certify_member_is_idempotent_and_does_not_duplicate_events(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run = root / 'run'; run.mkdir()
+            artifact = run / 'trajectory.json'; artifact.write_text('ok')
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            (run / 'ARTIFACTS.sha256').write_text(f'{digest}  trajectory.json\n')
+            status_path = root / 'status.json'
+            events = EventLog(root / 'events.jsonl')
+            events.append('reserve', sequence=0, run_id='run', allocation_id='alloc')
+            state = PairState(2, 'campaign', 'block', 'pair', 'run', 1, 'alloc', 'a' * 64, 'b' * 64,
+                              (BASELINE, EXPERIMENTAL), (), Phase.RUNNING.value, 0)
+            save_state(status_path, state)
+            supervisor = CampaignSupervisor(status_path, events, runner=None)
+            self.assertTrue(supervisor.certify_member(run, ('trajectory.json',), BASELINE))
+            first_sequence = supervisor.state.transition_sequence
+            first_members = supervisor.state.completed_members
+            # Re-certifying the same member (e.g. a retry after a crash) must be a
+            # no-op: no new transition, no duplicate "complete" event.
+            self.assertTrue(supervisor.certify_member(run, ('trajectory.json',), BASELINE))
+            self.assertEqual(supervisor.state.transition_sequence, first_sequence)
+            self.assertEqual(supervisor.state.completed_members, first_members)
+            event_lines = (root / 'events.jsonl').read_text().splitlines()
+            self.assertEqual(len(event_lines), 2)  # reserve + one complete, no duplicate
 
     def test_event_allowlist_and_chaining(self):
         with tempfile.TemporaryDirectory() as tmp:
