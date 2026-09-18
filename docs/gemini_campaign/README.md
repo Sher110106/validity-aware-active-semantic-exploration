@@ -1,25 +1,29 @@
 # Gemini campaign broker
 
-Status: **no-paid-call implementation**. This branch contains an injectable adapter and an offline ledger; it does not invoke Gemini or probe provider capabilities.
+Status: **no-paid-call implementation**. The branch has no direct runtime transport and the paid probe path remains unavailable.
 
 ## Security model
-Credentials are loaded only from an operator-provisioned regular file whose group/other permission bits are zero (`load_credential(path)`). The value is never logged, serialized, placed in an exception, passed in a URL, or accepted via environment inventory/CLI arguments. Transport is injected by the caller and broker events allowlist fields; raw requests/responses and authorization headers are not logged.
+`load_credential()` requires an absolute path outside caller-supplied forbidden repository roots, a regular file owned by the current UID, exact mode `0400` or `0600`, and a bounded single-line value. It opens with `O_NOFOLLOW` where available and validates the opened descriptor with `fstat`; errors are generic and contain neither path nor value. Keys beginning `AQ.` are valid authorization API keys as of 2026 when sent through the `x-goog-api-key` header; this implementation never validates or embeds a real key.
+
+Credentials are not accepted in environment inventories, CLI arguments, URLs, manifests, logs, exceptions, fixtures, or events. Events use an allowlist, identifier validation, exclusive no-follow opening, process locking, fsync, sequence numbers, and chained hashes. They never contain URLs, headers, bodies, raw responses, signatures, credentials, or arbitrary exception text.
 
 ## Budget invariants
-The stable allowlist is `gemini-3.8-flash`, `thinking_level="medium"`, explicit `max_output_tokens`, context bound 1,048,576 and output bound 65,536. Pricing is standard paid pricing through 2026-12-31: $0.75/M input and $3.75/M output (thinking included). The ledger uses integer microdollars and atomically reserves before dispatch. Reservations plus settled spend cannot exceed the $190 campaign ceiling. Missing usage, model/price mismatch, malformed responses, timeouts, lock errors, and corrupt ledgers fail closed with the reservation unresolved. No fallback and no automatic retries.
+The user cap is $200.00; the broker ceiling is $190.00, normal spending is $180.00, and the untouched/recovery reserve is at most $10.00. Exact integer microdollars are used. Phase caps are probe $2.00, engineering $18.00, scientific normal $160.00, and recovery $10.00. Recovery requires an explicit validated expiring `RecoveryControl`; a boolean cannot enable it.
 
-Normal ceiling is $180, recovery reserve is $10, and $10 remains untouched. Recovery controls are intentionally not implemented as an implicit path in this no-paid-call branch.
+Every complete request envelope gets either a trusted native count tied to its canonical request hash and exact model, or a conservative one-token-per-serialized-byte bound. Missing bounds fail closed. Every physical attempt allocates budget, reserves transactionally, writes a local dispatch receipt, then performs injected transport I/O. The provider response ID is never invented. Timeouts/unknown responses remain reserved. No SDK retries or provider fallbacks exist.
+
+Gemini `max_output_tokens` is a hard cap including thought tokens. Reservations use the complete cap once; settlement charges candidate plus thought tokens and requires `candidate + thought <= max_output_tokens`. Cached input is conservatively charged at the full input rate. Settlement requires exact model, standard service tier, valid usage totals, finish reason, response ID, and dispatched state. Duplicate settlement is idempotent only when all immutable accounting fields match.
 
 ## Commands
 
 ```sh
-python -m tools.gemini_campaign.cli summary ledger.sqlite
-python -m tools.gemini_campaign.cli export ledger.sqlite
-python -m tools.gemini_campaign.cli checksum ledger.sqlite
-python -m tools.gemini_campaign.cli probe                 # always dry-run
+python3 -m tools.gemini_campaign.cli probe       # dry-run only
+python3 -m tools.gemini_campaign.cli summary ledger.sqlite
+python3 -m tools.gemini_campaign.cli export ledger.sqlite
+python3 -m tools.gemini_campaign.cli checksum ledger.sqlite
 ```
 
-Exports contain ledger metadata only and should be treated as campaign artifacts. `summary` reconciles reserved, settled, unresolved, and remaining amounts.
+Paid enable is deliberately unavailable until a direct runtime transport is integrated. Probe allocations can never exceed $2.00.
 
 ## Official-source record
-Operator confirmation supplied 2026-09-18 states the exact model, thinking setting, limits, and pricing above. Reference URLs to re-check before any paid integration: [models](https://ai.google.dev/gemini-api/docs/models/gemini), [thinking](https://ai.google.dev/gemini-api/docs/thinking), and [pricing](https://ai.google.dev/gemini-api/docs/pricing). This branch makes no network/API calls and leaves paid invocation disabled.
+Operator confirmation supplied 2026-09-18 states the exact model, thinking level, limits, and pricing. Re-check before any future paid integration: [Gemini models](https://ai.google.dev/gemini-api/docs/models/gemini), [thinking](https://ai.google.dev/gemini-api/docs/thinking), [generate content](https://ai.google.dev/api/generate-content), [usage metadata](https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse), and [pricing](https://ai.google.dev/gemini-api/docs/pricing).
