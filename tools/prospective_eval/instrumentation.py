@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import Any, Mapping, Optional
 
 from .auditor import AuditResult, PassiveNavmeshAuditor
-from .schema import EventTaxonomy, MotionEvent, MotionOutcome, Pose, pose_distance, stable_hash
+from .schema import EventTaxonomy, MotionEvent, MotionOutcome, Pose, ControllerMode, position_error, rotation_error, pose_distance, stable_hash
 
 
 class PassiveMotionRecorder:
@@ -39,7 +39,7 @@ class PassiveMotionRecorder:
             taxonomy = EventTaxonomy.PLANNER_FAILURE
             outcome = MotionOutcome.PLANNER_FAILED
         elif result_pose is not None:
-            outcome = MotionOutcome.REACHED if pose_distance(previous_pose, requested_pose) == pose_distance(previous_pose, result_pose) else MotionOutcome.PARTIAL
+            outcome = MotionOutcome.REACHED if position_error(result_pose, requested_pose) <= 1e-4 and rotation_error(result_pose, requested_pose) <= 1e-4 else MotionOutcome.PARTIAL
         return MotionEvent(
             event_id=event_id,
             timestamp=datetime.now(timezone.utc).isoformat(),
@@ -49,18 +49,20 @@ class PassiveMotionRecorder:
             previous_pose=previous_pose,
             requested_pose=requested_pose,
             result_pose=result_pose,
-            nominal_distance_m=pose_distance(previous_pose, requested_pose),
-            pose_derived_distance_m=None if result_pose is None else pose_distance(previous_pose, result_pose),
+            requested_distance_m=pose_distance(previous_pose, requested_pose),
+            actual_displacement_m=None if result_pose is None else pose_distance(previous_pose, result_pose),
+            target_position_error_m=None if result_pose is None else position_error(result_pose, requested_pose),
+            target_rotation_error=None if result_pose is None else rotation_error(result_pose, requested_pose),
+            clipping_delta_m=None if result_pose is None else position_error(result_pose, requested_pose),
             outcome=outcome,
             taxonomy=taxonomy,
             planner_outcome=planner_outcome,
             reachability_outcome=reachability_outcome,
             passive_navmesh_admissible=audit.admissible,
-            clipping_delta_m=None,
             reset=reset,
             teleport=teleport,
             rotation_only=rotation_only,
-            controller_mode="passive",
+            controller_mode=ControllerMode.PASSIVE,
             command_hash=stable_hash(command) if command is not None else None,
             observation_hash=stable_hash(observation) if observation is not None else None,
         )

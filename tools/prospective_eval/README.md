@@ -1,39 +1,37 @@
 # Prospective motion/detour evaluation
 
-`tools/prospective_eval` is a passive, append-only instrumentation layer. It
-does not call `agent.set_state`, step Habitat, alter observations, consume RNG,
-or change controller decisions. Its primary event is a **navmesh/path audit**;
-it does not call that event a robot collision.
+This package is a passive overlay contract. Passive mode never calls
+`set_state`, steps Habitat, consumes RNG, changes observations, or changes
+controller decisions. It records requested distance, actual displacement,
+target position/rotation error, and clipping separately. `REACHED` requires
+both position and rotation errors within `1e-4`.
 
-## What is measurable
+Navmesh/pathfinder rejection, clipping, planner failure, object-box overlap,
+physical contact, blocked motion, and unknown are separate event classes.
+Pathfinder exceptions and invalid distances become `unknown`; no exception is
+treated as contact. A Habitat adapter must implement only query operations and
+must document that it does not mutate simulator state.
 
-Passive mode can record requested/result poses, nominal and pose-derived
-distance, planner/reachability outcomes, read-only navmesh admissibility,
-clipping, reset/teleport/rotation flags, hashes, and timestamps. A
-`physical_contact` event is valid only when a controller-altered adapter reports
-an engine contact signal. Object-box overlap and planner failure remain their
-own taxonomy values.
+`ControllerMode.COLLISION_AWARE_EXPERIMENT` is disabled by default. Contact or
+blocked motion requires a validated allowlisted engine receipt with source,
+event type, matching execution ID, timestamp, provenance hash, and the relevant
+flag. It is a separate controller-altered experiment.
 
-The optional `collision_aware_experiment` contract is disabled by default. It
-changes execution semantics and must be evaluated as a separate experiment;
-results are not method-faithful comparisons unless both policies use it.
+## Exact detour evidence
 
-## Detour preregistration
+`evaluate_intervention` accepts only immutable, hashed receipts: an externally
+reviewed FP label, complete common snapshot manifest, restore and execution
+receipts for both branches, reachability/target receipts, monotonic path
+samples, completion, useful-observation criteria, and state/external hashes.
+It recomputes path lengths and fails closed on missing or forged evidence.
+`reference_unmatched` remains `unknown`. Independent policy trajectories use
+`paired_policy_comparison`, a descriptive path/attribution result whose causal
+false-positive-detour field is always `not_identifiable`.
 
-Emit `false_positive_detour` only when the same exact snapshot is restored,
-the counterfactual is demonstrably FP-dependent, both branches execute live,
-the reference supports the FP claim, the alternative is shorter, and no
-preregistered useful-observation criterion is lost. Reference-unmatched labels
-are never treated as physical absence; otherwise the result is
-`tradeoff`, `unknown`, or `not_identifiable`.
+`BranchRunner` requires declared exact-restore, RNG, observation, filesystem,
+and isolation capabilities; it restores a clean baseline after both branches.
 
-`BranchRunner` fails closed when exact state restoration cannot be verified.
-Use `fixed_stage_samples` and report both eligible and missing stages.
-
-## Overlay guidance
-
-Deploy this package only through a controlled sibling/overlay wrapper around
-the pinned author pipeline. The wrapper should observe command/pose boundaries,
-invoke `PassiveNavmeshAuditor` with a read-only Habitat adapter, and append
-`MotionEvent.as_dict()` records. Do not patch the pinned checkout or silently
-replace `set_state`. No LLM calls are made by this package.
+`AppendOnlyLog` requires a contained owner-only regular file, uses an exclusive
+lock and fsync, and chains sequence/digest values. `verify()` detects tampering.
+No secrets or free-form credentials belong in receipt payloads; only stable IDs
+and hashes should be imported from external systems.

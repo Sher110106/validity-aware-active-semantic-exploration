@@ -6,6 +6,8 @@ starts a simulator, or changes an author's controller.
 
 from .schema import (
     Classification,
+    ControllerMode,
+    EvidenceReceipt,
     EventTaxonomy,
     MotionEvent,
     MotionOutcome,
@@ -14,6 +16,8 @@ from .schema import (
 
 __all__ = [
     "Classification",
+    "ControllerMode",
+    "EvidenceReceipt",
     "EventTaxonomy",
     "MotionEvent",
     "MotionOutcome",

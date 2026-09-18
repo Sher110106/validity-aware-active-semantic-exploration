@@ -1,17 +1,17 @@
-"""Read-only navmesh auditing and the explicitly separate altered-mode contract."""
+"""Read-only navmesh audit and receipt-gated altered execution taxonomy."""
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from typing import Any, Optional, Protocol
+from typing import Optional, Protocol
 
-from .schema import EventTaxonomy, MotionOutcome, Pose
+from .schema import ControllerMode, EventTaxonomy, Pose, _timestamp, _identifier, _finite
 
 
 class PathfinderAdapter(Protocol):
-    """Small Habitat adapter; implementations must not mutate simulator state."""
+    """Habitat adapter contract: query-only, no set_state/step/RNG mutation."""
 
     def is_navigable(self, position: tuple[float, float, float]) -> bool: ...
-
     def try_find_path(self, start: tuple[float, float, float], goal: tuple[float, float, float]) -> Optional[float]: ...
 
 
@@ -24,51 +24,64 @@ class AuditResult:
 
 
 class PassiveNavmeshAuditor:
-    """Audits a request without calling set_state, stepping, or changing RNG."""
-
     def __init__(self, adapter: PathfinderAdapter) -> None:
         self.adapter = adapter
 
     def audit(self, previous: Pose, requested: Pose) -> AuditResult:
-        if not self.adapter.is_navigable(requested.position):
-            return AuditResult(False, None, EventTaxonomy.NAVMESH_AUDIT_REJECTION, "goal_not_navigable")
-        distance = self.adapter.try_find_path(previous.position, requested.position)
-        if distance is None:
-            return AuditResult(False, None, EventTaxonomy.NAVMESH_AUDIT_REJECTION, "no_path")
-        return AuditResult(True, distance, EventTaxonomy.UNKNOWN, "admissible")
+        try:
+            if self.adapter.is_navigable(requested.position) is not True:
+                return AuditResult(False, None, EventTaxonomy.NAVMESH_AUDIT_REJECTION, "goal_not_navigable")
+            distance = self.adapter.try_find_path(previous.position, requested.position)
+            if distance is None:
+                return AuditResult(False, None, EventTaxonomy.NAVMESH_AUDIT_REJECTION, "no_path")
+            distance = _finite(distance, "path_distance_m", nonnegative=True)
+            return AuditResult(True, distance, EventTaxonomy.UNKNOWN, "admissible")
+        except (Exception, ValueError, TypeError):
+            return AuditResult(None, None, EventTaxonomy.UNKNOWN, "pathfinder_unavailable_or_invalid")
+
+
+@dataclass(frozen=True)
+class EngineEventReceipt:
+    source: str
+    event_type: str
+    execution_id: str
+    timestamp: str
+    provenance_hash: str
+    contact: bool = False
+    blocked: bool = False
+
+    ALLOWED_SOURCES = frozenset({"habitat_sim", "habitat_physics", "engine_contact_sensor"})
+    ALLOWED_TYPES = frozenset({"contact", "blocked_motion"})
+
+    def valid_for(self, execution_id: str, *, require: str) -> bool:
+        try:
+            _identifier(execution_id, "execution_id")
+            _timestamp(self.timestamp)
+            _identifier(self.source, "source")
+            _identifier(self.event_type, "event_type")
+        except ValueError:
+            return False
+        if self.source not in self.ALLOWED_SOURCES or self.event_type not in self.ALLOWED_TYPES:
+            return False
+        if self.execution_id != execution_id or not self.provenance_hash:
+            return False
+        return (require == "contact" and self.contact and self.event_type == "contact") or (require == "blocked" and self.blocked and self.event_type == "blocked_motion")
 
 
 @dataclass(frozen=True)
 class RealizedMotion:
     requested: Pose
     realized: Optional[Pose]
-    contact: Optional[bool]
-    blocked: Optional[bool]
-    engine_signal: str
+    execution_id: str
+    engine_receipt: Optional[EngineEventReceipt] = None
 
 
-class CollisionAwareExecutor(Protocol):
-    """Optional controller-altering experiment; never enabled by default."""
-
-    enabled: bool
-
-    def execute(self, requested: Pose) -> RealizedMotion: ...
-
-
-def validate_controller_mode(mode: str) -> None:
-    if mode not in {"passive", "collision_aware_experiment"}:
-        raise ValueError(f"unsupported controller mode: {mode}")
-    if mode == "collision_aware_experiment":
-        # This function is intentionally only a contract guard, not an executor.
-        return
-
-
-def taxonomy_for_realized_motion(motion: RealizedMotion, mode: str) -> EventTaxonomy:
-    validate_controller_mode(mode)
-    if mode != "collision_aware_experiment":
+def taxonomy_for_realized_motion(motion: RealizedMotion, mode: ControllerMode) -> EventTaxonomy:
+    mode = ControllerMode(mode)
+    if mode != ControllerMode.COLLISION_AWARE_EXPERIMENT or motion.realized is None:
         return EventTaxonomy.UNKNOWN
-    if motion.contact is True:
+    if motion.engine_receipt and motion.engine_receipt.valid_for(motion.execution_id, require="contact"):
         return EventTaxonomy.PHYSICAL_CONTACT
-    if motion.blocked is True:
+    if motion.engine_receipt and motion.engine_receipt.valid_for(motion.execution_id, require="blocked"):
         return EventTaxonomy.BLOCKED_MOTION
     return EventTaxonomy.UNKNOWN

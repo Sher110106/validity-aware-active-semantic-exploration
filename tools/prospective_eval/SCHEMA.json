@@ -2,14 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "prospective motion event",
   "type": "object",
-  "required": ["event_id", "previous_pose", "requested_pose", "taxonomy", "controller_mode"],
+  "additionalProperties": false,
+  "required": ["event_id", "timestamp", "stage_id", "segment_id", "command_id", "previous_pose", "requested_pose", "result_pose", "requested_distance_m", "actual_displacement_m", "target_position_error_m", "target_rotation_error", "clipping_delta_m", "outcome", "taxonomy", "planner_outcome", "reachability_outcome", "passive_navmesh_admissible", "reset", "teleport", "rotation_only", "controller_mode", "observation_hash", "command_hash", "metadata"],
   "properties": {
-    "event_id": {"type": "string"},
-    "previous_pose": {"$ref": "#/$defs/pose"},
-    "requested_pose": {"$ref": "#/$defs/pose"},
-    "result_pose": {"anyOf": [{"$ref": "#/$defs/pose"}, {"type": "null"}]},
-    "taxonomy": {"enum": ["planner_failure", "object_box_overlap", "navmesh_audit_rejection", "navmesh_audit_clipping", "physical_contact", "blocked_motion", "unknown"]},
-    "controller_mode": {"enum": ["passive", "collision_aware_experiment"]}
+    "event_id": {"$ref": "#/$defs/id"}, "timestamp": {"type": "string", "format": "date-time"}, "stage_id": {"$ref": "#/$defs/id"}, "segment_id": {"$ref": "#/$defs/id"}, "command_id": {"$ref": "#/$defs/id"},
+    "previous_pose": {"$ref": "#/$defs/pose"}, "requested_pose": {"$ref": "#/$defs/pose"}, "result_pose": {"anyOf": [{"$ref": "#/$defs/pose"}, {"type": "null"}]},
+    "requested_distance_m": {"type": "number", "minimum": 0}, "actual_displacement_m": {"$ref": "#/$defs/nullableNonnegative"}, "target_position_error_m": {"$ref": "#/$defs/nullableNonnegative"}, "target_rotation_error": {"$ref": "#/$defs/nullableNonnegative"}, "clipping_delta_m": {"$ref": "#/$defs/nullableNonnegative"},
+    "outcome": {"enum": ["reached", "partial", "blocked", "planner_failed", "unknown"]}, "taxonomy": {"enum": ["planner_failure", "object_box_overlap", "navmesh_audit_rejection", "navmesh_audit_clipping", "physical_contact", "blocked_motion", "unknown"]}, "planner_outcome": {"type": "string"}, "reachability_outcome": {"type": "string"}, "passive_navmesh_admissible": {"type": ["boolean", "null"]}, "reset": {"type": "boolean"}, "teleport": {"type": "boolean"}, "rotation_only": {"type": "boolean"}, "controller_mode": {"enum": ["passive", "collision_aware_experiment"]}, "observation_hash": {"type": ["string", "null"]}, "command_hash": {"type": ["string", "null"]}, "metadata": {"type": "object"}
   },
-  "$defs": {"pose": {"type": "object", "required": ["position"], "properties": {"position": {"type": "array", "minItems": 3, "maxItems": 3}, "rotation": {"type": ["array", "null"]}}}}
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+    "finite": {"type": "number"},
+    "nullableNonnegative": {"anyOf": [{"type": "number", "minimum": 0}, {"type": "null"}]},
+    "pose": {"type": "object", "additionalProperties": false, "required": ["position", "rotation"], "properties": {"position": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/$defs/finite"}}, "rotation": {"type": ["array", "null"], "items": {"$ref": "#/$defs/finite"}}}}
+  },
+  "allOf": [{"if": {"properties": {"controller_mode": {"const": "passive"}, "taxonomy": {"enum": ["physical_contact", "blocked_motion"]}}}, "then": {"not": {}}}]
 }
