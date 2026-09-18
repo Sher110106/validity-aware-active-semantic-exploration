@@ -112,3 +112,7 @@ class Hypothesis:
     calibrated_support: Optional[float] = None
     node_id: Optional[str] = None
     kind: str = "object"
+    # Raw agreement count behind `support` (support = hits / expected_size
+    # at the call site that produced it) - kept because a bare support
+    # float can't be un-divided later.
+    hits: int = 0

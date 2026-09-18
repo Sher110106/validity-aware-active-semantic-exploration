@@ -2,3 +2,10 @@
 __pycache__/
 *.py[cod]
 .venv_offline/
+.DS_Store
+.env
+.env.*
+!.env.example
+tmp/
+output/
+scratchpad_verify/

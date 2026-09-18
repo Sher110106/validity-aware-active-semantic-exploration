@@ -27,13 +27,14 @@ def score_viewpoint(
     `calibrator` is an uncalibrated-support passthrough when None: `supports`
     is used as raw ensemble support s_j (fraction of K completions
     containing a node), with no monotone map applied. A real calibrator
-    only reaches this argument via `fit_leave_one_scene_out`
-    (calibration.py), which requires reference graphs for at least 4
-    scenes rotated 3-vs-1 per IMPLEMENTATION_RESEARCH.md section 4.2 - as
-    of 2026-09-14 only one scene (00069) has one, so `fit_leave_one_scene_out`
-    raises rather than silently fitting on too few scenes (see its
-    docstring). Any run that passes calibrator=None is reporting an
-    UNCALIBRATED support-threshold policy, not the paper's proposed
+    reaches this argument via `fit_leave_one_scene_out`/`fit_loso_calibrator`
+    (calibration.py/support_policy.py), which requires reference graphs for
+    at least 4 scenes rotated 3-vs-1 per IMPLEMENTATION_RESEARCH.md section
+    4.2 - as of 2026-09-15 all 4 scenes (00069, 00573, 00853, 00871) have
+    one, so a real LOSO fit is computable and used by
+    `extension_policy_replay.py`/`decision_replay.py` (DEVIATIONS.md
+    #61-62/#65-66). Any run that passes calibrator=None is still reporting
+    an UNCALIBRATED support-threshold policy, not the paper's proposed
     calibration - label it that way in any output/report, never as
     "calibration-only"."""
     supports = list(visible_predictions)

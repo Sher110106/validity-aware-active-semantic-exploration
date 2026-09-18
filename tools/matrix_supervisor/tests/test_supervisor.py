@@ -77,7 +77,7 @@ class MatrixSupervisorTests(unittest.TestCase):
             control_file=root / "tools" / "matrix_supervisor" / "CONTROL.json",
         )
 
-    def _write_control(self, paths: SupervisorPaths):
+    def _write_control(self, paths: SupervisorPaths, *, max_completed_runs=None):
         paths.control_file.parent.mkdir(parents=True)
         paths.control_file.write_text(
             json.dumps(
@@ -95,6 +95,7 @@ class MatrixSupervisorTests(unittest.TestCase):
                     "startup_grace_seconds": 180,
                     "graceful_stop_seconds": 180,
                     "resume_generation": 0,
+                    "max_completed_runs": max_completed_runs,
                 }
             )
         )
@@ -326,6 +327,42 @@ class MatrixSupervisorTests(unittest.TestCase):
             state = json.loads(paths.state_file.read_text())["run_state"]
             self.assertEqual("launching", state["phase"])
 
+    def test_run_limit_blocks_launch_without_touching_queue_or_run_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paths = self._paths(root)
+            self._write_control(paths, max_completed_runs=0)
+            runtime = FakeRuntime(
+                root,
+                Observation.idle(now=1000.0, free_disk_gb=100),
+            )
+            supervisor = MatrixSupervisor(paths=paths, runtime=runtime, clock=lambda: 1000.0)
+
+            report = supervisor.reconcile(dry_run=False)
+
+            self.assertNotIn("launch", [call[0] for call in runtime.calls])
+            self.assertEqual("pause", report["proposed_action"])
+            self.assertIn("run limit reached", report["reason"])
+            state = json.loads(paths.state_file.read_text())
+            self.assertEqual(0, state["queue_index"])
+            self.assertEqual("ready", state["run_state"]["phase"])
+
+    def test_run_limit_does_not_block_launches_below_the_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paths = self._paths(root)
+            self._write_control(paths, max_completed_runs=1)
+            runtime = FakeRuntime(
+                root,
+                Observation.idle(now=1000.0, free_disk_gb=100),
+            )
+            supervisor = MatrixSupervisor(paths=paths, runtime=runtime, clock=lambda: 1000.0)
+
+            report = supervisor.reconcile(dry_run=False)
+
+            self.assertIn("launch", [call[0] for call in runtime.calls])
+            self.assertEqual("launch_run", report["proposed_action"])
+
     def test_control_rejects_resource_limits_looser_than_approved(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -341,6 +378,7 @@ class MatrixSupervisorTests(unittest.TestCase):
                 "max_attempts": 3,
                 "reasoning_effort": "high",
                 "max_tokens": 32000,
+                "max_completed_runs": -1,
             }
             for key, value in unsafe_changes.items():
                 with self.subTest(key=key):

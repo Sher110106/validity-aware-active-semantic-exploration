@@ -1,0 +1,11 @@
+nodes:
+  - id: 0
+    node_type: room
+    name: Kitchen
+    position: "[0.0, 0.0, 0.0]"
+  - id: 1
+    node_type: object
+    name: chair
+    position: "[1.0, 0.0, 0.0]"
+edges:
+  - [0, 1]

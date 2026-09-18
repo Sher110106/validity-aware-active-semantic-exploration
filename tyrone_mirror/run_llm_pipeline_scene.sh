@@ -59,6 +59,10 @@ export ASP_OPENROUTER_MODEL=deepseek/deepseek-v4.1-flash
 # outage fails over instead of stalling the run - same lesson as the
 # reverted hard pin to "Together" (see DEVIATIONS.md).
 export ASP_OPENROUTER_PROVIDER_ORDER=deepinfra/fp8
+# 2026-09-16: order alone let a fallback land on Relace (fp4), not just
+# Morph (also fp8) - confirmed live against the real API. quantizations
+# keeps every call, primary or fallback, restricted to fp8.
+export ASP_OPENROUTER_QUANTIZATIONS=fp8
 export ASP_OPENROUTER_REASONING_EFFORT=${REASONING_EFFORT}
 export ASP_OPENROUTER_MAX_TOKENS=${MAX_TOKENS}
 export ASP_LLM_LOG_DIR="$RUN/prompts"

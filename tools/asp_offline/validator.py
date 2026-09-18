@@ -186,7 +186,25 @@ def validate_completion(
         if node.type not in _PREDICTABLE:
             fail("node_schema", "new nodes may only be objects or rooms", node)
             continue
-        if node.center is None or (config.require_dimensions and node.dimensions is None) or aabb(node) is None:
+        if node.type == "room":
+            # 2026-09-15 bug fix: rooms in this pipeline's own wire format
+            # NEVER carry a `dimension` field - confirmed on real data,
+            # including the pipeline's own observed/tracked graphs, not
+            # just LLM predictions (rooms are centroid+label only,
+            # matched everywhere else in this codebase by a 4.0 m
+            # distance threshold, never by AABB overlap - see the
+            # `threshold = 4.0 if node.type == "room"` line below, and
+            # room_overlap/room_containment above, which both already
+            # `continue`/skip gracefully when `aabb(room) is None` rather
+            # than failing). Requiring an AABB for rooms here was an
+            # inconsistency with the rest of this file, not a deliberate
+            # check - it silently rejected every predicted room (and,
+            # via object_parent, everything predicted inside one),
+            # dominating any "filter-only" result with a missing-field
+            # artifact rather than a real structural-quality signal.
+            if node.center is None:
+                fail("finite_geometry", "predicted room must have a finite center", node)
+        elif node.center is None or (config.require_dimensions and node.dimensions is None) or aabb(node) is None:
             fail("finite_geometry", "predicted node must have finite center and non-negative dimensions", node)
 
     # Remove malformed/unknown edges and enforce the prompt's two edge forms.

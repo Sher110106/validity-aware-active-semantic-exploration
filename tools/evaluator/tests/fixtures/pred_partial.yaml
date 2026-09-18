@@ -1,0 +1,31 @@
+nodes:
+  - id: 10
+    node_type: room
+    name: Living Room
+    position: "[0.1, 0.0, 0.0]"
+  - id: 11
+    node_type: room
+    name: Bedroom
+    position: "[5.0, 0.0, 0.0]"
+  - id: 12
+    node_type: object
+    name: chair
+    position: "[1.1, 1.0, 0.0]"
+  - id: 13
+    node_type: object
+    name: table
+    position: "[1.0, 2.6, 0.0]"
+  - id: 14
+    node_type: object
+    name: lamp
+    position: "[1.0, 1.0, 1.0]"
+  - id: 15
+    node_type: structure
+    name: door
+    position: "[2.5, 0.0, 0.0]"
+edges:
+  - [10, 12]
+  - [10, 13]
+  - [10, 14]
+  - [10, 15]
+  - [11, 15]

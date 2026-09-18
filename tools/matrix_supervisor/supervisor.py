@@ -74,6 +74,7 @@ class RuntimeControl(Control):
     startup_grace_seconds: int = 180
     graceful_stop_seconds: int = 180
     resume_generation: int = 0
+    max_completed_runs: int | None = None
 
 
 @dataclass
@@ -148,6 +149,10 @@ def load_control(path: Path) -> RuntimeControl:
         raise ValueError("approved startup_grace_seconds is exactly 180")
     if control.graceful_stop_seconds != 180:
         raise ValueError("approved graceful_stop_seconds is exactly 180")
+    if control.max_completed_runs is not None and (
+        not isinstance(control.max_completed_runs, int) or control.max_completed_runs < 0
+    ):
+        raise ValueError("max_completed_runs must be null or a non-negative integer")
     return control
 
 
@@ -639,6 +644,21 @@ class MatrixSupervisor:
                     )
 
         decision = choose_action(state.run_state, observation, control)
+        if (
+            decision.kind == ActionKind.LAUNCH_RUN
+            and control.max_completed_runs is not None
+            and state.queue_index >= control.max_completed_runs
+        ):
+            reason = (
+                f"run limit reached ({control.max_completed_runs} of "
+                f"{len(self.plan)} configured runs) - operator stop, not a "
+                "safety pause; raise or clear max_completed_runs to resume"
+            )
+            decision = Decision(
+                ActionKind.PAUSE,
+                reason,
+                replace(state.run_state, blocker=reason),
+            )
         report = self._status(
             state=state,
             observation=observation,

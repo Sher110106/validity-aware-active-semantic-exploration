@@ -108,7 +108,7 @@ def evaluate_graph(predicted: Mapping[str, Any], reference: Mapping[str, Any]) -
         return tuple(sorted((edge.source, edge.target)))
     ref_edges = {undirected(e) for e in _edges(reference) if e.source in ref_ids and e.target in ref_ids}
     pred_edges = {undirected(e) for e in _edges(predicted) if e.source in pred_ids and e.target in pred_ids}
-    mapped_pred_edges = {(all_map.get(a), all_map.get(b)) for a, b in pred_edges if a in all_map and b in all_map}
+    mapped_pred_edges = {tuple(sorted((all_map[a], all_map[b]))) for a, b in pred_edges if a in all_map and b in all_map}
     edge_edits = len(ref_edges - mapped_pred_edges) + len(mapped_pred_edges - ref_edges)
     ged = float(node_edits + edge_edits)
     norm = len(comparable_r) + len(ref_edges)
