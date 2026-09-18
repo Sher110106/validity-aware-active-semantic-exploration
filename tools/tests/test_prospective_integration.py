@@ -76,8 +76,7 @@ class CompleteFakePairTests(unittest.TestCase):
             self.assertEqual(pair.policies, (BASELINE, EXPERIMENTAL))
 
             events = EventLog(root / "events.jsonl")
-            pair_slug = f"{pair.scene}-seed{pair.seed}-{pair.horizon_m}m"  # pair.id has a non-slug arrow
-            state = PairState(2, "paired_v5", "block-42-25m", pair_slug, "run-1", 1, "block-42-25m",
+            state = PairState(2, "paired_v5", "block-42-25m", pair.slug, "run-1", 1, "block-42-25m",
                               "a" * 64, "b" * 64, pair.policies, (), Phase.READY.value, 0)
             supervisor = CampaignSupervisor(root / "status.json", events, runner=None)
             telemetry = Telemetry(True, True, 100, 0, 0, True)
@@ -97,7 +96,7 @@ class CompleteFakePairTests(unittest.TestCase):
                                    "taxonomy": event.taxonomy.value,
                                    "controller_mode": event.controller_mode.value,
                                    "passive_navmesh_admissible": event.passive_navmesh_admissible})
-                self.assertTrue(adapter.draw("block-42-25m", f"{pair_slug}:{policy}", 100_000))
+                self.assertTrue(adapter.draw("block-42-25m", f"{pair.slug}:{policy}", 100_000))
                 certified = supervisor.certify_member(run_dir, ("trajectory.json",), policy)
                 self.assertTrue(certified)
                 expected_phase = Phase.COMPLETE if index == 1 else Phase.RESERVED
