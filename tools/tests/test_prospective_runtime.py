@@ -18,7 +18,9 @@ from prospective_runtime.manifest import RuntimeManifest, file_sha256
 from prospective_runtime.passive_nav import HabitatPassiveAdapter
 from prospective_runtime.policy import apply_unanimity_policy, equivalent_graph, process_cards
 from prospective_runtime.sdk_compat import content_to_rest, response_to_sdk_shape
-from prospective_runtime.transport import GeminiTransport, RequestContext, canonical_json, request_hash
+from prospective_runtime.transport import (
+    GeminiTransport, RequestContext, canonical_json, conservative_input_bound, request_hash,
+)
 
 
 OBSERVED = {"nodes": [{"id": "room0", "type": "room", "label": "room", "center": [0, 0, 0]}], "edges": []}
@@ -214,6 +216,12 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(canonical_json(first), canonical_json(second))
         self.assertEqual(request_hash(first), request_hash(second))
 
+    def test_conservative_input_bound_grows_with_request_size(self):
+        small = {"contents": [{"text": "hi"}]}
+        large = {"contents": [{"text": "hi" * 10_000}]}
+        self.assertGreater(conservative_input_bound(large), conservative_input_bound(small))
+        self.assertEqual(conservative_input_bound(small), len(canonical_json(small)))
+
 
 class AuthorTests(unittest.TestCase):
     def test_deterministic_seed_is_pure_and_stable(self):
@@ -256,6 +264,24 @@ class AuthorTests(unittest.TestCase):
         )
         self.assertEqual(result.text, "done")
         self.assertEqual(executed, ["move"])
+
+    def test_run_author_turns_recomputes_the_input_bound_each_growing_turn(self):
+        # Regression: a fixed bound copied from the base context would
+        # under-reserve later turns, since the conversation strictly grows
+        # each round trip (accumulated function call/response history).
+        broker = RecordingBroker()
+        responses = [gemini_payload(), gemini_payload(), gemini_payload(candidates=[{
+            "finishReason": "STOP", "content": {"role": "model", "parts": [{"text": "done"}]},
+        }])]
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: responses.pop(0))
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=make_context(trusted_input_token_bound=1), seed_for_turn=lambda turn: turn,
+            max_output_tokens=10, execute_tool=lambda call: {"ok": True},
+        )
+        bounds = [c.trusted_input_token_bound for c in broker.contexts]
+        self.assertTrue(all(b > 1 for b in bounds), bounds)  # never the caller's stale guess
+        self.assertLess(bounds[0], bounds[-1])  # strictly grows as history accumulates
 
     def test_run_author_turns_gives_every_turn_a_unique_attempt_and_turn_id(self):
         # attempt_id feeds the real ledger's UNIQUE(campaign_id, attempt_id)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Callable, Mapping, Optional, Sequence
 
-from .transport import GeminiTransport, RequestContext, RestResponse
+from .transport import GeminiTransport, RequestContext, RestResponse, conservative_input_bound
 
 
 def deterministic_seed(campaign: str, run: str, stage: str, member: str, turn: int) -> int:
@@ -45,12 +45,16 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
     contents = list(initial_contents)
     for turn in range(max_turns):
         request = request_for_turn(contents, seed=seed_for_turn(turn), max_output_tokens=max_output_tokens, tools=tools)
+        # A fixed bound from the caller would under-reserve later turns: the
+        # conversation strictly grows each round trip (accumulated function
+        # call/response history), so each turn needs its own bound computed
+        # from what it's actually about to send, not the first turn's size.
         turn_context = RequestContext(
             allocation_id=context.allocation_id, campaign_id=context.campaign_id,
             phase_id=context.phase_id, run_id=context.run_id, stage_id=context.stage_id,
             member_id=context.member_id, turn_id=f"{context.turn_id}:{turn}",
             attempt_id=f"{context.attempt_id}:{turn}",
-            trusted_input_token_bound=context.trusted_input_token_bound,
+            trusted_input_token_bound=conservative_input_bound(request),
         )
         response = transport.generate(request, context=turn_context)
         if not response.function_calls:

@@ -21,6 +21,14 @@ def request_hash(request: Mapping[str, Any]) -> str:
     return hashlib.sha256(canonical_json(request)).hexdigest()
 
 
+def conservative_input_bound(request: Mapping[str, Any]) -> int:
+    """One token per serialized byte -- intentionally over-conservative,
+    covering Unicode, tool schemas, and inline image data. A caller with a
+    trusted native token count should use that instead; this is the
+    fail-closed fallback when none is available."""
+    return len(canonical_json(request))
+
+
 @dataclass(frozen=True)
 class RequestContext:
     allocation_id: str
