@@ -24,16 +24,23 @@ def request_hash(request: Mapping[str, Any]) -> str:
 @dataclass(frozen=True)
 class RequestContext:
     allocation_id: str
+    campaign_id: str
+    phase_id: str
     run_id: str
     stage_id: str
     member_id: str
     turn_id: str
+    attempt_id: str
     trusted_input_token_bound: int
+    retry_of: Optional[str] = None
 
     def validate(self) -> None:
-        values = (self.allocation_id, self.run_id, self.stage_id, self.member_id, self.turn_id)
+        values = (self.allocation_id, self.campaign_id, self.phase_id, self.run_id,
+                  self.stage_id, self.member_id, self.turn_id, self.attempt_id)
         if any(not isinstance(value, str) or not value or len(value) > 200 for value in values):
             raise ValueError("broker context IDs must be non-empty bounded strings")
+        if self.retry_of is not None and (not isinstance(self.retry_of, str) or not self.retry_of or len(self.retry_of) > 200):
+            raise ValueError("retry_of must be a non-empty bounded string when given")
         if not isinstance(self.trusted_input_token_bound, int) or self.trusted_input_token_bound < 0:
             raise ValueError("trusted_input_token_bound must be a non-negative integer")
 
@@ -74,7 +81,8 @@ class RestResponse:
 
 
 class BudgetBroker(Protocol):
-    def reserve(self, *, context: RequestContext, request_hash: str) -> Reservation: ...
+    def reserve(self, *, context: RequestContext, request_hash: str,
+               max_output_tokens: int) -> Reservation: ...
     def dispatch(self, *, reservation: Reservation, receipt: DispatchReceipt) -> None: ...
     def settle(self, *, reservation: Reservation, usage: UsageMetadata,
                finish_reason: str) -> None: ...
@@ -96,7 +104,9 @@ class GeminiTransport:
         context.validate()
         _validate_request(request)
         digest = request_hash(request)
-        reservation = self._broker.reserve(context=context, request_hash=digest)
+        max_output_tokens = request["generationConfig"]["maxOutputTokens"]
+        reservation = self._broker.reserve(context=context, request_hash=digest,
+                                           max_output_tokens=max_output_tokens)
         if reservation.request_hash != digest:
             raise RuntimeError("broker returned a mismatched request hash")
         receipt = DispatchReceipt(reservation.reservation_id, digest)
