@@ -169,14 +169,15 @@ class Ledger:
     def _allocated_total(self) -> int:
         return int(self.db.execute("SELECT COALESCE(SUM(amount_microusd),0) FROM allocations").fetchone()[0])
 
-    def allocate(self, *, campaign_id: str, phase_id: str, amount_microusd: int) -> Allocation:
+    def allocate(self, *, campaign_id: str, phase_id: str, amount_microusd: int,
+                 allocation_id: str | None = None) -> Allocation:
         self._id(campaign_id, "campaign")
         self._check_phase(phase_id)
         if not isinstance(amount_microusd, int) or amount_microusd <= 0:
             raise LedgerError("allocation amount is invalid")
         if amount_microusd > PHASE_CAPS[phase_id] or phase_id == "recovery" and amount_microusd > self.recovery.amount_microusd:
             raise AccountingHalt("phase allocation cap reached")
-        aid = uuid.uuid4().hex
+        aid = self._id(allocation_id, "allocation") if allocation_id is not None else uuid.uuid4().hex
         self._tx()
         try:
             phase_total = int(self.db.execute("SELECT COALESCE(SUM(amount_microusd),0) FROM allocations WHERE phase_id=?", (phase_id,)).fetchone()[0])
@@ -190,6 +191,9 @@ class Ledger:
         except (AccountingHalt, LedgerError):
             self._rollback()
             raise
+        except sqlite3.IntegrityError as exc:
+            self._rollback()
+            raise AccountingHalt("allocation id is already used") from exc
         except sqlite3.Error as exc:
             self._rollback()
             raise AccountingHalt("allocation failed; dispatch halted") from exc
