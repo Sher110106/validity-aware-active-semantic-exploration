@@ -163,13 +163,20 @@ class GeminiTransport:
             service_tier = usage.get("serviceTier")
             if service_tier != "standard":
                 raise ValueError("non-standard or missing service metadata")
-            counts = [_nonnegative_int(usage[name]) for name in
-                      ("promptTokenCount", "candidatesTokenCount", "thoughtsTokenCount")]
-            # cachedContentTokenCount is omitted entirely (not sent as 0)
-            # when there is no cached content -- also confirmed live.
-            counts.append(_nonnegative_int(usage.get("cachedContentTokenCount", 0)))
-            counts.append(_nonnegative_int(usage["totalTokenCount"]))
-            prompt, candidate_tokens, thoughts, cached, total = counts
+            # promptTokenCount and totalTokenCount are the only usage fields
+            # required to always be present; every other per-category count
+            # is omitted entirely (not sent as 0) whenever its value would
+            # be zero -- confirmed live independently for thoughtsTokenCount
+            # (a heavily truncated max_output_tokens=5 call spent zero
+            # thinking tokens) and cachedContentTokenCount (an uncached
+            # call). candidatesTokenCount is defaulted the same way on the
+            # same principle, even though not yet observed omitted, rather
+            # than waiting to hit it as a third occurrence of this bug.
+            prompt = _nonnegative_int(usage["promptTokenCount"])
+            candidate_tokens = _nonnegative_int(usage.get("candidatesTokenCount", 0))
+            thoughts = _nonnegative_int(usage.get("thoughtsTokenCount", 0))
+            cached = _nonnegative_int(usage.get("cachedContentTokenCount", 0))
+            total = _nonnegative_int(usage["totalTokenCount"])
             if total != prompt + candidate_tokens + thoughts:
                 raise ValueError("inconsistent token totals")
             if len(candidates) != 1 or not isinstance(candidates[0], Mapping):

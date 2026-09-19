@@ -176,6 +176,31 @@ class TransportTests(unittest.TestCase):
         result = transport.generate(make_request(), context=make_context())
         self.assertEqual(result.usage.cached_content_tokens, 0)
 
+    def test_missing_thoughts_token_count_defaults_to_zero(self):
+        # Confirmed live (capability probe test4, max_output_tokens=5): the
+        # real API omits thoughtsTokenCount entirely, not as 0, when a
+        # heavily truncated call spends zero tokens on thinking.
+        broker = RecordingBroker()
+        usage = {"promptTokenCount": 17, "candidatesTokenCount": 1,
+                 "totalTokenCount": 18, "serviceTier": "standard"}
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(usageMetadata=usage))
+        result = transport.generate(make_request(max_output_tokens=5), context=make_context())
+        self.assertEqual(result.usage.thoughts_tokens, 0)
+
+    def test_missing_candidates_token_count_defaults_to_zero(self):
+        # Not yet observed live, but the same field-omission pattern is
+        # confirmed for two other usage sub-fields independently -- default
+        # this one the same way rather than waiting to hit it as a third
+        # occurrence of the same bug.
+        broker = RecordingBroker()
+        usage = {"promptTokenCount": 5, "thoughtsTokenCount": 10,
+                 "totalTokenCount": 15, "serviceTier": "standard"}
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(usageMetadata=usage))
+        result = transport.generate(make_request(), context=make_context())
+        self.assertEqual(result.usage.candidates_tokens, 0)
+
     def test_uppercase_top_level_service_tier_is_rejected(self):
         # Regression: this used to be the (wrong) expected shape.
         # serviceTier lives inside usageMetadata as lowercase "standard".
@@ -210,6 +235,31 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(result.finish_reason, "MAX_TOKENS")
         self.assertEqual(result.usage.thoughts_tokens, 142)
         self.assertEqual(result.usage.cached_content_tokens, 0)
+
+    def test_real_captured_extreme_truncation_response_parses_correctly(self):
+        # Exact payload captured from a live capability-probe call
+        # (2026-09-19, max_output_tokens=5) -- omits thoughtsTokenCount
+        # entirely (zero thinking tokens spent), trimmed of the actual
+        # thoughtSignature value.
+        broker = RecordingBroker()
+        real_payload = {
+            "candidates": [{
+                "content": {"parts": [{"text": "For", "thoughtSignature": "opaque"}], "role": "model"},
+                "finishReason": "MAX_TOKENS", "index": 0,
+            }],
+            "usageMetadata": {
+                "promptTokenCount": 17, "candidatesTokenCount": 1, "totalTokenCount": 18,
+                "promptTokensDetails": [{"modality": "TEXT", "tokenCount": 17}],
+                "serviceTier": "standard",
+            },
+            "modelVersion": "gemini-3.8-flash",
+            "responseId": "1gGuapKfCKzWjuMPqI2XwQc",
+        }
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: real_payload)
+        result = transport.generate(make_request(max_output_tokens=5), context=make_context())
+        self.assertEqual(result.finish_reason, "MAX_TOKENS")
+        self.assertEqual(result.usage.thoughts_tokens, 0)
+        self.assertEqual(result.usage.candidates_tokens, 1)
 
     def test_reservation_hash_mismatch_is_rejected(self):
         class MismatchedBroker(RecordingBroker):
