@@ -67,13 +67,18 @@ class RecordingBroker:
 
 
 def gemini_payload(**overrides):
+    # Shape confirmed against a real live response (capability probe,
+    # 2026-09-19): serviceTier lives inside usageMetadata as lowercase
+    # "standard" (not top-level "STANDARD"), modelVersion has no version
+    # suffix by default here (a separate test covers the suffixed form),
+    # and cachedContentTokenCount is omitted like the real API does when
+    # there's no cached content (a separate test covers it being absent).
     payload = {
         "responseId": "response-1",
-        "modelVersion": "gemini-3.8-flash-001",
-        "serviceTier": "STANDARD",
+        "modelVersion": "gemini-3.8-flash",
         "usageMetadata": {"promptTokenCount": 5, "candidatesTokenCount": 2,
                            "thoughtsTokenCount": 3, "cachedContentTokenCount": 0,
-                           "totalTokenCount": 10},
+                           "totalTokenCount": 10, "serviceTier": "standard"},
         "candidates": [{
             "finishReason": "STOP",
             "content": {"role": "model", "parts": [
@@ -151,6 +156,63 @@ class TransportTests(unittest.TestCase):
             transport.generate(make_request(), context=make_context())
         self.assertEqual(broker.calls, ["reserve", "dispatch", "unresolved"])
 
+    def test_accepts_a_suffixed_model_version_too(self):
+        # The real API has been observed returning the bare model name with
+        # no suffix (the default gemini_payload() shape); a versioned
+        # suffix (e.g. "-001") must also still be accepted if it ever
+        # appears, since nothing in the docs rules it out.
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(modelVersion="gemini-3.8-flash-001"))
+        result = transport.generate(make_request(), context=make_context())
+        self.assertEqual(result.text, "final answer")
+
+    def test_missing_cached_content_token_count_defaults_to_zero(self):
+        # Confirmed live: the real API omits this field entirely rather
+        # than sending it as 0 when there's no cached content.
+        broker = RecordingBroker()
+        usage = {"promptTokenCount": 5, "candidatesTokenCount": 2,
+                 "thoughtsTokenCount": 3, "totalTokenCount": 10, "serviceTier": "standard"}
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(usageMetadata=usage))
+        result = transport.generate(make_request(), context=make_context())
+        self.assertEqual(result.usage.cached_content_tokens, 0)
+
+    def test_uppercase_top_level_service_tier_is_rejected(self):
+        # Regression: this used to be the (wrong) expected shape.
+        # serviceTier lives inside usageMetadata as lowercase "standard".
+        broker = RecordingBroker()
+        payload = gemini_payload()
+        payload["serviceTier"] = "STANDARD"
+        del payload["usageMetadata"]["serviceTier"]
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: payload)
+        with self.assertRaises(RuntimeError):
+            transport.generate(make_request(), context=make_context())
+
+    def test_real_captured_response_shape_parses_correctly(self):
+        # Exact payload captured from a live capability-probe call
+        # (2026-09-19, gemini-3.8-flash, medium thinking, max_output_tokens=150),
+        # trimmed of the actual thoughtSignature value.
+        broker = RecordingBroker()
+        real_payload = {
+            "candidates": [{
+                "content": {"parts": [{"text": "I confirm that I", "thoughtSignature": "opaque"}], "role": "model"},
+                "finishReason": "MAX_TOKENS", "index": 0,
+            }],
+            "usageMetadata": {
+                "promptTokenCount": 24, "candidatesTokenCount": 4, "totalTokenCount": 170,
+                "promptTokensDetails": [{"modality": "TEXT", "tokenCount": 24}],
+                "thoughtsTokenCount": 142, "serviceTier": "standard",
+            },
+            "modelVersion": "gemini-3.8-flash",
+            "responseId": "Zv2tavyFLOHRg8UP29ONuAE",
+        }
+        transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: real_payload)
+        result = transport.generate(make_request(max_output_tokens=150), context=make_context())
+        self.assertEqual(result.finish_reason, "MAX_TOKENS")
+        self.assertEqual(result.usage.thoughts_tokens, 142)
+        self.assertEqual(result.usage.cached_content_tokens, 0)
+
     def test_reservation_hash_mismatch_is_rejected(self):
         class MismatchedBroker(RecordingBroker):
             def reserve(self, *, context, request_hash, max_output_tokens):
@@ -206,7 +268,7 @@ class TransportTests(unittest.TestCase):
         broker = RecordingBroker()
         oversized = gemini_payload(usageMetadata={"promptTokenCount": 1, "candidatesTokenCount": 20,
                                                    "thoughtsTokenCount": 20, "cachedContentTokenCount": 0,
-                                                   "totalTokenCount": 41})
+                                                   "totalTokenCount": 41, "serviceTier": "standard"})
         transport = GeminiTransport(lambda: "secret-key", broker=broker, http=lambda *a, **k: oversized)
         with self.assertRaises(RuntimeError):
             transport.generate(make_request(max_output_tokens=10), context=make_context())
