@@ -143,18 +143,32 @@ class GeminiTransport:
         try:
             model_version = payload["modelVersion"]
             response_id = payload["responseId"]
-            service_tier = payload["serviceTier"]
             usage = payload["usageMetadata"]
             candidates = payload["candidates"]
-            if not isinstance(model_version, str) or not model_version.startswith(MODEL + "-"):
+            if not isinstance(usage, Mapping):
+                raise ValueError("missing usage metadata")
+            # The real API returns the bare model name with no version
+            # suffix at all (confirmed live, capability probe 2026-09-19),
+            # not always a "-NNN"-suffixed version as first assumed.
+            if not isinstance(model_version, str) or not (
+                model_version == MODEL or model_version.startswith(MODEL + "-")
+            ):
                 raise ValueError("model mismatch")
             if not isinstance(response_id, str) or not response_id:
                 raise ValueError("responseId missing")
-            if service_tier != "STANDARD" or not isinstance(usage, Mapping):
+            # serviceTier lives inside usageMetadata, lowercase ("standard"),
+            # not at the payload top level as "STANDARD" -- also confirmed
+            # live; the earlier assumption came from generic REST examples,
+            # never checked against this model's actual response.
+            service_tier = usage.get("serviceTier")
+            if service_tier != "standard":
                 raise ValueError("non-standard or missing service metadata")
             counts = [_nonnegative_int(usage[name]) for name in
-                      ("promptTokenCount", "candidatesTokenCount", "thoughtsTokenCount",
-                       "cachedContentTokenCount", "totalTokenCount")]
+                      ("promptTokenCount", "candidatesTokenCount", "thoughtsTokenCount")]
+            # cachedContentTokenCount is omitted entirely (not sent as 0)
+            # when there is no cached content -- also confirmed live.
+            counts.append(_nonnegative_int(usage.get("cachedContentTokenCount", 0)))
+            counts.append(_nonnegative_int(usage["totalTokenCount"]))
             prompt, candidate_tokens, thoughts, cached, total = counts
             if total != prompt + candidate_tokens + thoughts:
                 raise ValueError("inconsistent token totals")
