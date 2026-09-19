@@ -6,14 +6,20 @@ lets prospective_campaign's block-level admission talk to the real ledger;
 this one lets prospective_runtime's Gemini transport do the same, at the
 individual-request granularity reserve()/settle() actually price.
 
-Two field-shape translations happen here, not upstream, because they are
-provider/wire-format facts about the REST response, not campaign policy:
-- serviceTier comes back as "STANDARD" (validated in transport.py's own
-  _parse); the ledger's settlement check is exactly lowercase "standard".
-- modelVersion comes back with a provider-controlled version suffix (e.g.
-  "gemini-3.8-flash-001", also validated in transport.py); the ledger's
-  MODEL_ID check is the campaign's frozen, unversioned model contract, so
-  the constant is passed, not the versioned string.
+One field-shape translation happens here, not upstream, because it is a
+campaign-policy decision, not a REST-response fact: modelVersion is
+whatever the provider actually returned (confirmed live: the bare model
+name with no version suffix at all -- an earlier assumption that it was
+always suffixed, e.g. "gemini-3.8-flash-001", was wrong and has been
+fixed in transport.py's own _parse validation); the ledger's MODEL_ID
+check is the campaign's frozen, unversioned model contract, so the
+constant is passed here instead of the response's own modelVersion.
+
+serviceTier itself needed no translation here once transport.py's _parse
+was fixed to read it from its real location (usageMetadata.serviceTier,
+lowercase "standard") -- UsageMetadata.service_tier already holds exactly
+what the ledger expects. The .lower() below is defensive normalization
+only, kept in case a future response ever returns it differently cased.
 """
 from __future__ import annotations
 

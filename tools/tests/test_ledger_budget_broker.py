@@ -27,10 +27,11 @@ def make_context(ledger: Ledger, *, allocation_id: str, attempt_id: str = "attem
 
 
 def gemini_payload(**overrides):
+    # Shape confirmed against a real live response (capability probe, 2026-09-19).
     payload = {
-        "responseId": "response-1", "modelVersion": "gemini-3.8-flash-001", "serviceTier": "STANDARD",
+        "responseId": "response-1", "modelVersion": "gemini-3.8-flash",
         "usageMetadata": {"promptTokenCount": 5, "candidatesTokenCount": 2, "thoughtsTokenCount": 3,
-                          "cachedContentTokenCount": 0, "totalTokenCount": 10},
+                          "cachedContentTokenCount": 0, "totalTokenCount": 10, "serviceTier": "standard"},
         "candidates": [{"finishReason": "STOP",
                        "content": {"role": "model", "parts": [{"text": "final answer"}]}}],
     }
