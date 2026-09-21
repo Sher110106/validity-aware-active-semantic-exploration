@@ -24,6 +24,8 @@ from gemini_campaign.credentials import load_credential
 from gemini_campaign.ledger import Ledger
 
 from prospective_integration.ledger_budget_broker import LedgerBudgetBroker
+from prospective_integration.race_instrumentation import RaceInstrumentation
+from prospective_integration.raw_archive import RawResponseArchive
 from prospective_runtime.transport import GeminiTransport, RequestContext
 
 _REQUIRED_ENV = ("ASP_PROSPECTIVE_LEDGER_PATH", "ASP_PROSPECTIVE_CREDENTIAL_PATH",
@@ -72,7 +74,29 @@ def build_transport(ledger_context: LedgerContext) -> GeminiTransport:
     def load_key() -> str:
         return load_credential(ledger_context.credential_path, forbidden_roots=())
 
-    return GeminiTransport(load_key, broker=broker)
+    # Optional raw request/response archive (deliberately separate from
+    # gemini_campaign/events.py's sanitized, metadata-only log) -- opt-in
+    # via ASP_PROSPECTIVE_RAW_ARCHIVE_PATH, off by default.
+    archive_path = os.environ.get("ASP_PROSPECTIVE_RAW_ARCHIVE_PATH")
+    on_raw_response = RawResponseArchive(archive_path) if archive_path else None
+
+    return GeminiTransport(load_key, broker=broker, on_raw_response=on_raw_response)
+
+
+def record_race_instrumentation(*, scene_index: int, ensemble_index: int, graph_id: int, result_path) -> None:
+    """No-op unless ASP_PROSPECTIVE_RACE_LOG is set. See race_instrumentation.py
+    for why this matters: complete_scene_graph()'s as_completed() loop yields
+    in completion order, so generated_graphs[0] is a race winner, not
+    "ensemble member 0". Pure instrumentation, called from
+    _run_single_ensemble_member regardless of success/drop -- never changes
+    behavior."""
+    path = os.environ.get("ASP_PROSPECTIVE_RACE_LOG")
+    if not path:
+        return
+    RaceInstrumentation(path).record_member_finished(
+        scene_index=scene_index, ensemble_index=ensemble_index,
+        graph_id=graph_id, result_path=result_path,
+    )
 
 
 def make_context(ledger_context: LedgerContext, *, scene_index: int, ensemble_index: int,

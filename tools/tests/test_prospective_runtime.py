@@ -263,6 +263,41 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(result.usage.thoughts_tokens, 0)
         self.assertEqual(result.usage.candidates_tokens, 1)
 
+    def test_on_raw_response_hook_receives_request_payload_and_context_before_parsing(self):
+        broker = RecordingBroker()
+        seen = {}
+
+        def hook(*, request, payload, context):
+            seen["request"] = request
+            seen["payload"] = payload
+            seen["context"] = context
+
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(), on_raw_response=hook)
+        context = make_context()
+        transport.generate(make_request(), context=context)
+        self.assertEqual(seen["context"], context)
+        self.assertEqual(seen["payload"]["responseId"], "response-1")
+        self.assertIn("contents", seen["request"])
+
+    def test_on_raw_response_hook_fires_even_when_parsing_later_fails(self):
+        broker = RecordingBroker()
+        calls = []
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(modelVersion="other-model"),
+                                    on_raw_response=lambda **kw: calls.append(kw))
+        with self.assertRaises(RuntimeError):
+            transport.generate(make_request(), context=make_context())
+        self.assertEqual(len(calls), 1)  # archived for debugging despite the parse failure
+
+    def test_on_raw_response_hook_failure_never_breaks_a_real_call(self):
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(),
+                                    on_raw_response=lambda **kw: 1 / 0)
+        result = transport.generate(make_request(), context=make_context())
+        self.assertEqual(result.text, "final answer")
+
     def test_reservation_hash_mismatch_is_rejected(self):
         class MismatchedBroker(RecordingBroker):
             def reserve(self, *, context, request_hash, max_output_tokens):

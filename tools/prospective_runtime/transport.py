@@ -101,12 +101,20 @@ class GeminiTransport:
     """Strict, single-attempt REST transport. A broker is mandatory."""
 
     def __init__(self, credential_loader: Callable[[], str], *, broker: BudgetBroker,
-                 http: Optional[Callable[..., Any]] = None, timeout_s: float = 120.0) -> None:
+                 http: Optional[Callable[..., Any]] = None, timeout_s: float = 120.0,
+                 on_raw_response: Optional[Callable[..., None]] = None) -> None:
         if broker is None:
             raise ValueError("a hardened budget broker is required")
         if timeout_s <= 0:
             raise ValueError("timeout must be positive")
         self._load_key, self._http, self._broker, self._timeout = credential_loader, http, broker, timeout_s
+        # Optional archival hook, called with (request=, payload=, context=)
+        # right after a raw HTTP response is received, before parsing --
+        # so even a response that fails to parse gets archived. Never
+        # receives the credential (only ever in the request header, never
+        # the body/payload this hook sees). A failing hook must never break
+        # a real call; see the try/except around its invocation below.
+        self._on_raw_response = on_raw_response
 
     def generate(self, request: Mapping[str, Any], *, context: RequestContext) -> RestResponse:
         context.validate()
@@ -135,6 +143,11 @@ class GeminiTransport:
                     if response.geturl() != ENDPOINT:
                         raise RuntimeError("unexpected redirect")
                     payload = json.load(response)
+            if self._on_raw_response is not None:
+                try:
+                    self._on_raw_response(request=request, payload=payload, context=context)
+                except Exception:
+                    pass  # archival is a diagnostic aid, never a call blocker
             result = self._parse(payload, request)
             self._broker.settle(reservation=reservation, usage=result.usage,
                                 finish_reason=result.finish_reason)

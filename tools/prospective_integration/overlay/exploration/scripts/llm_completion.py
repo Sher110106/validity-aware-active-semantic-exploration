@@ -32,7 +32,9 @@ from prospective_integration.author_overlay import (
     build_completion_contents, build_refinement_contents,
     make_check_collision_executor, run_completion_turns, run_single_turn,
 )
-from prospective_integration.overlay_runtime import LedgerContext, build_transport, deterministic_seed, make_context
+from prospective_integration.overlay_runtime import (
+    LedgerContext, build_transport, deterministic_seed, make_context, record_race_instrumentation,
+)
 # --- end prospective overlay imports --------------------------------------
 
 class FlowList(list):
@@ -500,6 +502,13 @@ class LLMManager:
             # whole ProcessPoolExecutor batch (see parse_response()).
             print(f"[Scene {scene_index}, Ensemble {ensemble_index}, GraphID {graph_id}] "
                   f"DROPPED (unparseable response)")
+            # --- prospective overlay: pure instrumentation, no behavior
+            # change. See race_instrumentation.py -- complete_scene_graph()'s
+            # as_completed() loop yields in completion order, so
+            # generated_graphs[0] is whichever member finishes first, not
+            # "ensemble member 0". No-op unless ASP_PROSPECTIVE_RACE_LOG is set.
+            record_race_instrumentation(scene_index=scene_index, ensemble_index=ensemble_index,
+                                        graph_id=graph_id, result_path=None)
             return None
 
         # Create scene slice for initial completion
@@ -507,6 +516,9 @@ class LLMManager:
 
 
         print(f"[Scene {scene_index}, Ensemble {ensemble_index}, GraphID {graph_id}] Done")
+        # --- prospective overlay: pure instrumentation, see above.
+        record_race_instrumentation(scene_index=scene_index, ensemble_index=ensemble_index,
+                                    graph_id=graph_id, result_path=new_yaml_filepath)
         return new_yaml_filepath
 
     def _preprocess_dsg(self, dsg_path, scene_index):
