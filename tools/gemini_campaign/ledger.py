@@ -8,7 +8,7 @@ import sqlite3
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 from .config import (
     CAMPAIGN_CEILING_MICROUSD,
@@ -23,6 +23,18 @@ from .config import (
 from .errors import AccountingHalt, LedgerError
 
 _ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$")
+# provider_response_id is the one identifier this ledger does not mint
+# itself -- it is whatever the real Gemini API returns. Confirmed live
+# (2026-09-22 pilot): real responseId values can start with "-" (e.g.
+# "-NWwasf4MsGlg8UP69rl8QU"), which _ID rejects outright, permanently
+# stranding an otherwise valid, correctly-priced completion as DISPATCHED
+# forever. provider_response_id is never used as a file path, shell
+# argument, or CLI flag anywhere in this codebase (only as a parameterized
+# SQL value and an equality/uniqueness check), so relaxing its leading
+# character is safe without loosening _ID for any self-generated
+# identifier (allocation_id, campaign_id, attempt_id, etc.), which keep
+# the original, stricter rule.
+_PROVIDER_RESPONSE_ID = re.compile(r"^[A-Za-z0-9_.:/-]{1,128}$")
 _STATES = "'RESERVED','DISPATCHED','SETTLED'"
 _FINISH_REASONS = {"STOP", "MAX_TOKENS", "LENGTH", "SAFETY", "OTHER"}
 
@@ -156,6 +168,66 @@ class Ledger:
             raise LedgerError(f"{name} is invalid")
         return value
 
+    @staticmethod
+    def _provider_response_id(value: Any, name: str) -> str:
+        if not isinstance(value, str) or not _PROVIDER_RESPONSE_ID.fullmatch(value):
+            raise LedgerError(f"{name} is invalid")
+        return value
+
+    MAX_ATTEMPT_RETRY_GENERATIONS = 4
+
+    def resolve_attempt_id(self, *, campaign_id: str, base_attempt_id: str) -> tuple[str, Optional[str]]:
+        """Returns (attempt_id_to_use, retry_of) for a caller about to
+        reserve(). If base_attempt_id is unused in this campaign, returns
+        it verbatim with retry_of=None -- today's exact behavior for any
+        first attempt, zero change. If it is already used by any existing
+        request (any state, not just settled), walks a ":retryN" suffix
+        until an unused attempt_id is found, and returns the most recent
+        prior request's request_id as retry_of for provenance.
+
+        Read-only; reserve()'s own UNIQUE(campaign_id, attempt_id)
+        constraint remains the actual enforcement backstop regardless --
+        this only avoids walking into a reservation doomed to collide,
+        which is what let a pipeline's own automatic whole-member retry
+        (confirmed live, 2026-09-22: it reruns a member from turn 0 with
+        the same deterministic attempt_id after any unresolved call) loop
+        forever on AccountingHalt("request identity is already used").
+
+        Independent design review (2026-09-22) found a real gap this
+        bound closes: the pipeline restarts a whole member from turn 0,
+        not just its failed turn, so a member whose EARLIER turn already
+        SETTLED gets that turn genuinely re-sent and re-billed on every
+        restart -- reproduced live in review. That re-billing is real work
+        (Gemini has no memory across separate HTTP calls, so it is not a
+        cache-hit re-charge, it is a new call), not eliminable without
+        changing the pinned pipeline's own restart granularity, which is
+        out of scope. What IS in scope: bounding it. A transient failure
+        should recover within a handful of retries; a member still
+        failing after MAX_ATTEMPT_RETRY_GENERATIONS is not transient, and
+        must fail loud instead of silently re-billing forever until the
+        allocation or campaign ceiling absorbs the damage."""
+        self._id(campaign_id, "campaign")
+        self._id(base_attempt_id, "attempt")
+        candidate = base_attempt_id
+        retry_of: Optional[str] = None
+        generation = 0
+        while True:
+            row = self.db.execute(
+                "SELECT request_id FROM requests WHERE campaign_id=? AND attempt_id=?",
+                (campaign_id, candidate),
+            ).fetchone()
+            if row is None:
+                return candidate, retry_of
+            retry_of = row["request_id"]
+            generation += 1
+            if generation > self.MAX_ATTEMPT_RETRY_GENERATIONS:
+                raise AccountingHalt(
+                    f"attempt {base_attempt_id!r} exceeded {self.MAX_ATTEMPT_RETRY_GENERATIONS} "
+                    "retry generations without settling; halting rather than re-billing "
+                    "already-completed turns indefinitely"
+                )
+            candidate = self._id(f"{base_attempt_id}:retry{generation}", "attempt")
+
     def _effective_ceiling(self) -> int:
         return NORMAL_CEILING_MICROUSD + (self.recovery.amount_microusd if self.recovery else 0)
 
@@ -271,7 +343,7 @@ class Ledger:
                finish_reason: str, response_bytes: bytes = b"",
                pricing_version: str = PRICING_VERSION) -> None:
         self._id(request_id, "request")
-        self._id(provider_response_id, "provider response")
+        self._provider_response_id(provider_response_id, "provider response")
         values = (input_tokens, candidate_tokens, thought_tokens, cached_tokens, total_tokens)
         if any(not isinstance(value, int) or value < 0 for value in values):
             raise AccountingHalt("invalid usage; reservation retained")
@@ -317,11 +389,22 @@ class Ledger:
         try:
             reserved = int(self.db.execute("SELECT COALESCE(SUM(reservation_microusd),0) FROM requests WHERE state!='SETTLED'").fetchone()[0])
             settled = int(self.db.execute("SELECT COALESCE(SUM(settled_microusd),0) FROM requests WHERE state='SETTLED'").fetchone()[0])
+            # Spend re-billed by resolve_attempt_id's retry path (a settled
+            # request with retry_of set means the pipeline restarted a
+            # member whose earlier turn had already settled, and that
+            # turn was genuinely re-sent and re-billed -- see
+            # resolve_attempt_id's docstring). Surfaced separately so
+            # redundant spend is visible, not silently folded into the
+            # same settled_microusd real progress is measured against.
+            redundant_settled = int(self.db.execute(
+                "SELECT COALESCE(SUM(settled_microusd),0) FROM requests WHERE state='SETTLED' AND retry_of IS NOT NULL"
+            ).fetchone()[0])
             allocated = self._allocated_total()
             unresolved = int(self.db.execute("SELECT COUNT(*) FROM requests WHERE state!='SETTLED'").fetchone()[0])
             return {"user_cap_microusd": 200_000_000, "ceiling_microusd": self.ceiling,
                     "allocated_microusd": allocated, "reserved_microusd": reserved,
-                    "settled_microusd": settled, "unresolved_requests": unresolved,
+                    "settled_microusd": settled, "redundant_settled_microusd": redundant_settled,
+                    "unresolved_requests": unresolved,
                     "remaining_microusd": self.ceiling - allocated}
         except sqlite3.Error as exc:
             raise AccountingHalt("ledger summary unavailable") from exc

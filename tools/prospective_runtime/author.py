@@ -44,6 +44,7 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
                      max_turns: int = 8,
                      input_bound_fn: Callable[[Mapping[str, Any]], int] = conservative_input_bound) -> RestResponse:
     contents = list(initial_contents)
+    resolve_attempt_id = getattr(transport.broker, "resolve_attempt_id", None)
     for turn in range(max_turns):
         request = request_for_turn(contents, seed=seed_for_turn(turn), max_output_tokens=max_output_tokens, tools=tools)
         # A fixed bound from the caller would under-reserve later turns: the
@@ -54,11 +55,27 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
         # behavior for any caller that doesn't pass one); a caller with a
         # trusted native counter should pass one instead -- see
         # transport.native_input_bound().
+        base_attempt_id = f"{context.attempt_id}:{turn}"
+        # If the broker supports it (LedgerBudgetBroker does), resolve a
+        # collision-free attempt_id before reserving. Confirmed live
+        # (2026-09-22): a pipeline that reruns this whole member from turn
+        # 0 after any unresolved call reconstructs this exact deterministic
+        # base_attempt_id again, which reserve()'s own
+        # UNIQUE(campaign_id, attempt_id) constraint then rejects forever --
+        # an infinite, cost-neutral (the constraint fires before any HTTP
+        # call) but non-productive loop. A broker that omits this method
+        # keeps today's exact behavior: the base attempt_id used verbatim,
+        # retry_of always None.
+        if resolve_attempt_id is not None:
+            attempt_id, retry_of = resolve_attempt_id(
+                campaign_id=context.campaign_id, base_attempt_id=base_attempt_id)
+        else:
+            attempt_id, retry_of = base_attempt_id, None
         turn_context = RequestContext(
             allocation_id=context.allocation_id, campaign_id=context.campaign_id,
             phase_id=context.phase_id, run_id=context.run_id, stage_id=context.stage_id,
             member_id=context.member_id, turn_id=f"{context.turn_id}:{turn}",
-            attempt_id=f"{context.attempt_id}:{turn}",
+            attempt_id=attempt_id, retry_of=retry_of,
             trusted_input_token_bound=input_bound_fn(request),
         )
         response = transport.generate(request, context=turn_context)

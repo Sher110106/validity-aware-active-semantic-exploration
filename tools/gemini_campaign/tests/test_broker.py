@@ -178,6 +178,76 @@ class LedgerTests(unittest.TestCase):
         with self.assertRaises(LedgerError):
             Ledger(path)
 
+    def test_provider_response_id_accepts_a_real_leading_hyphen_value(self):
+        # Regression: real Gemini responseId values can start with "-"
+        # (observed live, 2026-09-22 pilot: "-NWwasf4MsGlg8UP69rl8QU"),
+        # which the old shared _id() regex rejected outright, permanently
+        # stranding an otherwise valid, correctly-priced completion as
+        # DISPATCHED forever. Only provider_response_id was relaxed.
+        ledger = self.make_ledger()
+        allocation = self.allocation(ledger, amount=10_000)
+        reservation = self.reserve(ledger, allocation)
+        ledger.mark_dispatched(reservation.request_id)
+        ledger.settle(reservation.request_id, model=MODEL_ID, service_tier="standard",
+                      input_tokens=1, candidate_tokens=1, thought_tokens=0, cached_tokens=0,
+                      total_tokens=2, provider_response_id="-NWwasf4MsGlg8UP69rl8QU",
+                      finish_reason="STOP")
+        self.assertEqual(ledger.summary()["unresolved_requests"], 0)
+
+    def test_other_identifiers_still_reject_a_leading_hyphen(self):
+        # The relaxation is scoped to provider_response_id only -- every
+        # self-generated identifier keeps the original, stricter rule.
+        ledger = self.make_ledger()
+        allocation = self.allocation(ledger, amount=10_000)
+        with self.assertRaises(LedgerError):
+            self.reserve(ledger, allocation, attempt="-leading-hyphen-attempt")
+        with self.assertRaises(LedgerError):
+            ledger.allocate(campaign_id="-leading-hyphen-campaign", phase_id="engineering", amount_microusd=100)
+
+    def test_resolve_attempt_id_passes_through_a_free_id_with_no_retry_of(self):
+        ledger = self.make_ledger()
+        attempt_id, retry_of = ledger.resolve_attempt_id(campaign_id="campaign", base_attempt_id="fresh-attempt")
+        self.assertEqual(attempt_id, "fresh-attempt")
+        self.assertIsNone(retry_of)
+
+    def test_resolve_attempt_id_walks_a_free_generation_and_returns_retry_of(self):
+        # Regression: a pipeline that reruns a whole ensemble member from
+        # turn 0 after any unresolved call reconstructs the exact same
+        # deterministic attempt_id, which reserve()'s own
+        # UNIQUE(campaign_id, attempt_id) constraint then rejects forever
+        # (confirmed live, 2026-09-22: ten consecutive "request identity is
+        # already used" errors before the run was stopped). This is the
+        # self-healing lookup a caller should use before reserving.
+        ledger = self.make_ledger()
+        allocation = self.allocation(ledger, amount=10_000)
+        first = self.reserve(ledger, allocation, attempt="scene0-member0-completion:4")
+
+        attempt_id, retry_of = ledger.resolve_attempt_id(
+            campaign_id="campaign", base_attempt_id="scene0-member0-completion:4")
+        self.assertEqual(attempt_id, "scene0-member0-completion:4:retry1")
+        self.assertEqual(retry_of, first.request_id)
+
+        # Actually reserving under the resolved id succeeds where the raw
+        # base attempt_id would have raised AccountingHalt.
+        second = self.reserve(ledger, allocation, attempt=attempt_id, retry_of=retry_of)
+        self.assertNotEqual(second.request_id, first.request_id)
+
+        # A third collision (against both the original and the first
+        # retry) walks one generation further.
+        attempt_id_2, retry_of_2 = ledger.resolve_attempt_id(
+            campaign_id="campaign", base_attempt_id="scene0-member0-completion:4")
+        self.assertEqual(attempt_id_2, "scene0-member0-completion:4:retry2")
+        self.assertEqual(retry_of_2, second.request_id)
+
+    def test_resolve_attempt_id_is_scoped_to_its_own_campaign(self):
+        ledger = self.make_ledger()
+        allocation = self.allocation(ledger, amount=10_000)
+        self.reserve(ledger, allocation, attempt="shared-name")
+        attempt_id, retry_of = ledger.resolve_attempt_id(
+            campaign_id="a-different-campaign", base_attempt_id="shared-name")
+        self.assertEqual(attempt_id, "shared-name")
+        self.assertIsNone(retry_of)
+
 
 class EnvelopeAndAdapterTests(unittest.TestCase):
     def setUp(self):

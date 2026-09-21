@@ -64,3 +64,6 @@ class LedgerBudgetBroker:
         # design (no hidden retries; see Ledger.settle()/AccountingHalt).
         # There is nothing to roll back or free here.
         pass
+
+    def resolve_attempt_id(self, *, campaign_id: str, base_attempt_id: str):
+        return self.ledger.resolve_attempt_id(campaign_id=campaign_id, base_attempt_id=base_attempt_id)

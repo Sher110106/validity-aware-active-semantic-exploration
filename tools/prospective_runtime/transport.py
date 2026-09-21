@@ -192,6 +192,14 @@ class BudgetBroker(Protocol):
     def settle(self, *, reservation: Reservation, usage: UsageMetadata,
                finish_reason: str) -> None: ...
     def unresolved(self, *, reservation: Reservation, reason: str) -> None: ...
+    # Optional: a broker may implement this to make attempt_id collisions
+    # (e.g. a pipeline retrying a whole member from scratch after any
+    # unresolved call, confirmed live 2026-09-22) self-healing instead of
+    # looping on AccountingHalt("request identity is already used")
+    # forever. Callers must use getattr(broker, "resolve_attempt_id", None)
+    # and fall back to (base_attempt_id, None) for a broker that omits it
+    # -- this is not required by the protocol.
+    # def resolve_attempt_id(self, *, campaign_id: str, base_attempt_id: str) -> Tuple[str, Optional[str]]: ...
 
 
 class GeminiTransport:
@@ -212,6 +220,14 @@ class GeminiTransport:
         # the body/payload this hook sees). A failing hook must never break
         # a real call; see the try/except around its invocation below.
         self._on_raw_response = on_raw_response
+
+    @property
+    def broker(self) -> BudgetBroker:
+        # Read-only access for a caller (run_author_turns) that needs to
+        # reach an optional broker capability (resolve_attempt_id) beyond
+        # the four required by the protocol -- rather than reaching into
+        # a private attribute.
+        return self._broker
 
     def generate(self, request: Mapping[str, Any], *, context: RequestContext) -> RestResponse:
         context.validate()

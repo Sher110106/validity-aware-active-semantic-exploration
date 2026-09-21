@@ -180,6 +180,35 @@ class RunTurnsTests(unittest.TestCase):
         )
         self.assertEqual(broker.contexts[0].trusted_input_token_bound, 999)
 
+    def test_run_single_turn_uses_broker_resolve_attempt_id_when_available(self):
+        # A single-turn refinement call can be retried from scratch by the
+        # pinned pipeline just like a tool-loop call, so it needs the same
+        # collision-free attempt_id lookup (confirmed live, 2026-09-22).
+        class ResolvingBroker(RecordingBroker):
+            def resolve_attempt_id(self, *, campaign_id, base_attempt_id):
+                return f"{base_attempt_id}:resolved", "prior-request-id"
+
+        broker = ResolvingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload())
+        run_single_turn(
+            transport, [{"role": "user", "parts": [{"text": "refine this"}]}],
+            context=make_context(), seed=42, max_output_tokens=50,
+        )
+        self.assertEqual(broker.contexts[0].attempt_id, "attempt:resolved")
+        self.assertEqual(broker.contexts[0].retry_of, "prior-request-id")
+
+    def test_run_single_turn_falls_back_to_the_base_attempt_id_without_resolver_support(self):
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload())
+        run_single_turn(
+            transport, [{"role": "user", "parts": [{"text": "refine this"}]}],
+            context=make_context(), seed=42, max_output_tokens=50,
+        )
+        self.assertEqual(broker.contexts[0].attempt_id, "attempt")
+        self.assertIsNone(broker.contexts[0].retry_of)
+
     def test_run_completion_turns_uses_a_caller_supplied_input_bound_fn(self):
         broker = RecordingBroker()
         transport = GeminiTransport(lambda: "secret-key", broker=broker,

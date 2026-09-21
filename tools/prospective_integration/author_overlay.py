@@ -131,8 +131,18 @@ def run_single_turn(transport: GeminiTransport, initial_contents: Sequence[Mappi
     guess could easily under-reserve once images are in the request.
     input_bound_fn defaults to the byte-conservative bound (unchanged
     behavior); pass overlay_runtime.build_input_bound_fn(...)'s result to
-    use the real, measured token count instead."""
+    use the real, measured token count instead. Also resolves a
+    collision-free attempt_id the same way run_author_turns does, if the
+    transport's broker supports it -- a single-turn call can be retried
+    from scratch by the pinned pipeline exactly like a tool-loop call."""
     request = request_for_turn(initial_contents, seed=seed, max_output_tokens=max_output_tokens)
-    accurate_context = replace(context, trusted_input_token_bound=input_bound_fn(request))
+    resolve_attempt_id = getattr(transport.broker, "resolve_attempt_id", None)
+    if resolve_attempt_id is not None:
+        attempt_id, retry_of = resolve_attempt_id(
+            campaign_id=context.campaign_id, base_attempt_id=context.attempt_id)
+    else:
+        attempt_id, retry_of = context.attempt_id, None
+    accurate_context = replace(context, attempt_id=attempt_id, retry_of=retry_of,
+                               trusted_input_token_bound=input_bound_fn(request))
     result = transport.generate(request, context=accurate_context)
     return result.text

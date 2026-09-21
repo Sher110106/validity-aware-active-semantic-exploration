@@ -644,6 +644,55 @@ class AuthorTests(unittest.TestCase):
         self.assertEqual(len(attempt_ids), len(set(attempt_ids)))
         self.assertEqual(len(turn_ids), len(set(turn_ids)))
 
+    def test_run_author_turns_uses_broker_resolve_attempt_id_when_available(self):
+        # Regression: a broker that supports resolve_attempt_id (the real
+        # LedgerBudgetBroker does) must actually be consulted per turn, so
+        # a pipeline retry that reconstructs the same deterministic
+        # attempt_id gets a collision-free one instead of walking into
+        # AccountingHalt("request identity is already used") forever
+        # (confirmed live, 2026-09-22).
+        class ResolvingBroker(RecordingBroker):
+            def __init__(self):
+                super().__init__()
+                self.resolve_calls = []
+
+            def resolve_attempt_id(self, *, campaign_id, base_attempt_id):
+                self.resolve_calls.append((campaign_id, base_attempt_id))
+                return f"{base_attempt_id}:resolved", "prior-request-id"
+
+        broker = ResolvingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(candidates=[{
+                                        "finishReason": "STOP",
+                                        "content": {"role": "model", "parts": [{"text": "done"}]},
+                                    }]))
+        context = make_context()
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=context, seed_for_turn=lambda turn: turn, max_output_tokens=10,
+        )
+        self.assertEqual(broker.resolve_calls, [(context.campaign_id, f"{context.attempt_id}:0")])
+        self.assertEqual(broker.contexts[0].attempt_id, f"{context.attempt_id}:0:resolved")
+        self.assertEqual(broker.contexts[0].retry_of, "prior-request-id")
+
+    def test_run_author_turns_falls_back_to_the_base_attempt_id_without_resolver_support(self):
+        # RecordingBroker has no resolve_attempt_id -- today's exact
+        # behavior (base attempt_id verbatim, retry_of always None) must
+        # be unchanged for any broker that doesn't implement it.
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(candidates=[{
+                                        "finishReason": "STOP",
+                                        "content": {"role": "model", "parts": [{"text": "done"}]},
+                                    }]))
+        context = make_context()
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=context, seed_for_turn=lambda turn: turn, max_output_tokens=10,
+        )
+        self.assertEqual(broker.contexts[0].attempt_id, f"{context.attempt_id}:0")
+        self.assertIsNone(broker.contexts[0].retry_of)
+
     def test_run_author_turns_echoes_the_function_call_id_in_its_response(self):
         # google.genai.types.FunctionCall/FunctionResponse both carry `id`,
         # required to correlate a response when a turn has more than one
