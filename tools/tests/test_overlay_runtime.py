@@ -4,7 +4,8 @@ import os
 import unittest
 from unittest import mock
 
-from prospective_integration.overlay_runtime import LedgerContext, deterministic_seed, make_context
+from prospective_integration.overlay_runtime import LedgerContext, build_input_bound_fn, deterministic_seed, make_context
+from prospective_runtime.transport import conservative_input_bound
 
 
 class LedgerContextFromEnvTests(unittest.TestCase):
@@ -32,6 +33,48 @@ class LedgerContextFromEnvTests(unittest.TestCase):
         self.assertEqual(context.campaign_id, "paired_v5")
 
 
+class BuildInputBoundFnTests(unittest.TestCase):
+    """Regression context: the byte bound overshot the real countTokens
+    count by 440x on a real request (2026-09-21 pilot). This is opt-in via
+    ASP_PROSPECTIVE_NATIVE_COUNT=1 so no existing deployment changes
+    behavior until explicitly turned on."""
+
+    def _context(self, credential_path="/tmp/cred"):
+        return LedgerContext(ledger_path="/tmp/l", credential_path=credential_path, campaign_id="camp",
+                             phase_id="engineering", allocation_id="alloc", run_id="run",
+                             max_output_tokens=8192)
+
+    def test_returns_the_byte_bound_directly_when_not_enabled(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            bound_fn = build_input_bound_fn(self._context())
+        self.assertIs(bound_fn, conservative_input_bound)
+
+    def test_an_unrecognized_flag_value_also_stays_on_the_byte_bound(self):
+        with mock.patch.dict(os.environ, {"ASP_PROSPECTIVE_NATIVE_COUNT": "true"}, clear=True):
+            bound_fn = build_input_bound_fn(self._context())
+        self.assertIs(bound_fn, conservative_input_bound)
+
+    def test_enabled_flag_wires_a_real_countTokens_backed_function(self):
+        import tempfile
+        fd, path = tempfile.mkstemp()
+        try:
+            os.write(fd, b"AQ.fake-credential-value")
+            os.close(fd)
+            os.chmod(path, 0o600)
+            with mock.patch.dict(os.environ, {"ASP_PROSPECTIVE_NATIVE_COUNT": "1"}, clear=True):
+                with mock.patch("prospective_integration.overlay_runtime.native_input_bound") as fake:
+                    fake.return_value = 42
+                    bound_fn = build_input_bound_fn(self._context(credential_path=path))
+                    request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+                    result = bound_fn(request)
+            self.assertEqual(result, 42)
+            fake.assert_called_once()
+            self.assertEqual(fake.call_args.args[0], request)
+            self.assertEqual(fake.call_args.kwargs["credential_loader"](), "AQ.fake-credential-value")
+        finally:
+            os.path.exists(path) and os.remove(path)
+
+
 class ContextAndSeedTests(unittest.TestCase):
     def _context(self):
         return LedgerContext(ledger_path="/tmp/l", credential_path="/tmp/c", campaign_id="camp",
@@ -57,6 +100,23 @@ class ContextAndSeedTests(unittest.TestCase):
         self.assertNotEqual(first, third)
         self.assertNotEqual(first, fourth)
         self.assertTrue(0 <= first <= 2_147_483_647)
+
+    def test_deterministic_seed_masks_a_known_overflowing_hash(self):
+        # Pinned, not sampled: with lc.run_id="run", (scene_index=0,
+        # ensemble_index=0, turn=0, base_seed=42), sha256(...)[:4] as an
+        # unsigned 32-bit big-endian int is 2321322531 (0x8a5c9223), which
+        # exceeds the API's signed 31-bit max (2**31-1 = 2147483647) --
+        # exactly the class of value that broke live workers before the
+        # mask was added. A random draw only overflows about half the
+        # time, so an unpinned test proves nothing; this input is chosen
+        # specifically because its unmasked hash overflows.
+        lc = self._context()
+        unmasked = 2_321_322_531
+        assert unmasked > 2_147_483_647  # guards the fixture itself against drift
+        value = deterministic_seed(lc, 0, 0, 0, base_seed=42)
+        self.assertEqual(value, unmasked & 0x7FFFFFFF)
+        self.assertEqual(value, 173_838_883)
+        self.assertTrue(0 <= value <= 2_147_483_647)
 
     def test_deterministic_seed_stays_in_the_signed_31_bit_range_across_many_samples(self):
         # Regression: int.from_bytes(4 bytes, "big") alone gives an unsigned

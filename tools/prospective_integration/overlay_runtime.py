@@ -18,7 +18,7 @@ from __future__ import annotations
 import hashlib
 import os
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Callable, Mapping, Optional
 
 from gemini_campaign.credentials import load_credential
 from gemini_campaign.ledger import Ledger
@@ -26,7 +26,9 @@ from gemini_campaign.ledger import Ledger
 from prospective_integration.ledger_budget_broker import LedgerBudgetBroker
 from prospective_integration.race_instrumentation import RaceInstrumentation
 from prospective_integration.raw_archive import RawResponseArchive
-from prospective_runtime.transport import GeminiTransport, RequestContext
+from prospective_runtime.transport import (
+    GeminiTransport, RequestContext, conservative_input_bound, native_input_bound,
+)
 
 _REQUIRED_ENV = ("ASP_PROSPECTIVE_LEDGER_PATH", "ASP_PROSPECTIVE_CREDENTIAL_PATH",
                  "ASP_PROSPECTIVE_CAMPAIGN_ID", "ASP_PROSPECTIVE_ALLOCATION_ID",
@@ -81,6 +83,29 @@ def build_transport(ledger_context: LedgerContext) -> GeminiTransport:
     on_raw_response = RawResponseArchive(archive_path) if archive_path else None
 
     return GeminiTransport(load_key, broker=broker, on_raw_response=on_raw_response)
+
+
+def build_input_bound_fn(ledger_context: LedgerContext) -> Callable[[Mapping[str, Any]], int]:
+    """The real per-request token count via the free countTokens
+    endpoint, falling back to the conservative byte bound on any
+    failure -- see transport.native_input_bound() for why that fallback
+    direction is safe (over-reserve, never under-reserve).
+
+    Opt-in via ASP_PROSPECTIVE_NATIVE_COUNT=1, off (byte bound only,
+    today's exact behavior) otherwise -- so nothing changes for an
+    existing deployment until this is explicitly turned on. Measured
+    live (2026-09-21): the byte bound overshoots the real count by
+    ~440x on a real 6-image completion request (4,104,516 vs. 9,317),
+    which is why the byte-only path alone could not run this campaign
+    at any allocation size."""
+    def load_key() -> str:
+        return load_credential(ledger_context.credential_path, forbidden_roots=())
+    if os.environ.get("ASP_PROSPECTIVE_NATIVE_COUNT") != "1":
+        return conservative_input_bound
+
+    def bound_fn(request: Mapping[str, Any]) -> int:
+        return native_input_bound(request, credential_loader=load_key)
+    return bound_fn
 
 
 def record_race_instrumentation(*, scene_index: int, ensemble_index: int, graph_id: int, result_path) -> None:

@@ -33,7 +33,7 @@ from prospective_integration.author_overlay import (
     make_check_collision_executor, run_completion_turns, run_single_turn,
 )
 from prospective_integration.overlay_runtime import (
-    LedgerContext, build_transport, deterministic_seed, make_context, record_race_instrumentation,
+    LedgerContext, build_input_bound_fn, build_transport, deterministic_seed, make_context, record_race_instrumentation,
 )
 # --- end prospective overlay imports --------------------------------------
 
@@ -315,6 +315,7 @@ class LLMCompletion:
                 self.ledger_context, self.scene_index, self.ensemble_index, turn, base_seed=self.seed),
             max_output_tokens=self.ledger_context.max_output_tokens,
             execute_tool=execute_tool,
+            input_bound_fn=build_input_bound_fn(self.ledger_context),
         )
         if response_text is not None:
             print(response_text)
@@ -381,6 +382,7 @@ class LLMCompletion:
         return run_single_turn(
             transport, contents, context=context, seed=seed,
             max_output_tokens=self.ledger_context.max_output_tokens,
+            input_bound_fn=build_input_bound_fn(self.ledger_context),
         )
     
 

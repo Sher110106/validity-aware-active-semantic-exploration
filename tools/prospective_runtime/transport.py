@@ -8,6 +8,7 @@ from typing import Any, Callable, Mapping, Optional, Protocol, Sequence, Tuple
 
 MODEL = "gemini-3.8-flash"
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent"
+COUNT_TOKENS_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:countTokens"
 MAX_OUTPUT_TOKENS = 65536
 ALLOWED_FINISH_REASONS = frozenset(("STOP", "MAX_TOKENS", "SAFETY", "RECITATION", "OTHER"))
 
@@ -27,6 +28,56 @@ def conservative_input_bound(request: Mapping[str, Any]) -> int:
     trusted native token count should use that instead; this is the
     fail-closed fallback when none is available."""
     return len(canonical_json(request))
+
+
+def count_tokens(request: Mapping[str, Any], *, credential_loader: Callable[[], str],
+                 http: Optional[Callable[..., Any]] = None, timeout_s: float = 30.0) -> int:
+    """Real per-request input token count via the free, read-only
+    countTokens endpoint. Never touches a ledger or broker and never
+    settles anything -- callers must decide what to do with the result.
+    Raises on ANY failure (bad credential, network error, malformed
+    response); the caller's fallback direction matters: falling back to
+    conservative_input_bound() only ever over-reserves, so that is the
+    correct fail-closed behavior, never a silent under-reservation.
+
+    Confirmed live (2026-09-21) that countTokens rejects a bare
+    {"contents": ..., "tools": ...} body ("Unknown name \"tools\"") but
+    accepts the same fields wrapped in {"generateContentRequest": {...}}."""
+    body: dict[str, Any] = {"generateContentRequest": {
+        "model": "models/" + MODEL, "contents": request["contents"],
+    }}
+    if "tools" in request:
+        body["generateContentRequest"]["tools"] = request["tools"]
+    key = credential_loader()
+    if not isinstance(key, str) or not key or any(char in key for char in "\r\n"):
+        raise RuntimeError("credential loader did not return a valid key")
+    headers = {"x-goog-api-key": key, "content-type": "application/json"}
+    data = canonical_json(body)
+    if http is not None:
+        raw = http(COUNT_TOKENS_ENDPOINT, body=data, headers=headers, timeout=timeout_s,
+                   allow_redirects=False)
+        payload = raw if isinstance(raw, Mapping) else json.loads(raw)
+    else:
+        req = urllib.request.Request(COUNT_TOKENS_ENDPOINT, data=data, method="POST", headers=headers)
+        with urllib.request.urlopen(req, timeout=timeout_s) as response:
+            if response.geturl() != COUNT_TOKENS_ENDPOINT:
+                raise RuntimeError("unexpected redirect")
+            payload = json.load(response)
+    total = payload["totalTokens"]
+    if isinstance(total, bool) or not isinstance(total, int) or total < 0:
+        raise ValueError("invalid countTokens response")
+    return total
+
+
+def native_input_bound(request: Mapping[str, Any], *, credential_loader: Callable[[], str],
+                       http: Optional[Callable[..., Any]] = None, timeout_s: float = 30.0) -> int:
+    """The real token count when the free countTokens call succeeds; the
+    conservative byte bound on ANY failure -- a failed measurement must
+    never produce an under-reservation, only a (harmless) over-reservation."""
+    try:
+        return count_tokens(request, credential_loader=credential_loader, http=http, timeout_s=timeout_s)
+    except Exception:
+        return conservative_input_bound(request)
 
 
 @dataclass(frozen=True)

@@ -41,7 +41,8 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
                      context: RequestContext, seed_for_turn: Callable[[int], int],
                      max_output_tokens: int, tools: Optional[Sequence[Mapping[str, Any]]] = None,
                      execute_tool: Optional[Callable[[Mapping[str, Any]], Mapping[str, Any]]] = None,
-                     max_turns: int = 8) -> RestResponse:
+                     max_turns: int = 8,
+                     input_bound_fn: Callable[[Mapping[str, Any]], int] = conservative_input_bound) -> RestResponse:
     contents = list(initial_contents)
     for turn in range(max_turns):
         request = request_for_turn(contents, seed=seed_for_turn(turn), max_output_tokens=max_output_tokens, tools=tools)
@@ -49,12 +50,16 @@ def run_author_turns(transport: GeminiTransport, initial_contents: Sequence[Mapp
         # conversation strictly grows each round trip (accumulated function
         # call/response history), so each turn needs its own bound computed
         # from what it's actually about to send, not the first turn's size.
+        # input_bound_fn defaults to the byte-conservative bound (unchanged
+        # behavior for any caller that doesn't pass one); a caller with a
+        # trusted native counter should pass one instead -- see
+        # transport.native_input_bound().
         turn_context = RequestContext(
             allocation_id=context.allocation_id, campaign_id=context.campaign_id,
             phase_id=context.phase_id, run_id=context.run_id, stage_id=context.stage_id,
             member_id=context.member_id, turn_id=f"{context.turn_id}:{turn}",
             attempt_id=f"{context.attempt_id}:{turn}",
-            trusted_input_token_bound=conservative_input_bound(request),
+            trusted_input_token_bound=input_bound_fn(request),
         )
         response = transport.generate(request, context=turn_context)
         if not response.function_calls:

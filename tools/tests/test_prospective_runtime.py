@@ -19,7 +19,8 @@ from prospective_runtime.passive_nav import HabitatPassiveAdapter
 from prospective_runtime.policy import apply_unanimity_policy, equivalent_graph, process_cards
 from prospective_runtime.sdk_compat import content_to_rest, response_to_sdk_shape
 from prospective_runtime.transport import (
-    GeminiTransport, RequestContext, canonical_json, conservative_input_bound, request_hash,
+    COUNT_TOKENS_ENDPOINT, GeminiTransport, RequestContext, canonical_json, conservative_input_bound,
+    count_tokens, native_input_bound, request_hash,
 )
 
 
@@ -370,6 +371,109 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(conservative_input_bound(small), len(canonical_json(small)))
 
 
+class CountTokensTests(unittest.TestCase):
+    """Regression context: conservative_input_bound() measured 4,104,516 for
+    a real 6-image completion request; the real countTokens count for the
+    same request was 9,317 -- a 440.5x overshoot (2026-09-21 pilot). These
+    tests cover the free-measurement path added to close that gap, never
+    the ledger/broker itself."""
+
+    def test_count_tokens_posts_the_generateContentRequest_wrapped_shape(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}],
+                   "tools": [{"functionDeclarations": [{"name": "f"}]}],
+                   "generationConfig": {"maxOutputTokens": 10}}
+        captured = {}
+
+        def fake_http(url, *, body, headers, timeout, allow_redirects):
+            captured["url"] = url
+            captured["body"] = json.loads(body)
+            captured["headers"] = headers
+            return {"totalTokens": 1284}
+
+        result = count_tokens(request, credential_loader=lambda: "secret-key", http=fake_http)
+        self.assertEqual(result, 1284)
+        self.assertEqual(captured["url"], COUNT_TOKENS_ENDPOINT)
+        self.assertEqual(captured["headers"]["x-goog-api-key"], "secret-key")
+        # generationConfig is deliberately excluded -- confirmed live that
+        # countTokens rejects an unwrapped "tools" field but accepts
+        # {"generateContentRequest": {model, contents, tools}}.
+        self.assertEqual(set(captured["body"]), {"generateContentRequest"})
+        inner = captured["body"]["generateContentRequest"]
+        self.assertEqual(inner["model"], "models/gemini-3.8-flash")
+        self.assertEqual(inner["contents"], request["contents"])
+        self.assertEqual(inner["tools"], request["tools"])
+
+    def test_count_tokens_omits_tools_key_when_request_has_none(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+        captured = {}
+
+        def fake_http(url, *, body, headers, timeout, allow_redirects):
+            captured["body"] = json.loads(body)
+            return {"totalTokens": 3}
+
+        count_tokens(request, credential_loader=lambda: "secret-key", http=fake_http)
+        self.assertNotIn("tools", captured["body"]["generateContentRequest"])
+
+    def test_count_tokens_rejects_an_invalid_credential(self):
+        request = {"contents": []}
+        with self.assertRaises(RuntimeError):
+            count_tokens(request, credential_loader=lambda: "bad\nkey",
+                        http=lambda *a, **k: {"totalTokens": 1})
+
+    def test_count_tokens_rejects_a_malformed_response(self):
+        request = {"contents": []}
+        with self.assertRaises(ValueError):
+            count_tokens(request, credential_loader=lambda: "secret-key",
+                        http=lambda *a, **k: {"totalTokens": "not-a-number"})
+        with self.assertRaises(ValueError):
+            count_tokens(request, credential_loader=lambda: "secret-key",
+                        http=lambda *a, **k: {"totalTokens": -1})
+        with self.assertRaises(KeyError):
+            count_tokens(request, credential_loader=lambda: "secret-key",
+                        http=lambda *a, **k: {})
+
+    def test_native_input_bound_uses_the_real_count_on_success(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi" * 10_000}]}]}
+        bound = native_input_bound(request, credential_loader=lambda: "secret-key",
+                                   http=lambda *a, **k: {"totalTokens": 42})
+        self.assertEqual(bound, 42)
+        self.assertLess(bound, conservative_input_bound(request))  # the whole point of the fix
+
+    def test_native_input_bound_falls_back_to_the_byte_bound_on_any_failure(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+        expected = conservative_input_bound(request)
+
+        def broken_http(*a, **k):
+            raise TimeoutError("network unreachable")
+
+        self.assertEqual(
+            native_input_bound(request, credential_loader=lambda: "secret-key", http=broken_http),
+            expected,
+        )
+
+    def test_native_input_bound_falls_back_on_a_malformed_response_not_just_a_transport_error(self):
+        # The failure need not be a transport error -- a response missing
+        # totalTokens, or with an invalid value, must fall back exactly the
+        # same way as a network failure. A silent pass-through of a bad
+        # value here would be an under-reservation, never acceptable.
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+        expected = conservative_input_bound(request)
+        self.assertEqual(
+            native_input_bound(request, credential_loader=lambda: "secret-key",
+                              http=lambda *a, **k: {"totalTokens": -5}),
+            expected,
+        )
+
+    def test_native_input_bound_falls_back_on_an_invalid_credential_too(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+        expected = conservative_input_bound(request)
+        self.assertEqual(
+            native_input_bound(request, credential_loader=lambda: "",
+                              http=lambda *a, **k: {"totalTokens": 5}),
+            expected,
+        )
+
+
 class AuthorTests(unittest.TestCase):
     def test_deterministic_seed_is_pure_and_stable(self):
         first = deterministic_seed("campaign", "run", "stage", "member", 0)
@@ -429,6 +533,30 @@ class AuthorTests(unittest.TestCase):
         bounds = [c.trusted_input_token_bound for c in broker.contexts]
         self.assertTrue(all(b > 1 for b in bounds), bounds)  # never the caller's stale guess
         self.assertLess(bounds[0], bounds[-1])  # strictly grows as history accumulates
+
+    def test_run_author_turns_uses_a_caller_supplied_input_bound_fn_instead_of_the_byte_bound(self):
+        # Default stays conservative_input_bound (previous test); a caller
+        # with a trusted native counter (overlay_runtime.build_input_bound_fn)
+        # must actually be consulted, not just accepted and ignored.
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(candidates=[{
+                                        "finishReason": "STOP",
+                                        "content": {"role": "model", "parts": [{"text": "done"}]},
+                                    }]))
+        seen_requests = []
+
+        def fake_bound_fn(request):
+            seen_requests.append(request)
+            return 777
+
+        run_author_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=make_context(), seed_for_turn=lambda turn: turn,
+            max_output_tokens=10, input_bound_fn=fake_bound_fn,
+        )
+        self.assertEqual(len(seen_requests), 1)
+        self.assertEqual(broker.contexts[0].trusted_input_token_bound, 777)
 
     def test_run_author_turns_gives_every_turn_a_unique_attempt_and_turn_id(self):
         # attempt_id feeds the real ledger's UNIQUE(campaign_id, attempt_id)

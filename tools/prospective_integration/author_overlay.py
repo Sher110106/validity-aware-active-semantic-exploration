@@ -25,6 +25,8 @@ from dataclasses import replace
 from prospective_runtime.author import request_for_turn, run_author_turns
 from prospective_runtime.transport import GeminiTransport, RequestContext, conservative_input_bound
 
+InputBoundFn = Callable[[Mapping[str, Any]], int]
+
 CHECK_COLLISION_TOOL = {
     "functionDeclarations": [{
         "name": "check_collision",
@@ -98,17 +100,21 @@ def make_check_collision_executor(
 def run_completion_turns(transport: GeminiTransport, initial_contents: Sequence[Mapping[str, Any]], *,
                          context: RequestContext, seed_for_turn: Callable[[int], int],
                          max_output_tokens: int, execute_tool: Callable[[Mapping[str, Any]], Mapping[str, Any]],
-                         max_turns: int = 50) -> Optional[str]:
+                         max_turns: int = 50,
+                         input_bound_fn: InputBoundFn = conservative_input_bound) -> Optional[str]:
     """Drives the check_collision tool loop; returns None on a turn-budget
     timeout, matching the pinned code's own implicit `return None` when its
     while loop exhausts max_turns without a final text-only response --
     the caller (parse_response, then the per-member drop logic in
-    complete_scene_graph) already handles a None/unparseable result."""
+    complete_scene_graph) already handles a None/unparseable result.
+    input_bound_fn defaults to the byte-conservative bound (unchanged
+    behavior); pass overlay_runtime.build_input_bound_fn(...)'s result to
+    use the real, measured token count instead."""
     try:
         result = run_author_turns(
             transport, initial_contents, context=context, seed_for_turn=seed_for_turn,
             max_output_tokens=max_output_tokens, tools=[CHECK_COLLISION_TOOL],
-            execute_tool=execute_tool, max_turns=max_turns,
+            execute_tool=execute_tool, max_turns=max_turns, input_bound_fn=input_bound_fn,
         )
     except TimeoutError:
         return None
@@ -116,13 +122,17 @@ def run_completion_turns(transport: GeminiTransport, initial_contents: Sequence[
 
 
 def run_single_turn(transport: GeminiTransport, initial_contents: Sequence[Mapping[str, Any]], *,
-                    context: RequestContext, seed: int, max_output_tokens: int) -> str:
+                    context: RequestContext, seed: int, max_output_tokens: int,
+                    input_bound_fn: InputBoundFn = conservative_input_bound) -> str:
     """For generate_refinement_response: one plain call, no tools. The
     caller's context.trusted_input_token_bound is overridden with a bound
     computed from this exact request (images included), the same way
     run_author_turns computes one fresh per turn -- a caller-supplied
-    guess could easily under-reserve once images are in the request."""
+    guess could easily under-reserve once images are in the request.
+    input_bound_fn defaults to the byte-conservative bound (unchanged
+    behavior); pass overlay_runtime.build_input_bound_fn(...)'s result to
+    use the real, measured token count instead."""
     request = request_for_turn(initial_contents, seed=seed, max_output_tokens=max_output_tokens)
-    accurate_context = replace(context, trusted_input_token_bound=conservative_input_bound(request))
+    accurate_context = replace(context, trusted_input_token_bound=input_bound_fn(request))
     result = transport.generate(request, context=accurate_context)
     return result.text

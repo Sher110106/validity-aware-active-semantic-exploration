@@ -27,9 +27,11 @@ def make_context(**overrides) -> RequestContext:
 class RecordingBroker:
     def __init__(self):
         self.calls = []
+        self.contexts = []
 
     def reserve(self, *, context, request_hash, max_output_tokens):
         self.calls.append("reserve")
+        self.contexts.append(context)
         return type("R", (), {"reservation_id": "r", "request_hash": request_hash})()
 
     def dispatch(self, *, reservation, receipt):
@@ -166,6 +168,32 @@ class RunTurnsTests(unittest.TestCase):
         )
         self.assertEqual(text, "final answer")
         self.assertNotIn("tools", seen_requests[0])
+
+    def test_run_single_turn_uses_a_caller_supplied_input_bound_fn(self):
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload())
+        run_single_turn(
+            transport, [{"role": "user", "parts": [{"text": "refine this"}]}],
+            context=make_context(), seed=42, max_output_tokens=50,
+            input_bound_fn=lambda request: 999,
+        )
+        self.assertEqual(broker.contexts[0].trusted_input_token_bound, 999)
+
+    def test_run_completion_turns_uses_a_caller_supplied_input_bound_fn(self):
+        broker = RecordingBroker()
+        transport = GeminiTransport(lambda: "secret-key", broker=broker,
+                                    http=lambda *a, **k: gemini_payload(candidates=[{
+                                        "finishReason": "STOP",
+                                        "content": {"role": "model", "parts": [{"text": "done"}]},
+                                    }]))
+        run_completion_turns(
+            transport, [{"role": "user", "parts": [{"text": "start"}]}],
+            context=make_context(), seed_for_turn=lambda turn: turn,
+            max_output_tokens=10, execute_tool=lambda call: {"ok": True},
+            input_bound_fn=lambda request: 555,
+        )
+        self.assertEqual(broker.contexts[0].trusted_input_token_bound, 555)
 
 
 if __name__ == "__main__":
