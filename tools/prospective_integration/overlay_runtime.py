@@ -148,10 +148,20 @@ def make_context(ledger_context: LedgerContext, *, scene_index: int, ensemble_in
     nowhere near any real path-length checkpoint. Including the real
     stage number here makes every stage's ids naturally distinct, so
     resolve_attempt_id's retry path is reserved for genuine same-stage
-    retries again."""
+    retries again.
+
+    Also folds in ledger_context.run_id, for the same reason one level up:
+    confirmed live, 2026-09-22, immediately after the stage fix -- a
+    multi-block campaign deliberately shares one campaign_id across all
+    blocks (so one ledger file's ceiling enforces the true total cap
+    globally, per DEVIATIONS.md #83), so scene/member/call/stage alone
+    still collide identically across every block that reaches the same
+    stage number. run_id is set fresh per block by whatever launches the
+    pipeline (ASP_PROSPECTIVE_RUN_ID) and is exactly the missing
+    dimension."""
     stage_id = f"scene{scene_index}"
     member_id = f"member{ensemble_index}"
-    turn_id = f"stage{pipeline_stage}-{stage_id}-{member_id}-{call}"
+    turn_id = f"{ledger_context.run_id}-stage{pipeline_stage}-{stage_id}-{member_id}-{call}"
     return RequestContext(
         allocation_id=ledger_context.allocation_id, campaign_id=ledger_context.campaign_id,
         phase_id=ledger_context.phase_id, run_id=ledger_context.run_id,

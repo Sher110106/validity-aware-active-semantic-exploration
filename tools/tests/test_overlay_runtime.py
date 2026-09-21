@@ -132,6 +132,26 @@ class ContextAndSeedTests(unittest.TestCase):
         stage1.validate()
         stage12.validate()
 
+    def test_make_context_gives_every_run_a_distinct_attempt_id_even_with_a_shared_campaign_id(self):
+        # Regression: confirmed live, 2026-09-22, immediately after the
+        # stage fix above -- a real multi-block campaign deliberately
+        # shares one campaign_id across every block (so one ledger file's
+        # ceiling enforces the true total cap globally), so scene/member/
+        # call/stage alone still collided identically across block 2 and
+        # block 1 the moment both reached stage 0. run_id is the missing
+        # per-block dimension.
+        block1 = LedgerContext(ledger_path="/tmp/l", credential_path="/tmp/c", campaign_id="camp",
+                               phase_id="scientific", allocation_id="alloc", run_id="run-block-a",
+                               max_output_tokens=8192)
+        block2 = LedgerContext(ledger_path="/tmp/l", credential_path="/tmp/c", campaign_id="camp",
+                               phase_id="scientific", allocation_id="alloc", run_id="run-block-b",
+                               max_output_tokens=8192)
+        a = make_context(block1, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="0")
+        b = make_context(block2, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="0")
+        self.assertNotEqual(a.attempt_id, b.attempt_id)
+        a.validate()
+        b.validate()
+
     def test_deterministic_seed_is_pure_and_scene_member_turn_sensitive(self):
         lc = self._context()
         first = deterministic_seed(lc, 0, 1, 0, base_seed=42)
