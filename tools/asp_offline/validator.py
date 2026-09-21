@@ -54,9 +54,18 @@ def _nodes(graph: Mapping[str, Any], *, observed: bool = False) -> List[Node]:
     return [Node.from_mapping(n, observed=observed) for n in raw if isinstance(n, Mapping)]
 
 
+def _is_edge_shaped(e: Any) -> bool:
+    # A mapping (the original shape) or a flow-style [source, target] pair
+    # -- this pipeline's own real edge format, confirmed live 2026-09-22
+    # (tyrone_mirror/DEVIATIONS.md #89). Additive: never accepts anything
+    # the original Mapping-only check didn't already accept, only extends
+    # to also accept a real 2-element list/tuple.
+    return isinstance(e, Mapping) or (isinstance(e, (list, tuple)) and len(e) == 2)
+
+
 def _edges(graph: Mapping[str, Any]) -> List[Edge]:
     raw = graph.get("edges", [])
-    return [Edge.from_mapping(e) for e in raw if isinstance(e, Mapping)]
+    return [Edge.from_mapping(e) for e in raw if _is_edge_shaped(e)]
 
 
 def _graph(nodes: Iterable[Node], edges: Iterable[Edge], template: Optional[Mapping[str, Any]] = None) -> Graph:
@@ -130,8 +139,8 @@ def validate_completion(
     if not isinstance(raw_nodes, list) or not all(isinstance(n, Mapping) for n in raw_nodes):
         issues.append(ValidationIssue("node_schema", "nodes must be a list of mappings", severity="reject"))
         return ValidationResult(_graph(observed_nodes, _edges(observed_graph), observed_graph), False, True, issues)
-    if not isinstance(raw_edges, list) or not all(isinstance(e, Mapping) for e in raw_edges):
-        issues.append(ValidationIssue("edge_schema", "edges must be a list of mappings", severity="reject"))
+    if not isinstance(raw_edges, list) or not all(_is_edge_shaped(e) for e in raw_edges):
+        issues.append(ValidationIssue("edge_schema", "edges must be a list of mappings or [source, target] pairs", severity="reject"))
         return ValidationResult(_graph(observed_nodes, _edges(observed_graph), observed_graph), False, True, issues)
     if any(not _scalar_identifier(node.get("id")) for node in raw_nodes):
         issues.append(ValidationIssue("node_schema", "node identifiers must be non-empty scalar values", severity="reject"))
@@ -210,13 +219,20 @@ def validate_completion(
     # Remove malformed/unknown edges and enforce the prompt's two edge forms.
     valid_edges: List[Edge] = list(_edges(observed_graph))
     for raw_edge, edge in zip(raw_edges, edges):
-        def endpoint(names: Tuple[str, ...]) -> Any:
+        def endpoint(names: Tuple[str, ...], *, list_index: int) -> Any:
+            # A flow-style [source, target] pair (this pipeline's real
+            # edge format, confirmed live 2026-09-22) has no field names
+            # to look up -- take the endpoint by position instead, same
+            # as Edge.from_mapping already does for this shape.
+            if isinstance(raw_edge, (list, tuple)):
+                return raw_edge[list_index] if len(raw_edge) == 2 else None
             for name in names:
                 if name in raw_edge:
                     return raw_edge[name]
             return None
 
-        source, target = endpoint(("source", "from", "u")), endpoint(("target", "to", "v"))
+        source = endpoint(("source", "from", "u"), list_index=0)
+        target = endpoint(("target", "to", "v"), list_index=1)
         if not _scalar_identifier(source) or not _scalar_identifier(target):
             issues.append(ValidationIssue("edge_schema", "edge endpoints must be non-empty scalar identifiers"))
             continue

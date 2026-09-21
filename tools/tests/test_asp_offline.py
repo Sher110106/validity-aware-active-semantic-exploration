@@ -198,6 +198,90 @@ class ValidatorTests(unittest.TestCase):
         self.assertEqual(sum(bool(issue.reference_match) for issue in labeled), 1)
 
 
+class RealPipelineWireFormatTests(unittest.TestCase):
+    """Regression coverage for this pipeline's REAL output format,
+    confirmed live 2026-09-22 against actual campaign data
+    (tyrone_mirror/DEVIATIONS.md #89): node_type instead of type,
+    "dimension" (singular) instead of dimensions/size/extent,
+    position/dimension serialized as a YAML string of a Python list
+    literal rather than a real list, and edges as flow-style [a, b]
+    pairs rather than mappings. Every fix is additive -- the OBSERVED
+    fixture above (using the original "type"/"dimensions"/list/mapping
+    shapes) must keep passing unchanged alongside these."""
+
+    # Mirrors OBSERVED above (room0/wall0 at the same real coordinates)
+    # but spelled with this pipeline's real field names/shapes.
+    REAL_OBSERVED = {
+        "nodes": [
+            {"id": "room0", "node_type": "room", "name": "living",
+             "position": "[0, 0, 0]", "dimension": "[10, 3, 10]", "observed": True},
+            {"id": "wall0", "node_type": "structure", "name": "wall",
+             "position": "[4, 0, 0]", "dimension": "[0.2, 3, 10]", "observed": True},
+        ],
+        "edges": [],
+    }
+
+    def real_completion(self, nodes, edges=()):
+        payload = {"nodes": self.REAL_OBSERVED["nodes"] + list(nodes), "edges": list(edges)}
+        return "```yaml\n" + json.dumps(payload) + "\n```"
+
+    def real_object(self, node_id="chair"):
+        return {"id": node_id, "node_type": "object", "name": "chair",
+                "position": "[0, 0, 0]", "dimension": "[1, 1, 1]", "room_id": "room0"}
+
+    def test_node_type_field_is_read_as_type(self):
+        result = validate_completion(self.real_completion([self.real_object()]), self.REAL_OBSERVED)
+        self.assertTrue(result.accepted)
+        self.assertIn("chair", {n["id"] for n in result.graph["nodes"]})
+
+    def test_stringified_position_and_dimension_are_parsed(self):
+        result = validate_completion(self.real_completion([self.real_object()]), self.REAL_OBSERVED)
+        chair = next(n for n in result.graph["nodes"] if n["id"] == "chair")
+        self.assertEqual(chair["center"], [0.0, 0.0, 0.0])
+        self.assertEqual(chair["dimensions"], [1.0, 1.0, 1.0])
+
+    def test_flow_style_edge_pairs_are_read(self):
+        result = validate_completion(
+            self.real_completion([self.real_object()], edges=[["chair", "room0"]]),
+            self.REAL_OBSERVED,
+        )
+        self.assertTrue(result.accepted)
+        self.assertIn({"source": "chair", "target": "room0"}, result.graph["edges"])
+
+    def test_a_malformed_dimension_string_falls_back_to_none_not_a_crash(self):
+        broken = self.real_object()
+        broken["dimension"] = "not a list"
+        result = validate_completion(self.real_completion([broken]), self.REAL_OBSERVED)
+        # An object with no resolvable geometry is removed, not a crash --
+        # same existing fail-closed behavior as any other missing dimensions.
+        self.assertIn("chair", result.removed_nodes)
+
+    def test_real_name_field_preserves_door_semantics(self):
+        observed = {
+            "nodes": [
+                {"id": "room0", "node_type": "room", "name": "living",
+                 "position": "[0, 0, 0]", "dimension": "[10, 3, 10]"},
+                {"id": "wall0", "node_type": "structure", "name": "wall",
+                 "position": "[4, 0, 0]", "dimension": "[0.2, 3, 10]"},
+                {"id": "door0", "node_type": "structure", "name": "door",
+                 "position": "[4, 0, 2]", "dimension": "[0.5, 3, 1]"},
+            ],
+            "edges": [],
+        }
+        completion = {
+            "nodes": observed["nodes"] + [
+                {"id": "chair", "node_type": "object", "name": "chair",
+                 "position": "[4.6, 0, 2]", "dimension": "[0.2, 0.2, 0.2]",
+                 "room_id": "room0"},
+            ],
+            "edges": [],
+        }
+        result = validate_completion(
+            "```yaml\n" + json.dumps(completion) + "\n```", observed
+        )
+        self.assertEqual(result.removed_nodes, [])
+
+
 class CalibrationAndScoreTests(unittest.TestCase):
     def test_isotonic_map_is_monotone(self):
         calibrator = IsotonicCalibrator([0.0, 0.5, 1.0], [1, 0, 1])
