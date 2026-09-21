@@ -30,19 +30,36 @@ def conservative_input_bound(request: Mapping[str, Any]) -> int:
     return len(canonical_json(request))
 
 
+# Confirmed live (2026-09-21) that generationConfig's five approved fields
+# never affect tokenization (temperature/candidateCount/seed are sampling
+# params, maxOutputTokens/thinkingConfig bound generation, not input) --
+# _validate_request() below pins the request to exactly this set. countTokens
+# omits generationConfig entirely (it rejects an unwrapped "tools" field, and
+# generationConfig is not part of its documented shape); if a future field is
+# ever added to that approved set, it must be re-checked against this
+# assumption before being silently excluded here.
+_TOKEN_IRRELEVANT_CONFIG_KEYS = frozenset(
+    {"temperature", "maxOutputTokens", "candidateCount", "seed", "thinkingConfig"})
+
+
 def count_tokens(request: Mapping[str, Any], *, credential_loader: Callable[[], str],
                  http: Optional[Callable[..., Any]] = None, timeout_s: float = 30.0) -> int:
     """Real per-request input token count via the free, read-only
     countTokens endpoint. Never touches a ledger or broker and never
     settles anything -- callers must decide what to do with the result.
     Raises on ANY failure (bad credential, network error, malformed
-    response); the caller's fallback direction matters: falling back to
-    conservative_input_bound() only ever over-reserves, so that is the
-    correct fail-closed behavior, never a silent under-reservation.
+    response, or an unrecognized generationConfig field); the caller's
+    fallback direction matters: falling back to conservative_input_bound()
+    only ever over-reserves, so that is the correct fail-closed behavior,
+    never a silent under-reservation.
 
     Confirmed live (2026-09-21) that countTokens rejects a bare
     {"contents": ..., "tools": ...} body ("Unknown name \"tools\"") but
     accepts the same fields wrapped in {"generateContentRequest": {...}}."""
+    config_keys = set(request.get("generationConfig") or {})
+    if config_keys - _TOKEN_IRRELEVANT_CONFIG_KEYS:
+        raise ValueError("generationConfig has fields not known to be token-irrelevant; "
+                         "refusing to silently omit it from countTokens")
     body: dict[str, Any] = {"generateContentRequest": {
         "model": "models/" + MODEL, "contents": request["contents"],
     }}
@@ -70,14 +87,43 @@ def count_tokens(request: Mapping[str, Any], *, credential_loader: Callable[[], 
 
 
 def native_input_bound(request: Mapping[str, Any], *, credential_loader: Callable[[], str],
-                       http: Optional[Callable[..., Any]] = None, timeout_s: float = 30.0) -> int:
-    """The real token count when the free countTokens call succeeds; the
-    conservative byte bound on ANY failure -- a failed measurement must
-    never produce an under-reservation, only a (harmless) over-reservation."""
+                       http: Optional[Callable[..., Any]] = None, timeout_s: float = 30.0,
+                       on_count: Optional[Callable[..., None]] = None) -> int:
+    """The real token count, with a safety margin, when the free countTokens
+    call succeeds; the conservative byte bound on ANY failure.
+
+    Advisor review (2026-09-21/22): countTokens is a provider estimate, not
+    a guarantee of matching the real generateContent promptTokenCount --
+    unlike the byte bound, an under-count here is NOT proven safe.
+    Ledger.settle() (gemini_campaign/ledger.py) refuses to settle when the
+    real cost exceeds the reservation, which would leave real spend
+    DISPATCHED and never priced -- the exact failure this whole campaign
+    exists to prevent. A truncated response (finishReason=MAX_TOKENS) has
+    zero spare output-token slack to absorb an input under-count, so the
+    margin below is not optional. The margin is capped by the byte bound,
+    which is already known to always be >= the real count.
+
+    on_count, if given, is called exactly once per invocation with
+    keyword args (real_count, byte_bound, used, error) -- error is None on
+    success, the caught exception otherwise. A failing hook must never
+    break the caller; this is a diagnostic aid, same pattern as
+    GeminiTransport's on_raw_response."""
+    byte_bound = conservative_input_bound(request)
     try:
-        return count_tokens(request, credential_loader=credential_loader, http=http, timeout_s=timeout_s)
-    except Exception:
-        return conservative_input_bound(request)
+        real_count = count_tokens(request, credential_loader=credential_loader, http=http,
+                                  timeout_s=timeout_s)
+        used = min(real_count + max(256, real_count // 8), byte_bound)
+        error = None
+    except Exception as exc:
+        real_count = None
+        used = byte_bound
+        error = exc
+    if on_count is not None:
+        try:
+            on_count(real_count=real_count, byte_bound=byte_bound, used=used, error=error)
+        except Exception:
+            pass
+    return used
 
 
 @dataclass(frozen=True)

@@ -71,8 +71,31 @@ class BuildInputBoundFnTests(unittest.TestCase):
             fake.assert_called_once()
             self.assertEqual(fake.call_args.args[0], request)
             self.assertEqual(fake.call_args.kwargs["credential_loader"](), "AQ.fake-credential-value")
+            self.assertIsNone(fake.call_args.kwargs["on_count"])  # no ASP_PROSPECTIVE_COUNT_LOG set
         finally:
             os.path.exists(path) and os.remove(path)
+
+    def test_enabled_flag_with_a_log_path_wires_a_real_on_count_hook(self):
+        import tempfile
+        fd, cred_path = tempfile.mkstemp()
+        with tempfile.TemporaryDirectory() as d:
+            log_path = os.path.join(d, "counts.jsonl")
+            try:
+                os.write(fd, b"AQ.fake-credential-value")
+                os.close(fd)
+                os.chmod(cred_path, 0o600)
+                env = {"ASP_PROSPECTIVE_NATIVE_COUNT": "1", "ASP_PROSPECTIVE_COUNT_LOG": log_path}
+                with mock.patch.dict(os.environ, env, clear=True):
+                    with mock.patch("prospective_integration.overlay_runtime.native_input_bound") as fake:
+                        fake.return_value = 42
+                        bound_fn = build_input_bound_fn(self._context(credential_path=cred_path))
+                        bound_fn({"contents": []})
+                self.assertIsNotNone(fake.call_args.kwargs["on_count"])
+                fake.call_args.kwargs["on_count"](real_count=5, byte_bound=100, used=10, error=None)
+                with open(log_path) as f:
+                    self.assertIn('"real_count": 5', f.read())
+            finally:
+                os.path.exists(cred_path) and os.remove(cred_path)
 
 
 class ContextAndSeedTests(unittest.TestCase):

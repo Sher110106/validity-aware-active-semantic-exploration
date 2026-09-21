@@ -432,12 +432,79 @@ class CountTokensTests(unittest.TestCase):
             count_tokens(request, credential_loader=lambda: "secret-key",
                         http=lambda *a, **k: {})
 
-    def test_native_input_bound_uses_the_real_count_on_success(self):
+    def test_count_tokens_rejects_a_generationConfig_field_it_does_not_know_is_token_irrelevant(self):
+        # Advisor review: countTokens silently omits generationConfig on
+        # the theory that its five approved fields never affect
+        # tokenization. If that set ever grows, this must fail loudly
+        # rather than silently under-count.
+        request = {"contents": [], "generationConfig": {
+            "temperature": 0.2, "maxOutputTokens": 10, "candidateCount": 1,
+            "seed": 1, "thinkingConfig": {}, "mediaResolution": "HIGH",
+        }}
+        with self.assertRaises(ValueError):
+            count_tokens(request, credential_loader=lambda: "secret-key",
+                        http=lambda *a, **k: {"totalTokens": 1})
+
+    def test_count_tokens_accepts_the_exact_approved_generationConfig_shape(self):
+        request = {"contents": [], "generationConfig": {
+            "temperature": 0.2, "maxOutputTokens": 10, "candidateCount": 1,
+            "seed": 1, "thinkingConfig": {"thinkingLevel": "MEDIUM", "includeThoughts": False},
+        }}
+        result = count_tokens(request, credential_loader=lambda: "secret-key",
+                              http=lambda *a, **k: {"totalTokens": 3})
+        self.assertEqual(result, 3)
+
+    def test_native_input_bound_uses_the_real_count_plus_margin_on_success(self):
+        # Advisor review: countTokens is a provider estimate, not a
+        # guarantee of matching the real generateContent promptTokenCount.
+        # settle() refuses when real cost exceeds the reservation, and a
+        # MAX_TOKENS response has zero spare output slack to absorb an
+        # input under-count -- so a flat pass-through of the raw count is
+        # not safe; it must carry a margin.
         request = {"contents": [{"role": "user", "parts": [{"text": "hi" * 10_000}]}]}
         bound = native_input_bound(request, credential_loader=lambda: "secret-key",
                                    http=lambda *a, **k: {"totalTokens": 42})
-        self.assertEqual(bound, 42)
-        self.assertLess(bound, conservative_input_bound(request))  # the whole point of the fix
+        self.assertEqual(bound, 42 + 256)  # max(256, 42 // 8) == 256
+        self.assertLess(bound, conservative_input_bound(request))  # still the whole point of the fix
+
+    def test_native_input_bound_margin_scales_with_the_count_and_stays_capped_by_the_byte_bound(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi" * 10_000}]}]}
+        byte_bound = conservative_input_bound(request)
+        # A count large enough that count // 8 exceeds the 256 floor.
+        big_count = byte_bound - 1
+        bound = native_input_bound(request, credential_loader=lambda: "secret-key",
+                                   http=lambda *a, **k: {"totalTokens": big_count})
+        self.assertEqual(bound, byte_bound)  # margined value would exceed it; capped, not left uncapped
+
+    def test_native_input_bound_calls_on_count_with_the_real_count_on_success(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi" * 10_000}]}]}
+        seen = {}
+        native_input_bound(request, credential_loader=lambda: "secret-key",
+                           http=lambda *a, **k: {"totalTokens": 5},
+                           on_count=lambda **kwargs: seen.update(kwargs))
+        self.assertEqual(seen["real_count"], 5)
+        self.assertIsNone(seen["error"])
+        self.assertEqual(seen["used"], 5 + 256)
+
+    def test_native_input_bound_calls_on_count_with_the_exception_on_fallback(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}
+        seen = {}
+        native_input_bound(request, credential_loader=lambda: "secret-key",
+                           http=lambda *a, **k: (_ for _ in ()).throw(TimeoutError("no network")),
+                           on_count=lambda **kwargs: seen.update(kwargs))
+        self.assertIsNone(seen["real_count"])
+        self.assertIsInstance(seen["error"], TimeoutError)
+        self.assertEqual(seen["used"], conservative_input_bound(request))
+
+    def test_native_input_bound_never_breaks_on_a_failing_on_count_hook(self):
+        request = {"contents": [{"role": "user", "parts": [{"text": "hi" * 10_000}]}]}
+
+        def broken_hook(**kwargs):
+            raise RuntimeError("logging is down")
+
+        bound = native_input_bound(request, credential_loader=lambda: "secret-key",
+                                   http=lambda *a, **k: {"totalTokens": 5}, on_count=broken_hook)
+        self.assertEqual(bound, 5 + 256)  # the hook's own failure never breaks the real return value
 
     def test_native_input_bound_falls_back_to_the_byte_bound_on_any_failure(self):
         request = {"contents": [{"role": "user", "parts": [{"text": "hi"}]}]}

@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from prospective_integration.count_log import CountLog
 from prospective_integration.race_instrumentation import RaceInstrumentation
 from prospective_integration.raw_archive import RawResponseArchive
 from prospective_integration import overlay_runtime
@@ -79,6 +80,41 @@ class RaceInstrumentationTests(unittest.TestCase):
             link.symlink_to(real)
             with self.assertRaises(ValueError):
                 RaceInstrumentation(link)
+
+
+class CountLogTests(unittest.TestCase):
+    def test_records_real_count_byte_bound_used_and_no_error_on_success(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "counts.jsonl"
+            log = CountLog(path)
+            log.record(real_count=100, byte_bound=4_000_000, used=356, error=None)
+            record = json.loads(path.read_text().splitlines()[0])
+            self.assertEqual(record["real_count"], 100)
+            self.assertEqual(record["byte_bound"], 4_000_000)
+            self.assertEqual(record["used"], 356)
+            self.assertFalse(record["fell_back"])
+            self.assertIsNone(record["error_type"])
+
+    def test_records_the_exception_type_and_message_on_fallback(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "counts.jsonl"
+            log = CountLog(path)
+            log.record(real_count=None, byte_bound=4_000_000, used=4_000_000,
+                      error=TimeoutError("no network"))
+            record = json.loads(path.read_text().splitlines()[0])
+            self.assertIsNone(record["real_count"])
+            self.assertTrue(record["fell_back"])
+            self.assertEqual(record["error_type"], "TimeoutError")
+            self.assertEqual(record["error_message"], "no network")
+
+    def test_refuses_symlink_path(self):
+        with tempfile.TemporaryDirectory() as d:
+            real = Path(d) / "real.jsonl"
+            real.write_text("")
+            link = Path(d) / "link.jsonl"
+            link.symlink_to(real)
+            with self.assertRaises(ValueError):
+                CountLog(link)
 
 
 class OverlayRuntimeWiringTests(unittest.TestCase):

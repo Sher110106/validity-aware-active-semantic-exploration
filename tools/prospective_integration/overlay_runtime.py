@@ -23,6 +23,7 @@ from typing import Any, Callable, Mapping, Optional
 from gemini_campaign.credentials import load_credential
 from gemini_campaign.ledger import Ledger
 
+from prospective_integration.count_log import CountLog
 from prospective_integration.ledger_budget_broker import LedgerBudgetBroker
 from prospective_integration.race_instrumentation import RaceInstrumentation
 from prospective_integration.raw_archive import RawResponseArchive
@@ -103,8 +104,11 @@ def build_input_bound_fn(ledger_context: LedgerContext) -> Callable[[Mapping[str
     if os.environ.get("ASP_PROSPECTIVE_NATIVE_COUNT") != "1":
         return conservative_input_bound
 
+    log_path = os.environ.get("ASP_PROSPECTIVE_COUNT_LOG")
+    on_count = CountLog(log_path).record if log_path else None
+
     def bound_fn(request: Mapping[str, Any]) -> int:
-        return native_input_bound(request, credential_loader=load_key)
+        return native_input_bound(request, credential_loader=load_key, on_count=on_count)
     return bound_fn
 
 
