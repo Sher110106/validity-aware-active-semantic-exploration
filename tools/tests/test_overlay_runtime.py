@@ -58,6 +58,22 @@ class ContextAndSeedTests(unittest.TestCase):
         self.assertNotEqual(first, fourth)
         self.assertTrue(0 <= first <= 2_147_483_647)
 
+    def test_deterministic_seed_stays_in_the_signed_31_bit_range_across_many_samples(self):
+        # Regression: int.from_bytes(4 bytes, "big") alone gives an unsigned
+        # 32-bit range, exceeding the API's signed 31-bit max about half the
+        # time -- confirmed live (capability pilot, 2026-09-21), where ~half
+        # of 8 concurrent workers' seeds were rejected before any
+        # reservation. A single sample has ~50% odds of missing this by
+        # chance (as the test above did); sample many turn/index/seed
+        # combinations to actually exercise both halves of the hash output.
+        lc = self._context()
+        for scene_index in range(4):
+            for ensemble_index in range(4):
+                for turn in range(4):
+                    for base_seed in (0, 1, 42, 999999):
+                        value = deterministic_seed(lc, scene_index, ensemble_index, turn, base_seed=base_seed)
+                        self.assertTrue(0 <= value <= 2_147_483_647, value)
+
 
 if __name__ == "__main__":
     unittest.main()

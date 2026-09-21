@@ -115,4 +115,9 @@ def make_context(ledger_context: LedgerContext, *, scene_index: int, ensemble_in
 def deterministic_seed(ledger_context: LedgerContext, scene_index: int, ensemble_index: int,
                        turn: int, *, base_seed: int) -> int:
     key = f"{ledger_context.run_id}\x1f{scene_index}\x1f{ensemble_index}\x1f{turn}\x1f{base_seed}".encode()
-    return int.from_bytes(hashlib.sha256(key).digest()[:4], "big")
+    # int.from_bytes(4 bytes, "big") gives an unsigned 32-bit range
+    # [0, 2**32-1], but transport.py's _validate_request requires the API's
+    # signed 31-bit range [0, 2**31-1] -- masking to 31 bits, confirmed live
+    # (capability pilot, 2026-09-21): about half of randomly-hashed 32-bit
+    # values exceeded 2**31-1 and were rejected before any reservation.
+    return int.from_bytes(hashlib.sha256(key).digest()[:4], "big") & 0x7FFFFFFF
