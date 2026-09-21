@@ -106,12 +106,31 @@ class ContextAndSeedTests(unittest.TestCase):
 
     def test_make_context_is_stable_per_scene_member_call(self):
         lc = self._context()
-        a = make_context(lc, scene_index=0, ensemble_index=1, call="completion")
-        b = make_context(lc, scene_index=0, ensemble_index=1, call="completion")
-        c = make_context(lc, scene_index=0, ensemble_index=2, call="completion")
+        a = make_context(lc, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="0")
+        b = make_context(lc, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="0")
+        c = make_context(lc, scene_index=0, ensemble_index=2, call="completion", pipeline_stage="0")
         self.assertEqual(a, b)
         self.assertNotEqual(a.member_id, c.member_id)
         a.validate()
+
+    def test_make_context_gives_every_pipeline_stage_a_distinct_attempt_id(self):
+        # Regression: confirmed live, 2026-09-22 real scientific campaign --
+        # omitting the real stage number let every stage beyond the first
+        # reconstruct scene0-member0-completion identically to stage 0,
+        # since scene_index/ensemble_index/call alone repeat every stage.
+        # That silently exhausted resolve_attempt_id's retry-generation
+        # cap on ordinary progress, not real failures, halting every
+        # member after only 4 real stages.
+        lc = self._context()
+        stage0 = make_context(lc, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="0")
+        stage1 = make_context(lc, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="1")
+        stage12 = make_context(lc, scene_index=0, ensemble_index=1, call="completion", pipeline_stage="12")
+        self.assertNotEqual(stage0.attempt_id, stage1.attempt_id)
+        self.assertNotEqual(stage1.attempt_id, stage12.attempt_id)
+        self.assertNotEqual(stage0.attempt_id, stage12.attempt_id)
+        stage0.validate()
+        stage1.validate()
+        stage12.validate()
 
     def test_deterministic_seed_is_pure_and_scene_member_turn_sensitive(self):
         lc = self._context()

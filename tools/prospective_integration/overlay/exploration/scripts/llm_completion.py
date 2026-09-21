@@ -305,8 +305,14 @@ class LLMCompletion:
             return validate_feasibility(label, proposed_box, existing_nodes)
 
         transport = build_transport(self.ledger_context)
+        # self.base_path == exploration_pipeline.py's WORKING_DIRECTORY ==
+        # BASE_DIRECTORY/<self.stage> -- the only place this overlay can
+        # see the pinned pipeline's real stage counter without editing
+        # the pinned file itself. See make_context()'s docstring for why
+        # this must not be omitted.
         context = make_context(self.ledger_context, scene_index=self.scene_index,
-                               ensemble_index=self.ensemble_index, call="completion")
+                               ensemble_index=self.ensemble_index, call="completion",
+                               pipeline_stage=os.path.basename(self.base_path))
         contents = build_completion_contents(self.user_prompt, yaml_content, image_dir)
         execute_tool = make_check_collision_executor(check_collision)
         response_text = run_completion_turns(
@@ -376,7 +382,8 @@ class LLMCompletion:
 
         transport = build_transport(self.ledger_context)
         context = make_context(self.ledger_context, scene_index=self.scene_index,
-                               ensemble_index=self.ensemble_index, call="refinement")
+                               ensemble_index=self.ensemble_index, call="refinement",
+                               pipeline_stage=os.path.basename(self.base_path))
         contents = build_refinement_contents(user_prompt, new_items_yaml, original_scene_content, image_dir)
         seed = deterministic_seed(self.ledger_context, self.scene_index, self.ensemble_index, 0, base_seed=self.seed)
         return run_single_turn(

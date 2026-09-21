@@ -129,10 +129,29 @@ def record_race_instrumentation(*, scene_index: int, ensemble_index: int, graph_
 
 
 def make_context(ledger_context: LedgerContext, *, scene_index: int, ensemble_index: int,
-                 call: str) -> RequestContext:
+                 call: str, pipeline_stage: str) -> RequestContext:
+    """pipeline_stage must be the pinned pipeline's own stage counter
+    (exploration_pipeline.py's self.stage, exposed to the overlay only via
+    LLMCompletion.base_path == WORKING_DIRECTORY == BASE_DIRECTORY/<stage>,
+    since the pinned file is never edited to pass it explicitly).
+
+    Confirmed live, 2026-09-22 (real scientific-campaign block 1): omitting
+    this let every stage beyond the first reconstruct the exact same
+    deterministic turn_id/attempt_id as stage 0, since scene_index/
+    ensemble_index/call alone repeat identically every stage. resolve_attempt_id
+    (gemini_campaign/ledger.py) "resolved" every one of these as a
+    same-stage retry, correctly avoiding a collision but mislabeling
+    entirely new, legitimate per-stage work as redundant re-billing --
+    and, more seriously, consuming the MAX_ATTEMPT_RETRY_GENERATIONS
+    budget meant for real transient-failure retries, which would have
+    halted every member with AccountingHalt after only 4 real stages,
+    nowhere near any real path-length checkpoint. Including the real
+    stage number here makes every stage's ids naturally distinct, so
+    resolve_attempt_id's retry path is reserved for genuine same-stage
+    retries again."""
     stage_id = f"scene{scene_index}"
     member_id = f"member{ensemble_index}"
-    turn_id = f"{stage_id}-{member_id}-{call}"
+    turn_id = f"stage{pipeline_stage}-{stage_id}-{member_id}-{call}"
     return RequestContext(
         allocation_id=ledger_context.allocation_id, campaign_id=ledger_context.campaign_id,
         phase_id=ledger_context.phase_id, run_id=ledger_context.run_id,
