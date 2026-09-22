@@ -1,6 +1,7 @@
 {
   "ambiguous_stall_seconds": 1800,
   "display": 99,
+  "max_completed_runs": 3,
   "future_max_calls": 3000,
   "graceful_stop_seconds": 180,
   "max_attempts": 2,
