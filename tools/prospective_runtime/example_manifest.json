@@ -1,0 +1,11 @@
+{
+  "model": "gemini-3.8-flash",
+  "reasoning": "medium",
+  "policy": "official_asp",
+  "seed": 42,
+  "start_state": "/absolute/path/to/preregistered-start-state.json",
+  "output_dir": "/absolute/path/to/isolated-attempt",
+  "ledger_path": "/absolute/path/to/isolated-attempt/ledger.jsonl",
+  "path_budget_m": 120.0,
+  "wall_clock_limit_s": 7200
+}

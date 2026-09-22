@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import ast
+import json
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Tuple, Union
 
 Vec3 = Tuple[float, float, float]
 
@@ -20,8 +22,33 @@ class Node:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any], *, observed: bool = False) -> "Node":
         center = raw.get("center", raw.get("position", raw.get("translation")))
-        dims = raw.get("dimensions", raw.get("size", raw.get("extent")))
+        # "dimension" (singular) is this pipeline's own real field name,
+        # confirmed live 2026-09-22 (tyrone_mirror/DEVIATIONS.md #89) --
+        # additive alongside the existing "dimensions"/"size"/"extent",
+        # never instead of them.
+        dims = raw.get("dimensions", raw.get("size", raw.get("extent", raw.get("dimension"))))
         def vec(v: Any) -> Optional[Vec3]:
+            # This pipeline serializes its geometry fields as YAML strings
+            # of a Python list literal (e.g. "[0.832, 0.599, 0.667]"), not
+            # a real YAML list -- confirmed live 2026-09-22. literal_eval
+            # only ever parses a literal (no code execution); any string
+            # that isn't exactly a list/tuple/number literal falls through
+            # to the existing type check below and returns None, same as
+            # today for any other malformed value.
+            if isinstance(v, str):
+                # Geometry vectors are tiny; reject pathological model output
+                # before handing it to the AST parser.  This keeps validation
+                # fail-closed for adversarially large strings as well as
+                # ordinary malformed completions.
+                if len(v) > 4096:
+                    return None
+                try:
+                    v = ast.literal_eval(v)
+                except (ValueError, SyntaxError, RecursionError):
+                    try:
+                        v = json.loads(v)
+                    except (TypeError, ValueError, RecursionError):
+                        pass
             if isinstance(v, Mapping):
                 v = [v.get("x"), v.get("y"), v.get("z")]
             if not isinstance(v, (list, tuple)) or len(v) != 3:
@@ -31,8 +58,12 @@ class Node:
             except (TypeError, ValueError):
                 return None
         room_id = raw.get("room_id", raw.get("parent_room", raw.get("parent")))
-        return cls(str(raw.get("id", "")), str(raw.get("type", "")),
-                   str(raw.get("label", raw.get("category", ""))), vec(center),
+        # "node_type" is this pipeline's own real field name for what
+        # every other producer calls "type" -- confirmed live 2026-09-22,
+        # additive alongside the existing "type".
+        node_type = raw.get("type", raw.get("node_type", ""))
+        return cls(str(raw.get("id", "")), str(node_type),
+                   str(raw.get("label", raw.get("name", raw.get("category", "")))), vec(center),
                    vec(dims), str(room_id) if room_id is not None else None,
                    bool(raw.get("observed", observed)), dict(raw))
 
@@ -57,7 +88,15 @@ class Edge:
     type: str = ""
 
     @classmethod
-    def from_mapping(cls, raw: Mapping[str, Any]) -> "Edge":
+    def from_mapping(cls, raw: Union[Mapping[str, Any], list, tuple]) -> "Edge":
+        # This pipeline emits edges as a flow-style [source, target] pair,
+        # not a mapping -- confirmed live 2026-09-22
+        # (tyrone_mirror/DEVIATIONS.md #89). Additive: a real 2-element
+        # list/tuple is accepted alongside the existing mapping shapes;
+        # anything else (wrong length, wrong type) still falls through
+        # to the untyped default below, same as an empty mapping today.
+        if isinstance(raw, (list, tuple)) and len(raw) == 2:
+            return cls(str(raw[0]), str(raw[1]), "")
         source = raw.get("source", raw.get("from", raw.get("u", "")))
         target = raw.get("target", raw.get("to", raw.get("v", "")))
         return cls(str(source), str(target), str(raw.get("type", raw.get("relation", ""))))
