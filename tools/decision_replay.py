@@ -74,7 +74,18 @@ import yaml
 sys.path.insert(0, "/workspace/catkin_ws/src/active_semantic_perception/exploration/scripts")
 sys.path.insert(0, "/workspace/tools")
 
-from calculate_uncertainty import UncertaintyCalculator, CameraConfig
+try:
+    import calculate_uncertainty as _uncertainty_reference
+except ModuleNotFoundError as exc:
+    # The Linux replay host exposes the pinned module at the path above. The
+    # repository also carries the exact reference copy so local offline
+    # replay and tests do not depend on that host checkout.
+    if exc.name != "calculate_uncertainty":
+        raise
+    from decision_replay_reference import calculate_uncertainty as _uncertainty_reference
+
+UncertaintyCalculator = _uncertainty_reference.UncertaintyCalculator
+CameraConfig = _uncertainty_reference.CameraConfig
 from asp_offline.author_io import load_author_graph
 from asp_offline.geometry import distance as offline_distance
 from asp_offline.support_policy import fit_loso_calibrator, support_scores
@@ -105,7 +116,6 @@ RUN_DIR = Path("/workspace/runs/scene00069_seed42_25m_20260914_v3/stages")
 REFERENCE_PATH = "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml"
 OUT_DIR = Path("/workspace/runs/decision_replay_scene00069_v3")
 SCENE_ID = "00069"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def configure(*, scene_id: str, run_dir: Path, reference_path: str, out_dir: Path) -> None:
@@ -202,8 +212,7 @@ class PoolReplayCalculator(UncertaintyCalculator):
 
     @staticmethod
     def _camera_cls():
-        import calculate_uncertainty as cu
-        return cu.Camera
+        return _uncertainty_reference.Camera
 
     def visible_predicted_ids_at(self, optimized_groups, pose: np.ndarray) -> List[List[Any]]:
         """Per-group visible predicted node ids at one pose, unperturbed
@@ -214,8 +223,9 @@ class PoolReplayCalculator(UncertaintyCalculator):
         don't change across candidates."""
         pos = pose[:3]
         yaw_deg = float(pose[3])
-        import calculate_uncertainty as cu
-        camera = cu.Camera(config=self.camera_config, position=pos, yaw_degrees=yaw_deg)
+        camera = _uncertainty_reference.Camera(
+            config=self.camera_config, position=pos, yaw_degrees=yaw_deg
+        )
         result = []
         for opt_group in optimized_groups:
             ids, _, _, _ = self._visible_testing(opt_group[0], camera)
@@ -399,7 +409,7 @@ def score_pose_against_reference(reference_optimized_sg: Dict[str, Any], pose: n
     own camera_config for stage-1 scores, calculate_specific_pose_ig's
     near_clip=0.1/max_range=4.0 override for stage-2 - passing the wrong
     one would silently re-introduce a different fidelity gap)."""
-    import calculate_uncertainty as cu
+    cu = _uncertainty_reference
     camera = cu.Camera(config=camera_config, position=pose[:3], yaw_degrees=float(pose[3]))
     calc = UncertaintyCalculator.__new__(UncertaintyCalculator)
     visible_ids, _, _, _ = calc._visible_testing(reference_optimized_sg, camera)

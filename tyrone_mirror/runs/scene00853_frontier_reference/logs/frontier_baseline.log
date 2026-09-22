@@ -1,0 +1,478 @@
+[10:08:32:848380]:[Warning]:[Metadata] AbstractAttributesManager.h(531)::buildAttrSrcPathsFromJSONAndLoad : <Scene Instance> : No Glob path result found for `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/*/00[0-9][0-9][0-9]-???????????/*.basis.scene_instance.json` so unable to load templates from that path.
+Renderer: NVIDIA RTX A6000/PCIe/SSE2 by NVIDIA Corporation
+OpenGL version: 4.6.0 NVIDIA 595.84
+Using optional features:
+    GL_ARB_vertex_array_object
+    GL_ARB_separate_shader_objects
+    GL_ARB_robustness
+    GL_ARB_texture_storage
+    GL_ARB_texture_view
+    GL_ARB_framebuffer_no_attachments
+    GL_ARB_invalidate_subdata
+    GL_ARB_texture_storage_multisample
+    GL_ARB_multi_bind
+    GL_ARB_direct_state_access
+    GL_ARB_get_texture_sub_image
+    GL_ARB_texture_filter_anisotropic
+    GL_KHR_debug
+    GL_KHR_parallel_shader_compile
+    GL_NV_depth_buffer_float
+Using driver workarounds:
+    no-forward-compatible-core-context
+    nv-egl-incorrect-gl11-function-pointers
+    no-layout-qualifiers-on-old-glsl
+    nv-zero-context-profile-mask
+    nv-implementation-color-read-format-dsa-broken
+    nv-cubemap-inconsistent-compressed-image-size
+    nv-cubemap-broken-full-compressed-image-query
+    nv-compressed-block-size-in-bits
+[10:08:33:024885]:[Warning]:[Metadata] SceneDatasetAttributes.cpp(107)::addNewSceneInstanceToDataset : Dataset : 'hm3d_basis' : Lighting Layout Attributes 'no_lights' specified in Scene Attributes but does not exist in dataset, so creating default.
+[10:08:33:025441]:[Warning]:[Scene] SemanticScene.h(331)::checkFileExists : ::loadSemanticSceneDescriptor: File `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.scn` does not exist.  Aborting load.
+[10:08:33:025465]:[Warning]:[Scene] SemanticScene.cpp(123)::loadSemanticSceneDescriptor : SSD File Naming Issue! Neither SemanticAttributes-provided name : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.scn` nor constructed filename : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/val/00853-5cdEh9F2hJL/info_semantic.json` exist on disk.
+[10:08:33:025476]:[Error]:[Scene] SemanticScene.cpp(139)::loadSemanticSceneDescriptor : SSD Load Failure! File with SemanticAttributes-provided name `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.scn` exists but failed to load.
+[10:08:34:158079]:[Warning]:[Sim] Simulator.cpp(595)::instanceStageForSceneAttributes : The active scene does not contain semantic annotations : activeSemanticSceneID_ = 0
+[WARN] [1789380564.610079]: No local path available. Cannot execute navigation.
+[WARN] [1789380564.707330]: No local path available. Cannot execute navigation.
+[WARN] [1789380564.808976]: No local path available. Cannot execute navigation.
+[WARN] [1789380564.904250]: No local path available. Cannot execute navigation.
+[WARN] [1789380565.008024]: No local path available. Cannot execute navigation.
+[WARN] [1789380565.105387]: No local path available. Cannot execute navigation.
+[WARN] [1789380609.415460]: No local path available. Cannot execute navigation.
+[WARN] [1789380609.515573]: No local path available. Cannot execute navigation.
+[WARN] [1789380651.270998]: No local path available. Cannot execute navigation.
+[WARN] [1789380651.368109]: No local path available. Cannot execute navigation.
+[WARN] [1789380651.467420]: No local path available. Cannot execute navigation.
+[WARN] [1789380651.567430]: No local path available. Cannot execute navigation.
+[WARN] [1789380705.344430]: No local path available. Cannot execute navigation.
+[WARN] [1789380705.441180]: No local path available. Cannot execute navigation.
+[WARN] [1789380705.541289]: No local path available. Cannot execute navigation.
+[WARN] [1789380743.319453]: No local path available. Cannot execute navigation.
+[WARN] [1789380743.420902]: No local path available. Cannot execute navigation.
+[WARN] [1789380743.518482]: No local path available. Cannot execute navigation.
+[WARN] [1789380794.982158]: No local path available. Cannot execute navigation.
+[WARN] [1789380795.080656]: No local path available. Cannot execute navigation.
+[WARN] [1789380795.180722]: No local path available. Cannot execute navigation.
+[WARN] [1789380795.275851]: No local path available. Cannot execute navigation.
+[WARN] [1789380795.380889]: No local path available. Cannot execute navigation.
+[WARN] [1789380795.503256]: No local path available. Cannot execute navigation.
+[WARN] [1789380881.279439]: No local path available. Cannot execute navigation.
+[WARN] [1789380881.380416]: No local path available. Cannot execute navigation.
+[WARN] [1789380881.479895]: No local path available. Cannot execute navigation.
+[WARN] [1789380881.583626]: No local path available. Cannot execute navigation.
+[WARN] [1789380919.682628]: No local path available. Cannot execute navigation.
+[WARN] [1789380919.785886]: No local path available. Cannot execute navigation.
+[WARN] [1789380919.876319]: No local path available. Cannot execute navigation.
+[WARN] [1789380919.978119]: No local path available. Cannot execute navigation.
+[WARN] [1789380920.095025]: No local path available. Cannot execute navigation.
+[WARN] [1789380967.408166]: No local path available. Cannot execute navigation.
+[WARN] [1789380967.509688]: No local path available. Cannot execute navigation.
+[WARN] [1789380967.642782]: No local path available. Cannot execute navigation.
+
+========================================
+      COMPLETE FRONTIER EXPLORATION BASELINE
+========================================
+ Press 's' to start the exploration cycle.
+ Press 'Esc' to shut down.
+========================================
+
+[INFO] [1789380530.324759]: User pressed 's'. Starting pipeline...
+[INFO] [1789380530.395774]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380554.532431]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380554.567670]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380561.581105]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/0/graph0_dsg.json
+[INFO] [1789380561.584426]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380564.592593]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/0/graph1_dsg.json
+[INFO] [1789380577.111538]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380577.198455]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380601.321934]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380601.365442]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380606.379864]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/1/graph0_dsg.json
+[INFO] [1789380606.383510]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380609.394755]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/1/graph1_dsg.json
+[INFO] [1789380615.908368]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380616.002465]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380640.110553]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380640.211616]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380648.236836]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/2/graph0_dsg.json
+[INFO] [1789380648.240663]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380651.252804]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/2/graph1_dsg.json
+[INFO] [1789380670.065635]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380670.159801]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380694.263520]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380694.290680]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380702.308634]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/3/graph0_dsg.json
+[INFO] [1789380702.312804]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380705.325872]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/3/graph1_dsg.json
+[INFO] [1789380710.940517]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380711.033485]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380735.140431]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380735.251482]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380740.284458]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/4/graph0_dsg.json
+[INFO] [1789380740.288631]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380743.302179]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/4/graph1_dsg.json
+[INFO] [1789380759.620042]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380759.709790]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380783.817680]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380783.916701]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380791.947018]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/5/graph0_dsg.json
+[INFO] [1789380791.950630]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380794.964662]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/5/graph1_dsg.json
+[INFO] [1789380846.980551]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380847.072424]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380871.180321]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380871.216794]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380878.243771]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/6/graph0_dsg.json
+[INFO] [1789380878.247733]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380881.264547]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/6/graph1_dsg.json
+[INFO] [1789380885.279880]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380885.372332]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380909.480945]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380909.609553]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380916.640415]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/7/graph0_dsg.json
+[INFO] [1789380916.643818]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380919.663262]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/7/graph1_dsg.json
+[INFO] [1789380935.079768]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380935.171069]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789380959.274887]: State: PLANNING - Looking for frontiers.
+[INFO] [1789380959.317748]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789380964.365399]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/8/graph0_dsg.json
+[INFO] [1789380964.368901]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789380967.391131]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/8/graph1_dsg.json
+[INFO] [1789380984.408164]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789380984.500303]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381008.607646]: State: PLANNING - Looking for frontiers.
+[WARN] [1789381016.881651]: No local path available. Cannot execute navigation.
+[WARN] [1789381016.973615]: No local path available. Cannot execute navigation.
+[WARN] [1789381061.865674]: No local path available. Cannot execute navigation.
+[WARN] [1789381061.964761]: No local path available. Cannot execute navigation.
+[WARN] [1789381062.062793]: No local path available. Cannot execute navigation.
+[WARN] [1789381062.200623]: No local path available. Cannot execute navigation.
+[WARN] [1789381103.941956]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.040713]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.139503]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.242961]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.344062]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.440723]: No local path available. Cannot execute navigation.
+[WARN] [1789381104.540082]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.011833]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.111856]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.208815]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.306597]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.411534]: No local path available. Cannot execute navigation.
+[WARN] [1789381156.522613]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.473564]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.572569]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.672037]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.772720]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.874310]: No local path available. Cannot execute navigation.
+[WARN] [1789381204.973112]: No local path available. Cannot execute navigation.
+[WARN] [1789381244.073096]: No local path available. Cannot execute navigation.
+[WARN] [1789381244.174713]: No local path available. Cannot execute navigation.
+[WARN] [1789381244.274511]: No local path available. Cannot execute navigation.
+[WARN] [1789381244.369347]: No local path available. Cannot execute navigation.
+[WARN] [1789381244.472853]: No local path available. Cannot execute navigation.
+[WARN] [1789381290.524232]: No local path available. Cannot execute navigation.
+[WARN] [1789381290.624010]: No local path available. Cannot execute navigation.
+[WARN] [1789381290.724170]: No local path available. Cannot execute navigation.
+[WARN] [1789381290.825249]: No local path available. Cannot execute navigation.
+[WARN] [1789381290.924719]: No local path available. Cannot execute navigation.
+[WARN] [1789381291.024871]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.164073]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.255601]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.352483]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.456508]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.556555]: No local path available. Cannot execute navigation.
+[WARN] [1789381361.696048]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.042102]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.143838]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.243926]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.346909]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.440738]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.542024]: No local path available. Cannot execute navigation.
+[WARN] [1789381402.661839]: No local path available. Cannot execute navigation.
+[INFO] [1789381008.785429]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381013.816346]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/9/graph0_dsg.json
+[INFO] [1789381013.826325]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381016.850667]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/9/graph1_dsg.json
+[INFO] [1789381027.367604]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381027.460401]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381051.584477]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381051.790891]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381058.819444]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/10/graph0_dsg.json
+[INFO] [1789381058.823462]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381061.847854]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/10/graph1_dsg.json
+[INFO] [1789381068.564926]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381068.657097]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381092.763448]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381092.864528]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381100.893800]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/11/graph0_dsg.json
+[INFO] [1789381100.897961]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381103.923701]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/11/graph1_dsg.json
+[INFO] [1789381120.642053]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381120.732874]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381144.844136]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381144.929986]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381152.962225]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/12/graph0_dsg.json
+[INFO] [1789381152.965606]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381155.991702]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/12/graph1_dsg.json
+[INFO] [1789381169.149708]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381169.201396]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381193.307154]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381193.390093]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381201.426021]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/13/graph0_dsg.json
+[INFO] [1789381201.429531]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381204.455998]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/13/graph1_dsg.json
+[INFO] [1789381209.711476]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381209.763888]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381233.874108]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381233.999742]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381241.028193]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/14/graph0_dsg.json
+[INFO] [1789381241.031972]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381244.057241]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/14/graph1_dsg.json
+[INFO] [1789381254.872936]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381254.965848]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381279.077468]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381279.416716]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381287.478255]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/15/graph0_dsg.json
+[INFO] [1789381287.482138]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381290.507226]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/15/graph1_dsg.json
+[INFO] [1789381326.795434]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381326.815507]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381350.925025]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381351.049584]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381358.096642]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/16/graph0_dsg.json
+[INFO] [1789381358.101111]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381361.133867]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/16/graph1_dsg.json
+[INFO] [1789381366.706438]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381366.744757]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381390.852537]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381390.940236]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381398.987004]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/17/graph0_dsg.json
+[INFO] [1789381398.990405]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381402.025197]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/17/graph1_dsg.json
+[INFO] [1789381430.142769]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381430.249871]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381454.346211]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381454.482336]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381461.523111]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/18/graph0_dsg.json
+[INFO] [1789381461.526884]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[WARN] [1789381464.594195]: No local path available. Cannot execute navigation.
+[WARN] [1789381464.686316]: No local path available. Cannot execute navigation.
+[WARN] [1789381464.780795]: No local path available. Cannot execute navigation.
+[WARN] [1789381464.883151]: No local path available. Cannot execute navigation.
+[WARN] [1789381464.979878]: No local path available. Cannot execute navigation.
+[WARN] [1789381465.108336]: No local path available. Cannot execute navigation.
+[WARN] [1789381505.980086]: No local path available. Cannot execute navigation.
+[WARN] [1789381506.070213]: No local path available. Cannot execute navigation.
+[WARN] [1789381506.167120]: No local path available. Cannot execute navigation.
+[WARN] [1789381506.266871]: No local path available. Cannot execute navigation.
+[WARN] [1789381506.366632]: No local path available. Cannot execute navigation.
+[WARN] [1789381506.466072]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.468151]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.568663]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.667763]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.765719]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.866977]: No local path available. Cannot execute navigation.
+[WARN] [1789381544.968465]: No local path available. Cannot execute navigation.
+[WARN] [1789381545.121597]: No local path available. Cannot execute navigation.
+[WARN] [1789381545.197541]: No local path available. Cannot execute navigation.
+[WARN] [1789381611.510286]: No local path available. Cannot execute navigation.
+[WARN] [1789381611.611519]: No local path available. Cannot execute navigation.
+[WARN] [1789381611.709269]: No local path available. Cannot execute navigation.
+[WARN] [1789381611.810633]: No local path available. Cannot execute navigation.
+[WARN] [1789381611.911769]: No local path available. Cannot execute navigation.
+[WARN] [1789381612.013071]: No local path available. Cannot execute navigation.
+[WARN] [1789381612.146885]: No local path available. Cannot execute navigation.
+[WARN] [1789381665.444483]: No local path available. Cannot execute navigation.
+[WARN] [1789381665.540298]: No local path available. Cannot execute navigation.
+[WARN] [1789381665.704841]: No local path available. Cannot execute navigation.
+[WARN] [1789381665.764103]: No local path available. Cannot execute navigation.
+[WARN] [1789381700.515242]: No local path available. Cannot execute navigation.
+[WARN] [1789381700.613401]: No local path available. Cannot execute navigation.
+[WARN] [1789381700.711472]: No local path available. Cannot execute navigation.
+[WARN] [1789381700.814862]: No local path available. Cannot execute navigation.
+[WARN] [1789381700.915689]: No local path available. Cannot execute navigation.
+[WARN] [1789381701.014090]: No local path available. Cannot execute navigation.
+[WARN] [1789381701.153845]: No local path available. Cannot execute navigation.
+[WARN] [1789381758.558544]: No local path available. Cannot execute navigation.
+[WARN] [1789381758.660138]: No local path available. Cannot execute navigation.
+[WARN] [1789381758.774413]: No local path available. Cannot execute navigation.
+[WARN] [1789381758.860517]: No local path available. Cannot execute navigation.
+[WARN] [1789381758.958399]: No local path available. Cannot execute navigation.
+[WARN] [1789381759.122267]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.120736]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.212586]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.311099]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.411339]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.509837]: No local path available. Cannot execute navigation.
+[WARN] [1789381794.644264]: No local path available. Cannot execute navigation.
+[WARN] [1789381837.542795]: No local path available. Cannot execute navigation.
+[WARN] [1789381837.643384]: No local path available. Cannot execute navigation.
+[WARN] [1789381837.740238]: No local path available. Cannot execute navigation.
+[WARN] [1789381837.843671]: No local path available. Cannot execute navigation.
+[WARN] [1789381837.941167]: No local path available. Cannot execute navigation.
+[WARN] [1789381838.063653]: No local path available. Cannot execute navigation.
+[WARN] [1789381884.469972]: No local path available. Cannot execute navigation.
+[WARN] [1789381884.575854]: No local path available. Cannot execute navigation.
+[WARN] [1789381884.691510]: No local path available. Cannot execute navigation.
+[INFO] [1789381464.563239]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/18/graph1_dsg.json
+[INFO] [1789381471.632337]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381471.673247]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381495.780490]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381495.862270]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381502.905104]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/19/graph0_dsg.json
+[INFO] [1789381502.909470]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381505.946479]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/19/graph1_dsg.json
+[INFO] [1789381509.134505]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381509.156076]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381533.266349]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381533.354658]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381541.411086]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/20/graph0_dsg.json
+[INFO] [1789381541.414301]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381544.449177]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/20/graph1_dsg.json
+[INFO] [1789381576.118878]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381576.171485]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381600.265240]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381600.393524]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381608.450014]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/21/graph0_dsg.json
+[INFO] [1789381608.453940]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381611.493293]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/21/graph1_dsg.json
+[INFO] [1789381630.915902]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381631.000707]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381655.109882]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381655.323294]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381662.370337]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/22/graph0_dsg.json
+[INFO] [1789381662.374409]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381665.414513]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/22/graph1_dsg.json
+[INFO] [1789381666.033151]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381666.137726]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381690.262748]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381690.394552]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381697.460248]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/23/graph0_dsg.json
+[INFO] [1789381697.463881]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381700.497258]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/23/graph1_dsg.json
+[INFO] [1789381724.143643]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381724.205712]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381748.315732]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381748.443160]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381755.494338]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/24/graph0_dsg.json
+[INFO] [1789381755.498282]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381758.540475]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/24/graph1_dsg.json
+[INFO] [1789381759.690243]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381759.750533]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381783.861281]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381783.990625]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381791.049547]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/25/graph0_dsg.json
+[INFO] [1789381791.053812]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381794.092677]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/25/graph1_dsg.json
+[INFO] [1789381802.911124]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381803.002200]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381827.109307]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381827.427608]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381834.476199]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/26/graph0_dsg.json
+[INFO] [1789381834.480115]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381837.523075]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/26/graph1_dsg.json
+[INFO] [1789381852.080874]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381852.148262]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381876.238163]: State: PLANNING - Looking for frontiers.
+[INFO] [1789381876.351607]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381881.415759]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/27/graph0_dsg.json
+[INFO] [1789381881.419060]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381884.455151]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/27/graph1_dsg.json
+[INFO] [1789381917.221662]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381917.264080]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789381941.371373]: State: PLANNING - Looking for frontiers.
+[WARN] [1789381951.593500]: No local path available. Cannot execute navigation.
+[WARN] [1789381951.692725]: No local path available. Cannot execute navigation.
+[WARN] [1789381951.789882]: No local path available. Cannot execute navigation.
+[WARN] [1789381951.893086]: No local path available. Cannot execute navigation.
+[WARN] [1789381951.992168]: No local path available. Cannot execute navigation.
+[WARN] [1789381952.136652]: No local path available. Cannot execute navigation.
+[WARN] [1789381952.233491]: No local path available. Cannot execute navigation.
+[WARN] [1789382031.548251]: No local path available. Cannot execute navigation.
+[WARN] [1789382031.651170]: No local path available. Cannot execute navigation.
+[WARN] [1789382031.748455]: No local path available. Cannot execute navigation.
+[WARN] [1789382031.847502]: No local path available. Cannot execute navigation.
+[WARN] [1789382031.946756]: No local path available. Cannot execute navigation.
+[WARN] [1789382032.054363]: No local path available. Cannot execute navigation.
+[WARN] [1789382032.223954]: No local path available. Cannot execute navigation.
+[WARN] [1789382081.713654]: No local path available. Cannot execute navigation.
+[WARN] [1789382081.809628]: No local path available. Cannot execute navigation.
+[WARN] [1789382081.908819]: No local path available. Cannot execute navigation.
+[WARN] [1789382082.012942]: No local path available. Cannot execute navigation.
+[WARN] [1789382082.149355]: No local path available. Cannot execute navigation.
+[WARN] [1789382082.253778]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.084844]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.186366]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.284493]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.379631]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.486344]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.582014]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.704081]: No local path available. Cannot execute navigation.
+[WARN] [1789382170.813290]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.066713]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.165851]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.266056]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.363045]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.465955]: No local path available. Cannot execute navigation.
+[WARN] [1789382258.602459]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.442818]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.542766]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.643006]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.740306]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.842372]: No local path available. Cannot execute navigation.
+[WARN] [1789382334.944116]: No local path available. Cannot execute navigation.
+[WARN] [1789382335.039907]: No local path available. Cannot execute navigation.
+[WARN] [1789382335.189007]: No local path available. Cannot execute navigation.
+[WARN] [1789382335.275146]: No local path available. Cannot execute navigation.
+[WARN] [1789382386.863773]: Frontier planner returned no target. Exploration finished.
+[INFO] [1789381941.457557]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789381948.526481]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/28/graph0_dsg.json
+[INFO] [1789381948.530397]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789381951.574412]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/28/graph1_dsg.json
+[INFO] [1789381996.150170]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789381996.204365]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382020.292188]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382020.419597]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789382028.487033]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/29/graph0_dsg.json
+[INFO] [1789382028.490693]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789382031.529674]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/29/graph1_dsg.json
+[INFO] [1789382046.248589]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789382046.341164]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382070.446704]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382070.575714]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789382078.645497]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/30/graph0_dsg.json
+[INFO] [1789382078.649072]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789382081.692238]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/30/graph1_dsg.json
+[INFO] [1789382135.636279]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789382135.701017]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382159.811179]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382159.967771]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789382167.019338]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/31/graph0_dsg.json
+[INFO] [1789382167.023217]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789382170.065120]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/31/graph1_dsg.json
+[INFO] [1789382223.581867]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789382223.702712]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382247.781712]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382247.912068]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789382254.993845]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/32/graph0_dsg.json
+[INFO] [1789382254.997347]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789382258.046561]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/32/graph1_dsg.json
+[INFO] [1789382298.965200]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789382299.062513]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382323.171493]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382323.298883]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph0_dsg.json
+[INFO] [1789382331.376417]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/33/graph0_dsg.json
+[INFO] [1789382331.379783]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense_frontier/backend/graph1_dsg.json
+[INFO] [1789382334.424732]: Copied stable file to /workspace/runs/scene00853_frontier_reference/stages/33/graph1_dsg.json
+[INFO] [1789382362.342294]: Navigation to frontier complete. Transitioning to SCANNING.
+[INFO] [1789382362.433744]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789382386.548250]: State: PLANNING - Looking for frontiers.
+[INFO] [1789382386.879485]: Exploration complete. No more frontiers found. Stopping.
+[INFO] [1789383440.123699]: ========================================
+      EXPLORATION SUMMARY
+========================================
+[INFO] [1789383440.125973]: Total Duration: 2909.80 seconds
+[INFO] [1789383440.127579]: Total Path Length: 99.98 meters
+[INFO] [1789383440.129109]: ========================================
+[INFO] [1789383440.152075]: Pipeline shutdown.

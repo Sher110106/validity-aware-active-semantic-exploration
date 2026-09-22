@@ -1,0 +1,1 @@
+DeepSeek via OpenRouter; scene 853; reasoning effort=high, max_tokens=32000, call budget=1500; calibration-data collection run

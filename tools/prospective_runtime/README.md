@@ -1,6 +1,9 @@
 # Prospective runtime overlay
 
-This package is an **offline-only** integration seam for the prospective campaign. It does not edit the pinned author checkout, start Habitat/ROS, or run a paid campaign.
+This package is an **offline-safe** integration seam for the prospective
+campaign. The historical live overlay used a sibling checkout; this repository
+does not edit the pinned author checkout, start Habitat/ROS, or authorize a new
+paid campaign.
 
 * `transport.py` is a direct `generateContent` adapter for Python 3.9. It uses an `x-goog-api-key` header, no SDK retry, and an injectable HTTP callable. A broker reservation is required immediately before each physical attempt. API keys are never included in URLs, response objects, or logs.
 * `author.py` keeps the author tool-loop shape, explicit `gemini-3.8-flash`/medium request configuration, deterministic request seed, bounded output, and opaque thought signatures only in the same tool turn.

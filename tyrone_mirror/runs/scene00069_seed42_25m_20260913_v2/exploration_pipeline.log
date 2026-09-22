@@ -1,0 +1,3743 @@
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[18:21:24:973562]:[Warning]:[Metadata] AbstractAttributesManager.h(531)::buildAttrSrcPathsFromJSONAndLoad : <Scene Instance> : No Glob path result found for `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/*/00[0-9][0-9][0-9]-???????????/*.basis.scene_instance.json` so unable to load templates from that path.
+Renderer: NVIDIA RTX A6000/PCIe/SSE2 by NVIDIA Corporation
+OpenGL version: 4.6.0 NVIDIA 595.84
+Using optional features:
+    GL_ARB_vertex_array_object
+    GL_ARB_separate_shader_objects
+    GL_ARB_robustness
+    GL_ARB_texture_storage
+    GL_ARB_texture_view
+    GL_ARB_framebuffer_no_attachments
+    GL_ARB_invalidate_subdata
+    GL_ARB_texture_storage_multisample
+    GL_ARB_multi_bind
+    GL_ARB_direct_state_access
+    GL_ARB_get_texture_sub_image
+    GL_ARB_texture_filter_anisotropic
+    GL_KHR_debug
+    GL_KHR_parallel_shader_compile
+    GL_NV_depth_buffer_float
+Using driver workarounds:
+    no-forward-compatible-core-context
+    nv-egl-incorrect-gl11-function-pointers
+    no-layout-qualifiers-on-old-glsl
+    nv-zero-context-profile-mask
+    nv-implementation-color-read-format-dsa-broken
+    nv-cubemap-inconsistent-compressed-image-size
+    nv-cubemap-broken-full-compressed-image-query
+    nv-compressed-block-size-in-bits
+[18:21:25:085911]:[Warning]:[Metadata] SceneDatasetAttributes.cpp(107)::addNewSceneInstanceToDataset : Dataset : 'hm3d_basis' : Lighting Layout Attributes 'no_lights' specified in Scene Attributes but does not exist in dataset, so creating default.
+[18:21:25:086109]:[Warning]:[Scene] SemanticScene.h(331)::checkFileExists : ::loadSemanticSceneDescriptor: File `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` does not exist.  Aborting load.
+[18:21:25:086125]:[Warning]:[Scene] SemanticScene.cpp(123)::loadSemanticSceneDescriptor : SSD File Naming Issue! Neither SemanticAttributes-provided name : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` nor constructed filename : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/info_semantic.json` exist on disk.
+[18:21:25:086135]:[Error]:[Scene] SemanticScene.cpp(139)::loadSemanticSceneDescriptor : SSD Load Failure! File with SemanticAttributes-provided name `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` exists but failed to load.
+[18:21:26:084219]:[Warning]:[Sim] Simulator.cpp(595)::instanceStageForSceneAttributes : The active scene does not contain semantic annotations : activeSemanticSceneID_ = 0
+
+========================================
+      INTEGRATED EXPLORATION PIPELINE
+========================================
+ Press 's' to start the exploration cycle.
+ Press 'Esc' to shut down.
+========================================
+
+[INFO] [1789323715.182428]: User pressed 's'. Starting pipeline...
+[INFO] [1789323715.207523]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789323739.206887]: Scan complete.
+[INFO] [1789323739.307161]: State: PLANNING - Initiating planning sequence.
+[INFO] [1789323739.308899]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph0_dsg.json
+[INFO] [1789323747.334644]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/0/graph0_dsg.json
+[INFO] [1789323747.338143]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph1_dsg.json
+[INFO] [1789323750.349637]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/0/graph1_dsg.json
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 12168, "completion_tokens": 136, "total_tokens": 12304, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0038136, "upstream_inference_prompt_cost": 0.0036504, "upstream_inference_completions_cost": 0.0001632}, "completion_tokens_details": {"reasoning_tokens": 136, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[Scene 1, Ensemble 2, GraphID 6] Starting process.
+All new objects passed collision validation. Now I'll provide the YAML with the new room and objects.
+
+```yaml
+edges:
+- [27, 20]        # new bedroom connected to room containing the door (id 20)
+- [18, 27]        # connected to main living room through door exit
+- [9, 27]         # door on structure leads to new bedroom
+- [0, 27]         # sofa placed in bedroom? no -> not needed
+
+nodes:
+# ================= NEW ROOM =================
+- id: 27
+  name: an image of a bedroom
+  node_type: room
+  position: '[2.7, -11.8, 1.0]'
+
+# ================= NEW OBJECTS IN EXISTING LIVING ROOM (18/19) =================
+- id: 28
+  name: sofa
+  node_type: object
+  position: '[3.6, -6.9, 0.4]'
+  dimension: '[1.8, 0.8, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 29
+  name: coffee_table
+  node_type: object
+  position: '[3.6, -7.5, 0.25]'
+  dimension: '[1.0, 0.6, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 30
+  name: bookshelf
+  node_type: object
+  position: '[2.9, -6.6, 0.6]'
+  dimension: '[1.0, 0.4, 1.2]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 31
+  name: plant
+  node_type: object
+  position: '[2.7, -7.8, 0.5]'
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 32
+  name: floor_lamp
+  node_type: object
+  position: '[2.5, -6.5, 0.8]'
+  dimension: '[0.3, 0.3, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 33
+  name: tv
+  node_type: object
+  position: '[5.0, -8.5, 0.6]'
+  dimension: '[1.0, 0.3, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+# ================= NEW OBJECTS IN NEW BEDROOM (27) =================
+- id: 34
+  name: bed
+  node_type: object
+  position: '[2.7, -11.8, 0.3]'
+  dimension: '[1.5, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 35
+  name: nightstand
+  node_type: object
+  position: '[1.7, -11.0, 0.3]'
+  dimension: '[0.5, 0.5, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 36
+  name: wardrobe
+  node_type: object
+  position: '[3.8, -11.8, 1.0]'
+  dimension: '[0.6, 1.5, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 37
+  name: dresser
+  node_type: object
+  position: '[2.7, -13.0, 0.4]'
+  dimension: '[1.2, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+```
+
+**Summary of additions:**
+
+- **New room (id 27):** *bedroom* — placed south of the `Door` (id 9), projected ~3 m outward into the empty space beyond the wall/door. Connected via edges to the door and to the living room (id 18) and the room hosting the door (id 20).
+- **New objects in existing living room (ids 28–33):** sofa, coffee_table, bookshelf, plant, floor_lamp, tv — all validated with IoU = 0.0, placed in clear floor areas avoiding the existing chairs, cabinets, table, lamp, and all walls/window/door structures.
+- **New objects in new bedroom (ids 34–37):** bed, nightstand, wardrobe, dresser — all validated with IoU = 0.0, arranged sensibly within the new room's footprint.
+
+All `sofa`/`bookshelf` first attempts collided with the existing chair (id 2) and were moved; all final placements returned `"valid": true` with **IoU = 0.0**. No new `nothing`, `structure`, or `door` nodes were created, and no placement crosses a wall without a door.
+[Scene 1, Ensemble 2, GraphID 6] Generation took 167.93s
+[Scene 1, Ensemble 2, GraphID 6] Done
+[Scene 1, Ensemble 1, GraphID 5] Starting process.
+All new objects validated successfully. Here is the YAML with the new items that passed collision checks:
+
+```yaml
+edges:
+- [27, 20]
+- [28, 18]
+- [29, 18]
+- [30, 18]
+- [31, 27]
+- [32, 27]
+- [33, 27]
+- [34, 27]
+- [35, 27]
+- [36, 27]
+nodes:
+- id: 27
+  name: an image of a bedroom
+  node_type: room
+  position: '[3.5, -10.5, 1.0]'
+- id: 28
+  name: sofa
+  node_type: object
+  position: '[3.7, -7.05, 0.4]'
+  dimension: '[1.7, 0.8, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 29
+  name: tv
+  node_type: object
+  position: '[4.3, -5.9, 0.7]'
+  dimension: '[1.2, 0.1, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 30
+  name: plant
+  node_type: object
+  position: '[2.9, -8.6, 0.5]'
+  dimension: '[0.3, 0.3, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 31
+  name: bed
+  node_type: object
+  position: '[4.6, -10.6, 0.3]'
+  dimension: '[1.5, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 32
+  name: nightstand
+  node_type: object
+  position: '[3.9, -9.8, 0.3]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 33
+  name: wardrobe
+  node_type: object
+  position: '[2.0, -11.3, 1.0]'
+  dimension: '[0.6, 1.5, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 34
+  name: dresser
+  node_type: object
+  position: '[3.2, -11.5, 0.5]'
+  dimension: '[1.2, 0.5, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 35
+  name: bookshelf
+  node_type: object
+  position: '[5.8, -10.5, 1.0]'
+  dimension: '[0.4, 1.2, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 36
+  name: rug
+  node_type: object
+  position: '[4.6, -10.6, 0.02]'
+  dimension: '[2.5, 3.0, 0.02]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+```
+
+**Summary of additions:**
+
+- **New room (id 27):** A bedroom placed behind the existing door (id 9) on the south wall, extending into the empty space south of the living room. Connected to room 20 (the room adjacent to the door).
+- **Living room objects (room 18):** sofa, tv, and plant — all placed in the open floor area, clear of walls, the window, and existing furniture.
+- **Bedroom objects (room 27):** bed, nightstand, wardrobe, dresser, bookshelf, and rug — arranged logically within the new bedroom, away from the Nothing node (id 7) and the Wall (id 17).
+
+All 9 new objects passed the collision check with IoU = 0.0 (the initial bed placement collided with the Nothing node and was repositioned until clear).
+[Scene 1, Ensemble 1, GraphID 5] Generation took 241.96s
+[Scene 1, Ensemble 1, GraphID 5] Done
+[Scene 0, Ensemble 1, GraphID 1] Starting process.
+All new objects validated. The west side of the living room is a partial enclosure (open between wall 11 and wall 16), a logical spot for a new room. Finalizing.
+
+```yaml
+edges:
+- [26, 19]
+- [27, 18]
+- [28, 18]
+- [29, 18]
+- [30, 26]
+- [31, 26]
+- [32, 26]
+- [33, 26]
+- [34, 26]
+- [35, 26]
+nodes:
+- id: 26
+  name: an image of a bedroom
+  node_type: room
+  position: '[0.9, -6.9, 0.3]'
+- dimension: '[1.6, 0.8, 0.8]'
+  id: 27
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -7.0, 0.4]'
+- dimension: '[2.0, 2.0, 0.04]'
+  id: 28
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.3, -7.4, 0.02]'
+- dimension: '[0.8, 0.8, 0.9]'
+  id: 29
+  is_predicted: true
+  name: armchair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -7.9, 0.45]'
+- dimension: '[1.5, 2.0, 0.6]'
+  id: 30
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -6.5, 0.3]'
+- dimension: '[0.5, 0.5, 0.6]'
+  id: 31
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.6, -5.7, 0.3]'
+- dimension: '[0.6, 1.2, 2.0]'
+  id: 32
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-0.6, -7.5, 1.0]'
+- dimension: '[0.3, 0.3, 1.6]'
+  id: 33
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -5.6, 0.8]'
+- dimension: '[1.0, 0.5, 1.0]'
+  id: 34
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.9, -7.8, 0.5]'
+- dimension: '[0.5, 1.2, 2.0]'
+  id: 35
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.3, -8.6, 1.0]'
+```
+
+**Summary of additions:**
+- **New room (id 26):** a bedroom placed to the west, through the open partial-enclosure side of the living room (gap between wall 11 and wall 16). Connected to living room 19.
+- **New objects in existing living room (18):** sofa (27), rug (28), armchair (29) — placed in the open floor area clear of the existing table/chairs/cabinets.
+- **New objects in new bedroom (26):** bed (30), nightstand (31), wardrobe (32), lamp (33), dresser (34), bookshelf (35) — a full plausible bedroom set, positioned well away from living-room objects and clear of the partial walls.
+
+All objects were validated with `check_collision` (IoU = 0.0); the two initial bookshelf placements that collided with chair id 4 / wall id 16 / nothing id 8 were relocated until clear.
+[Scene 0, Ensemble 1, GraphID 1] Generation took 192.73s
+[Scene 0, Ensemble 1, GraphID 1] Done
+[Scene 1, Ensemble 0, GraphID 4] Starting process.
+All objects validated. Here is the YAML with the new items that passed collision checks:
+
+```yaml
+edges:
+- [0, 18]
+- [1, 18]
+- [2, 19]
+- [3, 18]
+- [4, 18]
+- [5, 18]
+- [6, 23]
+- [9, 20]
+- [11, 19]
+- [12, 19]
+- [13, 18]
+- [14, 22]
+- [15, 22]
+- [16, 20]
+- [17, 20]
+- [18, 19]
+- [18, 20]
+- [18, 21]
+- [18, 22]
+- [18, 23]
+- [18, 25]
+- [18, 26]
+- [19, 21]
+- [19, 24]
+- [27, 18]
+- [28, 18]
+- [27, 29]
+- [27, 30]
+- [27, 31]
+- [27, 32]
+- [27, 33]
+- [27, 34]
+- [28, 35]
+- [28, 36]
+- [28, 37]
+- [28, 38]
+- [28, 39]
+- [28, 40]
+- [28, 41]
+- [18, 42]
+- [18, 43]
+- [18, 44]
+- [18, 45]
+- [18, 46]
+- [18, 47]
+nodes:
+- id: 27
+  name: an image of a bedroom
+  node_type: room
+  position: '[3.5, -10.8, 1.0]'
+- id: 28
+  name: an image of a kitchen
+  node_type: room
+  position: '[0.9, -7.0, 1.0]'
+- dimension: '[1.4, 2.0, 0.5]'
+  id: 29
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.5, -10.8, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 30
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.5, -10.8, 0.3]'
+- dimension: '[1.0, 0.6, 2.0]'
+  id: 31
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.9, -11.5, 1.0]'
+- dimension: '[1.2, 0.5, 1.0]'
+  id: 32
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.6, -11.6, 0.5]'
+- dimension: '[1.0, 0.5, 0.75]'
+  id: 33
+  is_predicted: true
+  name: desk
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -10.0, 0.4]'
+- dimension: '[0.25, 0.25, 0.5]'
+  id: 34
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.5, -10.8, 0.8]'
+- dimension: '[1.5, 0.6, 0.9]'
+  id: 35
+  is_predicted: true
+  name: counter
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -6.0, 0.45]'
+- dimension: '[0.7, 0.7, 1.8]'
+  id: 36
+  is_predicted: true
+  name: fridge
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -7.5, 0.9]'
+- dimension: '[0.5, 0.5, 0.2]'
+  id: 37
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -6.0, 1.0]'
+- dimension: '[0.6, 0.6, 0.1]'
+  id: 38
+  is_predicted: true
+  name: stove
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -6.0, 0.95]'
+- dimension: '[0.5, 0.4, 0.3]'
+  id: 39
+  is_predicted: true
+  name: microwave
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -6.0, 1.2]'
+- dimension: '[1.0, 1.0, 0.75]'
+  id: 40
+  is_predicted: true
+  name: table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -9.0, 0.4]'
+- dimension: '[0.5, 0.5, 0.9]'
+  id: 41
+  is_predicted: true
+  name: chair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -10.0, 0.45]'
+- dimension: '[0.8, 0.5, 0.4]'
+  id: 42
+  is_predicted: true
+  name: coffee table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -7.0, 0.25]'
+- dimension: '[0.25, 0.8, 2.0]'
+  id: 43
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.6, -6.3, 1.0]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 44
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -8.6, 0.5]'
+- dimension: '[0.9, 1.8, 0.7]'
+  id: 45
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.1, -7.0, 0.4]'
+- dimension: '[0.4, 1.2, 0.5]'
+  id: 46
+  is_predicted: true
+  name: tv stand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.95, -7.5, 0.3]'
+- dimension: '[1.6, 1.6, 0.02]'
+  id: 47
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -7.2, 0.02]'
+```
+
+**Summary of additions:**
+
+- **New rooms (2):**
+  - **Bedroom (id 27)** at `[3.5, -10.8, 1.0]` — placed behind the existing door (id 9) on the south wall, extending into the empty space beyond it (Rule 7).
+  - **Kitchen (id 28)** at `[0.9, -7.0, 1.0]` — placed in the open area west of the living room, adjacent to the partial wall enclosure.
+
+- **New objects (19):** 6 in the living room (sofa, coffee table, bookshelf, plant, tv stand, rug), 6 in the new bedroom (bed, nightstand, wardrobe, dresser, desk, lamp), and 7 in the new kitchen (counter, fridge, sink, stove, microwave, table, chair).
+
+- **Validation:** Every new object was checked with the collision tool. The sofa and tv stand initially overlapped Wall id 11/16 and were repositioned until IoU = 0.0. All final placements report "Placement is clear."
+
+- **Edges:** New rooms connect to the living room (27↔18 via the door, 28↔18), and each new object is linked to its containing room.
+[Scene 1, Ensemble 0, GraphID 4] Generation took 233.43s
+[Scene 1, Ensemble 0, GraphID 4] Done
+[Scene 1, Ensemble 3, GraphID 7] Starting process.
+All validations complete. My new bedroom objects (behind the door on the south wall) and living room objects passed. The rug repeatedly collided with the cabinet/walls, so I discarded it. Here are the validated additions:
+
+```yaml
+nodes:
+- id: 27
+  name: sofa
+  node_type: object
+  position: '[3.05, -7.05, 0.4]'
+  dimension: '[1.9, 0.9, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 28
+  name: coffee_table
+  node_type: object
+  position: '[4.2, -7.8, 0.25]'
+  dimension: '[1.0, 0.5, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 29
+  name: armchair
+  node_type: object
+  position: '[3.4, -7.9, 0.4]'
+  dimension: '[0.8, 0.8, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 30
+  name: television
+  node_type: object
+  position: '[3.0, -7.0, 0.6]'
+  dimension: '[0.15, 1.2, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 31
+  name: bookshelf
+  node_type: object
+  position: '[2.55, -7.0, 0.9]'
+  dimension: '[0.4, 1.2, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 32
+  name: bed
+  node_type: object
+  position: '[3.4, -10.4, 0.45]'
+  dimension: '[1.4, 1.9, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 33
+  name: nightstand
+  node_type: object
+  position: '[4.4, -10.4, 0.5]'
+  dimension: '[0.5, 0.5, 0.55]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 34
+  name: wardrobe
+  node_type: object
+  position: '[4.9, -10.5, 0.9]'
+  dimension: '[1.2, 0.6, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 35
+  name: bench
+  node_type: object
+  position: '[3.0, -10.4, 0.25]'
+  dimension: '[1.2, 0.4, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 36
+  name: an image of a bedroom
+  node_type: room
+  position: '[3.9, -10.2, 1.0]'
+edges:
+- [27, 18]
+- [28, 18]
+- [29, 18]
+- [30, 18]
+- [31, 18]
+- [32, 36]
+- [33, 36]
+- [34, 36]
+- [35, 36]
+- [36, 18]
+- [36, 19]
+```
+[Scene 1, Ensemble 3, GraphID 7] Generation took 307.89s
+[Scene 1, Ensemble 3, GraphID 7] Done
+[Scene 0, Ensemble 2, GraphID 2] Starting process.
+All new objects validated with zero collisions (IoU = 0.0). Here are the new items:
+
+```yaml
+nodes:
+# ---------- New objects in EXISTING rooms ----------
+- id: 29
+  name: sofa
+  node_type: object
+  dimension: '[1.6, 0.7, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.9, -6.95, 0.4]'
+  is_predicted: true
+- id: 30
+  name: tv_stand
+  node_type: object
+  dimension: '[1.0, 0.4, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.2, -6.2, 0.5]'
+  is_predicted: true
+- id: 31
+  name: rug
+  node_type: object
+  dimension: '[1.8, 1.5, 0.03]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.9, -7.35, 0.02]'
+  is_predicted: true
+- id: 32
+  name: armchair
+  node_type: object
+  dimension: '[0.8, 0.8, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.55, -7.55, 0.45]'
+  is_predicted: true
+- id: 33
+  name: bookshelf
+  node_type: object
+  dimension: '[0.4, 1.2, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.9, -7.0, 0.9]'
+  is_predicted: true
+
+# ---------- New objects in NEW bedroom (behind door, id 26) ----------
+- id: 34
+  name: bed
+  node_type: object
+  dimension: '[1.4, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.6, -7.4, 0.3]'
+  is_predicted: true
+- id: 35
+  name: wardrobe
+  node_type: object
+  dimension: '[1.2, 0.6, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -9.2, 1.0]'
+  is_predicted: true
+- id: 36
+  name: dresser
+  node_type: object
+  dimension: '[1.2, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.6, -8.4, 0.4]'
+  is_predicted: true
+- id: 37
+  name: nightstand
+  node_type: object
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.6, -6.6, 0.25]'
+  is_predicted: true
+- id: 38
+  name: plant
+  node_type: object
+  dimension: '[0.5, 0.5, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.6, -6.9, 0.5]'
+  is_predicted: true
+
+# ---------- New objects in NEW bedroom (id 27) ----------
+- id: 39
+  name: bed
+  node_type: object
+  dimension: '[1.4, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.7, -11.7, 0.3]'
+  is_predicted: true
+- id: 40
+  name: wardrobe
+  node_type: object
+  dimension: '[0.6, 1.2, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.2, -11.6, 1.0]'
+  is_predicted: true
+- id: 41
+  name: nightstand
+  node_type: object
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.5, -10.9, 0.25]'
+  is_predicted: true
+- id: 42
+  name: dresser
+  node_type: object
+  dimension: '[1.2, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.6, -12.6, 0.4]'
+  is_predicted: true
+
+# ---------- New objects in NEW bathroom (id 28) ----------
+- id: 43
+  name: toilet
+  node_type: object
+  dimension: '[0.4, 0.6, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.3, -11.2, 0.35]'
+  is_predicted: true
+- id: 44
+  name: sink
+  node_type: object
+  dimension: '[0.6, 0.4, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.5, -12.2, 0.45]'
+  is_predicted: true
+- id: 45
+  name: bathtub
+  node_type: object
+  dimension: '[0.8, 1.6, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.3, -10.7, 0.3]'
+  is_predicted: true
+
+# ---------- New rooms ----------
+- id: 26
+  name: an image of a bedroom
+  node_type: room
+  position: '[1.7, -7.8, 1.0]'
+- id: 27
+  name: an image of a bedroom
+  node_type: room
+  position: '[2.05, -11.6, 0.4]'
+- id: 28
+  name: an image of a bathroom
+  node_type: room
+  position: '[4.9, -11.4, 0.5]'
+
+edges:
+# New objects -> existing rooms
+- [29, 22]
+- [30, 19]
+- [31, 22]
+- [32, 18]
+- [33, 19]
+# New objects -> new rooms
+- [34, 26]
+- [35, 26]
+- [36, 26]
+- [37, 26]
+- [38, 26]
+- [39, 27]
+- [40, 27]
+- [41, 27]
+- [42, 27]
+- [43, 28]
+- [44, 28]
+- [45, 28]
+# New rooms -> existing rooms
+- [26, 20]
+- [26, 19]
+- [26, 23]
+- [26, 24]
+- [27, 20]
+- [27, 24]
+- [27, 26]
+- [28, 20]
+- [28, 25]
+- [28, 27]
+```
+[Scene 0, Ensemble 2, GraphID 2] Generation took 336.93s
+[Scene 0, Ensemble 2, GraphID 2] Done
+[Scene 0, Ensemble 3, GraphID 3] Starting process.
+All 10 candidate objects passed the collision check (IoU = 0.0). Now I'll assemble the new items: 3 objects added to an existing living room (id 18), plus a new bedroom (behind the door) and a new bathroom, each with its own objects.
+
+```yaml
+edges:
+- [26, 18]
+- [27, 18]
+- [28, 18]
+- [29, 36]
+- [30, 36]
+- [31, 36]
+- [32, 36]
+- [33, 37]
+- [34, 37]
+- [35, 37]
+- [36, 18]
+- [37, 18]
+nodes:
+- id: 26
+  name: sofa
+  node_type: object
+  position: '[3.4, -6.9, 0.35]'
+  dimension: '[1.8, 0.7, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 27
+  name: bookshelf
+  node_type: object
+  position: '[4.15, -6.15, 1.0]'
+  dimension: '[0.8, 0.4, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 28
+  name: plant
+  node_type: object
+  position: '[4.4, -8.5, 0.7]'
+  dimension: '[0.3, 0.3, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 29
+  name: bed
+  node_type: object
+  position: '[0.2, -6.8, 0.3]'
+  dimension: '[1.6, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 30
+  name: nightstand
+  node_type: object
+  position: '[-1.2, -6.0, 0.3]'
+  dimension: '[0.5, 0.5, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 31
+  name: floor_lamp
+  node_type: object
+  position: '[-1.0, -7.5, 0.9]'
+  dimension: '[0.3, 0.3, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 32
+  name: wardrobe
+  node_type: object
+  position: '[0.3, -8.5, 1.0]'
+  dimension: '[1.4, 0.6, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 33
+  name: sink
+  node_type: object
+  position: '[2.7, -10.5, 0.45]'
+  dimension: '[0.6, 0.5, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 34
+  name: toilet
+  node_type: object
+  position: '[3.4, -10.6, 0.4]'
+  dimension: '[0.6, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 35
+  name: bathtub
+  node_type: object
+  position: '[2.7, -11.5, 0.3]'
+  dimension: '[1.6, 0.8, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 36
+  name: an image of a bedroom
+  node_type: room
+  position: '[-0.2, -7.3, 1.0]'
+- id: 37
+  name: an image of a bathroom
+  node_type: room
+  position: '[2.8, -11.0, 0.5]'
+```
+
+Summary of additions:
+- **Living room (18)**: sofa, bookshelf, plant — placed in the open floor on the clear side of the room.
+- **New bedroom (36)**: created behind the existing `door` (id 9) on the lower-left wall, projected outward into empty space; contains bed, nightstand, floor lamp, wardrobe.
+- **New bathroom (37)**: created in the empty lower region beyond the `nothing`/wall boundary, away from all existing objects; contains sink, toilet, bathtub.
+
+All new objects were validated with `check_collision` and returned IoU = 0.0 (clear). No new `nothing`, `structure`, or `door` nodes were created, and no object was placed across a wall or into a confirmed-empty (`nothing`) region.
+[Scene 0, Ensemble 3, GraphID 3] Generation took 378.37s
+[Scene 0, Ensemble 3, GraphID 3] Done
+[Scene 0, Ensemble 0, GraphID 0] Starting process.
+All new objects are validated (IoU = 0.0). The door on the south wall already leads to room 20, so no new room is created there. The living room's **west side is open** (gap between top wall id11 and left wall id16 at x≈2.45), so I extend a new **bedroom** westward and place its furniture there.
+
+```yaml
+nodes:
+- dimension: '[0.9, 0.8, 0.8]'
+  id: 26
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.15, -6.4, 0.4]'
+- dimension: '[0.5, 0.45, 0.45]'
+  id: 27
+  is_predicted: true
+  name: coffee_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.0, -7.3, 0.25]'
+- dimension: '[0.35, 1.0, 2.0]'
+  id: 28
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.3, -7.0, 1.0]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 29
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.55, -6.8, 0.5]'
+- dimension: '[0.3, 0.3, 1.8]'
+  id: 30
+  is_predicted: true
+  name: floor_lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.4, -6.9, 0.9]'
+- dimension: '[1.4, 1.9, 0.6]'
+  id: 31
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.8, -7.0, 0.3]'
+- dimension: '[0.4, 0.4, 0.5]'
+  id: 32
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.0, -6.0, 0.3]'
+- dimension: '[0.6, 0.5, 2.0]'
+  id: 33
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.8, -8.4, 1.0]'
+- id: 35
+  name: an image of a bedroom
+  node_type: room
+  position: '[0.0, -7.0, 1.2]'
+
+edges:
+- [26, 18]
+- [27, 18]
+- [28, 18]
+- [29, 18]
+- [30, 18]
+- [31, 35]
+- [32, 35]
+- [33, 35]
+- [35, 18]
+```
+
+**Summary of additions:**
+- **New room (id 35):** a bedroom extended westward from the living room's open west side, connected via edge `[35, 18]`.
+- **Living room (18) objects:** sofa, coffee_table, bookshelf, plant, floor_lamp — all placed in the clear interior zone (x≈2.5–4.4, y≈−6.4 to −7.3), avoiding the central "Nothing" volumes, the walls, and existing furniture.
+- **New bedroom (35) objects:** bed, nightstand, wardrobe — placed in the open westward area, away from all existing objects and structures.
+
+All new objects returned `valid: true` / IoU = 0.0 from the collision check. No walls, windows, or doors are crossed (the west gap is an open side, not a wall).
+[Scene 0, Ensemble 0, GraphID 0] Generation took 341.42s
+[Scene 0, Ensemble 0, GraphID 0] Done
+Starting uncertainty calculation to select next target...
+Sampling 300 viewpoints within bounds: [ -1.34828806 -13.08360658   1.1          0.        ] to [  6.04181079  -5.46630742   1.1        360.        ]
+Highest Combined Information Gain found at first stage: 4.5268
+[INFO] [1789324154.772903]: Evaluating reachability for 6 candidates...
+[INFO] [1789324155.060704]: After final reachability check, selected target pose with IG: 4.609180080416357
+[INFO] [1789324155.089043]: Selected Viewpoint: [ 2.99899671 -7.85740531  1.1       ]
+[INFO] [1789324170.099734]: Navigation completed. Ending stage 0 and transitioning to SCANNING.
+[INFO] [1789324170.193631]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789324194.192726]: Scan complete.
+[INFO] [1789324194.295229]: State: PLANNING - Initiating planning sequence.
+[INFO] [1789324194.298088]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph0_dsg.json
+[INFO] [1789324199.326344]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/graph0_dsg.json
+[INFO] [1789324199.330553]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph1_dsg.json
+[INFO] [1789324202.344103]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/graph1_dsg.json
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[Scene 1, Ensemble 0, GraphID 4] Starting process.
+All 11 candidate objects passed collision validation (IoU = 0.0). Here are the new items:
+
+- **New objects** placed in existing rooms (living rooms 20, 21 and hallway 22): sofa, bookshelf, plant, console_table, plant2
+- **New rooms**: a bedroom (west, extending off the hallway) and a bathroom (south, extending off the hallway)
+- **New objects** in the new rooms: bed, nightstand, dresser (bedroom); sink, toilet, bathtub (bathroom)
+
+```yaml
+edges:
+- [28, 20]
+- [29, 21]
+- [30, 20]
+- [31, 22]
+- [32, 21]
+- [33, 39]
+- [34, 39]
+- [35, 39]
+- [36, 40]
+- [37, 40]
+- [38, 40]
+- [39, 22]
+- [40, 25]
+nodes:
+- id: 28
+  name: sofa
+  node_type: object
+  is_predicted: true
+  dimension: '[1.4, 0.5, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.3, -8.15, 0.4]'
+- id: 29
+  name: bookshelf
+  node_type: object
+  is_predicted: true
+  dimension: '[0.5, 1.2, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.75, -7.0, 0.9]'
+- id: 30
+  name: plant
+  node_type: object
+  is_predicted: true
+  dimension: '[0.5, 0.5, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.9, -8.5, 0.4]'
+- id: 31
+  name: console_table
+  node_type: object
+  is_predicted: true
+  dimension: '[0.5, 0.9, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.0, -9.6, 0.4]'
+- id: 32
+  name: plant
+  node_type: object
+  is_predicted: true
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.85, -6.1, 0.5]'
+- id: 33
+  name: bed
+  node_type: object
+  is_predicted: true
+  dimension: '[2.0, 1.6, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-1.5, -10.5, 0.3]'
+- id: 34
+  name: nightstand
+  node_type: object
+  is_predicted: true
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-0.2, -10.9, 0.3]'
+- id: 35
+  name: dresser
+  node_type: object
+  is_predicted: true
+  dimension: '[1.2, 0.5, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-1.0, -11.8, 0.5]'
+- id: 36
+  name: sink
+  node_type: object
+  is_predicted: true
+  dimension: '[0.5, 0.4, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.8, -13.5, 0.5]'
+- id: 37
+  name: toilet
+  node_type: object
+  is_predicted: true
+  dimension: '[0.4, 0.6, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.6, -13.5, 0.4]'
+- id: 38
+  name: bathtub
+  node_type: object
+  is_predicted: true
+  dimension: '[1.6, 0.7, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.3, -14.0, 0.3]'
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[-1.0, -10.5, 1.0]'
+- id: 40
+  name: an image of a bathroom
+  node_type: room
+  position: '[2.2, -13.8, 1.0]'
+```
+
+Notes on placement logic:
+- The **bedroom (39)** is projected west of the hallway (25/22) into the open area bounded by wall 19, reached via the corridor — no walls crossed.
+- The **bathroom (40)** extends south off the hallway (25/26), in the open zone beneath the hallway, clear of all structure nodes.
+- All new objects were checked with the collision tool: **collision_count = 0** for every one (no overlap with existing objects, `nothing` nodes, or structure nodes).
+[Scene 1, Ensemble 0, GraphID 4] Generation took 210.64s
+[Scene 1, Ensemble 0, GraphID 4] Done
+[Scene 0, Ensemble 2, GraphID 2] Starting process.
+All placements validated. Compiling the confirmed additions:
+
+```yaml
+edges:
+- [24, 23]   # new bedroom adjacent to hallway
+- [25, 23]   # new bathroom adjacent to hallway
+- [0, 20]    # (existing table reference retained implicitly; new links below)
+- [26, 20]   # sofa -> existing living room
+- [27, 20]   # coffee_table -> existing living room
+- [28, 21]   # plant -> existing living room
+- [29, 19]   # tv_stand -> existing living room
+- [30, 21]   # armchair -> existing living room
+- [31, 23]   # console -> hallway
+- [32, 24]   # bed -> new bedroom
+- [33, 24]   # nightstand -> new bedroom
+- [34, 24]   # wardrobe -> new bedroom
+- [35, 24]   # dresser -> new bedroom
+- [36, 24]   # floor_lamp -> new bedroom
+- [37, 21]   # bookshelf -> existing living room
+- [38, 20]   # rug -> existing living room
+- [39, 25]   # toilet -> new bathroom
+- [40, 25]   # sink -> new bathroom
+- [41, 25]   # bathtub -> new bathroom
+- [42, 25]   # towel_rack -> new bathroom
+
+nodes:
+# ---------------- Existing-room additions (validated) ----------------
+- id: 26
+  name: sofa
+  node_type: object
+  position: '[3.2, -8.0, 0.4]'
+  dimension: '[1.2, 0.6, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 27
+  name: coffee_table
+  node_type: object
+  position: '[3.2, -7.0, 0.25]'
+  dimension: '[0.9, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 28
+  name: plant
+  node_type: object
+  position: '[2.8, -6.6, 0.5]'
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 29
+  name: tv_stand
+  node_type: object
+  position: '[4.7, -8.4, 0.4]'
+  dimension: '[1.2, 0.4, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 30
+  name: armchair
+  node_type: object
+  position: '[2.5, -7.3, 0.4]'
+  dimension: '[0.6, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 31
+  name: console
+  node_type: object
+  position: '[1.4, -9.8, 0.4]'
+  dimension: '[0.8, 0.4, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 37
+  name: bookshelf
+  node_type: object
+  position: '[2.9, -7.6, 0.9]'
+  dimension: '[0.4, 1.0, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 38
+  name: rug
+  node_type: object
+  position: '[3.6, -7.6, 0.02]'
+  dimension: '[1.6, 1.4, 0.04]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+# ---------------- New rooms (projected outward from hallway exit) ----------------
+- id: 24
+  name: an image of a bedroom
+  node_type: room
+  position: '[1.5, -12.2, 1.2]'
+- id: 25
+  name: an image of a bathroom
+  node_type: room
+  position: '[-1.0, -10.5, 1.0]'
+
+# ---------------- Additions inside new rooms (validated) ----------------
+- id: 32
+  name: bed
+  node_type: object
+  position: '[1.5, -12.5, 0.3]'
+  dimension: '[1.4, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 33
+  name: nightstand
+  node_type: object
+  position: '[0.4, -12.5, 0.3]'
+  dimension: '[0.4, 0.4, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 34
+  name: wardrobe
+  node_type: object
+  position: '[2.6, -12.4, 1.0]'
+  dimension: '[0.8, 0.6, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 35
+  name: dresser
+  node_type: object
+  position: '[1.5, -11.2, 0.5]'
+  dimension: '[1.0, 0.5, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 36
+  name: floor_lamp
+  node_type: object
+  position: '[3.3, -11.6, 0.9]'
+  dimension: '[0.3, 0.3, 1.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 39
+  name: toilet
+  node_type: object
+  position: '[-0.5, -9.8, 0.4]'
+  dimension: '[0.4, 0.6, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 40
+  name: sink
+  node_type: object
+  position: '[-1.2, -10.3, 0.5]'
+  dimension: '[0.5, 0.4, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 41
+  name: bathtub
+  node_type: object
+  position: '[-1.0, -11.5, 0.3]'
+  dimension: '[0.8, 1.6, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 42
+  name: towel_rack
+  node_type: object
+  position: '[-1.6, -10.0, 1.0]'
+  dimension: '[0.4, 0.2, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+```
+
+**Summary of additions:**
+
+- **8 objects in existing rooms** — sofa, coffee_table, plant, tv_stand, armchair, console, bookshelf, rug. Placed in clear floor zones of the living rooms (19–21) and the hallway (22), which I confirmed by projecting around the partial enclosures bounded by walls ID 12–18.
+- **2 new rooms** — a **bedroom** projected ~2 m south off the hallway (ID 23) through the open path near door ID 7, and a **bathroom** projected west off the hallway into the empty area beyond the lower partial enclosure.
+- **9 objects inside the new rooms** — bedroom: bed, nightstand, wardrobe, dresser, floor_lamp; bathroom: toilet, sink, bathtub, towel_rack.
+
+All 17 new objects passed `check_collision` with IoU = 0.0. Two initial placements (tv_stand and armchair) collided with Wall ID 16 and Nothing ID 9 / cabinet ID 2 and were relocated until clear. New rooms were placed without the collision tool as instructed, and no new `nothing`, `structure`, or `door` nodes were created.
+[Scene 0, Ensemble 2, GraphID 2] Generation took 245.95s
+[Scene 0, Ensemble 2, GraphID 2] Done
+[Scene 0, Ensemble 1, GraphID 1] Starting process.
+All objects validated. The bookshelf and plant were repositioned to clear the chair. Now I'll output the additions.
+
+```yaml
+edges:
+- [19, 31]
+- [19, 32]
+- [21, 33]
+- [21, 34]
+- [22, 35]
+- [22, 36]
+- [23, 24]
+- [23, 25]
+- [24, 26]
+- [24, 27]
+- [25, 28]
+- [25, 29]
+- [25, 30]
+nodes:
+- id: 24
+  name: an image of a bedroom
+  node_type: room
+  position: '[-1.5, -10.45, 1.2]'
+- id: 25
+  name: an image of a bathroom
+  node_type: room
+  position: '[2.9, -12.0, 1.2]'
+- id: 26
+  name: bed
+  node_type: object
+  position: '[-1.5, -10.45, 0.3]'
+  dimension: '[2.0, 1.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 27
+  name: nightstand
+  node_type: object
+  position: '[-2.9, -10.45, 0.3]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 28
+  name: bathtub
+  node_type: object
+  position: '[2.7, -12.0, 0.3]'
+  dimension: '[1.4, 0.7, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 29
+  name: sink
+  node_type: object
+  position: '[3.5, -11.4, 0.5]'
+  dimension: '[0.6, 0.4, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 30
+  name: toilet
+  node_type: object
+  position: '[4.3, -12.0, 0.4]'
+  dimension: '[0.4, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 31
+  name: sofa
+  node_type: object
+  position: '[4.8, -8.35, 0.35]'
+  dimension: '[1.2, 0.7, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 32
+  name: coffee_table
+  node_type: object
+  position: '[3.3, -7.65, 0.25]'
+  dimension: '[0.7, 0.5, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 33
+  name: bookshelf
+  node_type: object
+  position: '[2.75, -6.95, 0.9]'
+  dimension: '[0.4, 0.9, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 34
+  name: plant
+  node_type: object
+  position: '[2.75, -7.75, 0.6]'
+  dimension: '[0.3, 0.3, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 35
+  name: console_table
+  node_type: object
+  position: '[3.9, -9.5, 0.4]'
+  dimension: '[0.8, 0.4, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 36
+  name: shoe_rack
+  node_type: object
+  position: '[3.1, -9.45, 0.3]'
+  dimension: '[0.3, 0.6, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+```
+
+**Summary of additions:**
+
+- **2 new rooms:**
+  - **Bedroom (24)** — projected westward from the existing hallway (23), occupying the open space beyond the wall segment near `[2.1, -10.26]`.
+  - **Bathroom (25)** — projected southward from hallway (23), in the empty region below the door/wall line.
+
+- **New objects in existing rooms:**
+  - Living room 19: `sofa`, `coffee_table`
+  - Living room 21: `bookshelf`, `plant`
+  - Hallway 22: `console_table`, `shoe_rack`
+
+- **New objects in new rooms:**
+  - Bedroom 24: `bed`, `nightstand`
+  - Bathroom 25: `sink`, `toilet`, `bathtub`
+
+All 11 new objects passed the collision check (IoU = 0.0). The `bookshelf` and `plant` were repositioned after an initial collision with the existing chair (id 1). No new `nothing`, `structure`, or `door` nodes were created, and no objects were placed across walls or barriers.
+[Scene 0, Ensemble 1, GraphID 1] Generation took 257.51s
+[Scene 0, Ensemble 1, GraphID 1] Done
+[Scene 0, Ensemble 0, GraphID 0] Starting process.
+All new objects validated. Here is the YAML with only the passed items:
+
+```yaml
+edges:
+- [24, 19]
+- [25, 19]
+- [26, 19]
+- [27, 19]
+- [28, 19]
+- [29, 37]
+- [30, 37]
+- [31, 37]
+- [32, 37]
+- [33, 38]
+- [34, 38]
+- [35, 38]
+- [36, 38]
+- [37, 22]
+- [38, 22]
+- [37, 38]
+nodes:
+- dimension: '[0.65, 0.65, 0.8]'
+  id: 24
+  is_predicted: true
+  name: armchair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.95, -7.4, 0.45]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 25
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.8, -6.7, 0.5]'
+- dimension: '[1.6, 1.4, 0.04]'
+  id: 26
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.0, -7.6, 0.02]'
+- dimension: '[0.6, 1.1, 0.5]'
+  id: 27
+  is_predicted: true
+  name: tv_stand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -8.2, 0.3]'
+- dimension: '[1.4, 0.55, 0.7]'
+  id: 28
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -7.35, 0.4]'
+- dimension: '[2.0, 1.6, 0.5]'
+  id: 29
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-1.0, -7.0, 0.35]'
+- dimension: '[0.5, 0.4, 0.5]'
+  id: 30
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.4, -6.3, 0.3]'
+- dimension: '[0.6, 1.2, 2.0]'
+  id: 31
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.4, -7.8, 1.0]'
+- dimension: '[0.6, 1.2, 0.8]'
+  id: 32
+  is_predicted: true
+  name: desk
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-0.5, -8.6, 0.7]'
+- dimension: '[0.8, 1.7, 0.6]'
+  id: 33
+  is_predicted: true
+  name: bathtub
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.45, -13.0, 0.3]'
+- dimension: '[0.4, 0.6, 0.8]'
+  id: 34
+  is_predicted: true
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.6, -12.0, 0.4]'
+- dimension: '[0.5, 0.4, 0.2]'
+  id: 35
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.3, -12.0, 0.85]'
+- dimension: '[0.8, 0.05, 0.9]'
+  id: 36
+  is_predicted: true
+  name: mirror
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.9, -13.5, 1.4]'
+- id: 37
+  name: an image of a bedroom
+  node_type: room
+  position: '[-0.5, -7.5, 1.2]'
+- id: 38
+  name: an image of a bathroom
+  node_type: room
+  position: '[1.4, -12.6, 1.1]'
+```
+
+**Summary of additions:**
+- **5 new objects in the existing Living room (19):** armchair, plant, rug, tv_stand, sofa — all placed in open floor areas, validated clear of the existing cabinets/chairs/table and the `nothing` regions.
+- **New Bedroom (37):** bed, nightstand, wardrobe, desk — placed to the west (open floor beyond the partial wall), reachable from the hallway.
+- **New Bathroom (38):** bathtub, toilet, sink, mirror — placed south, behind the existing door (id 7) leading off the hallway wall.
+- All 13 new objects returned IoU = 0.0 (valid). No walls/windows/`nothing` nodes were crossed, and no new structure/door/nothing nodes were created.
+[Scene 0, Ensemble 0, GraphID 0] Generation took 264.08s
+[Scene 0, Ensemble 0, GraphID 0] Done
+[Scene 0, Ensemble 3, GraphID 3] Starting process.
+All validations complete. Here are the results:
+
+**New objects that passed collision checks:**
+- `hall_console` (in existing Hallway 22)
+- `hall_art` (in existing Hallway 22)
+- `plant_room21` (in existing Living room 21)
+- `bed_bedroom`, `nightstand_bedroom`, `wardrobe_bedroom` (new Bedroom)
+- `toilet_bath`, `sink_bath`, `bathtub_bath` (new Bathroom)
+
+**New rooms:** a Bedroom and a Bathroom, projected outward from the Hallway (22/23) into the empty lower region, connected logically.
+
+```yaml
+edges:
+- [26, 22]
+- [27, 24]
+- [28, 24]
+- [29, 24]
+- [30, 25]
+- [31, 25]
+- [32, 25]
+- [33, 22]
+- [34, 21]
+- [24, 23]
+- [25, 22]
+nodes:
+- id: 24
+  name: an image of a bedroom
+  node_type: room
+  position: '[1.0, -12.0, 1.0]'
+- id: 25
+  name: an image of a bathroom
+  node_type: room
+  position: '[4.5, -12.5, 1.0]'
+- dimension: '[1.0, 0.4, 0.9]'
+  id: 26
+  is_predicted: true
+  name: console
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -9.7, 0.5]'
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 27
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -12.5, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 28
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.1, -11.7, 0.3]'
+- dimension: '[0.6, 1.2, 2.0]'
+  id: 29
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.2, -13.5, 1.0]'
+- dimension: '[0.4, 0.6, 0.7]'
+  id: 30
+  is_predicted: true
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.2, -11.8, 0.3]'
+- dimension: '[0.5, 0.4, 0.2]'
+  id: 31
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.0, -12.4, 0.8]'
+- dimension: '[1.7, 0.8, 0.6]'
+  id: 32
+  is_predicted: true
+  name: bathtub
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.3, -13.0, 0.3]'
+- dimension: '[0.8, 0.1, 0.6]'
+  id: 33
+  is_predicted: true
+  name: picture_frame
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -9.6, 1.0]'
+- dimension: '[0.4, 0.4, 1.2]'
+  id: 34
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.4, -6.4, 0.6]'
+```
+
+**Summary of additions:**
+- **2 new rooms:** Bedroom (24) below the Hallway, and Bathroom (25) off the Hallway.
+- **9 new objects**, all validated with IoU = 0.0:
+  - Hallway (22): console, picture_frame
+  - Living room (21): plant
+  - Bedroom (24): bed, nightstand, wardrobe
+  - Bathroom (25): toilet, sink, bathtub
+- **New edges** connecting objects↔rooms and the new rooms↔existing rooms (Bedroom→Hallway 23, Bathroom→Hallway 22).
+
+All placements avoid the Nothing nodes, structure walls, and existing objects, and no objects were placed across walls without a door.
+[Scene 0, Ensemble 3, GraphID 3] Generation took 361.89s
+[Scene 0, Ensemble 3, GraphID 3] Done
+[Scene 1, Ensemble 2, GraphID 6] Starting process.
+All new objects validated with IoU = 0.0. Now I'll compile the additions.
+
+**New Rooms:**
+- **Bedroom** (id 41): placed west of the living room, extending through the open gap at x≈2.45 (bounded partly by walls 18/19). Connected to living room 21.
+- **Bathroom** (id 42): placed south of the hallway beyond the partial enclosure (wall 19 at y≈-10.26), connected to hallway 25.
+
+```yaml
+edges:
+- [28, 20]
+- [29, 20]
+- [30, 21]
+- [31, 21]
+- [32, 41]
+- [33, 41]
+- [34, 41]
+- [35, 41]
+- [36, 42]
+- [37, 42]
+- [38, 42]
+- [39, 42]
+- [40, 42]
+- [41, 21]
+- [42, 25]
+nodes:
+- id: 28
+  name: sofa
+  node_type: object
+  is_predicted: true
+  position: '[3.1, -7.0, 0.4]'
+  dimension: '[1.4, 0.85, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 29
+  name: coffee table
+  node_type: object
+  is_predicted: true
+  position: '[3.9, -8.0, 0.2]'
+  dimension: '[1.0, 0.6, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 30
+  name: bookshelf
+  node_type: object
+  is_predicted: true
+  position: '[2.9, -7.5, 0.9]'
+  dimension: '[0.4, 1.2, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 31
+  name: rug
+  node_type: object
+  is_predicted: true
+  position: '[3.3, -6.5, 0.02]'
+  dimension: '[1.2, 0.9, 0.03]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 32
+  name: bed
+  node_type: object
+  is_predicted: true
+  position: '[1.1, -7.1, 0.25]'
+  dimension: '[1.4, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 33
+  name: nightstand
+  node_type: object
+  is_predicted: true
+  position: '[1.1, -5.85, 0.3]'
+  dimension: '[0.45, 0.45, 0.55]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 34
+  name: wardrobe
+  node_type: object
+  is_predicted: true
+  position: '[0.2, -8.4, 0.95]'
+  dimension: '[0.6, 1.0, 1.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 35
+  name: desk
+  node_type: object
+  is_predicted: true
+  position: '[0.3, -6.0, 0.4]'
+  dimension: '[0.6, 1.2, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 36
+  name: bathtub
+  node_type: object
+  is_predicted: true
+  position: '[2.3, -13.5, 0.3]'
+  dimension: '[0.8, 1.7, 0.55]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 37
+  name: toilet
+  node_type: object
+  is_predicted: true
+  position: '[3.3, -12.2, 0.35]'
+  dimension: '[0.4, 0.6, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 38
+  name: sink
+  node_type: object
+  is_predicted: true
+  position: '[1.3, -12.2, 0.45]'
+  dimension: '[0.5, 0.4, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 39
+  name: shower
+  node_type: object
+  is_predicted: true
+  position: '[3.4, -13.6, 1.0]'
+  dimension: '[0.9, 0.9, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 40
+  name: mirror cabinet
+  node_type: object
+  is_predicted: true
+  position: '[1.2, -12.3, 0.9]'
+  dimension: '[0.4, 0.9, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+- id: 41
+  name: an image of a bedroom
+  node_type: room
+  is_predicted: true
+  position: '[1.0, -7.1, 0.5]'
+- id: 42
+  name: an image of a bathroom
+  node_type: room
+  is_predicted: true
+  position: '[2.3, -12.8, 0.5]'
+```
+
+**Summary of additions:**
+- **5 new objects** placed in the existing living room (sofa, coffee table, bookshelf, rug) — all clear of walls, the "nothing" zones, and existing furniture.
+- **5 new objects** in the new **Bedroom** (bed, nightstand, wardrobe, desk), positioned beyond the western open gap, away from the living room's furniture.
+- **5 new objects** in the new **Bathroom** (bathtub, toilet, sink, shower, mirror cabinet), placed south of the hallway's partial wall enclosure.
+- **2 new rooms** (Bedroom id 41 ↔ living room 21; Bathroom id 42 ↔ hallway 25), created behind the open/partially-enclosed boundaries without adding new structure nodes.
+[Scene 1, Ensemble 2, GraphID 6] Generation took 286.38s
+[Scene 1, Ensemble 2, GraphID 6] Done
+[Scene 1, Ensemble 3, GraphID 7] Starting process.
+All new objects are validated. Here is the final expansion:
+
+**Reasoning summary:**
+- **Living room (20)** at x≈4.9, y≈-7.1 (bounded by wall 15 on the right, wall 13/window on top): added TV stand, coffee table, plant.
+- **Living room (21)** at x≈3.7, y≈-6.3: added sofa, rug, bookshelf in the open floor area between the chair and the table cluster.
+- **Hallway (22)** (bounded by walls 17/18 with a door at id 8 leading south): added a console table and a decorative plant along the corridor.
+- **New Bedroom (28)**: projected west of the hallway wall 18 into the open space (x 0.4–2.0, y -6 to -9), reached from living room 21 / hallway 22 — with bed, nightstand, wardrobe.
+- **New Bathroom (29)**: placed behind the existing door (id 8) on the south wall, in the open region south of the hallway — with bathtub, vanity, toilet.
+
+```yaml
+nodes:
+- id: 28
+  name: an image of a bedroom
+  node_type: room
+  position: '[0.85, -6.35, 1.0]'
+- id: 29
+  name: an image of a bathroom
+  node_type: room
+  position: '[0.9, -10.2, 1.0]'
+- dimension: '[1.0, 0.4, 0.5]'
+  id: 30
+  is_predicted: false
+  name: tv_stand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.0, -6.6, 0.28]'
+- dimension: '[0.9, 0.5, 0.4]'
+  id: 31
+  is_predicted: false
+  name: coffee_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.05, -8.05, 0.22]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 32
+  is_predicted: false
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.25, -6.35, 0.5]'
+- dimension: '[1.3, 0.7, 0.7]'
+  id: 33
+  is_predicted: false
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -7.0, 0.4]'
+- dimension: '[1.8, 1.2, 0.02]'
+  id: 34
+  is_predicted: false
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -7.4, 0.01]'
+- dimension: '[0.4, 0.9, 1.8]'
+  id: 35
+  is_predicted: false
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.5, -7.6, 0.9]'
+- dimension: '[0.5, 1.0, 0.8]'
+  id: 36
+  is_predicted: false
+  name: console_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.6, -9.6, 0.4]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 37
+  is_predicted: false
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -9.6, 0.5]'
+- dimension: '[1.5, 2.0, 0.6]'
+  id: 38
+  is_predicted: false
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -7.3, 0.3]'
+- dimension: '[0.45, 0.45, 0.55]'
+  id: 39
+  is_predicted: false
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.9, -6.6, 0.3]'
+- dimension: '[0.7, 1.0, 2.0]'
+  id: 40
+  is_predicted: false
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.45, -8.9, 1.0]'
+- dimension: '[1.5, 0.7, 0.55]'
+  id: 41
+  is_predicted: false
+  name: bathtub
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.7, -10.4, 0.3]'
+- dimension: '[0.5, 0.8, 0.9]'
+  id: 42
+  is_predicted: false
+  name: vanity
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.8, -9.7, 0.45]'
+- dimension: '[0.4, 0.6, 0.7]'
+  id: 43
+  is_predicted: false
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -9.5, 0.35]'
+edges:
+- [30, 20]
+- [31, 20]
+- [32, 20]
+- [33, 21]
+- [34, 21]
+- [35, 21]
+- [36, 22]
+- [37, 22]
+- [38, 28]
+- [39, 28]
+- [40, 28]
+- [41, 29]
+- [42, 29]
+- [43, 29]
+- [28, 21]
+- [28, 22]
+- [29, 22]
+```
+[Scene 1, Ensemble 3, GraphID 7] Generation took 515.52s
+[Scene 1, Ensemble 3, GraphID 7] Done
+[Scene 1, Ensemble 1, GraphID 5] Starting process.
+All objects validated. Here is the final YAML of new additions that passed the collision check:
+
+```yaml
+edges:
+- [29, 24]
+- [30, 24]
+- [33, 24]
+- [31, 20]
+- [32, 20]
+- [34, 28]
+- [35, 28]
+- [36, 28]
+- [37, 28]
+- [38, 28]
+- [39, 28]
+- [28, 22]
+- [28, 27]
+nodes:
+- id: 29
+  name: sofa
+  node_type: object
+  position: '[2.9, -7.6, 0.4]'
+  dimension: '[1.6, 0.85, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 30
+  name: coffee table
+  node_type: object
+  position: '[3.3, -6.8, 0.28]'
+  dimension: '[1.0, 0.55, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 31
+  name: tv stand
+  node_type: object
+  position: '[4.6, -8.55, 0.3]'
+  dimension: '[0.9, 0.4, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 32
+  name: plant
+  node_type: object
+  position: '[4.9, -6.5, 0.5]'
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 33
+  name: bookshelf
+  node_type: object
+  position: '[2.65, -7.4, 1.0]'
+  dimension: '[0.35, 1.0, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 34
+  name: bed
+  node_type: object
+  position: '[-0.5, -10.6, 0.3]'
+  dimension: '[2.0, 1.6, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 35
+  name: nightstand
+  node_type: object
+  position: '[0.85, -11.4, 0.3]'
+  dimension: '[0.5, 0.5, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 36
+  name: dresser
+  node_type: object
+  position: '[-2.2, -10.6, 0.3]'
+  dimension: '[0.5, 1.2, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 37
+  name: desk
+  node_type: object
+  position: '[-2.0, -12.0, 0.3]'
+  dimension: '[1.2, 0.6, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 38
+  name: desk chair
+  node_type: object
+  position: '[-2.0, -12.9, 0.45]'
+  dimension: '[0.5, 0.5, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 39
+  name: wardrobe
+  node_type: object
+  position: '[-0.5, -13.3, 0.4]'
+  dimension: '[1.4, 0.6, 1.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 28
+  name: an image of a bedroom
+  node_type: room
+  position: '[-1.0, -11.5, 1.0]'
+```
+
+**Summary of additions:**
+
+- **New room:** A bedroom (id 28) placed south of the hallway (id 22), extending outward beyond the door (id 8) in the south wall — a logically enclosed space reachable through that existing doorway.
+- **New objects in existing living rooms (20/24):** sofa, coffee table, bookshelf, tv stand, and plant, all placed in the open floor area of the living room to complement the existing tables/chairs/cabinets.
+- **New objects in the new bedroom (28):** bed, nightstand, dresser, desk, desk chair, and wardrobe — a coherent bedroom furniture set kept well away from neighboring rooms' objects.
+
+All 11 new objects passed the collision check (IoU = 0.0), avoiding all existing objects, `nothing` nodes, and structure nodes, with no placements crossing any wall/window without a door.
+[Scene 1, Ensemble 1, GraphID 5] Generation took 367.75s
+[Scene 1, Ensemble 1, GraphID 5] Done
+Starting uncertainty calculation to select next target...
+Sampling 300 viewpoints within bounds: [ -3.05960338 -14.04108183   1.1          0.        ] to [  6.012  -5.63    1.1   360.   ]
+Highest Combined Information Gain found at first stage: 4.2505
+[INFO] [1789324742.876786]: Evaluating reachability for 9 candidates...
+[INFO] [1789324743.193487]: After final reachability check, selected target pose with IG: 4.548794940695398
+[INFO] [1789324743.225110]: Selected Viewpoint: [  1.47888401 -11.06759474   1.1       ]
+[INFO] [1789324753.146044]: Navigation completed. Ending stage 1 and transitioning to SCANNING.
+[INFO] [1789324753.234783]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789324777.232424]: Scan complete.
+[INFO] [1789324777.334704]: State: PLANNING - Initiating planning sequence.
+[INFO] [1789324777.337779]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph0_dsg.json
+[INFO] [1789324785.368494]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/2/graph0_dsg.json
+[INFO] [1789324785.372083]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph1_dsg.json
+[INFO] [1789324788.385771]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/2/graph1_dsg.json
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[Scene 1, Ensemble 1, GraphID 5] Starting process.
+All new objects validated with zero collisions. Here is the YAML of the additions:
+
+```yaml
+edges:
+- [32, 39]
+- [39, 40]
+- [40, 38]
+nodes:
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.7, -11.3, 1.0]'
+- id: 40
+  name: an image of an office
+  node_type: room
+  position: '[3.0, -13.0, 1.0]'
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 41
+  is_predicted: false
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.7, -11.3, 0.3]'
+- dimension: '[0.6, 1.0, 2.0]'
+  id: 42
+  is_predicted: false
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.5, -11.3, 1.0]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 43
+  is_predicted: false
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.7, -10.5, 0.25]'
+- dimension: '[1.2, 0.6, 0.8]'
+  id: 44
+  is_predicted: false
+  name: desk
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -13.6, 0.4]'
+- dimension: '[0.5, 0.5, 0.8]'
+  id: 45
+  is_predicted: false
+  name: chair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.3, -12.8, 0.4]'
+- dimension: '[0.6, 0.6, 1.2]'
+  id: 46
+  is_predicted: false
+  name: shelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.3, -12.0, 0.6]'
+- dimension: '[1.2, 0.8, 0.8]'
+  id: 47
+  is_predicted: false
+  name: table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.9, -7.2, 0.4]'
+- dimension: '[1.4, 0.6, 0.9]'
+  id: 48
+  is_predicted: false
+  name: counter
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.6, -7.6, 0.45]'
+- dimension: '[0.5, 0.5, 1.0]'
+  id: 49
+  is_predicted: false
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[6.6, -9.5, 0.5]'
+```
+
+Summary of reasoning:
+- **New rooms:** A **bedroom** (39) placed south of the hallway/bathroom wall in the open space below the living-room/hallway footprint, and an **office** (40) further south-east. Both are entered via the existing hallway (32) which already links the bathroom, kitchen, and living rooms.
+- **Objects in new rooms:** bed, wardrobe, nightstand in the bedroom; desk, chair, shelf in the office — all validated clear.
+- **Objects in existing rooms:** a kitchen table and counter in the kitchen (38), and a decorative plant in living room (30).
+- Every object passed `check_collision` (IoU = 0.0), avoiding existing objects, `nothing` nodes, and walls/structures.
+[Scene 1, Ensemble 1, GraphID 5] Generation took 340.07s
+[Scene 1, Ensemble 1, GraphID 5] Done
+[Scene 1, Ensemble 0, GraphID 4] Starting process.
+All validations complete. Here is the YAML with only the new items that passed the collision check.
+
+```yaml
+nodes:
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[8.2, -8.0, 0.9]'
+- id: 40
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.5, -12.3, 0.9]'
+- id: 41
+  name: an image of a bathroom
+  node_type: room
+  position: '[8.2, -12.2, 0.9]'
+- id: 42
+  is_predicted: false
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[7.6, -7.0, 0.25]'
+  dimension: '[1.4, 2.0, 0.5]'
+- id: 43
+  is_predicted: false
+  name: cabinet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[6.5, -6.3, 0.5]'
+  dimension: '[0.6, 0.5, 1.0]'
+- id: 44
+  is_predicted: false
+  name: cabinet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[7.5, -6.2, 0.6]'
+  dimension: '[0.6, 0.4, 1.2]'
+- id: 45
+  is_predicted: false
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[8.8, -8.0, 0.9]'
+  dimension: '[0.3, 0.3, 1.4]'
+- id: 46
+  is_predicted: false
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[7.5, -9.5, 0.4]'
+  dimension: '[1.6, 0.7, 0.8]'
+- id: 47
+  is_predicted: false
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -12.9, 0.25]'
+  dimension: '[1.4, 2.0, 0.5]'
+- id: 48
+  is_predicted: false
+  name: chair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.0, -12.3, 0.45]'
+  dimension: '[0.6, 0.6, 0.9]'
+- id: 49
+  is_predicted: false
+  name: chair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.6, -11.7, 0.45]'
+  dimension: '[0.6, 0.6, 0.9]'
+- id: 50
+  is_predicted: false
+  name: table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.0, -11.3, 0.375]'
+  dimension: '[0.7, 0.7, 0.75]'
+- id: 51
+  is_predicted: false
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.4, -13.6, 0.9]'
+  dimension: '[0.3, 0.3, 1.4]'
+- id: 52
+  is_predicted: false
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[7.6, -13.0, 0.3]'
+  dimension: '[0.6, 0.85, 0.6]'
+- id: 53
+  is_predicted: false
+  name: cabinet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[8.8, -13.1, 0.5]'
+  dimension: '[0.3, 0.8, 1.0]'
+- id: 54
+  is_predicted: false
+  name: bathtub
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[7.6, -11.3, 0.3]'
+  dimension: '[1.4, 0.7, 0.6]'
+- id: 55
+  is_predicted: false
+  name: table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.2, -8.6, 0.375]'
+  dimension: '[0.7, 0.7, 0.75]'
+- id: 56
+  is_predicted: false
+  name: cabinet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.1, -7.8, 0.6]'
+  dimension: '[0.6, 0.4, 1.2]'
+- id: 57
+  is_predicted: false
+  name: fridge
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.2, -9.5, 0.9]'
+  dimension: '[0.7, 0.7, 1.8]'
+- id: 58
+  is_predicted: false
+  name: cabinet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.3, -9.2, 0.5]'
+  dimension: '[0.8, 0.3, 1.0]'
+
+edges:
+- [42, 39]
+- [43, 39]
+- [44, 39]
+- [45, 39]
+- [46, 39]
+- [47, 40]
+- [48, 40]
+- [49, 40]
+- [50, 40]
+- [51, 40]
+- [52, 41]
+- [53, 41]
+- [54, 41]
+- [55, 38]
+- [56, 38]
+- [57, 38]
+- [58, 32]
+- [39, 30]
+- [40, 36]
+- [41, 37]
+- [40, 41]
+```
+
+Summary of additions:
+- **3 new rooms**: two bedrooms (ids 39, 40) placed in open floor space east of the living-room wall and south of the hallway, plus a second bathroom (id 41) south of the entry hallway.
+- **17 new objects**, all validated with `check_collision` (IoU = 0.0): a bedroom set (bed, cabinets, lamp, sofa) in room 39; a bedroom set (bed, chairs, table, lamp) in room 40; bathroom fixtures (toilet, cabinet, bathtub) in room 41; kitchen items (table, cabinet, fridge) in existing kitchen 38; and a hallway cabinet in existing hallway 32.
+- **Edges** connect each new object to its room, each new room to a plausible adjacent existing room (living room / hallway), and the two neighboring new rooms to each other.
+[Scene 1, Ensemble 0, GraphID 4] Generation took 354.00s
+[Scene 1, Ensemble 0, GraphID 4] Done
+[Scene 1, Ensemble 3, GraphID 7] Starting process.
+All new objects below passed the collision check (IoU = 0.0). I placed them in a new left bedroom, a new lower-right bedroom, plus existing kitchen/living room/bathroom, and connected the new rooms to the hallway network.
+
+```yaml
+nodes:
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[0.9, -7.2, 1.0]'
+- id: 40
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.0, -12.2, 1.0]'
+- dimension: '[1.5, 2.1, 0.55]'
+  id: 41
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -7.0, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 42
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.5, -7.0, 0.25]'
+- dimension: '[1.2, 0.6, 1.8]'
+  id: 43
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.5, -6.3, 0.9]'
+- dimension: '[0.5, 0.5, 1.0]'
+  id: 44
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.35, -8.0, 0.5]'
+- dimension: '[1.5, 2.0, 0.55]'
+  id: 45
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -12.0, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 46
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.2, -11.5, 0.25]'
+- dimension: '[0.3, 0.3, 0.6]'
+  id: 47
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.2, -11.5, 0.85]'
+- dimension: '[0.6, 1.2, 0.75]'
+  id: 48
+  is_predicted: true
+  name: desk
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.5, -12.5, 0.4]'
+- dimension: '[1.0, 0.4, 1.8]'
+  id: 49
+  is_predicted: true
+  name: shelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -8.5, 0.9]'
+- dimension: '[0.5, 0.5, 1.0]'
+  id: 50
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.3, -7.5, 0.5]'
+- dimension: '[0.5, 0.4, 0.9]'
+  id: 51
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.45, -13.8, 0.45]'
+edges:
+- [41, 39]
+- [42, 39]
+- [43, 39]
+- [44, 39]
+- [45, 40]
+- [46, 40]
+- [47, 40]
+- [48, 40]
+- [49, 38]
+- [50, 30]
+- [51, 35]
+- [39, 32]
+- [40, 37]
+```
+[Scene 1, Ensemble 3, GraphID 7] Generation took 366.58s
+[Scene 1, Ensemble 3, GraphID 7] Done
+[Scene 0, Ensemble 2, GraphID 2] Starting process.
+All placements validated. Here is the YAML with only the new items that passed collision checks:
+
+```yaml
+edges:
+- [33, 39]
+- [39, 40]
+- [39, 41]
+- [39, 42]
+- [39, 43]
+- [39, 44]
+- [30, 45]
+- [30, 46]
+- [30, 47]
+- [36, 48]
+- [36, 49]
+nodes:
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.3, -11.5, 1.2]'
+- id: 40
+  name: bed
+  node_type: object
+  position: '[4.4, -11.2, 0.3]'
+  dimension: '[1.5, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 41
+  name: nightstand
+  node_type: object
+  position: '[3.6, -10.6, 0.3]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 42
+  name: wardrobe
+  node_type: object
+  position: '[5.3, -11.0, 1.0]'
+  dimension: '[0.6, 1.2, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 43
+  name: dresser
+  node_type: object
+  position: '[3.6, -12.0, 0.45]'
+  dimension: '[0.5, 0.5, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 44
+  name: armchair
+  node_type: object
+  position: '[5.3, -12.4, 0.4]'
+  dimension: '[0.6, 0.6, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 45
+  name: sofa
+  node_type: object
+  position: '[3.3, -7.5, 0.4]'
+  dimension: '[0.8, 1.4, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 46
+  name: coffee_table
+  node_type: object
+  position: '[4.2, -7.5, 0.25]'
+  dimension: '[0.8, 0.5, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 47
+  name: rug
+  node_type: object
+  position: '[3.4, -7.3, 0.02]'
+  dimension: '[1.2, 1.0, 0.03]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 48
+  name: sink
+  node_type: object
+  position: '[2.3, -13.0, 0.85]'
+  dimension: '[0.5, 0.55, 0.85]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 49
+  name: toilet
+  node_type: object
+  position: '[1.7, -12.1, 0.35]'
+  dimension: '[0.4, 0.6, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+```
+
+Summary of additions:
+- **1 new room** (`39`, bedroom), placed in the open space extending from the hallway (`33`), away from the existing bathroom enclosure.
+- **5 new objects in the bedroom** (`40`–`44`): bed, nightstand, wardrobe, dresser, armchair.
+- **3 new objects in the existing living room** (`30`): sofa, coffee table, rug.
+- **2 new objects in the existing bathroom** (`36`): sink, toilet.
+
+All 10 objects passed `check_collision` with IoU = 0.0, avoiding walls, `nothing` nodes, structures, and existing objects.
+[Scene 0, Ensemble 2, GraphID 2] Generation took 370.44s
+[Scene 0, Ensemble 2, GraphID 2] Done
+[Scene 0, Ensemble 1, GraphID 1] Starting process.
+All objects are validated. Now I'll compile the final YAML with the new rooms and their validated objects.
+
+```yaml
+edges:
+- [41, 29]
+- [41, 31]
+- [42, 31]
+- [43, 29]
+- [44, 29]
+- [45, 32]
+- [46, 36]
+- [47, 36]
+- [48, 39]
+- [49, 39]
+- [50, 39]
+- [51, 39]
+- [52, 40]
+- [53, 40]
+- [54, 40]
+- [55, 40]
+- [39, 33]
+- [40, 31]
+nodes:
+- dimension: '[0.8, 0.8, 0.7]'
+  id: 41
+  is_predicted: true
+  name: armchair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.0, -8.0, 0.4]'
+- dimension: '[0.3, 1.2, 1.8]'
+  id: 42
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.4, -6.5, 0.9]'
+- dimension: '[0.9, 0.5, 0.4]'
+  id: 43
+  is_predicted: true
+  name: coffee_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.3, -7.2, 0.25]'
+- dimension: '[2.0, 1.6, 0.02]'
+  id: 44
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.7, -7.0, 0.02]'
+- dimension: '[0.8, 0.35, 0.8]'
+  id: 45
+  is_predicted: true
+  name: console_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.0, -9.3, 0.4]'
+- dimension: '[0.4, 0.6, 0.75]'
+  id: 46
+  is_predicted: true
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.9, -11.0, 0.4]'
+- dimension: '[0.5, 0.4, 0.85]'
+  id: 47
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.9, -11.7, 0.45]'
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 48
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.6, -11.0, 0.3]'
+- dimension: '[0.5, 0.5, 0.6]'
+  id: 49
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.7, -11.0, 0.3]'
+- dimension: '[0.6, 1.5, 1.8]'
+  id: 50
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -13.0, 0.9]'
+- dimension: '[1.2, 0.6, 0.75]'
+  id: 51
+  is_predicted: true
+  name: desk
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.7, -12.5, 0.4]'
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 52
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.0, -6.6, 0.3]'
+- dimension: '[0.5, 0.5, 0.6]'
+  id: 53
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.0, -6.0, 0.3]'
+- dimension: '[1.2, 0.5, 0.9]'
+  id: 54
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -7.5, 0.45]'
+- dimension: '[0.3, 0.3, 1.2]'
+  id: 55
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.0, -7.5, 0.6]'
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.6, -11.3, 1.2]'
+- id: 40
+  name: an image of a bedroom
+  node_type: room
+  position: '[1.0, -6.8, 1.2]'
+```
+
+**Summary of additions:**
+
+- **2 new rooms:**
+  - Room 39 (bedroom) — projected outward from hallway 33 into the open area to the lower-right; furnished with a bed, nightstand, wardrobe, and desk.
+  - Room 40 (bedroom) — projected outward from the living room 31 into the open area on the left; furnished with a bed, nightstand, dresser, and lamp.
+
+- **15 new objects** (all collision-validated with IoU = 0.0):
+  - Living room (29/31): armchair, bookshelf, coffee_table, rug
+  - Hallway (32): console_table
+  - Bathroom (36): toilet, sink
+  - Bedroom 39: bed, nightstand, wardrobe, desk
+  - Bedroom 40: bed, nightstand, dresser, lamp
+
+Two initial placements (a sofa and a first sink position) returned collisions with existing objects and were repositioned or dropped; only validated items are included. All new objects sit clear of `nothing`, `structure`, and existing `object` nodes, and no new `nothing`/`structure`/`door` nodes were created.
+[Scene 0, Ensemble 1, GraphID 1] Generation took 393.95s
+[Scene 0, Ensemble 1, GraphID 1] Done
+[Scene 0, Ensemble 0, GraphID 0] Starting process.
+All objects validated. Now I'll add one new room (a bedroom) accessible from the hallway's south end, and assign validated objects to it and existing rooms.
+
+**New Room reasoning:** Hallway node 35 sits at (2.864, -12.15). Projecting ~3 m south into the open empty space (no structures/objects there) gives a plausible bedroom at (2.5, -15.1). The bedroom objects (bed, nightstands, wardrobe, lamp, dresser) were all validated clear in that region.
+
+```yaml
+edges:
+- [30, 0]
+- [30, 3]
+- [30, 5]
+- [30, 8]
+- [30, 40]
+- [32, 39]
+- [33, 41]
+- [36, 42]
+- [36, 43]
+- [35, 39]
+- [39, 44]
+- [39, 45]
+- [39, 46]
+- [39, 47]
+- [39, 48]
+nodes:
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[2.5, -15.1, 1.2]'
+- id: 40
+  dimension: '[0.9, 1.4, 0.7]'
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.2, -7.6, 0.35]'
+- id: 41
+  dimension: '[0.6, 0.5, 0.4]'
+  is_predicted: true
+  name: coffee_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.9, -7.0, 0.2]'
+- id: 42
+  dimension: '[0.5, 0.5, 0.6]'
+  is_predicted: true
+  name: side_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.0, -8.3, 0.3]'
+- id: 43
+  dimension: '[1.3, 1.3, 0.02]'
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.9, -7.4, 0.01]'
+- id: 44
+  dimension: '[0.4, 0.4, 1.6]'
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.6, -8.0, 0.9]'
+- id: 45
+  dimension: '[0.4, 0.4, 1.0]'
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.7, -9.8, 0.5]'
+- id: 46
+  dimension: '[0.5, 0.8, 0.8]'
+  is_predicted: true
+  name: console_table
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.7, -11.3, 0.4]'
+- id: 47
+  dimension: '[0.5, 0.5, 0.4]'
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.7, -11.8, 0.5]'
+- id: 48
+  dimension: '[0.4, 0.6, 0.7]'
+  is_predicted: true
+  name: toilet
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.4, -13.5, 0.4]'
+- id: 49
+  dimension: '[1.4, 1.9, 0.5]'
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.3, -15.0, 0.3]'
+- id: 50
+  dimension: '[0.4, 0.4, 0.5]'
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.3, -14.6, 0.3]'
+- id: 51
+  dimension: '[0.6, 1.2, 1.8]'
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -15.4, 0.9]'
+- id: 52
+  dimension: '[0.3, 0.3, 1.4]'
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.3, -14.5, 0.8]'
+- id: 53
+  dimension: '[0.5, 1.2, 0.9]'
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[1.2, -15.6, 0.5]'
+```
+
+**Summary of additions:**
+- **1 new room**: bedroom (id 39) south of hallway node 35, in verified empty space with no overlapping structures/objects.
+- **14 new objects**, all confirmed by `check_collision` with IoU = 0.0:
+  - Living room (30): sofa, coffee_table, side_table, rug, bookshelf
+  - Hallway (32/33): plant, console_table
+  - Bathroom (36): sink, toilet
+  - New bedroom (39): bed, nightstand, wardrobe, lamp, dresser
+- Failed candidates (coffee table vs. chair, bookshelf vs. chair/wall, rug vs. chair, mirror vs. wall/nothing) were relocated until clear; the mirror was discarded after no clear position was found.
+- No new `nothing`, `structure`, or `door` nodes were created, and no wall/curtain/window was crossed (the bedroom is reached via the open hallway end, not through a closed structure).
+[Scene 0, Ensemble 0, GraphID 0] Generation took 451.48s
+[Scene 0, Ensemble 0, GraphID 0] Done
+[Scene 0, Ensemble 3, GraphID 3] Starting process.
+All new objects validated. Here is the final YAML of confirmed additions:
+
+```yaml
+nodes:
+# ---------- New objects in existing Living Room (29) ----------
+- id: 41
+  name: bookshelf
+  node_type: object
+  position: '[3.2, -7.6, 0.9]'
+  dimension: '[0.3, 1.2, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 42
+  name: plant
+  node_type: object
+  position: '[2.6, -9.5, 0.5]'
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 43
+  name: sofa
+  node_type: object
+  position: '[3.0, -7.0, 0.35]'
+  dimension: '[1.4, 0.55, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+
+# ---------- New objects in existing Bathroom (36) ----------
+- id: 44
+  name: toilet
+  node_type: object
+  position: '[1.6, -11.0, 0.4]'
+  dimension: '[0.4, 0.6, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 45
+  name: sink
+  node_type: object
+  position: '[0.7, -10.5, 0.5]'
+  dimension: '[0.5, 0.4, 0.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 46
+  name: mirror_cabinet
+  node_type: object
+  position: '[1.0, -11.3, 1.4]'
+  dimension: '[0.15, 0.6, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+
+# ---------- New objects in new East Bedroom (39) ----------
+- id: 47
+  name: bed
+  node_type: object
+  position: '[7.9, -7.4, 0.3]'
+  dimension: '[1.6, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 48
+  name: wardrobe
+  node_type: object
+  position: '[9.3, -7.5, 1.0]'
+  dimension: '[0.6, 1.6, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 49
+  name: nightstand
+  node_type: object
+  position: '[7.9, -5.9, 0.3]'
+  dimension: '[0.5, 0.5, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+
+# ---------- New objects in new South Bedroom (40) ----------
+- id: 50
+  name: bed
+  node_type: object
+  position: '[5.2, -13.0, 0.3]'
+  dimension: '[1.6, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 51
+  name: wardrobe
+  node_type: object
+  position: '[6.2, -11.5, 1.0]'
+  dimension: '[0.6, 1.2, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 52
+  name: dresser
+  node_type: object
+  position: '[5.9, -13.3, 0.4]'
+  dimension: '[1.2, 0.6, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 53
+  name: nightstand
+  node_type: object
+  position: '[3.6, -10.7, 0.3]'
+  dimension: '[0.5, 0.5, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+- id: 54
+  name: lamp
+  node_type: object
+  position: '[3.2, -10.3, 0.9]'
+  dimension: '[0.25, 0.25, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: false
+
+# ---------- New rooms ----------
+- id: 39
+  name: an image of a bedroom
+  node_type: room
+  position: '[8.0, -7.4, 1.2]'
+- id: 40
+  name: an image of a bedroom
+  node_type: room
+  position: '[5.0, -12.2, 1.2]'
+
+edges:
+# objects -> existing rooms
+- [41, 29]
+- [42, 29]
+- [43, 29]
+- [44, 36]
+- [45, 36]
+- [46, 36]
+# objects -> new rooms
+- [47, 39]
+- [48, 39]
+- [49, 39]
+- [50, 40]
+- [51, 40]
+- [52, 40]
+- [53, 40]
+- [54, 40]
+# new rooms -> rooms
+- [29, 39]
+- [32, 40]
+```
+
+**Summary of additions:**
+- **3 objects** added to the existing Living Room (29): bookshelf, plant, sofa — placed in the open partial-enclosure area away from walls, the window, and existing furniture/Nothing nodes.
+- **3 objects** added to the existing Bathroom (36): toilet, sink, mirror_cabinet — placed near the existing bathtub and cabinet without crossing any wall.
+- **New East Bedroom (39)** projected east past the living room's east wall (ID 20), referenced as a plausible extension off the living room; furnished with a bed, wardrobe, and nightstand.
+- **New South Bedroom (40)** projected south beyond the hallway/bathroom zone; furnished with a bed, wardrobe, dresser, nightstand, and lamp.
+
+All new objects returned `valid: true` with zero collisions, and every new room/object edge respects the impassable-wall rule (no items placed across walls without doors).
+[Scene 0, Ensemble 3, GraphID 3] Generation took 609.81s
+[Scene 0, Ensemble 3, GraphID 3] Done
+[Scene 1, Ensemble 2, GraphID 6] Starting process.
+The living room floor is crowded, but I found clear positions. Here's my validated addition set.
+
+```yaml
+edges:
+- [39, 31]
+- [40, 35]
+- [41, 38]
+- [42, 47]
+- [43, 47]
+- [44, 47]
+- [45, 48]
+- [46, 48]
+- [47, 36]
+- [47, 48]
+nodes:
+- id: 39
+  name: plant
+  node_type: object
+  position: '[3.8, -6.1, 0.5]'
+  dimension: '[0.4, 0.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 40
+  name: bathroom_sink
+  node_type: object
+  position: '[1.9, -11.9, 0.85]'
+  dimension: '[0.5, 0.4, 0.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 41
+  name: kitchen_counter
+  node_type: object
+  position: '[0.0, -8.35, 0.45]'
+  dimension: '[0.6, 2.0, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 42
+  name: bed
+  node_type: object
+  position: '[4.6, -11.6, 0.3]'
+  dimension: '[1.4, 2.0, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 43
+  name: nightstand
+  node_type: object
+  position: '[5.5, -10.8, 0.3]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 44
+  name: wardrobe
+  node_type: object
+  position: '[3.9, -9.9, 1.0]'
+  dimension: '[0.6, 0.6, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 45
+  name: sink
+  node_type: object
+  position: '[3.0, -13.3, 0.8]'
+  dimension: '[0.5, 0.4, 0.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 46
+  name: toilet
+  node_type: object
+  position: '[3.6, -13.7, 0.3]'
+  dimension: '[0.6, 0.8, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+- id: 47
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.6, -11.3, 1.0]'
+- id: 48
+  name: an image of a bathroom
+  node_type: room
+  position: '[3.3, -13.4, 1.0]'
+```
+
+Summary of additions:
+- **Existing rooms**: `plant` (living room 31), `bathroom_sink` (bathroom 35), `kitchen_counter` (kitchen 38).
+- **New bedroom (47)**: placed in the open lower-right area reachable from hallway 36, containing `bed`, `nightstand`, and `wardrobe`.
+- **New bathroom (48)**: tucked beside the bedroom (accessed through it), containing `sink` and `toilet`.
+
+All 8 new objects returned IoU = 0.0 (zero collisions) after repositioning the rejected candidates. Rooms were placed by projecting into empty space beyond the hallway exit rather than via collision checks, per protocol.
+[Scene 1, Ensemble 2, GraphID 6] Generation took 493.24s
+[Scene 1, Ensemble 2, GraphID 6] Done
+Starting uncertainty calculation to select next target...
+Sampling 300 viewpoints within bounds: [ -0.18693127 -15.80856424   1.1          0.        ] to [  9.31153195  -5.63         1.1        360.        ]
+Highest Combined Information Gain found at first stage: 4.3431
+[INFO] [1789325425.464432]: Evaluating reachability for 8 candidates...
+[INFO] [1789325425.878079]: After final reachability check, selected target pose with IG: 4.448476859632983
+[INFO] [1789325425.913593]: Selected Viewpoint: [ 0.54640285 -7.67583841  1.1       ]
+[INFO] [1789325460.431377]: Navigation completed. Ending stage 2 and transitioning to SCANNING.
+[INFO] [1789325460.522533]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789325484.519749]: Scan complete.
+[INFO] [1789325484.621696]: State: PLANNING - Initiating planning sequence.
+[INFO] [1789325484.624377]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph0_dsg.json
+[INFO] [1789325491.644550]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/3/graph0_dsg.json
+[INFO] [1789325491.648369]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph1_dsg.json
+[INFO] [1789325494.666163]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v2/stages/3/graph1_dsg.json
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[Scene 1, Ensemble 3, GraphID 7] Starting process.
+All collisions validated. Here is the final set of new, validated additions.
+
+```yaml
+edges:
+- [58, 56]
+- [59, 58]
+- [60, 58]
+- [61, 58]
+- [62, 58]
+- [63, 58]
+- [64, 58]
+- [65, 58]
+- [66, 58]
+- [67, 58]
+- [68, 54]
+nodes:
+- id: 58
+  name: an image of a bedroom
+  node_type: room
+  position: '[-4.6, -6.2, 1.0]'
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 59
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-4.6, -6.5, 0.25]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 60
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-3.6, -5.6, 0.25]'
+- dimension: '[0.6, 1.2, 2.0]'
+  id: 61
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-5.7, -6.5, 1.0]'
+- dimension: '[1.0, 0.5, 0.8]'
+  id: 62
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-4.6, -7.7, 0.4]'
+- dimension: '[0.8, 0.8, 0.8]'
+  id: 63
+  is_predicted: true
+  name: armchair
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-4.9, -4.9, 0.4]'
+- dimension: '[2.0, 2.2, 0.02]'
+  id: 64
+  is_predicted: true
+  name: rug
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-4.6, -6.5, 0.01]'
+- dimension: '[0.5, 1.2, 0.5]'
+  id: 65
+  is_predicted: true
+  name: bench
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-6.0, -4.5, 0.25]'
+- dimension: '[0.5, 1.0, 0.8]'
+  id: 66
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-6.8, -5.5, 0.4]'
+- dimension: '[0.4, 0.4, 1.0]'
+  id: 67
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-2.9, -4.3, 0.5]'
+- dimension: '[0.3, 0.3, 1.6]'
+  id: 68
+  is_predicted: true
+  name: floor lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -9.9, 0.8]'
+```
+
+**Summary of additions:**
+- **New room (id 58):** a bedroom placed behind door 20 (on wall 35), extending west into the empty space at x ≈ -4.6. It is connected to the adjacent room 56 via the existing door.
+- **9 new objects** inside the new bedroom (bed, nightstand, wardrobe, dresser ×2, armchair, rug, bench, plant) — all confirmed collision-free.
+- **1 new object** (floor lamp) placed in the existing hallway (room 54), also confirmed collision-free.
+
+All placements were verified with the collision tool returning IoU = 0.0 (no overlaps with objects, `nothing`, or `structure` nodes), and no walls/windows/blinds were crossed since the new bedroom sits behind an existing door.
+[Scene 1, Ensemble 3, GraphID 7] Generation took 219.45s
+[Scene 1, Ensemble 3, GraphID 7] Done
+[Scene 1, Ensemble 0, GraphID 4] Starting process.
+All key placements validated. Here is the YAML of new items that passed the collision check:
+
+```yaml
+# ===== NEW ROOM =====
+- id: 58
+  name: an image of a bedroom
+  node_type: room
+  position: '[-5.0, -6.3, 1.1]'
+
+# ===== NEW OBJECTS IN EXISTING ROOMS =====
+- id: 59
+  name: coffee table
+  node_type: object
+  position: '[4.3, -6.7, 0.2]'
+  dimension: '[1.1, 0.6, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 60
+  name: tv stand
+  node_type: object
+  position: '[3.6, -7.0, 0.3]'
+  dimension: '[1.0, 0.4, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 61
+  name: bookshelf
+  node_type: object
+  position: '[-1.5, -3.8, 0.8]'
+  dimension: '[0.4, 0.9, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 62
+  name: sink
+  node_type: object
+  position: '[1.7, -11.0, 0.4]'
+  dimension: '[0.5, 0.4, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 63
+  name: cabinet
+  node_type: object
+  position: '[1.6, -11.8, 0.4]'
+  dimension: '[0.4, 0.4, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+# ===== NEW OBJECTS IN NEW ROOM (id 58) =====
+- id: 64
+  name: bed
+  node_type: object
+  position: '[-4.9, -5.7, 0.3]'
+  dimension: '[1.5, 2.0, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 65
+  name: wardrobe
+  node_type: object
+  position: '[-5.6, -7.7, 1.0]'
+  dimension: '[1.0, 0.5, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 66
+  name: nightstand
+  node_type: object
+  position: '[-3.7, -6.6, 0.3]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 67
+  name: dresser
+  node_type: object
+  position: '[-3.8, -7.6, 0.4]'
+  dimension: '[0.8, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 68
+  name: rug
+  node_type: object
+  position: '[-5.0, -5.0, 0.03]'
+  dimension: '[1.8, 1.2, 0.05]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+
+- id: 69
+  name: side table
+  node_type: object
+  position: '[-3.0, -5.5, 0.5]'
+  dimension: '[0.5, 0.5, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  is_predicted: true
+```
+
+```yaml
+# ===== NEW EDGES =====
+edges:
+# Existing room -> new object
+- [59, 52]   # coffee table -> living room 52
+- [60, 52]   # tv stand -> living room 52
+- [61, 56]   # bookshelf -> living room 56
+- [62, 55]   # sink -> bathroom 55
+- [63, 55]   # cabinet -> bathroom 55
+# New room -> new objects
+- [64, 58]   # bed -> bedroom 58
+- [65, 58]   # wardrobe -> bedroom 58
+- [66, 58]   # nightstand -> bedroom 58
+- [67, 58]   # dresser -> bedroom 58
+- [68, 58]   # rug -> bedroom 58
+- [69, 58]   # side table -> bedroom 58
+# New room -> existing room (via door 20 on Wall 35)
+- [58, 56]
+```
+
+**Summary of additions:**
+
+- **New room (id 58):** a bedroom, placed behind the existing door (node 20) that sits on Wall 35 at x≈-2.3. This door has no room defined on its far side, so a bedroom was projected ~3 m westward into the empty space. This satisfies the door-to-new-room rule.
+- **7 new objects** placed in existing rooms:
+  - Living room 52: coffee table, tv stand
+  - Living room 56: bookshelf
+  - Bathroom 55: sink, cabinet
+- **6 new objects** placed in the new bedroom 58: bed, wardrobe, nightstand, dresser, rug, side table.
+
+All objects were validated with `check_collision`; any placement that returned IoU > 0.0 was relocated until IoU = 0.0. No items cross walls, and none overlap `nothing`, structure, or existing object nodes.
+[Scene 1, Ensemble 0, GraphID 4] Generation took 195.67s
+[Scene 1, Ensemble 1, GraphID 5] Starting process.
+[Scene 0, Ensemble 3, GraphID 3] Starting process.
+All intended objects validated cleanly. Here is the final YAML of new items.
+
+```yaml
+nodes:
+# ----- New BEDROOM (behind door 17 on the left living-room/hallway wall, id 29) -----
+- id: 56
+  name: an image of a bedroom
+  node_type: room
+  position: '[-5.0, -6.5, 1.2]'
+# ----- New BEDROOM (behind door 7 at the bottom of the hallway) -----
+- id: 57
+  name: an image of a bedroom
+  node_type: room
+  position: '[4.3, -11.5, 1.2]'
+
+# ----- New objects in EXISTING rooms -----
+- dimension: '[0.5, 0.9, 1.2]'
+  id: 58
+  is_predicted: true
+  name: bookshelf
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.4, -3.5, 0.6]'
+- dimension: '[0.4, 0.4, 0.8]'
+  id: 59
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-0.9, -3.9, 0.4]'
+- dimension: '[1.6, 0.7, 0.8]'
+  id: 60
+  is_predicted: true
+  name: sofa
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.7, -4.9, 0.4]'
+- dimension: '[0.4, 0.4, 0.8]'
+  id: 61
+  is_predicted: true
+  name: plant
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[2.2, -7.2, 0.4]'
+- dimension: '[1.0, 0.4, 0.5]'
+  id: 62
+  is_predicted: true
+  name: tv stand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.9, -6.8, 0.3]'
+- dimension: '[0.6, 0.4, 0.6]'
+  id: 63
+  is_predicted: true
+  name: sink
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[0.5, -14.0, 0.45]'
+
+# ----- New objects in NEW bedroom 56 -----
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 64
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-4.5, -7.0, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 65
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-3.3, -6.0, 0.3]'
+- dimension: '[0.3, 0.3, 0.7]'
+  id: 66
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-3.3, -6.0, 0.85]'
+- dimension: '[0.6, 1.8, 2.0]'
+  id: 67
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-6.3, -7.0, 1.0]'
+- dimension: '[0.5, 1.2, 1.0]'
+  id: 68
+  is_predicted: true
+  name: dresser
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-6.3, -5.2, 0.5]'
+- dimension: '[0.3, 0.3, 0.5]'
+  id: 69
+  is_predicted: true
+  name: lamp
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[-5.5, -7.5, 0.9]'
+
+# ----- New objects in NEW bedroom 57 -----
+- dimension: '[1.6, 2.0, 0.5]'
+  id: 70
+  is_predicted: true
+  name: bed
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[4.5, -11.5, 0.3]'
+- dimension: '[0.5, 0.5, 0.5]'
+  id: 71
+  is_predicted: true
+  name: nightstand
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[3.4, -11.5, 0.3]'
+- dimension: '[0.6, 1.6, 2.0]'
+  id: 72
+  is_predicted: true
+  name: wardrobe
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.8, -11.5, 1.0]'
+- dimension: '[0.1, 0.6, 0.8]'
+  id: 73
+  is_predicted: true
+  name: mirror
+  node_type: object
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  position: '[5.85, -10.0, 1.2]'
+
+edges:
+# new objects -> existing rooms
+- [58, 52]
+- [59, 52]
+- [60, 47]
+- [61, 46]
+- [62, 46]
+- [63, 51]
+# new objects -> new rooms
+- [64, 56]
+- [65, 56]
+- [66, 56]
+- [67, 56]
+- [68, 56]
+- [69, 56]
+- [70, 57]
+- [71, 57]
+- [72, 57]
+- [73, 57]
+# new rooms -> existing rooms
+- [52, 56]
+- [53, 56]
+- [48, 57]
+```
+[Scene 0, Ensemble 3, GraphID 3] Generation took 248.57s
+[Scene 0, Ensemble 3, GraphID 3] Done
+[Scene 0, Ensemble 2, GraphID 2] Starting process.
+[Scene 0, Ensemble 0, GraphID 0] Starting process.
+[Scene 0, Ensemble 1, GraphID 1] Starting process.
+[Scene 1, Ensemble 2, GraphID 6] Starting process.
+ERROR: A parallel job failed: while scanning for the next token
+found character '`' that cannot start any token
+  in "<unicode string>", line 96, column 1:
+    ```
+    ^
+ERROR: A parallel job failed: ASP_LLM_MAX_CALLS hard cap (160) exceeded on call #161 (model=openrouter:deepseek/deepseek-v4.1-flash). Refusing to make further Gemini API calls across ALL worker processes sharing /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts. Set ASP_LLM_MAX_CALLS higher to raise the cap deliberately, or point ASP_LLM_LOG_DIR elsewhere for an independent budget.
+ERROR: A parallel job failed: ASP_LLM_MAX_CALLS hard cap (160) exceeded on call #162 (model=openrouter:deepseek/deepseek-v4.1-flash). Refusing to make further Gemini API calls across ALL worker processes sharing /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts. Set ASP_LLM_MAX_CALLS higher to raise the cap deliberately, or point ASP_LLM_LOG_DIR elsewhere for an independent budget.
+ERROR: A parallel job failed: ASP_LLM_MAX_CALLS hard cap (160) exceeded on call #163 (model=openrouter:deepseek/deepseek-v4.1-flash). Refusing to make further Gemini API calls across ALL worker processes sharing /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts. Set ASP_LLM_MAX_CALLS higher to raise the cap deliberately, or point ASP_LLM_LOG_DIR elsewhere for an independent budget.
+Esc pressed. Press Esc again within 0.5 seconds to shut down.
+Esc pressed twice quickly. Requesting shutdown.
+[INFO] [1789325819.699144]: Escape pressed. Requesting shutdown.
+ERROR: A parallel job failed: ASP_LLM_MAX_CALLS hard cap (160) exceeded on call #164 (model=openrouter:deepseek/deepseek-v4.1-flash). Refusing to make further Gemini API calls across ALL worker processes sharing /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts. Set ASP_LLM_MAX_CALLS higher to raise the cap deliberately, or point ASP_LLM_LOG_DIR elsewhere for an independent budget.
+ERROR: A parallel job failed: ASP_LLM_MAX_CALLS hard cap (160) exceeded on call #165 (model=openrouter:deepseek/deepseek-v4.1-flash). Refusing to make further Gemini API calls across ALL worker processes sharing /workspace/runs/scene00069_seed42_25m_20260913_v2/prompts. Set ASP_LLM_MAX_CALLS higher to raise the cap deliberately, or point ASP_LLM_LOG_DIR elsewhere for an independent budget.
+[complete_scene_graph] 6/8 ensemble members were dropped (unparseable response or other per-worker failure)
+Starting uncertainty calculation to select next target...
+Sampling 300 viewpoints within bounds: [ -6.8        -14.20334308   1.1          0.        ] to [  6.09769284  -3.26624513   1.1        360.        ]
+Highest Combined Information Gain found at first stage: 1.6746
+[INFO] [1789325873.490490]: Evaluating reachability for 6 candidates...
+[INFO] [1789325873.596818]: After final reachability check, selected target pose with IG: 1.9999999999999998
+[INFO] [1789325873.647802]: Selected Viewpoint: [-0.3931771  -6.64027331  1.1       ]
+[INFO] [1789325873.651227]: Shutdown requested, stopping any active rosbag recording...
+[INFO] [1789325873.662150]: Pipeline shutdown.

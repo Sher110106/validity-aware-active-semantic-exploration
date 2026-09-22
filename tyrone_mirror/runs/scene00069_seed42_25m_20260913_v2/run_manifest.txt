@@ -1,0 +1,1 @@
+DeepSeek via OpenRouter; 25m bounded instrumentation; worker-exception and malformed-tool-args handlers

@@ -9,3 +9,8 @@ __pycache__/
 tmp/
 output/
 scratchpad_verify/
+
+# Course source material kept locally for context, not project deliverables.
+/Computer_Vision_Perception_Projects(Projects).csv
+/Lec1_Introduction (1).pdf
+/Report_Template (1).doc

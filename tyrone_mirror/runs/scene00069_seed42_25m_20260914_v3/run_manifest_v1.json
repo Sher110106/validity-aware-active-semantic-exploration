@@ -1,0 +1,91 @@
+{
+  "schema": "asp_run_manifest_v1",
+  "generated_at_utc": "2026-09-16T03:53:02Z",
+  "run_dir": "/workspace/runs/scene00069_seed42_25m_20260914_v3",
+  "pipeline_config": {
+    "path": "/workspace/runs/scene00069_seed42_25m_20260914_v3/config/pipeline_config.yaml",
+    "sha256": "24b044e14555ead52689bacf2af2904b30901134c3f1dfa6ebcedd081da07e76",
+    "present": true
+  },
+  "commit": {
+    "path": "/workspace/runs/scene00069_seed42_25m_20260914_v3/config/commit.txt",
+    "sha256": "d73390330a9213cac7ebef9e8525f857c7dd34aa48250b7ed923d9e584209dda",
+    "present": true
+  },
+  "reference_graph": {
+    "path": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+    "sha256": "b644bcdbee2c795f447f7ca61220b90ed2e8e6255eb774bca7e432058611c2a6",
+    "present": true
+  },
+  "evaluator_sources": {
+    "/workspace/tools/evaluator": {
+      "path": "/workspace/tools/evaluator",
+      "present": true,
+      "files": {
+        ".pytest_cache/.gitignore": "3ed731b65d06150c138e2dadb0be0697550888a6b47eb8c45ecc9adba8b8e9bd",
+        ".pytest_cache/CACHEDIR.TAG": "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4",
+        ".pytest_cache/README.md": "73fd6fccdd802c419a6b2d983d6c3173b7da97558ac4b589edec2dfe443db9ad",
+        ".pytest_cache/v/cache/nodeids": "65ac92dbea34930dac21484f708a8fae7a18d538d34ff7fad6381cb6143fc3f7",
+        "evaluate_run.py": "24015b1ba7fe979f5b5fcc09a9aafa4e0da0452d2c2e29ade6f52106343e3ffd",
+        "ged.py": "4a100cc893758a4e8dddec95bc404a8f2d4d9773b063ed76ddc215e3383691bc",
+        "graph_io.py": "6dbc5a17ca84fa0b93c1cf5c90c631fe1e18797780cdae80def3319ab2f65563",
+        "matching.py": "a670fb609966e4a3d5b600feafa589f31f1a7b31f9a4e72495c4ca40117b59b4",
+        "tests/fixtures/ged_gt_one_object.yaml": "5d81d5e2ec14b08ea9c8836fc33a0a29ede13094f21006f3f0e46a8d497de64b",
+        "tests/fixtures/ged_pred_orphan_object.yaml": "608da94b643ccf5e69060386c9ab62fe14e2a79c31b1518f6cbc8a746991e2ab",
+        "tests/fixtures/gt_simple.yaml": "a949e339298ad9dc847f7b32a6779c26083d9fe70406bb48ef63d39458dfe27e",
+        "tests/fixtures/pred_partial.yaml": "6c52c02684fb6d06a7f4135f700b2e849dfd65d3a8f853fa7309a9562f47059c",
+        "tests/test_evaluator.py": "7689ab0d0304b1c64d907c16e0e2ac4e5d6a84ccdd268fb6906961773f23afc8"
+      }
+    },
+    "/workspace/tools/asp_offline": {
+      "path": "/workspace/tools/asp_offline",
+      "present": true,
+      "files": {
+        "README.md": "f3842c4e77498e04cf113cd5e444480ca037246cbdaf18509fe5368e9374d2a1",
+        "__init__.py": "4f9ee5ae67c262941cacd82d315f89757c6a826b5cca28423f509dca3c821141",
+        "author_io.py": "a217d2183427bceaaff72e4c373828f0d4f875cefdbcf015493973eca73a4111",
+        "calibration.py": "71ce7a62d6d51272f1587ef2cac71e3c5b38bfb86cfd6f2b370f9cfc2e7d3de7",
+        "evaluator.py": "9fc4c723384c4a7df5e35c848b2cc848e7e61c2b5ec8c9b472fec656eaec6048",
+        "geometry.py": "f9719c4f4cd72fe3f8f6de79b0d956a550bfcbcaee57aaf0cc7935f7d597890c",
+        "models.py": "0541aae0629e478391cb47327f99983943542d0c00f2ed8c5e63046f573fcfcc",
+        "requirements.txt": "71749243f84428fee225bfaa796dca5ef6c1e83a98f6d2a407df615b0390d6fb",
+        "scoring.py": "b2e97243ef322c15facf056386a5854593d0ad7a2fa470dd95af489fa4c03e52",
+        "support_policy.py": "07ce09a5ae1e6a69a7e2a620f14b87b6febcc704936c762d49dbe86f33df1474",
+        "validator.py": "dff7960899cb36bf02eb7ae286c283f03c2a0db88719e23e6e1df5fd1b6a777f"
+      }
+    },
+    "/workspace/tools/decision_replay.py": {
+      "path": "/workspace/tools/decision_replay.py",
+      "sha256": "198e035a145e4e4e15fb04c9d931af77711f637d48b8a70f3b97ebc842fd4293",
+      "present": true
+    },
+    "/workspace/tools/extension_policy_replay.py": {
+      "path": "/workspace/tools/extension_policy_replay.py",
+      "sha256": "9d721699b486e3564005afb50107645152afccac102df13453060a87cebd59ac",
+      "present": true
+    }
+  },
+  "results": {
+    "/workspace/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay_v2_realcalib.json": {
+      "path": "/workspace/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay_v2_realcalib.json",
+      "sha256": "7ae8673054a66f1b7ceeed362654fa8aa89f8ebea64eefd27c6dc05bafdd0b17",
+      "present": true
+    },
+    "/workspace/runs/decision_replay_scene00069_v3/decision_replay_results_v2_h3h6fix.json": {
+      "path": "/workspace/runs/decision_replay_scene00069_v3/decision_replay_results_v2_h3h6fix.json",
+      "sha256": "17cb3d719c802ed5b8c45e98091c963a8de7079bd2d19dab17b6c7b57e8fdf0b",
+      "present": true
+    },
+    "/workspace/runs/tau_selection_loso_results.json": {
+      "path": "/workspace/runs/tau_selection_loso_results.json",
+      "sha256": "6bff1d1d4a3430752b309026eee0de856303be2ed2967bb654f639fd8ad565c9",
+      "present": true
+    },
+    "/workspace/runs/real_loso_calibration_results_v2_by_kind.json": {
+      "path": "/workspace/runs/real_loso_calibration_results_v2_by_kind.json",
+      "sha256": "e6c6b89a48670a863ee9c65b39c942c91f8343f9fe3332006e8f47b3d8ab7739",
+      "present": true
+    }
+  },
+  "commit_text": "f1ea141b1886d33ab8f4e4b791db4d3c92150b27"
+}

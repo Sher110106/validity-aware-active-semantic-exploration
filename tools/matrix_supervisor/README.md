@@ -1,8 +1,10 @@
 # ASP matrix supervisor
 
-This host-side service supervises the sequential 4-scene × 3-seed ASP matrix.
-It does not modify the pinned author checkout and does not implement resume.
-A failed run is restarted from zero at most once and its old artifacts are
+This host-side service historically supervised the sequential 4-scene ×
+3-seed ASP matrix. The final control state capped the campaign at three
+completed seed-42 runs; the queue is now frozen and no new launch is planned.
+It does not modify the pinned author checkout and does not implement resume. A
+failed run is restarted from zero at most once and its old artifacts are
 archived rather than overwritten.
 
 ## Operator commands

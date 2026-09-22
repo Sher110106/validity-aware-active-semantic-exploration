@@ -1,0 +1,5855 @@
+{
+  "observed": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_original_graph0.yaml",
+  "reference": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+  "completion_count": 8,
+  "expected_count": 8,
+  "missing_completion_count": 0,
+  "accepted_count": 8,
+  "rejected_count": 0,
+  "removed_node_count": 108,
+  "issue_counts": {
+    "aabb_conflict": 19,
+    "finite_geometry": 31,
+    "object_parent": 58
+  },
+  "results": [
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "25",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              2.8,
+              -6.7,
+              0.5
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.0
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "26",
+            "type": "object",
+            "label": "rug",
+            "observed": false,
+            "center": [
+              4.0,
+              -7.6,
+              0.02
+            ],
+            "dimensions": [
+              1.6,
+              1.4,
+              0.04
+            ],
+            "room_id": "19"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "25",
+            "target": "19"
+          },
+          {
+            "source": "26",
+            "target": "19"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "37",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "29",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "31",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "32",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "36",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_0.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "31",
+            "type": "object",
+            "label": "sofa",
+            "observed": false,
+            "center": [
+              4.8,
+              -8.35,
+              0.35
+            ],
+            "dimensions": [
+              1.2,
+              0.7,
+              0.7
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "32",
+            "type": "object",
+            "label": "coffee_table",
+            "observed": false,
+            "center": [
+              3.3,
+              -7.65,
+              0.25
+            ],
+            "dimensions": [
+              0.7,
+              0.5,
+              0.4
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "33",
+            "type": "object",
+            "label": "bookshelf",
+            "observed": false,
+            "center": [
+              2.75,
+              -6.95,
+              0.9
+            ],
+            "dimensions": [
+              0.4,
+              0.9,
+              1.8
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "34",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              2.75,
+              -7.75,
+              0.6
+            ],
+            "dimensions": [
+              0.3,
+              0.3,
+              1.0
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "35",
+            "type": "object",
+            "label": "console_table",
+            "observed": false,
+            "center": [
+              3.9,
+              -9.5,
+              0.4
+            ],
+            "dimensions": [
+              0.8,
+              0.4,
+              0.8
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "36",
+            "type": "object",
+            "label": "shoe_rack",
+            "observed": false,
+            "center": [
+              3.1,
+              -9.45,
+              0.3
+            ],
+            "dimensions": [
+              0.3,
+              0.6,
+              0.6
+            ],
+            "room_id": "22"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "19",
+            "target": "31"
+          },
+          {
+            "source": "19",
+            "target": "32"
+          },
+          {
+            "source": "21",
+            "target": "33"
+          },
+          {
+            "source": "21",
+            "target": "34"
+          },
+          {
+            "source": "22",
+            "target": "35"
+          },
+          {
+            "source": "22",
+            "target": "36"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "29",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_1.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "29",
+            "type": "object",
+            "label": "tv_stand",
+            "observed": false,
+            "center": [
+              4.7,
+              -8.4,
+              0.4
+            ],
+            "dimensions": [
+              1.2,
+              0.4,
+              0.5
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "31",
+            "type": "object",
+            "label": "console",
+            "observed": false,
+            "center": [
+              1.4,
+              -9.8,
+              0.4
+            ],
+            "dimensions": [
+              0.8,
+              0.4,
+              0.7
+            ],
+            "room_id": "23"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "20"
+          },
+          {
+            "source": "29",
+            "target": "19"
+          },
+          {
+            "source": "31",
+            "target": "23"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "32",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "36",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "39",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "40",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "41",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "42",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "37",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "30",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_2.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "34",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              2.4,
+              -6.4,
+              0.6
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.2
+            ],
+            "room_id": "21"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "34",
+            "target": "21"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "29",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "31",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "32",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_3.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "28",
+            "type": "object",
+            "label": "sofa",
+            "observed": false,
+            "center": [
+              3.3,
+              -8.15,
+              0.4
+            ],
+            "dimensions": [
+              1.4,
+              0.5,
+              0.75
+            ],
+            "room_id": "20"
+          },
+          {
+            "id": "29",
+            "type": "object",
+            "label": "bookshelf",
+            "observed": false,
+            "center": [
+              2.75,
+              -7.0,
+              0.9
+            ],
+            "dimensions": [
+              0.5,
+              1.2,
+              1.8
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "30",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              4.9,
+              -8.5,
+              0.4
+            ],
+            "dimensions": [
+              0.5,
+              0.5,
+              1.0
+            ],
+            "room_id": "20"
+          },
+          {
+            "id": "31",
+            "type": "object",
+            "label": "console_table",
+            "observed": false,
+            "center": [
+              2.0,
+              -9.6,
+              0.4
+            ],
+            "dimensions": [
+              0.5,
+              0.9,
+              0.8
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "32",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              3.85,
+              -6.1,
+              0.5
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.0
+            ],
+            "room_id": "21"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "20"
+          },
+          {
+            "source": "1",
+            "target": "20"
+          },
+          {
+            "source": "2",
+            "target": "21"
+          },
+          {
+            "source": "3",
+            "target": "20"
+          },
+          {
+            "source": "4",
+            "target": "20"
+          },
+          {
+            "source": "5",
+            "target": "20"
+          },
+          {
+            "source": "6",
+            "target": "20"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "8",
+            "target": "22"
+          },
+          {
+            "source": "13",
+            "target": "21"
+          },
+          {
+            "source": "14",
+            "target": "21"
+          },
+          {
+            "source": "15",
+            "target": "20"
+          },
+          {
+            "source": "16",
+            "target": "22"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "28",
+            "target": "20"
+          },
+          {
+            "source": "29",
+            "target": "21"
+          },
+          {
+            "source": "30",
+            "target": "20"
+          },
+          {
+            "source": "31",
+            "target": "22"
+          },
+          {
+            "source": "32",
+            "target": "21"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "39",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "40",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "36",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "37",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_4.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "31",
+            "type": "object",
+            "label": "tv stand",
+            "observed": false,
+            "center": [
+              4.6,
+              -8.55,
+              0.3
+            ],
+            "dimensions": [
+              0.9,
+              0.4,
+              0.6
+            ],
+            "room_id": "20"
+          },
+          {
+            "id": "32",
+            "type": "object",
+            "label": "plant",
+            "observed": false,
+            "center": [
+              4.9,
+              -6.5,
+              0.5
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.0
+            ],
+            "room_id": "20"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "20"
+          },
+          {
+            "source": "1",
+            "target": "20"
+          },
+          {
+            "source": "2",
+            "target": "21"
+          },
+          {
+            "source": "3",
+            "target": "20"
+          },
+          {
+            "source": "4",
+            "target": "20"
+          },
+          {
+            "source": "5",
+            "target": "20"
+          },
+          {
+            "source": "6",
+            "target": "20"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "8",
+            "target": "22"
+          },
+          {
+            "source": "13",
+            "target": "21"
+          },
+          {
+            "source": "14",
+            "target": "21"
+          },
+          {
+            "source": "15",
+            "target": "20"
+          },
+          {
+            "source": "16",
+            "target": "22"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "31",
+            "target": "20"
+          },
+          {
+            "source": "32",
+            "target": "20"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "29",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "36",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "37",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "39",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_5.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "29",
+            "type": "object",
+            "label": "coffee table",
+            "observed": false,
+            "center": [
+              3.9,
+              -8.0,
+              0.2
+            ],
+            "dimensions": [
+              1.0,
+              0.6,
+              0.4
+            ],
+            "room_id": "20"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "20"
+          },
+          {
+            "source": "1",
+            "target": "20"
+          },
+          {
+            "source": "2",
+            "target": "21"
+          },
+          {
+            "source": "3",
+            "target": "20"
+          },
+          {
+            "source": "4",
+            "target": "20"
+          },
+          {
+            "source": "5",
+            "target": "20"
+          },
+          {
+            "source": "6",
+            "target": "20"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "8",
+            "target": "22"
+          },
+          {
+            "source": "13",
+            "target": "21"
+          },
+          {
+            "source": "14",
+            "target": "21"
+          },
+          {
+            "source": "15",
+            "target": "20"
+          },
+          {
+            "source": "16",
+            "target": "22"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "29",
+            "target": "20"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "41",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "42",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "32",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "36",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "37",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "39",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "40",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "31",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_6.yaml"
+    },
+    {
+      "graph": {
+        "nodes": [
+          {
+            "id": "0",
+            "type": "object",
+            "label": "table",
+            "observed": true,
+            "center": [
+              5.746,
+              -6.774,
+              0.413
+            ],
+            "dimensions": [
+              0.719,
+              0.431,
+              0.775
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "1",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              3.146,
+              -6.076,
+              0.707
+            ],
+            "dimensions": [
+              0.825,
+              0.633,
+              0.65
+            ],
+            "room_id": "21"
+          },
+          {
+            "id": "2",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              3.746,
+              -8.655,
+              0.447
+            ],
+            "dimensions": [
+              0.647,
+              0.456,
+              0.893
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "3",
+            "type": "object",
+            "label": "cabinet",
+            "observed": true,
+            "center": [
+              5.741,
+              -6.121,
+              0.302
+            ],
+            "dimensions": [
+              0.682,
+              0.671,
+              0.583
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "4",
+            "type": "object",
+            "label": "lamp",
+            "observed": true,
+            "center": [
+              5.141,
+              -5.985,
+              1.132
+            ],
+            "dimensions": [
+              0.278,
+              0.315,
+              1.449
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "5",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.243,
+              -7.331,
+              0.486
+            ],
+            "dimensions": [
+              0.547,
+              0.655,
+              1.002
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "6",
+            "type": "object",
+            "label": "chair",
+            "observed": true,
+            "center": [
+              5.777,
+              -8.606,
+              0.385
+            ],
+            "dimensions": [
+              0.524,
+              0.692,
+              0.795
+            ],
+            "room_id": "19"
+          },
+          {
+            "id": "7",
+            "type": "object",
+            "label": "door",
+            "observed": true,
+            "center": [
+              2.693,
+              -8.903,
+              1.095
+            ],
+            "dimensions": [
+              0.7,
+              0.219,
+              1.9
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "8",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              5.15,
+              -7.15,
+              1.65
+            ],
+            "dimensions": [
+              0.9,
+              1.5,
+              1.1
+            ]
+          },
+          {
+            "id": "9",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.3,
+              -7.1,
+              1.05
+            ],
+            "dimensions": [
+              0.8,
+              1.6,
+              0.9
+            ]
+          },
+          {
+            "id": "10",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              4.35,
+              -6.05,
+              1.35
+            ],
+            "dimensions": [
+              0.5,
+              0.3,
+              1.7
+            ]
+          },
+          {
+            "id": "11",
+            "type": "nothing",
+            "label": "Nothing",
+            "observed": true,
+            "center": [
+              2.7,
+              -10.05,
+              1.1
+            ],
+            "dimensions": [
+              0.4,
+              1.7,
+              1.6
+            ]
+          },
+          {
+            "id": "12",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.261,
+              -5.761,
+              1.268
+            ],
+            "dimensions": [
+              3.621,
+              0.135,
+              3.222
+            ]
+          },
+          {
+            "id": "13",
+            "type": "structure",
+            "label": "Window",
+            "observed": true,
+            "center": [
+              4.372,
+              -5.63,
+              1.121
+            ],
+            "dimensions": [
+              1.58,
+              0.12,
+              2.308
+            ]
+          },
+          {
+            "id": "14",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              6.012,
+              -7.39,
+              1.282
+            ],
+            "dimensions": [
+              0.162,
+              3.169,
+              3.208
+            ]
+          },
+          {
+            "id": "15",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.897,
+              -8.983,
+              1.002
+            ],
+            "dimensions": [
+              1.498,
+              0.129,
+              2.717
+            ]
+          },
+          {
+            "id": "16",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              4.056,
+              -8.903,
+              1.269
+            ],
+            "dimensions": [
+              3.826,
+              0.219,
+              3.247
+            ]
+          },
+          {
+            "id": "17",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.447,
+              -8.445,
+              0.997
+            ],
+            "dimensions": [
+              0.237,
+              0.745,
+              2.637
+            ]
+          },
+          {
+            "id": "18",
+            "type": "structure",
+            "label": "Wall",
+            "observed": true,
+            "center": [
+              2.104,
+              -10.262,
+              1.059
+            ],
+            "dimensions": [
+              0.326,
+              0.067,
+              2.687
+            ]
+          },
+          {
+            "id": "19",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              4.87,
+              -7.375,
+              1.215
+            ]
+          },
+          {
+            "id": "20",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.717,
+              -6.633,
+              1.4
+            ]
+          },
+          {
+            "id": "21",
+            "type": "room",
+            "label": "an image of a living room",
+            "observed": true,
+            "center": [
+              3.2,
+              -6.65,
+              1.3
+            ]
+          },
+          {
+            "id": "22",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              2.491,
+              -9.856,
+              0.979
+            ]
+          },
+          {
+            "id": "23",
+            "type": "room",
+            "label": "an image of a hallway",
+            "observed": true,
+            "center": [
+              1.45,
+              -10.45,
+              1.65
+            ]
+          },
+          {
+            "id": "32",
+            "type": "object",
+            "label": "plant",
+            "observed": true,
+            "center": [
+              2.25,
+              -6.35,
+              0.5
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.0
+            ],
+            "room_id": "20"
+          },
+          {
+            "id": "36",
+            "type": "object",
+            "label": "console_table",
+            "observed": true,
+            "center": [
+              1.6,
+              -9.6,
+              0.4
+            ],
+            "dimensions": [
+              0.5,
+              1.0,
+              0.8
+            ],
+            "room_id": "22"
+          },
+          {
+            "id": "37",
+            "type": "object",
+            "label": "plant",
+            "observed": true,
+            "center": [
+              3.6,
+              -9.6,
+              0.5
+            ],
+            "dimensions": [
+              0.4,
+              0.4,
+              1.0
+            ],
+            "room_id": "22"
+          }
+        ],
+        "edges": [
+          {
+            "source": "0",
+            "target": "19"
+          },
+          {
+            "source": "1",
+            "target": "21"
+          },
+          {
+            "source": "2",
+            "target": "19"
+          },
+          {
+            "source": "3",
+            "target": "19"
+          },
+          {
+            "source": "4",
+            "target": "19"
+          },
+          {
+            "source": "5",
+            "target": "19"
+          },
+          {
+            "source": "6",
+            "target": "19"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "12",
+            "target": "20"
+          },
+          {
+            "source": "13",
+            "target": "20"
+          },
+          {
+            "source": "14",
+            "target": "19"
+          },
+          {
+            "source": "15",
+            "target": "19"
+          },
+          {
+            "source": "16",
+            "target": "19"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "19",
+            "target": "20"
+          },
+          {
+            "source": "19",
+            "target": "21"
+          },
+          {
+            "source": "19",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "22",
+            "target": "23"
+          },
+          {
+            "source": "0",
+            "target": "20"
+          },
+          {
+            "source": "1",
+            "target": "20"
+          },
+          {
+            "source": "2",
+            "target": "21"
+          },
+          {
+            "source": "3",
+            "target": "20"
+          },
+          {
+            "source": "4",
+            "target": "20"
+          },
+          {
+            "source": "5",
+            "target": "20"
+          },
+          {
+            "source": "6",
+            "target": "20"
+          },
+          {
+            "source": "7",
+            "target": "22"
+          },
+          {
+            "source": "8",
+            "target": "22"
+          },
+          {
+            "source": "13",
+            "target": "21"
+          },
+          {
+            "source": "14",
+            "target": "21"
+          },
+          {
+            "source": "15",
+            "target": "20"
+          },
+          {
+            "source": "16",
+            "target": "22"
+          },
+          {
+            "source": "17",
+            "target": "22"
+          },
+          {
+            "source": "18",
+            "target": "22"
+          },
+          {
+            "source": "20",
+            "target": "21"
+          },
+          {
+            "source": "20",
+            "target": "22"
+          },
+          {
+            "source": "21",
+            "target": "22"
+          },
+          {
+            "source": "32",
+            "target": "20"
+          },
+          {
+            "source": "36",
+            "target": "22"
+          },
+          {
+            "source": "37",
+            "target": "22"
+          }
+        ]
+      },
+      "accepted": true,
+      "rejected": false,
+      "issues": [
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "24",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "25",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "26",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "27",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "28",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "finite_geometry",
+          "message": "predicted node must have finite center and non-negative dimensions",
+          "node_id": "29",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": true
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "38",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "39",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "40",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "41",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "42",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "object_parent",
+          "message": "every predicted object needs an existing parent room",
+          "node_id": "43",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "30",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "31",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "33",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "34",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        },
+        {
+          "code": "aabb_conflict",
+          "message": "predicted node overlaps an observed or predicted blocker",
+          "node_id": "35",
+          "severity": "remove",
+          "original_support": null,
+          "reference_match": false
+        }
+      ],
+      "removed_nodes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "33",
+        "34",
+        "35",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "source": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages/1/habitat_scene_graph_new_graph_7.yaml"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+DeepSeek via OpenRouter; clean re-run; GOOGLE_API_KEY constructor wiring fixed; stop after stage-0 gate

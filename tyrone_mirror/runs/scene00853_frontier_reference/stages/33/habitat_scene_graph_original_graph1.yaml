@@ -1,0 +1,1820 @@
+nodes:
+- id: 0
+  is_predicted: false
+  name: cabinet
+  position: '[-0.808, -0.954, 0.485]'
+  dimension: '[0.158, 0.96, 0.743]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 1
+  is_predicted: false
+  name: duvet
+  position: '[0.287, -5.117, 0.681]'
+  dimension: '[0.507, 0.922, 0.308]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 2
+  is_predicted: false
+  name: chair
+  position: '[3.463, -2.889, 0.418]'
+  dimension: '[0.868, 0.865, 0.862]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 3
+  is_predicted: false
+  name: lamp
+  position: '[2.365, -2.625, 1.434]'
+  dimension: '[0.918, 0.51, 0.76]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 4
+  is_predicted: false
+  name: nightstand
+  position: '[-0.453, -6.102, 0.453]'
+  dimension: '[0.725, 0.308, 0.933]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 5
+  is_predicted: false
+  name: ceiling fan
+  position: '[1.271, -4.398, 2.277]'
+  dimension: '[1.297, 1.33, 0.374]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 6
+  is_predicted: false
+  name: mirror
+  position: '[-0.369, 1.673, 1.198]'
+  dimension: '[0.809, 0.28, 1.191]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 7
+  is_predicted: false
+  name: cabinet
+  position: '[0.951, -0.741, 0.71]'
+  dimension: '[0.646, 0.424, 0.805]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 8
+  is_predicted: false
+  name: Nothing
+  position: '[1.55, -1.35, 1.1]'
+  dimension: '[0.9, 0.3, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 9
+  is_predicted: false
+  name: garment
+  position: '[1.159, 1.387, 0.944]'
+  dimension: '[0.46, 0.303, 1.271]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 10
+  is_predicted: false
+  name: bathtub
+  position: '[0.629, 0.124, 0.708]'
+  dimension: '[0.447, 0.694, 0.524]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 11
+  is_predicted: false
+  name: bathtub
+  position: '[-0.378, 0.86, 0.082]'
+  dimension: '[1.445, 1.425, 0.46]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 12
+  is_predicted: false
+  name: mirror
+  position: '[-0.425, -0.582, 1.522]'
+  dimension: '[1.729, 0.705, 1.282]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 13
+  is_predicted: false
+  name: Nothing
+  position: '[2.05, 0.75, 1.0]'
+  dimension: '[0.3, 0.9, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 14
+  is_predicted: false
+  name: Nothing
+  position: '[-0.5, 0.65, 1.6]'
+  dimension: '[0.8, 1.3, 1.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 15
+  is_predicted: false
+  name: mirror
+  position: '[-1.301, -1.636, 1.579]'
+  dimension: '[0.114, 1.145, 1.128]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 16
+  is_predicted: false
+  name: Nothing
+  position: '[-0.05, -3.05, 1.6]'
+  dimension: '[0.7, 0.5, 1.2]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 17
+  is_predicted: false
+  name: pillow
+  position: '[1.533, -5.951, 1.027]'
+  dimension: '[0.814, 0.792, 0.379]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 18
+  is_predicted: false
+  name: mirror
+  position: '[4.081, -4.052, 1.042]'
+  dimension: '[0.574, 0.832, 1.97]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 19
+  is_predicted: false
+  name: flower
+  position: '[5.195, -7.676, 0.704]'
+  dimension: '[0.494, 0.852, 0.426]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 20
+  is_predicted: false
+  name: television
+  position: '[5.465, -6.517, 1.469]'
+  dimension: '[0.16, 1.246, 0.947]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 21
+  is_predicted: false
+  name: Nothing
+  position: '[3.05, -3.75, 1.55]'
+  dimension: '[0.5, 0.9, 1.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 22
+  is_predicted: false
+  name: Nothing
+  position: '[1.65, -4.2, 1.4]'
+  dimension: '[2.1, 2.0, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 23
+  is_predicted: false
+  name: cabinet
+  position: '[2.274, -2.864, 0.533]'
+  dimension: '[0.817, 0.25, 1.036]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 24
+  is_predicted: false
+  name: duvet
+  position: '[1.829, -5.176, 0.609]'
+  dimension: '[0.915, 2.008, 0.555]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 25
+  is_predicted: false
+  name: cabinet
+  position: '[2.04, -6.258, 0.394]'
+  dimension: '[0.447, 0.379, 0.865]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 26
+  is_predicted: false
+  name: television
+  position: '[5.302, -6.697, 0.431]'
+  dimension: '[0.445, 1.948, 0.898]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 27
+  is_predicted: false
+  name: rug
+  position: '[0.396, -8.636, 0.15]'
+  dimension: '[1.95, 2.506, 0.343]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 28
+  is_predicted: false
+  name: cabinet
+  position: '[4.855, -9.023, 0.81]'
+  dimension: '[0.627, 1.191, 1.672]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 29
+  is_predicted: false
+  name: lamp
+  position: '[-1.104, -6.774, 1.129]'
+  dimension: '[0.436, 0.427, 0.708]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 30
+  is_predicted: false
+  name: Nothing
+  position: '[4.35, -6.05, 1.0]'
+  dimension: '[0.7, 1.3, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 31
+  is_predicted: false
+  name: Nothing
+  position: '[4.4, -7.0, 1.0]'
+  dimension: '[0.6, 0.6, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 32
+  is_predicted: false
+  name: oven
+  position: '[3.82, -15.012, 0.45]'
+  dimension: '[0.255, 1.03, 0.886]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 33
+  is_predicted: false
+  name: mirror
+  position: '[10.35, -9.524, 1.587]'
+  dimension: '[1.056, 0.084, 1.139]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 34
+  is_predicted: false
+  name: cabinet
+  position: '[9.923, -9.629, 0.428]'
+  dimension: '[0.834, 0.399, 0.883]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 35
+  is_predicted: false
+  name: ceiling fan
+  position: '[9.763, -10.948, 2.234]'
+  dimension: '[1.255, 1.282, 0.524]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 36
+  is_predicted: false
+  name: nightstand
+  position: '[8.707, -12.509, 0.422]'
+  dimension: '[0.914, 0.438, 0.842]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 37
+  is_predicted: false
+  name: pillow
+  position: '[10.181, -12.497, 1.082]'
+  dimension: '[0.767, 0.818, 0.379]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 38
+  is_predicted: false
+  name: duvet
+  position: '[9.324, -10.983, 0.634]'
+  dimension: '[0.458, 0.609, 0.574]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 39
+  is_predicted: false
+  name: Nothing
+  position: '[10.0, -12.25, 1.8]'
+  dimension: '[1.6, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 40
+  is_predicted: false
+  name: Nothing
+  position: '[10.4, -11.25, 1.45]'
+  dimension: '[1.4, 1.3, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 41
+  is_predicted: false
+  name: lamp
+  position: '[11.298, -12.611, 1.218]'
+  dimension: '[0.572, 0.567, 0.551]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 42
+  is_predicted: false
+  name: curtain
+  position: '[11.589, -11.941, 1.551]'
+  dimension: '[0.285, 0.487, 1.405]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 43
+  is_predicted: false
+  name: curtain
+  position: '[11.568, -10.477, 1.143]'
+  dimension: '[0.38, 0.516, 2.22]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 44
+  is_predicted: false
+  name: cabinet
+  position: '[9.498, -9.102, 1.143]'
+  dimension: '[0.216, 0.39, 2.1]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 45
+  is_predicted: false
+  name: cabinet
+  position: '[11.519, -9.051, 1.063]'
+  dimension: '[0.586, 0.184, 2.137]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 46
+  is_predicted: false
+  name: chair
+  position: '[9.214, -6.865, 0.528]'
+  dimension: '[0.589, 0.544, 1.087]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 47
+  is_predicted: false
+  name: mirror
+  position: '[5.571, -7.317, 1.441]'
+  dimension: '[0.208, 0.906, 0.844]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 48
+  is_predicted: false
+  name: toilet
+  position: '[6.107, -6.298, 0.423]'
+  dimension: '[0.639, 0.384, 0.842]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 49
+  is_predicted: false
+  name: cabinet
+  position: '[9.631, -7.632, 0.462]'
+  dimension: '[0.548, 0.224, 0.919]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 50
+  is_predicted: false
+  name: Nothing
+  position: '[10.5, -10.25, 1.15]'
+  dimension: '[1.2, 0.5, 1.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 51
+  is_predicted: false
+  name: Nothing
+  position: '[9.3, -10.2, 1.05]'
+  dimension: '[1.2, 0.6, 1.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 52
+  is_predicted: false
+  name: Nothing
+  position: '[6.7, -6.0, 1.0]'
+  dimension: '[0.4, 0.6, 1.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 53
+  is_predicted: false
+  name: cabinet
+  position: '[6.174, -13.8, 0.469]'
+  dimension: '[1.121, 0.184, 0.935]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 54
+  is_predicted: false
+  name: cabinet
+  position: '[3.714, -13.486, 0.566]'
+  dimension: '[0.138, 0.94, 1.068]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 55
+  is_predicted: false
+  name: chair
+  position: '[1.242, -13.059, 0.515]'
+  dimension: '[0.953, 0.33, 0.999]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 56
+  is_predicted: false
+  name: cabinet
+  position: '[3.435, -15.849, 1.712]'
+  dimension: '[0.44, 0.861, 0.774]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 57
+  is_predicted: false
+  name: Nothing
+  position: '[3.65, -12.55, 1.1]'
+  dimension: '[0.7, 0.3, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 58
+  is_predicted: false
+  name: chair
+  position: '[1.833, -12.594, 0.506]'
+  dimension: '[0.369, 0.507, 1.006]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 59
+  is_predicted: false
+  name: sofa
+  position: '[0.447, -10.328, 0.485]'
+  dimension: '[2.128, 0.943, 0.966]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 60
+  is_predicted: false
+  name: glass table
+  position: '[1.646, -10.224, 0.411]'
+  dimension: '[0.703, 0.626, 0.466]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 61
+  is_predicted: false
+  name: rug
+  position: '[1.453, -13.302, 0.147]'
+  dimension: '[1.908, 1.19, 0.348]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 62
+  is_predicted: false
+  name: Nothing
+  position: '[5.05, -15.1, 0.65]'
+  dimension: '[0.7, 1.2, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 63
+  is_predicted: false
+  name: exhaust hood
+  position: '[6.814, -16.707, 2.226]'
+  dimension: '[1.284, 0.285, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 64
+  is_predicted: false
+  name: cabinet
+  position: '[3.508, -13.597, 1.5]'
+  dimension: '[0.518, 0.872, 1.269]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 65
+  is_predicted: false
+  name: cabinet
+  position: '[3.431, -14.435, 1.718]'
+  dimension: '[0.402, 1.063, 0.843]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 66
+  is_predicted: false
+  name: bathtub
+  position: '[4.435, -16.523, 0.84]'
+  dimension: '[1.258, 0.603, 0.18]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 67
+  is_predicted: false
+  name: ceiling fan
+  position: '[8.932, -14.982, 2.309]'
+  dimension: '[1.307, 1.192, 0.335]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 68
+  is_predicted: false
+  name: chair
+  position: '[10.483, -16.212, 0.531]'
+  dimension: '[0.409, 0.594, 0.985]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 69
+  is_predicted: false
+  name: cabinet
+  position: '[11.362, -14.033, 1.224]'
+  dimension: '[0.28, 0.494, 1.782]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 70
+  is_predicted: false
+  name: sofa
+  position: '[9.466, -13.542, 0.504]'
+  dimension: '[2.128, 0.953, 0.75]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 71
+  is_predicted: false
+  name: sofa
+  position: '[7.916, -14.905, 0.447]'
+  dimension: '[1.031, 1.471, 0.934]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 72
+  is_predicted: false
+  name: television
+  position: '[11.32, -15.13, 1.633]'
+  dimension: '[0.217, 1.561, 0.829]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 73
+  is_predicted: false
+  name: Nothing
+  position: '[10.4, -14.05, 1.6]'
+  dimension: '[1.2, 1.5, 1.2]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 74
+  is_predicted: false
+  name: rug
+  position: '[9.126, -15.231, 0.022]'
+  dimension: '[1.862, 1.795, 0.108]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 75
+  is_predicted: false
+  name: Nothing
+  position: '[10.4, -15.6, 1.65]'
+  dimension: '[1.4, 1.4, 1.1]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 76
+  is_predicted: false
+  name: Nothing
+  position: '[9.4, -13.9, 1.6]'
+  dimension: '[0.4, 1.4, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 77
+  is_predicted: false
+  name: glass table
+  position: '[9.334, -14.908, 0.27]'
+  dimension: '[1.031, 0.981, 0.464]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 78
+  is_predicted: false
+  name: Nothing
+  position: '[8.45, -14.75, 1.5]'
+  dimension: '[1.1, 2.1, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 79
+  is_predicted: false
+  name: Nothing
+  position: '[6.2, -14.65, 1.5]'
+  dimension: '[3.4, 2.1, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 80
+  is_predicted: false
+  name: ceiling fan
+  position: '[9.948, -7.123, 2.347]'
+  dimension: '[1.248, 1.44, 0.237]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 81
+  is_predicted: false
+  name: cabinet
+  position: '[9.983, -7.028, 0.462]'
+  dimension: '[1.207, 1.532, 0.963]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 82
+  is_predicted: false
+  name: curtain
+  position: '[11.666, -8.117, 1.077]'
+  dimension: '[0.344, 0.446, 2.219]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 83
+  is_predicted: false
+  name: Nothing
+  position: '[10.5, -7.65, 1.6]'
+  dimension: '[1.6, 0.5, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 84
+  is_predicted: false
+  name: Nothing
+  position: '[9.9, -5.7, 1.55]'
+  dimension: '[2.4, 0.4, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 85
+  is_predicted: false
+  name: Nothing
+  position: '[10.3, -6.65, 1.55]'
+  dimension: '[1.6, 1.5, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 86
+  is_predicted: false
+  name: lamp
+  position: '[10.333, -5.314, 2.383]'
+  dimension: '[2.027, 0.278, 0.242]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 87
+  is_predicted: false
+  name: Nothing
+  position: '[10.4, -8.4, 0.85]'
+  dimension: '[1.4, 0.6, 1.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 88
+  is_predicted: false
+  name: door
+  position: '[8.075, -8.723, 1.093]'
+  dimension: '[0.161, 0.6, 1.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 89
+  is_predicted: false
+  name: Nothing
+  position: '[8.95, -7.15, 1.7]'
+  dimension: '[1.1, 1.3, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 90
+  is_predicted: false
+  name: Nothing
+  position: '[8.9, -8.25, 1.2]'
+  dimension: '[1.0, 0.9, 2.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 91
+  is_predicted: false
+  name: Nothing
+  position: '[6.7, -9.15, 1.0]'
+  dimension: '[0.4, 1.7, 1.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 92
+  is_predicted: false
+  name: Nothing
+  position: '[5.15, -12.85, 1.05]'
+  dimension: '[2.1, 0.9, 1.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 93
+  is_predicted: false
+  name: Nothing
+  position: '[6.45, -11.75, 1.05]'
+  dimension: '[0.5, 3.1, 1.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 94
+  is_predicted: false
+  name: washing machine
+  position: '[5.703, -9.452, 0.505]'
+  dimension: '[0.624, 0.638, 1.007]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 95
+  is_predicted: false
+  name: Nothing
+  position: '[3.8, -8.15, 1.1]'
+  dimension: '[0.6, 1.5, 1.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 96
+  is_predicted: false
+  name: chair
+  position: '[0.224, -12.293, 0.52]'
+  dimension: '[0.825, 0.64, 0.979]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 97
+  is_predicted: false
+  name: sofa
+  position: '[-0.888, -8.849, 0.336]'
+  dimension: '[0.807, 1.833, 0.671]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 98
+  is_predicted: false
+  name: ceiling fan
+  position: '[0.463, -8.613, 2.306]'
+  dimension: '[1.269, 1.283, 0.342]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 99
+  is_predicted: false
+  name: Nothing
+  position: '[0.6, -11.3, 0.65]'
+  dimension: '[1.4, 0.8, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 100
+  is_predicted: false
+  name: Nothing
+  position: '[3.1, -10.3, 0.8]'
+  dimension: '[1.2, 0.8, 1.2]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 101
+  is_predicted: false
+  name: Nothing
+  position: '[3.55, -10.3, 1.8]'
+  dimension: '[0.7, 0.8, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 102
+  is_predicted: false
+  name: Nothing
+  position: '[1.2, -9.45, 1.4]'
+  dimension: '[0.6, 0.9, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 103
+  is_predicted: false
+  name: Nothing
+  position: '[2.45, -9.45, 1.55]'
+  dimension: '[1.7, 0.9, 1.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 104
+  is_predicted: false
+  name: Nothing
+  position: '[2.25, -8.65, 1.8]'
+  dimension: '[1.3, 0.7, 0.8]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 105
+  is_predicted: false
+  name: Nothing
+  position: '[0.4, -7.4, 1.6]'
+  dimension: '[2.2, 1.0, 1.2]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 106
+  is_predicted: false
+  name: sofa
+  position: '[1.933, -8.898, 0.375]'
+  dimension: '[1.144, 0.874, 0.779]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 107
+  is_predicted: false
+  name: Nothing
+  position: '[1.4, -8.65, 1.15]'
+  dimension: '[3.0, 0.7, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 108
+  is_predicted: false
+  name: television
+  position: '[0.135, -6.622, 1.53]'
+  dimension: '[2.296, 0.465, 0.899]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 109
+  is_predicted: false
+  name: cabinet
+  position: '[0.567, -6.8, 0.445]'
+  dimension: '[1.922, 0.501, 0.788]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 110
+  is_predicted: false
+  name: Nothing
+  position: '[-0.6, -8.55, 1.25]'
+  dimension: '[1.0, 0.9, 0.5]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 111
+  is_predicted: false
+  name: door
+  position: '[3.181, -12.524, 1.03]'
+  dimension: '[0.185, 0.6, 1.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 112
+  is_predicted: false
+  name: rug
+  position: '[1.894, -12.211, 0.088]'
+  dimension: '[1.227, 1.568, 0.224]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 113
+  is_predicted: false
+  name: cabinet
+  position: '[2.982, -13.655, 0.989]'
+  dimension: '[0.49, 1.079, 1.971]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 114
+  is_predicted: false
+  name: chair
+  position: '[1.003, -12.124, 0.496]'
+  dimension: '[0.574, 0.321, 1.02]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 115
+  is_predicted: false
+  name: mirror
+  position: '[-0.759, -14.024, 1.41]'
+  dimension: '[1.22, 0.118, 1.484]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 116
+  is_predicted: false
+  name: cabinet
+  position: '[-1.185, -12.434, 0.511]'
+  dimension: '[1.17, 1.81, 1.072]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: object
+- id: 117
+  is_predicted: false
+  name: Nothing
+  position: '[1.65, -13.55, 0.65]'
+  dimension: '[1.5, 0.5, 0.9]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 118
+  is_predicted: false
+  name: Nothing
+  position: '[1.95, -10.4, 1.7]'
+  dimension: '[1.9, 0.4, 0.6]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 119
+  is_predicted: false
+  name: Nothing
+  position: '[0.4, -9.6, 1.55]'
+  dimension: '[1.0, 1.2, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 120
+  is_predicted: false
+  name: Nothing
+  position: '[1.45, -11.3, 1.3]'
+  dimension: '[0.9, 1.2, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 121
+  is_predicted: false
+  name: Nothing
+  position: '[-0.55, -12.45, 1.85]'
+  dimension: '[0.7, 0.9, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 122
+  is_predicted: false
+  name: Nothing
+  position: '[0.9, -12.85, 1.3]'
+  dimension: '[2.0, 1.7, 0.4]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 123
+  is_predicted: false
+  name: Nothing
+  position: '[-0.8, -10.6, 1.7]'
+  dimension: '[1.4, 1.4, 1.0]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 124
+  is_predicted: false
+  name: Nothing
+  position: '[-0.7, -11.65, 1.85]'
+  dimension: '[1.2, 0.7, 0.7]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 125
+  is_predicted: false
+  name: Nothing
+  position: '[-0.7, -12.5, 1.35]'
+  dimension: '[1.2, 2.4, 0.3]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: nothing
+- id: 126
+  is_predicted: false
+  name: Wall
+  position: '[10.514, -16.968, 1.681]'
+  dimension: '[1.569, 0.143, 2.245]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 127
+  is_predicted: false
+  name: Wall
+  position: '[11.354, -15.636, 1.46]'
+  dimension: '[0.109, 2.69, 2.765]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 128
+  is_predicted: false
+  name: Wall
+  position: '[8.049, -7.062, 0.99]'
+  dimension: '[0.164, 1.842, 2.684]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 129
+  is_predicted: false
+  name: Wall
+  position: '[8.072, -7.183, 1.264]'
+  dimension: '[0.168, 3.862, 3.242]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 130
+  is_predicted: false
+  name: Wall
+  position: '[7.866, -11.55, 1.079]'
+  dimension: '[0.114, 1.478, 2.087]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 131
+  is_predicted: false
+  name: Wall
+  position: '[3.181, -12.488, 1.247]'
+  dimension: '[0.185, 3.071, 3.133]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 132
+  is_predicted: false
+  name: Curtain
+  position: '[11.502, -10.497, 1.22]'
+  dimension: '[0.115, 0.446, 2.598]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 133
+  is_predicted: false
+  name: Wall
+  position: '[10.173, -9.484, 1.267]'
+  dimension: '[2.798, 0.131, 3.24]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 134
+  is_predicted: false
+  name: Wall
+  position: '[11.64, -10.585, 1.294]'
+  dimension: '[0.212, 4.499, 3.229]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 135
+  is_predicted: false
+  name: Curtain
+  position: '[4.641, -16.697, 2.115]'
+  dimension: '[1.853, 0.151, 0.697]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 136
+  is_predicted: false
+  name: Wall
+  position: '[1.161, -14.233, 0.932]'
+  dimension: '[1.274, 0.084, 2.522]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 137
+  is_predicted: false
+  name: Wall
+  position: '[2.73, -14.141, 1.25]'
+  dimension: '[0.778, 0.084, 3.115]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 138
+  is_predicted: false
+  name: Window
+  position: '[8.635, -17.089, 0.939]'
+  dimension: '[2.174, 0.123, 2.447]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 139
+  is_predicted: false
+  name: Wall
+  position: '[-0.852, -14.011, 1.259]'
+  dimension: '[1.976, 0.152, 3.139]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 140
+  is_predicted: false
+  name: Curtain
+  position: '[0.347, -13.916, 1.181]'
+  dimension: '[0.543, 0.096, 2.922]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 141
+  is_predicted: false
+  name: Wall
+  position: '[8.873, -9.089, 1.1]'
+  dimension: '[0.07, 0.397, 2.603]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 142
+  is_predicted: false
+  name: Wall
+  position: '[5.648, -6.622, 1.234]'
+  dimension: '[0.14, 2.975, 2.47]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 143
+  is_predicted: false
+  name: Wall
+  position: '[7.156, -6.568, 1.061]'
+  dimension: '[0.087, 1.855, 2.527]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 144
+  is_predicted: false
+  name: Wall
+  position: '[6.577, -16.859, 1.236]'
+  dimension: '[1.917, 0.186, 3.116]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 145
+  is_predicted: false
+  name: Window
+  position: '[4.697, -16.913, 1.381]'
+  dimension: '[1.685, 0.076, 1.007]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 146
+  is_predicted: false
+  name: Wall
+  position: '[10.258, -8.917, 1.061]'
+  dimension: '[1.461, 0.074, 2.84]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 147
+  is_predicted: false
+  name: Wall
+  position: '[7.032, -16.859, 0.999]'
+  dimension: '[0.849, 0.052, 2.641]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 148
+  is_predicted: false
+  name: Wall
+  position: '[-1.655, -10.121, 1.23]'
+  dimension: '[0.321, 7.33, 3.168]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 149
+  is_predicted: false
+  name: Wall
+  position: '[3.457, -13.003, 1.141]'
+  dimension: '[0.668, 0.147, 1.96]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 150
+  is_predicted: false
+  name: Curtain
+  position: '[2.159, -13.969, 1.177]'
+  dimension: '[0.414, 0.113, 2.995]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 151
+  is_predicted: false
+  name: Wall
+  position: '[5.902, -9.919, 1.083]'
+  dimension: '[0.614, 0.091, 2.728]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 152
+  is_predicted: false
+  name: Window
+  position: '[1.267, -14.239, 0.936]'
+  dimension: '[1.471, 0.071, 2.506]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 153
+  is_predicted: false
+  name: Wall
+  position: '[7.122, -8.301, 1.054]'
+  dimension: '[1.589, 0.11, 2.831]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 154
+  is_predicted: false
+  name: Wall
+  position: '[11.745, -7.386, 1.284]'
+  dimension: '[0.227, 4.044, 3.22]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 155
+  is_predicted: false
+  name: Wall
+  position: '[8.323, -9.14, 1.08]'
+  dimension: '[0.908, 0.085, 2.321]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 156
+  is_predicted: false
+  name: Wall
+  position: '[9.655, -12.826, 1.292]'
+  dimension: '[3.682, 0.199, 3.234]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 157
+  is_predicted: false
+  name: Wall
+  position: '[7.042, -11.567, 1.06]'
+  dimension: '[0.173, 2.605, 2.824]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 158
+  is_predicted: false
+  name: Wall
+  position: '[0.508, -6.487, 1.236]'
+  dimension: '[4.036, 0.16, 3.113]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 159
+  is_predicted: false
+  name: Wall
+  position: '[3.287, -13.041, 1.042]'
+  dimension: '[1.0, 0.227, 2.797]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 160
+  is_predicted: false
+  name: Wall
+  position: '[7.45, -10.155, 1.001]'
+  dimension: '[0.956, 0.176, 2.643]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 161
+  is_predicted: false
+  name: Wall
+  position: '[8.298, -9.514, 1.016]'
+  dimension: '[0.906, 0.121, 2.675]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 162
+  is_predicted: false
+  name: Wall
+  position: '[5.574, -10.019, 1.036]'
+  dimension: '[1.208, 0.118, 2.739]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 163
+  is_predicted: false
+  name: Wall
+  position: '[6.009, -10.044, 1.078]'
+  dimension: '[0.325, 0.1, 2.078]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 164
+  is_predicted: false
+  name: Wall
+  position: '[6.924, -7.899, 1.019]'
+  dimension: '[0.144, 0.81, 2.609]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 165
+  is_predicted: false
+  name: Wall
+  position: '[9.995, -5.265, 1.284]'
+  dimension: '[3.699, 0.164, 3.203]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 166
+  is_predicted: false
+  name: Wall
+  position: '[7.861, -9.329, 1.059]'
+  dimension: '[0.059, 0.35, 2.814]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 167
+  is_predicted: false
+  name: Wall
+  position: '[7.359, -10.135, 1.102]'
+  dimension: '[0.727, 0.125, 1.717]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 168
+  is_predicted: false
+  name: Wall
+  position: '[8.822, -12.902, 1.246]'
+  dimension: '[4.934, 0.208, 3.182]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 169
+  is_predicted: false
+  name: Wall
+  position: '[3.751, -13.481, 1.082]'
+  dimension: '[0.082, 0.965, 2.629]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 170
+  is_predicted: false
+  name: Wall
+  position: '[4.582, -12.237, 1.062]'
+  dimension: '[2.826, 0.134, 2.81]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 171
+  is_predicted: false
+  name: Wall
+  position: '[5.99, -11.679, 1.024]'
+  dimension: '[0.066, 1.169, 2.597]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 172
+  is_predicted: false
+  name: Wall
+  position: '[6.125, -8.689, 1.044]'
+  dimension: '[0.104, 0.89, 2.651]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 173
+  is_predicted: false
+  name: Wall
+  position: '[-1.565, -8.372, 1.481]'
+  dimension: '[0.169, 3.898, 2.643]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 174
+  is_predicted: false
+  name: Wall
+  position: '[1.328, -6.522, 1.362]'
+  dimension: '[2.541, 0.123, 2.867]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 175
+  is_predicted: false
+  name: Wall
+  position: '[4.757, -3.925, 1.222]'
+  dimension: '[1.567, 0.064, 3.149]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 176
+  is_predicted: false
+  name: Wall
+  position: '[5.535, -4.463, 1.038]'
+  dimension: '[0.064, 0.916, 2.772]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 177
+  is_predicted: false
+  name: Wall
+  position: '[3.951, -4.539, 1.1]'
+  dimension: '[0.04, 1.165, 1.721]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 178
+  is_predicted: false
+  name: Wall
+  position: '[4.623, -11.058, 1.258]'
+  dimension: '[2.826, 0.145, 3.09]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 179
+  is_predicted: false
+  name: Wall
+  position: '[5.659, -8.098, 1.483]'
+  dimension: '[1.265, 0.085, 2.634]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 180
+  is_predicted: false
+  name: Wall
+  position: '[2.552, 0.564, 1.316]'
+  dimension: '[0.1, 1.78, 3.125]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 181
+  is_predicted: false
+  name: Wall
+  position: '[0.416, -0.655, 1.087]'
+  dimension: '[0.057, 0.548, 1.747]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 182
+  is_predicted: false
+  name: Wall
+  position: '[0.232, -0.264, 1.745]'
+  dimension: '[2.932, 0.149, 2.346]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 183
+  is_predicted: false
+  name: Wall
+  position: '[0.289, -1.046, 1.06]'
+  dimension: '[0.4, 0.084, 2.52]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 184
+  is_predicted: false
+  name: Wall
+  position: '[-0.692, -4.197, 1.225]'
+  dimension: '[0.277, 4.113, 3.15]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 185
+  is_predicted: false
+  name: Wall
+  position: '[-0.717, -0.334, 1.108]'
+  dimension: '[0.806, 0.079, 2.758]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 186
+  is_predicted: false
+  name: Wall
+  position: '[4.999, -9.284, 1.228]'
+  dimension: '[0.15, 2.458, 3.151]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 187
+  is_predicted: false
+  name: Wall
+  position: '[3.712, -4.93, 1.02]'
+  dimension: '[0.118, 0.801, 2.603]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 188
+  is_predicted: false
+  name: Wall
+  position: '[0.868, -6.351, 1.498]'
+  dimension: '[3.369, 0.184, 2.756]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 189
+  is_predicted: false
+  name: Wall
+  position: '[0.677, 1.516, 1.342]'
+  dimension: '[3.779, 0.154, 3.231]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 190
+  is_predicted: false
+  name: Wall
+  position: '[0.633, -2.416, 1.128]'
+  dimension: '[0.955, 0.064, 2.797]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 191
+  is_predicted: false
+  name: Wall
+  position: '[3.84, -3.892, 1.27]'
+  dimension: '[0.134, 2.826, 3.233]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 192
+  is_predicted: false
+  name: Wall
+  position: '[0.364, -1.999, 1.099]'
+  dimension: '[0.077, 0.715, 2.602]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 193
+  is_predicted: false
+  name: Window
+  position: '[-0.541, 1.7, 1.142]'
+  dimension: '[1.054, 0.145, 1.33]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 194
+  is_predicted: false
+  name: Wall
+  position: '[2.872, -6.096, 1.058]'
+  dimension: '[0.614, 0.574, 2.687]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 195
+  is_predicted: false
+  name: Wall
+  position: '[5.471, -6.056, 1.252]'
+  dimension: '[0.176, 4.084, 3.146]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 196
+  is_predicted: false
+  name: Wall
+  position: '[1.472, -2.379, 1.973]'
+  dimension: '[2.826, 0.111, 1.84]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 197
+  is_predicted: false
+  name: Wall
+  position: '[-0.946, -2.174, 1.101]'
+  dimension: '[0.782, 0.062, 2.683]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 198
+  is_predicted: false
+  name: Wall
+  position: '[-1.26, -0.226, 1.482]'
+  dimension: '[0.135, 3.616, 2.893]'
+  orientation: '[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]'
+  node_type: structure
+- id: 199
+  is_predicted: false
+  name: an image of a bedroom
+  position: '[1.244, -4.626, 1.262]'
+  node_type: room
+- id: 200
+  is_predicted: false
+  name: an image of a hallway
+  position: '[-0.25, -2.8, 0.863]'
+  node_type: room
+- id: 201
+  is_predicted: false
+  name: an image of a bathroom
+  position: '[0.344, 0.275, 1.225]'
+  node_type: room
+- id: 202
+  is_predicted: false
+  name: an image of a closet
+  position: '[1.361, -1.328, 1.194]'
+  node_type: room
+- id: 203
+  is_predicted: false
+  name: an image of a living room
+  position: '[4.348, -7.782, 1.086]'
+  node_type: room
+- id: 204
+  is_predicted: false
+  name: an image of a living room
+  position: '[1.317, -8.174, 1.009]'
+  node_type: room
+- id: 205
+  is_predicted: false
+  name: an image of a living room
+  position: '[-0.024, -11.84, 1.089]'
+  node_type: room
+- id: 206
+  is_predicted: false
+  name: an image of a kitchen
+  position: '[6.37, -13.526, 0.998]'
+  node_type: room
+- id: 207
+  is_predicted: false
+  name: an image of a hallway
+  position: '[7.467, -9.76, 0.971]'
+  node_type: room
+- id: 208
+  is_predicted: false
+  name: an image of a kitchen
+  position: '[5.021, -14.621, 1.245]'
+  node_type: room
+- id: 209
+  is_predicted: false
+  name: an image of a bathroom
+  position: '[6.496, -6.535, 0.958]'
+  node_type: room
+- id: 210
+  is_predicted: false
+  name: an image of a bedroom
+  position: '[9.921, -11.2, 1.259]'
+  node_type: room
+- id: 211
+  is_predicted: false
+  name: an image of a living room
+  position: '[9.369, -14.893, 1.174]'
+  node_type: room
+- id: 212
+  is_predicted: false
+  name: an image of a laundry room
+  position: '[9.956, -6.835, 1.079]'
+  node_type: room
+- id: 213
+  is_predicted: false
+  name: an image of a living room
+  position: '[9.3, -16.65, 1.5]'
+  node_type: room
+- id: 214
+  is_predicted: false
+  name: an image of a kitchen
+  position: '[4.95, -16.55, 1.75]'
+  node_type: room
+- id: 215
+  is_predicted: false
+  name: an image of a kitchen
+  position: '[6.55, -16.45, 0.95]'
+  node_type: room
+edges:
+- - 0
+  - 201
+- - 1
+  - 199
+- - 2
+  - 199
+- - 3
+  - 199
+- - 4
+  - 199
+- - 5
+  - 199
+- - 6
+  - 201
+- - 7
+  - 202
+- - 9
+  - 201
+- - 10
+  - 201
+- - 11
+  - 201
+- - 12
+  - 201
+- - 15
+  - 201
+- - 17
+  - 199
+- - 18
+  - 203
+- - 19
+  - 203
+- - 20
+  - 203
+- - 23
+  - 199
+- - 24
+  - 199
+- - 25
+  - 199
+- - 26
+  - 203
+- - 27
+  - 205
+- - 28
+  - 203
+- - 29
+  - 204
+- - 32
+  - 208
+- - 33
+  - 210
+- - 34
+  - 210
+- - 35
+  - 210
+- - 36
+  - 210
+- - 37
+  - 210
+- - 38
+  - 210
+- - 41
+  - 210
+- - 42
+  - 210
+- - 43
+  - 210
+- - 44
+  - 207
+- - 45
+  - 212
+- - 46
+  - 212
+- - 47
+  - 209
+- - 48
+  - 209
+- - 49
+  - 212
+- - 53
+  - 206
+- - 54
+  - 208
+- - 55
+  - 205
+- - 56
+  - 208
+- - 58
+  - 205
+- - 59
+  - 205
+- - 60
+  - 204
+- - 61
+  - 205
+- - 63
+  - 206
+- - 64
+  - 208
+- - 65
+  - 208
+- - 66
+  - 208
+- - 67
+  - 211
+- - 68
+  - 211
+- - 69
+  - 211
+- - 70
+  - 211
+- - 71
+  - 206
+- - 72
+  - 211
+- - 74
+  - 211
+- - 77
+  - 211
+- - 80
+  - 212
+- - 81
+  - 212
+- - 82
+  - 212
+- - 86
+  - 212
+- - 88
+  - 207
+- - 94
+  - 207
+- - 96
+  - 205
+- - 97
+  - 204
+- - 98
+  - 205
+- - 106
+  - 204
+- - 108
+  - 204
+- - 109
+  - 204
+- - 111
+  - 205
+- - 112
+  - 205
+- - 113
+  - 205
+- - 114
+  - 205
+- - 115
+  - 205
+- - 116
+  - 205
+- - 126
+  - 206
+- - 127
+  - 206
+- - 128
+  - 207
+- - 129
+  - 207
+- - 130
+  - 207
+- - 131
+  - 205
+- - 132
+  - 207
+- - 133
+  - 207
+- - 134
+  - 207
+- - 135
+  - 208
+- - 136
+  - 205
+- - 137
+  - 205
+- - 138
+  - 206
+- - 139
+  - 205
+- - 140
+  - 205
+- - 141
+  - 207
+- - 142
+  - 203
+- - 143
+  - 203
+- - 144
+  - 206
+- - 145
+  - 208
+- - 146
+  - 207
+- - 147
+  - 206
+- - 148
+  - 205
+- - 149
+  - 206
+- - 150
+  - 205
+- - 151
+  - 207
+- - 152
+  - 205
+- - 153
+  - 207
+- - 154
+  - 207
+- - 155
+  - 207
+- - 156
+  - 206
+- - 157
+  - 207
+- - 158
+  - 204
+- - 159
+  - 205
+- - 160
+  - 207
+- - 161
+  - 207
+- - 162
+  - 207
+- - 163
+  - 207
+- - 164
+  - 203
+- - 165
+  - 203
+- - 166
+  - 207
+- - 167
+  - 207
+- - 168
+  - 206
+- - 169
+  - 206
+- - 170
+  - 206
+- - 171
+  - 207
+- - 172
+  - 203
+- - 173
+  - 204
+- - 174
+  - 204
+- - 175
+  - 204
+- - 176
+  - 204
+- - 177
+  - 204
+- - 178
+  - 203
+- - 179
+  - 203
+- - 180
+  - 204
+- - 181
+  - 204
+- - 182
+  - 204
+- - 183
+  - 204
+- - 184
+  - 204
+- - 185
+  - 204
+- - 186
+  - 203
+- - 187
+  - 204
+- - 188
+  - 204
+- - 189
+  - 204
+- - 190
+  - 204
+- - 191
+  - 204
+- - 192
+  - 204
+- - 193
+  - 204
+- - 194
+  - 204
+- - 195
+  - 203
+- - 196
+  - 204
+- - 197
+  - 204
+- - 198
+  - 204
+- - 199
+  - 200
+- - 199
+  - 201
+- - 199
+  - 203
+- - 200
+  - 201
+- - 203
+  - 204
+- - 203
+  - 205
+- - 203
+  - 207
+- - 204
+  - 205
+- - 204
+  - 207
+- - 205
+  - 206
+- - 205
+  - 208
+- - 206
+  - 207
+- - 206
+  - 208
+- - 206
+  - 211
+- - 207
+  - 209
+- - 207
+  - 210
+- - 207
+  - 211
+- - 207
+  - 212
+- - 208
+  - 211

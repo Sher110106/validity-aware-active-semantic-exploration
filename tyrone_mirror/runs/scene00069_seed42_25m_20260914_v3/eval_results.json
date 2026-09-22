@@ -1,0 +1,196 @@
+{
+  "run_dir": "/workspace/runs/scene00069_seed42_25m_20260914_v3/stages",
+  "ground_truth": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+  "stages": {
+    "0": {
+      "path_length_m": 0,
+      "navigation_time_s": 0.0,
+      "n_graphs_averaged": 2,
+      "precision": 0.7196078431372549,
+      "recall": 0.17164179104477612,
+      "f1": 0.27700348432055755,
+      "ged": 162.5,
+      "ged_normalized": 1.0690789473684212,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.7333333333333333,
+          "recall": 0.16417910447761194,
+          "f1": 0.2682926829268293,
+          "true_positives": 11,
+          "false_positives": 4,
+          "false_negatives": 56,
+          "ged": 168.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.105263157894737
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.7058823529411765,
+          "recall": 0.1791044776119403,
+          "f1": 0.28571428571428575,
+          "true_positives": 12,
+          "false_positives": 5,
+          "false_negatives": 55,
+          "ged": 157.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0328947368421053
+        }
+      ]
+    },
+    "1": {
+      "path_length_m": 7.575000000000013,
+      "navigation_time_s": 44.76842188835144,
+      "n_graphs_averaged": 2,
+      "precision": 0.62531328320802,
+      "recall": 0.18656716417910446,
+      "f1": 0.28726215644820297,
+      "ged": 162.5,
+      "ged_normalized": 1.069078947368421,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.631578947368421,
+          "recall": 0.1791044776119403,
+          "f1": 0.27906976744186046,
+          "true_positives": 12,
+          "false_positives": 7,
+          "false_negatives": 55,
+          "ged": 161.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0592105263157894
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.6190476190476191,
+          "recall": 0.19402985074626866,
+          "f1": 0.29545454545454547,
+          "true_positives": 13,
+          "false_positives": 8,
+          "false_negatives": 54,
+          "ged": 164.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0789473684210527
+        }
+      ]
+    },
+    "2": {
+      "path_length_m": 12.299999999999972,
+      "navigation_time_s": 82.11991024017334,
+      "n_graphs_averaged": 2,
+      "precision": 0.6878260869565218,
+      "recall": 0.2462686567164179,
+      "f1": 0.3625603864734299,
+      "ged": 159.5,
+      "ged_normalized": 1.049342105263158,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.6956521739130435,
+          "recall": 0.23880597014925373,
+          "f1": 0.3555555555555555,
+          "true_positives": 16,
+          "false_positives": 7,
+          "false_negatives": 51,
+          "ged": 161.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0592105263157894
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.68,
+          "recall": 0.2537313432835821,
+          "f1": 0.3695652173913044,
+          "true_positives": 17,
+          "false_positives": 8,
+          "false_negatives": 50,
+          "ged": 158.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0394736842105263
+        }
+      ]
+    },
+    "3": {
+      "path_length_m": 16.499999999999932,
+      "navigation_time_s": 95.54409217834473,
+      "n_graphs_averaged": 2,
+      "precision": 0.6607142857142858,
+      "recall": 0.27611940298507465,
+      "f1": 0.3894736842105263,
+      "ged": 164.5,
+      "ged_normalized": 1.0822368421052633,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.6428571428571429,
+          "recall": 0.26865671641791045,
+          "f1": 0.37894736842105264,
+          "true_positives": 18,
+          "false_positives": 10,
+          "false_negatives": 49,
+          "ged": 158.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0394736842105263
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.6785714285714286,
+          "recall": 0.2835820895522388,
+          "f1": 0.4,
+          "true_positives": 19,
+          "false_positives": 9,
+          "false_negatives": 48,
+          "ged": 171.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.125
+        }
+      ]
+    },
+    "4": {
+      "path_length_m": 25.27499999999985,
+      "navigation_time_s": 146.7111828327179,
+      "n_graphs_averaged": 2,
+      "precision": 0.6935483870967742,
+      "recall": 0.32089552238805974,
+      "f1": 0.4387755102040817,
+      "ged": 167.5,
+      "ged_normalized": 1.1019736842105263,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.6774193548387096,
+          "recall": 0.31343283582089554,
+          "f1": 0.4285714285714286,
+          "true_positives": 21,
+          "false_positives": 10,
+          "false_negatives": 46,
+          "ged": 163.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0723684210526316
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.7096774193548387,
+          "recall": 0.3283582089552239,
+          "f1": 0.4489795918367347,
+          "true_positives": 22,
+          "false_positives": 9,
+          "false_negatives": 45,
+          "ged": 172.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.131578947368421
+        }
+      ]
+    }
+  }
+}

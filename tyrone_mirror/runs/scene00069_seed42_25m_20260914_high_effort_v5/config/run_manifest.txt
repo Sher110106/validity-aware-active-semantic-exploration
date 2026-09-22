@@ -1,0 +1,1 @@
+DeepSeek via OpenRouter; 25m final bounded instrumentation; reasoning effort=high, max_tokens=24000, sized call budget for 5 full stages

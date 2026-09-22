@@ -1,0 +1,65 @@
+{
+  "schema": "asp_run_manifest_v1",
+  "generated_at_utc": "2026-09-14T08:46:28Z",
+  "run_dir": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3",
+  "pipeline_config": {
+    "path": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/config/pipeline_config.yaml",
+    "sha256": "24b044e14555ead52689bacf2af2904b30901134c3f1dfa6ebcedd081da07e76",
+    "present": true
+  },
+  "commit": {
+    "path": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/config/commit.txt",
+    "sha256": "d73390330a9213cac7ebef9e8525f857c7dd34aa48250b7ed923d9e584209dda",
+    "present": true
+  },
+  "reference_graph": {
+    "path": "tyrone_mirror/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+    "sha256": "b644bcdbee2c795f447f7ca61220b90ed2e8e6255eb774bca7e432058611c2a6",
+    "present": true
+  },
+  "evaluator_sources": {
+    "tools/evaluator": {
+      "path": "tools/evaluator",
+      "present": true,
+      "files": {
+        "evaluate_run.py": "24015b1ba7fe979f5b5fcc09a9aafa4e0da0452d2c2e29ade6f52106343e3ffd",
+        "ged.py": "9dfbc9fb8e999efca578cd0d8d06a6b54e7079e2b0f5fe0fb790a3552663c660",
+        "graph_io.py": "6dbc5a17ca84fa0b93c1cf5c90c631fe1e18797780cdae80def3319ab2f65563",
+        "matching.py": "a670fb609966e4a3d5b600feafa589f31f1a7b31f9a4e72495c4ca40117b59b4",
+        "tests/fixtures/ged_gt_one_object.yaml": "5d81d5e2ec14b08ea9c8836fc33a0a29ede13094f21006f3f0e46a8d497de64b",
+        "tests/fixtures/ged_pred_orphan_object.yaml": "608da94b643ccf5e69060386c9ab62fe14e2a79c31b1518f6cbc8a746991e2ab",
+        "tests/fixtures/gt_simple.yaml": "a949e339298ad9dc847f7b32a6779c26083d9fe70406bb48ef63d39458dfe27e",
+        "tests/fixtures/pred_partial.yaml": "6c52c02684fb6d06a7f4135f700b2e849dfd65d3a8f853fa7309a9562f47059c",
+        "tests/test_evaluator.py": "797ede1e8dee5b4834ff058b821ae33f3a95ed6ae0524a19ef2e321980cd2201"
+      }
+    },
+    "tools/asp_offline/evaluator.py": {
+      "path": "tools/asp_offline/evaluator.py",
+      "sha256": "9fc4c723384c4a7df5e35c848b2cc848e7e61c2b5ec8c9b472fec656eaec6048",
+      "present": true
+    }
+  },
+  "results": {
+    "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/eval_results.json": {
+      "path": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/eval_results.json",
+      "sha256": "3ca77b1a07fecf7b7aac9dbdf55595417aa49f9e317c06a73f17b00a4d3e1212",
+      "present": true
+    },
+    "/tmp/eval_v3_reconfirm.json": {
+      "path": "/tmp/eval_v3_reconfirm.json",
+      "sha256": "3ca77b1a07fecf7b7aac9dbdf55595417aa49f9e317c06a73f17b00a4d3e1212",
+      "present": true
+    },
+    "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay.json": {
+      "path": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay.json",
+      "sha256": "b30b1a4b275d5bda43ed282e1390c479a67d49ad76f995d914eacd8a257a8726",
+      "present": true
+    },
+    "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay_k4.json": {
+      "path": "tyrone_mirror/runs/scene00069_seed42_25m_20260914_v3/extension_policy_replay_k4.json",
+      "sha256": "faf8f9ecd4501eef49ba3d57337ff4ef00789e743c0349f8b18edd0078960394",
+      "present": true
+    }
+  },
+  "commit_text": "f1ea141b1886d33ab8f4e4b791db4d3c92150b27"
+}

@@ -1,5 +1,9 @@
 # Goal: implement the prospective campaign control plane
 
+This goal document is a historical implementation contract. The control plane
+and its tests are complete, and the associated campaign is frozen; see
+`../../FINAL_REPORT.md` for the final scientific disposition.
+
 ## Scorecard
 
 - Deterministic queue and exact policy names: 100% order test pass.
@@ -12,9 +16,9 @@
 
 ## Done when
 
-The commands in `SPEC.md` pass; no paid API, credential, Tailscale, or run is
-invoked; and the branch contains the namespaced implementation and contract
-docs with an auditable scope decision.
+The commands in `SPEC.md` pass and the branch contains the namespaced
+implementation and contract docs with an auditable scope decision. The
+implementation is offline-safe by default; no new paid API call is planned.
 
 ## Workflow
 

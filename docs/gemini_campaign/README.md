@@ -1,6 +1,8 @@
 # Gemini campaign broker
 
-Status: **no-paid-call implementation**. The branch has no direct runtime transport and the paid probe path remains unavailable.
+Status: **complete and frozen**. The broker and audited runtime are retained
+for offline inspection; the recorded campaign is closed and no new paid probe
+or launch is planned.
 
 ## Security model
 `load_credential()` requires an absolute path outside caller-supplied forbidden repository roots, a regular file owned by the current UID, exact mode `0400` or `0600`, and a bounded single-line value. It opens with `O_NOFOLLOW` where available and validates the opened descriptor with `fstat`; errors are generic and contain neither path nor value. Keys beginning `AQ.` are valid authorization API keys as of 2026 when sent through the `x-goog-api-key` header; this implementation never validates or embeds a real key.
@@ -23,7 +25,8 @@ python3 -m tools.gemini_campaign.cli export ledger.sqlite
 python3 -m tools.gemini_campaign.cli checksum ledger.sqlite
 ```
 
-Paid enable is deliberately unavailable until a direct runtime transport is integrated. Probe allocations can never exceed $2.00.
+The CLI probe remains dry-run only, and this package does not authorize a new
+paid launch. Probe allocations can never exceed $2.00.
 
 ## Official-source record
 Operator confirmation supplied 2026-09-18 states the exact model, thinking level, limits, and pricing. Re-check before any future paid integration: [Gemini models](https://ai.google.dev/gemini-api/docs/models/gemini), [thinking](https://ai.google.dev/gemini-api/docs/thinking), [generate content](https://ai.google.dev/api/generate-content), [usage metadata](https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse), and [pricing](https://ai.google.dev/gemini-api/docs/pricing).

@@ -1,5 +1,9 @@
 # Prospective author overlay
 
+This is a historical, hash-checked deployment surface. The campaign that used
+it is frozen; the instructions below document provenance only and do not
+authorize another run.
+
 Routes the pinned `active_semantic_perception` pipeline's two Gemini-calling
 methods (`LLMCompletion.generate_completion_response`,
 `generate_refinement_response`) through the real, audited

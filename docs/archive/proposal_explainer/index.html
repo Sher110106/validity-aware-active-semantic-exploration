@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Active Semantic Perception - Course Project Brief</title>
+<meta name="description" content="Why our 3-person team should build Active Semantic Perception for the Computer Vision and Perception course project: official code, zero training, free data, published baselines.">
+<style>
+  :root {
+    --bg: #0b0e13;
+    --bg-soft: #10141c;
+    --panel: #121722;
+    --line: #1e2533;
+    --ink: #e8ecf2;
+    --ink-dim: #9aa5b4;
+    --ink-faint: #67707e;
+    --accent: #3ecf8e;
+    --accent-dim: #1d3a2e;
+    --warn: #e5a54b;
+    --radius: 10px;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- hero ---------- */
+  header.hero {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 72px 0 48px;
+    background:
+      radial-gradient(900px 480px at 85% -10%, rgba(62,207,142,0.09), transparent 60%),
+      linear-gradient(rgba(30,37,51,0.55) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,37,51,0.55) 1px, transparent 1px);
+    background-size: auto, 56px 56px, 56px 56px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    header.hero { padding-top: 96px; }
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    font-weight: 650;
+    max-width: 12ch;
+  }
+  .hero-sub {
+    margin-top: 28px;
+    color: var(--ink-dim);
+    font-size: 18px;
+    max-width: 46ch;
+  }
+  .hero-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 24px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--accent); color: #07140d; }
+  .btn-primary:hover { background: #58dc9f; }
+  .btn-ghost {
+    border: 1px solid var(--line);
+    color: var(--ink);
+    background: var(--panel);
+  }
+  .btn-ghost:hover { border-color: var(--ink-faint); }
+
+  /* verdict card */
+  .verdict {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .verdict-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .verdict-project {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+  .verdict-project em { color: var(--accent); font-style: normal; }
+  .vlist { margin-top: 20px; display: grid; gap: 14px; }
+  .vitem { display: flex; gap: 12px; font-size: 13.5px; }
+  .vkey {
+    font-family: var(--mono);
+    color: var(--ink-faint);
+    min-width: 74px;
+    font-size: 11.5px;
+    padding-top: 3px;
+  }
+  .vval { color: var(--ink-dim); }
+  .vval a { color: var(--accent); text-decoration: none; }
+  .vval a:hover { text-decoration: underline; }
+
+  /* ---------- sections ---------- */
+  section { padding: 96px 0; }
+  @media (max-width: 640px) { section { padding: 64px 0; } }
+  .statement { padding: 72px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .statement p {
+    font-size: clamp(24px, 3.4vw, 34px);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 550;
+    max-width: 24ch;
+  }
+  .statement p span { color: var(--accent); }
+
+  .sec-head { max-width: 60ch; margin-bottom: 48px; }
+  .sec-head h2 {
+    font-size: clamp(28px, 3.6vw, 40px);
+    letter-spacing: -0.025em;
+    font-weight: 650;
+    margin-top: 16px;
+  }
+  .sec-head p { color: var(--ink-dim); margin-top: 14px; font-size: 16px; }
+
+  /* bento */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 900px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .bento { grid-template-columns: 1fr; } }
+  .cell {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px;
+    min-height: 190px;
+    display: flex;
+    flex-direction: column;
+  }
+  .cell.accent-cell {
+    background:
+      radial-gradient(400px 200px at 100% 0%, rgba(62,207,142,0.16), transparent 65%),
+      var(--panel);
+    border-color: rgba(62,207,142,0.35);
+  }
+  .cell.mono-cell {
+    background:
+      repeating-linear-gradient(-45deg, rgba(62,207,142,0.05) 0 2px, transparent 2px 14px),
+      var(--panel);
+  }
+  .cell-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+  }
+  .cell h3 {
+    font-size: 17px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin: 14px 0 10px;
+  }
+  .cell.accent-cell h3 { color: var(--accent); }
+  .cell p { font-size: 13.5px; color: var(--ink-dim); }
+
+  /* table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  thead th {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(30,37,51,0.6);
+    color: var(--ink-dim);
+    vertical-align: top;
+  }
+  tbody td:first-child { color: var(--ink); font-weight: 550; }
+  tr.pick td { background: rgba(62,207,142,0.07); }
+  tr.pick td:first-child { color: var(--accent); }
+  .cell-dot { color: var(--ink-faint); font-family: var(--mono); font-size: 12px; }
+  .good { color: var(--accent); }
+  .bad { color: var(--ink-faint); }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  @media (max-width: 760px) { table { min-width: 720px; } }
+
+  /* timeline */
+  .phases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  @media (max-width: 860px) { .phases { grid-template-columns: 1fr; } }
+  .phase {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--panel);
+  }
+  .phase-weeks {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .phase h3 { font-size: 15px; font-weight: 650; margin: 10px 0 8px; }
+  .phase p { font-size: 12.5px; color: var(--ink-dim); }
+
+  /* team split */
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .team { grid-template-columns: 1fr; } }
+  .role { border-top: 2px solid var(--accent); padding: 20px 4px 4px; }
+  .role h3 { font-size: 16px; font-weight: 650; }
+  .role .who { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.1em; text-transform: uppercase; margin: 4px 0 12px; }
+  .role p { font-size: 13.5px; color: var(--ink-dim); }
+
+  /* risks */
+  .risks { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 760px) { .risks { grid-template-columns: 1fr; } }
+  .risk {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--panel);
+  }
+  .risk h3 { font-size: 14.5px; font-weight: 650; margin-bottom: 8px; }
+  .risk h3 span { color: var(--warn); font-family: var(--mono); font-size: 12px; margin-right: 8px; }
+  .risk p { font-size: 13px; color: var(--ink-dim); }
+  .risk p.mitigate { margin-top: 10px; color: var(--accent); font-size: 12.5px; }
+
+  /* sources */
+  .sources { list-style: none; display: grid; gap: 10px; }
+  .sources li {
+    display: flex;
+    gap: 14px;
+    font-size: 13.5px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(30,37,51,0.6);
+  }
+  .sources .n {
+    font-family: var(--mono);
+    color: var(--ink-faint);
+    font-size: 12px;
+    padding-top: 2px;
+    min-width: 22px;
+  }
+  .sources a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink-faint); }
+  .sources a:hover { color: var(--accent); border-color: var(--accent); }
+  .sources .desc { display: block; color: var(--ink-faint); font-size: 12.5px; margin-top: 2px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0 64px;
+    color: var(--ink-faint);
+    font-size: 12.5px;
+  }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--ink-dim); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Course project brief</div>
+      <h1>Active Semantic Perception</h1>
+      <p class="hero-sub">One paper, official code, zero training, free data. The lowest-risk route to a research-grade result for a three-person team.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#why">Why this project</a>
+        <a class="btn btn-ghost" href="#plan">The 12-week plan</a>
+      </div>
+    </div>
+    <aside class="verdict">
+      <div class="verdict-label">Decision</div>
+      <div class="verdict-project">Project 2 of 7, <em>Active Semantic Perception</em></div>
+      <div class="vlist">
+        <div class="vitem"><span class="vkey">Paper</span><span class="vval"><a href="https://arxiv.org/abs/2510.05430" target="_blank" rel="noopener">arXiv:2510.05430</a>, Oct 2025</span></div>
+        <div class="vitem"><span class="vkey">Code</span><span class="vval"><a href="https://github.com/grasp-lyrl/active_semantic_perception" target="_blank" rel="noopener">Official repo, public</a></span></div>
+        <div class="vitem"><span class="vkey">Training</span><span class="vval">None. Runs on a laptop GPU</span></div>
+        <div class="vitem"><span class="vkey">Data</span><span class="vval">HM3D apartments, free for academic use</span></div>
+        <div class="vitem"><span class="vkey">Sim</span><span class="vval">Habitat, no robot required</span></div>
+        <div class="vitem"><span class="vkey">Difficulty</span><span class="vval">Medium. Systems work, not research risk</span></div>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<section class="statement">
+  <div class="wrap">
+    <p>Most of the seven options demand weeks of plumbing before anything works. <span>This one ships a working baseline in week two.</span></p>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The case</div>
+      <h2>Eight reasons this is the right pick</h2>
+      <p>Every claim below is verifiable against the linked paper, repository, or dataset.</p>
+    </div>
+    <div class="bento">
+      <div class="cell accent-cell">
+        <span class="cell-num">01</span>
+        <h3>Official code exists</h3>
+        <p>The full pipeline ships in one repo: mapping stack, LLM completion, information-gain scoring, baselines, evaluation scripts. We reproduce, then improve. Two competing projects (ATLAS, aerial-ground mapping) have no public code.</p>
+      </div>
+      <div class="cell">
+        <span class="cell-num">02</span>
+        <h3>Zero model training</h3>
+        <p>No checkpoints to fit, no GPU queues, no convergence risk. The authors ran the whole system on an RTX 4060 laptop GPU. Our A6000 server is spare capacity, not a requirement.</p>
+      </div>
+      <div class="cell">
+        <span class="cell-num">03</span>
+        <h3>Free data, no field work</h3>
+        <p>Habitat simulator plus HM3D apartment scans, free for academic use. No robot, no drone, no permits, no campus logistics. The paper's own evaluation runs entirely in simulation.</p>
+      </div>
+      <div class="cell">
+        <span class="cell-num">04</span>
+        <h3>Baselines to beat</h3>
+        <p>Frontier exploration and semantic mutual-information exploration (SSMI, IEEE T-RO 2023) give objective targets: object-F1, graph-edit distance, room-finding time. Success is measurable, not vibes.</p>
+      </div>
+      <div class="cell mono-cell">
+        <span class="cell-num">05</span>
+        <h3>Built for three people</h3>
+        <p>Three clean modules with explicit seams: scene-graph mapping stack, LLM prediction, viewpoint selection plus evaluation. Each person owns one; a weekly integration demo keeps the seams honest.</p>
+      </div>
+      <div class="cell">
+        <span class="cell-num">06</span>
+        <h3>Midterm-ready</h3>
+        <p>By week six or seven: one scene, the frontier baseline, a first informed policy, first numbers. The midterm presentation becomes a working demo instead of a promise.</p>
+      </div>
+      <div class="cell">
+        <span class="cell-num">07</span>
+        <h3>Matches the curriculum</h3>
+        <p>Exercises the "Perception for Action" half of the course: semantic mapping, active perception, LLM reasoning over scenes. The same skills the lectures teach, applied end to end.</p>
+      </div>
+      <div class="cell accent-cell">
+        <span class="cell-num">08</span>
+        <h3>The A6000 becomes leverage</h3>
+        <p>Parallel scene runs, a local open-weights LLM instead of API dependence, and a LoRA fine-tune on scene-graph completion that targets a limitation the paper states itself. That last one is a genuine novel contribution.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The field</div>
+      <h2>Why not the other six</h2>
+      <p>Compared on the things that decide a 12-week project: code availability, training load, hardware dependence, and risk.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Official code</th>
+            <th>Training</th>
+            <th>Robot needed</th>
+            <th>Data</th>
+            <th>Course fit</th>
+            <th>Risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pick">
+            <td>2. Active Semantic Perception</td>
+            <td class="good">Yes</td>
+            <td>None</td>
+            <td>No (sim)</td>
+            <td>HM3D, free</td>
+            <td class="good">Very high</td>
+            <td>Lowest</td>
+          </tr>
+          <tr>
+            <td>1. ATLAS Navigator</td>
+            <td class="bad">No</td>
+            <td>None</td>
+            <td>Yes (real)</td>
+            <td>ScanNet, HM3D</td>
+            <td>High</td>
+            <td>Highest: three research modules to reimplement</td>
+          </tr>
+          <tr>
+            <td>3. VLA manipulation (CogACT)</td>
+            <td class="good">Yes</td>
+            <td class="bad">7B fine-tune</td>
+            <td>No (sim)</td>
+            <td>LIBERO, SIMPLER</td>
+            <td>Low</td>
+            <td>Medium-high: training runs and eval wall-clock</td>
+          </tr>
+          <tr>
+            <td>4. Vision-based grasping</td>
+            <td class="good">Yes</td>
+            <td>Optional</td>
+            <td>No (sim)</td>
+            <td class="bad">120GB+ download</td>
+            <td>Medium</td>
+            <td>Medium: integration-heavy, legacy toolchains</td>
+          </tr>
+          <tr>
+            <td>5. Tea leaf FLC estimation</td>
+            <td class="bad">Partial</td>
+            <td>Light</td>
+            <td>No</td>
+            <td class="bad">Collect + annotate 10-40k boxes</td>
+            <td>Low</td>
+            <td>Medium: pure data-logistics project</td>
+          </tr>
+          <tr>
+            <td>6. Ground + aerial 3D mapping</td>
+            <td class="bad">No</td>
+            <td>None</td>
+            <td>No (drone field)</td>
+            <td class="bad">Self-capture + permits</td>
+            <td class="good">Very high</td>
+            <td>Medium: drone permission, cross-view registration</td>
+          </tr>
+          <tr>
+            <td>7. Blur-aware 3D reconstruction</td>
+            <td class="good">Yes</td>
+            <td>NeRF, 15-24h/scene</td>
+            <td>No</td>
+            <td>Public</td>
+            <td class="good">Very high</td>
+            <td>Low-medium: training wall-clock</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--ink-faint); font-size: 13px; margin-top: 14px;">Project 6 and 7 are respectable fallbacks. Project 2 wins because it shares their course fit while removing their failure modes: field logistics and training wall-clock.</p>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Execution</div>
+      <h2>The 12-week plan</h2>
+      <p>About eight to ten person-hours per member per week, plus Friday labs. The midterm milestone lands at week six or seven.</p>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <span class="phase-weeks">Weeks 1-2</span>
+        <h3>Environment</h3>
+        <p>Dockerized ROS stack, Habitat, HM3D downloads, LLM API key. All three people on setup; this is the funnel.</p>
+      </div>
+      <div class="phase">
+        <span class="phase-weeks">Weeks 3-4</span>
+        <h3>First loop</h3>
+        <p>One full exploration loop end to end on one scene, repo as-is. Anything that fights back gets fixed now.</p>
+      </div>
+      <div class="phase">
+        <span class="phase-weeks">Weeks 5-7</span>
+        <h3>Midterm</h3>
+        <p>Frontier and random baselines, simplified information gain, first F1 and room-finding numbers. Demo ready.</p>
+      </div>
+      <div class="phase">
+        <span class="phase-weeks">Weeks 8-10</span>
+        <h3>Improvements</h3>
+        <p>Full two-stage LLM prompt, proper mutual information, second scene, node-type ablations, overnight runs.</p>
+      </div>
+      <div class="phase">
+        <span class="phase-weeks">Weeks 11-12</span>
+        <h3>Delivery</h3>
+        <p>Full evaluation, videos, report, code cleanup. Stretch goal: local LLM and LoRA fine-tune if ahead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Division of labor</div>
+      <h2>Three people, three modules</h2>
+    </div>
+    <div class="team">
+      <div class="role">
+        <h3>Mapping and simulation</h3>
+        <div class="who">Person A</div>
+        <p>ROS stack in Docker, Habitat, HM3D scenes, scene-graph export format. Owns the data path everyone else consumes.</p>
+      </div>
+      <div class="role">
+        <h3>LLM prediction</h3>
+        <div class="who">Person B</div>
+        <p>Two-stage prompts, ensemble sampling, hallucination filtering, consistency constraints. Owns the stretch goal: local LLM and fine-tuning.</p>
+      </div>
+      <div class="role">
+        <h3>Viewpoint selection and evaluation</h3>
+        <div class="who">Person C</div>
+        <p>Information-gain scoring, baseline policies, F1 and graph-edit metrics, figures and demo video. Owns the numbers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Honest risks</div>
+      <h2>What could go wrong, and the plan for each</h2>
+    </div>
+    <div class="risks">
+      <div class="risk">
+        <h3><span>R1</span>ROS environment build</h3>
+        <p>The mapping stack is C++ on ROS1 with old pinned dependencies. This is the classic multi-day sink.</p>
+        <p class="mitigate">Mitigation: Docker-first from week 1; ConceptGraphs, pure Python, is the one-week insurance plan.</p>
+      </div>
+      <div class="risk">
+        <h3><span>R2</span>LLM behavior</h3>
+        <p>Hallucinated scene completions, API nondeterminism, rate limits. The paper itself needed manual rejection of bad outputs.</p>
+        <p class="mitigate">Mitigation: majority-consensus confidence filtering, plausibility checks, capped API budget, local model fallback on the A6000.</p>
+      </div>
+      <div class="risk">
+        <h3><span>R3</span>Experiment latency</h3>
+        <p>LLM reasoning takes minutes per exploration step, so full scene runs span hours.</p>
+        <p class="mitigate">Mitigation: overnight batches, reduced ensemble size, several scenes in parallel on the A6000.</p>
+      </div>
+      <div class="risk">
+        <h3><span>R4</span>Dataset approval lag</h3>
+        <p>HM3D requires a registration form, and approval takes time.</p>
+        <p class="mitigate">Mitigation: submit in week 1, before anything else. It is free for academic use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Sources</div>
+      <h2>Everything above, verifiable</h2>
+    </div>
+    <ul class="sources">
+      <li>
+        <span class="n">1</span>
+        <div><a href="https://arxiv.org/abs/2510.05430" target="_blank" rel="noopener">Active Semantic Perception</a><span class="desc">Tang and Chaudhari, UPenn GRASP, October 2025. The reference paper; the course description is a paraphrase of its abstract.</span></div>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <div><a href="https://github.com/grasp-lyrl/active_semantic_perception" target="_blank" rel="noopener">Official code repository</a><span class="desc">Full pipeline: Clio-based mapping fork, LLM completion, information gain, baselines, evaluation scripts.</span></div>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <div><a href="https://github.com/MIT-SPARK/Clio" target="_blank" rel="noopener">Clio</a><span class="desc">Real-time open-set 3D scene graphs, the mapping backbone the paper builds on.</span></div>
+      </li>
+      <li>
+        <span class="n">4</span>
+        <div><a href="https://arxiv.org/abs/2112.04063" target="_blank" rel="noopener">SSMI: semantic octree mapping and Shannon mutual information</a><span class="desc">Asgharivaskasi and Atanasov, IEEE T-RO 2023. The strongest published baseline to beat.</span></div>
+      </li>
+      <li>
+        <span class="n">5</span>
+        <div><a href="https://github.com/concept-graphs/concept-graphs" target="_blank" rel="noopener">ConceptGraphs</a><span class="desc">Pure-Python fallback mapping stack, ICRA 2024, with an HM3D config included.</span></div>
+      </li>
+      <li>
+        <span class="n">6</span>
+        <div><a href="https://matterport.com/habitat-matterport-3d-research-dataset" target="_blank" rel="noopener">HM3D dataset</a><span class="desc">1,000 real apartment scans, free for academic use via registration. The paper evaluates on scenes 00853, 00871, 00573.</span></div>
+      </li>
+      <li>
+        <span class="n">7</span>
+        <div><a href="https://aihabitat.org/" target="_blank" rel="noopener">Habitat simulator</a><span class="desc">Photorealistic embodied-AI simulator used for all evaluation in the paper.</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Course project brief, prepared for a three-person team.</span>
+    <span>Numbers verified against the papers and repositories linked above.</span>
+  </div>
+</footer>
+
+</body>
+</html>

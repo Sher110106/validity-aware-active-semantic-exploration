@@ -1,5 +1,9 @@
 # Prospective paired campaign v5 contract
 
+This is the historical offline contract that governed the campaign
+implementation. The campaign is now complete and frozen; this file is kept
+for provenance and must not be read as authorization for another paid run.
+
 ## Goal
 
 Provide an unattended, outcome-blind control plane for a prospective paired
@@ -20,7 +24,9 @@ test of that policy. DeepSeek LOSO probabilities are not Gemini probabilities.
   remains unresolved and is included conservatively after the pilot.
 - Reasoning: `thinking_level=medium`; no fallback.
 - User cap $200; broker ceiling $190 = normal $180 + recovery $10; $10 margin.
-- No paid calls, credentials, Tailscale, or launched runs in this branch.
+- The final campaign used the audited sibling runtime and is represented by
+  the evidence under `../../tyrone_mirror/`; this contract itself performs no
+  paid calls and authorizes no new launch.
 - Queue is fixed seed-major by the order in `tools/prospective_campaign/queue.py`.
 - Horizons are cumulative path-distance budgets `horizon_m` from 120/75/50/25
   meters, never minutes, selected before outcomes and common to every pair in a

@@ -1,0 +1,1245 @@
+{
+  "analysis_commit": "5c178e2",
+  "completion_replay": {
+    "api_calls": 0,
+    "complete_scene_tracks": 13,
+    "missing_member_files": [
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/2/habitat_scene_graph_new_graph_0.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_0.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_1.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_2.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_3.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_4.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_5.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_6.yaml",
+      "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_7.yaml"
+    ],
+    "model": "gemini-3.8-flash",
+    "stage_rows": [
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 22,
+            "removed_nodes": 4,
+            "unanimity_node_count": 34
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 23,
+            "removed_nodes": 0,
+            "unanimity_node_count": 38
+          }
+        },
+        "stage": 0
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 29,
+            "removed_nodes": 0,
+            "unanimity_node_count": 44
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 30,
+            "removed_nodes": 5,
+            "unanimity_node_count": 48
+          }
+        },
+        "stage": 1
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 3,
+            "missing_members": 1,
+            "observed_node_count": 46,
+            "removed_nodes": 3,
+            "unanimity_node_count": null
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 42,
+            "removed_nodes": 0,
+            "unanimity_node_count": 61
+          }
+        },
+        "stage": 2
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 50,
+            "removed_nodes": 2,
+            "unanimity_node_count": 72
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 53,
+            "removed_nodes": 0,
+            "unanimity_node_count": 76
+          }
+        },
+        "stage": 3
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 70,
+            "removed_nodes": 7,
+            "unanimity_node_count": 99
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 72,
+            "removed_nodes": 0,
+            "unanimity_node_count": 101
+          }
+        },
+        "stage": 4
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 95,
+            "removed_nodes": 3,
+            "unanimity_node_count": 134
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 94,
+            "removed_nodes": 6,
+            "unanimity_node_count": 133
+          }
+        },
+        "stage": 5
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 112,
+            "removed_nodes": 2,
+            "unanimity_node_count": 159
+          },
+          "scene1": {
+            "available_members": 4,
+            "missing_members": 0,
+            "observed_node_count": 113,
+            "removed_nodes": 3,
+            "unanimity_node_count": 160
+          }
+        },
+        "stage": 6
+      },
+      {
+        "scenes": {
+          "scene0": {
+            "available_members": 0,
+            "missing_members": 4,
+            "observed_node_count": 125,
+            "removed_nodes": 0,
+            "unanimity_node_count": null
+          },
+          "scene1": {
+            "available_members": 0,
+            "missing_members": 4,
+            "observed_node_count": 128,
+            "removed_nodes": 0,
+            "unanimity_node_count": null
+          }
+        },
+        "stage": 7
+      }
+    ],
+    "stages_scored": 8,
+    "thinking_level": "medium"
+  },
+  "decision_replay": {
+    "calibration_status": "LOSO_CALIBRATED",
+    "calibration_trained_on": [
+      "00573",
+      "00853",
+      "00871"
+    ],
+    "combined_beta": {
+      "beta_0.0": {
+        "max_displacement_m": 0.0,
+        "mean_displacement_m": 0.0,
+        "mean_ig": 4.115600766058138,
+        "nonzero_count": 0
+      },
+      "beta_1.0": {
+        "max_displacement_m": 5.386029163320634,
+        "mean_displacement_m": 1.297287458293068,
+        "mean_ig": 4.054718662556943,
+        "nonzero_count": 2
+      },
+      "beta_20.0": {
+        "max_displacement_m": 4.286561886667693,
+        "mean_displacement_m": 2.434589809653725,
+        "mean_ig": 3.511758369946822,
+        "nonzero_count": 6
+      },
+      "beta_5.0": {
+        "max_displacement_m": 4.286561886667693,
+        "mean_displacement_m": 2.434589809653725,
+        "mean_ig": 3.511758369946822,
+        "nonzero_count": 6
+      }
+    },
+    "displacement": {
+      "calibrated_support": {
+        "max_m": 5.919824726337718,
+        "mean_m": 2.5590118013466605,
+        "nonzero_count": 5
+      },
+      "filter_only": {
+        "max_m": 1.2964889318239277,
+        "mean_m": 0.1852127045462754,
+        "nonzero_count": 1
+      },
+      "null_control": {
+        "max_m": 0.0,
+        "mean_m": 0.0,
+        "nonzero_count": 0
+      }
+    },
+    "null_displacement_values": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "null_exact_match": true,
+    "reference_objects_visible": {
+      "calibrated_support": {
+        "max": 5,
+        "mean": 2.142857142857143,
+        "min": 0
+      },
+      "filter_only": {
+        "max": 4,
+        "mean": 1.8571428571428572,
+        "min": 0
+      },
+      "null_control": {
+        "max": 5,
+        "mean": 2.0,
+        "min": 0
+      },
+      "official": {
+        "max": 5,
+        "mean": 2.0,
+        "min": 0
+      }
+    },
+    "stage2_ig": {
+      "calibrated_support": {
+        "max": 4.604030173029466,
+        "mean": 4.003661205265739,
+        "min": 3.561278124459133
+      },
+      "filter_only": {
+        "max": 4.684196364505182,
+        "mean": 4.121074096173438,
+        "min": 3.561278124459133
+      },
+      "null_control": {
+        "max": 4.589835426734748,
+        "mean": 4.115600766058138,
+        "min": 3.5435644431995965
+      },
+      "official": {
+        "max": 4.589835426734748,
+        "mean": 4.115600766058138,
+        "min": 3.5435644431995965
+      }
+    },
+    "stages": 7,
+    "support_tau": 0.03225806451612903
+  },
+  "economics_and_artifacts": {
+    "allocation_rows": [
+      {
+        "allocation_id": "scientific-campaign-20260922",
+        "amount_microusd": 160000000,
+        "campaign_id": "scientific-campaign-20260922",
+        "created_at": 1789986760,
+        "phase_id": "scientific"
+      }
+    ],
+    "archive_records": 898,
+    "archive_usage_metrics": {
+      "candidatesTokenCount": {
+        "mean": 133.30957683741647,
+        "p50": 65.0,
+        "p95": 1076.15,
+        "sum": 119712
+      },
+      "promptTokenCount": {
+        "mean": 22718.835189309575,
+        "p50": 22175.5,
+        "p95": 33769.95,
+        "sum": 20401514
+      },
+      "thoughtsTokenCount": {
+        "mean": 832.054565701559,
+        "p50": 299.5,
+        "p95": 3276.1999999999994,
+        "sum": 747185
+      },
+      "totalTokenCount": {
+        "mean": 23684.19933184855,
+        "p50": 22925.5,
+        "p95": 35404.399999999994,
+        "sum": 21268411
+      }
+    },
+    "by_stage": {
+      "0": {
+        "candidate_tokens": 18001,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 134
+        },
+        "input_tokens": 2229695,
+        "requests": 134,
+        "reserved_usd": 9.227703,
+        "retries": 0,
+        "settled_usd": 2.087117,
+        "thought_tokens": 92598,
+        "total_tokens": 2340294
+      },
+      "1": {
+        "candidate_tokens": 18374,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 144
+        },
+        "input_tokens": 2787725,
+        "requests": 144,
+        "reserved_usd": 10.076938,
+        "retries": 0,
+        "settled_usd": 2.540419,
+        "thought_tokens": 101500,
+        "total_tokens": 2907599
+      },
+      "2": {
+        "candidate_tokens": 14259,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 109
+        },
+        "input_tokens": 2292244,
+        "requests": 109,
+        "reserved_usd": 7.751049,
+        "retries": 0,
+        "settled_usd": 2.105128,
+        "thought_tokens": 88638,
+        "total_tokens": 2395141
+      },
+      "3": {
+        "candidate_tokens": 16181,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 118
+        },
+        "input_tokens": 2427397,
+        "requests": 118,
+        "reserved_usd": 8.491669,
+        "retries": 0,
+        "settled_usd": 2.178027,
+        "thought_tokens": 79122,
+        "total_tokens": 2522700
+      },
+      "4": {
+        "candidate_tokens": 16706,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 123
+        },
+        "input_tokens": 2943830,
+        "requests": 123,
+        "reserved_usd": 9.127087,
+        "retries": 0,
+        "settled_usd": 2.628527,
+        "thought_tokens": 95444,
+        "total_tokens": 3055980
+      },
+      "5": {
+        "candidate_tokens": 18197,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 126
+        },
+        "input_tokens": 3877962,
+        "requests": 126,
+        "reserved_usd": 9.686408,
+        "retries": 0,
+        "settled_usd": 3.487372,
+        "thought_tokens": 136151,
+        "total_tokens": 4032310
+      },
+      "6": {
+        "candidate_tokens": 16247,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 117
+        },
+        "input_tokens": 3097284,
+        "requests": 117,
+        "reserved_usd": 9.235047,
+        "retries": 0,
+        "settled_usd": 2.616456,
+        "thought_tokens": 61996,
+        "total_tokens": 3175527
+      },
+      "7": {
+        "candidate_tokens": 1747,
+        "errors": {},
+        "finish_reasons": {
+          "STOP": 27
+        },
+        "input_tokens": 745377,
+        "requests": 27,
+        "reserved_usd": 2.153953,
+        "retries": 0,
+        "settled_usd": 0.909618,
+        "thought_tokens": 91736,
+        "total_tokens": 838860
+      }
+    },
+    "count_log": {
+      "errors": {},
+      "fallbacks": 0,
+      "real_count_max": 24099,
+      "real_count_mean": 17388.284853700516,
+      "real_count_min": 9346,
+      "records": 1162,
+      "used_mean": 19561.438037865748,
+      "used_minus_real_mean": 2173.1531841652322,
+      "used_over_real_mean": 1.1249748014543468
+    },
+    "request_state_counts": {
+      "SETTLED": 898
+    },
+    "v6_ledger": {
+      "candidate_tokens": 119712,
+      "errors": {},
+      "finish_reasons": {
+        "STOP": 898
+      },
+      "input_tokens": 20401514,
+      "requests": 898,
+      "reserved_usd": 65.749854,
+      "retries": 0,
+      "settled_usd": 18.552664,
+      "thought_tokens": 747185,
+      "total_tokens": 21268411
+    },
+    "v6_settled_ledger": {
+      "candidate_tokens": 119712,
+      "errors": {},
+      "finish_reasons": {
+        "STOP": 898
+      },
+      "input_tokens": 20401514,
+      "requests": 898,
+      "reserved_usd": 65.749854,
+      "retries": 0,
+      "settled_usd": 18.552664,
+      "thought_tokens": 747185,
+      "total_tokens": 21268411
+    }
+  },
+  "reference": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+  "run": "block_00069_42_v6",
+  "tracked_graph": {
+    "auc_to_19_5m": {
+      "f1": 0.2825894926819473,
+      "ged_normalized": 1.1189081477732794,
+      "precision": 0.7573385388649814,
+      "recall": 0.18355338691159553
+    },
+    "endpoint_stage6": {
+      "f1": 0.4522222222222222,
+      "ged_normalized": 1.1085526315789473,
+      "path_length_m": 19.499999999999904,
+      "precision": 0.6922348484848485,
+      "recall": 0.33582089552238803
+    },
+    "stages": [
+      {
+        "f1": 0.05797101449275362,
+        "ged": 166.5,
+        "ged_normalized": 1.0953947368421053,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 0.0,
+        "path_length_m": 0,
+        "per_graph": [
+          {
+            "f1": 0.05797101449275362,
+            "false_negatives": 65,
+            "false_positives": 0,
+            "ged": 166.0,
+            "ged_normalized": 1.0921052631578947,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 1.0,
+            "recall": 0.029850746268656716,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 2
+          },
+          {
+            "f1": 0.05797101449275362,
+            "false_negatives": 65,
+            "false_positives": 0,
+            "ged": 167.0,
+            "ged_normalized": 1.0986842105263157,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 1.0,
+            "recall": 0.029850746268656716,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 2
+          }
+        ],
+        "precision": 1.0,
+        "recall": 0.029850746268656716,
+        "stage": 0
+      },
+      {
+        "f1": 0.14666666666666667,
+        "ged": 167.0,
+        "ged_normalized": 1.098684210526316,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 19.58312463760376,
+        "path_length_m": 2.4750000000000005,
+        "per_graph": [
+          {
+            "f1": 0.16,
+            "false_negatives": 61,
+            "false_positives": 2,
+            "ged": 162.0,
+            "ged_normalized": 1.0657894736842106,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.75,
+            "recall": 0.08955223880597014,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 6
+          },
+          {
+            "f1": 0.13333333333333333,
+            "false_negatives": 62,
+            "false_positives": 3,
+            "ged": 172.0,
+            "ged_normalized": 1.131578947368421,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.625,
+            "recall": 0.07462686567164178,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 5
+          }
+        ],
+        "precision": 0.6875,
+        "recall": 0.08208955223880596,
+        "stage": 1
+      },
+      {
+        "f1": 0.19466936572199733,
+        "ged": 175.0,
+        "ged_normalized": 1.151315789473684,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 24.356358528137207,
+        "path_length_m": 3.8250000000000037,
+        "per_graph": [
+          {
+            "f1": 0.20512820512820515,
+            "false_negatives": 59,
+            "false_positives": 3,
+            "ged": 177.0,
+            "ged_normalized": 1.1644736842105263,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.7272727272727273,
+            "recall": 0.11940298507462686,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 8
+          },
+          {
+            "f1": 0.1842105263157895,
+            "false_negatives": 60,
+            "false_positives": 2,
+            "ged": 173.0,
+            "ged_normalized": 1.138157894736842,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.7777777777777778,
+            "recall": 0.1044776119402985,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 7
+          }
+        ],
+        "precision": 0.7525252525252526,
+        "recall": 0.11194029850746268,
+        "stage": 2
+      },
+      {
+        "f1": 0.2178201545290153,
+        "ged": 172.0,
+        "ged_normalized": 1.131578947368421,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 49.60807538032532,
+        "path_length_m": 6.075000000000009,
+        "per_graph": [
+          {
+            "f1": 0.2278481012658228,
+            "false_negatives": 58,
+            "false_positives": 3,
+            "ged": 174.0,
+            "ged_normalized": 1.144736842105263,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.75,
+            "recall": 0.13432835820895522,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 9
+          },
+          {
+            "f1": 0.20779220779220778,
+            "false_negatives": 59,
+            "false_positives": 2,
+            "ged": 170.0,
+            "ged_normalized": 1.118421052631579,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.8,
+            "recall": 0.11940298507462686,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 8
+          }
+        ],
+        "precision": 0.775,
+        "recall": 0.12686567164179105,
+        "stage": 3
+      },
+      {
+        "f1": 0.3210489014883061,
+        "ged": 170.0,
+        "ged_normalized": 1.1184210526315788,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 85.23449730873108,
+        "path_length_m": 11.174999999999983,
+        "per_graph": [
+          {
+            "f1": 0.3529411764705882,
+            "false_negatives": 52,
+            "false_positives": 3,
+            "ged": 166.0,
+            "ged_normalized": 1.0921052631578947,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.8333333333333334,
+            "recall": 0.22388059701492538,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 15
+          },
+          {
+            "f1": 0.2891566265060241,
+            "false_negatives": 55,
+            "false_positives": 4,
+            "ged": 174.0,
+            "ged_normalized": 1.144736842105263,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.75,
+            "recall": 0.1791044776119403,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 12
+          }
+        ],
+        "precision": 0.7916666666666667,
+        "recall": 0.20149253731343283,
+        "stage": 4
+      },
+      {
+        "f1": 0.3870967741935484,
+        "ged": 169.5,
+        "ged_normalized": 1.1151315789473686,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 115.75683116912842,
+        "path_length_m": 15.824999999999939,
+        "per_graph": [
+          {
+            "f1": 0.3870967741935484,
+            "false_negatives": 49,
+            "false_positives": 8,
+            "ged": 164.0,
+            "ged_normalized": 1.0789473684210527,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.6923076923076923,
+            "recall": 0.26865671641791045,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 18
+          },
+          {
+            "f1": 0.3870967741935484,
+            "false_negatives": 49,
+            "false_positives": 8,
+            "ged": 175.0,
+            "ged_normalized": 1.1513157894736843,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.6923076923076923,
+            "recall": 0.26865671641791045,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 18
+          }
+        ],
+        "precision": 0.6923076923076923,
+        "recall": 0.26865671641791045,
+        "stage": 5
+      },
+      {
+        "f1": 0.4522222222222222,
+        "ged": 168.5,
+        "ged_normalized": 1.1085526315789473,
+        "n_graphs_averaged": 2,
+        "navigation_time_s": 129.25009989738464,
+        "path_length_m": 19.499999999999904,
+        "per_graph": [
+          {
+            "f1": 0.45999999999999996,
+            "false_negatives": 44,
+            "false_positives": 10,
+            "ged": 164.0,
+            "ged_normalized": 1.0789473684210527,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.696969696969697,
+            "recall": 0.34328358208955223,
+            "source_file": "habitat_scene_graph_original_graph0.yaml",
+            "true_positives": 23
+          },
+          {
+            "f1": 0.4444444444444444,
+            "false_negatives": 45,
+            "false_positives": 10,
+            "ged": 173.0,
+            "ged_normalized": 1.138157894736842,
+            "ged_reference_edges": 76,
+            "ged_reference_nodes": 76,
+            "precision": 0.6875,
+            "recall": 0.3283582089552239,
+            "source_file": "habitat_scene_graph_original_graph1.yaml",
+            "true_positives": 22
+          }
+        ],
+        "precision": 0.6922348484848485,
+        "recall": 0.33582089552238803,
+        "stage": 6
+      }
+    ]
+  },
+  "validator_diagnostics": {
+    "accepted": 55,
+    "by_stage": {
+      "0": {
+        "aabb_conflict": 4
+      },
+      "1": {
+        "aabb_conflict": 5
+      },
+      "2": {
+        "aabb_conflict": 3
+      },
+      "3": {
+        "aabb_conflict": 2
+      },
+      "4": {
+        "aabb_conflict": 3,
+        "impassable_crossing": 4
+      },
+      "5": {
+        "aabb_conflict": 8,
+        "impassable_crossing": 1
+      },
+      "6": {
+        "aabb_conflict": 5
+      }
+    },
+    "completions_seen": 55,
+    "issue_counts": {
+      "aabb_conflict": 30,
+      "impassable_crossing": 5
+    },
+    "rejected": 0,
+    "removed_nodes": 35,
+    "tracks": [
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 4,
+        "scene": 0,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 0
+      },
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 5,
+        "scene": 1,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 1
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 3,
+        "scene": 0,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 2
+      },
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 2,
+        "scene": 0,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 3
+      },
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 1,
+        "scene": 0,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 1,
+        "scene": 0,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 1,
+        "scene": 0,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 4,
+        "scene": 0,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 4
+      },
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 1,
+        "scene": 0,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 2,
+        "scene": 0,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 2,
+        "scene": 1,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 4,
+        "scene": 1,
+        "stage": 5
+      },
+      {
+        "accepted": true,
+        "graph_id": 0,
+        "rejected": false,
+        "removed": 2,
+        "scene": 0,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 1,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 2,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 3,
+        "rejected": false,
+        "removed": 0,
+        "scene": 0,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 4,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 5,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 6,
+        "rejected": false,
+        "removed": 0,
+        "scene": 1,
+        "stage": 6
+      },
+      {
+        "accepted": true,
+        "graph_id": 7,
+        "rejected": false,
+        "removed": 3,
+        "scene": 1,
+        "stage": 6
+      }
+    ]
+  }
+}

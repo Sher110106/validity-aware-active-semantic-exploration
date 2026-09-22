@@ -1,0 +1,35 @@
+{
+  "run": "scene00069_seed42_25m_20260914_v3",
+  "backend": "deepseek/deepseek-v4.1-flash via OpenRouter",
+  "llm_call_counter": 250,
+  "llm_call_ceiling": 1000,
+  "completed_navigation_stages": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "cumulative_path_m": 25.27499999999985,
+  "stop_reason": "automatic watcher shutdown after reaching the 25 m checkpoint",
+  "completion_counts_by_stage": {
+    "0": 8,
+    "1": 8,
+    "2": 5,
+    "3": 7,
+    "4": 6
+  },
+  "path_auc_0_25_275m": {
+    "object_precision": 0.6714121775514811,
+    "object_recall": 0.24117542849550494,
+    "object_f1": 0.35155595493548747,
+    "normalized_ged": 1.074681789786038
+  },
+  "removed_node_counts_by_stage": {
+    "0": 121,
+    "1": 99,
+    "2": 40,
+    "3": 70,
+    "4": 77
+  }
+}

@@ -1,0 +1,12 @@
+# ATTEMPTS
+
+| Time | Attempt | Evidence | Result | Next adjustment |
+| --- | --- | --- | --- | --- |
+| 2026-09-16 10:46 IST | Audit existing protection and active run. | No cron/systemd supervisor; Docker command is `sleep infinity`; only one matrix run exists; direct LAN required because local Tailscale was stopped. | Existing setup is healthy but not permanently supervised. | Build a host-resident supervisor and adopt run 1. |
+| 2026-09-16 11:08 IST | Test policy, host boundary, and state machine; run a remote dry-run against run 1. | Focused tests passed and dry-run proposed `none`; PID 933 was unchanged. | Persist adoption and install the service. |
+| 2026-09-16 11:10 IST | Install the user service, enable linger, observe two cycles, and restart only the supervisor. | Service remained active; experiment PID and start time did not change. | Harden crash windows and pipeline identity checks. |
+| 2026-09-16 11:27 IST | Deploy the final supervisor and verify tests, logger routing, service lock, scene files, and source hashes. | 36 remote tests passed; pinned-checkout status and diff hashes are unchanged. | Leave the service active and report only milestones or blockers. |
+| 2026-09-16 13:27 IST | Reconcile completed run 1 into the queue. | Run 1 stopped cleanly at 125.325 m and validated, but host marker creation failed because Docker-owned run directories are root-only for writes. No API process remained and run 2 had not launched. | Stop the supervisor, write markers atomically through Docker, test, and replay the idempotent completion transition. |
+| 2026-09-16 13:28 IST | Deploy container-boundary marker fix and replay run-1 completion. | 37 tests passed; marker recorded 1,922 calls and final stage 27; container cleanup succeeded and queue advanced to run 2 without rerunning run 1. | Verify run 2 starts with frozen settings and leave supervision active. |
+| 2026-09-16 13:29 IST | Launch scene 00573 / seed 42. | The first launch failed before any LLM call because stale display-99 lock/socket files survive Docker restarts after Xvfb dies. | Archive the failed launch, add live-owner-checked display cleanup, and use the one approved retry. |
+| 2026-09-16 13:35 IST | Relaunch scene 00573 / seed 42 after display cleanup. | 39 tests passed; PID 985 is healthy, logger route and frozen settings match, and calls began increasing under the 3,000 cap. | Resume unattended supervision. |

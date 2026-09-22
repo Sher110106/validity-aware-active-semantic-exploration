@@ -1,0 +1,44 @@
+{
+  "run_dir": "/workspace/runs/scene00069_seed42_clean_20260913_v3/stages",
+  "ground_truth": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+  "stages": {
+    "0": {
+      "path_length_m": 0,
+      "navigation_time_s": 0.0,
+      "n_graphs_averaged": 2,
+      "precision": 1.0,
+      "recall": 0.06716417910447761,
+      "f1": 0.1257824726134585,
+      "ged": 162.0,
+      "ged_normalized": 1.0657894736842106,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 1.0,
+          "recall": 0.05970149253731343,
+          "f1": 0.11267605633802817,
+          "true_positives": 4,
+          "false_positives": 0,
+          "false_negatives": 63,
+          "ged": 167.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0986842105263157
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 1.0,
+          "recall": 0.07462686567164178,
+          "f1": 0.13888888888888887,
+          "true_positives": 5,
+          "false_positives": 0,
+          "false_negatives": 62,
+          "ged": 157.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0328947368421053
+        }
+      ]
+    }
+  }
+}

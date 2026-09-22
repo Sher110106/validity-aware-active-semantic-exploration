@@ -1,0 +1,595 @@
+{
+  "api_calls": 0,
+  "generated_by_commit": "5c178e2",
+  "model": "gemini-3.8-flash",
+  "path_checkpoint_m": 19.499999999999904,
+  "policy_definitions": {
+    "official_asp": "each member's own validated completion",
+    "validator_plus_unanimity_raw_tau_1_0": "validated completion with raw-support unanimity across the intended 4-member track; observed map preserved"
+  },
+  "records": [
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 22,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 34,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 31,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 29,
+              "rejected": false,
+              "removed_nodes": [
+                "23",
+                "24",
+                "27",
+                "28"
+              ]
+            },
+            {
+              "member_index": 3,
+              "node_count": 31,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 34,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 23,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 32,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 32,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 32,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 37,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 38,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 0
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 29,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 40,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 38,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 40,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 38,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 44,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 30,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 40,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 33,
+              "rejected": false,
+              "removed_nodes": [
+                "31",
+                "32",
+                "34",
+                "35",
+                "36"
+              ]
+            },
+            {
+              "member_index": 2,
+              "node_count": 38,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 42,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 48,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 1
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/2/habitat_scene_graph_new_graph_0.yaml"
+          ],
+          "observed_node_count": 46,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 56,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 55,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 52,
+              "rejected": false,
+              "removed_nodes": [
+                "50",
+                "53",
+                "54"
+              ]
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": null
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 42,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 51,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 51,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 51,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 51,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 61,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 2
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 50,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 59,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 59,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 58,
+              "rejected": false,
+              "removed_nodes": [
+                "52",
+                "53"
+              ]
+            },
+            {
+              "member_index": 3,
+              "node_count": 58,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 72,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 53,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 61,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 63,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 64,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 63,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 76,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 3
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 70,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 78,
+              "rejected": false,
+              "removed_nodes": [
+                "70"
+              ]
+            },
+            {
+              "member_index": 1,
+              "node_count": 79,
+              "rejected": false,
+              "removed_nodes": [
+                "75"
+              ]
+            },
+            {
+              "member_index": 2,
+              "node_count": 79,
+              "rejected": false,
+              "removed_nodes": [
+                "70"
+              ]
+            },
+            {
+              "member_index": 3,
+              "node_count": 75,
+              "rejected": false,
+              "removed_nodes": [
+                "70",
+                "75",
+                "76",
+                "78"
+              ]
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 99,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 72,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 83,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 81,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 80,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 82,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 101,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 4
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 95,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 104,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 107,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 106,
+              "rejected": false,
+              "removed_nodes": [
+                "95"
+              ]
+            },
+            {
+              "member_index": 3,
+              "node_count": 103,
+              "rejected": false,
+              "removed_nodes": [
+                "96",
+                "98"
+              ]
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 134,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 94,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 104,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 103,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 101,
+              "rejected": false,
+              "removed_nodes": [
+                "95",
+                "97"
+              ]
+            },
+            {
+              "member_index": 3,
+              "node_count": 104,
+              "rejected": false,
+              "removed_nodes": [
+                "96",
+                "97",
+                "98",
+                "99"
+              ]
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 133,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 5
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [],
+          "observed_node_count": 112,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 119,
+              "rejected": false,
+              "removed_nodes": [
+                "114",
+                "115"
+              ]
+            },
+            {
+              "member_index": 1,
+              "node_count": 120,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 122,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 121,
+              "rejected": false,
+              "removed_nodes": []
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 159,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        },
+        "scene1": {
+          "missing_member_files": [],
+          "observed_node_count": 113,
+          "official_asp": [
+            {
+              "member_index": 0,
+              "node_count": 123,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 1,
+              "node_count": 124,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 2,
+              "node_count": 122,
+              "rejected": false,
+              "removed_nodes": []
+            },
+            {
+              "member_index": 3,
+              "node_count": 118,
+              "rejected": false,
+              "removed_nodes": [
+                "114",
+                "117",
+                "118"
+              ]
+            }
+          ],
+          "validator_plus_unanimity_raw_tau_1_0": {
+            "node_count": 160,
+            "policy_name": "validator_plus_unanimity_raw_tau_1_0"
+          }
+        }
+      },
+      "stage": 6
+    },
+    {
+      "score": {
+        "scene0": {
+          "missing_member_files": [
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_0.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_1.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_2.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_3.yaml"
+          ],
+          "observed_node_count": 125,
+          "official_asp": [],
+          "validator_plus_unanimity_raw_tau_1_0": null
+        },
+        "scene1": {
+          "missing_member_files": [
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_4.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_5.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_6.yaml",
+            "/workspace/runs/prospective_gemini/scientific_campaign_20260922/blocks/block_00069_42_v6/stages/7/habitat_scene_graph_new_graph_7.yaml"
+          ],
+          "observed_node_count": 128,
+          "official_asp": [],
+          "validator_plus_unanimity_raw_tau_1_0": null
+        }
+      },
+      "stage": 7
+    }
+  ],
+  "run": "block_00069_42_v6",
+  "stages_scored": 8,
+  "thinking_level": "medium"
+}

@@ -1,0 +1,4265 @@
+{
+  "run_dir": "/workspace/runs/scene00853_seed42_calib_high32k/stages",
+  "reference": "/workspace/runs/scene00853_frontier_reference/stages/33/habitat_scene_graph_original_graph0.yaml",
+  "tau_grid": [
+    0.0,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "support_denominator": {
+    "mode": "expected_per_scene_track",
+    "expected_size": 4,
+    "note": "support = hits / 4 always, never hits / (surviving completion count) - see support_policy.py's module docstring. Any JSON without this field predates the 2026-09-14 denominator fix (REVIEW_2026-09-14.md) and used hits / len(available), which inflates support on stages with more parsing failures."
+  },
+  "calibrated_tau_grid": [
+    {
+      "raw_tau": 0.0,
+      "calibrated_cutoff": 0.006198347107438017
+    },
+    {
+      "raw_tau": 0.5,
+      "calibrated_cutoff": 0.013245033112582781
+    },
+    {
+      "raw_tau": 0.75,
+      "calibrated_cutoff": 0.04
+    },
+    {
+      "raw_tau": 1.0,
+      "calibrated_cutoff": 0.5
+    }
+  ],
+  "calibration": {
+    "method": "isotonic_leave_one_scene_out",
+    "fitted_on_scenes": [
+      "00069",
+      "00573",
+      "00871"
+    ],
+    "held_out": true,
+    "held_out_scene": "00853",
+    "loso_scenes_available": 4,
+    "loso_scenes_required": 4,
+    "n_training_samples": 2124,
+    "n_training_positives": 21,
+    "by_kind": {
+      "room": {
+        "n_training_samples": 14,
+        "n_training_positives": 8
+      },
+      "object": {
+        "n_training_samples": 2110,
+        "n_training_positives": 13
+      }
+    },
+    "by_kind_note": "n_training_samples/n_training_positives above are POOLED (room+object together) and describe the fitted calibrator's own training set. by_kind splits the same training samples by Hypothesis.kind for diagnostic honesty only - the fitted calibrator itself is still the pooled one (see fit_loso_calibrator's docstring, audit finding H1).",
+    "status": "LOSO_CALIBRATED"
+  },
+  "note": "official/filter_only score the LLM's raw ensemble predictions (never merged into the pipeline's own tracked graph - see module docstring) filtered by each policy, not the pipeline's real navigation trajectory. support_threshold_tau_* and filter_plus_support_threshold_tau_* are always UNCALIBRATED raw-support cutoffs - do not read them as the paper's proposed calibration result regardless of 'calibration' below. support_threshold_calibrated_tau_* and filter_plus_support_threshold_calibrated_tau_* are present only when 'calibration'.status == 'LOSO_CALIBRATED', and ARE the calibration result: the same raw-support levels as *_tau_*, re-expressed as calibrated-probability cutoffs via a real leave-one-scene-out fit (see 'calibration' for which scenes trained it and 'calibrated_tau_grid' for the raw-tau -> cutoff mapping used).",
+  "stages": [
+    {
+      "stage": 0,
+      "path_m": 0,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.18898809523809523,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.061237244897959175,
+              "ged": 204.0,
+              "normalized_ged": 1.0515463917525774,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_only": {
+              "object_precision": 0.281650641025641,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06424577928337327,
+              "ged": 199.5,
+              "normalized_ged": 1.0283505154639174,
+              "object_tp": 3.0,
+              "room_tp": 2.5
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.18898809523809523,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.061237244897959175,
+              "ged": 204.0,
+              "normalized_ged": 1.0515463917525774,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.281650641025641,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06424577928337327,
+              "ged": 199.5,
+              "normalized_ged": 1.0283505154639174,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.6375000000000001,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06916599839615076,
+              "ged": 192.75,
+              "normalized_ged": 0.9935567010309279,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.675,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0693664795509222,
+              "ged": 192.5,
+              "normalized_ged": 0.9922680412371134,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7125,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06956696070569365,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7125,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06956696070569365,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.75,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0697674418604651,
+              "ged": 192.0,
+              "normalized_ged": 0.9896907216494846,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.75,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0697674418604651,
+              "ged": 192.0,
+              "normalized_ged": 0.9896907216494846,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.18898809523809523,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.061237244897959175,
+              "ged": 204.0,
+              "normalized_ged": 1.0515463917525774,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.281650641025641,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06424577928337327,
+              "ged": 199.5,
+              "normalized_ged": 1.0283505154639174,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6375000000000001,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06916599839615076,
+              "ged": 192.75,
+              "normalized_ged": 0.9935567010309279,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.675,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0693664795509222,
+              "ged": 192.5,
+              "normalized_ged": 0.9922680412371134,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7125,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06956696070569365,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7125,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.06956696070569365,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.75,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0697674418604651,
+              "ged": 192.0,
+              "normalized_ged": 0.9896907216494846,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.75,
+              "object_recall": 0.036585365853658534,
+              "object_f1": 0.0697674418604651,
+              "ged": 192.0,
+              "normalized_ged": 0.9896907216494846,
+              "object_tp": 3.0,
+              "room_tp": 2.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 3,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            7
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.15393939393939396,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04129073037594358,
+              "ged": 202.33333333333334,
+              "normalized_ged": 1.042955326460481,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_only": {
+              "object_precision": 0.45128205128205123,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04440085721550253,
+              "ged": 197.33333333333334,
+              "normalized_ged": 1.0171821305841924,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.15393939393939396,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04129073037594358,
+              "ged": 202.33333333333334,
+              "normalized_ged": 1.042955326460481,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.45128205128205123,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04440085721550253,
+              "ged": 195.33333333333334,
+              "normalized_ged": 1.006872852233677,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.15393939393939396,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04129073037594358,
+              "ged": 202.33333333333334,
+              "normalized_ged": 1.042955326460481,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.45128205128205123,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.04440085721550253,
+              "ged": 195.33333333333334,
+              "normalized_ged": 1.006872852233677,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 1.0,
+              "object_recall": 0.02439024390243903,
+              "object_f1": 0.047619047619047616,
+              "ged": 189.0,
+              "normalized_ged": 0.9742268041237113,
+              "object_tp": 2.0,
+              "room_tp": 3.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.17146374458874458,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05126398763695138,
+          "ged": 203.16666666666669,
+          "normalized_ged": 1.047250859106529,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_only": {
+          "object_precision": 0.3664663461538461,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.054323318249437896,
+          "ged": 198.41666666666669,
+          "normalized_ged": 1.022766323024055,
+          "object_tp": 2.5,
+          "room_tp": 2.75
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.17146374458874458,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05126398763695138,
+          "ged": 203.16666666666669,
+          "normalized_ged": 1.047250859106529,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.3664663461538461,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.054323318249437896,
+          "ged": 197.41666666666669,
+          "normalized_ged": 1.0176116838487972,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.8187500000000001,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05839252300759919,
+          "ged": 190.875,
+          "normalized_ged": 0.9838917525773196,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.8375,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05849276358498491,
+          "ged": 190.75,
+          "normalized_ged": 0.9832474226804124,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.85625,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.058593004162370635,
+          "ged": 190.625,
+          "normalized_ged": 0.9826030927835052,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.85625,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.058593004162370635,
+          "ged": 190.625,
+          "normalized_ged": 0.9826030927835052,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.875,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05869324473975636,
+          "ged": 190.5,
+          "normalized_ged": 0.981958762886598,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.875,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05869324473975636,
+          "ged": 190.5,
+          "normalized_ged": 0.981958762886598,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.17146374458874458,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05126398763695138,
+          "ged": 203.16666666666669,
+          "normalized_ged": 1.047250859106529,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.3664663461538461,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.054323318249437896,
+          "ged": 197.41666666666669,
+          "normalized_ged": 1.0176116838487972,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.8187500000000001,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05839252300759919,
+          "ged": 190.875,
+          "normalized_ged": 0.9838917525773196,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.8375,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05849276358498491,
+          "ged": 190.75,
+          "normalized_ged": 0.9832474226804124,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.85625,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.058593004162370635,
+          "ged": 190.625,
+          "normalized_ged": 0.9826030927835052,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.85625,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.058593004162370635,
+          "ged": 190.625,
+          "normalized_ged": 0.9826030927835052,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.875,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05869324473975636,
+          "ged": 190.5,
+          "normalized_ged": 0.981958762886598,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.875,
+          "object_recall": 0.03048780487804878,
+          "object_f1": 0.05869324473975636,
+          "ged": 190.5,
+          "normalized_ged": 0.981958762886598,
+          "object_tp": 2.5,
+          "room_tp": 2.5
+        }
+      }
+    },
+    {
+      "stage": 1,
+      "path_m": 2.8500000000000014,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.3906166932482722,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.15580134791418185,
+              "ged": 191.75,
+              "normalized_ged": 0.9884020618556701,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.5107142857142857,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.1633653461384554,
+              "ged": 187.5,
+              "normalized_ged": 0.9664948453608249,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.3906166932482722,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.15580134791418185,
+              "ged": 191.75,
+              "normalized_ged": 0.9884020618556701,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5107142857142857,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.1633653461384554,
+              "ged": 187.0,
+              "normalized_ged": 0.963917525773196,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.3906166932482722,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.15580134791418185,
+              "ged": 191.75,
+              "normalized_ged": 0.9884020618556701,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5107142857142857,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.1633653461384554,
+              "ged": 187.0,
+              "normalized_ged": 0.963917525773196,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.0975609756097561,
+              "object_f1": 0.17582417582417584,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 3,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            5
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.5286195286195287,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16020457529891494,
+              "ged": 192.33333333333334,
+              "normalized_ged": 0.9914089347079038,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.5543345543345543,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16465787480475616,
+              "ged": 190.33333333333334,
+              "normalized_ged": 0.9810996563573884,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.5286195286195287,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16020457529891494,
+              "ged": 192.33333333333334,
+              "normalized_ged": 0.9914089347079038,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.6284086284086284,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16652834476033251,
+              "ged": 188.33333333333334,
+              "normalized_ged": 0.970790378006873,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.8053872053872054,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17392674335170832,
+              "ged": 184.0,
+              "normalized_ged": 0.9484536082474225,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.8350168350168351,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.1745637874670133,
+              "ged": 183.66666666666666,
+              "normalized_ged": 0.9467353951890033,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5286195286195287,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16020457529891494,
+              "ged": 192.33333333333334,
+              "normalized_ged": 0.9914089347079038,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.6284086284086284,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.16652834476033251,
+              "ged": 188.33333333333334,
+              "normalized_ged": 0.970790378006873,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8053872053872054,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17392674335170832,
+              "ged": 184.0,
+              "normalized_ged": 0.9484536082474225,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8350168350168351,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.1745637874670133,
+              "ged": 183.66666666666666,
+              "normalized_ged": 0.9467353951890033,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8888888888888888,
+              "object_recall": 0.09756097560975611,
+              "object_f1": 0.17582417582417584,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721648,
+              "object_tp": 8.0,
+              "room_tp": 4.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.4596181109339004,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.1580029616065484,
+          "ged": 192.04166666666669,
+          "normalized_ged": 0.989905498281787,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_only": {
+          "object_precision": 0.5325244200244199,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.16401161047160578,
+          "ged": 188.91666666666669,
+          "normalized_ged": 0.9737972508591066,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.4596181109339004,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.1580029616065484,
+          "ged": 192.04166666666669,
+          "normalized_ged": 0.989905498281787,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.5695614570614571,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.16494684544939398,
+          "ged": 187.66666666666669,
+          "normalized_ged": 0.9673539518900345,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.8471380471380472,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.1748754595879421,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.861952861952862,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17519398164559458,
+          "ged": 181.83333333333331,
+          "normalized_ged": 0.9372852233676976,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.4596181109339004,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.1580029616065484,
+          "ged": 192.04166666666669,
+          "normalized_ged": 0.989905498281787,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.5695614570614571,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.16494684544939398,
+          "ged": 187.66666666666669,
+          "normalized_ged": 0.9673539518900345,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.8471380471380472,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.1748754595879421,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.861952861952862,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17519398164559458,
+          "ged": 181.83333333333331,
+          "normalized_ged": 0.9372852233676976,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8888888888888888,
+          "object_recall": 0.0975609756097561,
+          "object_f1": 0.17582417582417584,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 8.0,
+          "room_tp": 4.0
+        }
+      }
+    },
+    {
+      "stage": 2,
+      "path_m": 4.800000000000006,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.544973544973545,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19662634615825525,
+              "ged": 186.0,
+              "normalized_ged": 0.9587628865979382,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.46642695539754364,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19251484744248987,
+              "ged": 188.5,
+              "normalized_ged": 0.9716494845360826,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.544973544973545,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19662634615825525,
+              "ged": 186.0,
+              "normalized_ged": 0.9587628865979382,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5786064425770309,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19941004050789568,
+              "ged": 184.5,
+              "normalized_ged": 0.9510309278350515,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7458791208791209,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2094527933949812,
+              "ged": 179.5,
+              "normalized_ged": 0.9252577319587629,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7577838827838828,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.20998973497573722,
+              "ged": 179.25,
+              "normalized_ged": 0.9239690721649485,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.544973544973545,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19662634615825525,
+              "ged": 186.0,
+              "normalized_ged": 0.9587628865979382,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5786064425770309,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19941004050789568,
+              "ged": 184.5,
+              "normalized_ged": 0.9510309278350515,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7458791208791209,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2094527933949812,
+              "ged": 179.5,
+              "normalized_ged": 0.9252577319587629,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7577838827838828,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.20998973497573722,
+              "ged": 179.25,
+              "normalized_ged": 0.9239690721649485,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8333333333333334,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.21276595744680848,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.4902890587673196,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.1924341439835783,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.4413796348578957,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19096863197897587,
+              "ged": 194.25,
+              "normalized_ged": 1.0012886597938144,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.4902890587673196,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.1924341439835783,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5336873271655881,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19687123896372746,
+              "ged": 189.75,
+              "normalized_ged": 0.9780927835051547,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7298534798534798,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2088928829806475,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7298534798534798,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2088928829806475,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7554945054945055,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2099780701754386,
+              "ged": 183.25,
+              "normalized_ged": 0.9445876288659794,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7554945054945055,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2099780701754386,
+              "ged": 183.25,
+              "normalized_ged": 0.9445876288659794,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7692307692307693,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2105263157894737,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7692307692307693,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2105263157894737,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.4902890587673196,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.1924341439835783,
+              "ged": 192.25,
+              "normalized_ged": 0.990979381443299,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5336873271655881,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.19687123896372746,
+              "ged": 189.75,
+              "normalized_ged": 0.9780927835051547,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7298534798534798,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2088928829806475,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7298534798534798,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2088928829806475,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7554945054945055,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2099780701754386,
+              "ged": 183.25,
+              "normalized_ged": 0.9445876288659794,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7554945054945055,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2099780701754386,
+              "ged": 183.25,
+              "normalized_ged": 0.9445876288659794,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7692307692307693,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2105263157894737,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7692307692307693,
+              "object_recall": 0.12195121951219512,
+              "object_f1": 0.2105263157894737,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 10.0,
+              "room_tp": 4.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.5176313018704323,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19453024507091676,
+          "ged": 189.125,
+          "normalized_ged": 0.9748711340206186,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_only": {
+          "object_precision": 0.45390329512771965,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19174173971073288,
+          "ged": 191.375,
+          "normalized_ged": 0.9864690721649485,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.5176313018704323,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19453024507091676,
+          "ged": 189.125,
+          "normalized_ged": 0.9748711340206186,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.5561468848713095,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19814063973581159,
+          "ged": 187.125,
+          "normalized_ged": 0.9645618556701031,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.7378663003663004,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.20917283818781435,
+          "ged": 181.625,
+          "normalized_ged": 0.9362113402061856,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.7438186813186813,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.20944130897819235,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.7944139194139195,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21137201381112353,
+          "ged": 180.625,
+          "normalized_ged": 0.9310567010309279,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.7944139194139195,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21137201381112353,
+          "ged": 180.625,
+          "normalized_ged": 0.9310567010309279,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.8012820512820513,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21164613661814108,
+          "ged": 180.5,
+          "normalized_ged": 0.9304123711340206,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.8012820512820513,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21164613661814108,
+          "ged": 180.5,
+          "normalized_ged": 0.9304123711340206,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.5176313018704323,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19453024507091676,
+          "ged": 189.125,
+          "normalized_ged": 0.9748711340206186,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.5561468848713095,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.19814063973581159,
+          "ged": 187.125,
+          "normalized_ged": 0.9645618556701031,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7378663003663004,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.20917283818781435,
+          "ged": 181.625,
+          "normalized_ged": 0.9362113402061856,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7438186813186813,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.20944130897819235,
+          "ged": 181.5,
+          "normalized_ged": 0.9355670103092784,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7944139194139195,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21137201381112353,
+          "ged": 180.625,
+          "normalized_ged": 0.9310567010309279,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7944139194139195,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21137201381112353,
+          "ged": 180.625,
+          "normalized_ged": 0.9310567010309279,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8012820512820513,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21164613661814108,
+          "ged": 180.5,
+          "normalized_ged": 0.9304123711340206,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8012820512820513,
+          "object_recall": 0.12195121951219512,
+          "object_f1": 0.21164613661814108,
+          "ged": 180.5,
+          "normalized_ged": 0.9304123711340206,
+          "object_tp": 10.0,
+          "room_tp": 4.0
+        }
+      }
+    },
+    {
+      "stage": 3,
+      "path_m": 8.175000000000011,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.6468253968253967,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2345913261050876,
+              "ged": 182.75,
+              "normalized_ged": 0.9420103092783505,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.5703968253968253,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.23022441149967884,
+              "ged": 185.0,
+              "normalized_ged": 0.9536082474226804,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.6468253968253967,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2345913261050876,
+              "ged": 182.75,
+              "normalized_ged": 0.9420103092783505,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.6646825396825397,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.23664964514453868,
+              "ged": 181.75,
+              "normalized_ged": 0.9368556701030928,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.8035714285714286,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2474489795918367,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.8035714285714286,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2474489795918367,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.8428571428571429,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24935567010309279,
+              "ged": 176.25,
+              "normalized_ged": 0.9085051546391752,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.8428571428571429,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24935567010309279,
+              "ged": 176.25,
+              "normalized_ged": 0.9085051546391752,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.8571428571428571,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.25,
+              "ged": 176.0,
+              "normalized_ged": 0.9072164948453608,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.8571428571428571,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.25,
+              "ged": 176.0,
+              "normalized_ged": 0.9072164948453608,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.6468253968253967,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2345913261050876,
+              "ged": 182.75,
+              "normalized_ged": 0.9420103092783505,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.6646825396825397,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.23664964514453868,
+              "ged": 181.75,
+              "normalized_ged": 0.9368556701030928,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8035714285714286,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2474489795918367,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.8035714285714286,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.2474489795918367,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8428571428571429,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24935567010309279,
+              "ged": 176.25,
+              "normalized_ged": 0.9085051546391752,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8428571428571429,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24935567010309279,
+              "ged": 176.25,
+              "normalized_ged": 0.9085051546391752,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8571428571428571,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.25,
+              "ged": 176.0,
+              "normalized_ged": 0.9072164948453608,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8571428571428571,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.25,
+              "ged": 176.0,
+              "normalized_ged": 0.9072164948453608,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.6752232142857143,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22012061403508776,
+              "ged": 187.5,
+              "normalized_ged": 0.9664948453608249,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.4691485507246377,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.20855422937727647,
+              "ged": 192.75,
+              "normalized_ged": 0.9935567010309279,
+              "object_tp": 11.0,
+              "room_tp": 4.25
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.6752232142857143,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22012061403508776,
+              "ged": 187.5,
+              "normalized_ged": 0.9664948453608249,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.6992857142857143,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2232768691588785,
+              "ged": 185.75,
+              "normalized_ged": 0.9574742268041236,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7510504201680672,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22743055555555558,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7510504201680672,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22743055555555558,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.6752232142857143,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22012061403508776,
+              "ged": 187.5,
+              "normalized_ged": 0.9664948453608249,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.6992857142857143,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2232768691588785,
+              "ged": 185.75,
+              "normalized_ged": 0.9574742268041236,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7510504201680672,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22743055555555558,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7510504201680672,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22743055555555558,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7857142857142857,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22916666666666669,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.6610243055555556,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.22735597007008768,
+          "ged": 185.125,
+          "normalized_ged": 0.9542525773195877,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_only": {
+          "object_precision": 0.5197726880607315,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.21938932043847764,
+          "ged": 188.875,
+          "normalized_ged": 0.9735824742268041,
+          "object_tp": 11.5,
+          "room_tp": 4.125
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.6610243055555556,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.22735597007008768,
+          "ged": 185.125,
+          "normalized_ged": 0.9542525773195877,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.6819841269841269,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.2299632571517086,
+          "ged": 183.75,
+          "normalized_ged": 0.9471649484536082,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.7773109243697479,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23743976757369614,
+          "ged": 180.375,
+          "normalized_ged": 0.9297680412371134,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.7773109243697479,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23743976757369614,
+          "ged": 180.375,
+          "normalized_ged": 0.9297680412371134,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.8142857142857143,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23926116838487974,
+          "ged": 179.625,
+          "normalized_ged": 0.9259020618556701,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.8142857142857143,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23926116838487974,
+          "ged": 179.625,
+          "normalized_ged": 0.9259020618556701,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.8214285714285714,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23958333333333334,
+          "ged": 179.5,
+          "normalized_ged": 0.9252577319587629,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.8214285714285714,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23958333333333334,
+          "ged": 179.5,
+          "normalized_ged": 0.9252577319587629,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.6610243055555556,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.22735597007008768,
+          "ged": 185.125,
+          "normalized_ged": 0.9542525773195877,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.6819841269841269,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.2299632571517086,
+          "ged": 183.75,
+          "normalized_ged": 0.9471649484536082,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7773109243697479,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23743976757369614,
+          "ged": 180.375,
+          "normalized_ged": 0.9297680412371134,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7773109243697479,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23743976757369614,
+          "ged": 180.375,
+          "normalized_ged": 0.9297680412371134,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.8142857142857143,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23926116838487974,
+          "ged": 179.625,
+          "normalized_ged": 0.9259020618556701,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.8142857142857143,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23926116838487974,
+          "ged": 179.625,
+          "normalized_ged": 0.9259020618556701,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8214285714285714,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23958333333333334,
+          "ged": 179.5,
+          "normalized_ged": 0.9252577319587629,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.8214285714285714,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23958333333333334,
+          "ged": 179.5,
+          "normalized_ged": 0.9252577319587629,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        }
+      }
+    },
+    {
+      "stage": 4,
+      "path_m": 12.374999999999972,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 2,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            1,
+            3
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.40404040404040403,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.21443956920622256,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.452991452991453,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.22120285423037717,
+              "ged": 196.0,
+              "normalized_ged": 1.0103092783505154,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.40404040404040403,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.21443956920622256,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.452991452991453,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.22120285423037717,
+              "ged": 193.5,
+              "normalized_ged": 0.9974226804123711,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.75,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24489795918367344,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.775,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24616031979802228,
+              "ged": 182.5,
+              "normalized_ged": 0.9407216494845361,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.40404040404040403,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.21443956920622256,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.452991452991453,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.22120285423037717,
+              "ged": 193.5,
+              "normalized_ged": 0.9974226804123711,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.75,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24489795918367344,
+              "ged": 183.0,
+              "normalized_ged": 0.9432989690721649,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.775,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24616031979802228,
+              "ged": 182.5,
+              "normalized_ged": 0.9407216494845361,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.8,
+              "object_recall": 0.14634146341463414,
+              "object_f1": 0.24742268041237112,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 12.0,
+              "room_tp": 4.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.3754294380587484,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.1964921015178731,
+              "ged": 197.25,
+              "normalized_ged": 1.0167525773195876,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.4561125034809246,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.20532076640185895,
+              "ged": 193.75,
+              "normalized_ged": 0.9987113402061856,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.3754294380587484,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.1964921015178731,
+              "ged": 197.25,
+              "normalized_ged": 1.0167525773195876,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.4561125034809246,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.20532076640185895,
+              "ged": 192.5,
+              "normalized_ged": 0.9922680412371134,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.659640522875817,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22281214203894617,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.659640522875817,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22281214203894617,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.721875,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22622554176309698,
+              "ged": 182.25,
+              "normalized_ged": 0.9394329896907216,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.721875,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22622554176309698,
+              "ged": 182.25,
+              "normalized_ged": 0.9394329896907216,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7333333333333333,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2268041237113402,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7333333333333333,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2268041237113402,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.3754294380587484,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.1964921015178731,
+              "ged": 197.25,
+              "normalized_ged": 1.0167525773195876,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.4561125034809246,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.20532076640185895,
+              "ged": 192.5,
+              "normalized_ged": 0.9922680412371134,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.659640522875817,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22281214203894617,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.659640522875817,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22281214203894617,
+              "ged": 183.75,
+              "normalized_ged": 0.9471649484536082,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.721875,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22622554176309698,
+              "ged": 182.25,
+              "normalized_ged": 0.9394329896907216,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.721875,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.22622554176309698,
+              "ged": 182.25,
+              "normalized_ged": 0.9394329896907216,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7333333333333333,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2268041237113402,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7333333333333333,
+              "object_recall": 0.13414634146341464,
+              "object_f1": 0.2268041237113402,
+              "ged": 182.0,
+              "normalized_ged": 0.9381443298969072,
+              "object_tp": 11.0,
+              "room_tp": 4.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.3897349210495762,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.20546583536204782,
+          "ged": 197.125,
+          "normalized_ged": 1.0161082474226804,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_only": {
+          "object_precision": 0.45455197823618876,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.21326181031611807,
+          "ged": 194.875,
+          "normalized_ged": 1.0045103092783505,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.3897349210495762,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.20546583536204782,
+          "ged": 197.125,
+          "normalized_ged": 1.0161082474226804,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.45455197823618876,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.21326181031611807,
+          "ged": 193.0,
+          "normalized_ged": 0.9948453608247423,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.7048202614379084,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.2338550506113098,
+          "ged": 183.375,
+          "normalized_ged": 0.9452319587628866,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.7173202614379085,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23448623091848422,
+          "ged": 183.125,
+          "normalized_ged": 0.9439432989690721,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.7609375,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23682411108773405,
+          "ged": 182.125,
+          "normalized_ged": 0.9387886597938144,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.7609375,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23682411108773405,
+          "ged": 182.125,
+          "normalized_ged": 0.9387886597938144,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.7666666666666666,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23711340206185566,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.7666666666666666,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23711340206185566,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.3897349210495762,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.20546583536204782,
+          "ged": 197.125,
+          "normalized_ged": 1.0161082474226804,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.45455197823618876,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.21326181031611807,
+          "ged": 193.0,
+          "normalized_ged": 0.9948453608247423,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7048202614379084,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.2338550506113098,
+          "ged": 183.375,
+          "normalized_ged": 0.9452319587628866,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7173202614379085,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23448623091848422,
+          "ged": 183.125,
+          "normalized_ged": 0.9439432989690721,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7609375,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23682411108773405,
+          "ged": 182.125,
+          "normalized_ged": 0.9387886597938144,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7609375,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23682411108773405,
+          "ged": 182.125,
+          "normalized_ged": 0.9387886597938144,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7666666666666666,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23711340206185566,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7666666666666666,
+          "object_recall": 0.1402439024390244,
+          "object_f1": 0.23711340206185566,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 11.5,
+          "room_tp": 4.0
+        }
+      }
+    },
+    {
+      "stage": 5,
+      "path_m": 17.92499999999992,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.4167629471977298,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24020093986126595,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_only": {
+              "object_precision": 0.5021482400514659,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.25461826459228426,
+              "ged": 190.5,
+              "normalized_ged": 0.981958762886598,
+              "object_tp": 14.0,
+              "room_tp": 3.25
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.4167629471977298,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24020093986126595,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5021482400514659,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.25461826459228426,
+              "ged": 190.0,
+              "normalized_ged": 0.9793814432989691,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7573099415204678,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27861386138613864,
+              "ged": 180.5,
+              "normalized_ged": 0.9304123711340206,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.4167629471977298,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24020093986126595,
+              "ged": 197.0,
+              "normalized_ged": 1.0154639175257731,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5021482400514659,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.25461826459228426,
+              "ged": 190.0,
+              "normalized_ged": 0.9793814432989691,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7573099415204678,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27861386138613864,
+              "ged": 180.5,
+              "normalized_ged": 0.9304123711340206,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7777777777777778,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.27999999999999997,
+              "ged": 180.0,
+              "normalized_ged": 0.9278350515463918,
+              "object_tp": 14.0,
+              "room_tp": 3.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 3,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            6
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.34775413711583925,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.21618975926586917,
+              "ged": 199.66666666666666,
+              "normalized_ged": 1.029209621993127,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.40066137566137566,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2240765501796552,
+              "ged": 196.33333333333334,
+              "normalized_ged": 1.0120274914089347,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.34775413711583925,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.21618975926586917,
+              "ged": 199.66666666666666,
+              "normalized_ged": 1.029209621993127,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.40066137566137566,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2240765501796552,
+              "ged": 195.66666666666666,
+              "normalized_ged": 1.0085910652920962,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7363834422657952,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26087542087542087,
+              "ged": 178.66666666666666,
+              "normalized_ged": 0.9209621993127147,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7363834422657952,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26087542087542087,
+              "ged": 178.66666666666666,
+              "normalized_ged": 0.9209621993127147,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.34775413711583925,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.21618975926586917,
+              "ged": 199.66666666666666,
+              "normalized_ged": 1.029209621993127,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.40066137566137566,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2240765501796552,
+              "ged": 195.66666666666666,
+              "normalized_ged": 1.0085910652920962,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7363834422657952,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26087542087542087,
+              "ged": 178.66666666666666,
+              "normalized_ged": 0.9209621993127147,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7363834422657952,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26087542087542087,
+              "ged": 178.66666666666666,
+              "normalized_ged": 0.9209621993127147,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 4.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.38225854215678456,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.22819534956356757,
+          "ged": 198.33333333333331,
+          "normalized_ged": 1.02233676975945,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_only": {
+          "object_precision": 0.4514048078564208,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2393474073859697,
+          "ged": 193.41666666666669,
+          "normalized_ged": 0.9969931271477663,
+          "object_tp": 13.5,
+          "room_tp": 3.625
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.38225854215678456,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.22819534956356757,
+          "ged": 198.33333333333331,
+          "normalized_ged": 1.02233676975945,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.4514048078564208,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2393474073859697,
+          "ged": 192.83333333333331,
+          "normalized_ged": 0.9939862542955327,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.7468466918931316,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2697446411307798,
+          "ged": 179.58333333333331,
+          "normalized_ged": 0.9256872852233677,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.7570806100217865,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2704377104377104,
+          "ged": 179.33333333333331,
+          "normalized_ged": 0.9243986254295533,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.38225854215678456,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.22819534956356757,
+          "ged": 198.33333333333331,
+          "normalized_ged": 1.02233676975945,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.4514048078564208,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2393474073859697,
+          "ged": 192.83333333333331,
+          "normalized_ged": 0.9939862542955327,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7468466918931316,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2697446411307798,
+          "ged": 179.58333333333331,
+          "normalized_ged": 0.9256872852233677,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7570806100217865,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2704377104377104,
+          "ged": 179.33333333333331,
+          "normalized_ged": 0.9243986254295533,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7712418300653594,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2713131313131313,
+          "ged": 179.0,
+          "normalized_ged": 0.9226804123711341,
+          "object_tp": 13.5,
+          "room_tp": 3.5
+        }
+      }
+    },
+    {
+      "stage": 6,
+      "path_m": 26.24999999999984,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.4791158536585366,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24834503762994287,
+              "ged": 188.25,
+              "normalized_ged": 0.970360824742268,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_only": {
+              "object_precision": 0.4845150189977776,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2515162221044574,
+              "ged": 188.0,
+              "normalized_ged": 0.9690721649484537,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.4791158536585366,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24834503762994287,
+              "ged": 188.25,
+              "normalized_ged": 0.970360824742268,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5388253638253637,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2570806100217865,
+              "ged": 184.25,
+              "normalized_ged": 0.9497422680412371,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.6460144927536232,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.26992194936226915,
+              "ged": 178.75,
+              "normalized_ged": 0.9213917525773196,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.6688405797101449,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2718827336759947,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.6916666666666667,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2738435179897201,
+              "ged": 177.25,
+              "normalized_ged": 0.913659793814433,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.4791158536585366,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.24834503762994287,
+              "ged": 188.25,
+              "normalized_ged": 0.970360824742268,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5388253638253637,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2570806100217865,
+              "ged": 184.25,
+              "normalized_ged": 0.9497422680412371,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6460144927536232,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.26992194936226915,
+              "ged": 178.75,
+              "normalized_ged": 0.9213917525773196,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6688405797101449,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2718827336759947,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.6916666666666667,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2738435179897201,
+              "ged": 177.25,
+              "normalized_ged": 0.913659793814433,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7,
+              "object_recall": 0.17073170731707318,
+              "object_f1": 0.2745098039215686,
+              "ged": 177.0,
+              "normalized_ged": 0.9123711340206185,
+              "object_tp": 14.0,
+              "room_tp": 4.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 4,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [],
+          "policies": {
+            "official": {
+              "object_precision": 0.36876491194966987,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2207597079838459,
+              "ged": 197.5,
+              "normalized_ged": 1.018041237113402,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_only": {
+              "object_precision": 0.5267302845903251,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.24092204853074417,
+              "ged": 188.75,
+              "normalized_ged": 0.9729381443298969,
+              "object_tp": 13.0,
+              "room_tp": 5.25
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.36876491194966987,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2207597079838459,
+              "ged": 197.5,
+              "normalized_ged": 1.018041237113402,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5267302845903251,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.24092204853074417,
+              "ged": 187.25,
+              "normalized_ged": 0.9652061855670103,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.6766081871345029,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2568074160357212,
+              "ged": 180.75,
+              "normalized_ged": 0.9317010309278351,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.6957817337461301,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2580949271397728,
+              "ged": 179.75,
+              "normalized_ged": 0.9265463917525774,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.732843137254902,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2606565656565657,
+              "ged": 179.0,
+              "normalized_ged": 0.9226804123711341,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7434640522875817,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26131313131313133,
+              "ged": 178.5,
+              "normalized_ged": 0.9201030927835051,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.25,
+              "normalized_ged": 0.9188144329896907,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.36876491194966987,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2207597079838459,
+              "ged": 197.5,
+              "normalized_ged": 1.018041237113402,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5267302845903251,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.24092204853074417,
+              "ged": 187.25,
+              "normalized_ged": 0.9652061855670103,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6766081871345029,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2568074160357212,
+              "ged": 180.75,
+              "normalized_ged": 0.9317010309278351,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6957817337461301,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2580949271397728,
+              "ged": 179.75,
+              "normalized_ged": 0.9265463917525774,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.732843137254902,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.2606565656565657,
+              "ged": 179.0,
+              "normalized_ged": 0.9226804123711341,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7434640522875817,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26131313131313133,
+              "ged": 178.5,
+              "normalized_ged": 0.9201030927835051,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.25,
+              "normalized_ged": 0.9188144329896907,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7647058823529411,
+              "object_recall": 0.15853658536585366,
+              "object_f1": 0.26262626262626265,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 13.0,
+              "room_tp": 5.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.42394038280410323,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2345523728068944,
+          "ged": 192.875,
+          "normalized_ged": 0.9942010309278351,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_only": {
+          "object_precision": 0.5056226517940514,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.24621913531760078,
+          "ged": 188.375,
+          "normalized_ged": 0.9710051546391754,
+          "object_tp": 13.5,
+          "room_tp": 4.625
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.42394038280410323,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2345523728068944,
+          "ged": 192.875,
+          "normalized_ged": 0.9942010309278351,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.5327778242078445,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.24900132927626534,
+          "ged": 185.75,
+          "normalized_ged": 0.9574742268041236,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.6613113399440631,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26336468269899516,
+          "ged": 179.75,
+          "normalized_ged": 0.9265463917525774,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.6823111567281375,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26498883040788374,
+          "ged": 178.875,
+          "normalized_ged": 0.9220360824742269,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.7122549019607843,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26725004182314294,
+          "ged": 178.125,
+          "normalized_ged": 0.9181701030927836,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.7217320261437908,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26791146761734996,
+          "ged": 177.75,
+          "normalized_ged": 0.9162371134020618,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.7323529411764705,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26856803327391565,
+          "ged": 177.625,
+          "normalized_ged": 0.9155927835051546,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.7323529411764705,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26856803327391565,
+          "ged": 177.5,
+          "normalized_ged": 0.9149484536082474,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.42394038280410323,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.2345523728068944,
+          "ged": 192.875,
+          "normalized_ged": 0.9942010309278351,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.5327778242078445,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.24900132927626534,
+          "ged": 185.75,
+          "normalized_ged": 0.9574742268041236,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.6613113399440631,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26336468269899516,
+          "ged": 179.75,
+          "normalized_ged": 0.9265463917525774,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.6823111567281375,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26498883040788374,
+          "ged": 178.875,
+          "normalized_ged": 0.9220360824742269,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7122549019607843,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26725004182314294,
+          "ged": 178.125,
+          "normalized_ged": 0.9181701030927836,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7217320261437908,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26791146761734996,
+          "ged": 177.75,
+          "normalized_ged": 0.9162371134020618,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7323529411764705,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26856803327391565,
+          "ged": 177.625,
+          "normalized_ged": 0.9155927835051546,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7323529411764705,
+          "object_recall": 0.16463414634146342,
+          "object_f1": 0.26856803327391565,
+          "ged": 177.5,
+          "normalized_ged": 0.9149484536082474,
+          "object_tp": 13.5,
+          "room_tp": 4.5
+        }
+      }
+    },
+    {
+      "stage": 7,
+      "path_m": null,
+      "scenes": [
+        {
+          "scene_index": 0,
+          "completion_count": 3,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            0
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.4454811954811955,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.2826811424405738,
+              "ged": 180.33333333333334,
+              "normalized_ged": 0.9295532646048109,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_only": {
+              "object_precision": 0.47500000000000003,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.28829847371396267,
+              "ged": 179.66666666666666,
+              "normalized_ged": 0.9261168384879724,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.4454811954811955,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.2826811424405738,
+              "ged": 180.33333333333334,
+              "normalized_ged": 0.9295532646048109,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.47500000000000003,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.28829847371396267,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.6625641025641026,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31579554632514134,
+              "ged": 167.66666666666666,
+              "normalized_ged": 0.8642611683848798,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.672008547008547,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31679478220358726,
+              "ged": 167.33333333333334,
+              "normalized_ged": 0.8625429553264605,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.68,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31775700934579443,
+              "ged": 167.0,
+              "normalized_ged": 0.8608247422680413,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.6894444444444444,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.3187562452242403,
+              "ged": 166.66666666666666,
+              "normalized_ged": 0.859106529209622,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7083333333333334,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.32075471698113206,
+              "ged": 166.0,
+              "normalized_ged": 0.8556701030927835,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7083333333333334,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.32075471698113206,
+              "ged": 166.0,
+              "normalized_ged": 0.8556701030927835,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.4454811954811955,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.2826811424405738,
+              "ged": 180.33333333333334,
+              "normalized_ged": 0.9295532646048109,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.47500000000000003,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.28829847371396267,
+              "ged": 178.0,
+              "normalized_ged": 0.9175257731958762,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.6625641025641026,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31579554632514134,
+              "ged": 167.66666666666666,
+              "normalized_ged": 0.8642611683848798,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.672008547008547,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31679478220358726,
+              "ged": 167.33333333333334,
+              "normalized_ged": 0.8625429553264605,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.68,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.31775700934579443,
+              "ged": 167.0,
+              "normalized_ged": 0.8608247422680413,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.6894444444444444,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.3187562452242403,
+              "ged": 166.66666666666666,
+              "normalized_ged": 0.859106529209622,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7083333333333334,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.32075471698113206,
+              "ged": 166.0,
+              "normalized_ged": 0.8556701030927835,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7083333333333334,
+              "object_recall": 0.2073170731707317,
+              "object_f1": 0.32075471698113206,
+              "ged": 166.0,
+              "normalized_ged": 0.8556701030927835,
+              "object_tp": 17.0,
+              "room_tp": 6.0
+            }
+          }
+        },
+        {
+          "scene_index": 1,
+          "completion_count": 3,
+          "expected_completion_count": 4,
+          "missing_completion_ids": [
+            5
+          ],
+          "policies": {
+            "official": {
+              "object_precision": 0.5298953438488322,
+              "object_recall": 0.1991869918699187,
+              "object_f1": 0.2838623915585652,
+              "ged": 183.66666666666666,
+              "normalized_ged": 0.9467353951890035,
+              "object_tp": 16.333333333333332,
+              "room_tp": 6.0
+            },
+            "filter_only": {
+              "object_precision": 0.4764309764309764,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.27671635487638285,
+              "ged": 186.0,
+              "normalized_ged": 0.9587628865979382,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.0": {
+              "object_precision": 0.5298953438488322,
+              "object_recall": 0.1991869918699187,
+              "object_f1": 0.2838623915585652,
+              "ged": 183.66666666666666,
+              "normalized_ged": 0.9467353951890035,
+              "object_tp": 16.333333333333332,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.0": {
+              "object_precision": 0.5822510822510822,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.2898807452005559,
+              "ged": 179.66666666666666,
+              "normalized_ged": 0.9261168384879724,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.5": {
+              "object_precision": 0.7080745341614906,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.30577610295507346,
+              "ged": 173.66666666666666,
+              "normalized_ged": 0.895189003436426,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.5": {
+              "object_precision": 0.7282765543635108,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.307711274701566,
+              "ged": 173.0,
+              "normalized_ged": 0.8917525773195876,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_0.75": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_0.75": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_tau_1.0": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_tau_1.0": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5298953438488322,
+              "object_recall": 0.1991869918699187,
+              "object_f1": 0.2838623915585652,
+              "ged": 183.66666666666666,
+              "normalized_ged": 0.9467353951890035,
+              "object_tp": 16.333333333333332,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.0": {
+              "object_precision": 0.5822510822510822,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.2898807452005559,
+              "ged": 179.66666666666666,
+              "normalized_ged": 0.9261168384879724,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7080745341614906,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.30577610295507346,
+              "ged": 173.66666666666666,
+              "normalized_ged": 0.895189003436426,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.5": {
+              "object_precision": 0.7282765543635108,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.307711274701566,
+              "ged": 173.0,
+              "normalized_ged": 0.8917525773195876,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_0.75": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            },
+            "filter_plus_support_threshold_calibrated_tau_1.0": {
+              "object_precision": 0.7619047619047619,
+              "object_recall": 0.19512195121951223,
+              "object_f1": 0.31067961165048547,
+              "ged": 172.0,
+              "normalized_ged": 0.8865979381443299,
+              "object_tp": 16.0,
+              "room_tp": 6.0
+            }
+          }
+        }
+      ],
+      "policies": {
+        "official": {
+          "object_precision": 0.4876882696650139,
+          "object_recall": 0.2032520325203252,
+          "object_f1": 0.28327176699956946,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 16.666666666666664,
+          "room_tp": 6.0
+        },
+        "filter_only": {
+          "object_precision": 0.47571548821548826,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.2825074142951728,
+          "ged": 182.83333333333331,
+          "normalized_ged": 0.9424398625429553,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_tau_0.0": {
+          "object_precision": 0.4876882696650139,
+          "object_recall": 0.2032520325203252,
+          "object_f1": 0.28327176699956946,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 16.666666666666664,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_tau_0.0": {
+          "object_precision": 0.5286255411255412,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.28908960945725926,
+          "ged": 178.83333333333331,
+          "normalized_ged": 0.9218213058419243,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_tau_0.5": {
+          "object_precision": 0.6853193183627966,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.3107858246401074,
+          "ged": 170.66666666666666,
+          "normalized_ged": 0.8797250859106529,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_tau_0.5": {
+          "object_precision": 0.7001425506860288,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31225302845257663,
+          "ged": 170.16666666666669,
+          "normalized_ged": 0.877147766323024,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_tau_0.75": {
+          "object_precision": 0.720952380952381,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31421831049814,
+          "ged": 169.5,
+          "normalized_ged": 0.8737113402061856,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_tau_0.75": {
+          "object_precision": 0.7256746031746031,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.3147179284373629,
+          "ged": 169.33333333333331,
+          "normalized_ged": 0.872852233676976,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_tau_1.0": {
+          "object_precision": 0.7351190476190477,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31571716431580876,
+          "ged": 169.0,
+          "normalized_ged": 0.8711340206185567,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_tau_1.0": {
+          "object_precision": 0.7351190476190477,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31571716431580876,
+          "ged": 169.0,
+          "normalized_ged": 0.8711340206185567,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.4876882696650139,
+          "object_recall": 0.2032520325203252,
+          "object_f1": 0.28327176699956946,
+          "ged": 182.0,
+          "normalized_ged": 0.9381443298969072,
+          "object_tp": 16.666666666666664,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.0": {
+          "object_precision": 0.5286255411255412,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.28908960945725926,
+          "ged": 178.83333333333331,
+          "normalized_ged": 0.9218213058419243,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.6853193183627966,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.3107858246401074,
+          "ged": 170.66666666666666,
+          "normalized_ged": 0.8797250859106529,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.5": {
+          "object_precision": 0.7001425506860288,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31225302845257663,
+          "ged": 170.16666666666669,
+          "normalized_ged": 0.877147766323024,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.720952380952381,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31421831049814,
+          "ged": 169.5,
+          "normalized_ged": 0.8737113402061856,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_0.75": {
+          "object_precision": 0.7256746031746031,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.3147179284373629,
+          "ged": 169.33333333333331,
+          "normalized_ged": 0.872852233676976,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7351190476190477,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31571716431580876,
+          "ged": 169.0,
+          "normalized_ged": 0.8711340206185567,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        },
+        "filter_plus_support_threshold_calibrated_tau_1.0": {
+          "object_precision": 0.7351190476190477,
+          "object_recall": 0.20121951219512196,
+          "object_f1": 0.31571716431580876,
+          "ged": 169.0,
+          "normalized_ged": 0.8711340206185567,
+          "object_tp": 16.5,
+          "room_tp": 6.0
+        }
+      }
+    }
+  ],
+  "path_normalized_auc": {
+    "official": {
+      "object_precision": 0.4398388731639418,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.20542404728289798,
+      "normalized_ged": 1.0004679062346586
+    },
+    "filter_only": {
+      "object_precision": 0.4735103149384187,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.21095234825023287,
+      "normalized_ged": 0.9891013132056948
+    },
+    "support_threshold_tau_0.0": {
+      "object_precision": 0.4398388731639418,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.20542404728289798,
+      "normalized_ged": 1.0004679062346586
+    },
+    "filter_plus_support_threshold_tau_0.0": {
+      "object_precision": 0.5149778073832177,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.21365373121852876,
+      "normalized_ged": 0.9774634879725086
+    },
+    "support_threshold_tau_0.5": {
+      "object_precision": 0.7420358234644793,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23111575470349724,
+      "normalized_ged": 0.9354080756013746
+    },
+    "filter_plus_support_threshold_tau_0.5": {
+      "object_precision": 0.7533679973396229,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.231735479899424,
+      "normalized_ged": 0.9339340942562593
+    },
+    "support_threshold_tau_0.75": {
+      "object_precision": 0.7839064885569614,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23328127253583344,
+      "normalized_ged": 0.930702319587629
+    },
+    "filter_plus_support_threshold_tau_0.75": {
+      "object_precision": 0.7854092896774095,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23338615576891483,
+      "normalized_ged": 0.9303958026509573
+    },
+    "support_threshold_tau_1.0": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9299806701030929
+    },
+    "filter_plus_support_threshold_tau_1.0": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9298784977908691
+    },
+    "support_threshold_calibrated_tau_0.0": {
+      "object_precision": 0.4398388731639418,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.20542404728289798,
+      "normalized_ged": 1.0004679062346586
+    },
+    "filter_plus_support_threshold_calibrated_tau_0.0": {
+      "object_precision": 0.5149778073832177,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.21365373121852876,
+      "normalized_ged": 0.9774634879725086
+    },
+    "support_threshold_calibrated_tau_0.5": {
+      "object_precision": 0.7420358234644793,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23111575470349724,
+      "normalized_ged": 0.9354080756013746
+    },
+    "filter_plus_support_threshold_calibrated_tau_0.5": {
+      "object_precision": 0.7533679973396229,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.231735479899424,
+      "normalized_ged": 0.9339340942562593
+    },
+    "support_threshold_calibrated_tau_0.75": {
+      "object_precision": 0.7839064885569614,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23328127253583344,
+      "normalized_ged": 0.930702319587629
+    },
+    "filter_plus_support_threshold_calibrated_tau_0.75": {
+      "object_precision": 0.7854092896774095,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.23338615576891483,
+      "normalized_ged": 0.9303958026509573
+    },
+    "support_threshold_calibrated_tau_1.0": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9299806701030929
+    },
+    "filter_plus_support_threshold_calibrated_tau_1.0": {
+      "object_precision": 0.7909025456336383,
+      "object_recall": 0.13884146341463405,
+      "object_f1": 0.233623723105411,
+      "normalized_ged": 0.9298784977908691
+    }
+  }
+}

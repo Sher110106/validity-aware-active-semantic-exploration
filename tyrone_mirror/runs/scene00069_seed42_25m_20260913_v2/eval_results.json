@@ -1,0 +1,120 @@
+{
+  "run_dir": "/workspace/runs/scene00069_seed42_25m_20260913_v2/stages",
+  "ground_truth": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+  "stages": {
+    "0": {
+      "path_length_m": 0,
+      "navigation_time_s": 0.0,
+      "n_graphs_averaged": 2,
+      "precision": 0.7142857142857143,
+      "recall": 0.07462686567164178,
+      "f1": 0.13513513513513511,
+      "ged": 170.5,
+      "ged_normalized": 1.1217105263157894,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.7142857142857143,
+          "recall": 0.07462686567164178,
+          "f1": 0.13513513513513511,
+          "true_positives": 5,
+          "false_positives": 2,
+          "false_negatives": 62,
+          "ged": 171.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.125
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.7142857142857143,
+          "recall": 0.07462686567164178,
+          "f1": 0.13513513513513511,
+          "true_positives": 5,
+          "false_positives": 2,
+          "false_negatives": 62,
+          "ged": 170.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.118421052631579
+        }
+      ]
+    },
+    "1": {
+      "path_length_m": 0.8249999999999998,
+      "navigation_time_s": 13.284201860427856,
+      "n_graphs_averaged": 2,
+      "precision": 0.6696428571428572,
+      "recall": 0.07462686567164178,
+      "f1": 0.13423423423423422,
+      "ged": 167.5,
+      "ged_normalized": 1.1019736842105263,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.7142857142857143,
+          "recall": 0.07462686567164178,
+          "f1": 0.13513513513513511,
+          "true_positives": 5,
+          "false_positives": 2,
+          "false_negatives": 62,
+          "ged": 164.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.0789473684210527
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.625,
+          "recall": 0.07462686567164178,
+          "f1": 0.13333333333333333,
+          "true_positives": 5,
+          "false_positives": 3,
+          "false_negatives": 62,
+          "ged": 171.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.125
+        }
+      ]
+    },
+    "2": {
+      "path_length_m": 4.425000000000005,
+      "navigation_time_s": 22.63351273536682,
+      "n_graphs_averaged": 2,
+      "precision": 0.7070707070707071,
+      "recall": 0.1044776119402985,
+      "f1": 0.1818488529014845,
+      "ged": 168.5,
+      "ged_normalized": 1.1085526315789473,
+      "per_graph": [
+        {
+          "source_file": "habitat_scene_graph_original_graph0.yaml",
+          "precision": 0.7777777777777778,
+          "recall": 0.1044776119402985,
+          "f1": 0.1842105263157895,
+          "true_positives": 7,
+          "false_positives": 2,
+          "false_negatives": 60,
+          "ged": 169.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.111842105263158
+        },
+        {
+          "source_file": "habitat_scene_graph_original_graph1.yaml",
+          "precision": 0.6363636363636364,
+          "recall": 0.1044776119402985,
+          "f1": 0.17948717948717952,
+          "true_positives": 7,
+          "false_positives": 4,
+          "false_negatives": 60,
+          "ged": 168.0,
+          "ged_reference_nodes": 76,
+          "ged_reference_edges": 76,
+          "ged_normalized": 1.105263157894737
+        }
+      ]
+    }
+  }
+}

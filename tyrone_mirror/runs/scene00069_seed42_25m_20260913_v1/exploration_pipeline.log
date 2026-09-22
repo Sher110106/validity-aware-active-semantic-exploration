@@ -1,0 +1,158 @@
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[18:14:31:826693]:[Warning]:[Metadata] AbstractAttributesManager.h(531)::buildAttrSrcPathsFromJSONAndLoad : <Scene Instance> : No Glob path result found for `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/*/00[0-9][0-9][0-9]-???????????/*.basis.scene_instance.json` so unable to load templates from that path.
+Renderer: NVIDIA RTX A6000/PCIe/SSE2 by NVIDIA Corporation
+OpenGL version: 4.6.0 NVIDIA 595.84
+Using optional features:
+    GL_ARB_vertex_array_object
+    GL_ARB_separate_shader_objects
+    GL_ARB_robustness
+    GL_ARB_texture_storage
+    GL_ARB_texture_view
+    GL_ARB_framebuffer_no_attachments
+    GL_ARB_invalidate_subdata
+    GL_ARB_texture_storage_multisample
+    GL_ARB_multi_bind
+    GL_ARB_direct_state_access
+    GL_ARB_get_texture_sub_image
+    GL_ARB_texture_filter_anisotropic
+    GL_KHR_debug
+    GL_KHR_parallel_shader_compile
+    GL_NV_depth_buffer_float
+Using driver workarounds:
+    no-forward-compatible-core-context
+    nv-egl-incorrect-gl11-function-pointers
+    no-layout-qualifiers-on-old-glsl
+    nv-zero-context-profile-mask
+    nv-implementation-color-read-format-dsa-broken
+    nv-cubemap-inconsistent-compressed-image-size
+    nv-cubemap-broken-full-compressed-image-query
+    nv-compressed-block-size-in-bits
+[18:14:31:942415]:[Warning]:[Metadata] SceneDatasetAttributes.cpp(107)::addNewSceneInstanceToDataset : Dataset : 'hm3d_basis' : Lighting Layout Attributes 'no_lights' specified in Scene Attributes but does not exist in dataset, so creating default.
+[18:14:31:942592]:[Warning]:[Scene] SemanticScene.h(331)::checkFileExists : ::loadSemanticSceneDescriptor: File `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` does not exist.  Aborting load.
+[18:14:31:942608]:[Warning]:[Scene] SemanticScene.cpp(123)::loadSemanticSceneDescriptor : SSD File Naming Issue! Neither SemanticAttributes-provided name : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` nor constructed filename : `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/info_semantic.json` exist on disk.
+[18:14:31:942618]:[Error]:[Scene] SemanticScene.cpp(139)::loadSemanticSceneDescriptor : SSD Load Failure! File with SemanticAttributes-provided name `/workspace/datasets/hm3d/versioned_data/hm3d-0.2/hm3d/train/00069-Y8Y6ukxGMvn/Y8Y6ukxGMvn.basis.scn` exists but failed to load.
+[18:14:33:005171]:[Warning]:[Sim] Simulator.cpp(595)::instanceStageForSceneAttributes : The active scene does not contain semantic annotations : activeSemanticSceneID_ = 0
+
+========================================
+      INTEGRATED EXPLORATION PIPELINE
+========================================
+ Press 's' to start the exploration cycle.
+ Press 'Esc' to shut down.
+========================================
+
+[INFO] [1789323302.017230]: User pressed 's'. Starting pipeline...
+[INFO] [1789323302.048527]: State: SCANNING - Performing 360-degree scan.
+[INFO] [1789323326.046452]: Scan complete.
+[INFO] [1789323326.148048]: State: PLANNING - Initiating planning sequence.
+[INFO] [1789323326.150841]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph0_dsg.json
+[INFO] [1789323334.164391]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v1/stages/0/graph0_dsg.json
+[INFO] [1789323334.168031]: Waiting for updated and stable mapping file: /workspace/catkin_ws/src/active_semantic_perception/mapping/hydra/output/realsense/backend/graph1_dsg.json
+[INFO] [1789323337.179217]: Copied file to /workspace/runs/scene00069_seed42_25m_20260913_v1/stages/0/graph1_dsg.json
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+/workspace/environments/semantic_perception/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_llm_logger] installed: logging to /workspace/runs/scene00069_seed42_25m_20260913_v1/prompts/prompts_responses.jsonl, hard cap 160 generate_content calls this process
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 93, "total_tokens": 10690, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032907, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 0.0001116}, "completion_tokens_details": {"reasoning_tokens": 93, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 67, "total_tokens": 10664, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032595, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 8.04e-05}, "completion_tokens_details": {"reasoning_tokens": 67, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10571, "completion_tokens": 114, "total_tokens": 10685, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0033081, "upstream_inference_prompt_cost": 0.0031713, "upstream_inference_completions_cost": 0.0001368}, "completion_tokens_details": {"reasoning_tokens": 114, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 78, "total_tokens": 10675, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032727, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 9.36e-05}, "completion_tokens_details": {"reasoning_tokens": 78, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10571, "completion_tokens": 105, "total_tokens": 10676, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032973, "upstream_inference_prompt_cost": 0.0031713, "upstream_inference_completions_cost": 0.000126}, "completion_tokens_details": {"reasoning_tokens": 105, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10571, "completion_tokens": 94, "total_tokens": 10665, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032841, "upstream_inference_prompt_cost": 0.0031713, "upstream_inference_completions_cost": 0.0001128}, "completion_tokens_details": {"reasoning_tokens": 94, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10571, "completion_tokens": 96, "total_tokens": 10667, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032865, "upstream_inference_prompt_cost": 0.0031713, "upstream_inference_completions_cost": 0.0001152}, "completion_tokens_details": {"reasoning_tokens": 96, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 94, "total_tokens": 10691, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0032919, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 0.0001128}, "completion_tokens_details": {"reasoning_tokens": 94, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 1/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 5434, "total_tokens": 16031, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0096999, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 0.0065208}, "completion_tokens_details": {"reasoning_tokens": 5434, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 2/3, retrying...
+[_asp_openrouter_shim] empty response, finish_reason='error' provider='Together' - signaling retry
+[_asp_openrouter_shim] usage={"prompt_tokens": 10597, "completion_tokens": 5459, "total_tokens": 16056, "cost": 0, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0097299, "upstream_inference_prompt_cost": 0.0031791, "upstream_inference_completions_cost": 0.0065508}, "completion_tokens_details": {"reasoning_tokens": 5459, "image_tokens": 0, "audio_tokens": 0}}
+[_asp_openrouter_shim] empty/error response, attempt 2/3, retrying...
+ERROR: A parallel job failed: 'label'
+ERROR: A parallel job failed: 'label'
+ERROR: A parallel job failed: 'label'
+ERROR: A parallel job failed: 'label'
+ERROR: A parallel job failed: 'label'
+ERROR: A parallel job failed: A process in the process pool was terminated abruptly while the future was running or pending.
+ERROR: A parallel job failed: A process in the process pool was terminated abruptly while the future was running or pending.
+[complete_scene_graph] 7/8 ensemble members were dropped (unparseable response or other per-worker failure)
+Starting uncertainty calculation to select next target...
+Sampling 300 viewpoints within bounds: [  2.07530988 -12.34418859   1.1          0.        ] to [  6.64181079  -5.617        1.1        360.        ]
+Highest Combined Information Gain found at first stage: -0.0186
+[INFO] [1789323561.177695]: Evaluating reachability for 10 candidates...
+[INFO] [1789323561.251169]: After final reachability check, selected target pose with IG: 0.0
+[INFO] [1789323561.282755]: Selected Viewpoint: [ 3.63889658 -6.99972632  1.1       ]
+[INFO] [1789323561.294610]: Shutdown requested, stopping any active rosbag recording...
+[INFO] [1789323561.314737]: Pipeline shutdown.

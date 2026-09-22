@@ -1,0 +1,11 @@
+{
+  "run": "scene00069_seed42_25m_20260913_v2",
+  "backend": "deepseek/deepseek-v4.1-flash via OpenRouter",
+  "llm_call_counter": 165,
+  "llm_call_ceiling": 160,
+  "completed_navigation_stages": [0, 1, 2],
+  "cumulative_path_m": 4.425000000000005,
+  "partial_stage": 3,
+  "partial_stage_completion_files": 2,
+  "stop_reason": "manual shutdown after call ceiling was exceeded during stage-3 ensemble generation"
+}
