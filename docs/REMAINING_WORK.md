@@ -15,47 +15,43 @@ All items use existing files, local checks, or read-only host inspection. None r
 - [x] Pointed `docs/RESULTS_INDEX.md` at the mirrored static replays with evaluator labels and an input-availability note.
 - [x] Split `docs/REPRODUCE.md` into inspect, fixture-test, local-replay, and host-only tiers with one consistent interpreter.
 
-## Phase 1: write the IEEE paper (largest remaining item)
+## Final paper (Phase 1, done 26 September 2026)
 
-The template (`Report_Template (1).doc`) is an IEEE-style conference paper: A4, single column, Times, 10pt body, Roman-numeral section headings, abstract plus at least 5 keywords, tables and figures with fixed caption rules, no page numbers or hyperlinks. The deliverable is a fresh paper rendered into that format, not the markdown docs.
+- [x] Drafted the IEEE paper and rendered `paper/Validity_Aware_Active_Semantic_Exploration.docx` plus the PDF conversion (4 pages, A4, template margins and caption rules, Tables I-III, claim boundaries kept).
+- [x] `output/` proposal files stay as history only and do not ship.
 
-Section outline, each mapped to existing evidence:
+## Host closeout (Phase 2, done 26 September 2026)
 
-1. Title, authors, abstract, keywords. Claim only what is supported: unanimity filtering improves static graph precision, F1, and normalized GED on three DeepSeek scenes; calibration and risk show no benefit; no live-navigation claim.
-2. Introduction. The reproduced pipeline plus three tested extensions, and the deliberately narrower final conclusion (`FINAL_REPORT.md`, paper assessment update).
-3. Background and reproduction scope. Substitute-backend disclosure (DeepSeek in place of the paper's Gemini backend, no paired comparison), self-generated frontier references, NetworkX GED reported as best-found upper bounds.
-4. Method. Canonical adapter, structural validator, ensemble support with fixed denominator 4, LOSO calibration, and the three analysis tracks (static replay, decision replay, Phase 13). See `docs/ARCHITECTURE.md`.
-5. Experimental setup. Three scenes (00069, 00573, 00853), seed 42, 120 m-capped path-normalized AUC with the canonical evaluator, plus the short-run baselines. Include the input-availability disclaimer.
-6. Results. Static unanimity table with guardrails; mechanism plus validator-subsumed note; calibration negative (identical at tau 1.0, harmful at intermediate settings on 00573); risk-term negative; decision replay kept narrow and descriptive; Phase 13 guardrail disposition; Gemini v6 partial block in its own paragraph.
-7. Limitations. One seed, three scenes, autocorrelated stages, backend property rather than environment generalization, modified author worktree, paused supervisor state.
-8. Conclusion, acknowledgment, references. Cost note uses the corrected $37.353274 settled figure with three unresolved entries.
+- [x] Retired `asp-matrix-supervisor.service` with owner approval: snapshotted state, status, event log, and the 00853 pipeline log to `runs/matrix_supervisor/snapshot_20260926_retire/` on the host, then stopped and disabled the service (verified inactive, disabled, no supervisor process). `CONTROL.json` left byte-identical.
+- [x] The 00853 traceback needed no new investigation: already analyzed as a post-budget false positive with scoring intact. Original log preserved in the snapshot.
+- [x] Added `docs/audit/2026-09-26-campaign-status-note.md` reconciling the stale status file against ledger aggregates; the host original untouched.
 
-Hard claim boundaries (do not cross): no live-navigation, detour, collision, or path-length improvement; no calibration benefit; no risk-term benefit; no independent validator win on top of unanimity; no cross-scene generalization or significance claim at n=3; no predicted-only recall reading of the 99.7 percent full-graph retention; no reproduction of the authors' published numbers.
+## Ledger entries (Phase 3, done 26 September 2026)
 
-The `output/` proposal files stay as history only and do not ship. Do not carry proposal text forward except background sentences verified against current evidence.
+- [x] Resolved from existing records in `docs/audit/2026-09-26-dispatched-resolution.md`: the verification entry has an archived provider response and was correctly left fail-closed; the two probe entries have no archive either way. All three stay `DISPATCHED` with unknown cost, never zero. No ledger writes, no model calls.
 
-## Phase 2: retire the supervisor (one approved host change)
+## Evidence packaging (Phase 4, done 26 September 2026)
 
-Decision: retire, not leave paused-active. The 00853 pause is already analyzed in `DEVIATIONS.md` #73 as a conservative false positive on a post-budget traceback; the scored artifacts are intact. No new investigation is needed.
+- [x] Input-availability matrix confirmed in `docs/RESULTS_INDEX.md` against the host-only export list.
+- [x] Stale probe, deploy, resume, and live-mode invitations quarantined as historical provenance in `docs/prospective_overlay/README.md`; one frozen-campaign statement kept in canonical docs.
+- [x] Sanitized author-worktree diff preserved at `docs/audit/2026-09-26-author-worktree-diff.txt` (four modified files, no secrets). Raw-input manifest below.
 
-Approved sequence only:
+### Raw-input manifest (host-only exports needed for full Phase 13 regeneration)
 
-1. Snapshot supervisor state, status, event log, and the 00853 pipeline log to a dated host directory. Preserve originals, never rewrite.
-2. `systemctl --user stop` then `disable asp-matrix-supervisor.service`; verify inactive. Never raw-kill the PID (restart-on-failure resurrects it).
-3. Leave `tools/matrix_supervisor/CONTROL.json` byte-identical as history.
-4. Add a dated note reconciling `campaign_status.json` (earlier breadth snapshot, omits v3 through v6) against the ledger aggregates, without editing the original.
+| Input | Status |
+|---|---|
+| 00069 calibration `stages/` | Mirrored (partial) |
+| 00573, 00853, 00871 calibration `stages/` | Host-only |
+| Four frontier reference graphs | Mirrored |
+| Three matrix run directories (full `stages/`, logs, config) | Host-only |
+| Three matrix static replays + checksums | Mirrored |
+| Three matrix null decision replays | Mirrored |
+| Phase 13 v5 diagnostics + checksums | Mirrored |
+| v6 stage graph corpus | Host-only (derived JSON mirrored) |
+| Ledger SQLite files and response archives | Host-only |
+| Supervisor state snapshot | Host-only (`snapshot_20260926_retire/`) |
 
-## Phase 3: resolve the three DISPATCHED entries (existing records only)
-
-Two in the capability-probe ledger and one in the native-count verification ledger, $0.009147 reserved in total, each with a known request id. Read the ledgers with `mode=ro` plus `PRAGMA query_only=ON` through the existing container, then look up sibling response archives and count logs in the same run directories. No new model calls, no hand settlement, no retry. Record each entry as settled or unknown cost; never zero. Expected: the verification entry stays correctly unresolved and fail-closed.
-
-## Phase 4: finish evidence packaging
-
-- [ ] Confirm the input-availability matrix in `docs/RESULTS_INDEX.md` against the host-only export list (non-00069 calibration `stages/`, three matrix run directories, v6 stage corpus, ledger and response archives, supervisor snapshots).
-- [ ] Quarantine stale probe, deploy, resume, and live-mode invitations as historical provenance; keep one frozen-campaign statement in canonical docs.
-- [ ] If submission requires full replay, preserve a sanitized author-worktree diff (four modified files) plus a SHA-256 raw-input manifest. Do not claim the mirror alone regenerates Phase 13.
-
-## Phase 5: final verification and commit
+## Final verification (Phase 5)
 
 - [ ] Re-run the offline suite (`pytest`, 286 tests plus 9 subtests expected), `compileall`, JSON parsing of cited artifacts, and the canonical-doc link check. Record the date and revision.
 - [ ] Verify every paper table cell traces to a cited artifact and that static-replay and Phase 13 digests match their checksum files.

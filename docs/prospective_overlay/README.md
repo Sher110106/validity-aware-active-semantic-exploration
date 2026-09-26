@@ -119,7 +119,9 @@ If it's set but any other required variable is missing,
 `LedgerContext.from_env()` raises `RuntimeError` at construction time --
 also loud, never a silent fallback.
 
-## What this does not cover yet
+## What this does not cover yet (historical note, campaign frozen)
+
+The section below is preserved provenance from when the campaign was active. No probe, deployment, or paid call is authorized now; the campaign is frozen and the supervisor retired on 26 September 2026.
 
 No live Gemini call has been made through this overlay. Before one is:
 run the no-cost `countTokens`/request-shape checks, then the brokered
