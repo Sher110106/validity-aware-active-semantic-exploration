@@ -1,34 +1,65 @@
 # Validity-Aware Active Semantic Exploration
 
-This repository contains the completed implementation and evidence record for a course project built on the Active Semantic Perception (ASP) pipeline. The project reproduced the pinned ASP baseline, added a fail-closed graph validator, ensemble-support filtering, leave-one-scene-out calibration, risk-sensitive decision replay, a metered Gemini integration, and an auditable campaign control plane.
+A computer-vision course project that reproduces an **Active Semantic Perception (ASP)** pipeline and studies whether validating and filtering language-model scene-graph predictions makes them more useful for exploration.
 
-The experiments are frozen. No more paid runs are planned. The final interpretation is deliberately narrower than the original proposal: unanimity filtering is a useful static graph diagnostic for this backend; calibration and the risk term are not positive contributions; decision replay is informative but cannot establish live navigation improvement, detour reduction, or collision reduction.
+**Main result:** requiring all four ensemble members to support a prediction improves static graph precision, F1, and normalized graph edit distance on three DeepSeek scenes. Calibration and the risk-sensitive viewpoint score did not establish an additional benefit. The experiments do not demonstrate better live navigation.
 
-Start here:
+**Status, 26 September 2026:** implementation and the selected analyses are complete; experiments are frozen. The remaining work is evidence packaging, submission preparation, and operational closeout. No new runs are required for the conclusions reported here.
 
-- [Final closeout](FINAL_REPORT.md) for the project conclusion, scope, and remaining limits.
-- [Results index](docs/RESULTS_INDEX.md) for the run inventory and the primary numbers.
-- [Reproduction guide](docs/REPRODUCE.md) for offline tests and replay commands.
-- [Evidence map](tyrone_mirror/README.md) for the mirrored run artifacts and their provenance.
-- [Deviation log](tyrone_mirror/DEVIATIONS.md) for the dated engineering audit trail.
+## What we built and evaluated
 
-The implementation is under `tools/`. The most important entry points are:
+| Work | Delivered | Evidence status |
+|---|---|---|
+| ASP reproduction | Pinned-author evaluation, graph matching, path-budget metrics, run provenance | Baseline and short-run results recorded |
+| Graph validation | Canonical graph adapter; structural and geometric checks; rejection/removal reasons | Tested on fixtures and saved completions |
+| Ensemble support | Fixed four-member denominator and support-threshold ablations | Unanimity improves the three-scene static result |
+| Calibration | Leave-one-scene-out support calibration and diagnostics | No useful incremental policy gain established |
+| Risk-sensitive selection | Fixed-candidate decision replay and risk-weight sweeps | No demonstrated live-navigation benefit |
+| Experiment infrastructure | Metered Gemini requests, budget ledger, queue/control plane, runtime overlay, evidence instrumentation | Exercised during a partial Gemini campaign |
+| Frozen analysis | Three 120 m DeepSeek runs; Gemini breadth attempts and a 19.5 m v6 block | Results and limitations are linked below |
 
-- `tools/evaluator/` reproduces the author's tracked-graph precision, recall, F1, and GED measurements.
-- `tools/asp_offline/` contains the canonical graph adapter, validator, support policy, calibration, and static evaluator.
-- `tools/extension_policy_replay.py` compares completion policies over the same cached artifacts.
-- `tools/decision_replay.py` replays candidate selection with the pinned uncertainty calculator.
-- `tools/phase13_diagnostics.py` generates the frozen multi-scene diagnostics.
-- `tools/gemini_campaign/`, `tools/prospective_campaign/`, `tools/prospective_runtime/`, and `tools/prospective_integration/` contain the metered campaign components and overlay.
+ASP maintains a graph of rooms and objects observed by a robot. A language model predicts missing structure, and the pipeline uses those predictions when scoring possible viewpoints. Our extension checks those predictions and measures how filtering changes graph quality and replayed decisions. See [the architecture guide](docs/ARCHITECTURE.md) for the full data flow and terminology.
 
-The pinned research checkout is not included or modified here. The campaign ran against a sibling checkout and preserved the relevant metadata under `tyrone_mirror/`. Credentials, live ledgers, raw provider requests, and machine-local runtime state are excluded from this repository.
+## Read the project
 
-## Verification
+| If you want to… | Read |
+|---|---|
+| Understand the goal, work completed, findings, and limitations | [Final report](FINAL_REPORT.md) |
+| Find the exact result files and metric definitions | [Results index](docs/RESULTS_INDEX.md) |
+| Understand the code and module boundaries | [Architecture and implementation](docs/ARCHITECTURE.md) |
+| Inspect evidence or verify the code locally | [Offline reproduction guide](docs/REPRODUCE.md) |
+| Know what remains without launching new runs | [Remaining work](docs/REMAINING_WORK.md) |
+| See the SSH audit and corrected cost accounting | [26 September audit](docs/REMOTE_AUDIT_2026-09-26.md) |
+| Trace a historical change or discarded interpretation | [Archive guide](docs/archive/README.md) and [deviation log](tyrone_mirror/DEVIATIONS.md) |
 
-The final source tree was merged from the completed `prospective/integration` branch. The offline suites cover the ledger, campaign control plane, runtime overlay, evaluator, validator, and evidence instrumentation. Run the commands in [docs/REPRODUCE.md](docs/REPRODUCE.md) before publishing a new revision.
+## Repository map
 
-## Publishing
+```text
+tools/                  Evaluators, policies, campaign components, and tests
+docs/                   Current technical documentation and closeout checklist
+docs/audit/             Sanitized, dated accounting aggregates
+docs/archive/           Historical plans, reviews, and intermediate reports
+tyrone_mirror/          Selected existing results and reference graphs
+FINAL_REPORT.md         Project narrative and supported conclusions
+```
 
-The working tree is prepared as a clean local Git history, but this checkout
-does not have a GitHub remote configured. Add the destination repository as
-`origin` and push the final commit when you are ready.
+The local repository is an implementation and selected-evidence package. The full simulator, datasets, model weights, author checkout, and complete raw run directories live in the separate remote workspace. The mirror supports result inspection and a small cached example; it is not a complete reproduction bundle for every experiment.
+
+## Verify locally
+
+After installing the offline dependencies described in [REPRODUCE.md](docs/REPRODUCE.md):
+
+```sh
+PYTHONPATH=tools .venv_offline/bin/python -m pytest -q \
+  tools/tests tools/gemini_campaign/tests tools/prospective_campaign/tests \
+  tools/prospective_eval/tests tools/matrix_supervisor/tests tools/evaluator/tests
+```
+
+Verified on 26 September 2026: **286 tests and 9 subtests passed**. These tests use local fixtures and mocks. They do not start ASP or call a model provider.
+
+## Closeout notes
+
+- The best-supported contribution is a backend-specific static filtering result, accompanied by calibration/risk negative results and an auditable implementation.
+- Recorded Gemini settled cost is **$37.353274 across five ledgers**, including **$18.552664 for v6**. Three earlier probe/verification requests remain unresolved. See the [accounting audit](docs/REMOTE_AUDIT_2026-09-26.md#corrected-gemini-accounting).
+- No active exploration pipeline was observed on the SSH host. The old supervisor service remains active with a paused internal state; retiring it is a documented closeout task.
+- An `origin` GitHub remote is configured. Publication of subsequent changes is a separate action; this documentation review does not push commits.

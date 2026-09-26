@@ -1,0 +1,61 @@
+{
+  "audit_date_utc": "2026-09-26",
+  "scope": "Existing Gemini ledgers only. Excludes earlier DeepSeek/OpenRouter costs and any unrecorded provider charges.",
+  "method": "Read-only SQLite SELECT queries using mode=ro and PRAGMA query_only=ON through the existing asp-noetic container. No provider calls or experiments.",
+  "source_root": "runs/prospective_gemini",
+  "unit": "microusd",
+  "ledgers": [
+    {
+      "path": "capability_probe_20260919/ledger.sqlite",
+      "allocated_microusd": 2000000,
+      "states": [
+        {"state": "DISPATCHED", "requests": 2, "reservation_microusd": 1046, "settled_microusd": null},
+        {"state": "SETTLED", "requests": 6, "reservation_microusd": 9363, "settled_microusd": 3775}
+      ]
+    },
+    {
+      "path": "native_count_verify_20260922/ledger.sqlite",
+      "allocated_microusd": 1000000,
+      "states": [
+        {"state": "DISPATCHED", "requests": 1, "reservation_microusd": 8101, "settled_microusd": null},
+        {"state": "SETTLED", "requests": 1, "reservation_microusd": 38581, "settled_microusd": 16292}
+      ]
+    },
+    {
+      "path": "pilot_scene00069_seed42_20260921/ledger.sqlite",
+      "allocated_microusd": 2500000,
+      "states": []
+    },
+    {
+      "path": "pilot_scene00069_seed42_native_count_20260922/ledger.sqlite",
+      "allocated_microusd": 18000000,
+      "states": [
+        {"state": "SETTLED", "requests": 42, "reservation_microusd": 2857824, "settled_microusd": 549772}
+      ]
+    },
+    {
+      "path": "scientific_campaign_20260922/ledger.sqlite",
+      "allocated_microusd": 160000000,
+      "states": [
+        {"state": "SETTLED", "requests": 2233, "reservation_microusd": 159976812, "settled_microusd": 36783435}
+      ],
+      "v6_subset": {
+        "run_id": "run-block_00069_42_v6",
+        "requests": 898,
+        "reservation_microusd": 65749854,
+        "settled_microusd": 18552664
+      }
+    }
+  ],
+  "totals": {
+    "allocated_microusd": 183500000,
+    "settled_requests": 2282,
+    "settled_microusd": 37353274,
+    "unresolved_requests": 3,
+    "unresolved_reservation_microusd": 9147,
+    "code_ceiling_microusd": 190000000,
+    "unallocated_against_code_ceiling_microusd": 6500000
+  },
+  "scientific_allocation_reservation_headroom_microusd": 23188,
+  "interpretation": "The reservation column is summed across all request states, including settled rows. Historical reservation totals are not provider spend. V6 is a subset of the scientific ledger, not an extra cost to add to it. Unresolved costs remain unknown. No remaining balance authorizes a new run."
+}

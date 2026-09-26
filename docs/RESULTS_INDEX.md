@@ -1,6 +1,6 @@
 # Results index
 
-This index separates completed evidence from superseded diagnostics. Detailed JSON remains under `tyrone_mirror/runs/`; the dated deviation log explains every correction.
+This index separates completed evidence from superseded diagnostics. Detailed JSON remains under `tyrone_mirror/runs/`; the dated deviation log explains every correction. The three per-scene matrix static replays are now mirrored with checksums in `tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS`.
 
 ## Run families
 
@@ -17,7 +17,7 @@ This index separates completed evidence from superseded diagnostics. Detailed JS
 
 ## Final DeepSeek matrix
 
-These are 120 m-capped AUC values from the corrected static-policy replay. `tau=1.0` means all four members of each graph track support the prediction.
+These are 120 m-capped path-normalized AUC values from the corrected static-policy replay, scored with the **canonical evaluator** (`tools/asp_offline/evaluator.py`), not the author-faithful tracked-graph evaluator. `tau=1.0` means all four members of each graph track support the prediction. Per-scene sources: [00069](../tyrone_mirror/runs/matrix120m_scoring/scene00069_extension_policy_replay.json), [00573](../tyrone_mirror/runs/matrix120m_scoring/scene00573_extension_policy_replay.json), [00853](../tyrone_mirror/runs/matrix120m_scoring/scene00853_extension_policy_replay.json).
 
 | Scene | Official F1 | `tau=1.0` F1 | Relative F1 gain | Official GED | `tau=1.0` GED | Recall official → filtered |
 |---|---:|---:|---:|---:|---:|---:|
@@ -35,7 +35,7 @@ The exact frozen artifact is [phase13_diagnostics_v5.json](../tyrone_mirror/runs
 
 ## Gemini v6
 
-The final block reached 19.5 m over seven completed stages and one partial stage. Author-faithful tracked-graph metrics at stage 6 were P=0.692, R=0.336, F1=0.452, normalized GED=1.109. Path-normalized AUC through 19.5 m was P=0.757, R=0.184, F1=0.283, normalized GED=1.119.
+The final block reached 19.5 m over seven completed stages and one partial stage. Author-faithful tracked-graph metrics (**`tools/evaluator/`**) at stage 6 were P=0.692, R=0.336, F1=0.452, normalized GED=1.109. Path-normalized AUC through 19.5 m was P=0.757, R=0.184, F1=0.283, normalized GED=1.119.
 
 The best static completion-policy AUC was P=0.769, R=0.184, F1=0.284, normalized GED=0.937. Of 55 available completion files, all were accepted; 35 predicted nodes were removed, consisting of 30 AABB conflicts and 5 impassable crossings. Stage 2 scene 0 member 0 is missing; stage 7 is entirely partial.
 
@@ -45,6 +45,10 @@ The ledger settled 898 requests for $18.552664. Reservations summed to $65.74985
 
 ## Artifact map
 
+- [00069 matrix static replay](../tyrone_mirror/runs/matrix120m_scoring/scene00069_extension_policy_replay.json)
+- [00573 matrix static replay](../tyrone_mirror/runs/matrix120m_scoring/scene00573_extension_policy_replay.json)
+- [00853 matrix static replay](../tyrone_mirror/runs/matrix120m_scoring/scene00853_extension_policy_replay.json)
+- [Static replay checksums](../tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS)
 - [Author-faithful 00069 v6 evaluator](../tyrone_mirror/runs/prospective_gemini/scientific_campaign_20260922/offline_analysis_20260922/block_00069_42_v6/author_faithful_evaluator.json)
 - [00069 v6 extension replay](../tyrone_mirror/runs/prospective_gemini/scientific_campaign_20260922/offline_analysis_20260922/block_00069_42_v6/extension_policy_replay.json)
 - [00069 v6 decision replay](../tyrone_mirror/runs/prospective_gemini/scientific_campaign_20260922/offline_analysis_20260922/block_00069_42_v6/decision_replay_00069_v6.json)
@@ -52,3 +56,9 @@ The ledger settled 898 requests for $18.552664. Reservations summed to $65.74985
 - [Fixed-parser scoring summary](../tyrone_mirror/runs/prospective_gemini/scientific_campaign_20260922/offline_scoring_20260922/block_00069_42_v6/summary.json)
 - [Frozen Phase 13 diagnostics](../tyrone_mirror/runs/matrix120m_scoring/phase13_v5_20260917/phase13_diagnostics_v5.json)
 - [Authoritative deviation log](../tyrone_mirror/DEVIATIONS.md)
+- [26 September read-only audit](REMOTE_AUDIT_2026-09-26.md) and [sanitized ledger aggregates](audit/2026-09-26-ledger-summary.json)
+- [Architecture and metric reference](ARCHITECTURE.md)
+
+## Input availability
+
+The mirror holds selected results plus a small cached example; it does not hold every raw input the replay CLIs accept. Known host-only gaps: non-00069 calibration `stages/` directories, the three full matrix run directories, and the original v6 stage graph corpus. Static replay also resolves calibration folds by exact `/workspace/...` reference paths, so a local path yields `UNCALIBRATED_PROVISIONAL`. Decision replay needs all four host-side calibration corpora even when `--run` points elsewhere, and Phase 13 fails closed on missing inputs. See `docs/REPRODUCE.md` for what each tier needs.
