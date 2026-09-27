@@ -22,6 +22,7 @@ Read the frozen numbers and their provenance:
 - `tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS` for the matrix replay digests.
 - `docs/audit/2026-09-26-ledger-summary.json` for sanitized cost aggregates.
 - `docs/ARCHITECTURE.md` for which evaluator each table uses.
+- `docs/audit/2026-09-27-input-manifest.json` and `2026-09-27-input-SHA256SUMS` for file-level input provenance and local/host availability.
 
 ## Tier 2: run the fixture test suite
 
@@ -34,7 +35,7 @@ PYTHONPATH=tools .venv_offline/bin/python -m pytest -q \
 .venv_offline/bin/python -m compileall -q tools
 ```
 
-Last verified 26 September 2026: 286 tests and 9 subtests passed. Tests use local fixtures and mocks; they start no pipeline and call no provider.
+Last verified 27 September 2026: 286 tests and 9 subtests passed. Tests use local fixtures and mocks; they start no pipeline and call no provider.
 
 Caveats:
 
@@ -82,7 +83,16 @@ Decision replay is a fixed-pose approximation. It does not claim reachability, d
 
 ## Tier 4: host-only regeneration
 
-Full Phase 13 regeneration and full-matrix rescoring need the original exported workspace (calibration `stages/` corpora, matrix run directories, v6 stage graphs). Those inputs are not in this mirror. Do not present Tier 4 as available from a clean clone.
+Full DeepSeek Phase 13 regeneration needs the four calibration corpora, three matrix run directories, frontier references, and frozen static/decision results. Its request-count and timing diagnostics also read host-private `prompts/prompts_responses.jsonl` files, whose contents are not exported here. Gemini v6 rescoring separately needs its own stage graph corpus. These inputs are not all in the mirror.
+
+The [file-level manifest](audit/2026-09-27-input-manifest.json) records relative paths, sizes, SHA-256 hashes, missing graph slots, and local-copy status. The [checksum list](audit/2026-09-27-input-SHA256SUMS) uses paths relative to the original workspace root. On an existing exported workspace, this checks bytes without invoking an evaluator:
+
+```sh
+cd <exported-workspace-root>
+sha256sum --check <repository-root>/docs/audit/2026-09-27-input-SHA256SUMS
+```
+
+Missing host-only files will fail this check in a partial export. Three host source files differ from the local repository; both digests are recorded. Preserve the chosen source version before any future reproduction rather than treating the two trees as interchangeable. This closeout generated hashes only, not new analysis results.
 
 ## Evidence policy
 

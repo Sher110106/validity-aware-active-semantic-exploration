@@ -58,8 +58,8 @@ Other terms:
 
 - `tau`: raw support cutoff over `{0, 0.5, 0.75, 1.0}`; `tau=1.0` keeps predictions supported by all four intended members.
 - `calibration.status`: read before interpreting any calibrated row; `LOSO_CALIBRATED` is the fitted result, `UNCALIBRATED_PROVISIONAL` is not.
-- Guardrail policy: `filter_plus_support_threshold_calibrated_tau_1_0` (validator plus unanimity), with F1 loss below 0.05 and no normalized-GED increase required.
-- Full-graph recall retention near 99.7 percent is dominated by the unchanged observed map; predicted-only true positives drop (see Phase 13 validator diagnostics).
+- Guardrail policy: `filter_plus_support_threshold_calibrated_tau_1.0` (validator plus unanimity), requiring absolute F1 loss at most 0.05 and normalized-GED relative increase at most 10 percent. The measured GED decrease is an outcome, not a gate.
+- Full-graph true-positive retention near 99.7 percent is dominated by the unchanged observed map; it is a FULL-GRAPH measure, not predicted-only retention. Predicted-only true positives drop (see Phase 13 validator diagnostics).
 
 ## Status labels
 
@@ -69,10 +69,10 @@ Other terms:
 
 ## Known limitations (recorded, not fixed here)
 
-- `Node.as_dict()` does not serialize the in-memory `observed` flag (`models.py`). `support_filtered_graph()` concatenates observed nodes with kept completion nodes (`support_policy.py`). An echoed observed id that reaches support without a marker can therefore appear twice. The mirrored v6 summary shows one stage where the unanimity count (38) exceeds every validated member count (max 37), consistent with this path. The canonical extension replay uses marked canonical graphs and an additional filter-id intersection, so it is not automatically invalidated. No frozen number was changed.
+- `Node.as_dict()` does not serialize the in-memory `observed` flag (`models.py`). `support_filtered_graph()` concatenates observed nodes with kept completion nodes (`support_policy.py`). An echoed observed id that reaches support without a marker can therefore appear twice. The mirrored v6 summary shows one stage where the unanimity count (38) exceeds every validated member count (max 37), consistent with this path. The canonical extension replay follows a separate normalization path; it is not automatically invalidated by this finding, but no blanket unaffected claim is warranted. No frozen number was changed.
 - The validator is a deterministic structural filter, not a full consistency proof: predicted rooms check for a center but not finite coordinates; parent checks precede later removals without a final cascade; room overlap checks cannot operate on center-only room boxes; geometry is axis-aligned and ignores orientation.
 - Decision replay changes the stage-one shortlist and rescores without reapplying risk; it bypasses the reference history-distance candidate filter and has no ROS reachability gate.
 - Budget accounting is per SQLite file and sums historical reservations; settlement does not release reservation slack. Ceiling arithmetic is not spending permission.
 - `EvidenceReceipt` checks hashes, not issuer authenticity; an empty reviewer allowlist permits arbitrary reviewer strings; branch cleanup is not in a `finally` block.
-- `tools/matrix_supervisor/CONTROL.json` still reads `"paused": false`; the observed freeze is supervisor state, not a universal executable lock.
-- `docs/prospective_overlay/README.md` ends with a stale probe invitation; the campaign is frozen and that section is provenance only.
+- `tools/matrix_supervisor/CONTROL.json` retains its historical `"paused": false` value. Operational retirement is enforced by the inactive, disabled supervisor service, verified on 27 September 2026; no matching experiment processes were observed.
+- The [input manifest](audit/2026-09-27-input-manifest.json) records three source files that differ between the host and this repository: `tools/asp_offline/models.py`, `tools/asp_offline/validator.py`, and `tools/decision_replay.py`. It preserves both hashes; matching frozen result inputs does not make these source versions interchangeable.

@@ -1,5 +1,7 @@
 # Read-only closeout audit: 26 September 2026
 
+**Historical snapshot:** the supervisor was subsequently stopped and disabled on 26 September. The [27 September verification](audit/2026-09-27-closeout-verification.md) confirms retirement, retained snapshots, and the final file-level manifest. The observations below describe the earlier audit.
+
 The recorded research is frozen, but the remote operational state is not a clean shutdown. This audit inspected existing files, process state, Git metadata, and ledger aggregates. It launched no exploration, simulator, replay, or provider request and made no remote configuration changes.
 
 ## Scope and provenance

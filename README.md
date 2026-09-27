@@ -4,7 +4,7 @@ A computer-vision course project that reproduces an **Active Semantic Perception
 
 **Main result:** requiring all four ensemble members to support a prediction improves static graph precision, F1, and normalized graph edit distance on three DeepSeek scenes. Calibration and the risk-sensitive viewpoint score did not establish an additional benefit. The experiments do not demonstrate better live navigation.
 
-**Status, 26 September 2026:** implementation and the selected analyses are complete; experiments are frozen. The remaining work is evidence packaging, submission preparation, and operational closeout. No new runs are required for the conclusions reported here.
+**Status, 27 September 2026:** the documentation and paper package are complete; experiments are frozen. The supervisor is inactive and disabled, with no matched experiment processes observed. The [closeout verification](docs/audit/2026-09-27-closeout-verification.md) records the checks and remaining evidence limits.
 
 ## What we built and evaluated
 
@@ -25,10 +25,11 @@ ASP maintains a graph of rooms and objects observed by a robot. A language model
 | If you want to… | Read |
 |---|---|
 | Understand the goal, work completed, findings, and limitations | [Final report](FINAL_REPORT.md) |
+| Read the formatted course paper | [PDF](paper/Validity_Aware_Active_Semantic_Exploration.pdf), [Word](paper/Validity_Aware_Active_Semantic_Exploration.docx), and [table provenance](paper/README.md) |
 | Find the exact result files and metric definitions | [Results index](docs/RESULTS_INDEX.md) |
 | Understand the code and module boundaries | [Architecture and implementation](docs/ARCHITECTURE.md) |
 | Inspect evidence or verify the code locally | [Offline reproduction guide](docs/REPRODUCE.md) |
-| Know what remains without launching new runs | [Remaining work](docs/REMAINING_WORK.md) |
+| Check completed closeout work and evidence limits | [Closeout checklist](docs/REMAINING_WORK.md) |
 | See the SSH audit and corrected cost accounting | [26 September audit](docs/REMOTE_AUDIT_2026-09-26.md) |
 | Trace a historical change or discarded interpretation | [Archive guide](docs/archive/README.md) and [deviation log](tyrone_mirror/DEVIATIONS.md) |
 
@@ -55,11 +56,11 @@ PYTHONPATH=tools .venv_offline/bin/python -m pytest -q \
   tools/prospective_eval/tests tools/matrix_supervisor/tests tools/evaluator/tests
 ```
 
-Verified on 26 September 2026: **286 tests and 9 subtests passed**. These tests use local fixtures and mocks. They do not start ASP or call a model provider.
+Verified on 27 September 2026: **286 tests and 9 subtests passed**. These tests use local fixtures and mocks. They do not start ASP or call a model provider.
 
 ## Closeout notes
 
 - The best-supported contribution is a backend-specific static filtering result, accompanied by calibration/risk negative results and an auditable implementation.
 - Recorded Gemini settled cost is **$37.353274 across five ledgers**, including **$18.552664 for v6**. Three earlier probe/verification requests remain unresolved. See the [accounting audit](docs/REMOTE_AUDIT_2026-09-26.md#corrected-gemini-accounting).
-- No active exploration pipeline was observed on the SSH host. The old supervisor service remains active with a paused internal state; retiring it is a documented closeout task.
+- `asp-matrix-supervisor.service` is inactive and disabled; no matched experiment processes were observed during the 27 September closeout check. The host snapshot is under `runs/matrix_supervisor/snapshot_20260926_retire/`.
 - An `origin` GitHub remote is configured. Publication of subsequent changes is a separate action; this documentation review does not push commits.

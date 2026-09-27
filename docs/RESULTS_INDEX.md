@@ -17,7 +17,7 @@ This index separates completed evidence from superseded diagnostics. Detailed JS
 
 ## Final DeepSeek matrix
 
-These are 120 m-capped path-normalized AUC values from the corrected static-policy replay, scored with the **canonical evaluator** (`tools/asp_offline/evaluator.py`), not the author-faithful tracked-graph evaluator. `tau=1.0` means all four members of each graph track support the prediction. Per-scene sources: [00069](../tyrone_mirror/runs/matrix120m_scoring/scene00069_extension_policy_replay.json), [00573](../tyrone_mirror/runs/matrix120m_scoring/scene00573_extension_policy_replay.json), [00853](../tyrone_mirror/runs/matrix120m_scoring/scene00853_extension_policy_replay.json).
+These are 120 m-capped path-normalized AUC values from the corrected static-policy replay, scored with the **canonical evaluator** (`tools/asp_offline/evaluator.py`), not the author-faithful tracked-graph evaluator. The exact keys are `path_normalized_auc_capped.official` and `path_normalized_auc_capped.support_threshold_tau_1.0`. `tau=1.0` means all four members of each graph track support the prediction. Per-scene sources: [00069](../tyrone_mirror/runs/matrix120m_scoring/scene00069_extension_policy_replay.json), [00573](../tyrone_mirror/runs/matrix120m_scoring/scene00573_extension_policy_replay.json), [00853](../tyrone_mirror/runs/matrix120m_scoring/scene00853_extension_policy_replay.json).
 
 | Scene | Official F1 | `tau=1.0` F1 | Relative F1 gain | Official GED | `tau=1.0` GED | Recall official → filtered |
 |---|---:|---:|---:|---:|---:|---:|
@@ -25,11 +25,11 @@ These are 120 m-capped path-normalized AUC values from the corrected static-poli
 | 00573 | 0.3980 | 0.4349 | +9.29% | 0.9576 | 0.8877 | 0.3754 → 0.3743 |
 | 00853 | 0.4578 | 0.4957 | +8.28% | 0.8561 | 0.7930 | 0.4461 → 0.4449 |
 
-Interpretation: the filter removes approximately 27% of predicted nodes while retaining approximately 99.7% of full-graph true positives. The unchanged recall is expected because the filter removes predictions rather than adding them. This is a static graph result and a backend characterization, not live-policy generalization.
+Interpretation: the filter removes approximately 27% of predicted nodes while retaining approximately 99.7% of full-graph true positives. Near-preserved recall is an observed outcome, not a guarantee of removing predictions. This is a static graph result and a backend characterization, not live-policy generalization.
 
 ## Phase 13 disposition
 
-The frozen four-scene calibration corpus contains 2,829 held-out rows, 23 positives, and 16 room rows. Pooled calibration improves overall Brier score but room calibration is too small to support a room-level claim. Static guardrails pass for all three matrix scenes. The false-positive detour gate is `NOT IDENTIFIABLE`, robot collisions are `NOT INSTRUMENTED`, and combined usefulness is `NOT ESTABLISHED`.
+The frozen four-scene calibration corpus contains 2,829 held-out rows, 23 positives, and 16 room rows. Pooled calibration improves overall Brier score but room calibration is too small to support a room-level claim. Static guardrails pass for all three matrix scenes. The tested guardrail policy is `filter_plus_support_threshold_calibrated_tau_1.0`, with absolute F1 loss at most 0.05 and relative normalized-GED increase at most 10%; the headline table above uses raw support alone. The false-positive detour gate is `NOT IDENTIFIABLE`, robot collisions are `NOT INSTRUMENTED`, and combined usefulness is `NOT ESTABLISHED`.
 
 The exact frozen artifact is [phase13_diagnostics_v5.json](../tyrone_mirror/runs/matrix120m_scoring/phase13_v5_20260917/phase13_diagnostics_v5.json), with plots and checksums beside it.
 
@@ -61,4 +61,17 @@ The ledger settled 898 requests for $18.552664. Reservations summed to $65.74985
 
 ## Input availability
 
-The mirror holds selected results plus a small cached example; it does not hold every raw input the replay CLIs accept. Known host-only gaps: non-00069 calibration `stages/` directories, the three full matrix run directories, and the original v6 stage graph corpus. Static replay also resolves calibration folds by exact `/workspace/...` reference paths, so a local path yields `UNCALIBRATED_PROVISIONAL`. Decision replay needs all four host-side calibration corpora even when `--run` points elsewhere, and Phase 13 fails closed on missing inputs. See `docs/REPRODUCE.md` for what each tier needs.
+The [27 September file-level manifest](audit/2026-09-27-input-manifest.json) and [SHA-256 list](audit/2026-09-27-input-SHA256SUMS) inventory 1,702 existing files. They record 92 local byte-matching copies, 1,607 host-only files, and three differing source files. Hashes of all 13 inputs listed in the frozen Phase 13 provenance match. Missing completion slots remain explicitly recorded.
+
+| Input family | Local availability | Host requirement |
+|---|---|---|
+| 00069 calibration stage graphs | Selected cached stages mirrored | Full logs and other run files remain on host |
+| 00573, 00853, 00871 calibration stage graphs | Results/configuration only | Raw stage graphs required for fitting |
+| Four frontier references | Required `graph0` checkpoints mirrored | Other source artifacts remain on host |
+| Three 120 m matrix runs | Static/decision results mirrored | Raw graphs, navigation/path files, logs, and request metadata required |
+| Phase 13 v5 | Report, reliability plots, checksums mirrored | Raw inputs above required for regeneration |
+| Gemini v6 | Derived scoring and analysis JSON mirrored | Original stage graphs remain on host; not an input to DeepSeek Phase 13 |
+| Retired-supervisor snapshot | File digests recorded | Snapshot contents remain on host |
+| Live ledgers and response archives | Sanitized accounting notes only | Original private records remain on host; live databases excluded from file hashing |
+
+This is a selected-evidence mirror, not a complete raw-data export. Static replay resolves calibration folds by exact `/workspace/...` reference paths, so a local path yields `UNCALIBRATED_PROVISIONAL`. Decision replay needs all four calibration corpora even when `--run` points elsewhere. The manifest also discloses host/repository source drift. See [REPRODUCE.md](REPRODUCE.md) for what each tier needs.
