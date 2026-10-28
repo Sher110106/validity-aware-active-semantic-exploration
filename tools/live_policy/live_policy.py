@@ -41,6 +41,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import shutil
 import time
 from typing import Any, Dict, List, Optional, Sequence, Set
@@ -283,6 +284,13 @@ def _stage_number(working_dir: str) -> int:
     return int(name) if name.isdigit() else 0
 
 
+def _rerun_index(working_dir: str) -> int:
+    """n for a run directory named ..._rerun<n> (stage dirs sit in <run>/stages/<k>), else 0."""
+    run = os.path.basename(os.path.dirname(os.path.dirname(os.path.normpath(working_dir))))
+    m = re.search(r"_rerun(\d+)$", run)
+    return int(m.group(1)) if m else 0
+
+
 def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: str) -> List[str]:
     """Stand-in for complete_scene_graph that makes no LLM call. observed_only
     copies the observed graph to every member; placebo gives every member its
@@ -301,8 +309,12 @@ def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: s
     # seed; first attempts keep the original seed (2026-10-28 fix).
     summary_path = os.path.join(working_dir, SUMMARY_NAME)
     attempt = sum(1 for _ in open(summary_path)) if os.path.exists(summary_path) else 0
+    # A rerun of an excluded run (run dir ..._rerun<n>) must not replay the
+    # original's draws, as an LLM rerun would not. The salt goes last and is
+    # never 0: numpy seeds [a, b] and [a, b, 0] identically.
+    rerun = _rerun_index(working_dir)
     out = []
-    record: Dict[str, Any] = {"ts": t0, "policy": policy, "working_dir": working_dir, "tracks": {}, "attempt": attempt}
+    record: Dict[str, Any] = {"ts": t0, "policy": policy, "working_dir": working_dir, "tracks": {}, "attempt": attempt, "rerun": rerun}
     for track, observed_path in enumerate(processed):
         observed = _load_raw(observed_path)
         members = []
@@ -313,7 +325,8 @@ def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: s
                 shutil.copyfile(observed_path, dst)
                 members.append({"graph_id": graph_id, **_counts(observed, None)})
             else:
-                key = [int(config.SEED), _stage_number(working_dir), graph_id] + ([attempt] if attempt else [])
+                key = [int(config.SEED), _stage_number(working_dir), graph_id]
+                key += [attempt, rerun] if rerun else ([attempt] if attempt else [])
                 rng = np.random.default_rng(key)
                 graph = placebo_graph(observed, rng, calib)
                 with open(dst, "w") as f:

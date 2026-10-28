@@ -258,3 +258,26 @@ def test_placebo_retry_draws_fresh_hypotheses(tmp_path, monkeypatch):
     assert first[0] == expected  # first attempt keeps the pre-registered seed
     records = [json.loads(l) for l in (tmp_path / live_policy.SUMMARY_NAME).read_text().splitlines()]
     assert [r["attempt"] for r in records] == [0, 1]
+
+
+def test_placebo_rerun_draws_a_fresh_stream(tmp_path, monkeypatch):
+    monkeypatch.setattr(live_policy.time, "sleep", lambda s: None)
+    monkeypatch.setattr(live_policy, "load_calibration", lambda: CALIB)
+    import numpy as np
+    cls = type("M", (_Manager,), {})
+    live_policy.install(cls, "placebo")
+    graphs = {}
+    for run in ("e1_00871_s43_placebo_60m", "e1_00871_s43_placebo_60m_rerun1"):
+        stage = tmp_path / run / "stages" / "1"
+        stage.mkdir(parents=True)
+        manager = cls(str(stage))
+        manager.config.SEED = 43
+        graphs[run] = yaml.safe_load(open(manager.complete_scene_graph(["dsg0.json"])[0]))
+        record = json.loads((stage / live_policy.SUMMARY_NAME).read_text())
+        assert record["rerun"] == (1 if run.endswith("rerun1") else 0)
+    original, rerun = graphs.values()
+    assert original == live_policy.placebo_graph(OBSERVED, np.random.default_rng([43, 1, 0]), CALIB)
+    assert rerun == live_policy.placebo_graph(OBSERVED, np.random.default_rng([43, 1, 0, 0, 1]), CALIB)
+    assert original != rerun
+    assert live_policy._rerun_index("/w/runs/x_rerun12/stages/3") == 12
+    assert live_policy._rerun_index("/w/runs/x_60m/stages/3") == 0

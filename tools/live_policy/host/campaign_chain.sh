@@ -3,6 +3,8 @@
 # Runs jobs one after another on tyrone. Each line of jobs_file:
 #   pair <scene> <seed>                      E1: official + placebo (placebo paced from completed official runs)
 #   e2 <scene1> <seed1> <scene2> <seed2>     E2: two filter_only runs
+#   rerun <scene> <seed> <policy> [...]      E1: rerun once (as ..._rerun1) each named run
+#                                            that stopped below 50 m; skipped if it reached 50 m
 # A job starts when both runs of the previous job have finished, or one has
 # and MemAvailable >= 70 GB. Containers are picked from those with no active runner.
 W=/home/sher/active-semantic-perception-workspace; C=$W/runs/live_campaign; CAP=20.0
@@ -21,7 +23,7 @@ wait_prev() {
   done
 }
 prev_a=$2; prev_b=$3
-while read -r kind s1 d1 s2 d2; do
+while read -r kind s1 d1 s2 d2 p3 p4; do
   [ -z "$kind" ] && continue
   log "waiting for $prev_a and $prev_b before: $kind $s1 $d1 $s2 $d2"
   wait_prev "$prev_a" "$prev_b"
@@ -36,6 +38,26 @@ while read -r kind s1 d1 s2 d2; do
     log "launch pair $s1/$d1 on $c1 (official) $c2 (placebo), pacing $SCHED"
     $W/tools/live_policy/launch_pair.sh $c1 $c2 $s1 $d1 $SCHED $CAP >> $C/campaign_chain.log 2>&1
     prev_a=e1_${s1}_s${d1}_official_60m; prev_b=e1_${s1}_s${d1}_placebo_60m
+  elif [ "$kind" = rerun ]; then
+    names=""
+    for spec in "$s1 $d1 $s2" "$d2 $p3 $p4"; do
+      set -- $spec; [ -z "${3:-}" ] && continue
+      orig=e1_${1}_s${2}_${3}_60m
+      path=$(python3 -c "import glob,json,sys; print(max([json.load(open(f))['total_path_length_meters'] for f in glob.glob(sys.argv[1]+'/stages/*/navigation_stats.json')], default=0))" $orig)
+      if python3 -c "import sys; sys.exit(0 if float(sys.argv[1]) >= 50 else 1)" $path; then log "rerun $orig skipped: reached $path m"; continue; fi
+      c=$(idle | head -1); [ -z "$c" ] && { log "no idle container for rerun $orig; waiting"; sleep 120; c=$(idle | head -1); }
+      OFFS=$(ls -d e1_*_official_60m 2>/dev/null | while read r; do grep -q "finished $r: target_reached" runner_*.log && echo $r; done)
+      SCHED=$(python3 $W/tools/live_policy/pacing_update.py $OFFS | tail -1)
+      python3 -c "import json,sys; o,p,sc,sd,sch=sys.argv[1:6]; r={'name':o+'_rerun1','scene':sc,'seed':int(sd),'policy':p,'target_m':60,'max_hours':4.5,'max_cost_usd':1.5 if p=='official' else 0.0}; r.update({'no_llm_delay_schedule':sch} if p=='placebo' else {}); json.dump({'runs':[r]}, open('queue_'+o+'_rerun1.json','w'))" $orig $3 $1 $2 $SCHED
+      [ "$3" = placebo ] && echo "$(date +%H:%M) rerun ${orig}_rerun1 (stopped at $path m): placebo pacing from completed official runs ($(echo $OFFS)): $SCHED" >> DEVIATIONS.md
+      log "launch rerun ${orig}_rerun1 on $c (original stopped at $path m)"
+      $W/tools/live_policy/clean_container.sh $c > /dev/null
+      $W/tools/live_policy/start_runner.sh $c queue_${orig}_rerun1.json 99 $CAP >> $C/campaign_chain.log 2>&1
+      sleep 30
+      names="$names ${orig}_rerun1"
+    done
+    set -- $names
+    [ -n "${1:-}" ] && { prev_a=$1; prev_b=${2:-$1}; }
   else
     for spec in "$c1 $s1 $d1" "$c2 $s2 $d2"; do
       set -- $spec
