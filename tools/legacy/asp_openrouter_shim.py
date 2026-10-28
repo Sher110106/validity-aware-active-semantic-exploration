@@ -65,6 +65,141 @@ OPENROUTER_MODEL = os.environ.get("ASP_OPENROUTER_MODEL", "deepseek/deepseek-v4.
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 _TYPE_MAP = {str: "string", float: "number", int: "integer", bool: "boolean"}
 
+# 2026-10-28 (live 1017 campaign): per-call metering and a per-run cost
+# cap. The matrix runs never logged provider or cost on a successful call,
+# so their spend was never measured. Every addition below is driven by an
+# env var whose default keeps the old behaviour.
+COST_CAP_MESSAGE = "ASP_OPENROUTER_MAX_COST_USD cap reached"
+
+
+class CostCapExceeded(RuntimeError):
+    pass
+
+
+def _env_true(name, default):
+    return os.environ.get(name, default).strip().lower() not in ("0", "false", "no", "")
+
+
+def _meter_paths():
+    log_dir = os.environ.get("ASP_LLM_LOG_DIR", "").strip()
+    if not log_dir:
+        return None
+    return {
+        "cost": os.path.join(log_dir, "_cost_usd"),
+        "reserved": os.path.join(log_dir, "_reserved_usd"),
+        "lock": os.path.join(log_dir, "_cost_usd.lock"),
+        "usage": os.path.join(log_dir, "usage.jsonl"),
+        "cap_flag": os.path.join(log_dir, "_cost_cap_reached"),
+    }
+
+
+def _read_spent(path):
+    try:
+        with open(path) as f:
+            return float(f.read().strip() or 0.0)
+    except FileNotFoundError:
+        return 0.0
+
+
+def _write_amount(path, value):
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        f.write(f"{value:.9f}\n")
+    os.replace(tmp, path)
+
+
+class _MeterLock:
+    """Exclusive flock shared by the 8 spawn workers of one run."""
+
+    def __init__(self, paths):
+        self.path = paths["lock"]
+
+    def __enter__(self):
+        import fcntl
+
+        self.f = open(self.path, "a+")
+        fcntl.flock(self.f, fcntl.LOCK_EX)
+        return self
+
+    def __exit__(self, *exc):
+        self.f.close()
+
+
+def _reserve_budget():
+    """Before each request, atomically reserve a worst-case cost against the
+    per-run cap, so 8 concurrent workers cannot all pass a stale check.
+    Returns the amount reserved (0 when no cap is set)."""
+    cap = os.environ.get("ASP_OPENROUTER_MAX_COST_USD", "").strip()
+    paths = _meter_paths()
+    if not cap or paths is None:
+        return 0.0
+    reserve = float(os.environ.get("ASP_OPENROUTER_RESERVE_USD", "0.015"))
+    with _MeterLock(paths):
+        spent = _read_spent(paths["cost"])
+        held = _read_spent(paths["reserved"])
+        if spent + held + reserve > float(cap):
+            with open(paths["cap_flag"], "w") as f:
+                f.write(f"spent {spent:.9f} + reserved {held:.9f} + {reserve} > {cap}\n")
+            sys.stderr.write(f"[_asp_openrouter_shim] {COST_CAP_MESSAGE}: spent {spent:.6f}, reserved {held:.6f}, cap {cap}\n")
+            raise CostCapExceeded(f"{COST_CAP_MESSAGE}: spent {spent:.6f}, reserved {held:.6f}, cap {cap}")
+        _write_amount(paths["reserved"], held + reserve)
+    return reserve
+
+
+def _check_cost_cap():
+    """Backward-compatible name used by older callers and tests."""
+    return _reserve_budget()
+
+
+def _record_usage(status, latency_s, data, reserved=0.0):
+    """Append one line per request to usage.jsonl, add its cost to the run's
+    running total and release its reservation. Fails closed: a 200 response
+    without usage.cost, or a request that raised, is charged the reservation
+    (or the default reserve when no cap is set)."""
+    import time
+
+    paths = _meter_paths()
+    if paths is None:
+        return
+    data = data or {}
+    usage = data.get("usage") or {}
+    choice = (data.get("choices") or [{}])[0]
+    prompt_details = usage.get("prompt_tokens_details") or {}
+    completion_details = usage.get("completion_tokens_details") or {}
+    fallback = reserved or float(os.environ.get("ASP_OPENROUTER_RESERVE_USD", "0.015"))
+    cost_known = usage.get("cost") is not None
+    if cost_known:
+        cost = float(usage["cost"])
+    elif status == 200 or status == "exception":
+        cost = fallback
+    else:
+        cost = 0.0
+    rec = {
+        "ts": time.time(),
+        "pid": os.getpid(),
+        "status": status,
+        "latency_s": round(latency_s, 3),
+        "id": data.get("id"),
+        "provider": data.get("provider"),
+        "model": data.get("model"),
+        "finish_reason": choice.get("finish_reason"),
+        "tool_calls": len((choice.get("message") or {}).get("tool_calls") or []),
+        "prompt_tokens": usage.get("prompt_tokens"),
+        "cached_tokens": prompt_details.get("cached_tokens"),
+        "completion_tokens": usage.get("completion_tokens"),
+        "reasoning_tokens": completion_details.get("reasoning_tokens"),
+        "cost": cost,
+        "cost_known": cost_known,
+    }
+    with _MeterLock(paths):
+        spent = _read_spent(paths["cost"]) + cost
+        _write_amount(paths["cost"], spent)
+        if reserved:
+            _write_amount(paths["reserved"], max(0.0, _read_spent(paths["reserved"]) - reserved))
+        rec["run_cost_usd"] = round(spent, 9)
+        with open(paths["usage"], "a") as f:
+            f.write(json.dumps(rec) + "\n")
+
 
 def _function_to_openai_tool(fn):
     sig = inspect.signature(fn)
@@ -264,9 +399,17 @@ class _FakeResponse:
 
 
 def openrouter_generate_content(contents, config, api_key, _max_retries=3):
+    import time
+
+    backoff_s = float(os.environ.get("ASP_OPENROUTER_RETRY_BACKOFF_S", "0"))
     for attempt in range(1, _max_retries + 1):
+        if attempt > 1 and backoff_s > 0:
+            time.sleep(backoff_s * (attempt - 1))
         try:
             response = _openrouter_generate_content_once(contents, config, api_key)
+        except CostCapExceeded:
+            # Retrying cannot help and must not spend; give up at once.
+            return _FakeResponse(text="", parts=[_FakePart(text="")])
         except Exception as e:
             # 2026-09-13: discovered this retry loop only ever covered
             # "HTTP 200 but semantically empty" responses - a raw
@@ -304,6 +447,39 @@ def openrouter_generate_content(contents, config, api_key, _max_retries=3):
         f"empty/error responses - giving up, returning empty text.\n"
     )
     return _FakeResponse(text="", parts=[_FakePart(text="")])
+
+
+class RequestDeadlineExceeded(RuntimeError):
+    pass
+
+
+def _post_with_deadline(url, **kwargs):
+    """requests' timeout bounds each socket read, so a server that trickles
+    keep-alive bytes can hold a request open indefinitely (seen 2026-10-28:
+    one call open for over 12 minutes stalled a whole planning stage). With
+    ASP_OPENROUTER_TOTAL_TIMEOUT_S set, give up after that many seconds in
+    total; the abandoned request finishes or dies in a daemon thread."""
+    import threading
+
+    total = float(os.environ.get("ASP_OPENROUTER_TOTAL_TIMEOUT_S", "0") or 0)
+    if total <= 0:
+        return requests.post(url, **kwargs)
+    box = {}
+
+    def target():
+        try:
+            box["resp"] = requests.post(url, **kwargs)
+        except Exception as e:  # handed to the caller below
+            box["error"] = e
+
+    t = threading.Thread(target=target, daemon=True)
+    t.start()
+    t.join(total)
+    if t.is_alive():
+        raise RequestDeadlineExceeded(f"request exceeded {total:.0f} s in total")
+    if "error" in box:
+        raise box["error"]
+    return box["resp"]
 
 
 def _openrouter_generate_content_once(contents, config, api_key):
@@ -412,7 +588,10 @@ def _openrouter_generate_content_once(contents, config, api_key):
     provider_config = {"require_parameters": True}
     if provider_order.strip():
         provider_config["order"] = [p.strip() for p in provider_order.split(",") if p.strip()]
-        provider_config["allow_fallbacks"] = True
+        # 2026-10-28: ASP_OPENROUTER_ALLOW_FALLBACKS=0 makes the order a
+        # hard pin (the 1017 campaign runs DeepInfra fp8 only, by the
+        # user's choice). Default stays True, as above.
+        provider_config["allow_fallbacks"] = _env_true("ASP_OPENROUTER_ALLOW_FALLBACKS", "1")
     # 2026-09-16: `order` alone doesn't keep a fallback within the same
     # quantization - confirmed live, 5 test calls with
     # order=["deepinfra/fp8"] landed DeepInfra/DeepInfra/Relace/DeepInfra/
@@ -428,16 +607,35 @@ def _openrouter_generate_content_once(contents, config, api_key):
             q.strip() for q in provider_quantizations.split(",") if q.strip()
         ]
     payload["provider"] = provider_config
+    if _meter_paths() is not None:
+        payload["usage"] = {"include": True}
 
-    resp = requests.post(
-        OPENROUTER_URL,
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json=payload,
-        timeout=180,
-    )
+    reserved = _reserve_budget()
+    import time
+
+    t0 = time.time()
+    try:
+        resp = _post_with_deadline(
+            OPENROUTER_URL,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json=payload,
+            # 2026-10-28: 1017 first turns take 115-150 s on DeepInfra; the old
+            # fixed 180 s left little margin under 8-worker load.
+            timeout=float(os.environ.get("ASP_OPENROUTER_TIMEOUT_S", "180")),
+        )
+    except Exception:
+        # The provider may still bill a request we gave up on.
+        _record_usage("exception", time.time() - t0, None, reserved)
+        raise
     if resp.status_code != 200:
+        _record_usage(resp.status_code, time.time() - t0, None, reserved)
         raise RuntimeError(f"OpenRouter {resp.status_code}: {resp.text[:500]}")
-    data = resp.json()
+    try:
+        data = resp.json()
+    except ValueError:
+        _record_usage("exception", time.time() - t0, None, reserved)
+        raise
+    _record_usage(resp.status_code, time.time() - t0, data, reserved)
 
     choice = data["choices"][0]
     message = choice["message"]

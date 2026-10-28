@@ -1,0 +1,1 @@
+cd /home/sher/active-semantic-perception-workspace/runs/live_campaign; for r in e1_*_60m; do printf "%s:%s " ${r#e1_} $(grep -c "Error during planning" $r/logs/exploration_pipeline.log 2>/dev/null); done; echo
