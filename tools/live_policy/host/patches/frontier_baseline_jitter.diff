@@ -1,0 +1,21 @@
+--- frontier_baseline.py.orig_25c6a5d5	2026-10-29 22:23:56.560502959 +0530
++++ frontier_baseline.py	2026-10-29 22:23:56.651749829 +0530
+@@ -302,6 +302,18 @@
+         elif self.config.SCENE_NUMBER == 69:
+             # 00069
+             initial_state.position = np.array([0.6, self.config.AGENT_HEIGHT, 1.5])
++        # CVP frontier seeds: ASP_START_JITTER_SEED=<int> moves the start by up to
++        # 0.25 m in x and z (habitat frame), snapped to the navmesh. Unset: unchanged.
++        jitter_seed = os.environ.get("ASP_START_JITTER_SEED")
++        if jitter_seed:
++            rng = np.random.default_rng(int(jitter_seed))
++            dx, dz = rng.uniform(-0.25, 0.25, 2)
++            p = np.array(initial_state.position, dtype=float) + np.array([dx, 0.0, dz])
++            snapped = np.array(self.pathfinder.snap_point(p), dtype=float)
++            if np.all(np.isfinite(snapped)):
++                p = np.array([snapped[0], self.config.AGENT_HEIGHT, snapped[2]])
++            rospy.loginfo(f"Start jitter seed {jitter_seed}: {np.round(initial_state.position, 3).tolist()} -> {np.round(p, 3).tolist()}")
++            initial_state.position = p
+         self.agent.set_state(initial_state)
+ 
+     def _set_navigation_path_from_world_path(self, world_path_points):

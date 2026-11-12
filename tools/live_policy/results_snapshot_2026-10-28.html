@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CVP / ASP results snapshot, 28 Oct 2026, 16:45 IST</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --s-official: #2a78d6; --s-placebo: #eb6834; --s-filter: #1baf7a; --s-gemini: #eda100;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s-official: #3987e5; --s-placebo: #d95926; --s-filter: #199e70; --s-gemini: #c98500;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface-1: #1a1a19;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --s-official: #3987e5; --s-placebo: #d95926; --s-filter: #199e70; --s-gemini: #c98500;
+}
+body { margin: 0; }
+.viz-root { background: var(--page); color: var(--text-primary); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 20px; }
+.card { background: var(--surface-1); border: 1px solid var(--ring); border-radius: 10px; padding: 18px 20px; margin: 0 auto 16px; max-width: 800px; }
+h1 { font-size: 18px; margin: 0 0 4px; }
+h2 { font-size: 15px; margin: 0 0 2px; }
+.sub { color: var(--text-secondary); margin: 0 0 6px; font-size: 13px; }
+.take { margin: 6px 0 10px; font-size: 13.5px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); margin: 4px 0 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.sw.sq { border-radius: 2px; }
+svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+.tick { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.lab { fill: var(--text-primary); font-size: 12.5px; }
+.lab2 { fill: var(--text-secondary); font-size: 11.5px; }
+.note { fill: var(--text-muted); font-size: 11.5px; font-style: italic; }
+.val { fill: var(--text-primary); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+#tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--ring); box-shadow: 0 2px 8px rgba(0,0,0,.12); border-radius: 6px; padding: 6px 9px; font-size: 12px; display: none; max-width: 280px; }
+details { margin-top: 8px; font-size: 12.5px; }
+table { border-collapse: collapse; margin-top: 6px; width: 100%; }
+th, td { text-align: left; padding: 3px 8px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+th { color: var(--text-secondary); font-weight: 600; }
+.foot { color: var(--text-muted); font-size: 12px; max-width: 800px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="card">
+    <h1>Where the results stand: 28 Oct 2026, 16:45 IST</h1>
+    <p class="sub">Scenes 00853 and 00871 (HM3D). Every score is measured against the human HM3D annotation, not against a map made by one of the robots.</p>
+  </div>
+
+  <div class="card">
+    <h2>Live runs: object-mapping score over the first 50 m</h2>
+    <p class="sub">Area under the object-F1 curve to 50 m; higher is better. Each dot is one run (one seed). The dashed line is the frontier explorer, which uses no LLM. We use 50 m because every run so far has reached it.</p>
+    <p class="take">Random guesses score as well as the LLM's guesses. The live pipeline beats the frontier explorer on 00871 but not on 00853. Our filter's first run sits level with the author's run.</p>
+    <svg id="dots" width="760" height="270" role="img" aria-label="Dot plot of object-mapping scores by run, scene and arm"></svg>
+    <details><summary>Table view</summary>
+      <table>
+        <tr><th>Scene</th><th>Arm</th><th>Seed</th><th>Path</th><th>Score to 50 m</th><th>Score to 60 m</th></tr>
+        <tr><td>00853</td><td>Frontier explorer (no LLM)</td><td>-</td><td>95.7 m</td><td>0.151</td><td>0.172</td></tr>
+        <tr><td>00853</td><td>Author's pipeline, September run (earlier model)</td><td>42</td><td>126.1 m</td><td>0.171</td><td>0.189</td></tr>
+        <tr><td>00853</td><td>Author's pipeline, live (DeepSeek)</td><td>42</td><td>61.1 m</td><td>0.117</td><td>0.141</td></tr>
+        <tr><td>00853</td><td>Author's pipeline, live (DeepSeek)</td><td>43</td><td>54.3 m</td><td>0.130</td><td>0.153*</td></tr>
+        <tr><td>00853</td><td>Placebo (random guesses)</td><td>42</td><td>67.3 m</td><td>0.133</td><td>0.146</td></tr>
+        <tr><td>00853</td><td>Placebo (random guesses)</td><td>43</td><td>67.8 m</td><td>0.155</td><td>0.172</td></tr>
+        <tr><td>00853</td><td>Our filter</td><td>42</td><td>38.4 m</td><td>running</td><td>running</td></tr>
+        <tr><td>00871</td><td>Frontier explorer (no LLM)</td><td>-</td><td>120.2 m</td><td>0.103</td><td>0.119</td></tr>
+        <tr><td>00871</td><td>Author's pipeline, live (DeepSeek)</td><td>42</td><td>64.6 m</td><td>0.122</td><td>0.131</td></tr>
+        <tr><td>00871</td><td>Author's pipeline, live (DeepSeek)</td><td>43</td><td>61.0 m</td><td>0.112</td><td>0.127</td></tr>
+        <tr><td>00871</td><td>Placebo (random guesses)</td><td>42</td><td>60.2 m</td><td>0.104</td><td>0.114</td></tr>
+        <tr><td>00871</td><td>Placebo (random guesses)</td><td>43</td><td>-</td><td>excluded, rerun queued</td><td>-</td></tr>
+        <tr><td>00871</td><td>Our filter</td><td>42</td><td>60.8 m</td><td>0.124</td><td>0.136</td></tr>
+      </table>
+      <p>* stopped at 54.3 m (time limit); the 60 m score holds its last value.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>How often the model's predicted objects are real</h2>
+    <p class="sub">Share of predicted objects (placed more than 0.5 m from anything already mapped) that land within 0.5 m or 1.0 m of a real object with the same label. All three get the same 8 inputs; the placebo draws random objects of the same shape. Exploratory: the metric was fixed after the first 7 Gemini answers.</p>
+    <p class="take">DeepSeek's guesses are no better than chance at 0.5 m. Gemini's land four to five times as often as chance.</p>
+    <div class="legend">
+      <span><i class="sw sq" style="background:var(--s-placebo)"></i>Random placebo</span>
+      <span><i class="sw sq" style="background:var(--s-official)"></i>DeepSeek V4.1 Flash 1017</span>
+      <span><i class="sw sq" style="background:var(--s-gemini)"></i>Gemini 3.8 Flash</span>
+    </div>
+    <svg id="bars" width="560" height="230" role="img" aria-label="Grouped bars of predicted-object precision by model"></svg>
+    <details><summary>Table view</summary>
+      <table>
+        <tr><th>Model</th><th>Within 0.5 m</th><th>Within 1.0 m</th></tr>
+        <tr><td>Random placebo</td><td>1.5%</td><td>4.1%</td></tr>
+        <tr><td>DeepSeek V4.1 Flash 1017</td><td>1.7%</td><td>7.4%</td></tr>
+        <tr><td>Gemini 3.8 Flash</td><td>7.1%</td><td>17.1%</td></tr>
+      </table>
+      <p>Gemini ahead at 7 of 8 stages (sign test p = 0.07).</p>
+    </details>
+  </div>
+
+  <p class="foot">Sources on tyrone: runs/live_campaign/hm3d_refs_work/{cells12_scores, cell3_scores, interim_1640_scores, frontier_60m_scores, gemini_static*_scores}.json.</p>
+  <div id="tip"></div>
+</div>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const tip = document.getElementById("tip");
+function el(parent, name, attrs, text) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  parent.appendChild(e);
+  return e;
+}
+function hover(target, html) {
+  target.addEventListener("mousemove", ev => {
+    tip.innerHTML = html; tip.style.display = "block";
+    tip.style.left = (ev.clientX + 14) + "px"; tip.style.top = (ev.clientY + 12) + "px";
+  });
+  target.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+}
+
+// Dot plot: rows are arms, two facets are scenes, x is the score to 50 m.
+(function () {
+  const svg = document.getElementById("dots");
+  const rows = [
+    {key: "official", label: "Author's pipeline, live (DeepSeek)", color: "var(--s-official)"},
+    {key: "placebo", label: "Placebo (random guesses)", color: "var(--s-placebo)"},
+    {key: "filter", label: "Our filter (filter_only)", color: "var(--s-filter)"},
+    {key: "sept", label: "Author's pipeline, September run", sub: "earlier model, one run", color: null},
+  ];
+  const facets = [
+    {scene: "00853", x0: 240, frontier: 0.1511,
+     pts: {official: [[0.1169, 42, "61.1 m"], [0.1304, 43, "54.3 m"]], placebo: [[0.1333, 42, "67.3 m"], [0.1549, 43, "67.8 m"]],
+           filter: [], sept: [[0.1709, 42, "126.1 m"]]},
+     empty: {filter: "still running (38 m)"}},
+    {scene: "00871", x0: 505, frontier: 0.1031,
+     pts: {official: [[0.1218, 42, "64.6 m"], [0.1124, 43, "61.0 m"]], placebo: [[0.1035, 42, "60.2 m"]],
+           filter: [[0.1240, 42, "60.8 m"]], sept: []},
+     empty: {sept: "no run"}},
+  ];
+  const W = 235, top = 44, rh = 46, lo = 0.09, hi = 0.18;
+  const bottom = top + rows.length * rh;
+  const sx = (f, v) => f.x0 + (v - lo) / (hi - lo) * W;
+
+  rows.forEach((r, i) => {
+    const y = top + i * rh + rh / 2;
+    if (r.color) el(svg, "circle", {cx: 8, cy: y, r: 5, fill: r.color});
+    else el(svg, "circle", {cx: 8, cy: y, r: 4.5, fill: "none", stroke: "var(--text-secondary)", "stroke-width": 1.5});
+    el(svg, "text", {x: 20, y: r.sub ? y - 2 : y + 4, class: "lab"}, r.label);
+    if (r.sub) el(svg, "text", {x: 20, y: y + 13, class: "lab2"}, r.sub);
+  });
+
+  facets.forEach(f => {
+    el(svg, "text", {x: f.x0, y: 14, class: "lab", "font-weight": 600}, "Scene " + f.scene);
+    [0.10, 0.12, 0.14, 0.16, 0.18].forEach(t => {
+      el(svg, "line", {x1: sx(f, t), x2: sx(f, t), y1: top, y2: bottom, stroke: "var(--grid)", "stroke-width": 1});
+      el(svg, "text", {x: sx(f, t), y: bottom + 16, class: "tick", "text-anchor": "middle"}, t.toFixed(2));
+    });
+    el(svg, "line", {x1: f.x0, x2: f.x0 + W, y1: bottom, y2: bottom, stroke: "var(--axis)", "stroke-width": 1});
+    rows.forEach((r, i) => {
+      const y = top + i * rh + rh / 2;
+      el(svg, "line", {x1: f.x0, x2: f.x0 + W, y1: y, y2: y, stroke: "var(--grid)", "stroke-width": 1, "stroke-dasharray": "1 3"});
+    });
+    const fx = sx(f, f.frontier);
+    el(svg, "line", {x1: fx, x2: fx, y1: top - 6, y2: bottom, stroke: "var(--text-secondary)", "stroke-width": 1.5, "stroke-dasharray": "4 3"});
+    el(svg, "text", {x: fx, y: top - 12, class: "lab2", "text-anchor": "middle"}, "Frontier " + f.frontier.toFixed(3));
+    const fhit = el(svg, "rect", {x: fx - 6, y: top - 6, width: 12, height: bottom - top + 6, fill: "transparent"});
+    hover(fhit, `<b>Frontier explorer (no LLM)</b><br>Scene ${f.scene}<br>Score to 50 m: ${f.frontier.toFixed(3)}`);
+
+    rows.forEach((r, i) => {
+      const y = top + i * rh + rh / 2;
+      const pts = f.pts[r.key];
+      if (!pts.length && f.empty[r.key]) el(svg, "text", {x: sx(f, 0.13), y: y + 4, class: "note"}, f.empty[r.key]);
+      pts.forEach(([v, seed, path]) => {
+        const cx = sx(f, v);
+        if (r.color) el(svg, "circle", {cx, cy: y, r: 6.5, fill: r.color, stroke: "var(--surface-1)", "stroke-width": 2});
+        else el(svg, "circle", {cx, cy: y, r: 6, fill: "var(--surface-1)", stroke: "var(--text-secondary)", "stroke-width": 2});
+        const hit = el(svg, "circle", {cx, cy: y, r: 13, fill: "transparent"});
+        hover(hit, `<b>${r.label}</b><br>Scene ${f.scene}, seed ${seed}<br>Score to 50 m: ${v.toFixed(3)}<br>Path: ${path}`);
+      });
+    });
+  });
+  el(svg, "text", {x: 240 + W + 15, y: bottom + 34, class: "tick", "text-anchor": "middle"}, "Area under object-F1 curve to 50 m (HM3D annotation)");
+})();
+
+// Grouped bars: predicted-object precision.
+(function () {
+  const svg = document.getElementById("bars");
+  const series = [
+    {name: "Random placebo", color: "var(--s-placebo)", v: [1.5, 4.1]},
+    {name: "DeepSeek V4.1 Flash 1017", color: "var(--s-official)", v: [1.7, 7.4]},
+    {name: "Gemini 3.8 Flash", color: "var(--s-gemini)", v: [7.1, 17.1]},
+  ];
+  const groups = ["Within 0.5 m", "Within 1.0 m"];
+  const x0 = 50, top = 16, base = 190, maxV = 20, bw = 40, gap = 2;
+  const sy = v => base - v / maxV * (base - top);
+  [0, 5, 10, 15, 20].forEach(t => {
+    el(svg, "line", {x1: x0, x2: 540, y1: sy(t), y2: sy(t), stroke: t ? "var(--grid)" : "var(--axis)", "stroke-width": 1});
+    el(svg, "text", {x: x0 - 8, y: sy(t) + 4, class: "tick", "text-anchor": "end"}, t + "%");
+  });
+  const gw = series.length * bw + (series.length - 1) * gap;
+  groups.forEach((g, gi) => {
+    const cx = 175 + gi * 240, gx = cx - gw / 2;
+    el(svg, "text", {x: cx, y: base + 20, class: "lab", "text-anchor": "middle"}, g);
+    series.forEach((s, si) => {
+      const v = s.v[gi], x = gx + si * (bw + gap), y = sy(v), h = base - y, r = Math.min(4, h);
+      el(svg, "path", {d: `M${x},${base} V${y + r} Q${x},${y} ${x + r},${y} H${x + bw - r} Q${x + bw},${y} ${x + bw},${y + r} V${base} Z`, fill: s.color});
+      el(svg, "text", {x: x + bw / 2, y: y - 5, class: "val", "text-anchor": "middle"}, v.toFixed(1) + "%");
+      const hit = el(svg, "rect", {x, y: top, width: bw, height: base - top, fill: "transparent"});
+      hover(hit, `<b>${s.name}</b><br>${g}: ${v.toFixed(1)}% of predicted objects are real`);
+    });
+  });
+})();
+</script>
+</body>
+</html>

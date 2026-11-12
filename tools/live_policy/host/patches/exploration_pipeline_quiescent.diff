@@ -1,0 +1,28 @@
+--- exploration_pipeline.py.orig_2f17aa29	2026-10-29 22:30:03.859031575 +0530
++++ exploration_pipeline.py	2026-10-29 22:30:16.757191247 +0530
+@@ -361,6 +361,25 @@
+                     time.sleep(3)
+                     size_after_wait = os.path.getsize(src_path)
+ 
++                    if current_size == size_after_wait and os.environ.get("ASP_DSG_QUIESCENT_S"):
++                        # CVP step 8: snapshot only once the mapper has gone quiet, i.e. the
++                        # file's bytes stay identical for ASP_DSG_QUIESCENT_S seconds.
++                        # Unset: the author's size-stability rule alone, unchanged.
++                        import hashlib
++                        quiet = float(os.environ["ASP_DSG_QUIESCENT_S"])
++                        digest = lambda: hashlib.sha256(open(src_path, "rb").read()).hexdigest()
++                        h0, waited = digest(), 0.0
++                        quiet_cap = float(os.environ.get("ASP_DSG_QUIESCENT_MAX_S", "120"))
++                        while waited < quiet_cap:
++                            time.sleep(quiet)
++                            waited += quiet
++                            h1 = digest()
++                            if h1 == h0:
++                                break
++                            h0 = h1
++                        current_size = os.path.getsize(src_path)
++                        rospy.loginfo(f"Quiescent snapshot of {src_path} after {waited:.0f} s extra wait")
++                        size_after_wait = current_size
+                     if current_size == size_after_wait:
+                         # The size is stable. It's safe to copy.
+                         dest_path = os.path.join(dest_dir, os.path.basename(src_path))
