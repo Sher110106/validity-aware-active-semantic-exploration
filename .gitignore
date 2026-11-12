@@ -14,3 +14,13 @@ scratchpad_verify/
 /Computer_Vision_Perception_Projects(Projects).csv
 /Lec1_Introduction (1).pdf
 /Report_Template (1).doc
+
+# Local tool state and credentials (never pushed)
+.claude/
+.pytest_cache/
+.vercel/
+.*_credentials
+.cvp-secrets/
+
+# Rendered slide previews (rebuild with docs/checkin_2026-11/build_checkin2_pptx.py)
+docs/checkin_2026-11/render/*.png

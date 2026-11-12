@@ -1,0 +1,5 @@
+# Keep hashed result files byte for byte: some CSVs have CRLF line ends, and their
+# sha256 is pinned in results_2026-10-31/POST_CAMPAIGN_MANIFEST.sha256.
+tools/live_policy/results_2026-10-31/** -text
+*.csv -text
+*.sha256 -text
