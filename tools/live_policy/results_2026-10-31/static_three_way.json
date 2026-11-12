@@ -1,0 +1,271 @@
+{
+ "budget_m": 60.0,
+ "reference": "HM3D annotation (<scene>_hm3d_reference.yaml)",
+ "note": "official and filter_only runs; for filter_only, 'official' means the observed map plus the guesses the validator kept",
+ "runs": {
+  "e1_00853_s42_official_60m": {
+   "official": {
+    "object_precision": 0.3641,
+    "object_recall": 0.0848,
+    "object_f1": 0.1345,
+    "normalized_ged": 1.0505
+   },
+   "tau_1.0": {
+    "object_precision": 0.5449,
+    "object_recall": 0.0841,
+    "object_f1": 0.1406,
+    "normalized_ged": 1.0192
+   },
+   "observed_only": {
+    "object_precision": 0.5459,
+    "object_recall": 0.0841,
+    "object_f1": 0.1406,
+    "normalized_ged": 1.0191
+   },
+   "predicted_nodes": {
+    "total": 1474,
+    "kept_by_unanimity": 8
+   }
+  },
+  "e1_00853_s43_official_60m": {
+   "official": {
+    "object_precision": 0.3857,
+    "object_recall": 0.0913,
+    "object_f1": 0.1446,
+    "normalized_ged": 1.0437
+   },
+   "tau_1.0": {
+    "object_precision": 0.584,
+    "object_recall": 0.0908,
+    "object_f1": 0.1523,
+    "normalized_ged": 1.0108
+   },
+   "observed_only": {
+    "object_precision": 0.5855,
+    "object_recall": 0.0908,
+    "object_f1": 0.1524,
+    "normalized_ged": 1.0106
+   },
+   "predicted_nodes": {
+    "total": 2038,
+    "kept_by_unanimity": 12
+   }
+  },
+  "e1_00871_s42_official_60m": {
+   "official": {
+    "object_precision": 0.3176,
+    "object_recall": 0.0805,
+    "object_f1": 0.1265,
+    "normalized_ged": 1.0666
+   },
+   "tau_1.0": {
+    "object_precision": 0.4142,
+    "object_recall": 0.0791,
+    "object_f1": 0.1295,
+    "normalized_ged": 1.043
+   },
+   "observed_only": {
+    "object_precision": 0.4147,
+    "object_recall": 0.0791,
+    "object_f1": 0.1296,
+    "normalized_ged": 1.0428
+   },
+   "predicted_nodes": {
+    "total": 1571,
+    "kept_by_unanimity": 8
+   }
+  },
+  "e1_00871_s43_official_60m": {
+   "official": {
+    "object_precision": 0.2871,
+    "object_recall": 0.0779,
+    "object_f1": 0.1206,
+    "normalized_ged": 1.0683
+   },
+   "tau_1.0": {
+    "object_precision": 0.3692,
+    "object_recall": 0.0772,
+    "object_f1": 0.1246,
+    "normalized_ged": 1.0436
+   },
+   "observed_only": {
+    "object_precision": 0.3697,
+    "object_recall": 0.0772,
+    "object_f1": 0.1246,
+    "normalized_ged": 1.0435
+   },
+   "predicted_nodes": {
+    "total": 1762,
+    "kept_by_unanimity": 5
+   }
+  },
+  "e1_00871_s44_official_60m": {
+   "official": {
+    "object_precision": 0.2944,
+    "object_recall": 0.0705,
+    "object_f1": 0.1122,
+    "normalized_ged": 1.0668
+   },
+   "tau_1.0": {
+    "object_precision": 0.3823,
+    "object_recall": 0.0692,
+    "object_f1": 0.1149,
+    "normalized_ged": 1.0428
+   },
+   "observed_only": {
+    "object_precision": 0.3824,
+    "object_recall": 0.0691,
+    "object_f1": 0.1148,
+    "normalized_ged": 1.0428
+   },
+   "predicted_nodes": {
+    "total": 1826,
+    "kept_by_unanimity": 10
+   }
+  },
+  "e2_00853_s42_filter_only_60m": {
+   "official": {
+    "object_precision": 0.3931,
+    "object_recall": 0.0993,
+    "object_f1": 0.1547,
+    "normalized_ged": 1.0423
+   },
+   "tau_1.0": {
+    "object_precision": 0.5073,
+    "object_recall": 0.0983,
+    "object_f1": 0.1589,
+    "normalized_ged": 1.0204
+   },
+   "observed_only": {
+    "object_precision": 0.5073,
+    "object_recall": 0.0983,
+    "object_f1": 0.1589,
+    "normalized_ged": 1.0204
+   },
+   "predicted_nodes": {
+    "total": 1006,
+    "kept_by_unanimity": 2
+   }
+  },
+  "e2_00853_s43_filter_only_60m": {
+   "official": {
+    "object_precision": 0.3729,
+    "object_recall": 0.0761,
+    "object_f1": 0.1224,
+    "normalized_ged": 1.0467
+   },
+   "tau_1.0": {
+    "object_precision": 0.4969,
+    "object_recall": 0.0752,
+    "object_f1": 0.1255,
+    "normalized_ged": 1.0262
+   },
+   "observed_only": {
+    "object_precision": 0.4973,
+    "object_recall": 0.0752,
+    "object_f1": 0.1255,
+    "normalized_ged": 1.0261
+   },
+   "predicted_nodes": {
+    "total": 1155,
+    "kept_by_unanimity": 1
+   }
+  },
+  "e2_00853_s44_filter_only_60m": {
+   "official": {
+    "object_precision": 0.4581,
+    "object_recall": 0.128,
+    "object_f1": 0.1925,
+    "normalized_ged": 1.04
+   },
+   "tau_1.0": {
+    "object_precision": 0.5787,
+    "object_recall": 0.1274,
+    "object_f1": 0.199,
+    "normalized_ged": 1.0174
+   },
+   "observed_only": {
+    "object_precision": 0.5787,
+    "object_recall": 0.1274,
+    "object_f1": 0.199,
+    "normalized_ged": 1.0174
+   },
+   "predicted_nodes": {
+    "total": 1311,
+    "kept_by_unanimity": 1
+   }
+  },
+  "e2_00871_s42_filter_only_60m": {
+   "official": {
+    "object_precision": 0.3495,
+    "object_recall": 0.0832,
+    "object_f1": 0.1324,
+    "normalized_ged": 1.0518
+   },
+   "tau_1.0": {
+    "object_precision": 0.425,
+    "object_recall": 0.0819,
+    "object_f1": 0.1345,
+    "normalized_ged": 1.0338
+   },
+   "observed_only": {
+    "object_precision": 0.425,
+    "object_recall": 0.0819,
+    "object_f1": 0.1345,
+    "normalized_ged": 1.0338
+   },
+   "predicted_nodes": {
+    "total": 1372,
+    "kept_by_unanimity": 0
+   }
+  },
+  "e2_00871_s43_filter_only_60m": {
+   "official": {
+    "object_precision": 0.284,
+    "object_recall": 0.0449,
+    "object_f1": 0.0771,
+    "normalized_ged": 1.0535
+   },
+   "tau_1.0": {
+    "object_precision": 0.3613,
+    "object_recall": 0.0446,
+    "object_f1": 0.0787,
+    "normalized_ged": 1.0382
+   },
+   "observed_only": {
+    "object_precision": 0.3613,
+    "object_recall": 0.0446,
+    "object_f1": 0.0787,
+    "normalized_ged": 1.0382
+   },
+   "predicted_nodes": {
+    "total": 814,
+    "kept_by_unanimity": 4
+   }
+  },
+  "e2_00871_s44_filter_only_60m": {
+   "official": {
+    "object_precision": 0.2807,
+    "object_recall": 0.0534,
+    "object_f1": 0.0894,
+    "normalized_ged": 1.0567
+   },
+   "tau_1.0": {
+    "object_precision": 0.3474,
+    "object_recall": 0.0526,
+    "object_f1": 0.0909,
+    "normalized_ged": 1.0393
+   },
+   "observed_only": {
+    "object_precision": 0.3474,
+    "object_recall": 0.0526,
+    "object_f1": 0.0909,
+    "normalized_ged": 1.0393
+   },
+   "predicted_nodes": {
+    "total": 943,
+    "kept_by_unanimity": 3
+   }
+  }
+ }
+}

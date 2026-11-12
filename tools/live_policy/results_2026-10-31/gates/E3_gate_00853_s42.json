@@ -1,0 +1,66 @@
+[
+ {
+  "run": "e3_00853_s42_oracle_visible_60m",
+  "arm": "oracle_visible",
+  "scene": "853",
+  "stages_used": 14,
+  "candidate_rows": 2331,
+  "base_rate": {
+   "n_near": 627,
+   "mapped_k1": 0.1291866028708134,
+   "mapped_k2": 0.14354066985645933
+  },
+  "scanned_share_of_new_hypotheses": 0.6269694416151922,
+  "gate": {
+   "all": {
+    "approach": {
+     "gap": 0.035257335257335265,
+     "n_drawn": 945,
+     "n_undrawn": 1386,
+     "p_one_sided": 0.06546726636681659
+    },
+    "mapped1": {
+     "gap": 0.0040404040404040525,
+     "n_drawn": 945,
+     "n_undrawn": 1386,
+     "p_one_sided": 0.2908545727136432
+    },
+    "mapped2_gap": 0.015488215488215482
+   },
+   "scanned": {
+    "approach": {
+     "gap": 0.06904959479840181,
+     "n_drawn": 547,
+     "n_undrawn": 857,
+     "p_one_sided": 0.02148925537231384
+    },
+    "mapped1": {
+     "gap": -3.6264423107681965e-05,
+     "n_drawn": 547,
+     "n_undrawn": 857,
+     "p_one_sided": 0.45327336331834084
+    },
+    "mapped2_gap": 0.015444377841157556
+   },
+   "unscanned": {
+    "approach": {
+     "gap": -0.02559584310968832,
+     "n_drawn": 398,
+     "n_undrawn": 529,
+     "p_one_sided": 0.55872063968016
+    },
+    "mapped1": {
+     "gap": 0.008544613426299752,
+     "n_drawn": 398,
+     "n_undrawn": 529,
+     "p_one_sided": 0.29685157421289354
+    },
+    "mapped2_gap": 0.010316231440757648
+   }
+  },
+  "later_found": {
+   "unique": 161,
+   "share": 0.2360248447204969
+  }
+ }
+]

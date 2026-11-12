@@ -1,0 +1,152 @@
+[
+ {
+  "run": "e1_00853_s42_official_60m",
+  "unique_hypotheses": 878,
+  "found": 4,
+  "share": 0.0046
+ },
+ {
+  "run": "e1_00853_s42_placebo_60m",
+  "unique_hypotheses": 1033,
+  "found": 3,
+  "share": 0.0029
+ },
+ {
+  "run": "e1_00853_s43_official_60m",
+  "unique_hypotheses": 1206,
+  "found": 6,
+  "share": 0.005
+ },
+ {
+  "run": "e1_00853_s43_placebo_60m",
+  "unique_hypotheses": 1251,
+  "found": 0,
+  "share": 0.0
+ },
+ {
+  "run": "e1_00853_s44_official_60m",
+  "unique_hypotheses": 818,
+  "found": 8,
+  "share": 0.0098
+ },
+ {
+  "run": "e1_00853_s44_official_60m_rerun1",
+  "unique_hypotheses": 759,
+  "found": 5,
+  "share": 0.0066
+ },
+ {
+  "run": "e1_00853_s44_placebo_60m",
+  "unique_hypotheses": 1409,
+  "found": 1,
+  "share": 0.0007
+ },
+ {
+  "run": "e1_00871_s42_official_60m",
+  "unique_hypotheses": 966,
+  "found": 3,
+  "share": 0.0031
+ },
+ {
+  "run": "e1_00871_s42_placebo_60m",
+  "unique_hypotheses": 959,
+  "found": 1,
+  "share": 0.001
+ },
+ {
+  "run": "e1_00871_s43_official_60m",
+  "unique_hypotheses": 1139,
+  "found": 7,
+  "share": 0.0061
+ },
+ {
+  "run": "e1_00871_s43_placebo_60m",
+  "unique_hypotheses": 86,
+  "found": 0,
+  "share": 0.0
+ },
+ {
+  "run": "e1_00871_s43_placebo_60m_rerun1",
+  "unique_hypotheses": 753,
+  "found": 1,
+  "share": 0.0013
+ },
+ {
+  "run": "e1_00871_s44_official_60m",
+  "unique_hypotheses": 1029,
+  "found": 18,
+  "share": 0.0175
+ },
+ {
+  "run": "e1_00871_s44_placebo_60m",
+  "unique_hypotheses": 1763,
+  "found": 5,
+  "share": 0.0028
+ },
+ {
+  "run": "e2_00853_s42_filter_only_60m",
+  "unique_hypotheses": 689,
+  "found": 5,
+  "share": 0.0073
+ },
+ {
+  "run": "e2_00853_s43_filter_only_60m",
+  "unique_hypotheses": 719,
+  "found": 6,
+  "share": 0.0083
+ },
+ {
+  "run": "e2_00853_s44_filter_only_60m",
+  "unique_hypotheses": 850,
+  "found": 2,
+  "share": 0.0024
+ },
+ {
+  "run": "e2_00871_s42_filter_only_60m",
+  "unique_hypotheses": 890,
+  "found": 6,
+  "share": 0.0067
+ },
+ {
+  "run": "e2_00871_s43_filter_only_60m",
+  "unique_hypotheses": 551,
+  "found": 2,
+  "share": 0.0036
+ },
+ {
+  "run": "e2_00871_s44_filter_only_60m",
+  "unique_hypotheses": 577,
+  "found": 2,
+  "share": 0.0035
+ },
+ {
+  "run": "e3_00853_s42_oracle_visible_60m_rerun1",
+  "unique_hypotheses": 160,
+  "found": 48,
+  "share": 0.3
+ },
+ {
+  "run": "e3_00853_s43_oracle_visible_60m",
+  "unique_hypotheses": 163,
+  "found": 53,
+  "share": 0.3252
+ },
+ {
+  "run": "e3_00871_s42_oracle_visible_60m",
+  "unique_hypotheses": 207,
+  "found": 25,
+  "share": 0.1208
+ },
+ {
+  "run": "e3_00871_s43_oracle_visible_60m",
+  "unique_hypotheses": 202,
+  "found": 38,
+  "share": 0.1881
+ },
+ {
+  "run": "e3_00871_s44_oracle_visible_60m",
+  "unique_hypotheses": 216,
+  "found": 46,
+  "share": 0.213
+ }
+]

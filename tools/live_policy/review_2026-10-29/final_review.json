@@ -1,0 +1,1045 @@
+{
+ "confirmed": [
+  {
+   "reviewer": "numbers",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What ran', line 161",
+   "quote": "the same pacing and identical placebo guesses. live_policy seeds each draw with [seed, stage, graph id]; it adds a salt only for `_rerun<n>` names and retried attempts.",
+   "problem": "The replicates share placebo seeds, not placebo guesses. The guesses already differ at stage 0, because placebo_graph builds them around the observed map. So measure (b), the stage-0 stop, mixes mapper noise with the guess differences that the map differences cause.",
+   "evidence": "stages/0/live_policy.jsonl gives these per-member predicted counts. q1: track 0 [6,14,7,10], track 1 [8,8,10,16]. q2: [6,14,8,9] and [8,8,6,9]. q3: [6,14,10,10] and [8,8,10,16]. Attempt and rerun are 0 in all three. The habitat_scene_graph_new_graph_{0,1,4}.yaml files have different md5s in every replicate. live_policy.py:203-263 (placebo_graph) picks anchors from the observed nodes and redraws candidate points that fall too close to observed positions, so the same seed on a different map gives different guesses.",
+   "fix": "the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id] and adds a salt only for `_rerun<n>` names and retried attempts). The guesses themselves still differ, because the placebo generator places them relative to the observed map: at stage 0 the members' guess counts already differ (track 0: 6/14/7/10, 6/14/8/9, 6/14/10/10). So the stop measure (b) mixes map noise with the guess differences it causes.",
+   "severity": "high",
+   "verifier_reason": "Confirmed. live_policy.py:422-424 seeds each draw with [SEED, stage, graph_id], with the salt only for attempt or rerun. But placebo_graph (live_policy.py:203-283) takes its anchors from the observed nodes, uses the observed room height and floor height, and redraws candidates that fall too near observed positions, so the number of random draws used depends on the map. The stage-0 live_policy.jsonl records attempt 0 and rerun 0 in all three runs, yet the predicted counts differ. Track 0 is q1 [6,14,7,10], q2 [6,14,8,9], q3 [6,14,10,10]; track 1 is q1 [8,8,10,16], q2 [8,8,6,9], q3 [8,8,10,16]. new_graph_{0,1,4}.yaml have different md5s in every replicate. All three manifests record the same live_policy.py md5 (eaf477c5), which also matches the local file. PREREGISTRATION_DETERMINISM.md never claims identical guesses. The stage-0 stop (b) is chosen using these stage-0 guesses, so it carries the map noise both directly and through the guesses the map changes.",
+   "verifier_fix": "**Runs:** three $0 placebo replicates, q1-q3, all on scene 00853 with seed 42, a 15 m target, the same pacing and the same placebo seeds. live_policy seeds each draw with [seed, stage, graph id] and adds a salt only for `_rerun<n>` names and retried attempts. The guesses themselves still differ, because the placebo generator places them around each run's observed map: at stage 0, track 0's members hold 6/14/7/10 guesses in q1, 6/14/8/9 in q2 and 6/14/10/10 in q3. So the stage-0 stop, measure (b), carries map noise twice: directly, and through the guesses the map changes."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 37(f), line 111",
+   "quote": "The three replicates draw identical placebo guesses: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts.",
+   "problem": "Same error as in the main report: the seeds are identical, but the guesses drawn from them are not.",
+   "evidence": "Stage-0 live_policy.jsonl predicted counts: q1 [6,14,7,10]/[8,8,10,16], q2 [6,14,8,9]/[8,8,6,9], q3 [6,14,10,10]/[8,8,10,16]. placebo_graph depends on the observed map (live_policy.py:203-263).",
+   "fix": "The three replicates use identical placebo seeds (live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts). Their guesses still differ, because the generator places them relative to each run's observed map (stage-0 member counts 6/14/7/10, 6/14/8/9 and 6/14/10/10 in track 0).",
+   "severity": "high",
+   "verifier_reason": "Same error as finding 0, checked against the same sources. Item 37(f) was written at 01:24, before q2 and q3 had run, so it records a prediction that the stage-0 live_policy.jsonl counts (q1 6/14/7/10, q2 6/14/8/9, q3 6/14/10/10 in track 0) show to be false. placebo_graph draws depend on the observed map.",
+   "verifier_fix": "In 37(f): \"The three replicates use identical placebo seeds: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts. Their guesses still differ, because placebo_graph places them around each run's observed map (stage-0 track-0 member counts 6/14/7/10, 6/14/8/9 and 6/14/10/10).\" Since DEVIATIONS is a time-stamped log, this could go in as a correction under item 38 instead of an edit to 37(f)."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 430",
+   "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+   "problem": "This turns a null result into a claim that the two are equal. The difference's CI spans about \u00b10.7 objects. The project's own rule (PREREGISTRATION_E1.md; PREREGISTRATION_FRONTIER_SEEDS.md) says a non-significant result is 'no detectable difference', never 'equal'.",
+   "evidence": "summary.json decision/R1/b: LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], n = 119 official stages.",
+   "fix": "Under ASP's own score, LLM guesses did not detectably beat random ones (regret 9.12 vs 9.15 on official stages; difference \u22120.03, CI \u22120.76 to +0.70).",
+   "severity": "medium",
+   "verifier_reason": "summary.json decision/R1/b gives LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], n 119. On the same official stages, R1's oracle regret is 8.76 against placebo A's 9.15 (tables/Uwall/official/cells/R1), a gain of only 0.39. So the interval is about twice the gain from exact objects: the test could not have told the LLM from exact objects, let alone shown it equal to random. PREREGISTRATION_E1.md and _FRONTIER_SEEDS.md forbid 'equal' for a null. 'Do equally well' turns an underpowered null into an equivalence claim. All the numbers in the fix already have numbers.csv rows (bench:R1:b_llm_minus_A, b_ci_lo, b_ci_hi).",
+   "verifier_fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; difference \u22120.03, CI \u22120.76 to +0.70)."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 'What else the bench shows', line 81",
+   "quote": "Under ASP's own score, DeepSeek's guesses and random ones do equally well.",
+   "problem": "Same equality claim from a null result. The R5 sentence on line 83 ('does as well as ASP's score') makes the same kind of claim from R1 \u2212 R5 = \u22120.16, CI \u22120.53 to +0.20.",
+   "evidence": "summary.json decision/R1/b: \u22120.034 [\u22120.756, 0.697]. R5_comparisons/Uwall/actual/R1: \u22120.164 [\u22120.526, 0.195]. PREREGISTRATION_E1.md: a non-significant result is 'no detectable difference', never 'equal'.",
+   "fix": "Under ASP's own score, DeepSeek's guesses do not detectably beat random ones (official R1 regret 9.12 vs 9.15; difference \u22120.03, CI \u22120.76 to +0.70).",
+   "severity": "medium",
+   "verifier_reason": "Same problem as finding 2, at STEPS line 81: the R1 official contrast is \u22120.034 [\u22120.756, 0.697], an interval wider than R1's own oracle gain on those stages (8.76 vs 9.15). Line 83 is milder because it prints the CI, but 'does as well as' still states equality from R1 \u2212 R5 = \u22120.164 [\u22120.526, 0.195] (R5_comparisons/Uwall/actual/R1). SYNTHESIS \u00a710's last bullet ('does only as well as ASP's score') repeats the line-83 wording.",
+   "verifier_fix": "Line 81: \"**Under ASP's own score, DeepSeek's guesses show no detectable difference from random ones.** On official stages R1 regret is 9.12 with the LLM files and 9.15 with placebo A (difference \u22120.03, CI \u22120.76 to +0.70). That interval is wider than the gain exact objects give R1 on the same stages (8.76 against 9.15), so this test could not separate the LLM from exact objects either.\" Line 83: \"The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5, actual files: \u22120.16, CI \u22120.53 to +0.20).\" SYNTHESIS \u00a710: \"The 'far from walked path' rule is not detectably worse than ASP's score under a wall-aware count (step 6, R5 against R1), not better as \u00a78 suggested.\""
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 3 'Check and caveats', line 152",
+   "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows.",
+   "problem": "Two of three 00853 starts, not one, moved past the 0.25 m per-axis draw range. The 0.31 m is the x shift only; the total shift is larger. The snap also moved seed 42 away from its drawn point.",
+   "evidence": "frontier_baseline.log start-jitter lines. Seed 43: (-0.5, 4.5) -> (-0.808, 4.286), x 0.308 m, total 0.375 m (draw dx 0.076, dz -0.228). Seed 44: -> (-0.805, 4.383), x 0.305 m, total 0.327 m (draw dx -0.189). Seed 42: -> (-0.355, 4.749), drawn z shift -0.031 but actual +0.249. On 00871 all three starts equal the raw draws.",
+   "fix": "On 00853 the navmesh snap moved the starts of seeds 43 and 44 by 0.31 m in x, past the 0.25 m draw range (total shifts 0.38 and 0.33 m), and moved seed 42's start 0.28 m from its drawn point; the pre-registration allows the snap. On 00871 the starts equal the draws.",
+   "severity": "low",
+   "verifier_reason": "The frontier_baseline.log start-jitter lines, checked against np.random.default_rng(seed).uniform(-0.25,0.25,2), show the following. On 00853, seed 43 drew (+0.076, \u22120.228) but moved (\u22120.308, \u22120.214), 0.375 m in all. Seed 44 drew (\u22120.189, \u22120.121) but moved (\u22120.305, \u22120.117), 0.327 m. Seed 42 drew (+0.137, \u22120.031) but moved (+0.145, +0.249), which is 0.28 m from its drawn point though within 0.25 m per axis. On 00871 all three starts equal the draws exactly. So two 00853 starts, not one, left the 0.25 m per-axis range. The verifier's REPORT.md makes the same omission. Low severity: the pre-registration allows the snap.",
+   "verifier_fix": "On 00853 the navmesh snap moved two starts past the 0.25 m draw range: seeds 43 and 44 each moved about 0.31 m in x (0.38 and 0.33 m in all). It also moved seed 42's start 0.28 m from its drawn point. The pre-registration allows the snap. On 00871 every start equals its draw."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 'Caveats', line 96",
+   "quote": "and about 3.5 more for the verifier's recompute.",
+   "problem": "The verifier's per-stage recompute alone used 3.64 CPU-hours, before its exact-wall and decision recomputes.",
+   "evidence": "verify/verify_log.txt last line: 'verify_stages.py 12761.76s user 333.43s system 431% cpu 50:32.07 total', which is 13,095 s = 3.64 h.",
+   "fix": "and about 3.6 more for the verifier's per-stage recompute alone.",
+   "severity": "low",
+   "verifier_reason": "verify/verify_log.txt line 385: verify_stages.py used 12,761.76 s user + 333.43 s system = 13,095 s = 3.64 CPU-hours, and that is only the per-stage pass. The exact-wall and decision recomputes are extra and not timed. The verifier's report in agent_reports.json gives no CPU figure, so 'about 3.5' is the author's own estimate and falls below the logged minimum. The build figure of 2.75 h (9,643.52 + 265.66 s) is correct. Low.",
+   "verifier_fix": "Run cost: 2.75 CPU-hours on the laptop for the build, and at least 3.6 more for the verifier (3.64 for its per-stage recompute alone)."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, sections 5 and 6, lines 200 and 227",
+   "quote": "Of the $40 DeepSeek cap, $25.4 is left; Gemini credit is untouched.",
+   "problem": "$25.4 is $40 minus the stop-line total of $14.60. The package itself says stop lines miss shutdown calls of a few cents per run, so the true balance is a little lower. Line 200 ('The $25.4 left') has the same issue.",
+   "evidence": "WRITEUP.md lines 70 and 378: 'Calls made while a run shuts down add a few cents per run'; 'Spend totals use the runners' stop lines and miss shutdown calls'. DEVIATIONS item 34: $1.23 (scheduler) against $1.204 (stop line) for one run.",
+   "fix": "Of the $40 DeepSeek cap, about $25 is left ($14.60 spent by the runners' stop lines, plus a few cents of shutdown calls per paid run); Gemini credit is untouched.",
+   "severity": "low",
+   "verifier_reason": "$40 \u2212 $14.60 = $25.40 exactly, and $14.60 is the stop-line total (DEVIATIONS 35(e), numbers.csv rows 791-793). WRITEUP lines 70 and 378 and DEVIATIONS 34(e) say stop lines miss shutdown calls of a few cents per run. For example, item 28 is $1.23 by the scheduler against $1.204 by the stop line. With about 13 scored paid runs plus archived paid attempts, the true balance is a few tens of cents lower. Stating '$25.4' to one decimal implies a precision the package itself says it lacks. Low.",
+   "verifier_fix": "Line 227: \"Of the $40 DeepSeek cap, about $25 is left: the runners' stop lines total $14.60, and calls made during shutdown add a few cents per paid run. Gemini credit is untouched.\" Line 200: \"The roughly $25 left of the DeepSeek budget is unspent.\""
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 442",
+   "quote": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell, or a replay simulator.",
+   "problem": "The registered decision names only 5 replicates per cell. The replay simulator was not part of it.",
+   "evidence": "PREREGISTRATION_DETERMINISM.md Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' determinism.json decision: 'plan at least 5 replicates per cell'.",
+   "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. The replay simulator of plan step 9 is the other way out, but it was not part of the registered decision.",
+   "severity": "low",
+   "verifier_reason": "PREREGISTRATION_DETERMINISM.md Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' determinism.json decision is 'plan at least 5 replicates per cell'. The replay simulator is not in the registered decision, yet WRITEUP line 442 puts it under 'As registered:'. STEPS line 176 gets this right, and STEPS line 18 does not claim it as registered. Low.",
+   "verifier_fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. A replay simulator (plan step 9) would also remove the need, but the registered decision does not name it."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 426",
+   "quote": "Spend: $0.",
+   "problem": "Line 3 says every number appears in numbers.csv with its file and key. This one has no row: numbers.csv has no spend row for steps 6-8. Every other number in section 12 has a row that resolves.",
+   "evidence": "numbers.csv spend rows are 733-734, 791-794 and 898 only, all for E1-E3. Rows 960-1059 (section 12) have no spend key. The step 8 run_manifest.txt shows max_cost_usd=0.0, and the frontier runs make no LLM calls.",
+   "fix": "Add a row such as `spend:steps_6_8,0,e5_* config/run_manifest.txt max_cost_usd=0.0; frontier_baseline.py makes no LLM calls`, or drop the figure from section 12.",
+   "severity": "low",
+   "verifier_reason": "Line 3 says 'Every number below appears in numbers.csv with its file and key.' numbers.csv has no row for the steps 6-8 spend: its spend rows (733-734, 791-793) cover only E1-E3, and rows 960-1059 have no spend key. The figure itself is right: all three e5 run_manifest.txt files show policy=placebo, max_cost_usd=0.0, and the frontier runs and bench make no LLM calls. The same gap already exists for 'Gemini: $0' at line 71. Low: a provenance slip, not a wrong number.",
+   "verifier_fix": "Add rows such as `spend:steps_6_8,0,e5_* config/run_manifest.txt max_cost_usd=0.0; frontier_baseline.py and the bench make no LLM calls` and `spend:gemini,0,<source>` (for line 71), or drop the figures."
+  },
+  {
+   "reviewer": "numbers",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, line 3 (header)",
+   "quote": "Section 12 and the files listed in `POST_CAMPAIGN_MANIFEST.sha256` were added on 10-30.",
+   "problem": "The manifest does not match one of the files it lists. DEVIATIONS.md was edited after the manifest was written, so `shasum -a 256 -c POST_CAMPAIGN_MANIFEST.sha256` fails on it. A reader checking the package would see a failure.",
+   "evidence": "The manifest (mtime 10-30 10:16:19) lists DEVIATIONS.md as 967f0446\u2026; the current file (mtime 10:17:54) hashes to c5e3b6d8\u2026. Every other entry, including all 1,236 run files checked against /Users/sher/cvp_live_campaign_copy, passes.",
+   "fix": "Regenerate the DEVIATIONS.md line of POST_CAMPAIGN_MANIFEST.sha256 after the last edit, so that every listed file checks.",
+   "severity": "low",
+   "verifier_reason": "Confirmed. POST_CAMPAIGN_MANIFEST.sha256 (mtime 10-30 10:16:19) lists DEVIATIONS.md as 967f0446\u2026. The current file (mtime 10:17:54) hashes to c5e3b6d8\u2026. Running shasum -a 256 -c on the 9 package-relative entries gives 'DEVIATIONS.md: FAILED' and nothing else. All 1,236 runs/ entries pass against /Users/sher/cvp_live_campaign_copy. The header sentence is not false, but the manifest it points to fails its own check. Low.",
+   "verifier_fix": "Regenerate the DEVIATIONS.md line of POST_CAMPAIGN_MANIFEST.sha256 after the last edit (current hash c5e3b6d89dc69794311ae8faaddf3b8fdc13be352a0afc18c481819a6b2509e6), so that every listed file checks."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 436), step 7 bullet labelled [R, new pre-registration]",
+   "quote": "Frontier leads on 00853. On 00871 the official arm leads frontier, and placebo and frontier are level.",
+   "problem": "This sentence sits under a registered label. Putting 'official leads frontier' next to 'placebo and frontier are level' on one home reads as an LLM-content effect on 00871. The frontier pre-registration forbids that unless official \u2212 frontier is significant and placebo \u2212 frontier is not, and neither is. 'Level' is the 'equal' wording the same pre-registration bans for nulls. A 3 v 3 cell cannot reach p < 0.1, so neither split can be tested. Unlike OUTCOMES, \u00a712 gives no disclaimer. The next bullet (41-46 vs 12-28 stages) is an unregistered fairness check, also under [R].",
+   "evidence": "PREREGISTRATION_FRONTIER_SEEDS.md, Reading: 'No sentence credits LLM content unless official \u2212 frontier is significant and placebo \u2212 frontier is not'. Tests: 'Null results use the registered null form; never \"equal\"'. frontier_holm.json: per_scene60 00871 official +0.0279, placebo \u22120.0027; p60 0.47 and 0.07, Holm 0.47 and 0.14.",
+   "fix": "Per scene (2-3 runs a cell, not testable alone): 00853 official \u22120.052, placebo \u22120.047; 00871 official +0.028, placebo \u22120.003. These splits do not credit LLM content; neither registered test is significant. [X] On 00871 frontier stops and scans far more often over the same 60 m: 41-46 stages, against 12-28 for the ASP arms.",
+   "severity": "medium",
+   "verifier_reason": "The per-scene numbers are right (frontier_holm.json per_scene60: 00853 official \u22120.0518, placebo \u22120.0472; 00871 official +0.0279, placebo \u22120.0027). But \u00a712 puts them under [R, new pre-registration] with no word that 2-3 runs a cell cannot be tested (3 v 3 gives at best p 0.1). It also uses 'level' for an untested gap. Read together, 'official leads frontier, placebo level' points to the LLM-content reading that PREREGISTRATION_FRONTIER_SEEDS.md forbids. OUTCOMES adds a disclaimer here; \u00a712 does not. The stage-count bullet comes from the verifier's fairness checks, not a registered analysis, yet it sits under [R] without an [X] tag.",
+   "verifier_fix": "Per scene (2-3 runs a cell, not tested): on 00853 official \u2212 frontier is \u22120.052 and placebo \u2212 frontier \u22120.047; on 00871 they are +0.028 and \u22120.003. Under the registered reading these splits give no credit to LLM content. [X] On 00871 frontier stops and scans far more often over the same 60 m: 41-46 stages, against 12-28 for the ASP arms."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md item 37(e)",
+   "quote": "By scene, frontier leads on 00853 by about 0.05; on 00871 official leads frontier by 0.03 and placebo and frontier are level.",
+   "problem": "This sits inside 'Step 7 result, as registered'. It pairs the two 00871 gaps in a way that implies LLM content helped on 00871, and it uses 'level' (equal) for a null. Both break the frontier pre-registration's reading rules.",
+   "evidence": "PREREGISTRATION_FRONTIER_SEEDS.md, Reading and Tests (quoted above). frontier_holm.json per_scene60: 00871 official +0.0279, placebo \u22120.0027. Neither contrast is significant (Holm 0.47, 0.14).",
+   "fix": "By scene (not tested; 3 v 3 at most): 00853 official \u22120.052, placebo \u22120.047; 00871 official +0.028, placebo \u22120.003. Under the registered reading these do not credit LLM content.",
+   "severity": "medium",
+   "verifier_reason": "Same text as \u00a712 and same problem. It sits under 'Step 7 result, as registered'. It pairs the 00871 gaps (+0.0279 and \u22120.0027) with no note that they were not tested and do not credit LLM content, and it uses 'level' for an untested gap.",
+   "verifier_fix": "By scene (2-3 runs a cell, not tested): 00853 official \u2212 frontier \u22120.052, placebo \u2212 frontier \u22120.047; 00871 +0.028 and \u22120.003. Under the registered reading these do not credit LLM content."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72, Yardstick check (line 49); same in DEVIATIONS.md 37(b) 'The decision is the same either way.'",
+   "quote": "The decision is the same under either reading,",
+   "problem": "The pre-registration ties the yardstick check to a label, not to the decision. If U_wall does not separate at least as well as U_360, the bench results are 'provisional'. On the ratio reading U_wall fails (8.6 vs 21.2). On the difference reading it passes only on the point estimate (gap CI \u22120.002 to +0.029). The builder chose the difference reading and noted that on the ratio reading 'the bench would be provisional'. OUTCOMES leaves this choice out of its list of the builder's readings. No document marks the bench provisional, and later sentences state bench results as firm.",
+   "evidence": "PREREGISTRATION_BENCH.md, Yardstick check: '...report that, and treat bench results as provisional.' summary.json yardstick_check: Uwall ratio 8.56 [7.09, 10.23], U360 21.18 [17.2, 26.6]; minus_U360_ci95 [\u22120.0018, 0.0292]; provisional=false. summarize.py:175 and :205 set this from the difference alone. agent_reports.json built.caveats[1]: 'On a ratio reading it fails... which would make the bench provisional.'",
+   "fix": "The pre-registration did not name the measure. The builder used the difference, on which U_wall passes on the point estimate only. On the ratio it fails, and the pre-registration then makes the bench results provisional. We report them as provisional. The go/no-go is the same either way, but every regret number rests on a yardstick that counts 19% of the objects mapped next.",
+   "severity": "medium",
+   "verifier_reason": "PREREGISTRATION_BENCH.md says: if U_wall does not separate at least as well as U_360, 'report that, and treat bench results as provisional'. It does not name the measure. summarize.py sets provisional=false from the difference alone, and on that measure U_wall passes on the point estimate only (gap +0.014, CI \u22120.0018 to +0.0292). On the ratio it fails (8.56 [7.09, 10.23] against 21.18 [17.2, 26.6]). Builder caveat 1 says the ratio reading 'would make the bench provisional'. OUTCOMES reports both readings but never uses the word provisional. It also leaves the measure out of its list of the builder's readings. 'The decision is the same' is true of go/no-go, but it hides the pre-registered label.",
+   "verifier_fix": "The pre-registration did not name the measure. The builder used the difference of shares, on which U_wall passes on the point estimate only (gap +0.014, CI \u22120.002 to +0.029). On the ratio it fails, and the pre-registration then makes the bench results provisional, so read the bench numbers as provisional. The stop decision is the same under either reading and under every variant of the wall test. (DEVIATIONS 37(b): 'The stop decision is the same either way; on the ratio reading the bench numbers are provisional.')"
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 427), bench bullet",
+   "quote": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls.",
+   "problem": "\u00a712 states the bench results with no word on the yardstick check. The wall-aware count fails the pre-registered check on the ratio reading, which makes the results provisional. It also counts only 156 of the 820 objects that are mapped next. \u00a711 had said 'Fix the yardstick's wall problem first', so a reader of \u00a712 would assume that was done.",
+   "evidence": "summary.json yardstick_check: Uwall in_mapped 156, out_mapped 664 (820 total); ratio 8.6 vs U360 21.2. PREREGISTRATION_BENCH.md, Yardstick check. OUTCOMES \u00a72 Caveats: 'The yardstick is weak... It counts 19% of the objects the robot does map next.'",
+   "fix": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls. This yardstick counts only 19% of the objects mapped next and fails the pre-registered check on a ratio reading, so these results are provisional.",
+   "severity": "medium",
+   "verifier_reason": "\u00a711 says 'Fix the yardstick's wall problem first'. \u00a712 then describes the yardstick as if that fix worked. It gives no word on the check: U_wall counts 156 of the 820 objects mapped next (19%), and it passes only on the difference reading's point estimate while failing on the ratio. SYNTHESIS \u00a710 and OUTCOMES both note the weakness, but the package's own \u00a712 does not. A reader would take the regret numbers, such as 'at most 15%', as resting on a working yardstick.",
+   "verifier_fix": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls. This yardstick counts only 19% of the objects the robot maps next, and it passes the pre-registered yardstick check only on one reading (on the ratio it fails, which would make these results provisional)."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72 (line 86); also \u00a76 line 214 'Exact objects improve it by at most 15%' and line 221 'the limits are the objective and the detector, not the LLM'",
+   "quote": "Better guesses alone would not change that: with exact objects the gain is at most 15%.",
+   "problem": "15% is the best rule's point estimate on the registered yardstick, which the same report calls weak. The R4 CI reaches 0.804, a 20% gain. Under the unregistered wall-map variants the report itself puts forward as fixes, the oracle gain grows: 21.5% with own-footprint and 25% with the 1.1 m slice. The go/no-go does not change, since every ratio stays above 0.70. But 'at most 15%' and 'not the LLM' claim more than this analysis can show. No registered analysis measured the LLM's share, and E1 leaves effects up to +0.040 open.",
+   "evidence": "summary.json decision R4 a: ratio 0.850, CI [0.804, 0.893]. summary.json sensitivity.decision R4 a_ratio: own_footprint 0.785, head015_footprint 0.761, slice_1p1 0.747. WRITEUP \u00a73: E1 'Effects up to +0.040 are not ruled out.'",
+   "fix": "On the registered yardstick, exact objects cut regret by 15% at best (R4 ratio 0.850, CI 0.804-0.893). Unregistered wall-map variants give up to 25% (R4 0.747), still short of the 30% bar. In \u00a76: 'the bench points to the objective and the detector as the larger limits; it did not test the LLM's share.'",
+   "severity": "medium",
+   "verifier_reason": "15% is the best rule's point estimate (R4 ratio 0.850). Its CI reaches 0.804, about a 20% gain. The report calls the yardstick weak and blames each object's own outline. Under the unregistered wall-map variants that fix this, the R4 ratio is 0.785 (own_footprint), 0.761 (head015_footprint) and 0.747 (slice_1p1), a 21-25% gain (summary.json sensitivity.decision). All stay above 0.70, so the decision holds. But 'at most 15%' is a bound the data do not give. The \u00a76 line 'the limits are the objective and the detector, not the LLM' goes further than the bench, which did not test the detector.",
+   "verifier_fix": "\u00a72: 'Better guesses alone would not reach the bar: with exact objects the best rule cuts regret by 15% on the registered yardstick (R4 ratio 0.850, CI 0.804-0.893), and by 21-25% under the unregistered wall-map fixes (R4 0.785-0.747), against the 30% asked.' \u00a76 item 2: 'Exact objects improve it by about 15% (up to 25% under unregistered wall-map fixes), short of the 30% bar.' \u00a76 line 221: 'If the work continues, the bench and the mechanism review point to the objective and the detector as the larger limits; even exact objects do not reach the bar, so better guesses alone are unlikely to be enough.'"
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 430)",
+   "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+   "problem": "This draws equivalence from a null. The R1 contrast is \u22120.03, CI \u22120.76 to +0.70: differences of about \u00b10.7 objects are not ruled out, about the size of the noise floor (\u22120.73). The project's registered null form is 'no detectable difference', never 'equal'.",
+   "evidence": "summary.json decision R1 b: LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], floor \u22120.731. PREREGISTRATION_E1.md: 'A non-significant result is \"no detectable difference, MDE = x\", never \"equal\".' PREREGISTRATION_FRONTIER_SEEDS.md: 'never \"equal\"'.",
+   "fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; LLM \u2212 placebo \u22120.03, CI \u22120.76 to +0.70).",
+   "severity": "medium",
+   "verifier_reason": "'Do equally well' claims the two are the same based on a null result. summary.json R1 b: LLM \u2212 placebo A \u22120.034, CI \u22120.756 to +0.697, floor \u22120.731. Gaps of about \u00b10.7 objects are not ruled out, which is a large share of the roughly 1.9-object spread between rules (builder caveat 14). The project's registered null form (PREREGISTRATION_E1, PREREGISTRATION_FRONTIER_SEEDS, e1_analysis.py docstring) bans 'equal'.",
+   "verifier_fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; LLM \u2212 placebo A \u22120.03, CI \u22120.76 to +0.70)."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72 (line 81); same issue at line 83 'R5 does as well as ASP's score with the guesses it actually had'",
+   "quote": "Under ASP's own score, DeepSeek's guesses and random ones do equally well.",
+   "problem": "Both sentences claim equivalence from nulls. R1 LLM \u2212 placebo A is \u22120.03 [\u22120.76, +0.70]. R1 \u2212 R5 with the actual files is \u22120.16 [\u22120.53, +0.20]. The registered null wording is 'no detectable difference', never 'equal'.",
+   "evidence": "summary.json decision R1 b: LLM_minus_A CI [\u22120.756, 0.697]. R5_comparisons Uwall actual R1: \u22120.164, CI [\u22120.526, 0.195]. PREREGISTRATION_E1.md null form.",
+   "fix": "Under ASP's own score, DeepSeek's guesses and random ones show no detectable difference (\u22120.03, CI \u22120.76 to +0.70). The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5 \u22120.16, CI \u22120.53 to +0.20).",
+   "severity": "medium",
+   "verifier_reason": "Both lines read a null as the same result. R1 LLM \u2212 placebo A is \u22120.03 [\u22120.76, +0.70]. R1 \u2212 R5 with the actual files is \u22120.164 [\u22120.526, +0.195] (summary.json R5_comparisons Uwall actual R1). Both CIs are wide next to the ~1.9-object spread between rules, so 'equally well' and 'does as well as' claim more than the data show.",
+   "verifier_fix": "Line 81: 'Under ASP's own score, DeepSeek's guesses and random ones show no detectable difference (LLM \u2212 placebo A \u22120.03, CI \u22120.76 to +0.70); R1 regret is 9.12 with the LLM files and 9.15 with placebo A.' Line 83: 'The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5, actual files: \u22120.16, CI \u22120.53 to +0.20).'"
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a73 (line 141)",
+   "quote": "A stage bootstrap gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). That is not the registered test.",
+   "problem": "This bootstrap does not resample stages. e1_analysis.py resamples runs within scene and arm. It is the scene-blocked bootstrap CI that the E1 pre-registration lists as a reported item, and WRITEUP \u00a73 shows it for E1 and E2. Step 7 was to be run 'the way E1 is', so this is registered reporting, not an extra. Step 7 also leaves out the registered MDE ('no detectable difference, MDE = x').",
+   "evidence": "e1_analysis.py docstring and bootstrap_ci: 'runs resampled within scene and arm'. PREREGISTRATION_E1.md: 'Reported: per-scene differences, scene-blocked bootstrap 95% CI, and the minimum detectable effect'. E4_*_60m.json: bootstrap_95ci [\u22120.0220, \u22120.0011] and [\u22120.0390, \u22120.0097]. frontier_holm.json mde60 0.0198 and 0.0258.",
+   "fix": "The scene-blocked run bootstrap, which E1 also reports, gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). It is not the test, and with 2-3 runs per cell it understates the spread. Registered null form: no detectable difference, MDE at 60 m 0.020 (official) and 0.026 (placebo).",
+   "severity": "medium",
+   "verifier_reason": "e1_analysis.py bootstrap_ci draws runs with replacement within each scene and arm (docstring: 'runs resampled within scene and arm'), not stages. So 'stage bootstrap' names the method wrongly. It is the scene-blocked bootstrap CI that PREREGISTRATION_E1 lists as a reported item, and WRITEUP \u00a73 reports it for E1 and E2. The numbers match E4_*_60m.json ([\u22120.0220, \u22120.0011] and [\u22120.0390, \u22120.0097]). Step 7 also leaves out the MDE, which E1's null form reports; frontier_holm.json gives mde60 0.0198 and 0.0258.",
+   "verifier_fix": "The scene-blocked bootstrap that E1 also reports (runs resampled within scene and arm) gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). It is not the registered test, and with 2-3 runs per cell it understates the spread. Minimum detectable effect at 60 m: 0.020 (official) and 0.026 (placebo)."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md \u00a710 (line 245)",
+   "quote": "rule does only as well as ASP's score",
+   "problem": "This is equal wording for a null. With the actual files R1 \u2212 R5 is \u22120.16, CI \u22120.53 to +0.20, and with no guesses it is +0.27, CI \u22120.13 to +0.68. The data show no detectable difference, not equality.",
+   "evidence": "summary.json R5_comparisons Uwall: actual R1 \u22120.164 [\u22120.526, 0.195]; none R1 +0.273 [\u22120.130, 0.680].",
+   "fix": "The 'far from walked path' rule shows no detectable difference from ASP's score under a wall-aware count (R1 \u2212 R5, actual files \u22120.16, CI \u22120.53 to +0.20). It does not beat ASP's score as \u00a78 suggested.",
+   "severity": "low",
+   "verifier_reason": "'Does only as well as' reads a null as the same result. summary.json R5_comparisons Uwall: actual R1 \u2212 R5 \u22120.164 [\u22120.526, +0.195]; none +0.273 [\u22120.130, +0.680]. 'Not better as \u00a78 suggested' is correct, since R5 does not beat R1, but the data support no detectable difference, not equality.",
+   "verifier_fix": "The 'far from walked path' rule shows no detectable difference from ASP's score under a wall-aware count (step 6, R1 \u2212 R5 with the actual files \u22120.16, CI \u22120.53 to +0.20); it does not beat it, as \u00a78 suggested."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 427)",
+   "quote": "Offline bench (step 6) [X]: no rule passes, so live work stops.",
+   "problem": "The bench ran under PREREGISTRATION_BENCH.md with a pre-registered decision rule, and 'live work stops' is that rule's outcome. The section heading says 'R under new pre-registrations', yet the bench alone is labelled [X], which makes the stop decision look exploratory.",
+   "evidence": "PREREGISTRATION_BENCH.md, 'Decision rule (the plan's, fixed now)'. WRITEUP \u00a712 heading: '[X, and R under new pre-registrations]'. OUTCOMES \u00a72: 'Decision rule (pre-registered)'.",
+   "fix": "Offline bench (step 6) [R, new pre-registration, on stages already seen in the audit; results provisional, see yardstick]: no rule passes, so live work stops.",
+   "severity": "low",
+   "verifier_reason": "WRITEUP defines [X] as exploratory and [R] as registered analysis. The bench ran under PREREGISTRATION_BENCH.md, whose decision rule ('If no rule meets both, write up the bench and stop live work') gives the very outcome this bullet states. OUTCOMES \u00a72 calls it 'Decision rule (pre-registered)'. Tagging the stop decision [X], while steps 7 and 8 get [R, new pre-registration], is inconsistent and makes a registered decision look optional.",
+   "verifier_fix": "Offline bench (step 6) [R, new pre-registration, on the audit's stages; the 'no decision attached' results below are X]: no rule passes, so live work stops."
+  },
+  {
+   "reviewer": "rules",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 442)",
+   "quote": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell, or a replay simulator.",
+   "problem": "The registered decision is only 'plan at least 5 replicates per cell'. The replay simulator is plan step 9, which itself needs step 6 to find a rule. Adding it under 'As registered' widens the registered decision.",
+   "evidence": "PREREGISTRATION_DETERMINISM.md, Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.'",
+   "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. (Not registered: a replay simulator is the other route.)",
+   "severity": "low",
+   "verifier_reason": "PREREGISTRATION_DETERMINISM.md, Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' It does not mention a replay simulator. That is plan step 9, which needs step 6 to find a rule. Putting it under 'As registered' widens the registered decision.",
+   "verifier_fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. (Not registered: a replay simulator is the other route.)"
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a71 (line 19)",
+   "quote": "The plan runs the detection-replay simulator and the live confirmation only if step 6 finds a rule (step 9 also needs step 8 to work). Neither condition held.",
+   "problem": "Plan step 8 named a snapshot keyed to a frame count or a Hydra idle flag. The run tested a file-content quiet wait instead, and the report itself says 'The fix the plan named was not tested'. So whether 'step 8 works' was never tested; it did not fail. Step 6 alone blocks steps 9 and 10, so the decision stands.",
+   "evidence": "SYNTHESIS \u00a76 step 8: 'Deterministic stage snapshot (frame count or Hydra idle flag instead of file-size stability)'. exploration_pipeline_quiescent.diff waits on file hashes. OUTCOMES \u00a74: 'The fix the plan named was not tested.'",
+   "fix": "Step 6 found no rule, which alone stops steps 9 and 10. Step 8's condition was not tested as the plan framed it: the run tried a file-level wait, not the frame-count or idle-flag snapshot the plan named.",
+   "severity": "low",
+   "verifier_reason": "SYNTHESIS \u00a76 step 8 defines the step as a snapshot on a frame count or Hydra idle flag, instead of file-size stability. What ran was a file-hash quiet wait (exploration_pipeline_quiescent.diff hashes the file). OUTCOMES \u00a74 says 'The fix the plan named was not tested.' So whether the plan's step 8 'works' is untested, not shown to fail. The decision stands, because step 6 alone blocks steps 9 and 10. This is low severity, since the line above says the mapper-progress wait was not tested.",
+   "verifier_fix": "Steps 9 and 10 were not run. The plan runs them only if step 6 finds a rule, and it found none. (Step 9 also needs step 8 to work: the file-level wait that ran did not make runs pair, and the frame-count or idle-flag snapshot the plan named was not tested.)"
+  },
+  {
+   "reviewer": "rules",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a73 (line 152)",
+   "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows.",
+   "problem": "Seed 44 on 00853 also moved past 0.25 m in x (0.305 m). The navmesh snap also put the starts of seeds 43 and 44 only 0.10 m apart, so two of the three 00853 'seeds' start from nearly the same spot.",
+   "evidence": "frontier_baseline.log: seed 43 [-0.5, 1.1, 4.5] -> [-0.808, 1.1, 4.286]; seed 44 [-0.5, 1.1, 4.5] -> [-0.805, 1.1, 4.383]. The drawn jitters were (0.076, \u22120.228) and (\u22120.189, \u22120.121).",
+   "fix": "Seeds 43 and 44 on 00853 moved about 0.31 m in x, past 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows. The snap left those two starts 0.10 m apart.",
+   "severity": "low",
+   "verifier_reason": "frontier_baseline.log for e4_00853_s44 reads: 'Start jitter seed 44: [-0.5, 1.1, 4.5] -> [-0.805, 1.1, 4.383]', so x moved 0.305 m, past 0.25 m, as with seed 43 ([-0.808, 1.1, 4.286]). The two snapped starts are about 0.10 m apart (\u0394x 0.003, \u0394z 0.097). OUTCOMES, and the verifier, name only seed 43.",
+   "verifier_fix": "On 00853 the starts of seeds 43 and 44 both moved about 0.31 m in x, past 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows. The snap left those two starts about 0.10 m apart."
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What this says about the cause' (lines 184 and 189)",
+   "quote": "The likely reading: the mapper writes the file only now and then. When it last wrote before the copy, it had taken in less of the scan in q3 than in q1 and q2 [I]. So how far the mapper has got varies from run to run, and a file that sits still can still be stale.",
+   "problem": "The copied files contradict this reading. Every track-0 stage-0 file already holds the mapper's poses up to the end of the scan. The objects q3 lacks never appear in q3's later track-0 maps either. So the mapper did not fall behind the copy; it made less of the same scan, and no wait would have recovered those objects. Line 184 also keeps the snapshot-timing cause alive ('A quiet wait on the file does not fix it'), but the data argue against that cause.",
+   "evidence": "Host runs/live_campaign/e5_00853_s42_placebo_15m_q{1,2,3}/stages/0/graph0_dsg.json.\n- Timing: the last AgentNodeAttributes timestamp falls 0.30, 0.10 and 0.09 s before each run's 'Scan complete' (rosout 1793303349.28 / 1793310748.46 / 1793314107.38). The first pose comes 0.0-1.7 s after the scan starts, and the poses are spread evenly over the turn.\n- Counts: q3 track 0 has 58 pose nodes, against 120 in q1 and 104 in q2. Place nodes are alike (54-60, about 1 MB each).\n- File size: the gap is the object nodes. KhronosObjectAttributes take 1.77 MB in q1 and 1.48 MB in q2; q3 has none.\n- Later stages: q3's track-0 YAMLs for stages 1-5 never contain the duvet (about 0.4,-5.2), the nightstand (-0.6,-6.9) or the lamp (-0.47,-6.18). q1, q2 and q3's own track 1 all mapped these at stage 0.\n- Code: run_pipeline calls publish_sensor_images only in SCANNING, WAITING_FOR_MID_PATH and NAVIGATING, and the copy wait blocks inside PLANNING. The mapper therefore gets no new frames after the scan.",
+   "fix": "Line 184: \"The working cause was that the pipeline copies the map file before the mapper has taken in the whole scan. The step 8 data do not support it.\"\n\nLine 189: \"The likely reading: in all three runs the copied track-0 file already holds the mapper's poses up to the last 0.3 s of the scan, so the copy did not come too early. But q3's track 0 kept about half as many poses (58 against 104-120) and formed none of the four start-room objects, and those objects never appear in its later maps either [I]. So the split lies in what the mapper makes of the same scan, not in when the file is copied. Waiting longer, on the file or on the mapper's progress, would not have recovered q3's objects.\"",
+   "severity": "high",
+   "verifier_reason": "Checked on the host (read-only) and in the local copies. In each stage-0 track-0 graph0_dsg.json the last agent pose falls 0.30, 0.10 and 0.09 s before rosout 'Scan complete' in q1, q2 and q3, and the poses span the whole turn (max gap 1.4 s). q3 track 0 has 58 poses (q1 120, q2 104), 60 places and no KhronosObjectAttributes nodes; q1 and q2 carry 1.77 and 1.48 MB of object nodes. q3's track-0 YAMLs at stages 1-5 never hold the duvet, the nightstand (-0.6,-6.9) or the lamp (-0.47,-6.18). run_pipeline calls publish_sensor_images only in SCANNING, WAITING_FOR_MID_PATH and NAVIGATING, and the copy wait runs inside execute_planning, so the mapper gets no frames while the pipeline waits. The copy was not early and the file was not stale, so the doc's timing story conflicts with its own data. Only q3's cabinet case is unclear: a cabinet 0.67 m off turns up from stage 2.",
+   "verifier_fix": "Line 184: \"The working cause was that the pipeline copies the map file before the mapper has taken in the whole scan. The step 8 files argue against it:\" Line 189: \"**The likely reading:** the copy was not early. In all three runs the copied track-0 file holds mapper poses up to the last 0.3 s of the scan [V]. But q3's track 0 kept 58 poses against 104-120 and formed no objects, and the duvet, nightstand and lamp it missed never appear in its track-0 maps at stages 1-5 [V]. The pipeline sends the mapper no frames while it waits to copy. So the split lies in what the mapper makes of the same scan, not in when the file is copied. A longer wait, on the file or on the mapper's progress, would likely not have helped [I].\" (Line 190 should then say that such a wait is untested and unlikely to help.)"
+  },
+  {
+   "reviewer": "claims",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 8 bullet",
+   "quote": "The wait never saw the file change, yet the copied maps differed. The mapper had got further through the scan in some runs than others when it last wrote [I]. A wait on the mapper's own progress was not tested.",
+   "problem": "The evidence contradicts the inference. Every copied stage-0 file already held the mapper's poses to the end of the scan. q3's missing objects never appeared in its later maps, so the cause was not how far the mapper had got.",
+   "evidence": "- Last pose node in each track-0 stage-0 graph0_dsg.json: 0.09-0.30 s before 'Scan complete' in q1, q2 and q3.\n- q3 track 0 has 58 pose nodes against 104-120 and no object nodes.\n- The start-room objects (duvet, nightstand, lamp at -0.47,-6.18) are absent from q3's track-0 maps at stages 1-5.\n- The pipeline publishes no frames while it waits to copy (run_pipeline / execute_planning).",
+   "fix": "\"The wait never saw the file change, yet the copied maps differed. Each copied file already held the mapper's poses up to the end of the scan. In q3, one track kept half as many poses and formed none of the start-room objects, which did not appear later either [I]. So the split lies in the mapper's output, not the copy time, and waiting longer would likely not have fixed it.\"",
+   "severity": "high",
+   "verifier_reason": "Same evidence as [0]. Every copied stage-0 track-0 file holds poses to within 0.3 s of scan end. q3's track 0 has 58 poses and no objects, and its missing start-room objects never appear at stages 1-5. The inference that the mapper 'had got further through the scan in some runs than others when it last wrote' is contradicted.",
+   "verifier_fix": "\"The wait never saw the file change, yet the copied maps differed. Each copied file already held the mapper's poses to the end of the scan. In q3 one track kept about half as many poses and formed none of the start-room objects, and they never appeared in its later maps either. So the split lies in what the mapper makes of a scan, not in when the file is copied, and a longer wait would likely not help [I]. A wait on the mapper's own progress was not tested.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md, section 10, step 8 bullet",
+   "quote": "A wait on the file does not fix \u00a77's snapshot-timing cause. The copies came at the same moment in every run, but the mapper had got further through the scan in some runs than others [I].",
+   "problem": "The sentence presents snapshot timing as the cause and adds an inference that the files contradict. Step 8's own data point away from snapshot timing.",
+   "evidence": "- Stage-0 track-0 DSGs: last pose 0.09-0.30 s before 'Scan complete' in all three runs.\n- q3: 58 pose nodes against 104-120, no object nodes.\n- q3's missing start-room objects never appear in its track-0 maps at stages 1-5.",
+   "fix": "\"Step 8's data argue against \u00a77's snapshot-timing cause. The copies came at the same moment, each copied file already held the mapper's poses to the end of the scan, and the objects q3 lacked never appeared in its later maps [I]. The split lies in what the mapper makes of a scan. A wait on the mapper's progress (frame count or idle flag) is untested and unlikely to help.\"",
+   "severity": "high",
+   "verifier_reason": "SYNTHESIS \u00a77 lists snapshot timing as the inferred cause, and \u00a710 keeps it ('A wait on the file does not fix \u00a77's snapshot-timing cause') while adding the 'got further through the scan' inference. The DSG poses (to within 0.09-0.30 s of scan end in all runs), q3's 58 poses with no objects, and the missing objects' absence at stages 1-5 all argue against snapshot timing.",
+   "verifier_fix": "\"Step 8's data argue against \u00a77's snapshot-timing cause. The copies came at about the same moment in every run, each copied file already held the mapper's poses to the end of the scan, and the objects q3 lacked never appeared in its later maps [I]. The split lies in what the mapper makes of a scan. A wait on the mapper's own progress (frame count or idle flag) is untested and unlikely to help.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 38(e)",
+   "quote": "At stage 0 the copy rule takes the first large-enough file, so the mapper had likely got less far through the scan when it last wrote (inferred).",
+   "problem": "The run's own DSG files contradict this inference: the copied file covered the whole scan in time, and the missing objects never appeared later.",
+   "evidence": "- q3 stage-0 graph0_dsg.json: last pose node 0.09 s before 'Scan complete' (q1 0.30 s, q2 0.10 s).\n- 58 pose nodes against 104-120, and no KhronosObjectAttributes nodes. Those nodes make up the 1.5-1.8 MB that q1 and q2 carry and q3 lacks.\n- q3's track-0 YAMLs at stages 1-5 lack the duvet, the nightstand and the lamp at (-0.47,-6.18).",
+   "fix": "\"In every run the copied track-0 file holds mapper poses up to the last 0.3 s of the scan, so the copy was not early. q3's file has 58 poses against 104-120 and no objects, and its missing start-room objects never appear in later track-0 maps (inferred: the mapper formed fewer objects from the same scan; waiting would not have helped).\"",
+   "severity": "high",
+   "verifier_reason": "The inference in 38(e) that 'the mapper had likely got less far through the scan when it last wrote' is contradicted by q3's own graph0_dsg.json, whose last pose is 0.09 s before 'Scan complete'. It has 58 poses and no object nodes, and the duvet, nightstand and lamp are absent from q3's track-0 YAMLs at stages 1-5.",
+   "verifier_fix": "\"Not registered: q3's stage-0 track-0 map has no objects (file 1.1 MB vs 2.4-2.7 MB in q1/q2), although the file was stable for 15 s and was copied about as long after launch as in q1/q2. The copy was not early: in every run the copied track-0 file holds mapper poses up to the last 0.3 s of the scan. q3's file has 58 poses against 104-120 and no object nodes, and the duvet, nightstand and lamp it lacks never appear in its later track-0 maps (inferred: the mapper made less of the same scan, and waiting would not have helped).\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 Caveats (line 90)",
+   "quote": "The frontier explorer moves the robot the same way (frontier_baseline.py:577-580), so it favours neither side in step 7.",
+   "problem": "Both explorers use the same set_state call, but their paths do not meet walls the same way. Frontier paths almost never enter wall-map cells, while ASP paths do so at the random rate. The missing collision check therefore touches the ASP arms and not frontier, so 'favours neither side' has no support. The direction of any tilt is unknown.",
+   "evidence": "- Method: the bench wall maps (review_2026-10-29/bench/walls/<scene>_walls.npz, 1.1 m slice), with executed_path.json world paths sampled every 2 cm (/tmp/cvp_final_review/claims/wall_cross.py).\n- Frontier: the six runs put 0.00%, 0.14% and 0.03% of points in occupied cells on 00853, and 0.00% in all three runs on 00871.\n- ASP: counted runs put 1.2-7.7% of points in occupied cells. Pooled over the E1-E3 runs it is 3.3% on 00853 and 3.6% on 00871, against 3.5% and 3.4% for random points.\n- Code: frontier snaps each goal to the navmesh (frontier_baseline.py:612, pathfinder.snap_point); exploration_pipeline.py never calls the pathfinder.",
+   "fix": "\"The frontier explorer uses the same set_state motion (frontier_baseline.py:577-580), but it snaps its goals to the navmesh, and its walked paths almost never enter wall-map cells (0.0-0.1% of path points, against 1.2-7.7% per ASP run). So the missing collision check affects the ASP arms, not frontier. How this moves the step 7 contrasts is unknown.\"",
+   "severity": "high",
+   "verifier_reason": "frontier_baseline.py:577-580 does move the robot with set_state, and both explorers use the same MidPlanner. I sampled each executed_path.json world path every 2 cm against the 1.1 m wall slice; the raw 7.5 cm path steps give the same result. Frontier runs put 0.00%, 0.14% and 0.03% of points in occupied cells on 00853 and 0.00% in all three runs on 00871. Counted ASP runs range from 1.2% to 7.7%, pooled 3.3% and 3.7% against 3.7% and 3.5% for random points. world_frame_path matches code_R and code_t for both explorers, so the frames agree. Same motion code does not mean the same exposure, so 'favours neither side' has no support. Frontier does snap its goals to the navmesh (line 612), but I would not claim that as the cause.",
+   "verifier_fix": "\"The frontier explorer uses the same set_state motion (frontier_baseline.py:577-580), but its walked paths almost never enter wall-map cells (0.00-0.14% of path points per run, against 1.2-7.7% per counted ASP run). So the missing collision check bears on the ASP arms, not frontier, and step 7 may be tilted in a direction we do not know.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md, section 10, 'Two points correct earlier sections'",
+   "quote": "The frontier explorer moves the same way, so the step 7 comparison is not tilted.",
+   "problem": "Same defect as in the main report, stated more strongly. The paths show that through-wall moves happen in the ASP arms and almost never in frontier runs.",
+   "evidence": "- 1.1 m wall-cell share of walked path points: frontier runs 0.00-0.14%; counted ASP runs 1.2-7.7% (pooled 3.3% and 3.6%, about the random rate).\n- Frontier snaps its goals to the navmesh (frontier_baseline.py:612).",
+   "fix": "\"The frontier explorer uses the same set_state call, but its paths almost never enter wall cells (0.0-0.1% of points, against 1.2-7.7% per ASP run). So the step 7 comparison may be tilted, in an unknown direction.\"",
+   "severity": "high",
+   "verifier_reason": "The same evidence as [4] contradicts 'so the step 7 comparison is not tilted': frontier paths are at 0.00-0.14% wall-cell points per run and ASP runs at 1.2-7.7%, about the random rate.",
+   "verifier_fix": "\"The frontier explorer uses the same set_state call, but its paths almost never enter wall-map cells (0.00-0.14% of points per run, against 1.2-7.7% per ASP run). So the step 7 comparison may be tilted, in an unknown direction.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What ran' (line 161)",
+   "quote": "the same pacing and identical placebo guesses. live_policy seeds each draw with [seed, stage, graph id]",
+   "problem": "The seeds were identical, but the guesses were not. placebo_graph places guesses around the observed map's rooms and nodes, so the same key gives different guesses on different maps. At stage 0 the guesses already differed in every pair.",
+   "evidence": "- Code: live_policy.py:203-248, placebo_graph uses the observed nodes as anchors and for clearance checks.\n- Stage-0 habitat_scene_graph_new_graph_0.yaml, nodes added over the observed map: q1 has a bed at (-0.56,-2.73), q2 a bed at (-0.82,-4.33). q1 and q2 share labels but every position differs. q3 has different labels again (a bathroom and a mirror). graph_4 shows the same pattern.",
+   "fix": "\"the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id] ...). Placebo guesses are placed around the observed map, so they match only where the maps match; at stage 0 they already differed in every pair.\"",
+   "severity": "medium",
+   "verifier_reason": "live_policy.py does key each draw with [SEED, stage, graph_id], adding attempt and rerun only when nonzero. But placebo_graph places rooms and objects around the observed map's anchors and checks clearance against it. I compared the added nodes in stage-0 new_graph_0..7 for q1-q3: all 24 pairwise comparisons differ. Positions always differ, and labels differ in many (for example q3's graph 0 adds a bathroom and toilets where q1 and q2 add a bedroom and a kitchen counter). The seeds are the same; the guesses are not.",
+   "verifier_fix": "\"the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id]; it adds a salt only for `_rerun<n>` names and retried attempts). The guesses are placed around the observed map, so they match only where the maps match; at stage 0 they differed in every pair.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 37(f)",
+   "quote": "The three replicates draw identical placebo guesses: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts.",
+   "problem": "Only the seeds are identical. The guesses depend on the observed map, and the stage-0 guess files differ across q1-q3.",
+   "evidence": "- live_policy.py:203-248: placebo_graph places guesses around the observed map.\n- q1-q3 stage-0 new_graph_0 and new_graph_4 files: the added nodes differ in position in every pair, and in labels for q3.",
+   "fix": "\"The three replicates use the same placebo seeds ([SEED, stage, graph_id], salted only for _rerun<n> names and retried attempts). Because guesses are placed around the observed map, they match only where the maps match.\"",
+   "severity": "medium",
+   "verifier_reason": "Same check as [6]. Item 37(f)'s 'draw identical placebo guesses' is false. The stage-0 added nodes differ in position in every pair and every graph, and in labels for several.",
+   "verifier_fix": "\"The three replicates use the same placebo seeds (live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts). The guesses are placed around the observed map, so they match only where the maps match; at stage 0 they differed in every pair.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 1 Summary (line 12)",
+   "quote": "No rule makes DeepSeek's guesses beat random ones by more than two random draws differ from each other.",
+   "problem": "Overstated. Under R3, DeepSeek beats placebo A by more than the noise floor at the point estimate, and the CI excludes zero; only the CI's upper end fails the registered test. The section 2 text gets this right, but the summary says the opposite.",
+   "evidence": "bench/build/summary.json decision.R3.b: LLM_minus_A -1.034 [-1.756, -0.361], noise_floor_p2.5 -0.824, ci_wholly_below_floor false. On official stages the LLM's regret is 8.08, against 9.12 for placebo A and 8.94 for placebo B.",
+   "fix": "\"For no rule does DeepSeek's lead over random guesses clearly exceed the gap between two random draws. R3 comes nearest: 1.03 objects less regret (CI 0.36-1.76), against a placebo-placebo floor of 0.82.\"",
+   "severity": "medium",
+   "verifier_reason": "summary.json decision.R3.b: LLM_minus_A -1.034 [-1.756, -0.361], B_minus_A -0.176, noise_floor_p2.5 -0.824, ci_wholly_below_floor false. LLM regret is 8.08 against 9.12 (A) and 8.94 (B). Under R3, DeepSeek's lead (1.03) exceeds the floor (0.82) at the point estimate and the CI excludes zero. Only the registered whole-CI test fails. The summary line says the opposite of the section 2 text, which is correct.",
+   "verifier_fix": "\"No rule passes the registered test that DeepSeek's guesses beat random ones by clearly more than two random draws differ. R3 comes nearest: 1.03 objects less regret than placebo A (CI 0.36-1.76), past the 0.82 floor at the point estimate, but the CI does not lie wholly past it.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 6 bullet (same wording in SYNTHESIS_AND_NEXT_PLAN.md section 10)",
+   "quote": "No rule makes DeepSeek's guesses beat random ones beyond the gap between two random draws.",
+   "problem": "Same overstatement in the outward-facing write-up. Under R3 the point estimate is beyond the floor and the CI excludes zero; the test fails only because the CI is not wholly below the floor.",
+   "evidence": "summary.json decision.R3.b: -1.03 [-1.76, -0.36], floor -0.82.",
+   "fix": "\"No rule shows DeepSeek's guesses clearly beating random ones beyond the gap between two random draws (nearest, R3: -1.03 [-1.76, -0.36] against a floor of -0.82).\"",
+   "severity": "medium",
+   "verifier_reason": "The WRITEUP \u00a712 step 6 bullet and SYNTHESIS \u00a710 step 6 bullet both have the same wording as [8], against the same summary.json R3.b numbers (-1.03 [-1.76, -0.36], floor -0.82).",
+   "verifier_fix": "\"No rule shows DeepSeek's guesses clearly beating random ones by more than two random draws differ; R3 comes nearest (LLM - placebo A -1.03, CI -1.76 to -0.36, against a floor of -0.82).\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 yardstick check (lines 47-48)",
+   "quote": "The likely cause: the slice map includes each large object's own outline (beds and tables at 0.6 m), so the ray to its centre is blocked. Ignoring cells inside the object's own footprint lifts the counted share to 0.146.",
+   "problem": "This explains only part of the miss. Ignoring the object's own footprint recovers 156 of the 664 missed objects (to 312 of 820, 38%). Using the 1.1 m slice alone recovers 334 (to 490, 60%), so low obstacles in general matter more than each object's own outline. Also, 0.146 is the share of counted objects mapped next, not the 19% recall the previous sentence discusses, so the sentence reads as if recall fell.",
+   "evidence": "bench/build/summary.json sensitivity.yardstick_check:\n- Uwall: in_mapped 156.\n- Uwall_own_footprint: in_mapped 312, share_in 0.146.\n- Uwall_slice_1p1: in_mapped 490, share_in 0.119.",
+   "fix": "\"One cause: the slice map includes each large object's own outline, so the ray to its centre is blocked. Ignoring cells in the object's own footprint lifts the count of next-mapped objects from 156 to 312 of 820, and the share of counted objects mapped next from 0.104 to 0.146. Using only the 1.1 m slice lifts the count to 490, so low furniture blocking the flat rays is the larger cause. Neither variant was pre-registered.\"",
+   "severity": "low",
+   "verifier_reason": "summary.json sensitivity.yardstick_check: Uwall in_mapped 156 of 820. Uwall_own_footprint in_mapped 312, share_in 0.146. Uwall_slice_1p1 in_mapped 490, share_in 0.119. Ignoring each object's own footprint recovers 156 of the 664 misses, while the 1.1 m slice alone recovers 334. So the object's own outline is one cause, not the main one, and 'the likely cause' overstates it. 'Lifts the counted share to 0.146' means the table's share-mapped-next column, not the 19% recall the bullet before it discusses, so it is easy to misread.",
+   "verifier_fix": "\"One cause: the slice map includes each large object's own outline (beds and tables at 0.6 m), so the ray to its centre is blocked. Ignoring cells inside the object's own footprint lifts the count of next-mapped objects from 156 to 312 of 820 (share of counted objects mapped next 0.104 to 0.146). Using only the 1.1 m slice lifts it to 490, so low furniture in general blocks more rays than each object's own outline. Neither variant was pre-registered.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md line 90; DEVIATIONS.md item 37(c)",
+   "quote": "(exploration_pipeline.py:606-612, `_agent_forward` calls `agent.set_state`)",
+   "problem": "These line numbers belong to the step 8 patched file (4b1bcb52). The pinned pipeline that ran the 24 bench runs is .orig_2f17aa29 (md5 6040198b, as in the E1-E3 run manifests), and there _agent_forward is at lines 587-593.",
+   "evidence": "On the host, grep on exploration_pipeline.py.orig_2f17aa29 gives _agent_turn at 578-585 and _agent_forward at 587-593 (set_state at 593). In the patched file they are at 597-604 and 606-612. The run manifests e1_00853_s42_official_60m and e3_00871_s44_oracle_visible_60m both list md5 6040198b.",
+   "fix": "\"(exploration_pipeline.py.orig_2f17aa29:587-593, the pinned file; 606-612 in the step 8 patched copy)\"",
+   "severity": "low",
+   "verifier_reason": "On the host, exploration_pipeline.py.orig_2f17aa29 (md5 6040198b) has _agent_turn at 578-585 and _agent_forward at 587-593, with set_state at 593. The patched exploration_pipeline.py (sha256 4b1bcb52, md5 223ed036) has them at 597-604 and 606-612. e1_00853_s42_official_60m's run_manifest lists md5 6040198b, and the step 8 runs list 223ed036. The text says 'the pinned pipeline' but cites the patched file's line numbers. This is a small citation slip.",
+   "verifier_fix": "\"(exploration_pipeline.py.orig_2f17aa29:587-593, the pinned file the E1-E3 runs used; 606-612 in the step 8 patched copy)\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md line 186; DEVIATIONS.md item 38(e)",
+   "quote": "Track 0's stage-0 file was copied 98-99 s after launch in q1, q2 and q3 [V].",
+   "problem": "q1's copy came about 2 s earlier than the others under any launch time; 98-99 s fits only q2 and q3.",
+   "evidence": "- Copy times: 01:19:29.43, 03:22:50.60 and 04:18:49.52.\n- Against run_manifest.txt (01:17:51.99, 03:21:11.16, 04:17:10.09): 97.4, 99.4 and 99.4 s.\n- Against rosout 'Node Startup': 96.2, 98.3 and 98.2 s.\n- All three scans ended 76.0-76.1 s after rosout start. The copy came 20.0 s later in q1 and 22.0 s later in q2 and q3.",
+   "fix": "\"Track 0's stage-0 file was copied 97-99 s after launch (96-98 s after ROS start) in q1, q2 and q3, 20-22 s after each scan ended [V].\"",
+   "severity": "low",
+   "verifier_reason": "The host graph0_dsg.json copy times are 01:19:29.43, 03:22:50.60 and 04:18:49.52. Against the run_manifest times (01:17:51.99, 03:21:11.16, 04:17:10.09) that is 97.4, 99.4 and 99.4 s. Against rosout 'Node Startup' it is 96.2, 98.3 and 98.2 s. The copies came 20.2, 22.1 and 22.1 s after 'Scan complete'. q1 falls outside '98-99 s' under either launch time, so this is a small slip.",
+   "verifier_fix": "\"Track 0's stage-0 file was copied 97-99 s after the run started (96-98 s after ROS start) in q1, q2 and q3, 20-22 s after each scan ended [V].\" In DEVIATIONS 38(e): \"copied at about the same time after launch (97-99 s) as in q1/q2\"."
+  },
+  {
+   "reviewer": "claims",
+   "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 3 'Small effects, checked' (line 152)",
+   "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh",
+   "problem": "Seed 43 is not the only one: on 00853 the navmesh snap moved all three seeded starts. Seed 44 also moved beyond the 0.25 m box in x (0.305 m). For seed 43, 0.31 m is the x shift only; the full move was 0.375 m.",
+   "evidence": "frontier_baseline.log 'Start jitter' lines on 00853:\n- Seed 42: (-0.5, 4.5) -> (-0.355, 4.749).\n- Seed 43: -> (-0.808, 4.286).\n- Seed 44: -> (-0.805, 4.383).\nThe intended jitter from default_rng(seed).uniform(-0.25, 0.25, 2) is (0.137, -0.031), (0.076, -0.228) and (-0.189, -0.121). The 00871 starts match the intended points exactly.",
+   "fix": "\"On 00853 the navmesh snap moved every seeded start away from its drawn point. Seeds 43 and 44 ended 0.31 m from the reference start in x, beyond the 0.25 m box (0.38 and 0.33 m in all). The pre-registration allows this.\"",
+   "severity": "low",
+   "verifier_reason": "The frontier logs give the 00853 starts as seed 42 (-0.355, 4.749), seed 43 (-0.808, 4.286) and seed 44 (-0.805, 4.383), against the reference (-0.5, 4.5). default_rng(seed).uniform(-0.25, 0.25, 2) gives (0.137, -0.031), (0.076, -0.228) and (-0.189, -0.121). So the snap moved all three 00853 starts off their drawn points. Seed 43 (x 0.308) and seed 44 (x 0.305) both end beyond the 0.25 m box, at 0.375 and 0.327 m in total. The 00871 starts match their drawn points exactly. The doc names only seed 43 and gives its x shift as its whole move.",
+   "verifier_fix": "\"On 00853 the navmesh snap moved every seeded start off its drawn point. Seeds 43 and 44 ended 0.31 m from the reference start in x, past the 0.25 m box (0.38 and 0.33 m in all), as the pre-registration allows.\""
+  },
+  {
+   "reviewer": "claims",
+   "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 6 bullet (also STEPS_6_TO_10_OUTCOMES.md line 81)",
+   "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+   "problem": "This states a null result as equality. The CI of the difference runs from -0.76 to +0.70 objects, about 8% of regret either way.",
+   "evidence": "summary.json decision.R1.b: LLM_minus_A -0.034 [-0.756, 0.697].",
+   "fix": "\"Under ASP's own score, LLM and random guesses showed no detectable difference (regret 9.12 vs 9.15 on official stages; difference CI -0.76 to +0.70).\"",
+   "severity": "low",
+   "verifier_reason": "summary.json decision.R1.b gives LLM_minus_A -0.034 with CI [-0.756, 0.697], about plus or minus 8% of regret. That interval is as wide as the noise floor (-0.73) and close to the R3 effect the doc treats as notable. 'Do equally well' claims an equality the CI does not show. Elsewhere the project writes 'did not detectably beat'. This is a small overstatement.",
+   "verifier_fix": "\"Under ASP's own score, LLM and random guesses showed no detectable difference (regret 9.12 vs 9.15 on official stages; difference -0.03, CI -0.76 to +0.70).\""
+  }
+ ],
+ "all": [
+  {
+   "reviewer": "numbers",
+   "checked": "I recomputed the step 6 bench from build/stages.jsonl: regrets from the U arrays and picks (0 mismatches), every decision-table mean and ratio, the yardstick counts (156/1,496, 633/7,720, 820 mapped next, 19%), and the 2.6-4.6 and 2.7 pick figures. I read every CI, floor, R5 contrast, sensitivity variant, filter_only row and run time from summary.json, verify/recompute.json, bench_log.txt and verify_log.txt. For step 7 I re-ran the scene-blocked exact permutation on the per-run AUCs and got p 0.47 and 0.07, 50 m p 0.345 and 0.065, and Holm 0.47 and 0.14. I checked the CIs, the stage-bootstrap intervals, per-scene differences, stage counts (41-46 against 12-28), final paths (60.4-68.9 m) and the 2.1-5.7 h ASP run times against E4_*.json, frontier_holm.json, all_scores_with_frontier.json and run_table.csv. I took the jitter shifts from the frontier_baseline.log start lines and the run durations from log and config timestamps. For step 8 I recomputed stage-0 object counts, the 0.17 m partner distance and every stop distance (0.24/3.60/3.84, 2.49/0.47, 6.03/7.38, 4.49/7.31, baseline 1.99/1.22/0.77 and 1.46/3.45) from the copied YAMLs and executed_path.json. I checked the means (2.56, 1.33) and share ranges, counted the quiet-wait lines (26/12/12), and checked the 98-99 s copy time, q1's stall at 14.2 m, the ~56 min q2/q3 runs, the pre-snapshot warnings, and the placebo seeds and counts in live_policy.jsonl. I resolved every numbers.csv row 960-1059 against its source path (all resolve) and matched them to each number in WRITEUP section 12. I checked POST_CAMPAIGN_MANIFEST.sha256 with shasum -c and verified the bench pre-registration hash. I could not check the 1.1 MB vs 2.4-2.7 MB DSG sizes or the line references in exploration_pipeline.py and frontier_baseline.py, because the DSG files and that code exist only on the host. Scratch scripts are in /tmp/cvp_final_review/numbers/.",
+   "findings": [
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What ran', line 161",
+     "quote": "the same pacing and identical placebo guesses. live_policy seeds each draw with [seed, stage, graph id]; it adds a salt only for `_rerun<n>` names and retried attempts.",
+     "problem": "The replicates share placebo seeds, not placebo guesses. The guesses already differ at stage 0, because placebo_graph builds them around the observed map. So measure (b), the stage-0 stop, mixes mapper noise with the guess differences that the map differences cause.",
+     "evidence": "stages/0/live_policy.jsonl gives these per-member predicted counts. q1: track 0 [6,14,7,10], track 1 [8,8,10,16]. q2: [6,14,8,9] and [8,8,6,9]. q3: [6,14,10,10] and [8,8,10,16]. Attempt and rerun are 0 in all three. The habitat_scene_graph_new_graph_{0,1,4}.yaml files have different md5s in every replicate. live_policy.py:203-263 (placebo_graph) picks anchors from the observed nodes and redraws candidate points that fall too close to observed positions, so the same seed on a different map gives different guesses.",
+     "fix": "the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id] and adds a salt only for `_rerun<n>` names and retried attempts). The guesses themselves still differ, because the placebo generator places them relative to the observed map: at stage 0 the members' guess counts already differ (track 0: 6/14/7/10, 6/14/8/9, 6/14/10/10). So the stop measure (b) mixes map noise with the guess differences it causes.",
+     "severity": "high"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 37(f), line 111",
+     "quote": "The three replicates draw identical placebo guesses: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts.",
+     "problem": "Same error as in the main report: the seeds are identical, but the guesses drawn from them are not.",
+     "evidence": "Stage-0 live_policy.jsonl predicted counts: q1 [6,14,7,10]/[8,8,10,16], q2 [6,14,8,9]/[8,8,6,9], q3 [6,14,10,10]/[8,8,10,16]. placebo_graph depends on the observed map (live_policy.py:203-263).",
+     "fix": "The three replicates use identical placebo seeds (live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts). Their guesses still differ, because the generator places them relative to each run's observed map (stage-0 member counts 6/14/7/10, 6/14/8/9 and 6/14/10/10 in track 0).",
+     "severity": "high"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 430",
+     "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+     "problem": "This turns a null result into a claim that the two are equal. The difference's CI spans about \u00b10.7 objects. The project's own rule (PREREGISTRATION_E1.md; PREREGISTRATION_FRONTIER_SEEDS.md) says a non-significant result is 'no detectable difference', never 'equal'.",
+     "evidence": "summary.json decision/R1/b: LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], n = 119 official stages.",
+     "fix": "Under ASP's own score, LLM guesses did not detectably beat random ones (regret 9.12 vs 9.15 on official stages; difference \u22120.03, CI \u22120.76 to +0.70).",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 'What else the bench shows', line 81",
+     "quote": "Under ASP's own score, DeepSeek's guesses and random ones do equally well.",
+     "problem": "Same equality claim from a null result. The R5 sentence on line 83 ('does as well as ASP's score') makes the same kind of claim from R1 \u2212 R5 = \u22120.16, CI \u22120.53 to +0.20.",
+     "evidence": "summary.json decision/R1/b: \u22120.034 [\u22120.756, 0.697]. R5_comparisons/Uwall/actual/R1: \u22120.164 [\u22120.526, 0.195]. PREREGISTRATION_E1.md: a non-significant result is 'no detectable difference', never 'equal'.",
+     "fix": "Under ASP's own score, DeepSeek's guesses do not detectably beat random ones (official R1 regret 9.12 vs 9.15; difference \u22120.03, CI \u22120.76 to +0.70).",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 3 'Check and caveats', line 152",
+     "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows.",
+     "problem": "Two of three 00853 starts, not one, moved past the 0.25 m per-axis draw range. The 0.31 m is the x shift only; the total shift is larger. The snap also moved seed 42 away from its drawn point.",
+     "evidence": "frontier_baseline.log start-jitter lines. Seed 43: (-0.5, 4.5) -> (-0.808, 4.286), x 0.308 m, total 0.375 m (draw dx 0.076, dz -0.228). Seed 44: -> (-0.805, 4.383), x 0.305 m, total 0.327 m (draw dx -0.189). Seed 42: -> (-0.355, 4.749), drawn z shift -0.031 but actual +0.249. On 00871 all three starts equal the raw draws.",
+     "fix": "On 00853 the navmesh snap moved the starts of seeds 43 and 44 by 0.31 m in x, past the 0.25 m draw range (total shifts 0.38 and 0.33 m), and moved seed 42's start 0.28 m from its drawn point; the pre-registration allows the snap. On 00871 the starts equal the draws.",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 3 table, line 122",
+     "quote": "\u22120.017 (0.35)",
+     "problem": "The official 50 m p is given as 0.35. The exact value is 0.34, and the script's own 0.345 is the float 0.34499\u2026, so it rounds to 0.34 too. The text below already says 'The official 50 m p is 0.34 exactly'.",
+     "evidence": "frontier_holm.json official/p50 = 0.345. frontier_verify/REPORT.md and perm_results.json give p = 0.34. My recompute on the rounded AUCs gives 0.345.",
+     "fix": "\u22120.017 (0.34)",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 'Caveats', line 96",
+     "quote": "and about 3.5 more for the verifier's recompute.",
+     "problem": "The verifier's per-stage recompute alone used 3.64 CPU-hours, before its exact-wall and decision recomputes.",
+     "evidence": "verify/verify_log.txt last line: 'verify_stages.py 12761.76s user 333.43s system 431% cpu 50:32.07 total', which is 13,095 s = 3.64 h.",
+     "fix": "and about 3.6 more for the verifier's per-stage recompute alone.",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, sections 5 and 6, lines 200 and 227",
+     "quote": "Of the $40 DeepSeek cap, $25.4 is left; Gemini credit is untouched.",
+     "problem": "$25.4 is $40 minus the stop-line total of $14.60. The package itself says stop lines miss shutdown calls of a few cents per run, so the true balance is a little lower. Line 200 ('The $25.4 left') has the same issue.",
+     "evidence": "WRITEUP.md lines 70 and 378: 'Calls made while a run shuts down add a few cents per run'; 'Spend totals use the runners' stop lines and miss shutdown calls'. DEVIATIONS item 34: $1.23 (scheduler) against $1.204 (stop line) for one run.",
+     "fix": "Of the $40 DeepSeek cap, about $25 is left ($14.60 spent by the runners' stop lines, plus a few cents of shutdown calls per paid run); Gemini credit is untouched.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 442",
+     "quote": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell, or a replay simulator.",
+     "problem": "The registered decision names only 5 replicates per cell. The replay simulator was not part of it.",
+     "evidence": "PREREGISTRATION_DETERMINISM.md Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' determinism.json decision: 'plan at least 5 replicates per cell'.",
+     "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. The replay simulator of plan step 9 is the other way out, but it was not part of the registered decision.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, line 426",
+     "quote": "Spend: $0.",
+     "problem": "Line 3 says every number appears in numbers.csv with its file and key. This one has no row: numbers.csv has no spend row for steps 6-8. Every other number in section 12 has a row that resolves.",
+     "evidence": "numbers.csv spend rows are 733-734, 791-794 and 898 only, all for E1-E3. Rows 960-1059 (section 12) have no spend key. The step 8 run_manifest.txt shows max_cost_usd=0.0, and the frontier runs make no LLM calls.",
+     "fix": "Add a row such as `spend:steps_6_8,0,e5_* config/run_manifest.txt max_cost_usd=0.0; frontier_baseline.py makes no LLM calls`, or drop the figure from section 12.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, line 3 (header)",
+     "quote": "Section 12 and the files listed in `POST_CAMPAIGN_MANIFEST.sha256` were added on 10-30.",
+     "problem": "The manifest does not match one of the files it lists. DEVIATIONS.md was edited after the manifest was written, so `shasum -a 256 -c POST_CAMPAIGN_MANIFEST.sha256` fails on it. A reader checking the package would see a failure.",
+     "evidence": "The manifest (mtime 10-30 10:16:19) lists DEVIATIONS.md as 967f0446\u2026; the current file (mtime 10:17:54) hashes to c5e3b6d8\u2026. Every other entry, including all 1,236 run files checked against /Users/sher/cvp_live_campaign_copy, passes.",
+     "fix": "Regenerate the DEVIATIONS.md line of POST_CAMPAIGN_MANIFEST.sha256 after the last edit, so that every listed file checks.",
+     "severity": "low"
+    }
+   ],
+   "verdicts": [
+    {
+     "index": 0,
+     "real": true,
+     "reason": "Confirmed. live_policy.py:422-424 seeds each draw with [SEED, stage, graph_id], with the salt only for attempt or rerun. But placebo_graph (live_policy.py:203-283) takes its anchors from the observed nodes, uses the observed room height and floor height, and redraws candidates that fall too near observed positions, so the number of random draws used depends on the map. The stage-0 live_policy.jsonl records attempt 0 and rerun 0 in all three runs, yet the predicted counts differ. Track 0 is q1 [6,14,7,10], q2 [6,14,8,9], q3 [6,14,10,10]; track 1 is q1 [8,8,10,16], q2 [8,8,6,9], q3 [8,8,10,16]. new_graph_{0,1,4}.yaml have different md5s in every replicate. All three manifests record the same live_policy.py md5 (eaf477c5), which also matches the local file. PREREGISTRATION_DETERMINISM.md never claims identical guesses. The stage-0 stop (b) is chosen using these stage-0 guesses, so it carries the map noise both directly and through the guesses the map changes.",
+     "fix": "**Runs:** three $0 placebo replicates, q1-q3, all on scene 00853 with seed 42, a 15 m target, the same pacing and the same placebo seeds. live_policy seeds each draw with [seed, stage, graph id] and adds a salt only for `_rerun<n>` names and retried attempts. The guesses themselves still differ, because the placebo generator places them around each run's observed map: at stage 0, track 0's members hold 6/14/7/10 guesses in q1, 6/14/8/9 in q2 and 6/14/10/10 in q3. So the stage-0 stop, measure (b), carries map noise twice: directly, and through the guesses the map changes."
+    },
+    {
+     "index": 1,
+     "real": true,
+     "reason": "Same error as finding 0, checked against the same sources. Item 37(f) was written at 01:24, before q2 and q3 had run, so it records a prediction that the stage-0 live_policy.jsonl counts (q1 6/14/7/10, q2 6/14/8/9, q3 6/14/10/10 in track 0) show to be false. placebo_graph draws depend on the observed map.",
+     "fix": "In 37(f): \"The three replicates use identical placebo seeds: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts. Their guesses still differ, because placebo_graph places them around each run's observed map (stage-0 track-0 member counts 6/14/7/10, 6/14/8/9 and 6/14/10/10).\" Since DEVIATIONS is a time-stamped log, this could go in as a correction under item 38 instead of an edit to 37(f)."
+    },
+    {
+     "index": 2,
+     "real": true,
+     "reason": "summary.json decision/R1/b gives LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], n 119. On the same official stages, R1's oracle regret is 8.76 against placebo A's 9.15 (tables/Uwall/official/cells/R1), a gain of only 0.39. So the interval is about twice the gain from exact objects: the test could not have told the LLM from exact objects, let alone shown it equal to random. PREREGISTRATION_E1.md and _FRONTIER_SEEDS.md forbid 'equal' for a null. 'Do equally well' turns an underpowered null into an equivalence claim. All the numbers in the fix already have numbers.csv rows (bench:R1:b_llm_minus_A, b_ci_lo, b_ci_hi).",
+     "fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; difference \u22120.03, CI \u22120.76 to +0.70)."
+    },
+    {
+     "index": 3,
+     "real": true,
+     "reason": "Same problem as finding 2, at STEPS line 81: the R1 official contrast is \u22120.034 [\u22120.756, 0.697], an interval wider than R1's own oracle gain on those stages (8.76 vs 9.15). Line 83 is milder because it prints the CI, but 'does as well as' still states equality from R1 \u2212 R5 = \u22120.164 [\u22120.526, 0.195] (R5_comparisons/Uwall/actual/R1). SYNTHESIS \u00a710's last bullet ('does only as well as ASP's score') repeats the line-83 wording.",
+     "fix": "Line 81: \"**Under ASP's own score, DeepSeek's guesses show no detectable difference from random ones.** On official stages R1 regret is 9.12 with the LLM files and 9.15 with placebo A (difference \u22120.03, CI \u22120.76 to +0.70). That interval is wider than the gain exact objects give R1 on the same stages (8.76 against 9.15), so this test could not separate the LLM from exact objects either.\" Line 83: \"The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5, actual files: \u22120.16, CI \u22120.53 to +0.20).\" SYNTHESIS \u00a710: \"The 'far from walked path' rule is not detectably worse than ASP's score under a wall-aware count (step 6, R5 against R1), not better as \u00a78 suggested.\""
+    },
+    {
+     "index": 4,
+     "real": true,
+     "reason": "The frontier_baseline.log start-jitter lines, checked against np.random.default_rng(seed).uniform(-0.25,0.25,2), show the following. On 00853, seed 43 drew (+0.076, \u22120.228) but moved (\u22120.308, \u22120.214), 0.375 m in all. Seed 44 drew (\u22120.189, \u22120.121) but moved (\u22120.305, \u22120.117), 0.327 m. Seed 42 drew (+0.137, \u22120.031) but moved (+0.145, +0.249), which is 0.28 m from its drawn point though within 0.25 m per axis. On 00871 all three starts equal the draws exactly. So two 00853 starts, not one, left the 0.25 m per-axis range. The verifier's REPORT.md makes the same omission. Low severity: the pre-registration allows the snap.",
+     "fix": "On 00853 the navmesh snap moved two starts past the 0.25 m draw range: seeds 43 and 44 each moved about 0.31 m in x (0.38 and 0.33 m in all). It also moved seed 42's start 0.28 m from its drawn point. The pre-registration allows the snap. On 00871 every start equals its draw."
+    },
+    {
+     "index": 5,
+     "real": false,
+     "reason": "The table reports the registered script's value: frontier_holm.json official/p50 = 0.345 (69/200), rounded half-up to 0.35. The placebo row uses the same convention (0.065 to 0.07). The paragraph right below (line 147) gives the exact 0.34 and explains the 0.345. The argument that the float 0.345 is 0.34499\u2026 is a binary storage quirk, not a property of 69/200. This is a rounding convention, not a wrong number."
+    },
+    {
+     "index": 6,
+     "real": true,
+     "reason": "verify/verify_log.txt line 385: verify_stages.py used 12,761.76 s user + 333.43 s system = 13,095 s = 3.64 CPU-hours, and that is only the per-stage pass. The exact-wall and decision recomputes are extra and not timed. The verifier's report in agent_reports.json gives no CPU figure, so 'about 3.5' is the author's own estimate and falls below the logged minimum. The build figure of 2.75 h (9,643.52 + 265.66 s) is correct. Low.",
+     "fix": "Run cost: 2.75 CPU-hours on the laptop for the build, and at least 3.6 more for the verifier (3.64 for its per-stage recompute alone)."
+    },
+    {
+     "index": 7,
+     "real": true,
+     "reason": "$40 \u2212 $14.60 = $25.40 exactly, and $14.60 is the stop-line total (DEVIATIONS 35(e), numbers.csv rows 791-793). WRITEUP lines 70 and 378 and DEVIATIONS 34(e) say stop lines miss shutdown calls of a few cents per run. For example, item 28 is $1.23 by the scheduler against $1.204 by the stop line. With about 13 scored paid runs plus archived paid attempts, the true balance is a few tens of cents lower. Stating '$25.4' to one decimal implies a precision the package itself says it lacks. Low.",
+     "fix": "Line 227: \"Of the $40 DeepSeek cap, about $25 is left: the runners' stop lines total $14.60, and calls made during shutdown add a few cents per paid run. Gemini credit is untouched.\" Line 200: \"The roughly $25 left of the DeepSeek budget is unspent.\""
+    },
+    {
+     "index": 8,
+     "real": true,
+     "reason": "PREREGISTRATION_DETERMINISM.md Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' determinism.json decision is 'plan at least 5 replicates per cell'. The replay simulator is not in the registered decision, yet WRITEUP line 442 puts it under 'As registered:'. STEPS line 176 gets this right, and STEPS line 18 does not claim it as registered. Low.",
+     "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. A replay simulator (plan step 9) would also remove the need, but the registered decision does not name it."
+    },
+    {
+     "index": 9,
+     "real": true,
+     "reason": "Line 3 says 'Every number below appears in numbers.csv with its file and key.' numbers.csv has no row for the steps 6-8 spend: its spend rows (733-734, 791-793) cover only E1-E3, and rows 960-1059 have no spend key. The figure itself is right: all three e5 run_manifest.txt files show policy=placebo, max_cost_usd=0.0, and the frontier runs and bench make no LLM calls. The same gap already exists for 'Gemini: $0' at line 71. Low: a provenance slip, not a wrong number.",
+     "fix": "Add rows such as `spend:steps_6_8,0,e5_* config/run_manifest.txt max_cost_usd=0.0; frontier_baseline.py and the bench make no LLM calls` and `spend:gemini,0,<source>` (for line 71), or drop the figures."
+    },
+    {
+     "index": 10,
+     "real": true,
+     "reason": "Confirmed. POST_CAMPAIGN_MANIFEST.sha256 (mtime 10-30 10:16:19) lists DEVIATIONS.md as 967f0446\u2026. The current file (mtime 10:17:54) hashes to c5e3b6d8\u2026. Running shasum -a 256 -c on the 9 package-relative entries gives 'DEVIATIONS.md: FAILED' and nothing else. All 1,236 runs/ entries pass against /Users/sher/cvp_live_campaign_copy. The header sentence is not false, but the manifest it points to fails its own check. Low.",
+     "fix": "Regenerate the DEVIATIONS.md line of POST_CAMPAIGN_MANIFEST.sha256 after the last edit (current hash c5e3b6d89dc69794311ae8faaddf3b8fdc13be352a0afc18c481819a6b2509e6), so that every listed file checks."
+    }
+   ]
+  },
+  {
+   "reviewer": "rules",
+   "checked": "I read the three pre-registrations (the BENCH hash matches 2571a7ef...), plan \u00a76 and \u00a79, all of STEPS_6_TO_10_OUTCOMES.md, WRITEUP line 3 and \u00a712, SYNTHESIS \u00a710, and DEVIATIONS items 36-38.\n\nStep 6: I compared every decision number against bench/build/summary.json (decision, tables, R5_comparisons, filter_only, descriptors, sensitivity, yardstick_check), read summarize.py's provisional logic, and read the builder's and verifier's full reports in agent_reports.json. I re-bootstrapped the rule-minus-random contrasts from stages.jsonl.\n\nStep 7: I compared against frontier_holm.json, the four E4_*.json files, frontier_seeds_scores.raw.json and frontier_verify/REPORT.md. I read e1_analysis.py: its bootstrap resamples runs within scene, not stages. I recomputed the jitter draws and checked them against the \"Start jitter\" log lines, and timed the six runs from their manifests and logs.\n\nStep 8: I re-ran determinism_check.py on the six run copies. The output is byte-identical to determinism.json. From the rosout logs and stage files I checked the quiet-wait log lines (26/12/12, all 15 s), the 98-99 s copy times, the 14.17 m stall in q1, and the ~56 min for q2 and q3. I read the quiet-wait patch.\n\nnumbers.csv: every number in \u00a712 is present with a source. run_table.csv confirms the 2.1-5.7 h and 12-28 stage figures.\n\nThe headline numbers and all three go/no-go outcomes check out. The problems are in wording, labels, and the yardstick 'provisional' clause that the documents left out.",
+   "findings": [
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 436), step 7 bullet labelled [R, new pre-registration]",
+     "quote": "Frontier leads on 00853. On 00871 the official arm leads frontier, and placebo and frontier are level.",
+     "problem": "This sentence sits under a registered label. Putting 'official leads frontier' next to 'placebo and frontier are level' on one home reads as an LLM-content effect on 00871. The frontier pre-registration forbids that unless official \u2212 frontier is significant and placebo \u2212 frontier is not, and neither is. 'Level' is the 'equal' wording the same pre-registration bans for nulls. A 3 v 3 cell cannot reach p < 0.1, so neither split can be tested. Unlike OUTCOMES, \u00a712 gives no disclaimer. The next bullet (41-46 vs 12-28 stages) is an unregistered fairness check, also under [R].",
+     "evidence": "PREREGISTRATION_FRONTIER_SEEDS.md, Reading: 'No sentence credits LLM content unless official \u2212 frontier is significant and placebo \u2212 frontier is not'. Tests: 'Null results use the registered null form; never \"equal\"'. frontier_holm.json: per_scene60 00871 official +0.0279, placebo \u22120.0027; p60 0.47 and 0.07, Holm 0.47 and 0.14.",
+     "fix": "Per scene (2-3 runs a cell, not testable alone): 00853 official \u22120.052, placebo \u22120.047; 00871 official +0.028, placebo \u22120.003. These splits do not credit LLM content; neither registered test is significant. [X] On 00871 frontier stops and scans far more often over the same 60 m: 41-46 stages, against 12-28 for the ASP arms.",
+     "severity": "medium"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md item 37(e)",
+     "quote": "By scene, frontier leads on 00853 by about 0.05; on 00871 official leads frontier by 0.03 and placebo and frontier are level.",
+     "problem": "This sits inside 'Step 7 result, as registered'. It pairs the two 00871 gaps in a way that implies LLM content helped on 00871, and it uses 'level' (equal) for a null. Both break the frontier pre-registration's reading rules.",
+     "evidence": "PREREGISTRATION_FRONTIER_SEEDS.md, Reading and Tests (quoted above). frontier_holm.json per_scene60: 00871 official +0.0279, placebo \u22120.0027. Neither contrast is significant (Holm 0.47, 0.14).",
+     "fix": "By scene (not tested; 3 v 3 at most): 00853 official \u22120.052, placebo \u22120.047; 00871 official +0.028, placebo \u22120.003. Under the registered reading these do not credit LLM content.",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72, Yardstick check (line 49); same in DEVIATIONS.md 37(b) 'The decision is the same either way.'",
+     "quote": "The decision is the same under either reading,",
+     "problem": "The pre-registration ties the yardstick check to a label, not to the decision. If U_wall does not separate at least as well as U_360, the bench results are 'provisional'. On the ratio reading U_wall fails (8.6 vs 21.2). On the difference reading it passes only on the point estimate (gap CI \u22120.002 to +0.029). The builder chose the difference reading and noted that on the ratio reading 'the bench would be provisional'. OUTCOMES leaves this choice out of its list of the builder's readings. No document marks the bench provisional, and later sentences state bench results as firm.",
+     "evidence": "PREREGISTRATION_BENCH.md, Yardstick check: '...report that, and treat bench results as provisional.' summary.json yardstick_check: Uwall ratio 8.56 [7.09, 10.23], U360 21.18 [17.2, 26.6]; minus_U360_ci95 [\u22120.0018, 0.0292]; provisional=false. summarize.py:175 and :205 set this from the difference alone. agent_reports.json built.caveats[1]: 'On a ratio reading it fails... which would make the bench provisional.'",
+     "fix": "The pre-registration did not name the measure. The builder used the difference, on which U_wall passes on the point estimate only. On the ratio it fails, and the pre-registration then makes the bench results provisional. We report them as provisional. The go/no-go is the same either way, but every regret number rests on a yardstick that counts 19% of the objects mapped next.",
+     "severity": "medium"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 427), bench bullet",
+     "quote": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls.",
+     "problem": "\u00a712 states the bench results with no word on the yardstick check. The wall-aware count fails the pre-registered check on the ratio reading, which makes the results provisional. It also counts only 156 of the 820 objects that are mapped next. \u00a711 had said 'Fix the yardstick's wall problem first', so a reader of \u00a712 would assume that was done.",
+     "evidence": "summary.json yardstick_check: Uwall in_mapped 156, out_mapped 664 (820 total); ratio 8.6 vs U360 21.2. PREREGISTRATION_BENCH.md, Yardstick check. OUTCOMES \u00a72 Caveats: 'The yardstick is weak... It counts 19% of the objects the robot does map next.'",
+     "fix": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls. This yardstick counts only 19% of the objects mapped next and fails the pre-registered check on a ratio reading, so these results are provisional.",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72 (line 86); also \u00a76 line 214 'Exact objects improve it by at most 15%' and line 221 'the limits are the objective and the detector, not the LLM'",
+     "quote": "Better guesses alone would not change that: with exact objects the gain is at most 15%.",
+     "problem": "15% is the best rule's point estimate on the registered yardstick, which the same report calls weak. The R4 CI reaches 0.804, a 20% gain. Under the unregistered wall-map variants the report itself puts forward as fixes, the oracle gain grows: 21.5% with own-footprint and 25% with the 1.1 m slice. The go/no-go does not change, since every ratio stays above 0.70. But 'at most 15%' and 'not the LLM' claim more than this analysis can show. No registered analysis measured the LLM's share, and E1 leaves effects up to +0.040 open.",
+     "evidence": "summary.json decision R4 a: ratio 0.850, CI [0.804, 0.893]. summary.json sensitivity.decision R4 a_ratio: own_footprint 0.785, head015_footprint 0.761, slice_1p1 0.747. WRITEUP \u00a73: E1 'Effects up to +0.040 are not ruled out.'",
+     "fix": "On the registered yardstick, exact objects cut regret by 15% at best (R4 ratio 0.850, CI 0.804-0.893). Unregistered wall-map variants give up to 25% (R4 0.747), still short of the 30% bar. In \u00a76: 'the bench points to the objective and the detector as the larger limits; it did not test the LLM's share.'",
+     "severity": "medium"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 430)",
+     "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+     "problem": "This draws equivalence from a null. The R1 contrast is \u22120.03, CI \u22120.76 to +0.70: differences of about \u00b10.7 objects are not ruled out, about the size of the noise floor (\u22120.73). The project's registered null form is 'no detectable difference', never 'equal'.",
+     "evidence": "summary.json decision R1 b: LLM_minus_A \u22120.034, CI [\u22120.756, 0.697], floor \u22120.731. PREREGISTRATION_E1.md: 'A non-significant result is \"no detectable difference, MDE = x\", never \"equal\".' PREREGISTRATION_FRONTIER_SEEDS.md: 'never \"equal\"'.",
+     "fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; LLM \u2212 placebo \u22120.03, CI \u22120.76 to +0.70).",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72 (line 81); same issue at line 83 'R5 does as well as ASP's score with the guesses it actually had'",
+     "quote": "Under ASP's own score, DeepSeek's guesses and random ones do equally well.",
+     "problem": "Both sentences claim equivalence from nulls. R1 LLM \u2212 placebo A is \u22120.03 [\u22120.76, +0.70]. R1 \u2212 R5 with the actual files is \u22120.16 [\u22120.53, +0.20]. The registered null wording is 'no detectable difference', never 'equal'.",
+     "evidence": "summary.json decision R1 b: LLM_minus_A CI [\u22120.756, 0.697]. R5_comparisons Uwall actual R1: \u22120.164, CI [\u22120.526, 0.195]. PREREGISTRATION_E1.md null form.",
+     "fix": "Under ASP's own score, DeepSeek's guesses and random ones show no detectable difference (\u22120.03, CI \u22120.76 to +0.70). The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5 \u22120.16, CI \u22120.53 to +0.20).",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a73 (line 141)",
+     "quote": "A stage bootstrap gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). That is not the registered test.",
+     "problem": "This bootstrap does not resample stages. e1_analysis.py resamples runs within scene and arm. It is the scene-blocked bootstrap CI that the E1 pre-registration lists as a reported item, and WRITEUP \u00a73 shows it for E1 and E2. Step 7 was to be run 'the way E1 is', so this is registered reporting, not an extra. Step 7 also leaves out the registered MDE ('no detectable difference, MDE = x').",
+     "evidence": "e1_analysis.py docstring and bootstrap_ci: 'runs resampled within scene and arm'. PREREGISTRATION_E1.md: 'Reported: per-scene differences, scene-blocked bootstrap 95% CI, and the minimum detectable effect'. E4_*_60m.json: bootstrap_95ci [\u22120.0220, \u22120.0011] and [\u22120.0390, \u22120.0097]. frontier_holm.json mde60 0.0198 and 0.0258.",
+     "fix": "The scene-blocked run bootstrap, which E1 also reports, gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). It is not the test, and with 2-3 runs per cell it understates the spread. Registered null form: no detectable difference, MDE at 60 m 0.020 (official) and 0.026 (placebo).",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md \u00a710 (last bullet pair)",
+     "quote": "The frontier explorer moves the same way, so the step 7 comparison is not tilted.",
+     "problem": "This holds only for the motion model. \u00a710 leaves out the known tilt that remains: on 00871 the frontier explorer stops and makes a full scan 2-3 times as often per metre. The 60 m budget counts only forward motion. OUTCOMES says a time or scan budget could rank the explorers differently, but \u00a710 tells the reader the comparison is fair.",
+     "evidence": "frontier_verify/REPORT.md: 'On 00871 the frontier therefore makes 2-3 times as many stops, and turns, per metre.' numbers.csv n_stages: frontier 00871 43/41/46; ASP 00871 12-28. OUTCOMES \u00a73: 'A budget in time or in scans could rank the explorers differently.'",
+     "fix": "The frontier explorer moves the same way, so motion does not tilt step 7. But on 00871 frontier stops and scans 2-3 times as often per metre (41-46 stages vs 12-28), and a time or scan budget could rank the explorers differently.",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a73 'Reading, as registered' (line 140)",
+     "quote": "on 00871, the official arm is ahead of frontier by 0.03, and placebo and frontier are level.",
+     "problem": "This per-scene pairing sits inside the registered reading and uses 'level' (equal) for a null that cannot be tested at 3 v 3. A disclaimer follows two bullets later, but this line still uses the banned wording and sets up the LLM-content contrast.",
+     "evidence": "PREREGISTRATION_FRONTIER_SEEDS.md: 'never \"equal\"'. frontier_holm.json per_scene60 00871: official +0.0279, placebo \u22120.0027.",
+     "fix": "on 00871, official \u2212 frontier is +0.028 and placebo \u2212 frontier is \u22120.003. With 3 v 3 runs neither can be tested, and the pair does not credit LLM content.",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md \u00a710 (line 245)",
+     "quote": "rule does only as well as ASP's score",
+     "problem": "This is equal wording for a null. With the actual files R1 \u2212 R5 is \u22120.16, CI \u22120.53 to +0.20, and with no guesses it is +0.27, CI \u22120.13 to +0.68. The data show no detectable difference, not equality.",
+     "evidence": "summary.json R5_comparisons Uwall: actual R1 \u22120.164 [\u22120.526, 0.195]; none R1 +0.273 [\u22120.130, 0.680].",
+     "fix": "The 'far from walked path' rule shows no detectable difference from ASP's score under a wall-aware count (R1 \u2212 R5, actual files \u22120.16, CI \u22120.53 to +0.20). It does not beat ASP's score as \u00a78 suggested.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 427)",
+     "quote": "Offline bench (step 6) [X]: no rule passes, so live work stops.",
+     "problem": "The bench ran under PREREGISTRATION_BENCH.md with a pre-registered decision rule, and 'live work stops' is that rule's outcome. The section heading says 'R under new pre-registrations', yet the bench alone is labelled [X], which makes the stop decision look exploratory.",
+     "evidence": "PREREGISTRATION_BENCH.md, 'Decision rule (the plan's, fixed now)'. WRITEUP \u00a712 heading: '[X, and R under new pre-registrations]'. OUTCOMES \u00a72: 'Decision rule (pre-registered)'.",
+     "fix": "Offline bench (step 6) [R, new pre-registration, on stages already seen in the audit; results provisional, see yardstick]: no rule passes, so live work stops.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md \u00a712 (line 442)",
+     "quote": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell, or a replay simulator.",
+     "problem": "The registered decision is only 'plan at least 5 replicates per cell'. The replay simulator is plan step 9, which itself needs step 6 to find a rule. Adding it under 'As registered' widens the registered decision.",
+     "evidence": "PREREGISTRATION_DETERMINISM.md, Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.'",
+     "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. (Not registered: a replay simulator is the other route.)",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a71 (line 19)",
+     "quote": "The plan runs the detection-replay simulator and the live confirmation only if step 6 finds a rule (step 9 also needs step 8 to work). Neither condition held.",
+     "problem": "Plan step 8 named a snapshot keyed to a frame count or a Hydra idle flag. The run tested a file-content quiet wait instead, and the report itself says 'The fix the plan named was not tested'. So whether 'step 8 works' was never tested; it did not fail. Step 6 alone blocks steps 9 and 10, so the decision stands.",
+     "evidence": "SYNTHESIS \u00a76 step 8: 'Deterministic stage snapshot (frame count or Hydra idle flag instead of file-size stability)'. exploration_pipeline_quiescent.diff waits on file hashes. OUTCOMES \u00a74: 'The fix the plan named was not tested.'",
+     "fix": "Step 6 found no rule, which alone stops steps 9 and 10. Step 8's condition was not tested as the plan framed it: the run tried a file-level wait, not the frame-count or idle-flag snapshot the plan named.",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md item 38(e) (and 36(c))",
+     "quote": "A wait on the mapper's own progress (frame count or idle flag, the plan's suggestion) was not tested.",
+     "problem": "The plan named this change as the content of step 8; it was not just a suggestion. PREREGISTRATION_DETERMINISM.md swapped in a file-byte quiet wait without saying it departed from the plan. 36(c) logs the patch but not the swap, and 38(e) files it under 'Not registered' as an aside. WRITEUP line 3 says DEVIATIONS numbers each departure.",
+     "evidence": "SYNTHESIS \u00a76 step 8 and REVIEW_A_mechanism.md B2: 'snapshot on a frame count or Hydra idle flag instead of file-size stability'. PREREGISTRATION_DETERMINISM.md, Change: 'map file's bytes stay identical'.",
+     "fix": "Departure from the plan: \u00a76 step 8 called for a snapshot on a frame count or Hydra idle flag. PREREGISTRATION_DETERMINISM.md tested a file-byte quiet wait instead. The plan's change was not tested, so step 8's answer covers only the file-level wait.",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a73 (line 152)",
+     "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows.",
+     "problem": "Seed 44 on 00853 also moved past 0.25 m in x (0.305 m). The navmesh snap also put the starts of seeds 43 and 44 only 0.10 m apart, so two of the three 00853 'seeds' start from nearly the same spot.",
+     "evidence": "frontier_baseline.log: seed 43 [-0.5, 1.1, 4.5] -> [-0.808, 1.1, 4.286]; seed 44 [-0.5, 1.1, 4.5] -> [-0.805, 1.1, 4.383]. The drawn jitters were (0.076, \u22120.228) and (\u22120.189, \u22120.121).",
+     "fix": "Seeds 43 and 44 on 00853 moved about 0.31 m in x, past 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows. The snap left those two starts 0.10 m apart.",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md \u00a72 (line 35); also WRITEUP line 3 'DEVIATIONS.md numbers each departure'",
+     "quote": "and an oracle draw of true unmapped objects, made as the live oracle arm made it.",
+     "problem": "The builder marked this point as a deviation. Oracle draws read /tmp/cvp_review/refs/oracle_sets.json and took the saved stage YAML as the observed graph, on the untested assumption that it equals the graph the live arm passed after _preprocess_dsg. OUTCOMES' list of the builder's readings leaves this out, and DEVIATIONS 37 does not log it. 'Made as the live oracle arm made it' therefore states an unchecked assumption as fact.",
+     "evidence": "agent_reports.json built.caveats[9]: 'Oracle and placebo inputs (deviation)... I assume this equals what the live arm passed after _preprocess_dsg (not checked).' PREREGISTRATION_BENCH.md: 'oracle: a draw from live_policy.oracle_graph, as the live oracle arm draws.'",
+     "fix": "and an oracle draw from live_policy.oracle_graph with the live arm's settings. The builder fed it the saved stage YAML and did not check that this equals the graph the live arm passed (builder caveat 9; to be logged in DEVIATIONS 37).",
+     "severity": "low"
+    }
+   ],
+   "verdicts": [
+    {
+     "index": 0,
+     "real": true,
+     "reason": "The per-scene numbers are right (frontier_holm.json per_scene60: 00853 official \u22120.0518, placebo \u22120.0472; 00871 official +0.0279, placebo \u22120.0027). But \u00a712 puts them under [R, new pre-registration] with no word that 2-3 runs a cell cannot be tested (3 v 3 gives at best p 0.1). It also uses 'level' for an untested gap. Read together, 'official leads frontier, placebo level' points to the LLM-content reading that PREREGISTRATION_FRONTIER_SEEDS.md forbids. OUTCOMES adds a disclaimer here; \u00a712 does not. The stage-count bullet comes from the verifier's fairness checks, not a registered analysis, yet it sits under [R] without an [X] tag.",
+     "fix": "Per scene (2-3 runs a cell, not tested): on 00853 official \u2212 frontier is \u22120.052 and placebo \u2212 frontier \u22120.047; on 00871 they are +0.028 and \u22120.003. Under the registered reading these splits give no credit to LLM content. [X] On 00871 frontier stops and scans far more often over the same 60 m: 41-46 stages, against 12-28 for the ASP arms."
+    },
+    {
+     "index": 1,
+     "real": true,
+     "reason": "Same text as \u00a712 and same problem. It sits under 'Step 7 result, as registered'. It pairs the 00871 gaps (+0.0279 and \u22120.0027) with no note that they were not tested and do not credit LLM content, and it uses 'level' for an untested gap.",
+     "fix": "By scene (2-3 runs a cell, not tested): 00853 official \u2212 frontier \u22120.052, placebo \u2212 frontier \u22120.047; 00871 +0.028 and \u22120.003. Under the registered reading these do not credit LLM content."
+    },
+    {
+     "index": 2,
+     "real": true,
+     "reason": "PREREGISTRATION_BENCH.md says: if U_wall does not separate at least as well as U_360, 'report that, and treat bench results as provisional'. It does not name the measure. summarize.py sets provisional=false from the difference alone, and on that measure U_wall passes on the point estimate only (gap +0.014, CI \u22120.0018 to +0.0292). On the ratio it fails (8.56 [7.09, 10.23] against 21.18 [17.2, 26.6]). Builder caveat 1 says the ratio reading 'would make the bench provisional'. OUTCOMES reports both readings but never uses the word provisional. It also leaves the measure out of its list of the builder's readings. 'The decision is the same' is true of go/no-go, but it hides the pre-registered label.",
+     "fix": "The pre-registration did not name the measure. The builder used the difference of shares, on which U_wall passes on the point estimate only (gap +0.014, CI \u22120.002 to +0.029). On the ratio it fails, and the pre-registration then makes the bench results provisional, so read the bench numbers as provisional. The stop decision is the same under either reading and under every variant of the wall test. (DEVIATIONS 37(b): 'The stop decision is the same either way; on the ratio reading the bench numbers are provisional.')"
+    },
+    {
+     "index": 3,
+     "real": true,
+     "reason": "\u00a711 says 'Fix the yardstick's wall problem first'. \u00a712 then describes the yardstick as if that fix worked. It gives no word on the check: U_wall counts 156 of the 820 objects mapped next (19%), and it passes only on the difference reading's point estimate while failing on the ratio. SYNTHESIS \u00a710 and OUTCOMES both note the weakness, but the package's own \u00a712 does not. A reader would take the regret numbers, such as 'at most 15%', as resting on a working yardstick.",
+     "fix": "On 384 saved stages, regret is measured in true unmapped objects visible past HM3D walls. This yardstick counts only 19% of the objects the robot maps next, and it passes the pre-registered yardstick check only on one reading (on the ratio it fails, which would make these results provisional)."
+    },
+    {
+     "index": 4,
+     "real": true,
+     "reason": "15% is the best rule's point estimate (R4 ratio 0.850). Its CI reaches 0.804, about a 20% gain. The report calls the yardstick weak and blames each object's own outline. Under the unregistered wall-map variants that fix this, the R4 ratio is 0.785 (own_footprint), 0.761 (head015_footprint) and 0.747 (slice_1p1), a 21-25% gain (summary.json sensitivity.decision). All stay above 0.70, so the decision holds. But 'at most 15%' is a bound the data do not give. The \u00a76 line 'the limits are the objective and the detector, not the LLM' goes further than the bench, which did not test the detector.",
+     "fix": "\u00a72: 'Better guesses alone would not reach the bar: with exact objects the best rule cuts regret by 15% on the registered yardstick (R4 ratio 0.850, CI 0.804-0.893), and by 21-25% under the unregistered wall-map fixes (R4 0.785-0.747), against the 30% asked.' \u00a76 item 2: 'Exact objects improve it by about 15% (up to 25% under unregistered wall-map fixes), short of the 30% bar.' \u00a76 line 221: 'If the work continues, the bench and the mechanism review point to the objective and the detector as the larger limits; even exact objects do not reach the bar, so better guesses alone are unlikely to be enough.'"
+    },
+    {
+     "index": 5,
+     "real": true,
+     "reason": "'Do equally well' claims the two are the same based on a null result. summary.json R1 b: LLM \u2212 placebo A \u22120.034, CI \u22120.756 to +0.697, floor \u22120.731. Gaps of about \u00b10.7 objects are not ruled out, which is a large share of the roughly 1.9-object spread between rules (builder caveat 14). The project's registered null form (PREREGISTRATION_E1, PREREGISTRATION_FRONTIER_SEEDS, e1_analysis.py docstring) bans 'equal'.",
+     "fix": "Under ASP's own score, LLM and random guesses show no detectable difference (regret 9.12 vs 9.15 on official stages; LLM \u2212 placebo A \u22120.03, CI \u22120.76 to +0.70)."
+    },
+    {
+     "index": 6,
+     "real": true,
+     "reason": "Both lines read a null as the same result. R1 LLM \u2212 placebo A is \u22120.03 [\u22120.76, +0.70]. R1 \u2212 R5 with the actual files is \u22120.164 [\u22120.526, +0.195] (summary.json R5_comparisons Uwall actual R1). Both CIs are wide next to the ~1.9-object spread between rules, so 'equally well' and 'does as well as' claim more than the data show.",
+     "fix": "Line 81: 'Under ASP's own score, DeepSeek's guesses and random ones show no detectable difference (LLM \u2212 placebo A \u22120.03, CI \u22120.76 to +0.70); R1 regret is 9.12 with the LLM files and 9.15 with placebo A.' Line 83: 'The guess-free distance rule (R5) shows no detectable difference from ASP's score with the guesses it actually had (R1 \u2212 R5, actual files: \u22120.16, CI \u22120.53 to +0.20).'"
+    },
+    {
+     "index": 7,
+     "real": true,
+     "reason": "e1_analysis.py bootstrap_ci draws runs with replacement within each scene and arm (docstring: 'runs resampled within scene and arm'), not stages. So 'stage bootstrap' names the method wrongly. It is the scene-blocked bootstrap CI that PREREGISTRATION_E1 lists as a reported item, and WRITEUP \u00a73 reports it for E1 and E2. The numbers match E4_*_60m.json ([\u22120.0220, \u22120.0011] and [\u22120.0390, \u22120.0097]). Step 7 also leaves out the MDE, which E1's null form reports; frontier_holm.json gives mde60 0.0198 and 0.0258.",
+     "fix": "The scene-blocked bootstrap that E1 also reports (runs resampled within scene and arm) gives narrower intervals that exclude 0 for both contrasts (official \u22120.022 to \u22120.001; placebo \u22120.039 to \u22120.010). It is not the registered test, and with 2-3 runs per cell it understates the spread. Minimum detectable effect at 60 m: 0.020 (official) and 0.026 (placebo)."
+    },
+    {
+     "index": 8,
+     "real": false,
+     "reason": "The sentence sits in a bullet about set_state motion with no collision check, and in that scope it is right: frontier_baseline.py moves the robot the same way. Stops per metre are a separate matter. The verifier found that thinning frontier's stages moves its AUC by at most 0.0032. The denser scanning is on 00871, where frontier does not lead (official +0.028, placebo \u22120.003). On 00853, where frontier does lead, stage counts are close (frontier 21-25, ASP roughly 15-21). So the missing note does not hide a tilt toward frontier's lead. OUTCOMES covers the scan point in full."
+    },
+    {
+     "index": 9,
+     "real": false,
+     "reason": "OUTCOMES gives the per-run table, the per-scene numbers are right, and E1's method lists per-scene differences as a reported item. The disclaimer 'The registered reading forbids any sentence crediting LLM content here' follows in the same bullet list. 'Level' describes an untested \u22120.003 point gap, not a test result, so the registered ban on 'equal' for null results does not strictly apply. What remains is wording."
+    },
+    {
+     "index": 10,
+     "real": true,
+     "reason": "'Does only as well as' reads a null as the same result. summary.json R5_comparisons Uwall: actual R1 \u2212 R5 \u22120.164 [\u22120.526, +0.195]; none +0.273 [\u22120.130, +0.680]. 'Not better as \u00a78 suggested' is correct, since R5 does not beat R1, but the data support no detectable difference, not equality.",
+     "fix": "The 'far from walked path' rule shows no detectable difference from ASP's score under a wall-aware count (step 6, R1 \u2212 R5 with the actual files \u22120.16, CI \u22120.53 to +0.20); it does not beat it, as \u00a78 suggested."
+    },
+    {
+     "index": 11,
+     "real": true,
+     "reason": "WRITEUP defines [X] as exploratory and [R] as registered analysis. The bench ran under PREREGISTRATION_BENCH.md, whose decision rule ('If no rule meets both, write up the bench and stop live work') gives the very outcome this bullet states. OUTCOMES \u00a72 calls it 'Decision rule (pre-registered)'. Tagging the stop decision [X], while steps 7 and 8 get [R, new pre-registration], is inconsistent and makes a registered decision look optional.",
+     "fix": "Offline bench (step 6) [R, new pre-registration, on the audit's stages; the 'no decision attached' results below are X]: no rule passes, so live work stops."
+    },
+    {
+     "index": 12,
+     "real": true,
+     "reason": "PREREGISTRATION_DETERMINISM.md, Decision: 'Otherwise: plan at least 5 replicates per cell, and say whether the change moved the replicates closer than the baseline did.' It does not mention a replay simulator. That is plan step 9, which needs step 6 to find a rule. Putting it under 'As registered' widens the registered decision.",
+     "fix": "As registered: seeds do not pair runs, so plan at least 5 replicates per cell. (Not registered: a replay simulator is the other route.)"
+    },
+    {
+     "index": 13,
+     "real": true,
+     "reason": "SYNTHESIS \u00a76 step 8 defines the step as a snapshot on a frame count or Hydra idle flag, instead of file-size stability. What ran was a file-hash quiet wait (exploration_pipeline_quiescent.diff hashes the file). OUTCOMES \u00a74 says 'The fix the plan named was not tested.' So whether the plan's step 8 'works' is untested, not shown to fail. The decision stands, because step 6 alone blocks steps 9 and 10. This is low severity, since the line above says the mapper-progress wait was not tested.",
+     "fix": "Steps 9 and 10 were not run. The plan runs them only if step 6 finds a rule, and it found none. (Step 9 also needs step 8 to work: the file-level wait that ran did not make runs pair, and the frame-count or idle-flag snapshot the plan named was not tested.)"
+    },
+    {
+     "index": 14,
+     "real": false,
+     "reason": "WRITEUP line 3 says DEVIATIONS numbers departures from the pre-registrations, and the step 8 runs followed PREREGISTRATION_DETERMINISM.md. 36(c) logs the change that ran. 38(e), OUTCOMES \u00a74 ('The fix the plan named was not tested') and SYNTHESIS \u00a710 all say plainly that the frame-count or idle-flag wait was not tested, so no reader is misled about what step 8 covers. 'Suggestion' against 'named change' is wording; the plan's parenthetical offers two options."
+    },
+    {
+     "index": 15,
+     "real": true,
+     "reason": "frontier_baseline.log for e4_00853_s44 reads: 'Start jitter seed 44: [-0.5, 1.1, 4.5] -> [-0.805, 1.1, 4.383]', so x moved 0.305 m, past 0.25 m, as with seed 43 ([-0.808, 1.1, 4.286]). The two snapped starts are about 0.10 m apart (\u0394x 0.003, \u0394z 0.097). OUTCOMES, and the verifier, name only seed 43.",
+     "fix": "On 00853 the starts of seeds 43 and 44 both moved about 0.31 m in x, past 0.25 m, because the start is snapped to the navmesh, as the pre-registration allows. The snap left those two starts about 0.10 m apart."
+    },
+    {
+     "index": 16,
+     "real": false,
+     "reason": "I checked the builder's 'deviation' and it does not change the substance. /tmp/cvp_review/refs/oracle_sets.json is byte-identical (sha256 a7b35313\u2026) to the campaign copy at /Users/sher/cvp_live_campaign_copy/tools/live_policy/oracle_sets.json. In live_policy.no_llm_completions the observed graph is the path _preprocess_dsg returns, which is <working_dir>/habitat_scene_graph_original_graph{i}.yaml (llm_completion.py:545-558). The stage folders save that same file next to the new_graph files and live_policy.jsonl. So the generator and its inputs match the live arm's. Only the seeds differ (fresh draws), and that does not make 'made as the live oracle arm made it' false."
+    }
+   ]
+  },
+  {
+   "reviewer": "claims",
+   "checked": "I read all four documents, the three pre-registrations and plan section 6, and checked each claim about code or cause against its source.\n\n- **Host code (read-only ssh).** Covered exploration_pipeline.py, both the patched 4b1bcb52 and the pinned .orig_2f17aa29, which matches md5 6040198b in the E1-E3 run manifests. Also covered frontier_baseline.py (motion, goal snapping, start jitter), the copy rule with its quiet-wait patch, the MIN_DSG_FILE_SIZE_BYTES setting (1000), the state machine (no sensor frames are published during PLANNING), and both YAML converters (f1_score_plot.convert_dsg_to_yaml and llm_completion.preprocess_file).\n- **Step 8 logs and file times.** Counted the quiet-wait lines in each rosout.log: 26, 12 and 12, all \"after 15 s\". Timed the copies against run_manifest.txt and against rosout start, and checked the warnings in both rosout and roslaunch logs.\n- **Step 8 map files.** Pulled the stage-0 graph{0,1}_dsg.json files from the host. I broke them down by node type, size and pose timestamps against \"Scan complete\", traced the start-room objects through q3's later track-0 maps, and compared the stage-0 placebo guess files across q1-q3.\n- **Frontier and ASP paths.** Measured how often the walked paths of the frontier runs and the ASP runs fall in the 1.1 m wall cells of the bench wall maps.\n- **Bench numbers.** Checked the decision and sensitivity blocks in summary.json, the verifier's report in agent_reports.json, and the start-jitter log lines.\n- **Run seeding.** Read live_policy.py for how placebo draws are seeded and placed.\n\nScratch scripts are in /tmp/cvp_final_review/claims/. These claims held:\n\n- The copy rule at stage 0 and that the quiet wait leaves the author's rule unchanged when unset.\n- The 50 quiet-wait log lines.\n- The q3 file sizes (1,127,248 B against 2,394,785 and 2,662,601 B).\n- Track 1 having the same four labels in all three runs.\n- No warning setting q3 apart.\n- set_state with no collision check in both explorers.\n- The converter equivalence, as far as reading the code can show; the two-stage test itself left no saved file.",
+   "findings": [
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What this says about the cause' (lines 184 and 189)",
+     "quote": "The likely reading: the mapper writes the file only now and then. When it last wrote before the copy, it had taken in less of the scan in q3 than in q1 and q2 [I]. So how far the mapper has got varies from run to run, and a file that sits still can still be stale.",
+     "problem": "The copied files contradict this reading. Every track-0 stage-0 file already holds the mapper's poses up to the end of the scan. The objects q3 lacks never appear in q3's later track-0 maps either. So the mapper did not fall behind the copy; it made less of the same scan, and no wait would have recovered those objects. Line 184 also keeps the snapshot-timing cause alive ('A quiet wait on the file does not fix it'), but the data argue against that cause.",
+     "evidence": "Host runs/live_campaign/e5_00853_s42_placebo_15m_q{1,2,3}/stages/0/graph0_dsg.json.\n- Timing: the last AgentNodeAttributes timestamp falls 0.30, 0.10 and 0.09 s before each run's 'Scan complete' (rosout 1793303349.28 / 1793310748.46 / 1793314107.38). The first pose comes 0.0-1.7 s after the scan starts, and the poses are spread evenly over the turn.\n- Counts: q3 track 0 has 58 pose nodes, against 120 in q1 and 104 in q2. Place nodes are alike (54-60, about 1 MB each).\n- File size: the gap is the object nodes. KhronosObjectAttributes take 1.77 MB in q1 and 1.48 MB in q2; q3 has none.\n- Later stages: q3's track-0 YAMLs for stages 1-5 never contain the duvet (about 0.4,-5.2), the nightstand (-0.6,-6.9) or the lamp (-0.47,-6.18). q1, q2 and q3's own track 1 all mapped these at stage 0.\n- Code: run_pipeline calls publish_sensor_images only in SCANNING, WAITING_FOR_MID_PATH and NAVIGATING, and the copy wait blocks inside PLANNING. The mapper therefore gets no new frames after the scan.",
+     "fix": "Line 184: \"The working cause was that the pipeline copies the map file before the mapper has taken in the whole scan. The step 8 data do not support it.\"\n\nLine 189: \"The likely reading: in all three runs the copied track-0 file already holds the mapper's poses up to the last 0.3 s of the scan, so the copy did not come too early. But q3's track 0 kept about half as many poses (58 against 104-120) and formed none of the four start-room objects, and those objects never appear in its later maps either [I]. So the split lies in what the mapper makes of the same scan, not in when the file is copied. Waiting longer, on the file or on the mapper's progress, would not have recovered q3's objects.\"",
+     "severity": "high"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 8 bullet",
+     "quote": "The wait never saw the file change, yet the copied maps differed. The mapper had got further through the scan in some runs than others when it last wrote [I]. A wait on the mapper's own progress was not tested.",
+     "problem": "The evidence contradicts the inference. Every copied stage-0 file already held the mapper's poses to the end of the scan. q3's missing objects never appeared in its later maps, so the cause was not how far the mapper had got.",
+     "evidence": "- Last pose node in each track-0 stage-0 graph0_dsg.json: 0.09-0.30 s before 'Scan complete' in q1, q2 and q3.\n- q3 track 0 has 58 pose nodes against 104-120 and no object nodes.\n- The start-room objects (duvet, nightstand, lamp at -0.47,-6.18) are absent from q3's track-0 maps at stages 1-5.\n- The pipeline publishes no frames while it waits to copy (run_pipeline / execute_planning).",
+     "fix": "\"The wait never saw the file change, yet the copied maps differed. Each copied file already held the mapper's poses up to the end of the scan. In q3, one track kept half as many poses and formed none of the start-room objects, which did not appear later either [I]. So the split lies in the mapper's output, not the copy time, and waiting longer would likely not have fixed it.\"",
+     "severity": "high"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md, section 10, step 8 bullet",
+     "quote": "A wait on the file does not fix \u00a77's snapshot-timing cause. The copies came at the same moment in every run, but the mapper had got further through the scan in some runs than others [I].",
+     "problem": "The sentence presents snapshot timing as the cause and adds an inference that the files contradict. Step 8's own data point away from snapshot timing.",
+     "evidence": "- Stage-0 track-0 DSGs: last pose 0.09-0.30 s before 'Scan complete' in all three runs.\n- q3: 58 pose nodes against 104-120, no object nodes.\n- q3's missing start-room objects never appear in its track-0 maps at stages 1-5.",
+     "fix": "\"Step 8's data argue against \u00a77's snapshot-timing cause. The copies came at the same moment, each copied file already held the mapper's poses to the end of the scan, and the objects q3 lacked never appeared in its later maps [I]. The split lies in what the mapper makes of a scan. A wait on the mapper's progress (frame count or idle flag) is untested and unlikely to help.\"",
+     "severity": "high"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 38(e)",
+     "quote": "At stage 0 the copy rule takes the first large-enough file, so the mapper had likely got less far through the scan when it last wrote (inferred).",
+     "problem": "The run's own DSG files contradict this inference: the copied file covered the whole scan in time, and the missing objects never appeared later.",
+     "evidence": "- q3 stage-0 graph0_dsg.json: last pose node 0.09 s before 'Scan complete' (q1 0.30 s, q2 0.10 s).\n- 58 pose nodes against 104-120, and no KhronosObjectAttributes nodes. Those nodes make up the 1.5-1.8 MB that q1 and q2 carry and q3 lacks.\n- q3's track-0 YAMLs at stages 1-5 lack the duvet, the nightstand and the lamp at (-0.47,-6.18).",
+     "fix": "\"In every run the copied track-0 file holds mapper poses up to the last 0.3 s of the scan, so the copy was not early. q3's file has 58 poses against 104-120 and no objects, and its missing start-room objects never appear in later track-0 maps (inferred: the mapper formed fewer objects from the same scan; waiting would not have helped).\"",
+     "severity": "high"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 Caveats (line 90)",
+     "quote": "The frontier explorer moves the robot the same way (frontier_baseline.py:577-580), so it favours neither side in step 7.",
+     "problem": "Both explorers use the same set_state call, but their paths do not meet walls the same way. Frontier paths almost never enter wall-map cells, while ASP paths do so at the random rate. The missing collision check therefore touches the ASP arms and not frontier, so 'favours neither side' has no support. The direction of any tilt is unknown.",
+     "evidence": "- Method: the bench wall maps (review_2026-10-29/bench/walls/<scene>_walls.npz, 1.1 m slice), with executed_path.json world paths sampled every 2 cm (/tmp/cvp_final_review/claims/wall_cross.py).\n- Frontier: the six runs put 0.00%, 0.14% and 0.03% of points in occupied cells on 00853, and 0.00% in all three runs on 00871.\n- ASP: counted runs put 1.2-7.7% of points in occupied cells. Pooled over the E1-E3 runs it is 3.3% on 00853 and 3.6% on 00871, against 3.5% and 3.4% for random points.\n- Code: frontier snaps each goal to the navmesh (frontier_baseline.py:612, pathfinder.snap_point); exploration_pipeline.py never calls the pathfinder.",
+     "fix": "\"The frontier explorer uses the same set_state motion (frontier_baseline.py:577-580), but it snaps its goals to the navmesh, and its walked paths almost never enter wall-map cells (0.0-0.1% of path points, against 1.2-7.7% per ASP run). So the missing collision check affects the ASP arms, not frontier. How this moves the step 7 contrasts is unknown.\"",
+     "severity": "high"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/SYNTHESIS_AND_NEXT_PLAN.md, section 10, 'Two points correct earlier sections'",
+     "quote": "The frontier explorer moves the same way, so the step 7 comparison is not tilted.",
+     "problem": "Same defect as in the main report, stated more strongly. The paths show that through-wall moves happen in the ASP arms and almost never in frontier runs.",
+     "evidence": "- 1.1 m wall-cell share of walked path points: frontier runs 0.00-0.14%; counted ASP runs 1.2-7.7% (pooled 3.3% and 3.6%, about the random rate).\n- Frontier snaps its goals to the navmesh (frontier_baseline.py:612).",
+     "fix": "\"The frontier explorer uses the same set_state call, but its paths almost never enter wall cells (0.0-0.1% of points, against 1.2-7.7% per ASP run). So the step 7 comparison may be tilted, in an unknown direction.\"",
+     "severity": "high"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 4 'What ran' (line 161)",
+     "quote": "the same pacing and identical placebo guesses. live_policy seeds each draw with [seed, stage, graph id]",
+     "problem": "The seeds were identical, but the guesses were not. placebo_graph places guesses around the observed map's rooms and nodes, so the same key gives different guesses on different maps. At stage 0 the guesses already differed in every pair.",
+     "evidence": "- Code: live_policy.py:203-248, placebo_graph uses the observed nodes as anchors and for clearance checks.\n- Stage-0 habitat_scene_graph_new_graph_0.yaml, nodes added over the observed map: q1 has a bed at (-0.56,-2.73), q2 a bed at (-0.82,-4.33). q1 and q2 share labels but every position differs. q3 has different labels again (a bathroom and a mirror). graph_4 shows the same pattern.",
+     "fix": "\"the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id] ...). Placebo guesses are placed around the observed map, so they match only where the maps match; at stage 0 they already differed in every pair.\"",
+     "severity": "medium"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/DEVIATIONS.md, item 37(f)",
+     "quote": "The three replicates draw identical placebo guesses: live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts.",
+     "problem": "Only the seeds are identical. The guesses depend on the observed map, and the stage-0 guess files differ across q1-q3.",
+     "evidence": "- live_policy.py:203-248: placebo_graph places guesses around the observed map.\n- q1-q3 stage-0 new_graph_0 and new_graph_4 files: the added nodes differ in position in every pair, and in labels for q3.",
+     "fix": "\"The three replicates use the same placebo seeds ([SEED, stage, graph_id], salted only for _rerun<n> names and retried attempts). Because guesses are placed around the observed map, they match only where the maps match.\"",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 1 Summary (line 12)",
+     "quote": "No rule makes DeepSeek's guesses beat random ones by more than two random draws differ from each other.",
+     "problem": "Overstated. Under R3, DeepSeek beats placebo A by more than the noise floor at the point estimate, and the CI excludes zero; only the CI's upper end fails the registered test. The section 2 text gets this right, but the summary says the opposite.",
+     "evidence": "bench/build/summary.json decision.R3.b: LLM_minus_A -1.034 [-1.756, -0.361], noise_floor_p2.5 -0.824, ci_wholly_below_floor false. On official stages the LLM's regret is 8.08, against 9.12 for placebo A and 8.94 for placebo B.",
+     "fix": "\"For no rule does DeepSeek's lead over random guesses clearly exceed the gap between two random draws. R3 comes nearest: 1.03 objects less regret (CI 0.36-1.76), against a placebo-placebo floor of 0.82.\"",
+     "severity": "medium"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 6 bullet (same wording in SYNTHESIS_AND_NEXT_PLAN.md section 10)",
+     "quote": "No rule makes DeepSeek's guesses beat random ones beyond the gap between two random draws.",
+     "problem": "Same overstatement in the outward-facing write-up. Under R3 the point estimate is beyond the floor and the CI excludes zero; the test fails only because the CI is not wholly below the floor.",
+     "evidence": "summary.json decision.R3.b: -1.03 [-1.76, -0.36], floor -0.82.",
+     "fix": "\"No rule shows DeepSeek's guesses clearly beating random ones beyond the gap between two random draws (nearest, R3: -1.03 [-1.76, -0.36] against a floor of -0.82).\"",
+     "severity": "medium"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 2 yardstick check (lines 47-48)",
+     "quote": "The likely cause: the slice map includes each large object's own outline (beds and tables at 0.6 m), so the ray to its centre is blocked. Ignoring cells inside the object's own footprint lifts the counted share to 0.146.",
+     "problem": "This explains only part of the miss. Ignoring the object's own footprint recovers 156 of the 664 missed objects (to 312 of 820, 38%). Using the 1.1 m slice alone recovers 334 (to 490, 60%), so low obstacles in general matter more than each object's own outline. Also, 0.146 is the share of counted objects mapped next, not the 19% recall the previous sentence discusses, so the sentence reads as if recall fell.",
+     "evidence": "bench/build/summary.json sensitivity.yardstick_check:\n- Uwall: in_mapped 156.\n- Uwall_own_footprint: in_mapped 312, share_in 0.146.\n- Uwall_slice_1p1: in_mapped 490, share_in 0.119.",
+     "fix": "\"One cause: the slice map includes each large object's own outline, so the ray to its centre is blocked. Ignoring cells in the object's own footprint lifts the count of next-mapped objects from 156 to 312 of 820, and the share of counted objects mapped next from 0.104 to 0.146. Using only the 1.1 m slice lifts the count to 490, so low furniture blocking the flat rays is the larger cause. Neither variant was pre-registered.\"",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md line 90; DEVIATIONS.md item 37(c)",
+     "quote": "(exploration_pipeline.py:606-612, `_agent_forward` calls `agent.set_state`)",
+     "problem": "These line numbers belong to the step 8 patched file (4b1bcb52). The pinned pipeline that ran the 24 bench runs is .orig_2f17aa29 (md5 6040198b, as in the E1-E3 run manifests), and there _agent_forward is at lines 587-593.",
+     "evidence": "On the host, grep on exploration_pipeline.py.orig_2f17aa29 gives _agent_turn at 578-585 and _agent_forward at 587-593 (set_state at 593). In the patched file they are at 597-604 and 606-612. The run manifests e1_00853_s42_official_60m and e3_00871_s44_oracle_visible_60m both list md5 6040198b.",
+     "fix": "\"(exploration_pipeline.py.orig_2f17aa29:587-593, the pinned file; 606-612 in the step 8 patched copy)\"",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md line 186; DEVIATIONS.md item 38(e)",
+     "quote": "Track 0's stage-0 file was copied 98-99 s after launch in q1, q2 and q3 [V].",
+     "problem": "q1's copy came about 2 s earlier than the others under any launch time; 98-99 s fits only q2 and q3.",
+     "evidence": "- Copy times: 01:19:29.43, 03:22:50.60 and 04:18:49.52.\n- Against run_manifest.txt (01:17:51.99, 03:21:11.16, 04:17:10.09): 97.4, 99.4 and 99.4 s.\n- Against rosout 'Node Startup': 96.2, 98.3 and 98.2 s.\n- All three scans ended 76.0-76.1 s after rosout start. The copy came 20.0 s later in q1 and 22.0 s later in q2 and q3.",
+     "fix": "\"Track 0's stage-0 file was copied 97-99 s after launch (96-98 s after ROS start) in q1, q2 and q3, 20-22 s after each scan ended [V].\"",
+     "severity": "low"
+    },
+    {
+     "doc": "docs/checkin/review_2026-10-29/STEPS_6_TO_10_OUTCOMES.md, section 3 'Small effects, checked' (line 152)",
+     "quote": "Seed 43's start on 00853 moved 0.31 m, not 0.25 m, because the start is snapped to the navmesh",
+     "problem": "Seed 43 is not the only one: on 00853 the navmesh snap moved all three seeded starts. Seed 44 also moved beyond the 0.25 m box in x (0.305 m). For seed 43, 0.31 m is the x shift only; the full move was 0.375 m.",
+     "evidence": "frontier_baseline.log 'Start jitter' lines on 00853:\n- Seed 42: (-0.5, 4.5) -> (-0.355, 4.749).\n- Seed 43: -> (-0.808, 4.286).\n- Seed 44: -> (-0.805, 4.383).\nThe intended jitter from default_rng(seed).uniform(-0.25, 0.25, 2) is (0.137, -0.031), (0.076, -0.228) and (-0.189, -0.121). The 00871 starts match the intended points exactly.",
+     "fix": "\"On 00853 the navmesh snap moved every seeded start away from its drawn point. Seeds 43 and 44 ended 0.31 m from the reference start in x, beyond the 0.25 m box (0.38 and 0.33 m in all). The pre-registration allows this.\"",
+     "severity": "low"
+    },
+    {
+     "doc": "tools/live_policy/results_2026-10-31/WRITEUP.md, section 12, step 6 bullet (also STEPS_6_TO_10_OUTCOMES.md line 81)",
+     "quote": "Under ASP's own score, LLM and random guesses do equally well (regret 9.12 vs 9.15 on official stages).",
+     "problem": "This states a null result as equality. The CI of the difference runs from -0.76 to +0.70 objects, about 8% of regret either way.",
+     "evidence": "summary.json decision.R1.b: LLM_minus_A -0.034 [-0.756, 0.697].",
+     "fix": "\"Under ASP's own score, LLM and random guesses showed no detectable difference (regret 9.12 vs 9.15 on official stages; difference CI -0.76 to +0.70).\"",
+     "severity": "low"
+    }
+   ],
+   "verdicts": [
+    {
+     "index": 0,
+     "real": true,
+     "reason": "Checked on the host (read-only) and in the local copies. In each stage-0 track-0 graph0_dsg.json the last agent pose falls 0.30, 0.10 and 0.09 s before rosout 'Scan complete' in q1, q2 and q3, and the poses span the whole turn (max gap 1.4 s). q3 track 0 has 58 poses (q1 120, q2 104), 60 places and no KhronosObjectAttributes nodes; q1 and q2 carry 1.77 and 1.48 MB of object nodes. q3's track-0 YAMLs at stages 1-5 never hold the duvet, the nightstand (-0.6,-6.9) or the lamp (-0.47,-6.18). run_pipeline calls publish_sensor_images only in SCANNING, WAITING_FOR_MID_PATH and NAVIGATING, and the copy wait runs inside execute_planning, so the mapper gets no frames while the pipeline waits. The copy was not early and the file was not stale, so the doc's timing story conflicts with its own data. Only q3's cabinet case is unclear: a cabinet 0.67 m off turns up from stage 2.",
+     "fix": "Line 184: \"The working cause was that the pipeline copies the map file before the mapper has taken in the whole scan. The step 8 files argue against it:\" Line 189: \"**The likely reading:** the copy was not early. In all three runs the copied track-0 file holds mapper poses up to the last 0.3 s of the scan [V]. But q3's track 0 kept 58 poses against 104-120 and formed no objects, and the duvet, nightstand and lamp it missed never appear in its track-0 maps at stages 1-5 [V]. The pipeline sends the mapper no frames while it waits to copy. So the split lies in what the mapper makes of the same scan, not in when the file is copied. A longer wait, on the file or on the mapper's progress, would likely not have helped [I].\" (Line 190 should then say that such a wait is untested and unlikely to help.)"
+    },
+    {
+     "index": 1,
+     "real": true,
+     "reason": "Same evidence as [0]. Every copied stage-0 track-0 file holds poses to within 0.3 s of scan end. q3's track 0 has 58 poses and no objects, and its missing start-room objects never appear at stages 1-5. The inference that the mapper 'had got further through the scan in some runs than others when it last wrote' is contradicted.",
+     "fix": "\"The wait never saw the file change, yet the copied maps differed. Each copied file already held the mapper's poses to the end of the scan. In q3 one track kept about half as many poses and formed none of the start-room objects, and they never appeared in its later maps either. So the split lies in what the mapper makes of a scan, not in when the file is copied, and a longer wait would likely not help [I]. A wait on the mapper's own progress was not tested.\""
+    },
+    {
+     "index": 2,
+     "real": true,
+     "reason": "SYNTHESIS \u00a77 lists snapshot timing as the inferred cause, and \u00a710 keeps it ('A wait on the file does not fix \u00a77's snapshot-timing cause') while adding the 'got further through the scan' inference. The DSG poses (to within 0.09-0.30 s of scan end in all runs), q3's 58 poses with no objects, and the missing objects' absence at stages 1-5 all argue against snapshot timing.",
+     "fix": "\"Step 8's data argue against \u00a77's snapshot-timing cause. The copies came at about the same moment in every run, each copied file already held the mapper's poses to the end of the scan, and the objects q3 lacked never appeared in its later maps [I]. The split lies in what the mapper makes of a scan. A wait on the mapper's own progress (frame count or idle flag) is untested and unlikely to help.\""
+    },
+    {
+     "index": 3,
+     "real": true,
+     "reason": "The inference in 38(e) that 'the mapper had likely got less far through the scan when it last wrote' is contradicted by q3's own graph0_dsg.json, whose last pose is 0.09 s before 'Scan complete'. It has 58 poses and no object nodes, and the duvet, nightstand and lamp are absent from q3's track-0 YAMLs at stages 1-5.",
+     "fix": "\"Not registered: q3's stage-0 track-0 map has no objects (file 1.1 MB vs 2.4-2.7 MB in q1/q2), although the file was stable for 15 s and was copied about as long after launch as in q1/q2. The copy was not early: in every run the copied track-0 file holds mapper poses up to the last 0.3 s of the scan. q3's file has 58 poses against 104-120 and no object nodes, and the duvet, nightstand and lamp it lacks never appear in its later track-0 maps (inferred: the mapper made less of the same scan, and waiting would not have helped).\""
+    },
+    {
+     "index": 4,
+     "real": true,
+     "reason": "frontier_baseline.py:577-580 does move the robot with set_state, and both explorers use the same MidPlanner. I sampled each executed_path.json world path every 2 cm against the 1.1 m wall slice; the raw 7.5 cm path steps give the same result. Frontier runs put 0.00%, 0.14% and 0.03% of points in occupied cells on 00853 and 0.00% in all three runs on 00871. Counted ASP runs range from 1.2% to 7.7%, pooled 3.3% and 3.7% against 3.7% and 3.5% for random points. world_frame_path matches code_R and code_t for both explorers, so the frames agree. Same motion code does not mean the same exposure, so 'favours neither side' has no support. Frontier does snap its goals to the navmesh (line 612), but I would not claim that as the cause.",
+     "fix": "\"The frontier explorer uses the same set_state motion (frontier_baseline.py:577-580), but its walked paths almost never enter wall-map cells (0.00-0.14% of path points per run, against 1.2-7.7% per counted ASP run). So the missing collision check bears on the ASP arms, not frontier, and step 7 may be tilted in a direction we do not know.\""
+    },
+    {
+     "index": 5,
+     "real": true,
+     "reason": "The same evidence as [4] contradicts 'so the step 7 comparison is not tilted': frontier paths are at 0.00-0.14% wall-cell points per run and ASP runs at 1.2-7.7%, about the random rate.",
+     "fix": "\"The frontier explorer uses the same set_state call, but its paths almost never enter wall-map cells (0.00-0.14% of points per run, against 1.2-7.7% per ASP run). So the step 7 comparison may be tilted, in an unknown direction.\""
+    },
+    {
+     "index": 6,
+     "real": true,
+     "reason": "live_policy.py does key each draw with [SEED, stage, graph_id], adding attempt and rerun only when nonzero. But placebo_graph places rooms and objects around the observed map's anchors and checks clearance against it. I compared the added nodes in stage-0 new_graph_0..7 for q1-q3: all 24 pairwise comparisons differ. Positions always differ, and labels differ in many (for example q3's graph 0 adds a bathroom and toilets where q1 and q2 add a bedroom and a kitchen counter). The seeds are the same; the guesses are not.",
+     "fix": "\"the same pacing and the same placebo seeds (live_policy seeds each draw with [seed, stage, graph id]; it adds a salt only for `_rerun<n>` names and retried attempts). The guesses are placed around the observed map, so they match only where the maps match; at stage 0 they differed in every pair.\""
+    },
+    {
+     "index": 7,
+     "real": true,
+     "reason": "Same check as [6]. Item 37(f)'s 'draw identical placebo guesses' is false. The stage-0 added nodes differ in position in every pair and every graph, and in labels for several.",
+     "fix": "\"The three replicates use the same placebo seeds (live_policy seeds [SEED, stage, graph_id] and salts only _rerun<n> names and retried attempts). The guesses are placed around the observed map, so they match only where the maps match; at stage 0 they differed in every pair.\""
+    },
+    {
+     "index": 8,
+     "real": true,
+     "reason": "summary.json decision.R3.b: LLM_minus_A -1.034 [-1.756, -0.361], B_minus_A -0.176, noise_floor_p2.5 -0.824, ci_wholly_below_floor false. LLM regret is 8.08 against 9.12 (A) and 8.94 (B). Under R3, DeepSeek's lead (1.03) exceeds the floor (0.82) at the point estimate and the CI excludes zero. Only the registered whole-CI test fails. The summary line says the opposite of the section 2 text, which is correct.",
+     "fix": "\"No rule passes the registered test that DeepSeek's guesses beat random ones by clearly more than two random draws differ. R3 comes nearest: 1.03 objects less regret than placebo A (CI 0.36-1.76), past the 0.82 floor at the point estimate, but the CI does not lie wholly past it.\""
+    },
+    {
+     "index": 9,
+     "real": true,
+     "reason": "The WRITEUP \u00a712 step 6 bullet and SYNTHESIS \u00a710 step 6 bullet both have the same wording as [8], against the same summary.json R3.b numbers (-1.03 [-1.76, -0.36], floor -0.82).",
+     "fix": "\"No rule shows DeepSeek's guesses clearly beating random ones by more than two random draws differ; R3 comes nearest (LLM - placebo A -1.03, CI -1.76 to -0.36, against a floor of -0.82).\""
+    },
+    {
+     "index": 10,
+     "real": true,
+     "reason": "summary.json sensitivity.yardstick_check: Uwall in_mapped 156 of 820. Uwall_own_footprint in_mapped 312, share_in 0.146. Uwall_slice_1p1 in_mapped 490, share_in 0.119. Ignoring each object's own footprint recovers 156 of the 664 misses, while the 1.1 m slice alone recovers 334. So the object's own outline is one cause, not the main one, and 'the likely cause' overstates it. 'Lifts the counted share to 0.146' means the table's share-mapped-next column, not the 19% recall the bullet before it discusses, so it is easy to misread.",
+     "fix": "\"One cause: the slice map includes each large object's own outline (beds and tables at 0.6 m), so the ray to its centre is blocked. Ignoring cells inside the object's own footprint lifts the count of next-mapped objects from 156 to 312 of 820 (share of counted objects mapped next 0.104 to 0.146). Using only the 1.1 m slice lifts it to 490, so low furniture in general blocks more rays than each object's own outline. Neither variant was pre-registered.\""
+    },
+    {
+     "index": 11,
+     "real": true,
+     "reason": "On the host, exploration_pipeline.py.orig_2f17aa29 (md5 6040198b) has _agent_turn at 578-585 and _agent_forward at 587-593, with set_state at 593. The patched exploration_pipeline.py (sha256 4b1bcb52, md5 223ed036) has them at 597-604 and 606-612. e1_00853_s42_official_60m's run_manifest lists md5 6040198b, and the step 8 runs list 223ed036. The text says 'the pinned pipeline' but cites the patched file's line numbers. This is a small citation slip.",
+     "fix": "\"(exploration_pipeline.py.orig_2f17aa29:587-593, the pinned file the E1-E3 runs used; 606-612 in the step 8 patched copy)\""
+    },
+    {
+     "index": 12,
+     "real": true,
+     "reason": "The host graph0_dsg.json copy times are 01:19:29.43, 03:22:50.60 and 04:18:49.52. Against the run_manifest times (01:17:51.99, 03:21:11.16, 04:17:10.09) that is 97.4, 99.4 and 99.4 s. Against rosout 'Node Startup' it is 96.2, 98.3 and 98.2 s. The copies came 20.2, 22.1 and 22.1 s after 'Scan complete'. q1 falls outside '98-99 s' under either launch time, so this is a small slip.",
+     "fix": "\"Track 0's stage-0 file was copied 97-99 s after the run started (96-98 s after ROS start) in q1, q2 and q3, 20-22 s after each scan ended [V].\" In DEVIATIONS 38(e): \"copied at about the same time after launch (97-99 s) as in q1/q2\"."
+    },
+    {
+     "index": 13,
+     "real": true,
+     "reason": "The frontier logs give the 00853 starts as seed 42 (-0.355, 4.749), seed 43 (-0.808, 4.286) and seed 44 (-0.805, 4.383), against the reference (-0.5, 4.5). default_rng(seed).uniform(-0.25, 0.25, 2) gives (0.137, -0.031), (0.076, -0.228) and (-0.189, -0.121). So the snap moved all three 00853 starts off their drawn points. Seed 43 (x 0.308) and seed 44 (x 0.305) both end beyond the 0.25 m box, at 0.375 and 0.327 m in total. The 00871 starts match their drawn points exactly. The doc names only seed 43 and gives its x shift as its whole move.",
+     "fix": "\"On 00853 the navmesh snap moved every seeded start off its drawn point. Seeds 43 and 44 ended 0.31 m from the reference start in x, past the 0.25 m box (0.38 and 0.33 m in all), as the pre-registration allows.\""
+    },
+    {
+     "index": 14,
+     "real": true,
+     "reason": "summary.json decision.R1.b gives LLM_minus_A -0.034 with CI [-0.756, 0.697], about plus or minus 8% of regret. That interval is as wide as the noise floor (-0.73) and close to the R3 effect the doc treats as notable. 'Do equally well' claims an equality the CI does not show. Elsewhere the project writes 'did not detectably beat'. This is a small overstatement.",
+     "fix": "\"Under ASP's own score, LLM and random guesses showed no detectable difference (regret 9.12 vs 9.15 on official stages; difference -0.03, CI -0.76 to +0.70).\""
+    }
+   ]
+  }
+ ]
+}

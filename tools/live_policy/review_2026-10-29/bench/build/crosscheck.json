@@ -1,0 +1,9 @@
+{
+ "n": 384,
+ "yard_U360_equal": 365,
+ "yard_compared": 365,
+ "U360_max_equal": 384,
+ "U360_mean_absdiff_max": 0.0,
+ "n_cand_equal": 384,
+ "mismatches": []
+}

@@ -1,0 +1,37 @@
+{
+ "e3_00853_s42_oracle_visible_60m_FAILED_ATTEMPT1_gate": {
+  "random_drawn": 0.058,
+  "max_drawn_count": 0.154,
+  "best_gap": 0.22,
+  "live": 0.024,
+  "units": 30
+ },
+ "e3_00853_s42_oracle_visible_60m_rerun1": {
+  "random_drawn": 0.015,
+  "max_drawn_count": 0.119,
+  "best_gap": 0.213,
+  "live": 0.005,
+  "units": 34
+ },
+ "e3_00853_s43_oracle_visible_60m": {
+  "random_drawn": 0.034,
+  "max_drawn_count": 0.145,
+  "best_gap": 0.219,
+  "live": 0.014,
+  "units": 32
+ },
+ "e3_00871_s42_oracle_visible_60m": {
+  "random_drawn": 0.045,
+  "max_drawn_count": 0.1,
+  "best_gap": 0.179,
+  "live": 0.026,
+  "units": 26
+ },
+ "e3_00871_s43_oracle_visible_60m": {
+  "random_drawn": 0.019,
+  "max_drawn_count": 0.125,
+  "best_gap": 0.198,
+  "live": 0.03,
+  "units": 24
+ }
+}

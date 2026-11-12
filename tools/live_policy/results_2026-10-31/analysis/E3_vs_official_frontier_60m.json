@@ -1,0 +1,67 @@
+{
+ "contrast": "oracle_visible - official",
+ "metric": "auc_af_f1_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "stopped at 46.800000000000345 m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "stopped at 44.25000000000025 m"
+  },
+  {
+   "run": "e3_00853_s42_oracle_visible_60m_rerun1",
+   "reason": "excluded"
+  },
+  {
+   "run": "e3_00853_s43_oracle_visible_60m",
+   "reason": "excluded"
+  }
+ ],
+ "per_scene": {
+  "00871": {
+   "oracle_visible": [
+    0.5171,
+    0.4646,
+    0.5243
+   ],
+   "official": [
+    0.4617,
+    0.467,
+    0.4301
+   ],
+   "diff_of_means": 0.04906666666666665
+  }
+ },
+ "statistic": 0.04906666666666665,
+ "blocked_permutation_p": 0.2,
+ "n_relabelings": 20,
+ "seed_paired_signflip_p": 0.5,
+ "n_pairs": 3,
+ "pair_diffs": [
+  0.055400000000000005,
+  -0.0024000000000000132,
+  0.0942
+ ],
+ "bootstrap_95ci": [
+  0.013433333333333353,
+  0.08126666666666671
+ ],
+ "mde_alpha05_power80": 0.06177101513745028,
+ "permutation_95ci": [
+  -0.05093333333333336,
+  0.14906666666666665
+ ],
+ "counted_runs": [
+  "e1_00853_s42_official_60m",
+  "e1_00853_s43_official_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s43_official_60m",
+  "e1_00871_s44_official_60m",
+  "e3_00871_s42_oracle_visible_60m",
+  "e3_00871_s43_oracle_visible_60m",
+  "e3_00871_s44_oracle_visible_60m"
+ ],
+ "min_attainable_p": 0.1
+}

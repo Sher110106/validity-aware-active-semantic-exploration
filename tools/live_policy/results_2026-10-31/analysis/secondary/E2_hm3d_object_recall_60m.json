@@ -1,0 +1,76 @@
+{
+ "contrast": "official - filter_only",
+ "metric": "hm3d_auc_object_recall_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "stopped at 46.800000000000345 m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "stopped at 44.25000000000025 m"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "official": [
+    0.0838,
+    0.0908
+   ],
+   "filter_only": [
+    0.0983,
+    0.0752,
+    0.1274
+   ],
+   "diff_of_means": -0.012999999999999998
+  },
+  "00871": {
+   "official": [
+    0.0791,
+    0.0772,
+    0.0691
+   ],
+   "filter_only": [
+    0.0819,
+    0.0446,
+    0.0526
+   ],
+   "diff_of_means": 0.015433333333333327
+  }
+ },
+ "statistic": 0.0012166666666666645,
+ "blocked_permutation_p": 0.925,
+ "n_relabelings": 200,
+ "seed_paired_signflip_p": 0.375,
+ "n_pairs": 5,
+ "pair_diffs": [
+  -0.014499999999999999,
+  0.015600000000000003,
+  -0.002799999999999997,
+  0.032600000000000004,
+  0.016499999999999994
+ ],
+ "bootstrap_95ci": [
+  -0.014100000000000001,
+  0.016133333333333333
+ ],
+ "mde_alpha05_power80": 0.030198028486052603,
+ "permutation_95ci": [
+  -0.028283333333333337,
+  0.032216666666666664
+ ],
+ "counted_runs": [
+  "e1_00853_s42_official_60m",
+  "e1_00853_s43_official_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s43_official_60m",
+  "e1_00871_s44_official_60m",
+  "e2_00853_s42_filter_only_60m",
+  "e2_00853_s43_filter_only_60m",
+  "e2_00853_s44_filter_only_60m",
+  "e2_00871_s42_filter_only_60m",
+  "e2_00871_s43_filter_only_60m",
+  "e2_00871_s44_filter_only_60m"
+ ],
+ "min_attainable_p": 0.01
+}

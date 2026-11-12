@@ -1,0 +1,134 @@
+{
+ "official": {
+  "rho_r1.0_median": 0.173,
+  "pct_stop_r1.0": [
+   0.611,
+   [
+    0.572,
+    0.651
+   ],
+   119
+  ],
+  "n_unmapped_r0.5_mean": 154.6,
+  "n_unmapped_r1.0_mean": 125.1,
+  "nav_frac_mean": 0.632,
+  "U360_nav_mean": 17.36,
+  "U360_offnav_mean": 14.29,
+  "pct_stop_nav": [
+   0.585,
+   [
+    0.541,
+    0.627
+   ],
+   119
+  ],
+  "rho_nav_median": 0.185,
+  "pct_stop_band": [
+   0.632,
+   [
+    0.588,
+    0.674
+   ],
+   117
+  ]
+ },
+ "placebo": {
+  "rho_r1.0_median": 0.064,
+  "pct_stop_r1.0": [
+   0.611,
+   [
+    0.57,
+    0.651
+   ],
+   110
+  ],
+  "n_unmapped_r0.5_mean": 157.3,
+  "n_unmapped_r1.0_mean": 127.8,
+  "nav_frac_mean": 0.534,
+  "U360_nav_mean": 16.13,
+  "U360_offnav_mean": 10.02,
+  "pct_stop_nav": [
+   0.529,
+   [
+    0.482,
+    0.576
+   ],
+   110
+  ],
+  "rho_nav_median": -0.077,
+  "pct_stop_band": [
+   0.621,
+   [
+    0.574,
+    0.669
+   ],
+   108
+  ]
+ },
+ "filter_only": {
+  "rho_r1.0_median": 0.037,
+  "pct_stop_r1.0": [
+   0.609,
+   [
+    0.554,
+    0.663
+   ],
+   97
+  ],
+  "n_unmapped_r0.5_mean": 150.4,
+  "n_unmapped_r1.0_mean": 120.2,
+  "nav_frac_mean": 0.67,
+  "U360_nav_mean": 16.37,
+  "U360_offnav_mean": 13.51,
+  "pct_stop_nav": [
+   0.611,
+   [
+    0.555,
+    0.666
+   ],
+   97
+  ],
+  "rho_nav_median": 0.085,
+  "pct_stop_band": [
+   0.623,
+   [
+    0.565,
+    0.68
+   ],
+   97
+  ]
+ },
+ "oracle_visible": {
+  "rho_r1.0_median": 0.418,
+  "pct_stop_r1.0": [
+   0.77,
+   [
+    0.717,
+    0.815
+   ],
+   58
+  ],
+  "n_unmapped_r0.5_mean": 136.4,
+  "n_unmapped_r1.0_mean": 100.3,
+  "nav_frac_mean": 0.64,
+  "U360_nav_mean": 17.14,
+  "U360_offnav_mean": 13.04,
+  "pct_stop_nav": [
+   0.741,
+   [
+    0.691,
+    0.788
+   ],
+   58
+  ],
+  "rho_nav_median": 0.404,
+  "pct_stop_band": [
+   0.765,
+   [
+    0.72,
+    0.808
+   ],
+   58
+  ]
+ }
+}

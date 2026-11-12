@@ -1,0 +1,80 @@
+{
+ "contrast": "official - placebo",
+ "metric": "hm3d_auc_f1point60_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  },
+  {
+   "run": "e1_00871_s43_placebo_60m",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "official": [
+    0.2668,
+    0.2776
+   ],
+   "placebo": [
+    0.2185,
+    0.2616,
+    0.2332
+   ],
+   "diff_of_means": 0.034433333333333344
+  },
+  "00871": {
+   "official": [
+    0.1812,
+    0.1984,
+    0.1919
+   ],
+   "placebo": [
+    0.1743,
+    0.133,
+    0.1073
+   ],
+   "diff_of_means": 0.052299999999999985
+  }
+ },
+ "statistic": 0.043366666666666664,
+ "blocked_permutation_p": 0.015,
+ "n_relabelings": 200,
+ "seed_paired_signflip_p": 0.0625,
+ "n_pairs": 5,
+ "pair_diffs": [
+  0.04829999999999998,
+  0.016000000000000014,
+  0.0068999999999999895,
+  0.06539999999999999,
+  0.08459999999999998
+ ],
+ "bootstrap_95ci": [
+  0.023566666666666652,
+  0.06201666666666668
+ ],
+ "mde_alpha05_power80": 0.03766399896157839,
+ "permutation_95ci": [
+  0.012366666666666665,
+  0.07486666666666666
+ ],
+ "counted_runs": [
+  "e1_00853_s42_official_60m",
+  "e1_00853_s42_placebo_60m",
+  "e1_00853_s43_official_60m",
+  "e1_00853_s43_placebo_60m",
+  "e1_00853_s44_placebo_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s42_placebo_60m",
+  "e1_00871_s43_official_60m",
+  "e1_00871_s43_placebo_60m_rerun1",
+  "e1_00871_s44_official_60m",
+  "e1_00871_s44_placebo_60m"
+ ],
+ "min_attainable_p": 0.01
+}

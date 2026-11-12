@@ -1,0 +1,34 @@
+{
+ "official": {
+  "n": 7854,
+  "same_label_0.5m": 0.1772,
+  "same_label_1m": 0.2944,
+  "same_label_2m": 0.4561,
+  "any_label_1m": 0.7161,
+  "within_1m_of_observed": 0.3373
+ },
+ "placebo": {
+  "n": 8829,
+  "same_label_0.5m": 0.0119,
+  "same_label_1m": 0.0444,
+  "same_label_2m": 0.1536,
+  "any_label_1m": 0.4144,
+  "within_1m_of_observed": 0.3288
+ },
+ "filter_only": {
+  "n": 6147,
+  "same_label_0.5m": 0.1147,
+  "same_label_1m": 0.2058,
+  "same_label_2m": 0.3322,
+  "any_label_1m": 0.6011,
+  "within_1m_of_observed": 0.387
+ },
+ "oracle_visible": {
+  "n": 6091,
+  "same_label_0.5m": 0.3605,
+  "same_label_1m": 0.4216,
+  "same_label_2m": 0.4979,
+  "any_label_1m": 0.6978,
+  "within_1m_of_observed": 0.3614
+ }
+}

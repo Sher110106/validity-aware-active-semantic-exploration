@@ -1,0 +1,75 @@
+{
+ "contrast": "placebo - frontier",
+ "metric": "hm3d_auc_af_f1_to_50m",
+ "dropped": [
+  {
+   "run": "e1_00871_s43_placebo_60m",
+   "reason": "stopped at 0 m"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "placebo": [
+    0.1333,
+    0.1549,
+    0.1188
+   ],
+   "frontier": [
+    0.1606,
+    0.197,
+    0.182
+   ],
+   "diff_of_means": -0.04420000000000002
+  },
+  "00871": {
+   "placebo": [
+    0.1035,
+    0.0753,
+    0.0822
+   ],
+   "frontier": [
+    0.0874,
+    0.0908,
+    0.0921
+   ],
+   "diff_of_means": -0.0031000000000000055
+  }
+ },
+ "statistic": -0.02365000000000001,
+ "blocked_permutation_p": 0.065,
+ "n_relabelings": 400,
+ "seed_paired_signflip_p": 0.125,
+ "n_pairs": 6,
+ "pair_diffs": [
+  -0.02729999999999999,
+  -0.0421,
+  -0.06319999999999999,
+  0.01609999999999999,
+  -0.0155,
+  -0.009900000000000006
+ ],
+ "bootstrap_95ci": [
+  -0.037000000000000005,
+  -0.009683333333333329
+ ],
+ "mde_alpha05_power80": 0.024068013812711862,
+ "permutation_95ci": [
+  -0.04715000000000001,
+  0.00134999999999999
+ ],
+ "counted_runs": [
+  "e1_00853_s42_placebo_60m",
+  "e1_00853_s43_placebo_60m",
+  "e1_00853_s44_placebo_60m",
+  "e1_00871_s42_placebo_60m",
+  "e1_00871_s43_placebo_60m_rerun1",
+  "e1_00871_s44_placebo_60m",
+  "e4_00853_s42_frontier_60m",
+  "e4_00853_s43_frontier_60m",
+  "e4_00853_s44_frontier_60m",
+  "e4_00871_s42_frontier_60m",
+  "e4_00871_s43_frontier_60m",
+  "e4_00871_s44_frontier_60m"
+ ],
+ "min_attainable_p": 0.005
+}

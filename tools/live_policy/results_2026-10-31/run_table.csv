@@ -1,0 +1,26 @@
+run,arm,scene,seed,rerun,container,outcome,hours,path_m,cost_usd,status,stages,m_per_stage,dropped_member_rate,llm_wait_mean_s,sleep_s_per_m,fallback_share,auc_hm3d_50m,auc_hm3d_60m,auc_frontier_50m,auc_frontier_60m
+e1_00853_s42_official_60m,official,00853,42,,asp-noetic,target_reached,3.0,61.1,0.87912,counted,18,3.396,0.2361,512.8,,,0.1169,0.1412,0.2238,0.2623
+e1_00853_s42_placebo_60m,placebo,00853,42,,asp-noetic-b,target_reached,2.55,67.3,0.0,counted,16,4.205,,,113.86,,0.1333,0.1464,0.3325,0.3609
+e1_00853_s43_official_60m,official,00853,43,,asp-noetic-b,wall_clock_limit,4.51,54.3,1.149505,counted,20,2.715,0.075,706.6,,,0.1304,0.1531,0.251,0.2896
+e1_00853_s43_placebo_60m,placebo,00853,43,,asp-noetic,target_reached,2.9,67.8,0.0,counted,17,3.988,,,129.37,,0.1549,0.1722,0.3374,0.3697
+e1_00853_s44_official_60m,official,00853,44,,asp-noetic,wall_clock_limit,4.5,46.8,0.858418,excluded: stopped at 46.800000000000345 m,15,3.12,0.1167,995.7,,,0.097,0.1019,0.2604,0.2682
+e1_00853_s44_official_60m_rerun1,official,00853,44,1,asp-noetic,stalled,4.3,44.3,0.753365,excluded: stopped at 44.25000000000025 m,14,3.161,0.1429,843.5,,,0.1467,0.1583,0.2903,0.3118
+e1_00853_s44_placebo_60m,placebo,00853,44,,asp-noetic-c,target_reached,3.5,60.8,0.0,counted,21,2.893,,,178.93,,0.1188,0.1368,0.2852,0.317
+e1_00871_s42_official_60m,official,00871,42,,asp-noetic-d,target_reached,2.68,64.6,0.810035,counted,17,3.799,0.1397,468.6,,,0.1218,0.1314,0.4343,0.4617
+e1_00871_s42_placebo_60m,placebo,00871,42,,asp-noetic-c,target_reached,2.42,60.2,0.0,counted,15,4.015,,,119.19,,0.1035,0.1141,0.4099,0.4317
+e1_00871_s43_official_60m,official,00871,43,,asp-noetic,target_reached,4.17,61.0,1.016638,counted,18,3.388,0.0903,731.7,,,0.1124,0.1267,0.4428,0.467
+e1_00871_s43_placebo_60m,placebo,00871,43,,asp-noetic-c,planning_error_loop,0.66,0,0.0,excluded: stopped at 0 m,2,0.0,,,,,0.0,0.0,0.0,0.0
+e1_00871_s43_placebo_60m_rerun1,placebo,00871,43,1,asp-noetic-c,target_reached,2.15,61.7,0.0,counted,12,5.144,,,104.63,,0.0753,0.0826,0.3265,0.3446
+e1_00871_s44_official_60m,official,00871,44,,asp-noetic-b,target_reached,5.65,61.7,1.078236,counted,19,3.249,0.0987,932.5,,,0.1051,0.1165,0.3999,0.4301
+e1_00871_s44_placebo_60m,placebo,00871,44,,asp-noetic-c,target_reached,4.67,60.1,0.0,counted,28,2.146,,,239.2,,0.0822,0.086,0.3121,0.3164
+e2_00853_s42_filter_only_60m,filter_only,00853,42,,asp-noetic-b,target_reached,3.91,60.5,1.00135,counted,16,3.778,0.1328,783.2,,,0.1425,0.1609,0.368,0.3974
+e2_00853_s43_filter_only_60m,filter_only,00853,43,,asp-noetic-b,target_reached,3.71,62.3,1.10332,counted,19,3.28,0.1118,615.1,,,0.1055,0.1265,0.298,0.3389
+e2_00853_s44_filter_only_60m,filter_only,00853,44,,asp-noetic,target_reached,5.33,63.1,1.29282,counted,20,3.154,0.1375,858.0,,,0.1789,0.2008,0.3456,0.3806
+e2_00871_s42_filter_only_60m,filter_only,00871,42,,asp-noetic-c,target_reached,3.33,60.8,1.085156,counted,20,3.041,0.1375,500.9,,,0.124,0.136,0.4404,0.4643
+e2_00871_s43_filter_only_60m,filter_only,00871,43,,asp-noetic-c,call_loop,4.39,54.9,1.204451,counted,16,3.431,0.1562,643.2,,,0.0764,0.0793,0.3198,0.3286
+e2_00871_s44_filter_only_60m,filter_only,00871,44,,asp-noetic-b,target_reached,3.44,61.3,0.831282,counted,15,4.085,0.1583,724.3,,,0.0889,0.0923,0.3671,0.3763
+e3_00853_s42_oracle_visible_60m_rerun1,oracle_visible,00853,42,1,asp-noetic-c,target_reached,2.75,66.4,0.0,excluded: E3 ended on 00853: second broken gate verdict (DEVIATIONS item 29),17,3.904,,,122.94,0.0,0.1487,0.1668,0.3926,0.4264
+e3_00853_s43_oracle_visible_60m,oracle_visible,00853,43,,asp-noetic-b,target_reached,2.63,64.4,0.0,excluded: E3 ended on 00853: second broken gate verdict (DEVIATIONS item 29),16,4.027,,,120.29,0.0,0.1515,0.175,0.3522,0.3912
+e3_00871_s42_oracle_visible_60m,oracle_visible,00871,42,,asp-noetic,target_reached,2.07,62.2,0.0,counted,13,4.783,,,97.52,0.0,0.1224,0.1302,0.4993,0.5171
+e3_00871_s43_oracle_visible_60m,oracle_visible,00871,43,,asp-noetic-c,target_reached,2.16,60.0,0.0,counted,12,5.0,,,107.63,0.0,0.1144,0.1281,0.4278,0.4646
+e3_00871_s44_oracle_visible_60m,oracle_visible,00871,44,,asp-noetic,target_reached,2.84,65.1,0.0,counted,17,3.829,,,127.74,0.0,0.116,0.1267,0.5011,0.5243

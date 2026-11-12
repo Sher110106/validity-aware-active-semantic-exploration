@@ -1,0 +1,745 @@
+{
+ "prereg": "PREREGISTRATION_DETERMINISM.md",
+ "tolerances": {
+  "object_xy_m": 0.1,
+  "stop_xy_m": 0.25
+ },
+ "replicates": {
+  "runs": [
+   "e5_00853_s42_placebo_15m_q1",
+   "e5_00853_s42_placebo_15m_q2",
+   "e5_00853_s42_placebo_15m_q3"
+  ],
+  "quiet_waits_s": {
+   "e5_00853_s42_placebo_15m_q1": [
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0
+   ],
+   "e5_00853_s42_placebo_15m_q2": [
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0
+   ],
+   "e5_00853_s42_placebo_15m_q3": [
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0
+   ]
+  },
+  "pairs": [
+   {
+    "pair": [
+     "e5_00853_s42_placebo_15m_q1",
+     "e5_00853_s42_placebo_15m_q2"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          5,
+          4
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.6666666666666666,
+         "max_nearest_m": 4.695058040109835,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          4,
+          4
+         ],
+         "labels_equal": true,
+         "label_sym_diff": 0,
+         "share_within_tol": 0.75,
+         "max_nearest_m": 0.16560495161679176,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 0.24126949816930934,
+       "pass": true
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          7,
+          8
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.5333333333333333,
+         "max_nearest_m": 2.0055276113781133,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          8,
+          9
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.47058823529411764,
+         "max_nearest_m": 1.8297871460910418,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 2.4901377623950824,
+       "pass": false
+      }
+     },
+     "2": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          10,
+          11
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 3,
+         "share_within_tol": 0.47619047619047616,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          13,
+          12
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 3,
+         "share_within_tol": 0.4,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 0.4730754019685001,
+       "pass": false
+      }
+     }
+    },
+    "stage0_pass": false
+   },
+   {
+    "pair": [
+     "e5_00853_s42_placebo_15m_q1",
+     "e5_00853_s42_placebo_15m_q3"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          5,
+          0
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 5,
+         "share_within_tol": 0.0,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          4,
+          4
+         ],
+         "labels_equal": true,
+         "label_sym_diff": 0,
+         "share_within_tol": 1.0,
+         "max_nearest_m": 0.037576588456111705,
+         "all_within_tol": true
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 3.6008462131935164,
+       "pass": false
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          7,
+          5
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 6,
+         "share_within_tol": 0.5,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          8,
+          8
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 2,
+         "share_within_tol": 0.625,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 6.03091970114244,
+       "pass": false
+      }
+     },
+     "2": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          10,
+          10
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 8,
+         "share_within_tol": 0.3,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          13,
+          12
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 7,
+         "share_within_tol": 0.4,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 7.38257629885917,
+       "pass": false
+      }
+     }
+    },
+    "stage0_pass": false
+   },
+   {
+    "pair": [
+     "e5_00853_s42_placebo_15m_q2",
+     "e5_00853_s42_placebo_15m_q3"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          4,
+          0
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 4,
+         "share_within_tol": 0.0,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          4,
+          4
+         ],
+         "labels_equal": true,
+         "label_sym_diff": 0,
+         "share_within_tol": 0.75,
+         "max_nearest_m": 0.1704259369931701,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 3.8374692024519943,
+       "pass": false
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          8,
+          5
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 7,
+         "share_within_tol": 0.15384615384615385,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          9,
+          8
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 3,
+         "share_within_tol": 0.47058823529411764,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 4.491476160103893,
+       "pass": false
+      }
+     },
+     "2": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          11,
+          10
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 5,
+         "share_within_tol": 0.09523809523809523,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          12,
+          12
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 4,
+         "share_within_tol": 0.3333333333333333,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 7.3131133202756,
+       "pass": false
+      }
+     }
+    },
+    "stage0_pass": false
+   }
+  ],
+  "all_pairs_stage0_pass": false,
+  "stage0_stop_distance_m": [
+   0.24126949816930934,
+   3.6008462131935164,
+   3.8374692024519943
+  ],
+  "stage0_share_within_tol": [
+   [
+    0.6666666666666666,
+    0.75
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    0.75
+   ]
+  ]
+ },
+ "baseline": {
+  "runs": [
+   "e1_00853_s42_placebo_60m",
+   "e1_00853_s42_placebo_60m_FAILED_ATTEMPT1_retry_loop",
+   "e1_00853_s42_placebo_60m_FAILED_ATTEMPT2_false_exit"
+  ],
+  "quiet_waits_s": {
+   "e1_00853_s42_placebo_60m": null,
+   "e1_00853_s42_placebo_60m_FAILED_ATTEMPT1_retry_loop": null,
+   "e1_00853_s42_placebo_60m_FAILED_ATTEMPT2_false_exit": null
+  },
+  "pairs": [
+   {
+    "pair": [
+     "e1_00853_s42_placebo_60m",
+     "e1_00853_s42_placebo_60m_FAILED_ATTEMPT1_retry_loop"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          4,
+          3
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.2857142857142857,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          3,
+          4
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.5714285714285714,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 1.9902143280112221,
+       "pass": false
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          10,
+          5
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 5,
+         "share_within_tol": 0.4,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          6,
+          9
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 5,
+         "share_within_tol": 0.26666666666666666,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 1.4572782499642112,
+       "pass": false
+      }
+     },
+     "2": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          10,
+          6
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 8,
+         "share_within_tol": 0.375,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          7,
+          11
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 8,
+         "share_within_tol": 0.2222222222222222,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 3.4469174836387086,
+       "pass": false
+      }
+     }
+    },
+    "stage0_pass": false
+   },
+   {
+    "pair": [
+     "e1_00853_s42_placebo_60m",
+     "e1_00853_s42_placebo_60m_FAILED_ATTEMPT2_false_exit"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          4,
+          3
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.5714285714285714,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          3,
+          5
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 2,
+         "share_within_tol": 0.75,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 1.2248467535158352,
+       "pass": false
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          10,
+          9
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 7,
+         "share_within_tol": 0.42105263157894735,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          6,
+          11
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 5,
+         "share_within_tol": 0.23529411764705882,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": null
+     },
+     "2": {
+      "a_maps": null,
+      "b_stops": null
+     }
+    },
+    "stage0_pass": false
+   },
+   {
+    "pair": [
+     "e1_00853_s42_placebo_60m_FAILED_ATTEMPT1_retry_loop",
+     "e1_00853_s42_placebo_60m_FAILED_ATTEMPT2_false_exit"
+    ],
+    "stages": {
+     "0": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          3,
+          3
+         ],
+         "labels_equal": true,
+         "label_sym_diff": 0,
+         "share_within_tol": 0.3333333333333333,
+         "max_nearest_m": 0.20607280266934802,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          4,
+          5
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 1,
+         "share_within_tol": 0.8888888888888888,
+         "max_nearest_m": 2.8114170804062497,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": {
+       "distance_m": 0.7729917761988339,
+       "pass": false
+      }
+     },
+     "1": {
+      "a_maps": {
+       "tracks": [
+        {
+         "track": 0,
+         "n_objects": [
+          5,
+          9
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 6,
+         "share_within_tol": 0.14285714285714285,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        },
+        {
+         "track": 1,
+         "n_objects": [
+          9,
+          11
+         ],
+         "labels_equal": false,
+         "label_sym_diff": 4,
+         "share_within_tol": 0.5,
+         "max_nearest_m": null,
+         "all_within_tol": false
+        }
+       ],
+       "pass": false
+      },
+      "b_stops": null
+     },
+     "2": {
+      "a_maps": null,
+      "b_stops": null
+     }
+    },
+    "stage0_pass": false
+   }
+  ],
+  "all_pairs_stage0_pass": false,
+  "stage0_stop_distance_m": [
+   1.9902143280112221,
+   1.2248467535158352,
+   0.7729917761988339
+  ],
+  "stage0_share_within_tol": [
+   [
+    0.2857142857142857,
+    0.5714285714285714
+   ],
+   [
+    0.5714285714285714,
+    0.75
+   ],
+   [
+    0.3333333333333333,
+    0.8888888888888888
+   ]
+  ]
+ },
+ "decision": "plan at least 5 replicates per cell"
+}

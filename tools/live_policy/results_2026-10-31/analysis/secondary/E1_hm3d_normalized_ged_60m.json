@@ -1,0 +1,80 @@
+{
+ "contrast": "official - placebo",
+ "metric": "hm3d_auc_normalized_ged_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "stopped at 46.800000000000345 m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "stopped at 44.25000000000025 m"
+  },
+  {
+   "run": "e1_00871_s43_placebo_60m",
+   "reason": "stopped at 0 m"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "official": [
+    1.0193,
+    1.0106
+   ],
+   "placebo": [
+    1.0344,
+    1.0051,
+    1.0208
+   ],
+   "diff_of_means": -0.005149999999999988
+  },
+  "00871": {
+   "official": [
+    1.0428,
+    1.0435,
+    1.0428
+   ],
+   "placebo": [
+    1.0432,
+    1.0333,
+    1.0444
+   ],
+   "diff_of_means": 0.0027333333333332543
+  }
+ },
+ "statistic": -0.0012083333333333668,
+ "blocked_permutation_p": 0.81,
+ "n_relabelings": 200,
+ "seed_paired_signflip_p": 0.9375,
+ "n_pairs": 5,
+ "pair_diffs": [
+  -0.015099999999999891,
+  0.005499999999999838,
+  -0.00039999999999995595,
+  0.010199999999999987,
+  -0.0016000000000000458
+ ],
+ "bootstrap_95ci": [
+  -0.008558333333333334,
+  0.006525000000000003
+ ],
+ "mde_alpha05_power80": 0.014924274335606495,
+ "permutation_95ci": [
+  -0.013708333333333367,
+  0.010791666666666633
+ ],
+ "counted_runs": [
+  "e1_00853_s42_official_60m",
+  "e1_00853_s42_placebo_60m",
+  "e1_00853_s43_official_60m",
+  "e1_00853_s43_placebo_60m",
+  "e1_00853_s44_placebo_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s42_placebo_60m",
+  "e1_00871_s43_official_60m",
+  "e1_00871_s43_placebo_60m_rerun1",
+  "e1_00871_s44_official_60m",
+  "e1_00871_s44_placebo_60m"
+ ],
+ "min_attainable_p": 0.01
+}

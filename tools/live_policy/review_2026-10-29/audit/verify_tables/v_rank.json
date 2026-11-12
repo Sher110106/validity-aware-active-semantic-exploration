@@ -1,0 +1,18 @@
+{
+ "B_set": {
+  "n": 364,
+  "n_matchedB": 364,
+  "rank1B": 112,
+  "shareB": 0.3076923076923077,
+  "n_A_matched": 364,
+  "rank0A": 66
+ },
+ "A_set": {
+  "n": 394,
+  "n_matchedB": 394,
+  "rank1B": 125,
+  "shareB": 0.31725888324873097,
+  "n_A_matched": 394,
+  "rank0A": 71
+ }
+}

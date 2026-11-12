@@ -1,0 +1,82 @@
+{
+ "contrast": "official - filter_only",
+ "metric": "hm3d_auc_af_f1_to_50m",
+ "dropped": [
+  {
+   "run": "e1_00853_s42_official_60m",
+   "reason": "excluded"
+  },
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "stopped at 46.800000000000345 m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "stopped at 44.25000000000025 m"
+  },
+  {
+   "run": "e1_00871_s44_official_60m",
+   "reason": "excluded"
+  },
+  {
+   "run": "e2_00853_s42_filter_only_60m",
+   "reason": "excluded"
+  },
+  {
+   "run": "e2_00871_s44_filter_only_60m",
+   "reason": "excluded"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "official": [
+    0.1304
+   ],
+   "filter_only": [
+    0.1055,
+    0.1789
+   ],
+   "diff_of_means": -0.011800000000000005
+  },
+  "00871": {
+   "official": [
+    0.1218,
+    0.1124
+   ],
+   "filter_only": [
+    0.124,
+    0.0764
+   ],
+   "diff_of_means": 0.016900000000000012
+  }
+ },
+ "statistic": 0.0025500000000000037,
+ "blocked_permutation_p": 1.0,
+ "n_relabelings": 18,
+ "seed_paired_signflip_p": 0.5,
+ "n_pairs": 3,
+ "pair_diffs": [
+  0.02489999999999999,
+  -0.0021999999999999936,
+  0.036000000000000004
+ ],
+ "bootstrap_95ci": [
+  -0.027700000000000002,
+  0.0328
+ ],
+ "mde_alpha05_power80": 0.07681718904863241,
+ "permutation_95ci": [
+  -0.09745000000000001,
+  0.10255
+ ],
+ "counted_runs": [
+  "e1_00853_s43_official_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s43_official_60m",
+  "e2_00853_s43_filter_only_60m",
+  "e2_00853_s44_filter_only_60m",
+  "e2_00871_s42_filter_only_60m",
+  "e2_00871_s43_filter_only_60m"
+ ],
+ "min_attainable_p": 0.1111111111111111
+}

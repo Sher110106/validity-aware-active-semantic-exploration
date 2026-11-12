@@ -1,0 +1,57 @@
+{
+ "e3_00853_s42_oracle_visible_60m_FAILED_ATTEMPT1_gate": {
+  "rows": 2537,
+  "drawn_share": 0.40283799763500194,
+  "approach_drawn": 0.27984344422700586,
+  "approach_undrawn": 0.2528052805280528,
+  "approach_gap": 0.027038163698953066,
+  "ideal_gap_mean": 0.015287251347627056,
+  "undrawn_neighbours_within_3.5m_median": 10.0,
+  "members_per_drawn_mean": 1.2064579256360077,
+  "share_drawn_by_1_member": 0.8111545988258317
+ },
+ "e3_00853_s42_oracle_visible_60m_rerun1": {
+  "rows": 2830,
+  "drawn_share": 0.40035335689045937,
+  "approach_drawn": 0.2727272727272727,
+  "approach_undrawn": 0.24631703005303476,
+  "approach_gap": 0.026410242674237944,
+  "ideal_gap_mean": 0.020724365872420183,
+  "undrawn_neighbours_within_3.5m_median": 9.0,
+  "members_per_drawn_mean": 1.2462488967343337,
+  "share_drawn_by_1_member": 0.7766990291262136
+ },
+ "e3_00853_s43_oracle_visible_60m": {
+  "rows": 2505,
+  "drawn_share": 0.4151696606786427,
+  "approach_drawn": 0.3038461538461538,
+  "approach_undrawn": 0.27235494880546074,
+  "approach_gap": 0.03149120504069308,
+  "ideal_gap_mean": 0.02963097651374777,
+  "undrawn_neighbours_within_3.5m_median": 9.0,
+  "members_per_drawn_mean": 1.2451923076923077,
+  "share_drawn_by_1_member": 0.7826923076923077
+ },
+ "e3_00871_s42_oracle_visible_60m": {
+  "rows": 3657,
+  "drawn_share": 0.26333059885151766,
+  "approach_drawn": 0.26791277258566976,
+  "approach_undrawn": 0.2364513734224202,
+  "approach_gap": 0.031461399163249554,
+  "ideal_gap_mean": 0.03695526354272004,
+  "undrawn_neighbours_within_3.5m_median": 21.0,
+  "members_per_drawn_mean": 1.122533748701973,
+  "share_drawn_by_1_member": 0.8899273104880582
+ },
+ "e3_00871_s43_oracle_visible_60m": {
+  "rows": 2796,
+  "drawn_share": 0.29113018597997137,
+  "approach_drawn": 0.32432432432432434,
+  "approach_undrawn": 0.28002018163471243,
+  "approach_gap": 0.044304142689611914,
+  "ideal_gap_mean": -0.0024683074217001035,
+  "undrawn_neighbours_within_3.5m_median": 19.0,
+  "members_per_drawn_mean": 1.151105651105651,
+  "share_drawn_by_1_member": 0.8574938574938575
+ }
+}

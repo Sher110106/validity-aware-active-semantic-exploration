@@ -1,0 +1,82 @@
+[
+ {
+  "run": "e1_00853_s42_official_60m",
+  "stage": 3,
+  "n": 10,
+  "median_same_label_m": 0.40068396206065554,
+  "share_same_within_0.5m": 0.5,
+  "median_random_label_m": 3.271056286295517
+ },
+ {
+  "run": "e1_00853_s42_official_60m",
+  "stage": 8,
+  "n": 17,
+  "median_same_label_m": 0.1615951731952408,
+  "share_same_within_0.5m": 0.7647058823529411,
+  "median_random_label_m": 3.7199236551305734
+ },
+ {
+  "run": "e1_00853_s42_official_60m",
+  "stage": 14,
+  "n": 33,
+  "median_same_label_m": 0.2707397274136178,
+  "share_same_within_0.5m": 0.696969696969697,
+  "median_random_label_m": 5.668859585489837
+ },
+ {
+  "run": "e1_00871_s42_placebo_60m",
+  "stage": 3,
+  "n": 22,
+  "median_same_label_m": 0.41251306284880906,
+  "share_same_within_0.5m": 0.5,
+  "median_random_label_m": 3.047370105419443
+ },
+ {
+  "run": "e1_00871_s42_placebo_60m",
+  "stage": 8,
+  "n": 48,
+  "median_same_label_m": 0.4542625750083546,
+  "share_same_within_0.5m": 0.5208333333333334,
+  "median_random_label_m": 3.002487791138633
+ },
+ {
+  "run": "e1_00871_s42_placebo_60m",
+  "stage": 14,
+  "n": 54,
+  "median_same_label_m": 0.49043360404783604,
+  "share_same_within_0.5m": 0.5,
+  "median_random_label_m": 4.417842125203673
+ },
+ {
+  "run": "e2_00871_s43_filter_only_60m",
+  "stage": 5,
+  "n": 26,
+  "median_same_label_m": 0.6184833557218301,
+  "share_same_within_0.5m": 0.46153846153846156,
+  "median_random_label_m": 4.843386647453093
+ },
+ {
+  "run": "e2_00871_s43_filter_only_60m",
+  "stage": 10,
+  "n": 30,
+  "median_same_label_m": 0.683082848832965,
+  "share_same_within_0.5m": 0.4666666666666667,
+  "median_random_label_m": 3.776416375721947
+ },
+ {
+  "run": "e3_00853_s43_oracle_visible_60m",
+  "stage": 4,
+  "n": 18,
+  "median_same_label_m": 0.3097144821321112,
+  "share_same_within_0.5m": 0.6111111111111112,
+  "median_random_label_m": 4.540166277564099
+ },
+ {
+  "run": "e3_00853_s43_oracle_visible_60m",
+  "stage": 9,
+  "n": 40,
+  "median_same_label_m": 0.2573341359633654,
+  "share_same_within_0.5m": 0.575,
+  "median_random_label_m": 4.116186409457363
+ }
+]

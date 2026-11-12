@@ -1,0 +1,82 @@
+{
+ "frontier": {
+  "e4_00853_s42_frontier_60m": {
+   "share_in_wall_cells": 0.0,
+   "n_points": 3592
+  },
+  "e4_00853_s43_frontier_60m": {
+   "share_in_wall_cells": 0.0016835016835016834,
+   "n_points": 3564
+  },
+  "e4_00853_s44_frontier_60m": {
+   "share_in_wall_cells": 0.0005446623093681918,
+   "n_points": 3672
+  },
+  "e4_00871_s42_frontier_60m": {
+   "share_in_wall_cells": 0.0,
+   "n_points": 3296
+  },
+  "e4_00871_s43_frontier_60m": {
+   "share_in_wall_cells": 0.0,
+   "n_points": 3308
+  },
+  "e4_00871_s44_frontier_60m": {
+   "share_in_wall_cells": 0.0,
+   "n_points": 3336
+  }
+ },
+ "e1": {
+  "e1_00853_s42_official_60m": {
+   "share_in_wall_cells": 0.02737020316027088,
+   "n_points": 3544
+  },
+  "e1_00853_s42_placebo_60m": {
+   "share_in_wall_cells": 0.0700815494393476,
+   "n_points": 3924
+  },
+  "e1_00853_s43_official_60m": {
+   "share_in_wall_cells": 0.03389261744966443,
+   "n_points": 2980
+  },
+  "e1_00853_s43_placebo_60m": {
+   "share_in_wall_cells": 0.052672147995889006,
+   "n_points": 3892
+  },
+  "e1_00853_s44_placebo_60m": {
+   "share_in_wall_cells": 0.023626373626373626,
+   "n_points": 3640
+  },
+  "e1_00871_s42_official_60m": {
+   "share_in_wall_cells": 0.032619521912350596,
+   "n_points": 4016
+  },
+  "e1_00871_s42_placebo_60m": {
+   "share_in_wall_cells": 0.02607184241019699,
+   "n_points": 3452
+  },
+  "e1_00871_s43_official_60m": {
+   "share_in_wall_cells": 0.03944504896626768,
+   "n_points": 3676
+  },
+  "e1_00871_s43_placebo_60m_rerun1": {
+   "share_in_wall_cells": 0.047180667433831994,
+   "n_points": 3476
+  },
+  "e1_00871_s44_official_60m": {
+   "share_in_wall_cells": 0.03274853801169591,
+   "n_points": 3420
+  },
+  "e1_00871_s44_placebo_60m": {
+   "share_in_wall_cells": 0.033704572098475966,
+   "n_points": 3412
+  }
+ },
+ "frontier_range": [
+  0.0,
+  0.0016835016835016834
+ ],
+ "e1_range": [
+  0.023626373626373626,
+  0.0700815494393476
+ ]
+}

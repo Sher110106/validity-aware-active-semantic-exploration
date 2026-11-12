@@ -1,0 +1,79 @@
+{
+ "official": {
+  "within_lo_over_20_seeds": [
+   0.58,
+   0.586
+  ],
+  "frac_seeds_lo_gt_0.5": 1.0,
+  "cluster_ci": [
+   0.536,
+   0.705
+  ]
+ },
+ "placebo": {
+  "within_lo_over_20_seeds": [
+   0.564,
+   0.569
+  ],
+  "frac_seeds_lo_gt_0.5": 1.0,
+  "cluster_ci": [
+   0.494,
+   0.731
+  ]
+ },
+ "filter_only": {
+  "within_lo_over_20_seeds": [
+   0.576,
+   0.583
+  ],
+  "frac_seeds_lo_gt_0.5": 1.0,
+  "cluster_ci": [
+   0.534,
+   0.725
+  ]
+ },
+ "oracle_visible": {
+  "within_lo_over_20_seeds": [
+   0.737,
+   0.742
+  ],
+  "frac_seeds_lo_gt_0.5": 1.0,
+  "cluster_ci": [
+   0.717,
+   0.857
+  ]
+ },
+ "official/00853": {
+  "within_lo_over_20_seeds": [
+   0.495,
+   0.5
+  ],
+  "frac_seeds_lo_gt_0.5": 0.0,
+  "cluster_ci": [
+   0.476,
+   0.663
+  ]
+ },
+ "placebo/00871": {
+  "within_lo_over_20_seeds": [
+   0.474,
+   0.481
+  ],
+  "frac_seeds_lo_gt_0.5": 0.0,
+  "cluster_ci": [
+   0.412,
+   0.735
+  ]
+ },
+ "filter_only/00871": {
+  "within_lo_over_20_seeds": [
+   0.456,
+   0.468
+  ],
+  "frac_seeds_lo_gt_0.5": 0.0,
+  "cluster_ci": [
+   0.405,
+   0.682
+  ]
+ }
+}

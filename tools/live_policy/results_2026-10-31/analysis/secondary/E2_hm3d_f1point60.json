@@ -1,0 +1,76 @@
+{
+ "contrast": "official - filter_only",
+ "metric": "hm3d_auc_f1point60_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00853_s44_official_60m",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  },
+  {
+   "run": "e1_00853_s44_official_60m_rerun1",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  }
+ ],
+ "per_scene": {
+  "00853": {
+   "official": [
+    0.2668,
+    0.2776
+   ],
+   "filter_only": [
+    0.2534,
+    0.2414,
+    0.3258
+   ],
+   "diff_of_means": -0.001333333333333353
+  },
+  "00871": {
+   "official": [
+    0.1812,
+    0.1984,
+    0.1919
+   ],
+   "filter_only": [
+    0.2098,
+    0.0938,
+    0.111
+   ],
+   "diff_of_means": 0.05230000000000001
+  }
+ },
+ "statistic": 0.02548333333333333,
+ "blocked_permutation_p": 0.28,
+ "n_relabelings": 200,
+ "seed_paired_signflip_p": 0.1875,
+ "n_pairs": 5,
+ "pair_diffs": [
+  0.013399999999999967,
+  0.03620000000000001,
+  -0.028599999999999987,
+  0.1046,
+  0.08089999999999999
+ ],
+ "bootstrap_95ci": [
+  -0.011400000000000007,
+  0.05871666666666666
+ ],
+ "mde_alpha05_power80": 0.07083056942058592,
+ "permutation_95ci": [
+  -0.03901666666666667,
+  0.08698333333333333
+ ],
+ "counted_runs": [
+  "e1_00853_s42_official_60m",
+  "e1_00853_s43_official_60m",
+  "e1_00871_s42_official_60m",
+  "e1_00871_s43_official_60m",
+  "e1_00871_s44_official_60m",
+  "e2_00853_s42_filter_only_60m",
+  "e2_00853_s43_filter_only_60m",
+  "e2_00853_s44_filter_only_60m",
+  "e2_00871_s42_filter_only_60m",
+  "e2_00871_s43_filter_only_60m",
+  "e2_00871_s44_filter_only_60m"
+ ],
+ "min_attainable_p": 0.01
+}

@@ -1,0 +1,132 @@
+{
+ "labels_in_file": 52,
+ "00853": {
+  "use_rule": {
+   "reached": 85,
+   "listed": 85,
+   "fraction": 1.0
+  },
+  "C1": {
+   "room_nodes": 13,
+   "room_names": [
+    "an image of a bedroom",
+    "an image of a bedroom",
+    "an image of a bathroom",
+    "an image of a closet",
+    "an image of a hallway",
+    "an image of a living room",
+    "an image of a kitchen",
+    "an image of a kitchen",
+    "an image of a living room",
+    "an image of a bathroom",
+    "an image of a bedroom",
+    "an image of a laundry room",
+    "an image of a laundry room"
+   ],
+   "paper_rooms": 6,
+   "start_island_area_m2": 77.00389099121094,
+   "kept_area_estimate_m2": 191.25,
+   "paper_area_m2": 207.63,
+   "node_types": {
+    "object": 118,
+    "nothing": 44,
+    "structure": 89,
+    "room": 13
+   }
+  },
+  "C2": {
+   "apr_b_final_vs_a_final_f1_prec_rec": [
+    0.02654867256637168,
+    0.75,
+    0.013513513513513514
+   ],
+   "apr_b_objects_final": 2,
+   "apr_b_final_identical_to_stage0": true
+  },
+  "C3": {
+   "apr_a_recall_vs_hm3d": 0.32222222222222224,
+   "apr_a_precision_vs_hm3d": 0.5225225225225225,
+   "f1": 0.39862542955326463,
+   "apr_a_objects": 111,
+   "hm3d_objects": 180
+  },
+  "C4": {
+   "classes_in_apr_a": 23,
+   "classes_not_in_label_file": [],
+   "labels_never_seen": 29
+  },
+  "C5": {
+   "apr_a_vs_frontier_made_f1_prec_rec": [
+    0.6387434554973823,
+    0.5495495495495496,
+    0.7625
+   ],
+   "frontier_made_objects": 80
+  }
+ },
+ "00871": {
+  "use_rule": {
+   "reached": 66,
+   "listed": 66,
+   "fraction": 1.0
+  },
+  "C1": {
+   "room_nodes": 14,
+   "room_names": [
+    "an image of a bedroom",
+    "an image of a living room",
+    "an image of a bathroom",
+    "an image of a hallway",
+    "an image of a living room",
+    "an image of a living room",
+    "an image of a living room",
+    "an image of a bedroom",
+    "an image of a living room",
+    "an image of a bathroom",
+    "an image of a closet",
+    "an image of a closet",
+    "an image of a laundry room",
+    "an image of a living room"
+   ],
+   "paper_rooms": 9,
+   "start_island_area_m2": 59.27443313598633,
+   "kept_area_estimate_m2": 148.5,
+   "paper_area_m2": 235.03,
+   "node_types": {
+    "object": 117,
+    "nothing": 40,
+    "structure": 82,
+    "room": 14
+   }
+  },
+  "C2": {
+   "apr_b_final_vs_a_final_f1_prec_rec": [
+    0.07476635514018691,
+    1.0,
+    0.038834951456310676
+   ],
+   "apr_b_objects_final": 4,
+   "apr_b_final_identical_to_stage0": true
+  },
+  "C3": {
+   "apr_a_recall_vs_hm3d": 0.21120689655172414,
+   "apr_a_precision_vs_hm3d": 0.47572815533980584,
+   "f1": 0.29253731343283584,
+   "apr_a_objects": 103,
+   "hm3d_objects": 232
+  },
+  "C4": {
+   "classes_in_apr_a": 26,
+   "classes_not_in_label_file": [],
+   "labels_never_seen": 26
+  },
+  "C5": {
+   "apr_a_vs_frontier_made_f1_prec_rec": [
+    0.6701030927835051,
+    0.6310679611650486,
+    0.7142857142857143
+   ],
+   "frontier_made_objects": 91
+  }
+ }
+}

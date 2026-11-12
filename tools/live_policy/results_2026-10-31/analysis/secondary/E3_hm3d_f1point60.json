@@ -1,0 +1,64 @@
+{
+ "contrast": "oracle_visible - placebo",
+ "metric": "hm3d_auc_f1point60_to_60m",
+ "dropped": [
+  {
+   "run": "e1_00871_s43_placebo_60m",
+   "reason": "no hm3d_auc_f1point60_to_60m"
+  },
+  {
+   "run": "e3_00853_s42_oracle_visible_60m_rerun1",
+   "reason": "excluded"
+  },
+  {
+   "run": "e3_00853_s43_oracle_visible_60m",
+   "reason": "excluded"
+  }
+ ],
+ "per_scene": {
+  "00871": {
+   "oracle_visible": [
+    0.1714,
+    0.2095,
+    0.1914
+   ],
+   "placebo": [
+    0.1743,
+    0.133,
+    0.1073
+   ],
+   "diff_of_means": 0.05256666666666665
+  }
+ },
+ "statistic": 0.05256666666666665,
+ "blocked_permutation_p": 0.2,
+ "n_relabelings": 20,
+ "seed_paired_signflip_p": 0.5,
+ "n_pairs": 3,
+ "pair_diffs": [
+  -0.0029000000000000137,
+  0.07649999999999998,
+  0.08409999999999998
+ ],
+ "bootstrap_95ci": [
+  0.016466666666666657,
+  0.08759999999999998
+ ],
+ "mde_alpha05_power80": 0.06272944373347424,
+ "permutation_95ci": [
+  -0.047433333333333355,
+  0.15256666666666666
+ ],
+ "counted_runs": [
+  "e1_00853_s42_placebo_60m",
+  "e1_00853_s43_placebo_60m",
+  "e1_00853_s44_placebo_60m",
+  "e1_00871_s42_placebo_60m",
+  "e1_00871_s43_placebo_60m_rerun1",
+  "e1_00871_s44_placebo_60m",
+  "e3_00871_s42_oracle_visible_60m",
+  "e3_00871_s43_oracle_visible_60m",
+  "e3_00871_s44_oracle_visible_60m"
+ ],
+ "min_attainable_p": 0.1
+}
