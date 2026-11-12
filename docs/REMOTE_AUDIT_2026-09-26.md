@@ -6,7 +6,7 @@ The recorded research is frozen, but the remote operational state is not a clean
 
 ## Scope and provenance
 
-- Connection: the SSH endpoint supplied by the project owner, `sher@10.1.17.241`.
+- Connection: the project host over SSH, as supplied by the project owner.
 - Workspace: `~/active-semantic-perception-workspace`; mounted as `/workspace` in `asp-noetic`.
 - Local source revision before this documentation pass: `c41cc31`.
 - Author checkout HEAD: `f1ea141b1886d33ab8f4e4b791db4d3c92150b27`.

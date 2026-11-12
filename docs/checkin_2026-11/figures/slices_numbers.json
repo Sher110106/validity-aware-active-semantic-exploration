@@ -1,0 +1,179 @@
+{
+ "run": "e1_00853_s42_official_60m",
+ "scene": "00853",
+ "stage": 3,
+ "members": 8,
+ "frame": "habitat world frame, x/y top-down, z band 0.5 to 1.5 m",
+ "rule": {
+  "new_guess": "is_predicted object, > 0.5 m (x/y) from every observed object",
+  "right_in_place": "same lower-case name, real object within 0.5 m (x/y); also within 2 m"
+ },
+ "observed_objects": 10,
+ "real_objects_in_house": 180,
+ "real_objects_in_view": 85,
+ "new_guesses": 90,
+ "within_0.5m": 4,
+ "within_2m": 20,
+ "same_name_exists_anywhere": 44,
+ "no_same_name_object_in_house": 46,
+ "examples": [
+  {
+   "kind": "hit",
+   "name": "toilet",
+   "distance_m": 0.39,
+   "guess_xy": [
+    0.85,
+    0.2
+   ],
+   "real_xy": [
+    1.22,
+    0.08
+   ]
+  },
+  {
+   "kind": "near",
+   "name": "lamp",
+   "distance_m": 0.83,
+   "guess_xy": [
+    4.5,
+    -5.6
+   ],
+   "real_xy": [
+    4.79,
+    -4.82
+   ]
+  },
+  {
+   "kind": "far",
+   "name": "nightstand",
+   "distance_m": 3.06,
+   "guess_xy": [
+    4.5,
+    -4.5
+   ],
+   "real_xy": [
+    2.24,
+    -6.55
+   ]
+  }
+ ],
+ "all_sample_stages": {
+  "stage_runs": 15,
+  "new": 1230,
+  "within_0.5m": 30,
+  "within_2m": 307
+ },
+ "per_stage_run": [
+  {
+   "run": "e1_00853_s42_official_60m",
+   "stage": 3,
+   "new": 90,
+   "within_0.5m": 4,
+   "within_2m": 20
+  },
+  {
+   "run": "e1_00853_s42_official_60m",
+   "stage": 8,
+   "new": 73,
+   "within_0.5m": 0,
+   "within_2m": 12
+  },
+  {
+   "run": "e1_00853_s42_official_60m",
+   "stage": 13,
+   "new": 60,
+   "within_0.5m": 0,
+   "within_2m": 8
+  },
+  {
+   "run": "e1_00853_s43_official_60m",
+   "stage": 3,
+   "new": 89,
+   "within_0.5m": 2,
+   "within_2m": 21
+  },
+  {
+   "run": "e1_00853_s43_official_60m",
+   "stage": 8,
+   "new": 88,
+   "within_0.5m": 1,
+   "within_2m": 16
+  },
+  {
+   "run": "e1_00853_s43_official_60m",
+   "stage": 13,
+   "new": 99,
+   "within_0.5m": 0,
+   "within_2m": 12
+  },
+  {
+   "run": "e1_00871_s42_official_60m",
+   "stage": 3,
+   "new": 72,
+   "within_0.5m": 3,
+   "within_2m": 17
+  },
+  {
+   "run": "e1_00871_s42_official_60m",
+   "stage": 8,
+   "new": 77,
+   "within_0.5m": 5,
+   "within_2m": 30
+  },
+  {
+   "run": "e1_00871_s42_official_60m",
+   "stage": 13,
+   "new": 78,
+   "within_0.5m": 4,
+   "within_2m": 25
+  },
+  {
+   "run": "e1_00871_s43_official_60m",
+   "stage": 3,
+   "new": 95,
+   "within_0.5m": 0,
+   "within_2m": 24
+  },
+  {
+   "run": "e1_00871_s43_official_60m",
+   "stage": 8,
+   "new": 87,
+   "within_0.5m": 5,
+   "within_2m": 32
+  },
+  {
+   "run": "e1_00871_s43_official_60m",
+   "stage": 13,
+   "new": 83,
+   "within_0.5m": 1,
+   "within_2m": 27
+  },
+  {
+   "run": "e1_00871_s44_official_60m",
+   "stage": 3,
+   "new": 78,
+   "within_0.5m": 0,
+   "within_2m": 14
+  },
+  {
+   "run": "e1_00871_s44_official_60m",
+   "stage": 8,
+   "new": 76,
+   "within_0.5m": 1,
+   "within_2m": 9
+  },
+  {
+   "run": "e1_00871_s44_official_60m",
+   "stage": 13,
+   "new": 85,
+   "within_0.5m": 4,
+   "within_2m": 40
+  }
+ ],
+ "window_xy": [
+  -2.5,
+  8.26,
+  -9.5,
+  2.73
+ ]
+}
