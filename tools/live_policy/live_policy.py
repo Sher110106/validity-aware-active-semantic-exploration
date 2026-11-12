@@ -28,6 +28,10 @@ pinned-only field of a surviving node is left untouched:
   does), drawn independently per member. official vs placebo asks whether
   the LLM's scene-conditioned content matters, not merely whether
   hypotheses exist.
+- oracle_visible: no LLM call; the placebo's rooms, but each member's
+  objects are true unseen objects from the human annotation near the map
+  (oracle_graph). oracle vs placebo asks whether this loop turns correct
+  object hypotheses into map gain at all.
 
 The two no-LLM arms sleep per planning step (ASP_LIVE_NO_LLM_DELAY_SCHEDULE,
 seconds for stages 0, 1, ..., last value repeating) so Hydra gets about the
@@ -48,8 +52,8 @@ from typing import Any, Dict, List, Optional, Sequence, Set
 
 import yaml
 
-POLICIES = ("official", "filter_only", "unanimity", "observed_only", "placebo")
-NO_LLM_POLICIES = ("observed_only", "placebo")
+POLICIES = ("official", "filter_only", "unanimity", "observed_only", "placebo", "oracle_visible")
+NO_LLM_POLICIES = ("observed_only", "placebo", "oracle_visible")
 ENV_VAR = "ASP_LIVE_POLICY"
 DELAY_ENV_VAR = "ASP_LIVE_NO_LLM_DELAY_S"
 SCHEDULE_ENV_VAR = "ASP_LIVE_NO_LLM_DELAY_SCHEDULE"
@@ -178,6 +182,10 @@ def _fmt(values: Sequence[float]) -> str:
 
 
 CALIBRATION_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "placebo_calibration.json")
+# Oracle arm (E3): per-scene reference objects, built by build_oracle_sets.py.
+ORACLE_SETS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "oracle_sets.json")
+ORACLE_REACH_M = 5.0
+ORACLE_NEW_M = 0.5
 
 
 def load_calibration(path: str = CALIBRATION_PATH) -> Dict[str, Any]:
@@ -269,6 +277,89 @@ def placebo_graph(observed: Dict[str, Any], rng: Any, calib: Dict[str, Any]) -> 
     return {"nodes": nodes + new_rooms + new_objects, "edges": edges}
 
 
+def _label(name: Any) -> str:
+    return str(name).lower().replace("_", " ").strip()
+
+
+def load_oracle_set(scene_number: Any, path: str = ORACLE_SETS_PATH) -> List[Dict[str, Any]]:
+    with open(path) as f:
+        return json.load(f)["scenes"][str(int(scene_number))]["objects"]
+
+
+def oracle_eligible(observed: Dict[str, Any], candidates: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Reference objects the oracle may draw for this observed graph: unmapped
+    (more than ORACLE_NEW_M in xy from every observed object, and from every
+    observed structure node of the same label) and within ORACLE_REACH_M (xy)
+    of an observed room centre (any observed node if no room is mapped yet)."""
+    positioned = [n for n in observed.get("nodes") or [] if "position" in n]
+    if not positioned:
+        return []
+    obs_obj_xy = [_vec(n["position"])[:2] for n in positioned if n.get("node_type") == "object"]
+    obs_struct: Dict[str, List[List[float]]] = {}
+    for n in positioned:
+        if n.get("node_type") == "structure":
+            obs_struct.setdefault(_label(n.get("name", "")), []).append(_vec(n["position"])[:2])
+    obs_rooms = [n for n in positioned if n.get("node_type") == "room"]
+    anchor_xy = [_vec(n["position"])[:2] for n in (obs_rooms or positioned)]
+
+    def near(xy, others, radius):
+        return any((xy[0] - a) ** 2 + (xy[1] - b) ** 2 <= radius ** 2 for a, b in others)
+
+    def mapped(c):
+        xy = c["position"][:2]
+        return near(xy, obs_obj_xy, ORACLE_NEW_M) or near(xy, obs_struct.get(_label(c["name"]), []), ORACLE_NEW_M)
+
+    return [c for c in candidates if not mapped(c) and near(c["position"][:2], anchor_xy, ORACLE_REACH_M)]
+
+
+def oracle_graph(observed: Dict[str, Any], rng: Any, calib: Dict[str, Any],
+                 candidates: Sequence[Dict[str, Any]]) -> tuple:
+    """Oracle arm: the placebo's random rooms, but objects taken from the human
+    annotation. A member draws a count from the placebo's object-count
+    distribution (its own draw, not the placebo's number), without
+    replacement, from reference objects that are unmapped (more than
+    ORACLE_NEW_M in xy from every observed object, and from every observed
+    structure node of the same label: Hydra maps most windows and curtains as
+    structure) and near the map (within ORACLE_REACH_M in xy of an observed
+    room, or of any observed node if no room is mapped yet). Each drawn object
+    links to the nearest room, observed or hypothesised. Members draw
+    independently, so the ensemble disagrees where true unmapped objects are.
+    With nothing in reach the member gets the placebo's own objects and the
+    draw is flagged as a fallback. Returns (graph, info)."""
+    nodes = list(observed.get("nodes") or [])
+    positioned = [n for n in nodes if "position" in n]
+    info = {"n_candidates_in_reach": 0, "n_drawn": 0, "fallback": False}
+    if not positioned:
+        return {"nodes": nodes, "edges": [list(e) for e in observed.get("edges") or []]}, info
+    # Rooms exactly as the placebo draws them: the same code and the same
+    # random stream, with the object count forced to zero.
+    graph = placebo_graph(observed, rng, dict(calib, objects_min=0, objects_max=0))
+    eligible = oracle_eligible(observed, candidates)
+    info["n_candidates_in_reach"] = len(eligible)
+    n_objects = int(min(calib["objects_max"], max(calib["objects_min"], rng.poisson(calib["objects_poisson_mean"]))))
+    if not eligible:
+        info["fallback"] = True
+        return placebo_graph(observed, rng, calib), info
+    picks = rng.choice(len(eligible), size=min(n_objects, len(eligible)), replace=False)
+    rooms = [n for n in graph["nodes"] if n.get("node_type") == "room" and "position" in n]
+    next_id = max(int(n["id"]) for n in graph["nodes"]) + 1
+    new_objects = []
+    for i in sorted(int(p) for p in picks):
+        c = eligible[i]
+        new_objects.append({"id": next_id, "name": c["name"], "node_type": "object", "is_predicted": True,
+                            "dimension": _fmt(c["dimension"]),
+                            "orientation": "[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]",
+                            "position": _fmt(c["position"])})
+        if rooms:
+            parent = min(rooms, key=lambda r: (_vec(r["position"])[0] - c["position"][0]) ** 2
+                         + (_vec(r["position"])[1] - c["position"][1]) ** 2)
+            graph["edges"].append([next_id, parent["id"]])
+        next_id += 1
+    info["n_drawn"] = len(new_objects)
+    graph["nodes"] = graph["nodes"] + new_objects
+    return graph, info
+
+
 def pacing_delay(stage: int) -> float:
     """Per-stage sleep for the no-LLM arms. ASP_LIVE_NO_LLM_DELAY_SCHEDULE is
     a comma list for stages 0, 1, ...; its last value repeats. Falls back to
@@ -294,7 +385,9 @@ def _rerun_index(working_dir: str) -> int:
 def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: str) -> List[str]:
     """Stand-in for complete_scene_graph that makes no LLM call. observed_only
     copies the observed graph to every member; placebo gives every member its
-    own random hypotheses (seeded by SEED, stage and graph id)."""
+    own random hypotheses (seeded by SEED, stage and graph id); oracle_visible
+    gives every member the placebo's rooms plus its own draw of unseen
+    reference objects near the map (same seeding)."""
     import numpy as np
 
     config = manager.config
@@ -302,7 +395,8 @@ def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: s
     ensemble_size = config.LLM_ENSEMBLE_COUNT
     t0 = time.time()
     processed = [manager._preprocess_dsg(p, scene_index=i) for i, p in enumerate(initial_dsg_paths)]
-    calib = load_calibration() if policy == "placebo" else None
+    calib = load_calibration() if policy in ("placebo", "oracle_visible") else None
+    candidates = load_oracle_set(config.SCENE_NUMBER) if policy == "oracle_visible" else None
     # The pipeline retries a planning step that fails (e.g. every candidate
     # viewpoint unreachable). The LLM arm then gets fresh samples, so the
     # placebo must too: retries draw with the attempt number added to the
@@ -328,10 +422,14 @@ def no_llm_completions(manager: Any, initial_dsg_paths: Sequence[str], policy: s
                 key = [int(config.SEED), _stage_number(working_dir), graph_id]
                 key += [attempt, rerun] if rerun else ([attempt] if attempt else [])
                 rng = np.random.default_rng(key)
-                graph = placebo_graph(observed, rng, calib)
+                info: Dict[str, Any] = {}
+                if policy == "oracle_visible":
+                    graph, info = oracle_graph(observed, rng, calib, candidates)
+                else:
+                    graph = placebo_graph(observed, rng, calib)
                 with open(dst, "w") as f:
                     yaml.safe_dump(graph, f)
-                members.append({"graph_id": graph_id, **_counts(graph, None)})
+                members.append({"graph_id": graph_id, **_counts(graph, None), **info})
             out.append(dst)
         record["tracks"][str(track)] = {"available": ensemble_size, "members": members}
     delay = pacing_delay(_stage_number(working_dir))

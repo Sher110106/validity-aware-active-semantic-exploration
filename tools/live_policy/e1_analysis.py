@@ -1,8 +1,9 @@
 """Pre-registered analysis for the live campaign's confirmatory contrasts.
 
 Input: the JSON list that live_score.py prints. Run names follow
-e<k>_<scene>_s<seed>_<arm>_<budget>m. For each pair of arms (default
-official vs placebo):
+e<k>_<scene>_s<seed>_<arm>_<budget>m, optionally with _rerun<n> (the one
+rerun the pre-registration allows; it fills the same cell). For each pair of
+arms (default official vs placebo):
 
 - unit: run; statistic: mean over scenes of (mean arm A - mean arm B) of
   author-faithful object F1 AUC over 0 to <budget> m (af_f1, tracks averaged);
@@ -13,12 +14,18 @@ official vs placebo):
 - scene-blocked bootstrap 95% CI of the statistic (runs resampled within
   scene and arm);
 - minimum detectable effect at alpha 0.05 and power 0.8 from the pooled
-  within-scene, within-arm SD (normal approximation).
-Runs below the budget, or flagged excluded in the exclusions file, are
-dropped and listed. Never read "no detectable difference" as "equal".
+  within-scene, within-arm SD (normal approximation);
+- permutation-inverted 95% interval: the shifts d of arm A for which the
+  blocked test does not reject at 0.05 (does not shrink with 3 runs a cell
+  the way the bootstrap does).
+Runs below the budget, flagged excluded (exclusions file or EXCLUDED_<run>.json
+markers), outside --seeds, or with names that do not parse are dropped and
+listed. Two counted runs in one (scene, seed, arm) cell stop the analysis.
+Never read "no detectable difference" as "equal".
 
 Usage: python3 e1_analysis.py scores.json [--a official --b placebo]
        [--metric af_f1] [--budget 60] [--exclude exclusions.json]
+       [--exclude-dir campaign_dir] [--seeds 42,43,44]
 """
 from __future__ import annotations
 
@@ -32,7 +39,7 @@ import statistics
 import sys
 from collections import defaultdict
 
-NAME = re.compile(r"e\d+_(?P<scene>\d{5})_s(?P<seed>\d+)_(?P<arm>[a-z_]+)_(?P<budget>\d+)m$")
+NAME = re.compile(r"e\d+_(?P<scene>\d{5})_s(?P<seed>\d+)_(?P<arm>[a-z_]+)_(?P<budget>\d+)m(?:_rerun(?P<rerun>\d+))?$")
 
 
 def parse(run_dir: str):
@@ -87,6 +94,21 @@ def bootstrap_ci(groups: dict, a: str, b: str, n: int = 10000, seed: int = 0) ->
     return vals[int(0.025 * n)], vals[int(0.975 * n) - 1]
 
 
+def permutation_ci(groups: dict, a: str, b: str, step: float = 0.0005, span: float = 0.1) -> tuple:
+    """Shifts d of arm A not rejected at 0.05 by the blocked test, on a grid
+    around the observed statistic."""
+    obs = stat(groups, a, b)
+    kept = []
+    k = -int(span / step)
+    while k <= int(span / step):
+        d = obs + k * step
+        shifted = {s: {a: [x - d for x in v[a]], b: v[b]} for s, v in groups.items()}
+        if blocked_permutation(shifted, a, b)[0] >= 0.05:
+            kept.append(d)
+        k += 1
+    return (min(kept), max(kept)) if kept else (float("nan"), float("nan"))
+
+
 def mde(groups: dict, a: str, b: str) -> float:
     resid = []
     for v in groups.values():
@@ -115,23 +137,42 @@ def main() -> int:
     ap.add_argument("--exclude", default=None)
     ap.add_argument("--ref", default="hm3d_", help="key prefix: 'hm3d_' (annotation reference) or '' (frontier reference)")
     ap.add_argument("--min-path", type=float, default=50.0, help="pre-registered exclusion: runs stopping below this")
+    ap.add_argument("--exclude-dir", default=None, help="campaign dir holding EXCLUDED_<run>.json markers")
+    ap.add_argument("--seeds", default="42,43,44", help="registered seeds; runs with other seeds are dropped")
     args = ap.parse_args()
     runs = json.load(open(args.scores))
     excluded = set(json.load(open(args.exclude))) if args.exclude else set()
+    if args.exclude_dir:
+        import glob
+        import os
+        excluded |= {os.path.basename(p)[len("EXCLUDED_"):-len(".json")]
+                     for p in glob.glob(os.path.join(args.exclude_dir, "EXCLUDED_*.json"))}
+    seeds = {int(x) for x in args.seeds.split(",") if x.strip()}
     key = f"{args.ref}auc_{args.metric}_to_{args.budget}m"
     groups: dict = defaultdict(lambda: {args.a: [], args.b: []})
     cells: dict = defaultdict(dict)
     dropped = []
+    counted: dict = {}
     for r in runs:
-        parsed = parse(r["run_dir"])
-        if not parsed or parsed[2] not in (args.a, args.b):
-            continue
         name = r["run_dir"].rstrip("/").split("/")[-1]
+        parsed = parse(r["run_dir"])
+        if not parsed:
+            if re.match(r"e\d+_", name):
+                dropped.append({"run": name, "reason": "unparsed name"})
+            continue
+        if parsed[2] not in (args.a, args.b):
+            continue
+        if parsed[1] not in seeds:
+            dropped.append({"run": name, "reason": f"seed {parsed[1]} not in --seeds"})
+            continue
         if name in excluded or key not in r or r.get("final_path_m", 0) < args.min_path:
             reason = "excluded" if name in excluded else (f"no {key}" if key not in r else f"stopped at {r.get('final_path_m')} m")
             dropped.append({"run": name, "reason": reason})
             continue
         scene, seed, arm = parsed
+        if (scene, seed, arm) in counted:
+            sys.exit(f"two counted runs in cell {(scene, seed, arm)}: {counted[(scene, seed, arm)]} and {name}")
+        counted[(scene, seed, arm)] = name
         groups[scene][arm].append(r[key])
         cells[(scene, seed)][arm] = r[key]
     groups = {s: v for s, v in sorted(groups.items()) if v[args.a] and v[args.b]}
@@ -144,6 +185,8 @@ def main() -> int:
         out["seed_paired_signflip_p"], out["n_pairs"], out["pair_diffs"] = paired_signflip(cells, args.a, args.b)
         out["bootstrap_95ci"] = bootstrap_ci(groups, args.a, args.b)
         out["mde_alpha05_power80"] = mde(groups, args.a, args.b)
+        out["permutation_95ci"] = permutation_ci(groups, args.a, args.b)
+        out["counted_runs"] = sorted(counted.values())
         out["min_attainable_p"] = 1 / out["n_relabelings"] * 2 if out["n_relabelings"] else None
     print(json.dumps(out, indent=1, default=str))
     return 0

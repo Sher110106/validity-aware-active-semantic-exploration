@@ -19,6 +19,8 @@ import os
 import sys
 
 sys.dont_write_bytecode = True
+# ASP_WORKSPACE lets reproduce.sh score an off-host copy laid out like /workspace.
+WS = os.environ.get("ASP_WORKSPACE", "/workspace")
 sys.path[:0] = ["/workspace/tools/evaluator", "/workspace/tools"]
 from asp_offline.author_io import load_author_graph  # noqa: E402
 from asp_offline.evaluator import area_under_curve, evaluate_graph  # noqa: E402
@@ -26,16 +28,16 @@ from graph_io import load_eval_graph  # noqa: E402
 from matching import match_objects  # noqa: E402
 
 REFS = {
-    "00069": "/workspace/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
-    "00573": "/workspace/runs/scene00573_frontier_reference/stages/53/habitat_scene_graph_original_graph0.yaml",
-    "00853": "/workspace/runs/scene00853_frontier_reference/stages/33/habitat_scene_graph_original_graph0.yaml",
-    "00871": "/workspace/runs/scene00871_frontier_reference/stages/54/habitat_scene_graph_original_graph0.yaml",
+    "00069": f"{WS}/runs/scene00069_frontier_reference/stages/25/habitat_scene_graph_original_graph0.yaml",
+    "00573": f"{WS}/runs/scene00573_frontier_reference/stages/53/habitat_scene_graph_original_graph0.yaml",
+    "00853": f"{WS}/runs/scene00853_frontier_reference/stages/33/habitat_scene_graph_original_graph0.yaml",
+    "00871": f"{WS}/runs/scene00871_frontier_reference/stages/54/habitat_scene_graph_original_graph0.yaml",
 }
 # Policy-independent references built from the official HM3D semantic
 # annotations (val scenes only); see runs/live_campaign/hm3d_refs_work/.
 REFS_HM3D = {
-    "00853": "/workspace/runs/live_campaign/hm3d_refs_work/00853_hm3d_reference.yaml",
-    "00871": "/workspace/runs/live_campaign/hm3d_refs_work/00871_hm3d_reference.yaml",
+    "00853": f"{WS}/runs/live_campaign/hm3d_refs_work/00853_hm3d_reference.yaml",
+    "00871": f"{WS}/runs/live_campaign/hm3d_refs_work/00871_hm3d_reference.yaml",
 }
 BUDGETS = (10.0, 25.0, 50.0, 60.0, 90.0, 120.0)
 CANON = ("object_precision", "object_recall", "object_f1", "normalized_ged")

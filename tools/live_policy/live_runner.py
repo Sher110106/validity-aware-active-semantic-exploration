@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shlex
 import subprocess
 import sys
@@ -302,7 +303,7 @@ class Runner:
             return rec
         import fcntl
 
-        paid = spec["policy"] not in ("observed_only", "placebo")
+        paid = spec["policy"] not in ("observed_only", "placebo", "oracle_visible")
         marker = CAMPAIGN / f".active_{name}"
         with open(CAMPAIGN / ".launch.lock", "a+") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
@@ -322,13 +323,16 @@ class Runner:
 
     def _run_launched(self, spec: dict, pristine: Path, rec: dict, run: Path) -> dict:
         name = spec["name"]
-        paid = spec["policy"] not in ("observed_only", "placebo")
+        paid = spec["policy"] not in ("observed_only", "placebo", "oracle_visible")
         scene_id, scene_number = SCENES[spec["scene"]]
         self.kill_all()
         self.restore_config(pristine)
         args = [LAUNCHER, scene_id, str(scene_number), name, str(self.display), spec["policy"],
                 str(spec["seed"]), str(spec["max_cost_usd"]), str(spec.get("no_llm_delay_schedule", "0"))]
-        cmd = "exec " + " ".join(shlex.quote(a) for a in args) + f" >> {CONTAINER_CAMPAIGN}/launcher_{name}.log 2>&1"
+        # Optional per-job environment (plan step 8: ASP_DSG_QUIESCENT_S), exported before launch.
+        exports = "".join(f"export {k}={shlex.quote(str(v))}; " for k, v in spec.get("env", {}).items()
+                          if re.fullmatch(r"ASP_[A-Z0-9_]+", k))
+        cmd = exports + "exec " + " ".join(shlex.quote(a) for a in args) + f" >> {CONTAINER_CAMPAIGN}/launcher_{name}.log 2>&1"
         r = self.dexec("bash", "-lc", cmd, detach=True)
         if r.returncode != 0:
             rec.update(outcome="launch_failed", error=r.stderr.strip())
@@ -340,7 +344,7 @@ class Runner:
 
     def _monitor(self, spec: dict, pristine: Path, rec: dict, run: Path, t0: float) -> dict:
         name = spec["name"]
-        paid = spec["policy"] not in ("observed_only", "placebo")
+        paid = spec["policy"] not in ("observed_only", "placebo", "oracle_visible")
         outcome = None
         stage_seen, calls_at_stage = -1, 0
         while outcome is None:
@@ -428,7 +432,7 @@ def main() -> int:
     CAMPAIGN.mkdir(parents=True, exist_ok=True)
     runs = json.loads(a.queue.read_text())["runs"]
     for spec in runs:
-        if spec["scene"] not in SCENES or spec["policy"] not in ("official", "filter_only", "unanimity", "observed_only", "placebo"):
+        if spec["scene"] not in SCENES or spec["policy"] not in ("official", "filter_only", "unanimity", "observed_only", "placebo", "oracle_visible"):
             raise SystemExit(f"bad spec {spec}")
     Runner(a.container, a.display, a.campaign_cap, a.catkin_host).run_queue(runs, adopt=a.adopt)
     return 0

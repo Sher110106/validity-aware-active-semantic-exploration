@@ -51,6 +51,7 @@ cp "$CFG" "$RUN/config/pipeline_config.yaml"
 printf "%s\n" "f1ea141b1886d33ab8f4e4b791db4d3c92150b27" > "$RUN/config/commit.txt"
 {
   printf "live campaign 2026-10-28; scene %s seed %s; policy=%s; no_llm_delay_schedule=%s\n" "$SCENE_NUMBER" "$SEED" "$POLICY" "$NO_LLM_DELAY_SCHEDULE"
+  printf "ASP_DSG_QUIESCENT_S=%s ASP_DSG_QUIESCENT_MAX_S=%s\n" "${ASP_DSG_QUIESCENT_S:-}" "${ASP_DSG_QUIESCENT_MAX_S:-}"
   printf "model=%s provider=deepinfra/fp8 allow_fallbacks=0 reasoning effort=%s, max_tokens=%s, call budget=%s, max_cost_usd=%s\n" \
     "$MODEL" "$REASONING_EFFORT" "$MAX_TOKENS" "$MAX_CALLS" "$MAX_COST_USD"
   md5sum /workspace/tools/llm_openrouter/_asp_openrouter_shim.py "$HERE/live_policy.py" \
