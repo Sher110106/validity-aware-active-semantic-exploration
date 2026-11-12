@@ -1638,16 +1638,16 @@ run locally on the Mac, no tyrone dependency).
     instability pattern was found, separate from the reboots themselves**:
     the local SSH config's `Host tyrone` entry had a **temporary override**
     (dated 2026-09-12, at the very start of this session) pointing at a
-    direct LAN address (`10.1.24.188`) instead of the normal Tailscale
-    address, because the Tailscale node (`sunitaa4`) was offline on the
+    direct LAN address instead of the normal Tailscale
+    address, because the host's Tailscale node was offline on the
     tailnet at that time. That LAN path is very likely what was
     unreliable all session - not tyrone's network stack itself, and not
     purely the reboots (which are a real, separate, still-unexplained
     problem). The user re-established Tailscale connectivity directly
-    (manual `ssh 100.109.75.117` login, confirmed working instantly and
+    (manual ssh login to the Tailscale address, confirmed working instantly and
     repeatedly) partway through this outage, and the SSH config was
     updated to restore the Tailscale address
-    (`~/.ssh/config`, `Host tyrone` -> `HostName 100.109.75.117`,
+    (the local SSH config entry for tyrone,
     replacing the temporary LAN override).
 
     **Practical effect going forward**: SSH connections via `tyrone` should
@@ -1828,6 +1828,7 @@ The independent evaluator scored all five checkpoints against the existing exhau
     1 exact vs. the paper's implied 4 perturbed). This is the pinned
     author's own code, not something to "fix."
 
+    **[Corrected 2026-10-09 by #93: the list was found in the author repo's `task_def/`; this paragraph's "not published anywhere" claim is wrong.]**
     **Confirmed unfixable gap, exhaustively searched, not guessed**:
     the paper's F1 metric restricts to "61 common indoor object
     categories" but never enumerates them, and this project's evaluator
@@ -3032,18 +3033,18 @@ The independent evaluator scored all five checkpoints against the existing exhau
     **~6 hour connectivity outage between the fixes being written and
     being deployed - root cause corrected here.** Tailscale showed tyrone
     as "active" with one-way traffic (tx>0, rx=0) then flickering to
-    "offline", and a "Fortinet may be blocking Tailscale" health-check
+    "offline", and a "campus firewall may be blocking Tailscale" health-check
     warning - this was assumed to be a local-network/firewall issue
     (consistent with an earlier, shorter outage this session that
     resolved after user intervention on their end). **That assumption was
     wrong.** Once SSH was reached via tyrone's direct LAN IP
-    (10.1.17.241, same host - confirmed by matching SSH host key
-    fingerprint against tyrone's Tailscale IP in `known_hosts`), `uptime`
+    (same host - confirmed by matching SSH host key
+    fingerprint against the known host key), `uptime`
     showed the HOST had rebooted ~5.5 hours earlier - the real cause was
-    tyrone itself going down, not a Fortinet block on this end. `docker
+    tyrone itself going down, not a campus-firewall block on this end. `docker
     ps -a` showed `asp-noetic` (`Exited (255) 6 hours ago`) had not
     restarted after the reboot, while 4 unrelated containers
-    (`findingframe-*`) had - `asp-noetic` restarted cleanly with `docker
+    (from other projects) had - `asp-noetic` restarted cleanly with `docker
     start`. The Tailscale flapping/warnings were a downstream symptom of
     the host being unreachable across its own reboot, not the root cause.
     Lesson for future sessions: when Tailscale to tyrone looks wrong for
@@ -3096,15 +3097,13 @@ The independent evaluator scored all five checkpoints against the existing exhau
     --max-depth=1 /` found `/var/lib/docker` is only 43GB - not the
     culprit. The real breakdown: `/home` is 728GB, of which
     `/home/sher` is 392GB. Inside that, `/home/sher/projects` (245GB -
-    several other, unrelated projects: `adv_nlp`, `indic`, `pre`, `rlp`,
-    `rlp-supplementary`, `tmc`, none touched by this session) is the
+    several other, unrelated projects, none touched by this session) is the
     single largest consumer, and this ASP project's own host-side
     footprint (`/home/sher/active-semantic-perception-workspace`, the
     directory `/workspace` is deployed into inside the container) is
     110GB - roughly matching the ~111GB counted from inside the
     container. The remaining large share is other users' home
-    directories on this shared box (`moti` 183GB, `deep` 75GB,
-    `taponray` 56GB, `shashank` 22GB) - not this project's data, not
+    directories on this shared box (about 336GB across four users) - not this project's data, not
     this session's to prune or judge.
 
     **Revised conclusion**: this machine is a shared, multi-tenant
@@ -4240,3 +4239,20 @@ The independent evaluator scored all five checkpoints against the existing exhau
     Of 55 available completion files, all 55 were accepted; 35 predicted nodes were removed (30 AABB conflicts, 5 impassable crossings). Stage 2 scene 0 member 0 is missing; stage 7 has all eight member files missing and no navigation checkpoint. Decision replay's null control matched the official selected pose exactly at all seven completed stages. Filter-only moved one stage (mean 0.185 m); calibrated support moved five (mean 2.559 m, max 5.920 m); combined risk moved 0/7 stages at β=0, 2/7 at β=1, and 6/7 at β=5/20. Detours and robot collisions remain unidentifiable.
 
     The v6 ledger contains 898 settled requests, all `STOP`, no errors/retries: $18.552664 settled against $65.749854 summed reservations. Raw archive and ledger agree on 20,401,514 input, 747,185 thought, 119,712 candidate, and 21,268,411 total tokens. Native-count instrumentation recorded 1,162 calls with zero fallbacks; real count mean 17,388 (9,346–24,099), safety-bound mean 19,561. At a common 16.425 m cap, v6 F1 AUC=0.256 versus earlier DeepSeek v3=0.318 and completed matrix=0.216; this is descriptive only because backend and checkpoint schedules differ. Full report and JSON artifacts are mirrored under `tyrone_mirror/runs/prospective_gemini/scientific_campaign_20260922/offline_analysis_20260922/block_00069_42_v6/` and summarized in `GEMINI_PARTIAL_ANALYSIS_2026-09-22.md`.
+
+93. **The "unpublished" 61-category list was in the author repo all along; #51's claim was wrong (2026-10-09).** The author repo's `task_def/` folder has held both lists since its first commit (`b336fe3`, 2025-10-06):
+    - `objects_habitat_apartment.yaml` has 52 labels. `mapping/clio/clio_ros/launch/realsense.launch` loads it by default as `detector_tasks`, so every run in this project used it.
+    - `objects_habitat_apartment_00573.yaml` has exactly 61 labels: the same 52 plus kitchen island, exercise bike, dumbbell, luggage, electric outlet, light switch, loft bed, dishsoap and toy.
+    - `region_tasks_habitat_apartment.yaml` holds the 10 room prompts.
+
+    The 61-label file is almost certainly the paper's "61 common indoor object categories". The count matches exactly, but the paper never names the file. #51's search missed it because it looked for list-shaped category files rather than the detector task files.
+
+    **Effect on our numbers: close to none.** The scene-00069 frontier reference scores 67 objects (76 object nodes minus 9 doors) across 18 labels, plus 9 rooms. All 18 labels are on the 52-label list. The tracked graphs we score come from the same detector and the same list. So restricting F1 to the 61 categories would remove almost nothing from either side. The earlier claim that this gap "likely explains most of the residual gap" to the paper (IMPLEMENTATION_PLAN.md, SESSION_REPORT_2026-09-13.md) no longer holds. The remaining known differences are the frontier-driven reference, where the paper used a human pilot, and the DeepSeek backend, where the paper used Gemini.
+
+    The list does explain the calibration finding in #61. About 70% of the LLM's guessed labels (for example `bookshelf`) are not on the detector list, so they can never match the reference.
+
+    Docs that repeat #51's claim now carry a pointer to this entry.
+
+    **Addendum (same day): what "61" most likely means.** The paper (arXiv:2510.05430v2, §IV-A) says F1 measures correct objects "across 61 common indoor object categories". It does not say the detector loaded 61 labels for every scene. The 61-label file is named for scene 00573, one of the paper's four scenes (853, 69, 871, 573). Its 9 extra labels (loft bed, exercise bike, dumbbell, kitchen island, …) read like additions for that one house. So the reading that best fits the evidence is this: the authors ran 853, 69 and 871 with the 52-label default and 573 with the 61-label file, giving 61 categories across the paper. We cannot rule out that they used 61 everywhere and left the released default at 52. The paper does not settle it.
+
+    Effect: on scene 00069, which carries every headline number, our 52-label setup most likely matches the authors'. On scene 00573 it most likely does not. Our 00573 frontier reference and calibration run both used 52 labels and could not see the 9 extra kinds. That affects only the extension and calibration analyses on 00573.
