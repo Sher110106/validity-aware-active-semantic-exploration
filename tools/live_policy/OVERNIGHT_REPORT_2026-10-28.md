@@ -16,14 +16,26 @@
 7. New assets: HM3D-annotation reference graphs for 00853 and 00871 in the pipeline frame (frame transform exact against the robot's logged paths); figure pack /tmp/cvp_zero/figures/.
 
 ## Live E1 so far (pilot)
-Author-faithful object F1 AUC to 60 m (scores: runs/live_campaign/hm3d_refs_work/cells12_scores.json):
+Author-faithful object F1 AUC to 60 m (scores: runs/live_campaign/hm3d_refs_work/cells12_scores.json, cell3_scores.json):
 
-| Cell | Official (HM3D) | Placebo (HM3D) | Official (frontier ref) | Placebo (frontier ref) | Official cost |
-|---|---|---|---|---|---|
-| 00853/42 | 0.1412 | 0.1464 | 0.2623 | 0.3609 | $0.88 |
-| 00871/42 | 0.1314 | 0.1141 | 0.4617 | 0.4317 | $0.81 |
+| Cell | Official (HM3D) | Placebo (HM3D) | Official (frontier ref) | Placebo (frontier ref) | Official path | Official cost |
+|---|---|---|---|---|---|---|
+| 00853/42 | 0.1412 | 0.1464 | 0.2623 | 0.3609 | 61.1 m | $0.88 |
+| 00871/42 | 0.1314 | 0.1141 | 0.4617 | 0.4317 | 64.6 m | $0.81 |
+| 00853/43 | 0.1531 | 0.1722 | 0.2896 | 0.3697 | 54.3 m | $1.15 |
 
-Two cells point in opposite directions on the primary reference (mean official minus placebo +0.006); no inference yet. Running: 00853/43 (started 09:24); 00871/43 launches automatically on tyrone when memory allows, then 00853/44 and 00871/44. Each pair takes about 2.5-3 h and only one pair fits in memory at a time, so the six cells need until about evening; E2 (validator arm, 6 runs) after that.
+The placebo leads in two of three cells on the primary reference (mean official minus placebo -0.002); no inference yet. The 00853/43 official run hit the 4.5 h limit at 54.3 m (kept: above the 50 m line), so its 60 m score holds its last value from 54.3 m; at 50 m, which both arms reached, the cell reads 0.1304 vs 0.1549.
+
+Status at 14:00 (DEVIATIONS 15-16):
+- 00871/43: official running (20 m at 13:47). Its placebo stopped at 0.0 m: after its first move the robot stood where the author's planner reached none of 53 candidates over six differently seeded hypothesis sets. Excluded and queued for one rerun with a fresh placebo stream (a plain rerun would replay the same draws).
+- E2 (our filter_only change vs the author's official pipeline) moved to the front: 00853/42 and 00871/42 started at 13:58; first E2 numbers about 17:00-18:00.
+- Then E1 pairs 00853/44 and 00871/44, the placebo rerun, and E2 seeds 43 and 44 (campaign_jobs_3.txt).
+
+Status at 17:20:
+- 00871/43 official reached 61.0 m at 16:32 ($1.02): HM3D AUC to 60 m 0.1267 (frontier ref 0.467). Its placebo rerun is still queued.
+- First E2 result: e2_00871_s42_filter_only_60m reached 60.8 m at 17:19 ($1.09). HM3D AUC to 60 m 0.136 against the official run's 0.1314 on the same scene and seed (+0.005; at 50 m 0.124 vs 0.122). The two official seeds on 00871 differ by the same 0.005, so this one pair shows no gain beyond seed noise. Scores: hm3d_refs_work/e2_00871_s42_scores.json.
+- Frontier explorer scored to 60 m on both scenes (hm3d_refs_work/frontier_60m_scores.json): HM3D AUC 0.1716 on 00853, 0.1192 on 00871. On 00853 the live DeepSeek official runs (0.141, 0.153) fall below it; on 00871 they beat it (0.131, 0.127).
+- Pair 00853/44 started at 17:19; e2_00853_s42 at 47.6 m. Chart: results_snapshot_2026-10-28.html.
 
 ## What went wrong overnight, and the fixes (DEVIATIONS.md on tyrone)
 - Six concurrent runs plus leftover ROS stacks exhausted the host's 123 GB of RAM at about 04:00. The kernel OOM killer killed another user's claude-desktop (03:59) and your atlas-api-readonly service (04:10; systemd restarted it at 04:10:50). Under that load the runners misread failed process checks as "pipeline exited" and stopped all six first-wave runs. Fixed: robust process checks, memory guards, one pair at a time; mapper memory grows about 8 GB per hour per run.
@@ -34,7 +46,7 @@ Two cells point in opposite directions on the primary reference (mean official m
 Lost work: about $1.7 of DeepSeek on aborted or excluded runs; no run's data was corrupted.
 
 ## Spend
-DeepSeek: $2.78 this month on the key (all tests and runs), $37.22 left of $40. Gemini: $39.60 tonight; if the $200 credit paid only for this project, about $123 is left (unconfirmed; check the AI Studio billing page).
+DeepSeek: $2.78 this month on the key at 07:35 (all tests and runs); the live campaign's metered total was $4.97 at 14:00, well inside the $40 cap. Gemini: $39.60 tonight; if the $200 credit paid only for this project, about $123 is left (unconfirmed; check the AI Studio billing page).
 
 ## Code (uncommitted, repo working tree)
 tools/live_policy/ (live_policy.py, run_pipeline_with_policy.py, run_live_run.sh, live_runner.py, live_score.py, e1_analysis.py, gemini_static.py, gemini_static_score.py, placebo_calibration.json, PREREGISTRATION_E1.md, PREREGISTRATION_E2.md, this report), tools/legacy/asp_openrouter_shim.py, tools/tests/test_live_policy.py, test_live_runner.py, test_openrouter_shim_metering.py (36 pass locally). Host-only helpers in /workspace/tools/live_policy/ (start_runner.sh, launch_pair.sh, next_pair_when_ready.sh, clean_container.sh, wave_status.py, pacing_update.py).
