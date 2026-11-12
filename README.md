@@ -1,66 +1,80 @@
 # Validity-Aware Active Semantic Exploration
 
-A computer-vision course project that reproduces an **Active Semantic Perception (ASP)** pipeline and studies whether validating and filtering language-model scene-graph predictions makes them more useful for exploration.
+A replication and audit of Active Semantic Perception (ASP), [arXiv 2510.05430](https://arxiv.org/abs/2510.05430). We rebuilt the ASP evaluation, added a filter for the language model's scene-graph guesses, and tested whether the filter helps a robot explore.
 
-**Main result:** requiring all four ensemble members to support a prediction improves static graph precision, F1, and normalized graph edit distance on three DeepSeek scenes. Calibration and the risk-sensitive viewpoint score did not establish an additional benefit. The experiments do not demonstrate better live navigation.
+Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision and perception.
 
-**Status, 27 September 2026:** the documentation and paper package are complete; experiments are frozen. The supervisor is inactive and disabled, with no matched experiment processes observed. The [closeout verification](docs/audit/2026-09-27-closeout-verification.md) records the checks and remaining evidence limits.
+## Findings so far
 
-## What we built and evaluated
+1. **The September "main result" is withdrawn.** We first reported that requiring all four ensemble members to agree (unanimity) improves F1 and graph edit distance. That filter keeps 19 of 8,943 predicted nodes, and it scores within 0.0002 of the observed map alone (F1 0.5218 / 0.4349 / 0.4957 against 0.5219 / 0.4351 / 0.4957). The gain came from dropping the guesses, not from filtering them. Source: `tools/live_policy/results_2026-10-31/WRITEUP.md` §9, erratum 2.
+2. **October live test, with a random-guess placebo.** Source: the same WRITEUP.
+   - E1, LLM guesses minus random guesses: +0.013 F1 AUC to 60 m, 95% interval -0.012 to +0.040, p 0.22. This is a pilot; effects up to +0.040 are not ruled out.
+   - Our filter made no detectable difference.
+   - E3, exact objects minus random guesses: +0.034 on scene 871, p 0.10. That p is the smallest a 3 v 3 test can give, so it cannot decide either way.
+3. **November paper-scale scores** (author's F1 rules, F1 x 100, reference rebuilt by our tours; `tools/live_policy/results_paper_compare_1112/paper_compare.md`, scene 00853). The paper columns are Fig. 4 of the paper. The paper's 14-16 point ASP lead over frontier on 853 does not appear: our `official` arm leads our frontier by 4.1 at 10% and trails it by 0.8 at 50%.
 
-| Work | Delivered | Evidence status |
-|---|---|---|
-| ASP reproduction | Pinned-author evaluation, graph matching, path-budget metrics, run provenance | Baseline and short-run results recorded |
-| Graph validation | Canonical graph adapter; structural and geometric checks; rejection/removal reasons | Tested on fixtures and saved completions |
-| Ensemble support | Fixed four-member denominator and support-threshold ablations | Unanimity improves the three-scene static result |
-| Calibration | Leave-one-scene-out support calibration and diagnostics | No useful incremental policy gain established |
-| Risk-sensitive selection | Fixed-candidate decision replay and risk-weight sweeps | No demonstrated live-navigation benefit |
-| Experiment infrastructure | Metered Gemini requests, budget ledger, queue/control plane, runtime overlay, evidence instrumentation | Exercised during a partial Gemini campaign |
-| Frozen analysis | Three 120 m DeepSeek runs; Gemini breadth attempts and a 19.5 m v6 block | Results and limitations are linked below |
+   | Row | Arm | 10% | 50% | 100% |
+   |---|---|---|---|---|
+   | Frontier | ours (`frontier_end`) | 12.4 | 39.5 | 55.6 (3 of 5 runs) |
+   | Frontier | paper | 18.6 | 46.5 | 58.8 |
+   | ASP | ours (`official`) | 16.5 | 38.7 | no value |
+   | ASP | paper | 34.4 | 60.8 | 66.7 |
 
-ASP maintains a graph of rooms and objects observed by a robot. A language model predicts missing structure, and the pipeline uses those predictions when scoring possible viewpoints. Our extension checks those predictions and measures how filtering changes graph quality and replayed decisions. See [the architecture guide](docs/ARCHITECTURE.md) for the full data flow and terminology.
+   Our `filter_only` ASP arm scores 14.8 / 48.3 / no value. "No value" means no run reached the stage.
 
-## Read the project
+## Where things stand
 
-| If you want to… | Read |
+- Status: [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md).
+- What comes next: [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md).
+
+## Doc map
+
+| Doc | Purpose |
 |---|---|
-| Understand the goal, work completed, findings, and limitations | [Final report](FINAL_REPORT.md) |
-| Read the formatted course paper | [PDF](paper/Validity_Aware_Active_Semantic_Exploration.pdf), [Word](paper/Validity_Aware_Active_Semantic_Exploration.docx), and [table provenance](paper/README.md) |
-| Find the exact result files and metric definitions | [Results index](docs/RESULTS_INDEX.md) |
-| Understand the code and module boundaries | [Architecture and implementation](docs/ARCHITECTURE.md) |
-| Inspect evidence or verify the code locally | [Offline reproduction guide](docs/REPRODUCE.md) |
-| Check completed closeout work and evidence limits | [Closeout checklist](docs/REMAINING_WORK.md) |
-| See the SSH audit and corrected cost accounting | [26 September audit](docs/REMOTE_AUDIT_2026-09-26.md) |
-| Trace a historical change or discarded interpretation | [Archive guide](docs/archive/README.md) and [deviation log](tyrone_mirror/DEVIATIONS.md) |
+| `README.md` | This page. |
+| [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md) | What is done and what is open, 12 Nov. |
+| [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md) | End-semester plan, budget and cut rules. |
+| [docs/RESULTS.md](docs/RESULTS.md) | All results, metric definitions, costs and errata. |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Code, data flow and terms. |
+| [docs/REPRODUCE.md](docs/REPRODUCE.md) | How to check the evidence and run the tests. |
+| [docs/HISTORY.md](docs/HISTORY.md) | Timeline, archive guide and where removed docs went. |
+| [docs/audit/](docs/audit/) | Dated audits and cost accounting (September). |
+| [docs/archive/](docs/archive/) | September plans, reviews and reports. Superseded. |
+| [docs/checkin/](docs/checkin/) | Check-in 1 deck and the 29 Oct review package. |
+| [docs/checkin_2026-11/](docs/checkin_2026-11/) | Check-in 2 deck, script and number sources. |
+| [paper/](paper/README.md) | Course paper (PDF, Word) and table provenance. |
+| [tools/live_policy/README.md](tools/live_policy/README.md) | Live-test code, pre-registrations, host runbook. |
+| `tools/*/README.md`, [docs/prospective_overlay/README.md](docs/prospective_overlay/README.md) | Module guides. |
+| [tools/live_policy/results_2026-10-31/WRITEUP.md](tools/live_policy/results_2026-10-31/WRITEUP.md) | October live-test write-up (E1-E3, errata, deviations). |
+| [tyrone_mirror/](tyrone_mirror/README.md) | Read-only evidence copied from the GPU host, and the 93-item deviation log. |
 
-## Repository map
+## Repository layout
 
 ```text
-tools/                  Evaluators, policies, campaign components, and tests
-docs/                   Current technical documentation and closeout checklist
-docs/audit/             Sanitized, dated accounting aggregates
-docs/archive/           Historical plans, reviews, and intermediate reports
-tyrone_mirror/          Selected existing results and reference graphs
-FINAL_REPORT.md         Project narrative and supported conclusions
+docs/                         Documentation (map above)
+paper/                        Course paper
+tools/asp_offline/            Offline ASP graph and scoring helpers
+tools/evaluator/              Evaluation and graph edit distance
+tools/live_policy/            October-November live tests and paper-scale scoring
+tools/gemini_campaign/        Metered Gemini campaign (September)
+tools/prospective_*/          Prospective campaign: runtime, eval, overlay, integration
+tools/matrix_supervisor/      Run queue and control plane (September)
+tools/legacy/                 Old provider shim
+tools/fixtures/               Small test inputs
+tools/tests/                  Main test suite
+tyrone_mirror/                Evidence mirror
 ```
 
-The local repository is an implementation and selected-evidence package. The full simulator, datasets, model weights, author checkout, and complete raw run directories live in the separate remote workspace. The mirror supports result inspection and a small cached example; it is not a complete reproduction bundle for every experiment.
-
-## Verify locally
-
-After installing the offline dependencies described in [REPRODUCE.md](docs/REPRODUCE.md):
+## Run the tests
 
 ```sh
-PYTHONPATH=tools .venv_offline/bin/python -m pytest -q \
-  tools/tests tools/gemini_campaign/tests tools/prospective_campaign/tests \
-  tools/prospective_eval/tests tools/matrix_supervisor/tests tools/evaluator/tests
+.venv_offline/bin/python -m pytest
 ```
 
-Verified on 27 September 2026: **286 tests and 9 subtests passed**. These tests use local fixtures and mocks. They do not start ASP or call a model provider.
+`pytest.ini` sets `pythonpath = tools`. Install `networkx`, `scipy` and `requests` first; with them, 470 tests are collected: 453 pass and 17 skip (checked 12 Nov). Without `requests`, collection stops at `test_openrouter_shim_metering.py` ( see [docs/REPRODUCE.md](docs/REPRODUCE.md)). They use local fixtures and do not call a model provider. Some tests are skipped unless `ASP_AUTHOR_SCRIPTS` points at the author's code.
 
-## Closeout notes
+## Data outside the repo
 
-- The best-supported contribution is a backend-specific static filtering result, accompanied by calibration/risk negative results and an auditable implementation.
-- Recorded Gemini settled cost is **$37.353274 across five ledgers**, including **$18.552664 for v6**. Three earlier probe/verification requests remain unresolved. See the [accounting audit](docs/REMOTE_AUDIT_2026-09-26.md#corrected-gemini-accounting).
-- `asp-matrix-supervisor.service` is inactive and disabled; no matched experiment processes were observed during the 27 September closeout check. The host snapshot is under `runs/matrix_supervisor/snapshot_20260926_retire/`.
-- An `origin` GitHub remote is configured. Publication of subsequent changes is a separate action; this documentation review does not push commits.
+- **GPU host:** the simulator, datasets, model weights, author checkout and full run directories. Host steps are in the runbook in `tools/live_policy/README.md`.
+- **Off-host copy:** a private copy of the October campaign (maps, stats, logs). Scripts that regenerate the E1-E3 package need it. It is not in this repo.
+- This repo holds code, write-ups and selected evidence. It does not reproduce every run on its own.

@@ -16,3 +16,14 @@
 7. **Stages without a graph.** In a crashed first attempt (`e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358`), the last stage before t at 50% of B has stats but no graph, and the scorer takes the stage before it. Under the strict reading the run has no value there, and that cell becomes 39.4 [34.8-46.7] n=3. It changes no cell compared with the paper.
 8. **GPU sharing.** From 11-09 19:46 the queue launched jobs with about 5.3 GB of GPU free, beside another user's vLLM server. Only e7 853 seed 42 ran with the GPU to itself. Speed per metre was the same (about 7.1 s per metre either way), but every 871 crash came from this.
 9. **C1 floor area is far off.** The start floor's navmesh covers 77.0 m² on 853 and 59.3 m² on 871, against the paper's 207.63 and 235.03 m². The waypoint grid spans about 191 and 149 m² (waypoints × 2.25 m²). Rooms: 13 and 14, against 6 and 9.
+
+## Frontier clock
+
+Not one of the nine disclosures above; it is a separate finding from 6 Nov (carried from the former `docs/STANDING_2026-11-06.md` §2), which affects how the frontier and ASP times compare.
+
+- In the author's released code, frontier's clock also runs while it waits for each new path (`frontier_baseline.py:650`). ASP's clock starts when the path arrives (`exploration_pipeline.py:734`).
+- Frontier stops more often (about 2.5 times as often on 871), so this charges frontier more time per metre.
+- Our frontier logs 6.8 s per metre on 853 and 8.7 on 871. ASP logs 6.1-6.5.
+- Effect on the 6 Nov reading: at 50% of a 20% shorter 871 budget, ASP had walked 46-55 m against 33-37 m for frontier, so part of ASP's lead there may come from the clock (see `../results_paper_compare/NOTES.md`).
+- The file:line references may come from the host's patched copy; this is not verifiable from the repo. The host patches in `../host/patches/` (`frontier_baseline_jitter.diff` inserts 12 lines at line 302; `exploration_pipeline_quiescent.diff` inserts 19 at line 361) shift later lines, so in the released code (commit f1ea141b) the lines may differ.
+- Open question for the author: was the same true for his Fig. 4?

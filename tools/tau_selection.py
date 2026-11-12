@@ -43,7 +43,7 @@ SCENE_FILES = {
 }
 # 2026-09-17: kept as-is - this is the original 4-scene diagnostic (one
 # low-effort scene, three effort=high/32k-token scenes, a real reasoning-
-# effort/token-ceiling confound - see PAPER_ASSESSMENT_2026-09-16.md
+# effort/token-ceiling confound - see docs/archive/PAPER_ASSESSMENT_UPDATE_2026-09-17.md (appendix)
 # section 3.7c). Never edit this dict for the new uniform-config 3-scene
 # matrix run - pass a different `scene_files` to select_and_evaluate()/
 # `--scene-files` on the CLI instead, so this original result stays

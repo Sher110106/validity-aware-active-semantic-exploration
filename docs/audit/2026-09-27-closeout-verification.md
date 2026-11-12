@@ -51,7 +51,7 @@ Selected DeepSeek request archives were hashed in place because Phase 13 reads t
 
 ## Corrections completed
 
-1. Updated current supervisor status; kept the earlier [26 September audit](../REMOTE_AUDIT_2026-09-26.md) explicitly historical.
+1. Updated current supervisor status; kept the earlier [26 September audit](2026-09-26-remote-audit.md) explicitly historical.
 2. Corrected the guardrail policy key and limits: absolute F1 loss at most 0.05, relative normalized-GED increase at most 10%. GED decreasing is a measured result, not the required threshold.
 3. Added HM3D and NetworkX in-text citations, qualified full-graph retention, and clarified the separate normalization path in both paper formats.
 4. Added [table provenance](../../paper/README.md) and file-level input hashes, replacing the earlier inventory-only completion claim.

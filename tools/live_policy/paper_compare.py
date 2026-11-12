@@ -31,9 +31,9 @@ GED comes from --ged-json files that tools/live_policy/paper_ged.py writes on th
 with the author's own ged_score_plot.CustomGED (gmatch4py). Without them every "ged"
 field is null.
 
-Usage:
-    python paper_compare.py                       # default run list
-    python paper_compare.py --no-default-runs \\
+Usage (--out-dir is required, so a rerun never overwrites a frozen results folder):
+    python paper_compare.py --out-dir /tmp/pc       # default run list
+    python paper_compare.py --out-dir /tmp/pc --no-default-runs \\
         --add-run frontier_end=00853=/path/to/runs/e7_00853_s42_frontier_end \\
         --apr 00853=/path/to/apr_00853_a --budget 00853=700
 """
@@ -58,7 +58,6 @@ sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 PROJECT = HERE.parents[1]
 DEFAULT_ROOT = Path("/Users/sher/cvp_live_campaign_copy")
-DEFAULT_OUT = HERE / "results_paper_compare"
 DEFAULT_PAPER_HTML = PROJECT / ".firecrawl" / "arxiv-2510.05430-html.md"
 # Holds the final stage of each frontier-made reference run with its
 # navigation_stats.json, which the off-host copy lacks.
@@ -673,7 +672,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--root", type=Path, default=DEFAULT_ROOT, help="off-host copy of the campaign")
     ap.add_argument("--run-table", type=Path, default=HERE / "results_2026-10-31" / "run_table.csv")
-    ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--budget", action="append", metavar="SCENE=SECONDS",
                     help="override the budget B of a scene (repeatable)")
     ap.add_argument("--add-run", action="append", metavar="ARM=SCENE=PATH",

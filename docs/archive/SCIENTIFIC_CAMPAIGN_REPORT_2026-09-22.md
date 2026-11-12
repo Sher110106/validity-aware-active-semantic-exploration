@@ -1,5 +1,12 @@
 # Scientific campaign report — 2026-09-22
 
+> **Status note, added 2026-11-12.** This report is the 22 Sept record and is kept as written. Later figures replace some of its own:
+>
+> - Its total of $17.310224 is superseded. The shared scientific ledger reached $36.783435 settled (see "Addendum" below and `docs/audit/2026-09-26-remote-audit.md`, table row "Scientific campaign, including v6"). All five ledgers together settled $37.353274 (`docs/audit/2026-09-26-remote-audit.md`, Total row).
+> - Its "offline scoring blocked" finding is superseded. Offline scoring was fixed in commit `5c178e2` (`docs/archive/GEMINI_PARTIAL_ANALYSIS_2026-09-22.md`).
+> - Its claim that all 9 blocks ran, in "Bottom line" and "What's done vs. what remains", is **unverified**. The block table below shows stage-0 partial data for most blocks and I found no ledger or run listing by block in the repo that checks it. Later project notes say 3 of 9 Gemini blocks never ran. That is not verifiable from the repo.
+> - Three dated sections were appended below from the files they came from: "Night 1: engineering pilot", "Night 2 morning" and "Addendum". Each source file is removed from the tree and remains in git history.
+
 ## Bottom line
 
 The real 9-block scientific-phase campaign ran. All 9 (scene, seed)
@@ -225,3 +232,41 @@ verification.
 No cap was raised beyond what was already established. No branch was
 merged or pushed. No block's run directory was overwritten — every
 retry (v1 → v2) got its own preserved directory.
+
+---
+
+## Night 1: engineering pilot (2026-09-21)
+
+Merged from `ENGINEERING_PILOT_REPORT_2026-09-21.md`, a letter written after the one-stage pilot (scene 00069, seed 42). Entry #81 in `tyrone_mirror/DEVIATIONS.md` holds the same core findings in more detail. Here only the parts below are kept.
+
+- **Result.** The pilot did not complete and made no paid Gemini call. `settled_microusd: 0`, `reserved_microusd: 0`, `unresolved_requests: 0`.
+- **Reservation bug.** Each of the 8 ensemble workers builds a request with six scene-slice JPEGs (about 500 KB each) as base64. `conservative_input_bound()` in `transport.py` charged one token per byte: 4,104,516 "tokens" for the scene-0/member-0 request, about $3.08 of input against a $2.50 pilot allocation. `AccountingHalt("allocation exhausted")` fired before any HTTP call.
+- **Free measurement.** Google's `countTokens` returned 9,317 tokens for the same request, an overshoot of 440.5x. One turn's reservation at that count is `cost_microdollars(9317, 8192)` = $0.0377.
+- **Allocation ratchet.** `Ledger.allocate()` has no release or cancel. `_allocated_total()` sums every allocation ever made, so an unsettled allocation stays debited from the $190 ceiling.
+- **Seed overflow, fixed in `4b1a477`.** `deterministic_seed()` (`prospective_integration/overlay_runtime.py`) read a 4-byte SHA-256 prefix as an unsigned 32-bit integer, but the API needs a signed 31-bit seed. About half of the workers failed with `seed must be an explicit deterministic integer`, before any reservation. The fix is a mask (`& 0x7FFFFFFF`) with a pinned test, `test_deterministic_seed_masks_a_known_overflowing_hash`. Masking changes every derived seed; nothing had settled under the old one.
+- **Member order (not in DEVIATIONS).** `complete_scene_graph()` loops over `as_completed()`, so `generated_graphs` fills in finish order, not member order. `generated_graphs[0]` is the first worker to finish, not "ensemble member 0". `race_instrumentation.py` was added (opt-in) to record which member produced which graph. The pinned pipeline's indexing is unchanged. Anything that assumes `graphs[i]` is member `i` needs a check.
+- **Lost finding (not in DEVIATIONS).** Before a context compaction the author had noted a finding only as "a missing policy hook". The author could not re-find it in code comments, commit messages or the campaign docs, and did not invent details. It was never recovered.
+- **Integrity.** The pinned checkout was byte-identical against a pre-pilot hash of every `.py`, `.yaml` and `.launch` file. The one new file was hydra's own output snapshot at `mapping/hydra/output/prospective_pilot_20260921/hydra_config.yaml`. Two orphaned zombie processes (`Xvfb`, `roslaunch`) were reaped. Display `:99` (the paused matrix run) was not touched.
+- **Not done.** No relaunch, no cap raised, no change to `reserve()`, no merge or push.
+
+## Night 2 morning (2026-09-22)
+
+Merged from `MORNING_REPORT_2026-09-22.md`, a letter after the overnight native-count fix and pilot re-run. Both bugs it left open were fixed later (`tyrone_mirror/DEVIATIONS.md` #85). Its spend figures were replaced by #85 ($0.549772 settled) and by `docs/audit/2026-09-26-remote-audit.md`. Its pointer to the Night 1 letter now means the section above.
+
+- **Fix.** `transport.count_tokens()` and `native_input_bound()` use a free `countTokens` call, plus a margin `count + max(256, count/8)` capped at the old byte bound, with every count and fallback logged. It is opt-in via `ASP_PROSPECTIVE_NATIVE_COUNT=1`. Detail: `tyrone_mirror/DEVIATIONS.md` #82 and #83.
+- **Verification.** A one-call $1 run settled with `promptTokenCount: 9317`, equal to the free measurement.
+- **Pilot re-run.** 29 completions settled across both stages of scene 00069. Cost per turn was $0.0096 to $0.0207.
+- **Second bug.** 8 of those calls, plus 1 in the verification ledger, returned valid responses but failed to settle with `LedgerError("provider response is invalid")`. Google response IDs can start with `-`, for example `-NWwasf4MsGlg8UP69rl8QU`, and the ledger needs an alphanumeric first character. The author estimated about 24% of calls hit this regex.
+- **Retry loop.** An unresolved call makes the pipeline rerun that member with the same deterministic ID, which then collides with the ledger's duplicate-request guard. The loop costs nothing. The overnight session stopped the pilot.
+- **Accounting.** Replaying the 8 stuck responses against a disposable ledger copy gave $0.1014 of added spend. The ledger reported $0.448; the author put the true pilot total at about $0.55.
+- **Left open that morning.** The `responseId` regex (it validates other fields too); the retry and attempt-id scheme (the schema has an unused `retry_of` field); `Ledger.allocate()` cannot release an allocation; the $190 and $180 ceilings are enforced per ledger file, not globally.
+- **Not done.** No further live runs, no cap raised, no merge or push.
+
+## Addendum (2026-09-22): block 00069/42 v6
+
+Merged from `SCIENTIFIC_CAMPAIGN_ADDENDUM_2026-09-22.md`. Every figure here is also in `tyrone_mirror/DEVIATIONS.md` #91 and `docs/audit/2026-09-26-remote-audit.md`.
+
+- The last fresh attempt stopped at 19.5 m, after stages 0 to 6 completed and stage 7 began. It added $18.552664 of settled spend. The shared scientific ledger then stood at $36.783435 settled, with no unresolved or reserved requests and no rise in redundant settlement.
+- **Pinned checkout.** Byte-identical against a fresh 616-file baseline.
+- **Limit.** 2,233 settled requests used $159.976812 of the $160 allocation's reservation sum, though they cost $36.783435. The pipeline then failed closed with `AccountingHalt("allocation exhausted")`. Retries made no new provider calls. A new allocation did not fit in the remaining $6.50 of code-ceiling headroom, and the ledger rules were not changed.
+- **Offline scoring.** Run at commit `5c178e2` under `official_asp` and `validator_plus_unanimity_raw_tau_1_0`. It is kept on the host at `/workspace/runs/prospective_gemini/scientific_campaign_20260922/offline_scoring_20260922/block_00069_42_v6/summary.json`. Stages 0 to 6 have complete four-member tracks. Stage 7 is a partial artifact, marked by missing completion files. The three earlier zero-spend startup attempts (`v3`, `v4`, `v5`) are kept too.

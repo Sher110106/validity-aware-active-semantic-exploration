@@ -130,3 +130,49 @@ So U_360 does pick out the objects that get mapped next. But pooled, only about 
 
 - **Frontier proxy.** "Far from the walked path" ranks candidates by U_360 better than ASP's score in the official (0.50 vs 0.20), placebo (0.21 vs 0.10) and filter_only (0.39 vs 0.12) arms, but not in the oracle arm (0.40 vs 0.45) (verified). U ignores unmapped walls, which may favour any outward-pulling rule (inferred).
 - **Observed-only IG.** IG from the observed graph alone is zero for about 48% of candidates, and its median rho is -0.05 (verified).
+
+## Builder's method and caveats (first draft)
+
+Appended 2026-11-12 from the first-draft builder file, which is removed from the tree. The corrected results are in the sections above. Scratch paths are generalised.
+
+### Method
+Python: .venv_offline/bin/python, run with -B so nothing is written into work_A. I imported reviewer A's work_A/fastig.py, replay.py and replay2.py read-only, along with the pinned calculate_uncertainty.py that they load.
+
+1. Frame check (frame_check.py). In 10 sampled stages across 4 runs, each observed object node or structure node sits a median 0.16-0.68 m (xy) from the nearest reference object with the same label, and 3.0-5.7 m from one with a random other label. So the reference objects and the observed graphs share one frame (verified: frame_check.json).
+
+2. Replay (audit.py). For each stage I regenerated the candidates and their first-stage scores with fastig.Scorer.first_stage, using A's file order (replay2.gids_for) and RNG offset (replay.stage_meta). The run's own top-10 check is the same as A's: allclose against parsed_runs pose_tops[-1].
+
+3. Unmapped. Primary rule: the code in live_policy.oracle_eligible without the reach test, applied to the union of graph0 and graph1 at stage k. A reference object is mapped if it lies within 0.5 m (xy) of an observed object of ANY label, or of a structure node with the SAME label. The brief describes the rule as "same-label object or structure", which does not match the code. I ran that version too as a variant (suffix _sl).
+
+4. Visibility. I used fastig.visible, the vectorized form of the pinned camera model. Targets are the oracle-set reference objects with identity orientation. Occluders are the structure nodes and door-named nodes of both observed graphs, as in _preprocess_groups. Each object is checked at its centre plus 8 box corners, with a centre-ray box occlusion test.
+   - U_cone uses the first-stage camera (0.5-3.0 m) at the candidate's own yaw.
+   - U_360 uses the second-stage range (0.1-4.0 m) and takes the union over 12 yaws, 30 deg apart, with the -10 deg pitch. A 36-yaw check changed the per-stage rho by at most 0.003 (yaw_sensitivity.json).
+
+5. Per stage I computed Spearman rho (scipy, average ranks for ties) between U_360 or U_cone and two scores: the ASP total (IG - 0.2*d), which is the score that ranks candidates, and IG alone.
+   - The live stop is the last world_frame_path point of stages/(k+1)/executed_path.json, at z = 1.1.
+   - The logged first-stage best is pose_tops[-1].top[0]. The logged second-stage pick is the pose_finals 'final' entry nearest the stop.
+   - Percentile among the candidates' U_360 is mid-rank: share below plus half the ties.
+   - Yardstick: of the unmapped objects in the stop's U_360, the share that show up in stage k+1's graphs (same label within 0.5 m xy), against unmapped objects not in view. I also report an any-label version.
+
+6. Summaries (summarize.py):
+   - median and IQR of per-stage rho;
+   - mean percentile with a stage bootstrap, resampling stages within each run, 2,000 draws, seed 0;
+   - a stage-level one-sided binomial sign test of "stop U_360 > candidate median", with ties dropped;
+   - a run-level one-sided exact sign-flip test on run-mean percentiles minus 0.5.
+
+7. Extra matched-state check, not in the brief (counterfactual.py). On every used stage I held the robot state and the 300 candidates fixed and rescored them with four hypothesis sets: actual, observed-only, a fresh live_policy.placebo_graph draw, and a fresh live_policy.oracle_graph draw from oracle_sets.json (the live oracle arm's generator). I also computed a hypothesis-free frontier proxy: each candidate's distance to the path walked through stage k.
+
+I computed no F1 or AUC for any run. I ran no SSH, spent no money, and ran neither Habitat nor the pipeline.
+
+### Caveats
+- The definition of 'unmapped' in the brief does not match the code it cites. live_policy.oracle_eligible counts a reference object as mapped if it lies within 0.5 m of an observed object of ANY label or of a structure node with the SAME label; the brief says 'same-label object or structure'. I used the code rule as primary and report the same-label version as _sl. The rho results change little (verified).
+- U_360 and U_cone count only occlusion by observed structure and door boxes. The reference graphs have no wall nodes, so objects behind walls the robot has not yet mapped count as visible. This inflates U, especially toward unexplored space, and helps explain why only about 7-9% of in-view objects are mapped at the next stage. It may favour any outward-pulling score, including placebo and the frontier proxy (inferred).
+- Arms differ in trajectories and states, so comparing rho across arms mixes state with content. The matched-state check (Table 2) removes that, but it uses a single placebo draw and a single oracle draw per stage, so its per-stage numbers are noisy.
+- Stage-level sign tests treat stages as independent, which is optimistic because stages within a run are correlated. The run-level exact tests have floors of 1/2^n runs: 0.0078 for 7 runs, 0.0156 for 6 and 0.0625 for 4. Oracle has only 4 runs (2 per scene).
+- Run set as given in runs.txt: it includes both e1_00853_s44_official_60m and its _rerun1, and e1_00871_s43_placebo_60m, which has 1 stage. Each counts as a separate run in the bootstrap and the run tests.
+- The brief says A matched 383 of 394 stages. A's replay2_results.jsonl and my replay both give 384 of 396; the files win.
+- Spearman rho correlates with the ASP total (IG - 0.2*d), the score that actually ranks candidates. Rho with IG alone is also reported and is similar.
+- The camera is placed at z = 1.1 for candidates and stops alike, matching AGENT_HEIGHT and the logged path height. Reference objects use identity orientation. U_360 uses 12 yaws; the 36-yaw check moved rho by at most 0.003.
+- The decision rules give no threshold for 'near 0' in rule 2. I used |median rho| < 0.1.
+- No F1 or AUC was computed for any run. E3 runs entered only as planner states and paths.
+- The reviewer scratch directory (185 MB) holds regenerated placebo and oracle YAMLs and can be deleted. Nothing outside the reviewer scratch directory was written: work_A/__pycache__ mtimes predate this run (verified).

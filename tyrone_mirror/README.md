@@ -9,4 +9,4 @@ The top-level run groups are:
 - `prospective_gemini/`: the fixed-parser Gemini v6 offline analysis and scoring summary.
 - `DEVIATIONS.md`: the complete dated engineering log, including corrections and claim boundaries.
 
-The canonical interpretation is in [../FINAL_REPORT.md](../FINAL_REPORT.md) and [../docs/RESULTS_INDEX.md](../docs/RESULTS_INDEX.md). Files in this mirror are evidence artifacts, not an active runtime workspace.
+The canonical interpretation is in [../docs/RESULTS.md](../docs/RESULTS.md). Files in this mirror are evidence artifacts, not an active runtime workspace.

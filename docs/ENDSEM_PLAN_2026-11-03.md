@@ -254,20 +254,20 @@ The readouts are secondary and sit outside the 3 × 3 confirmatory family.
   - `paper_ged.py`, the author's GED on the host.
   - `host/coverage_tour.py` and `host/tour_waypoints.py`, 51 tests. An Opus review found one blocker: the floor snap from camera height can land on a bed top. It is fixed, and a test fails on the old code.
   - `host/run_coverage_tour.sh`, `host/stop_coverage_tour.sh` and `host/paper_queue.sh`.
-- **Results so far:** `results_paper_compare/paper_compare.md`, summarised in `docs/STANDING_2026-11-06.md`.
+- **Results so far:** `results_paper_compare/paper_compare.md`, read in `tools/live_policy/results_paper_compare/NOTES.md`.
 - **The two old frontier-to-end runs.** Their stages were converted with the author's converter on the host. This added YAML files beside the old DSG files and changed nothing else.
 - **Blocker.** Another user's vLLM server holds about 46 of the GPU's 48 GB. The first run (e7 853/42) failed with nvblox CUDA out of memory and was stopped.
   - `runs/apr/paper_queue.sh` waits for 12 GB of free GPU memory before each job.
   - Its order: a 3-waypoint dry run, e7 853/42 and 871/42, the four tours (APR-a and APR-b on each scene), then e7 seeds 43-46.
 - **11-09: outage, restart and two queue fixes.**
-  - Tyrone dropped off the network at about 09:23 IST and restarted. The queue died having launched nothing: until then it had waited for the GPU. An agent on tyrone restarted it at 16:20 with all 15 jobs (`docs/TYRONE_AGENT_BRIEF_2026-11-09.md`). The reboot had stopped the vLLM server, so the dry run started at 16:25.
+  - Tyrone dropped off the network at about 09:23 IST and restarted. The queue died having launched nothing: until then it had waited for the GPU. An agent on tyrone restarted it at 16:20 with all 15 jobs (agent brief v1 of 11-09; summary in `docs/HISTORY.md`). The reboot had stopped the vLLM server, so the dry run started at 16:25.
   - That agent found that the explorer's stdout is block-buffered when written to a file, so `Exploration complete` never reaches the log while the explorer idles. The queue then ends a finished run as `stalled` 20 minutes later. The data is not affected.
   - Review found that the queue applied its 250 m stop to the tours, but §2b gives tours only the 4 h cap.
-  - Both are fixed in `paper_queue.sh` (sha256 6ffb5601…): jobs launch with `PYTHONUNBUFFERED=1`, and only e7 jobs stop at 250 m. `host/paper_queue_ctl.sh` (48 tests) swaps the running queue for the fixed one after its current job (`docs/TYRONE_AGENT_BRIEF_2026-11-09_v2.md`). The old queue ran only the dry run and possibly e7 853/42, so no tour used the old rule. A `stalled` ending under the old queue counts as finished if the explorer's log holds `Exploration complete` or, for a tour, its summary says complete.
+  - Both are fixed in `paper_queue.sh` (sha256 6ffb5601…): jobs launch with `PYTHONUNBUFFERED=1`, and only e7 jobs stop at 250 m. `host/paper_queue_ctl.sh` (48 tests) swaps the running queue for the fixed one after its current job (agent brief v2 of 11-09; summary in `docs/HISTORY.md`; the script that ran is `tools/live_policy/host/paper_queue_ctl_v2_2b71ee20.sh`). The old queue ran only the dry run and possibly e7 853/42, so no tour used the old rule. A `stalled` ending under the old queue counts as finished if the explorer's log holds `Exploration complete` or, for a tour, its summary says complete.
   - The handover worked at 17:52. E7 853/42 had logged `Exploration complete` at 17:29, so it counts as finished. The fixed queue started e7 871/42 at 17:57, with 13 jobs left. The tyrone agent then found two more traps, and both were confirmed from the laptop:
     - The queue ran inside the agent's T3 Code systemd scope. `setsid` and `nohup` don't take a process out of its cgroup, so closing that thread would have killed the queue without a log line.
     - The container had no `zstd`, so no DSG file had ever been compressed, though the queue logs `compressed their DSG` after each job. At about 3.4 GB per 871 run, the 10 GB disk rule would have skipped seeds 44-46.
-  - Brief v3 (`docs/TYRONE_AGENT_BRIEF_2026-11-09_v3.md`) moves the queue into its own scope, installs `zstd` in the container and compresses the finished runs. Control script v3 changes:
+  - Brief v3 (11-09; its steps are in the host runbook, `tools/live_policy/README.md`) moves the queue into its own scope, installs `zstd` in the container and compresses the finished runs. Control script v3 changes:
     - a tour that hits the 4 h cap counts as a normal end (§2b);
     - `status` reports skips and a GPU give-up;
     - `restart` starts the queue under `systemd-run --user --scope` and refuses to start it without `zstd`.
@@ -282,7 +282,31 @@ The readouts are secondary and sit outside the 3 × 3 confirmatory family.
 
 ### B6. Draft email to the author (the student edits and sends it)
 
-Superseded on 11-06. The current draft is §6 of `docs/STANDING_2026-11-06.md`. It drops the category question, now answered by the author's `task_def/` files. It adds questions on how Fig. 4 reads its time axis: the stage value or the running best, whether the scan counts, and the frontier clock.
+Superseded on 11-06. The current draft is below. It drops the category question, now answered by the author's `task_def/` files. It adds questions on how Fig. 4 reads its time axis: the stage value or the running best, whether the scan counts, and the frontier clock.
+
+> **Subject:** ASP reproduction: your reference graphs and the Fig. 4 time axis
+>
+> Dear [first author],
+>
+> Thank you again for the talk and the demo. We are reproducing ASP with your released code (commit f1ea141b) on HM3D scenes 853 and 871. We now score our runs with the rules in your `f1_score_plot.py` and `ged_score_plot.py`, and we would like our numbers to sit on the same scale as Fig. 4. Could you help with a few details?
+>
+> 1. The reference scene graphs for the four scenes (853, 69, 871 and 573), in the YAML form `f1_score_plot.py` reads. Object names and centres would be enough for F1; GED also needs the rooms and edges.
+> 2. The time axis in Fig. 4:
+>    - The text says a fixed time budget and the caption says total navigation time. How many seconds was 100% in each scene?
+>    - Is each value the F1 at that time, or the running best that `f1_score_plot.py` plots?
+>    - Does the time include the 360° turn at each stop?
+>    - In the released code, the frontier explorer's clock starts before it waits for each new path, while ASP's starts when the path arrives. Was that also true for Fig. 4?
+> 3. The setup:
+>    - Did 853, 69 and 871 use `objects_habitat_apartment.yaml`, with the 61-label file only for 573?
+>    - How many runs per scene did Fig. 4 use?
+>    - What was L_max?
+> 4. The 28 rooms behind "9 of 28".
+>
+> We will credit you for any file you send, and we will not pass the files on without asking.
+>
+> Best regards,
+> [name]
+
 
 ---
 
@@ -293,6 +317,8 @@ Superseded on 11-06. The current draft is §6 of `docs/STANDING_2026-11-06.md`. 
 **Base:** P1, which both judges scored highest. §2 lists every flaw the judges raised and how this plan fixes it. Everything costs $0 until the smoke test on Sun 11-08. Every paid step has a hard cap and needs the student's OK first.
 
 ---
+
+**Lecture question (11-03):** "ASP's score rewards disagreement between the completions. What does it gain when none of them is right, and how would you change it to reward correct predictions?" Follow-ups: what would random room proposals score on the 2-of-8, within-2.5 m room test; how many runs per scene does Fig. 4 use, and how much did F1 vary between runs (the 853 numbers moved 7.7-10.5 points between v1 and v2)?
 
 ## 0. Aim
 
@@ -338,7 +364,7 @@ Every week ends with slides that stand alone (§7).
 ### M0a: Talk insurance (Tue 11-03 to Thu 11-05; $0; laptop)
 - **Method.**
   - `tools/live_policy/paper_table.py` takes F1 at the last stage at or below 60 m, key **`af_f1`** (`object_f1` does not reproduce the table), from `results_2026-10-31/frontier_seeds/all_scores_with_frontier.json`. It uses `stages` for the frontier-made reference and `hm3d_stages` for human labels, counted runs only. The frontier-made column is labelled unfair to ASP.
-  - A new deck at `/Users/sher/project/open-slide/slides/asp-endsem/index.tsx` with a 6-slide block: ASP in one picture; E1-E3; frontier; mechanism; paper table; limits.
+  - A new deck in the open-slide project (`slides/asp-endsem`) with a 6-slide block: ASP in one picture; E1-E3; frontier; mechanism; paper table; limits.
   - Fix the check-in errata: use 3.0% against 0.5% (not 1.7/1.5% or 2.6%); use 24.1% at 2 m on matched inputs (not 24.7%); drop the slide 3 frontier claim and the slide 4 plan; name the two filters apart.
   - An errata note listing the September claims never to repeat: the unanimity gain, "bit-identical at beta ≤ 1", "removes about 27%", Gemini breadth.
 - **Control.** `numbers.csv` (1,074 rows) is the only source. An Opus reviewer gets the slides and the files, not our conclusions.

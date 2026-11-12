@@ -1,6 +1,6 @@
 # Read-only closeout audit: 26 September 2026
 
-**Historical snapshot:** the supervisor was subsequently stopped and disabled on 26 September. The [27 September verification](audit/2026-09-27-closeout-verification.md) confirms retirement, retained snapshots, and the final file-level manifest. The observations below describe the earlier audit.
+**Historical snapshot:** the supervisor was subsequently stopped and disabled on 26 September. The [27 September verification](2026-09-27-closeout-verification.md) confirms retirement, retained snapshots, and the final file-level manifest. The observations below describe the earlier audit.
 
 The recorded research is frozen, but the remote operational state is not a clean shutdown. This audit inspected existing files, process state, Git metadata, and ledger aggregates. It launched no exploration, simulator, replay, or provider request and made no remote configuration changes.
 
@@ -41,7 +41,7 @@ It also reported untracked mapping dependencies/configuration. A pinned HEAD alo
 
 ## Corrected Gemini accounting
 
-Source: [sanitized ledger aggregates](audit/2026-09-26-ledger-summary.json), queried directly from the five existing databases. The SSH user could not read the root-owned ledgers directly, so the queries used the already-running container with SQLite `mode=ro` and `PRAGMA query_only=ON`.
+Source: [sanitized ledger aggregates](2026-09-26-ledger-summary.json), queried directly from the five existing databases. The SSH user could not read the root-owned ledgers directly, so the queries used the already-running container with SQLite `mode=ro` and `PRAGMA query_only=ON`.
 
 | Ledger | Allocation | Settled requests | Recorded settled cost | Unresolved requests |
 |---|---:|---:|---:|---:|
@@ -60,7 +60,7 @@ The allocations sum to $183.50 against the $190 code ceiling, an arithmetic diff
 
 ## Evidence copied without recomputation
 
-The three existing `runs/matrix120m_scoring/scene*_extension_policy_replay.json` files were copied into the matching [local mirror directory](../tyrone_mirror/runs/matrix120m_scoring/). They supply the previously unlinked per-scene source tables for the headline DeepSeek result. Their SHA-256 digests matched the remote originals and are listed in [STATIC_REPLAY_SHA256SUMS](../tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS).
+The three existing `runs/matrix120m_scoring/scene*_extension_policy_replay.json` files were copied into the matching [local mirror directory](../../tyrone_mirror/runs/matrix120m_scoring/). They supply the previously unlinked per-scene source tables for the headline DeepSeek result. Their SHA-256 digests matched the remote originals and are listed in [STATIC_REPLAY_SHA256SUMS](../../tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS).
 
 No scoring command was run to produce or refresh these files. Their embedded `/workspace/...` paths record the original environment, not paths that should exist in a fresh local clone.
 
@@ -71,4 +71,4 @@ No scoring command was run to produce or refresh these files. Their embedded `/w
 3. Resolve the three outstanding ledger entries from existing response archives or provider billing records, if available, without issuing new model calls.
 4. Preserve a sanitized author-worktree diff and a manifest of raw inputs if independent full replay is a submission requirement.
 
-See [remaining work](REMAINING_WORK.md) for the broader submission checklist.
+The submission checklist that followed is summarised in [the project history](../HISTORY.md).

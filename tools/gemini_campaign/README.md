@@ -4,6 +4,8 @@ Status: **complete and frozen**. The broker and audited runtime are retained
 for offline inspection; the recorded campaign is closed and no new paid probe
 or launch is planned.
 
+The 28 Oct Gemini static test ($39.60, `tools/live_policy/gemini_static.py`) ran outside this ledger; see [`../../docs/RESULTS.md`](../../docs/RESULTS.md), Cost.
+
 ## Security model
 `load_credential()` requires an absolute path outside caller-supplied forbidden repository roots, a regular file owned by the current UID, exact mode `0400` or `0600`, and a bounded single-line value. It opens with `O_NOFOLLOW` where available and validates the opened descriptor with `fstat`; errors are generic and contain neither path nor value. Keys beginning `AQ.` are valid authorization API keys as of 2026 when sent through the `x-goog-api-key` header; this implementation never validates or embeds a real key.
 

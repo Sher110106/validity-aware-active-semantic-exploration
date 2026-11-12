@@ -49,3 +49,5 @@ their SSH connection.
 Runtime truth is under `runs/matrix_supervisor/`. `state.json` is machine
 state, `status.json` is the current operator view, and `events.jsonl` is an
 append-only transition log.
+
+Build record: the specification, governance, build order, deployment state, notes and attempts log are in [`../../docs/archive/MATRIX_SUPERVISOR_BUILD_2026-09-16.md`](../../docs/archive/MATRIX_SUPERVISOR_BUILD_2026-09-16.md).

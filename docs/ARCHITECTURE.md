@@ -43,9 +43,25 @@ The operative baseline is the pinned author commit plus documented working-tree 
 | Prospective evidence | `tools/prospective_eval/` | Receipt, classification, detour, and runner helpers; consistency checks, not authenticated causal proof |
 | Matrix supervisor | `tools/matrix_supervisor/` | Host-side DeepSeek run queue, safety checks, and state machine; `--check` and `--once --dry-run` are the inspection modes |
 
+## Live policy (`tools/live_policy/`)
+
+The October and November work runs the author's pipeline live, with a policy hook that decides what the completion ensemble contains. Folder map, pre-registration hashes and the host runbook: [tools/live_policy/README.md](../tools/live_policy/README.md). Results: [RESULTS.md](RESULTS.md).
+
+| Part | Code | Role |
+|---|---|---|
+| Live arms | `live_policy.py`, `live_runner.py`, `run_live_run.sh` | Four arms: `official` (LLM completions as the author uses them), `filter_only` (official plus our validator), `placebo`, `oracle_visible` |
+| Placebo | `live_policy.py`, `placebo_calibration.json` | Random guesses of the LLM's measured shape (counts, labels, room links, distances), with a per-stage delay schedule. No LLM call, $0 |
+| `oracle_visible` | `live_policy.py`, `oracle_sets.json`, `build_oracle_sets.py` | True unmapped HM3D objects, drawn at random per member at the placebo's counts, with placebo rooms. No LLM call |
+| Live scoring | `live_score.py`, `e1_analysis.py`, `stage_diagnostics.py` | Author-faithful F1 of the observed map against the HM3D annotation, as area under the curve to 60 m; scene-blocked permutation tests |
+| Coverage tour | `host/coverage_tour.py`, `host/tour_waypoints.py` | The author's frontier explorer with the planner replaced by a fixed waypoint list. It builds the author-protocol reference (APR) map. Preregistered in `PREREGISTRATION_PAPER.md` |
+| Paper-scale scoring | `paper_compare.py` | F1 at 10%, 50% and 100% of a time budget, on the paper's scale (arXiv 2510.05430v2, Fig. 4) |
+| Paper-scale GED | `paper_ged.py` | Runs on the host. Calls the author's own GED code (see the third scorer below) and writes the `--ged-json` files that `paper_compare.py` reads |
+
+Pre-registrations and the frozen result packages are hash-pinned. Do not edit them.
+
 ## Metric glossary
 
-Two evaluators produce numbers that look similar but are not interchangeable. Name the evaluator beside every result.
+Three scorers produce numbers that look similar but are not interchangeable. Name the scorer beside every result. The first two are in the table below; the third follows it.
 
 | Metric | Author-faithful (`tools/evaluator/`) | Static/canonical (`tools/asp_offline/evaluator.py`) |
 |---|---|---|
@@ -54,12 +70,26 @@ Two evaluators produce numbers that look similar but are not interchangeable. Na
 | GED | NetworkX edit distance with parent-aware substitution costs; reported values are best-found upper bounds under the 60 s timeout (`ged.py`) | Node plus edge edit proxy computed from the fixed mapping; predicted edges with unmatched endpoints are dropped before the edge comparison (`evaluator.py`) |
 | Aggregation | Per-stage precision/recall/F1/GED | Path-normalized area under the curve; state the budget (120 m matrix, 19.5 m partial Gemini block) |
 
+**The third scorer: the author's own (paper-scale scores).** `tools/live_policy/paper_compare.py` and `paper_ged.py` score runs on the paper's scale.
+- **F1** follows the author's `f1_score_plot.py`, copied rather than imported. Object nodes only, `door` excluded. Each predicted object, in file order, takes the nearest unmatched reference object with the same name; it counts as a match below 0.5 m. Precision, recall and F1 are per graph, and the stage value is the mean over the `graph0` and `graph1` files that exist.
+- **GED** is the author's `ged_score_plot.CustomGED`: gmatch4py `GraphEditDistance(1, 1, 1, 1)` with the author's substitution costs, mean over `graph0` and `graph1`. It runs on the host, where gmatch4py is installed in a scratch directory.
+- **Readout.** The stage value at the last stage whose navigation time is at most t is the primary readout. The running maximum over stages up to t (the author's plot rule) is reported beside it. A run with no stage at t has a null value, never a held one.
+- **References.** `hm3d` (human labels), `apr` (coverage-tour map) and `frontier_made` (the frontier run's own map). The paper uses a hand-driven full-scene map, so no reference here is like-for-like.
+
 Other terms:
 
-- `tau`: raw support cutoff over `{0, 0.5, 0.75, 1.0}`; `tau=1.0` keeps predictions supported by all four intended members.
+- `tau`: raw support cutoff over `{0, 0.5, 0.75, 1.0}`; `tau=1.0` keeps predictions supported by all four intended members. It keeps almost none (19 of 8,943 predicted nodes on the three matrix scenes), so `tau=1.0` scores within 0.0002 of the observed map alone (WRITEUP §9 erratum 2 in [the October package](../tools/live_policy/results_2026-10-31/WRITEUP.md)). Read its gain over `official` as the harm of the guesses, not as value added by the filter.
 - `calibration.status`: read before interpreting any calibrated row; `LOSO_CALIBRATED` is the fitted result, `UNCALIBRATED_PROVISIONAL` is not.
 - Guardrail policy: `filter_plus_support_threshold_calibrated_tau_1.0` (validator plus unanimity), requiring absolute F1 loss at most 0.05 and normalized-GED relative increase at most 10 percent. The measured GED decrease is an outcome, not a gate.
 - Full-graph true-positive retention near 99.7 percent is dominated by the unchanged observed map; it is a FULL-GRAPH measure, not predicted-only retention. Predicted-only true positives drop (see Phase 13 validator diagnostics).
+
+## Safeguards
+
+What the engineering work added beyond the experiments (from the 27 September closeout):
+- The metered ledger validates provider identities and usage, bounds retries, and records raw responses without credentials.
+- Request IDs separate stage identity from block identity.
+- The offline graph adapter accepts the pipeline's real `node_type`, singular `dimension`, stringified vector and pair-shaped edge fields.
+- Regression tests cover those adapter cases and the campaign control plane. The test counts by suite are in [HISTORY.md](HISTORY.md).
 
 ## Status labels
 

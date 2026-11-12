@@ -2,12 +2,12 @@
 
 "Offline" below means no simulation run and no provider call after setup. Installing dependencies may still use a package index.
 
-Use one interpreter consistently: `.venv_offline/bin/python` with `PYTHONPATH=tools`.
+Use one interpreter consistently: `.venv_offline/bin/python`. Scripts need `PYTHONPATH=tools`; pytest gets it from `pytest.ini` (`pythonpath = tools`).
 
 ## Environment
 
 The offline tools require Python 3.10+ and the packages in
-`tools/asp_offline/requirements.txt`. A local setup is:
+`tools/asp_offline/requirements.txt`. `networkx`, `scipy` and `requests` must be installed: without `scipy` and `requests`, some test files fail at import (`test_decision_replay.py`, `test_openrouter_shim_metering.py`). A local setup is:
 
 ```sh
 python3 -m venv .venv_offline
@@ -18,7 +18,7 @@ python3 -m venv .venv_offline
 
 Read the frozen numbers and their provenance:
 
-- `docs/RESULTS_INDEX.md` for the run inventory and per-scene sources.
+- `docs/RESULTS.md` for the run inventory and per-scene sources.
 - `tyrone_mirror/runs/matrix120m_scoring/STATIC_REPLAY_SHA256SUMS` for the matrix replay digests.
 - `docs/audit/2026-09-26-ledger-summary.json` for sanitized cost aggregates.
 - `docs/ARCHITECTURE.md` for which evaluator each table uses.
@@ -29,13 +29,11 @@ Read the frozen numbers and their provenance:
 From the repository root:
 
 ```sh
-PYTHONPATH=tools .venv_offline/bin/python -m pytest -q \
-  tools/tests tools/gemini_campaign/tests tools/prospective_campaign/tests \
-  tools/prospective_eval/tests tools/matrix_supervisor/tests tools/evaluator/tests
+.venv_offline/bin/python -m pytest
 .venv_offline/bin/python -m compileall -q tools
 ```
 
-Last verified 27 September 2026: 286 tests and 9 subtests passed. Tests use local fixtures and mocks; they start no pipeline and call no provider.
+`pytest.ini` collects every test under `tools/`: 470 tests with `requests` installed, of which 453 pass and 17 skip (checked 12 Nov 2026); without it, collection stops at `test_openrouter_shim_metering.py`. Tests use local fixtures and mocks; they start no pipeline and call no provider. The September run of 27 Sep (286 tests, six suites) predates the October-November tests and is out of date.
 
 Caveats:
 
@@ -45,7 +43,7 @@ Caveats:
 
 ## Tier 3: replay locally included artifacts
 
-These commands read cached graphs and write new output files beside them. They need the referenced inputs to exist locally; the mirror does not contain every host-side corpus (see `docs/RESULTS_INDEX.md`, input availability).
+These commands read cached graphs and write new output files beside them. They need the referenced inputs to exist locally; the mirror does not contain every host-side corpus (see `docs/RESULTS.md`, input availability).
 
 ```sh
 PYTHONPATH=tools .venv_offline/bin/python tools/evaluator/evaluate_run.py \
@@ -94,6 +92,28 @@ sha256sum --check <repository-root>/docs/audit/2026-09-27-input-SHA256SUMS
 
 Missing host-only files will fail this check in a partial export. Three host source files differ from the local repository; both digests are recorded. Preserve the chosen source version before any future reproduction rather than treating the two trees as interchangeable. This closeout generated hashes only, not new analysis results.
 
+## Tier 5: October-November work (live policy and paper scale)
+
+Code and results are in `tools/live_policy/`; read `tools/live_policy/README.md` first.
+
+1. **Regenerate the E1-E3 package** (needs the off-host copy of the campaign, which is not in this repository; see the README):
+   ```sh
+   tools/live_policy/reproduce.sh [copy_dir] [expected_dir] [out_dir]
+   ```
+   It rebuilds `all_scores.json` and the E1-E3 analysis JSONs and compares them with `results_2026-10-31/analysis/`.
+2. **Check the manifests.** `results_2026-10-31/COPY_MANIFEST.sha256`, `POST_CAMPAIGN_MANIFEST.sha256` and `HOST_MANIFEST.sha256` list sha256 values. Lines that start with `runs/` need the off-host copy or the host. The 12 package lines of `POST_CAMPAIGN_MANIFEST.sha256` check from `results_2026-10-31/`. `numbers.csv` has CRLF line endings; its hash only holds if git does not convert them. Check `PREREGISTRATION_BENCH.sha256` and `PREREGISTRATION_PAPER.sha256` from `tools/live_policy/`.
+3. **Rescore paper-scale runs.** `paper_compare.py` needs an explicit `--out-dir`, so a rerun never overwrites a frozen results folder:
+   ```sh
+   PYTHONPATH=tools .venv_offline/bin/python tools/live_policy/paper_compare.py \
+     --out-dir <new directory> --no-default-runs \
+     --add-run frontier_end=00853=<run dir> --apr 00853=<apr dir> --budget 00853=<seconds>
+   ```
+   The exact argument list of each published table is in `meta.argv` of its `paper_compare.json`. Add `--out-dir` when you replay the 6 Nov one (`results_paper_compare/`), which predates the flag, and replace the 12 Nov argv's `--out-dir` with a new directory so the frozen folder is not overwritten.
+4. **GED runs on the host only.** `tools/live_policy/paper_ged.py` calls the author's `ged_score_plot.py` and gmatch4py, which are not in `.venv_offline`. Its output (`ged/*.json`) is passed to `paper_compare.py` with `--ged-json`. Without it every `ged` field is null.
+5. **Live-policy tests.** `tools/tests/test_live_policy.py`, `test_e1_analysis.py`, `test_live_runner.py`, `test_paper_compare.py` and `test_paper_queue_ctl.py` run under the plain pytest command above. `test_coverage_tour.py` reads the author's scripts from `/tmp/asp_author_scripts` or from the path in `ASP_AUTHOR_SCRIPTS`. Without them its 17 tests skip.
+6. **Step 7 rerun.** `bash tools/live_policy/frontier_seeds_analysis.sh <copy> /tmp/fc; diff -rq /tmp/fc tools/live_policy/results_2026-10-31/frontier_seeds` (the script is not executable and does not compare by itself); expect only `wall_cells.json` to differ.
+7. **Host steps** (queue, tours, zstd, systemd scopes) are in the "Host runbook" of `tools/live_policy/README.md`. They need the GPU host.
+
 ## Evidence policy
 
-Do not commit credentials, live ledgers, raw provider request bodies, or machine-specific paths. Keep new results in a unique evidence directory, add a row to `docs/RESULTS_INDEX.md`, and record material deviations in `tyrone_mirror/DEVIATIONS.md`.
+Do not commit credentials, live ledgers, raw provider request bodies, or machine-specific paths. Keep new results in a unique evidence directory, add a row to `docs/RESULTS.md`, and record material deviations in `tyrone_mirror/DEVIATIONS.md`.

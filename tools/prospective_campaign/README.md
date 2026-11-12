@@ -54,6 +54,49 @@ block, valid invalid-hypothesis gate, measurable positive FP-detour reduction,
 F1 loss <= 0.05, and GED increase <= 10%. A zero baseline detour or missing
 detour instrumentation is `not_identifiable`; incomplete pairs are excluded.
 
+## Controls
+
+Merged from the former `CONTROL.md`. The enforcing code is `control.py` (the `Control` dataclass).
+
+Only these sidecar controls are permitted: `paused`, `stop`, monotonically increasing `resume_generation`, exact `approved_hashes`, and conservative attempt, disk, stall and runtime floors. Unknown keys or changed approved hashes pause without taking a resource action. `stop=true` is terminal for the controller instance. Connectivity loss and unknown spend are automatic stops.
+
+## Campaign scorecard and admission rule
+
+Merged from the former `GOAL.md`, the implementation goal for this control plane. It was a historical contract. The control plane and its tests are complete and the campaign is frozen; the final disposition is in [`../../docs/RESULTS.md`](../../docs/RESULTS.md).
+
+Scorecard:
+
+- Deterministic queue and exact policy names: 100% order-test pass.
+- Admission safety: every admitted unit has a full-pair or block budget reservation and a healthy technical state.
+- Crash safety: status is atomic, events are append-only, markers follow hash validation, and partial trajectories are never merged.
+- Scientific safety: claim gates return `not_established` or `not_identifiable` when prerequisites are missing.
+
+Workflow:
+
+1. Probe capability (maximum $2), then an engineering pilot (maximum $18): paired scene 00069 seed 42, exactly one planning/navigation stage, then stop.
+2. Exclude the pilot from confirmatory tables. Compute the enforceable worst-case pair cost, including unresolved spend and thinking-token uncertainty. Pick a common cumulative path horizon in meters before any outcome is inspected.
+3. Admit the seed-42 3-pair block only if its complete reservation fits. **Admit seed 43/44 blocks only if each complete block fits. Never promise 18 runs.**
+
+The implementation is offline-safe by default; no new paid API call is planned.
+
+## Implementation plan and scope decision
+
+Merged from the former `PLAN.md`. All items were done except one:
+
+- Open: implement adapters for the budget broker and the motion/detour runner in separate cherry-pickable branches.
+
+Scope decision artifact: after the pilot, the controller writes a terminal scope decision. It holds the pilot ledger, the worst-case pair estimate, the selected horizon, the reservations, and whether each complete block fit. It is a decision record, not a promise to run a fixed number of attempts.
+
+Prior (same numbers as "Historical prior" above): paired 120m and 75m are ruled out under the $200 cap. A paired 50m block has a $117.62 base estimate before thinking and may be rejected. 25m is the likely minimum useful block. Admitting a block lowers the remaining ledger for the next one.
+
+## Working rule
+
+Merged from the former `WORKING_MEMORY.md`, a placeholder that was never filled in. Its one rule: never replace an existing attempt directory or infer outcomes from queue position. Pilot ledger, worst-case pair cost, horizon, reservations, stop reasons and the scope decision belong in append-only machine artifacts.
+
+## Status
+
+Merged from the former `STATUS.md`. Implementation is complete and the campaign is frozen. No new campaign, paid call or credential operation is planned. The terminal scope decision and evidence summary are in [`../../docs/RESULTS.md`](../../docs/RESULTS.md). The experimental policy is `validator_plus_unanimity_raw_tau_1_0`, not beta-R. The live-navigation and detour claim gates stay closed because the evidence does not establish those outcomes.
+
 ## Done when
 
 1. `python3 -m unittest discover -s tools/prospective_campaign/tests` passes.
@@ -61,6 +104,8 @@ detour instrumentation is `not_identifiable`; incomplete pairs are excluded.
    artifact markers, manifests, and claim gates are covered by tests.
 3. `GOAL.md`, `PLAN.md`, `CONTROL.md`, `STATUS.md`, and `WORKING_MEMORY.md`
    remain namespaced under this directory.
+
+*Note added 2026-11-12:* item 3 is historical. It named five sibling files in `docs/prospective_campaign/`. Those files (`GOAL.md`, `PLAN.md`, `CONTROL.md`, `STATUS.md`, `WORKING_MEMORY.md`) are now merged into this README as the sections "Controls", "Campaign scorecard and admission rule", "Implementation plan and scope decision", "Working rule" and "Status". They remain in git history.
 
 ## Feedback loop
 
