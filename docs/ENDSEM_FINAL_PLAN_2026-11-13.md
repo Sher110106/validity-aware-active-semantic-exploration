@@ -31,8 +31,8 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [ ] Copy only YAML and stats files to the laptop (rsync include list, dry run first; never a DSG file).
 - [ ] The author's GED on the host for the new runs.
 - [ ] Rescore: budget by script as Amendment 2 A2.3 says, C2 written to file first, crashed rows pointed at the right folders, the 11-12 values for 871 marked superseded.
-- [ ] The C1 area table: navmesh island, HM3D labelled floor, waypoint grid, the paper's figure.
-- [ ] ASP on 853 to the full budget, behind the readiness check (§6). Approved 11-13.
+- [x] The C1 area table: navmesh island, HM3D labelled floor, waypoint grid, the paper's figure (`results_paper_compare_1113/c1_area_table.md`, deviation 59). The paper's figure is 2.7 and 4.0 times the navmesh island, and within 7% of the convex hull of all labelled geometry.
+- [~] ASP on 853 to the full budget, behind the readiness check (§6). Approved 11-13. Rules set and reviewed: Amendment 3 (hashed 21:20) and its Note (hashed 21:37, deviation 58). Scoring code for its own row is being added. The runs wait for the GPU.
 
 ### 3.2 Part 3: the author's defense
 
@@ -79,11 +79,11 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 ### 3.3 The talk
 
-- [~] Deck with parts 1 and 2, and part 3 slots for all four outcomes: first build done (`docs/endsem_2026-11/`, 16 slides); review and numbers to come.
-- [ ] `numbers.csv` rows for every new number.
-- [ ] Write-up section and the limits slide (§5).
-- [ ] Independent recompute of M1, M2 and M4 from raw files.
-- [ ] Opus review of the deck against its sources.
+- [~] Deck with parts 1 to 3 (`docs/endsem_2026-11/`): rebuilt after a first Opus review (20 slides), then part 3 filled from the result files (22 slides and 2 backup). Second Opus review done: no wrong number in 165 checked; wording and layout fixes in progress.
+- [x] A numbers table for every part-3 number (`results_semantic_1113/numbers_part3.csv`, 1,247 rows, built and audited by script).
+- [~] Write-up (`results_semantic_1113/RESULTS.md`, commit f5101c3) and the limits slide. Opus review: about 400 numbers traced, none wrong; eight sentences said too much and seven required items were missing. Fixes in progress.
+- [~] Independent recompute from raw files: M1 and M4 reproduced (`results_semantic_1113/independent_recompute/`); M2's summary and verdicts are being recomputed from its per-stage files.
+- [~] Opus review of the deck against its sources: done once (see above); a second look follows the fixes.
 
 ## 4. Rules for runs on the host
 
@@ -172,3 +172,8 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 20:30 and 21:05: M2 on tyrone's CPUs, both passes complete (384 stages each). True objects at true places beat random guesses by +0.218 in rank correlation with the yardstick (+0.195 to +0.241). Moved by each model's own placement error (medians 7.7 m DeepSeek, 7.1 m Haiku, 8.1 m Opus) they fall to −0.020, −0.006 and −0.029; room types alone give +0.024. Every arm reads "not shown sufficient, on a provisional yardstick".
 - 11-13 20:55-21:02: tyrone was unreachable because Cloudflare WARP on the laptop was connected and blocks Tailscale. The student said to leave WARP off until the work is done; it is to be reconnected at the end.
 - Still blocked on the GPU (another user's job holds 43 of 48 GB since about 18:05): the 871 APR-b tour, the four 871 seeds, and ASP on 853. The queue waits at its check; nothing is harmed.
+- 11-13 21:33: the part-3 write-up and its numbers table committed and pushed (f5101c3). An Opus review traced about 400 of its numbers to the result files and found none wrong. It asked for eight sentences to be cut back to what the rules allow (for example: "Rejected" means the interval rules out a gain as large as the margin, not that the model is worse) and for seven required items the scorer did not save (label shares, flag counts, the copy-the-map comparator, M2's regret figures). A lane is fixing these; the missing counts come from a supplement script that imports the frozen scorer and changes no result file.
+- 11-13 21:37: an Opus review of Amendment 3 found one false statement (the 853 full-budget runs use E1's official code path, not E1's files: three files changed since, none in the official arm) and cases the rules left open. A Note corrects and settles them, hashed 21:37:37 (67f48d61…) and pushed before any run (f9ef216, deviation 58). Each seed is now launched on its own behind checks made by hand; a run killed by another job's use of the GPU is not rerun; the dry run's cost limit is $1.00. The review projects 5 to 10 hours and $1.5 to $2.2 a run, and guesses that one run in three ends before the budget.
+- 11-13 21:41: Opus review of the deck with part 3 filled: no wrong number in about 165 checked against the raw files; three wrong labels, ten sentences that said too much (the answer slide above all), too many words on every part-3 slide, and one missing answer (why Claude, when the paper used Gemini). A lane is fixing these.
+- 11-13 21:44: the C1 area table (9b245c7, deviation 59).
+- 11-13 21:47: the GPU is still held by the other user's job (43.0 of 48 GB); the queue checks every five minutes and waits up to 72 hours. Nothing GPU-bound has moved since 18:05.
