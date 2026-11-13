@@ -87,3 +87,39 @@ Waypoints the navmesh cannot reach from the start are dropped when the list is b
 ## Note (2026-11-06 17:59 IST)
 
 The Amendment 1 heading said 17:10; the amendment was written and hashed at 17:04. The time was corrected and the hash retaken. No new run had produced any data: the queue was still waiting for GPU memory.
+
+## Amendment 2 (2026-11-13 17:54 IST, before any third attempt of an e7 871 run has started)
+
+**Why.** §2a has no rule for a run that crashes, and §2b's use rule counts waypoints, not maps. Both gaps opened on 11-09 and 11-10.
+- E7 871 seeds 42-45 crashed in two attempts each. In every attempt nvblox ran out of GPU memory and the planner lost its map. Those attempts ran beside another user's GPU job, with the queue's free-GPU check lowered from the reviewed 12 GB to 5 GB.
+- Both APR-b tours reached every waypoint, so they pass §2b's 80% rule, yet each final graph equals its stage-0 graph.
+
+A third attempt of the four seeds and a rerun of both APR-b tours were announced on 11-12 (`docs/STATUS_2026-11-12.md` §5). They were queued on 11-13 at 17:02 IST under the reviewed 12 GB check, in this order: APR-b on 853, APR-b on 871, then e7 871 seeds 42 to 45. This amendment fixes how they are read.
+
+**What had been seen when this was written (17:53 IST).**
+- The 853 APR-b rerun was running, at waypoint 72 of 85. The sizes of its saved stage graphs had been read (they grow from stage 0), and its logs had been searched for the timeout line and the out-of-memory line (neither was present).
+- The 871 APR-b rerun had not started. No third attempt of any e7 871 seed had started.
+- No rerun had been scored against any reference.
+
+**A2.1 A valid frontier-to-end run.** An e7 run counts only if all three hold:
+1. it ended by a §2a stop: its explorer log holds "Exploration complete", or the queue stopped it at the 250 m or the 4 h cap;
+2. its `logs/roslaunch.log` holds no "out of memory" line and no line saying that `nvblox_node` has died;
+3. the graph0 of its final stage differs from the graph0 of its stage 0.
+
+The test reads logs and files. It reads no score.
+
+**A2.2 Which attempt counts.** For 871 seeds 42-45 the third attempt counts if it is valid. If it is not, that seed is missing: no earlier attempt takes its place, and there is no fourth attempt. Attempts 1 and 2 stay out of every paper cell and keep their own rows (`crashed_frontier_1st`, `crashed_frontier_rerun`). An invalid third attempt is reported as `crashed_frontier_3rd`.
+
+**A2.3 Budget B, as §4 already says.** B for a scene is the median end-of-run navigation time of its valid e7 runs, once at least two exist. 871 seed 46 is valid (1,263.5 s), so one valid third attempt is enough to replace the 809.08 s fallback used on 11-12. Every 871 readout is then recomputed by script. The 11-12 values stay on file in `results_paper_compare_1112/` and are marked superseded. A run stopped by a cap enters B at its stop time and is flagged; B is also reported without such runs.
+
+**A2.4 Frozen tours.** A tour is frozen if the graph0 of its final stage holds the same object nodes (name and centre) as the graph0 of its stage 0. A frozen tour is not used, as a reference or in check C2, whatever share of its waypoints it reached. The test is applied to every tour, APR-a and APR-b alike. For every tour the report also gives: whether nvblox died, the number of "Timeout! Did not find" lines in the tour log, and the last archived stop whose graph differs from the one before it.
+
+**A2.5 The reference and C2.**
+- APR-a stays the reference on both scenes. It is not frozen and it passes §2b's use rule, so the §2b swap does not arise.
+- If an APR-b rerun is not frozen, C2 is computed for that scene and written to file before any run is rescored.
+- In both APR-a tours nvblox died partway, and each final graph lacks about the last 60 s of its tour (`results_paper_compare_1112/NOTES.md`, items 3 and 4). A C2 below 0.90 therefore mixes that damage with real movement of the reference, and the slide says so.
+- If an APR-b rerun is frozen again, C2 for that scene is reported as not computable. There is no further attempt.
+
+**A2.6 Folders.** The queue moves an older attempt aside as `*_FAILED_ATTEMPT_HHMM` before a rerun. Before any rescoring, `tools/live_policy/DEVIATIONS_NOVEMBER.md` records which folder holds each attempt.
+
+**Not changed.** §1, §3, and the readouts of §4. Like the rest of this file, the amendment tests no hypothesis.
