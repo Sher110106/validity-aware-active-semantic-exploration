@@ -70,8 +70,16 @@ FRACTIONS = (("10", 0.1), ("50", 0.5), ("100", 1.0))
 VARIANTS = (("B", 1.0), ("0.8B", 0.8), ("1.2B", 1.2))
 PRIMARY = "B"
 COUNTED_ARMS = ("official", "placebo", "filter_only", "oracle_visible")
-ARM_ORDER = ("official", "filter_only", "placebo", "oracle_visible", "frontier_60m",
+ARM_ORDER = ("official", "official_nov", "filter_only", "placebo", "oracle_visible", "frontier_60m",
              "frontier_end_ref", "frontier_end")
+# Amendment 3 and its Note: the November ASP runs on 00853 are their own arm. Only this anchored
+# name pattern picks them, and no code path pools them with October's `official` arm.
+NOV_ARM = "official_nov"
+NOV_RE = re.compile(r"^e8_00853_s(42|43|44)_official_105m(_relaunch1)?$")
+ARM_LABELS = {NOV_ARM: "ASP + DeepSeek, November"}
+NOV_SCENE = "00853"
+# Every e8 name, and its dry run, belongs to the November arm or to nothing.
+EIGHT_RE = re.compile(r"^(dryrun_)?e8_")
 REF_ORDER = ("hm3d", "apr", "frontier_made")
 
 # Pre-registered fallback: end of the frontier-made reference run (seconds).
@@ -299,8 +307,16 @@ def pick_stages(stages: list, t: float, tol: float = TIME_TOL):
     return eligible, None
 
 
-def readout(stages: list, ref_name: str, t: float, tol: float = TIME_TOL) -> dict:
+def complete_end_s(stages: list):
+    """Time of the last stage that holds navigation stats and both graph files (Amendment 3, A3.2)."""
+    ends = [s["time_s"] for s in stages if len(s["graphs"]) == 2]
+    return max(ends) if ends else float("-inf")
+
+
+def readout(stages: list, ref_name: str, t: float, tol: float = TIME_TOL, end_s=None) -> dict:
     eligible, reason = pick_stages(stages, t, tol)
+    if eligible is not None and end_s is not None and end_s < t:      # "at least B": no tolerance
+        eligible, reason = None, "run_ended_before_t"
     entry = {"t_s": t, "stage": None, "stage_time_s": None, "f1": None, "f1_runmax": None,
              "precision": None, "recall": None, "ged": None, "null_reason": reason}
     if eligible is None:
@@ -317,13 +333,13 @@ def readout(stages: list, ref_name: str, t: float, tol: float = TIME_TOL) -> dic
     return entry
 
 
-def build_readouts(stages: list, refs_for_scene: dict, budget: float, tol: float) -> dict:
+def build_readouts(stages: list, refs_for_scene: dict, budget: float, tol: float, end_s=None) -> dict:
     out = {}
     for ref_name in refs_for_scene:
         out[ref_name] = {}
         for vname, vmult in VARIANTS:
             out[ref_name][vname] = {
-                flabel: readout(stages, ref_name, budget * vmult * frac, tol)
+                flabel: readout(stages, ref_name, budget * vmult * frac, tol, end_s)
                 for flabel, frac in FRACTIONS}
     return out
 
@@ -353,8 +369,13 @@ def score_run(spec: RunSpec, refs: dict, budgets: dict, fallback_roots, tol: flo
                     "n_graphs": len(s["graphs"]), "sources": s["sources"],
                     "scores": {r: {k: v for k, v in sc.items() if k != "ged"}
                                for r, sc in s["scores"].items()}} for s in stages],
-        "readouts": build_readouts(stages, refs_for_scene, budgets[spec.scene], tol),
+        "readouts": build_readouts(stages, refs_for_scene, budgets[spec.scene], tol,
+                                   complete_end_s(stages) if spec.arm == NOV_ARM else None),
     })
+    if spec.arm == NOV_ARM:
+        end = complete_end_s(stages)
+        record["reached_end_s"] = None if end == float("-inf") else end
+        record["reached_b"] = bool(end >= budgets[spec.scene])
     return record
 
 
@@ -365,7 +386,7 @@ def score_run(spec: RunSpec, refs: dict, budgets: dict, fallback_roots, tol: flo
 def paper_method(arm: str):
     if arm.startswith("frontier"):
         return "Frontier"
-    if arm in ("official", "filter_only"):
+    if arm in ("official", "filter_only", NOV_ARM):
         return "Semantic (Ours)"
     return None
 
@@ -381,10 +402,54 @@ def _x100(entries: list, key: str) -> list:
     return [None if e[key] is None else 100.0 * e[key] for e in entries]
 
 
+def check_arm_name(arm: str, name: str, scene=None) -> None:
+    """The name guard. Any name that starts `e8_` or `dryrun_e8_` belongs to the arm `official_nov` or to no
+    arm; `official_nov` takes only a name that matches the anchored pattern, and only on scene 00853. This keeps
+    the two ASP rows apart whatever calls the code."""
+    if arm == NOV_ARM:
+        ok = bool(NOV_RE.match(name)) and (scene is None or scene == NOV_SCENE)
+    else:
+        ok = not EIGHT_RE.match(name)
+    if not ok:
+        raise ValueError(f"run {name!r} in arm {arm!r} (scene {scene!r}): names starting e8_ or dryrun_e8_ belong to the arm "
+                         f"{NOV_ARM!r} or to none; that arm takes only {NOV_RE.pattern} on scene {NOV_SCENE}")
+
+
+def _has_stage(run: Path) -> bool:
+    sd = Path(run) / "stages"
+    return sd.is_dir() and any(e.name.isdigit() for e in sd.iterdir())
+
+
+def check_nov_pairs(paths: list) -> list:
+    """One folder per seed (the Note to Amendment 3: a relaunch is allowed only when the first never started).
+
+    A relaunch beside an original that holds a stage is an error naming both. An original that holds no stage
+    is dropped, and the relaunch stays. The same folder twice is an error. Returns the folders to score."""
+    paths = [Path(p) for p in paths]
+    if len({str(p) for p in paths}) != len(paths):
+        raise ValueError("the same November run folder was given twice")
+    by_seed = {}
+    for p in paths:
+        by_seed.setdefault(NOV_RE.match(p.name).group(1), []).append(p)
+    drop = set()
+    for seed, group in by_seed.items():
+        if len(group) > 1:
+            orig = [p for p in group if not p.name.endswith("_relaunch1")]
+            relaunch = [p for p in group if p.name.endswith("_relaunch1")]
+            if len(orig) != 1 or len(relaunch) != 1:
+                raise ValueError(f"seed {seed}: more than one November folder: {', '.join(p.name for p in group)}")
+            if _has_stage(orig[0]):
+                raise ValueError(f"seed {seed}: {orig[0].name} and {relaunch[0].name} both exist and {orig[0].name} holds a stage; "
+                                 f"a relaunch is allowed only when the first never started, and no seed counts twice")
+            drop.add(str(orig[0]))
+    return [p for p in paths if str(p) not in drop]
+
+
 def aggregate(records: list) -> list:
     """Cells over (scene, arm, reference, variant, fraction); F1 values are x 100."""
     groups = {}
     for rec in records:
+        check_arm_name(rec["arm"], rec.get("run", ""), rec.get("scene"))
         for ref_name, by_variant in rec.get("readouts", {}).items():
             for vname, by_frac in by_variant.items():
                 for flabel, entry in by_frac.items():
@@ -471,11 +536,28 @@ def check_paper_table(html_path) -> dict:
 # Inputs
 # --------------------------------------------------------------------------
 
-def default_runs(root: Path, run_table: Path) -> list:
+def nov_runs(root: Path) -> list:
+    """The November ASP runs in a campaign copy, picked only by the anchored name pattern."""
+    camp = root / "runs" / "live_campaign"
+    out = []
+    if camp.is_dir():
+        for d in sorted(camp.iterdir()):
+            m = NOV_RE.match(d.name)
+            if m and d.is_dir():
+                out.append(RunSpec(d.name, NOV_ARM, "00853", d, int(m.group(1))))
+    return out
+
+
+def default_runs(root: Path, run_table: Path, nov: bool = True) -> list:
+    """October's counted runs, the e4 runs and the reference runs. `nov` is kept for old callers and does nothing:
+    a November run enters only through --add-run, built by rescore_paper.py after its A3.2 checks."""
     runs, seen = [], set()
     with open(run_table, newline="") as f:
         for row in csv.DictReader(f):
             name = row["run"]
+            if EIGHT_RE.match(name):
+                raise ValueError(f"run table row {name!r}: an e8 run is scored as the arm {NOV_ARM!r} through "
+                                 f"--add-run, never from the run table")
             if row["status"].strip() != "counted" or row["arm"] not in COUNTED_ARMS or name in seen:
                 continue
             seen.add(name)
@@ -544,6 +626,10 @@ def _fmt(s: dict, n_runs: int) -> str:
     return f"{s['mean']:.1f} [{s['min']:.1f}-{s['max']:.1f}] {n}"
 
 
+def _label(arm):
+    return ARM_LABELS.get(arm, arm)
+
+
 def _arm_key(arm):
     return (ARM_ORDER.index(arm) if arm in ARM_ORDER else len(ARM_ORDER), arm)
 
@@ -576,7 +662,7 @@ def build_markdown(result: dict) -> str:
         for scene, arm in sorted({(c["scene"], c["arm"]) for c in sel}, key=lambda k: (k[0], _arm_key(k[1]))):
             row = {c["fraction"]: c for c in sel if c["scene"] == scene and c["arm"] == arm}
             method = paper_method(arm)
-            parts = [scene, arm, PAPER_LABELS.get(method, "none") if method else "none"]
+            parts = [scene, _label(arm), PAPER_LABELS.get(method, "none") if method else "none"]
             for flabel, _ in FRACTIONS:
                 c = row[flabel]
                 parts.append(_fmt(c["stage_value_x100"], c["n_runs"]))
@@ -587,7 +673,7 @@ def build_markdown(result: dict) -> str:
                   "|---|---|---|---|---|---|---|---|"]
         sens = [c for c in cells if c["reference"] == ref_name and c["variant"] != PRIMARY]
         for scene, arm in sorted({(c["scene"], c["arm"]) for c in sens}, key=lambda k: (k[0], _arm_key(k[1]))):
-            parts = [scene, arm]
+            parts = [scene, _label(arm)]
             for vname in ("0.8B", "1.2B"):
                 for flabel, _ in FRACTIONS:
                     c = next(c for c in sens if (c["scene"], c["arm"], c["variant"], c["fraction"]) == (scene, arm, vname, flabel))
@@ -608,7 +694,7 @@ def build_markdown(result: dict) -> str:
                       "|---|---|---|---|---|---|---|---|"]
             for scene, arm in sorted({(c["scene"], c["arm"]) for c in sel}, key=lambda k: (k[0], _arm_key(k[1]))):
                 row = {c["fraction"]: c for c in sel if c["scene"] == scene and c["arm"] == arm}
-                parts = [scene, arm]
+                parts = [scene, _label(arm)]
                 for flabel, _ in FRACTIONS:
                     g = row[flabel]["ged"]
                     parts.append("null" if not g["n"] else
@@ -624,19 +710,28 @@ def build_markdown(result: dict) -> str:
     for r in sorted(result["seconds_per_metre"], key=lambda r: (r["scene"], _arm_key(r["arm"]))):
         s = r["sec_per_m"]
         if s["n"] == 0:
-            lines.append(f"| {r['scene']} | {r['arm']} | {r['n_runs']} | null | null | null |")
+            lines.append(f"| {r['scene']} | {_label(r['arm'])} | {r['n_runs']} | null | null | null |")
             continue
-        lines.append(f"| {r['scene']} | {r['arm']} | {r['n_runs']} | {s['mean']:.2f} [{s['min']:.2f}-{s['max']:.2f}] "
+        lines.append(f"| {r['scene']} | {_label(r['arm'])} | {r['n_runs']} | {s['mean']:.2f} [{s['min']:.2f}-{s['max']:.2f}] "
                      f"| {r['final_time_s']['mean']:.1f} | {r['final_path_m']['mean']:.1f} |")
     asp = _span(result["seconds_per_metre"], COUNTED_ARMS)
     frontier = _span(result["seconds_per_metre"], ("frontier_60m",))
+    nov_rows = [r for r in result["seconds_per_metre"] if r["arm"] == NOV_ARM]
+    if nov_rows:
+        nov = _span(nov_rows, (NOV_ARM,))
+        asp_note = ("- October's ASP runs stop at 60 m of path" + (f", which took {asp} here" if asp else "")
+                    + f". The row \"{ARM_LABELS[NOV_ARM]}\" ran to about 105 m of path" + (f" ({nov})" if nov else "")
+                    + ". A run has no value at a t past its last stage, so an October run's 100% readout is null, "
+                    "a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.")
+    else:
+        asp_note = ("- ASP runs stop at 60 m of path" + (f", which took {asp} here" if asp else "")
+                    + ". A run has no value at a t past its last stage, so its 100% readout is null, "
+                    "and a 50% readout is null when the run ended sooner.")
     lines += ["", "## Not comparable", "",
               "- The references differ. The paper scores against a hand-driven full-scene map. "
               "We use the HM3D human-label map, the frontier-made map (biased toward frontier), "
               "and a coverage-tour map when one exists.",
-              "- ASP runs stop at 60 m of path" + (f", which took {asp} here" if asp else "")
-              + ". A run has no value at a t past its last stage, so its 100% readout is null, "
-              "and a 50% readout is null when the run ended sooner.",
+              asp_note,
               "- The e4 frontier runs stop at 60 m too" + (f" ({frontier})" if frontier else "")
               + ", so their 100% readout is null as well. Only the frontier-to-end runs reach B.",
               "- Navigation time counts moving time only, so it depends on seconds per metre, which differs by arm.",
@@ -678,6 +773,8 @@ def main(argv=None) -> int:
     ap.add_argument("--add-run", action="append", metavar="ARM=SCENE=PATH",
                     help="score one more run dir under an arm label (repeatable)")
     ap.add_argument("--no-default-runs", action="store_true", help="score only the --add-run runs")
+    ap.add_argument("--no-nov-default", action="store_true",
+                    help="no effect (kept for old command lines): e8 runs are never picked from --root")
     ap.add_argument("--apr", action="append", metavar="SCENE=PATH",
                     help="coverage-tour reference: a graph0 YAML or a tour run dir (repeatable)")
     ap.add_argument("--fallback-root", action="append", type=Path,
@@ -707,7 +804,25 @@ def main(argv=None) -> int:
         if len(parts) != 3:
             sys.exit(f"--add-run: expected ARM=SCENE=PATH, got {item!r}")
         arm, scene, path = parts
-        specs.append(RunSpec(Path(path).name, arm, scene, Path(path)))
+        name = Path(path).name
+        try:
+            check_arm_name(arm, name, scene)
+        except ValueError as e:
+            sys.exit(f"--add-run: {e}")
+        if arm == NOV_ARM:
+            specs.append(RunSpec(name, arm, scene, Path(path), int(NOV_RE.match(name).group(1))))
+            continue
+        specs.append(RunSpec(name, arm, scene, Path(path)))
+    nov_specs = [sp for sp in specs if sp.arm == NOV_ARM]
+    if nov_specs:
+        try:
+            kept = {str(p) for p in check_nov_pairs([sp.path for sp in nov_specs])}
+        except ValueError as e:
+            sys.exit(f"--add-run: {e}")
+        specs = [sp for sp in specs if sp.arm != NOV_ARM or str(sp.path) in kept]
+    left = [sp.name for sp in nov_runs(args.root) if sp.name not in {x.name for x in specs}]
+    if left:
+        print("not scored here: November runs are assessed by rescore_paper.py: " + ", ".join(left), file=sys.stderr)
     if not specs:
         sys.exit("no runs to score")
     no_budget = sorted({s.scene for s in specs} - set(budgets))

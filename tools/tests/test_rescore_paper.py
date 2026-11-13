@@ -780,3 +780,339 @@ def test_ged_state_is_read_from_rc_and_process_not_guessed():
 def test_recheck_runs_only_when_asked():
     assert rp.build_parser().parse_args([]).ged_recheck == 0
     assert rp.build_parser().parse_args(["--ged-recheck", "2"]).ged_recheck == 2
+
+
+# =====================================================================================
+# The November ASP row (Amendment 3 and its Note)
+# =====================================================================================
+
+import hashlib  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+import paper_compare as pcmp  # noqa: E402
+
+B853 = 632.1750566959381
+E8 = "e8_00853_s{}_official_105m"
+MODEL = "deepseek/deepseek-v4.1-flash-1017"
+
+
+def _e8_run(camp, name, end_s=700.0, oom=False, died=False, usage="ok", dropped=False, last_g1=True, marker=None, marker_in_run=False,
+            policy=True, bad_policy_line=False):
+    """A November run folder as the copy step brings it over."""
+    run = camp / name
+    for n, (m, t) in enumerate([(0, 0.0), (30, 200.0), (60, 400.0), (90, 500.0), (100, 580.0), (105, end_s)]):
+        d = run / "stages" / str(n)
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "navigation_stats.json").write_text(json.dumps({"total_path_length_meters": m, "total_navigation_time_seconds": t}))
+        for gi in (0, 1):
+            if gi == 1 and n == 5 and not last_g1:
+                continue
+            graph(d / f"habitat_scene_graph_original_graph{gi}.yaml", [("bed", 0.0)])
+        avail = 1 if dropped else 4
+        if policy:
+            (d / "live_policy.jsonl").write_text(json.dumps({"tracks": {"0": {"available": avail}, "1": {"available": avail}}}) + "\n"
+                                                 + ("{broken\n" if bad_policy_line and n == 3 else ""))
+    log = run / "logs"
+    log.mkdir(parents=True, exist_ok=True)
+    lines = ["... logging to /root/.ros/log", "process[nvblox_node-3]: started"]
+    if oom:
+        lines.append("[nvblox_node-3] CUDA error: Out Of Memory in allocation")
+    if died:
+        lines.append("[nvblox_node-3] process has died [pid 123, exit code -11]")
+    (log / "roslaunch.log").write_text("\n".join(lines) + "\n")
+    if usage is not None:
+        (run / "prompts").mkdir(exist_ok=True)
+        rec = {"status": 200, "provider": "DeepInfra", "model": MODEL}
+        if usage == "other_provider":
+            rec["provider"] = "Together"
+        if usage == "other_model":
+            rec["model"] = "deepseek/deepseek-v3"
+        text = json.dumps(rec) + "\n" + json.dumps({"status": 429, "provider": None}) + "\n"
+        if usage == "broken_line_hides_foreign_call":      # the reader of the runner stops at the broken line
+            text = json.dumps(rec) + "\n{not json\n" + json.dumps(dict(rec, provider="Together")) + "\n"
+        if usage == "empty":
+            text = ""
+        (run / "prompts" / "usage.jsonl").write_text(text)
+    if marker:
+        target = run if marker_in_run else camp
+        (target / f"EXCLUDED_{name}.json").write_text(json.dumps({"reason": marker}))
+    return run
+
+
+def test_three_valid_runs_all_count_and_all_reached_b(tmp_path):
+    out = []
+    for s in (42, 43, 44):
+        out.append(rp.assess_e8(_e8_run(tmp_path, E8.format(s)), B853, tmp_path))
+    assert [a["counts_in_cells"] for a in out] == [True] * 3 and [a["reached_b"] for a in out] == [True] * 3
+    assert all(a["reasons"] == [] and not a["open"] for a in out)
+
+
+def test_a_run_one_short_of_b_counts_in_cells_but_has_no_100(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), end_s=632.0), B853, tmp_path)
+    assert a["counts_in_cells"] and a["reached_b"] is False and a["end_s"] == 632.0
+    assert any("no 100% value" in n for n in a["notes"])
+
+
+
+
+def test_the_last_stage_needs_both_graph_files_to_reach_b(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), end_s=700.0, last_g1=False), B853, tmp_path)
+    assert a["reached_b"] is False and a["end_s"] == 580.0
+
+
+def test_out_of_memory_line_leaves_the_run_out_with_the_reason(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), oom=True), B853, tmp_path)
+    assert a["counts_in_cells"] is False and any("out of memory" in r for r in a["reasons"])
+
+
+def test_nvblox_death_line_leaves_the_run_out(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), died=True), B853, tmp_path)
+    assert a["counts_in_cells"] is False and any("nvblox" in r for r in a["reasons"])
+
+
+def test_excluded_marker_in_the_campaign_folder_or_in_the_run_leaves_the_run_out(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), marker="provider_violation"), B853, tmp_path)
+    assert a["counts_in_cells"] is False and any("EXCLUDED" in r and "provider_violation" in r for r in a["reasons"])
+    b = rp.assess_e8(_e8_run(tmp_path, E8.format(43), marker="dropped_members", marker_in_run=True), B853, tmp_path)
+    assert b["counts_in_cells"] is False and any("EXCLUDED" in r for r in b["reasons"])
+
+
+@pytest.mark.parametrize("kw,word", [({"usage": "other_provider"}, "provider"), ({"usage": "other_model"}, "provider"),
+                                     ({"dropped": True}, "dropped"), ({"usage": None}, "usage.jsonl")])
+def test_the_e1_gates_are_reused_for_provider_model_and_dropped_members(tmp_path, kw, word):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), **kw), B853, tmp_path)
+    assert a["counts_in_cells"] is False and any(word in r for r in a["reasons"])
+
+
+def test_the_exclusion_code_is_the_runners_own():
+    import live_runner
+    assert rp.REQUIRED_PROVIDER is live_runner.REQUIRED_PROVIDER or rp.REQUIRED_PROVIDER == live_runner.REQUIRED_PROVIDER == "DeepInfra"
+    assert live_runner.MAX_DROPPED_FRACTION == 0.5 and live_runner.REQUIRED_MODEL_TAG in MODEL
+
+
+def test_a_relaunch1_name_is_assessed_like_any_other(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(44) + "_relaunch1"), B853, tmp_path)
+    assert a["run"] == E8.format(44) + "_relaunch1" and a["counts_in_cells"]
+
+
+def test_a_run_with_an_active_marker_is_open_and_not_scored(tmp_path):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42)), B853, tmp_path, active=True)
+    assert a["open"] is True and a["counts_in_cells"] is False
+
+
+# --- the host listing, the dry run and zero runs ---------------------------------------------------
+
+LISTING = "\n".join(["e1_00853_s42_official_60m", E8.format(42), E8.format(43) + "_relaunch1", "dryrun_e8_00853_s42_official_5m",
+                     ".active_" + E8.format(43) + "_relaunch1", "EXCLUDED_" + E8.format(42) + ".json", "e8_00853_s42_official_105m_relaunch2",
+                     ".active_dryrun_e8_00853_s42_official_5m", "EXCLUDED_e3_00853_s43_oracle_visible_60m.json"])
+
+
+def test_listing_picks_by_the_anchored_pattern_and_never_the_dry_run():
+    l = rp.parse_e8_listing(LISTING)
+    assert l["runs"] == [E8.format(42), E8.format(43) + "_relaunch1"]
+    assert l["active"] == [E8.format(43) + "_relaunch1"] and l["excluded"] == [E8.format(42)]
+    assert rp.parse_e8_listing("")["runs"] == []
+    assert rp.e8_copy_folders(l) == ["live_campaign/" + E8.format(42)]       # the running one is not copied
+
+
+def test_e8_copy_rules_bring_the_extra_files_and_never_a_dsg_file():
+    rules = rp.e8_rsync_rules(["live_campaign/" + E8.format(42)], [E8.format(42)])
+    f = "live_campaign/" + E8.format(42)
+    for want in (f"--include=/{f}/stages/*/live_policy.jsonl", f"--include=/{f}/prompts/usage.jsonl",
+                 f"--include=/{f}/logs/roslaunch.log", f"--include=/{f}/stages/*/navigation_stats.json",
+                 f"--include=/live_campaign/EXCLUDED_{E8.format(42)}.json"):
+        assert want in rules
+    assert rules[-1] == "--exclude=*" and not any("dsg" in r.lower() or "prompts_responses" in r for r in rules)
+
+
+def test_transfer_list_for_e8_allows_its_files_and_still_refuses_dsg_and_prompts():
+    ok = ["live_campaign/x/prompts/usage.jsonl", "live_campaign/x/logs/roslaunch.log", "live_campaign/x/stages/0/live_policy.jsonl",
+          "live_campaign/EXCLUDED_" + E8.format(42) + ".json"]
+    assert rp.check_transfer_list(ok, allowed=rp.ALLOWED_E8) == ok
+    for bad in ("live_campaign/x/prompts/prompts_responses.jsonl", "live_campaign/x/stages/0/foo_dsg.json.zst", "live_campaign/x/config/commit.txt"):
+        with pytest.raises(ValueError):
+            rp.check_transfer_list([bad], allowed=rp.ALLOWED_E8)
+    with pytest.raises(ValueError):
+        rp.check_transfer_list(ok[:1])               # the default list does not take usage.jsonl
+
+
+def test_e8_copy_goes_through_staging_and_stops_if_the_listing_moves(tmp_path, monkeypatch):
+    monkeypatch.setattr(rp, "NEW_COPY", tmp_path)
+    f = "live_campaign/" + E8.format(42)
+    files = [f"{f}/stages/0/navigation_stats.json"]
+    before = ([], frozenset({E8.format(42)}))
+    got = rp.copy_settled([f], None, "S", before, lambda: before, _fake_rsync(files),
+                          rules_fn=lambda fs: rp.e8_rsync_rules(fs, []))
+    assert got == files and (tmp_path / files[0]).read_text() == "NEW"
+    assert not list(tmp_path.rglob(".rescore_attempt.json"))              # no launch marker for e8
+    (tmp_path / files[0]).write_text("OLD")
+    moved = ([], frozenset({E8.format(42), ".active_" + E8.format(43)}))
+    with pytest.raises(rp.HostError, match="changed during the copy"):
+        rp.copy_settled([f], None, "S2", before, lambda: moved, _fake_rsync(files), rules_fn=lambda fs: rp.e8_rsync_rules(fs, []))
+    assert (tmp_path / files[0]).read_text() == "OLD"
+
+
+def test_e8_runs_go_to_the_ged_job_and_an_empty_one_does_not():
+    w = [{"folder": "live_campaign/" + E8.format(42), "scene": "00853", "path": "p"},
+         {"folder": "live_campaign/" + E8.format(43), "scene": "00853", "path": "q"}]
+    reuse, compute = rp.plan_ged(w, ged_pool([]), lambda p: [{"stage": 0, "path_m": 0.0, "nav_s": 0.0}] if p == "p" else [])
+    assert reuse == [] and [x["folder"] for x in compute] == ["live_campaign/" + E8.format(42)]
+
+
+# --- scoring command, notes, and "no e8 run: nothing changes" -------------------------------------------
+
+ROWS = {"frontier_end": [("00853", "frontier_seeds/e7_00853_s42_frontier_end"), ("00871", "frontier_seeds/e7_00871_s46_frontier_end")],
+        "crashed_frontier_1st": [("00871", "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213")]}
+BUD = {"00853": {"primary_s": B853, "with_capped_s": B853}, "00871": {"primary_s": 809.084, "with_capped_s": 809.084}}
+
+
+def test_score_command_without_november_runs_is_the_one_written_before_the_arm():
+    argv = rp.build_score_argv(Path("/o"), ROWS, BUD, "primary_s", Path("/g.json"), [])
+    N = rp.NEW_COPY
+    assert argv == [sys.executable, str(rp.LIVE / "paper_compare.py"), "--out-dir", "/o",
+                    "--add-run", f"frontier_end=00853={N}/frontier_seeds/e7_00853_s42_frontier_end",
+                    "--add-run", f"frontier_end=00871={N}/frontier_seeds/e7_00871_s46_frontier_end",
+                    "--add-run", f"crashed_frontier_1st=00871={N}/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+                    "--apr", f"00853={N}/apr/apr_00853_a", "--budget", "00853=632.1750566959381",
+                    "--apr", f"00871={N}/apr/apr_00871_a", "--budget", "00871=809.084", "--ged-json", "/g.json"]
+
+
+
+
+def _hash(s):
+    return hashlib.sha256(s.encode()).hexdigest()
+
+
+def test_notes_without_november_runs_are_byte_identical_to_before():
+    old = {"00853": 632.0, "00871": 809.084}
+    assert _hash(rp.write_notes(_summary(False), _cmp(False), dict(old), None)) == \
+        "2361077538a0d44231a34ebe3412e1e26d20ff8723f72ec75a692b9155eff45a"
+    s, c = _final([True] * 4)
+    assert _hash(rp.write_notes(s, c, dict(old), None)) == "4f5f26500ebeb90c420cd8cd5b9fb6f9e0f995f23082d2c2bd085028f2830115"
+    s, c = _final([False] * 4)
+    assert _hash(rp.write_notes(s, c, dict(old), None)) == "348e1630b26a5d9aa281a01ad7ad5d06d6a27d65bcfde0e1f95f7a8d7bfebfb5"
+
+
+def _nov_state(tmp_path):
+    runs = [rp.assess_e8(_e8_run(tmp_path, E8.format(42)), B853, tmp_path),
+            rp.assess_e8(_e8_run(tmp_path, E8.format(43), end_s=600.0), B853, tmp_path),
+            rp.assess_e8(_e8_run(tmp_path, E8.format(44), oom=True), B853, tmp_path)]
+    return {"B_s": B853, "runs": runs, "listing": {"runs": [r["run"] for r in runs], "active": [], "excluded": []}}
+
+
+def test_notes_list_the_november_runs_and_say_why_one_is_left_out(tmp_path):
+    s = _summary(False)
+    s["nov"] = _nov_state(tmp_path)
+    text = rp.write_notes(s, _cmp(False), {"00853": 632.0, "00871": 809.084}, None)
+    sec = text.split("## November ASP row")[1].split("\n## ")[0]
+    assert E8.format(42) in sec and E8.format(43) in sec and E8.format(44) in sec
+    assert "no 100% value" in sec and "out of memory" in sec and "2 of 3" in sec
+    assert "not pooled" in sec.lower() or "never pooled" in sec.lower()
+
+
+def test_notes_say_when_none_of_the_three_runs_exists_yet():
+    s = _summary(False)
+    s["nov"] = {"B_s": B853, "runs": [], "listing": {"runs": [], "active": [], "excluded": []}}
+    text = rp.write_notes(s, _cmp(False), {"00853": 632.0, "00871": 809.084}, None)
+    assert "0 of 3" in text.split("## November ASP row")[1]
+
+
+# =====================================================================================
+# Review round on the November row
+# =====================================================================================
+
+def test_b_is_pinned_at_the_figure_of_a3_3_and_a_pipeline_b_that_moved_stops_the_run(tmp_path):
+    run = _e8_run(tmp_path, E8.format(42), end_s=700.0)
+    assert rp.assess_e8(run, B853, tmp_path)["reached_b"] is True           # 632.17505669, the figure rounded to 632.1751
+    with pytest.raises(rp.HostError) as e:
+        rp.assess_e8(run, 640.0, tmp_path)
+    assert "640.0" in str(e.value) and "632.1751" in str(e.value)
+    with pytest.raises(rp.HostError):
+        rp.check_nov_b(632.2)
+    assert rp.check_nov_b(632.1751) is None and rp.check_nov_b(B853) is None
+
+
+@pytest.mark.parametrize("end,reached", [(632.1750, False), (632.17505, False), (632.1751, True), (700.0, True)])
+def test_reached_b_means_at_least_632_1751_with_no_slack(tmp_path, end, reached):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), end_s=end), B853, tmp_path)
+    assert a["reached_b"] is reached
+
+
+@pytest.mark.parametrize("kw,what", [({"policy": False}, "live_policy.jsonl"), ({"bad_policy_line": True}, "live_policy.jsonl"),
+                                     ({"usage": "broken_line_hides_foreign_call"}, "usage.jsonl"), ({"usage": "empty"}, "usage.jsonl")])
+def test_the_borrowed_checks_fail_closed_on_a_broken_copy(tmp_path, kw, what):
+    a = rp.assess_e8(_e8_run(tmp_path, E8.format(42), **kw), B853, tmp_path)
+    assert a["counts_in_cells"] is False
+    assert any(r.startswith("cannot check:") and what in r for r in a["reasons"])
+
+
+def test_a_clean_copy_still_passes_the_closed_checks(tmp_path):
+    assert rp.assess_e8(_e8_run(tmp_path, E8.format(42)), B853, tmp_path)["reasons"] == []
+
+
+# --- a relaunch beside its original ----------------------------------------------------------------
+
+def test_a_started_original_beside_its_relaunch_stops_the_run_and_names_both(tmp_path):
+    _e8_run(tmp_path, E8.format(42))
+    _e8_run(tmp_path, E8.format(42) + "_relaunch1")
+    listing = {"runs": [E8.format(42), E8.format(42) + "_relaunch1"], "active": [], "excluded": []}
+    with pytest.raises(rp.HostError) as e:
+        rp.e8_runs_to_assess(tmp_path, listing)
+    assert E8.format(42) in str(e.value) and "_relaunch1" in str(e.value)
+
+
+def test_an_original_that_never_started_gives_way_to_its_relaunch(tmp_path):
+    (tmp_path / E8.format(42) / "config").mkdir(parents=True)
+    _e8_run(tmp_path, E8.format(42) + "_relaunch1")
+    _e8_run(tmp_path, E8.format(43))
+    listing = {"runs": [E8.format(42), E8.format(42) + "_relaunch1", E8.format(43)], "active": [], "excluded": []}
+    names, never = rp.e8_runs_to_assess(tmp_path, listing)
+    assert names == [E8.format(42) + "_relaunch1", E8.format(43)] and never == [E8.format(42)]
+
+
+# --- stale markers and the listing call ------------------------------------------------------------------
+
+AGES = "\n=====AGES=====\n1000000\n.active_{} 996400\n.active_{} 900000\n"
+
+
+def test_listing_reads_marker_ages_from_the_hosts_own_clock_and_flags_the_old_ones():
+    n42, n43 = E8.format(42), E8.format(43)
+    text = "\n".join([n42, n43, ".active_" + n42, ".active_" + n43]) + AGES.format(n42, n43)
+    l = rp.parse_e8_listing(text)
+    assert l["active"] == [n42, n43] and l["ages_s"] == {n42: 3600, n43: 100000}
+    assert l["stale"] == [n43]                                  # older than 13 hours
+    assert rp.parse_e8_listing(n42 + "\n")["stale"] == [] and rp.STALE_MARKER_S == 13 * 3600
+
+
+def test_notes_flag_a_stale_marker_for_a_hand_check_and_keep_the_run_unscored(tmp_path):
+    n43 = E8.format(43)
+    a = rp.assess_e8(_e8_run(tmp_path, n43), B853, tmp_path, active=True)
+    s = _summary(False)
+    s["nov"] = {"B_s": B853, "runs": [a], "listing": {"runs": [n43], "active": [n43], "excluded": [], "stale": [n43],
+                                                      "ages_s": {n43: 100000}}}
+    text = rp.write_notes(s, _cmp(False), {"00853": 632.0, "00871": 809.084}, None)
+    sec = text.split("## November ASP row")[1].split("\n## ")[0]
+    assert "stale marker: check by hand" in sec and n43 in sec and a["counts_in_cells"] is False
+    s["nov"]["listing"]["stale"] = []
+    assert "stale marker" not in rp.write_notes(s, _cmp(False), {"00853": 632.0, "00871": 809.084}, None)
+
+
+def test_the_listing_fails_loudly_and_every_mode_has_other_ssh_calls(monkeypatch):
+    class R:
+        returncode, stdout, stderr = 1, "", "boom"
+    monkeypatch.setattr(rp, "ssh", lambda *a, **k: R())
+    with pytest.raises(rp.HostError):
+        rp.fetch_e8_listing()
+    cmds = []
+
+    class OK:
+        returncode, stdout, stderr = 0, "", ""
+    monkeypatch.setattr(rp, "ssh", lambda c, *a, **k: cmds.append(c) or OK())
+    rp.fetch_e8_listing()
+    assert "stat" in cmds[0] and "date +%s" in cmds[0]
+
+
+def test_score_command_has_no_default_pick_flag_even_with_november_runs():
+    argv = rp.build_score_argv(Path("/o"), ROWS, BUD, "primary_s", Path("/g.json"), [rp.NEW_COPY / "live_campaign" / E8.format(42)])
+    assert f"official_nov=00853={rp.NEW_COPY}/live_campaign/{E8.format(42)}" in argv
+    assert "--no-nov-default" not in argv and argv.count("--add-run") == 4

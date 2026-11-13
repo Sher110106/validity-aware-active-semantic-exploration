@@ -40,6 +40,10 @@ sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 LIVE = HERE.parent
 sys.path.insert(0, str(LIVE))
+sys.path.insert(1, str(HERE))
+import live_runner  # noqa: E402  (October's exclusion gates: provider, model, dropped members)
+from live_runner import (ENSEMBLE_SLOTS, MAX_DROPPED_FRACTION, MIN_STAGES_FOR_DROP_GATE,  # noqa: E402
+                         REQUIRED_MODEL_TAG, REQUIRED_PROVIDER, Runner)
 
 HOST = "tyrone"
 WS = "/home/sher/active-semantic-perception-workspace"
@@ -67,6 +71,15 @@ CRASH_ARM = {1: "crashed_frontier_1st", 2: "crashed_frontier_rerun", 3: "crashed
 CAP_REASON = re.compile(r"^(path_cap_250m|wall_clock_4h)")
 ALLOWED_FILES = re.compile(r"^(habitat_scene_graph_original_graph\d*\.yaml|navigation_stats\.json|"
                            r"tour_summary\.json|waypoints\.json)$")
+# The November ASP runs (Amendment 3 and its Note). Their files come from runs/live_campaign/.
+ALLOWED_E8 = re.compile(r"^(habitat_scene_graph_original_graph\d*\.yaml|navigation_stats\.json|live_policy\.jsonl|usage\.jsonl|"
+                        r"roslaunch\.log|EXCLUDED_e8_00853_s(42|43|44)_official_105m(_relaunch1)?\.json)$")
+NOV_SCENE = "00853"
+# A3.3 fixes B for the November runs at 632.1751 s, the figure of 11-12 (the pipeline's own B is 632.17505669...,
+# which rounds to it). The pipeline's B must agree to 1e-4: a B that moved stops the November row.
+NOV_B_S = 632.1751
+NOV_B_PIN_TOL = 1e-4
+STALE_MARKER_S = 13 * 3600     # a .active_ marker older than the 12 h run limit plus an hour
 DAMAGE_NOTE = ("In both APR-a tours nvblox died partway, and each final graph lacks about the last 60 s of its "
                "tour (results_paper_compare_1112/NOTES.md, items 3 and 4). A C2 below 0.90 therefore mixes that "
                "damage with real movement of the reference, and the slide says so.")
@@ -625,8 +638,9 @@ def rsync_rules(folders: list) -> list:
     return rules
 
 
-def check_transfer_list(lines: list) -> list:
+def check_transfer_list(lines: list, allowed=None) -> list:
     """Read the file list of a dry run. Raise on any file outside the include list, and on any dsg file."""
+    allowed = allowed or ALLOWED_FILES
     files = []
     for raw in lines:
         line = raw.strip()
@@ -635,14 +649,14 @@ def check_transfer_list(lines: list) -> list:
         if line.endswith("/") or line == ".":
             continue
         base = line.rsplit("/", 1)[-1]
-        if "dsg" in line.lower() or not ALLOWED_FILES.match(base):
+        if "dsg" in line.lower() or not allowed.match(base):
             raise ValueError(f"the rsync file list holds a file outside the include list: {line!r}")
         files.append(line)
     return files
 
 
-def rsync_cmd(folders: list, dry: bool, dest: Path | None = None) -> list:
-    cmd = ["rsync", "-rt", "-v"] + (["-n"] if dry else []) + rsync_rules(folders)
+def rsync_cmd(folders: list, dry: bool, dest: Path | None = None, rules: list | None = None) -> list:
+    cmd = ["rsync", "-rt", "-v"] + (["-n"] if dry else []) + (rules if rules is not None else rsync_rules(folders))
     return cmd + ["-e", "ssh -o BatchMode=yes -o ConnectTimeout=20", f"{HOST}:{WS}/runs/", str(dest or NEW_COPY) + "/"]
 
 
@@ -678,39 +692,49 @@ def _run_rsync(cmd: list, dry: bool):
     return subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
 
 
-def copy_settled(folders: list, attempts: dict, stamp: str, before: tuple, fetch_state, run_rsync=_run_rsync) -> list:
+def copy_settled(folders: list, attempts, stamp: str, before: tuple, fetch_state, run_rsync=_run_rsync,
+                 rules_fn=None, allowed=None) -> list:
     """Copy into a staging folder, read the queue again, and merge only if nothing changed.
 
     `before` is (events, existing) read before the copy. A launch, a finish, a conversion or a
     rename during the copy stops the run with the local copy untouched, so files of a new attempt
-    never land in the folder of an old one."""
+    never land in the folder of an old one. `attempts` None means no launch markers (the e8 runs);
+    `rules_fn` and `allowed` swap in the e8 include list and file names."""
     if not folders:
         return []
+    rules = rules_fn(folders) if rules_fn else None
     staging = NEW_COPY / f"_incoming_{stamp}"
     shutil.rmtree(staging, ignore_errors=True)
     staging.mkdir(parents=True)
     try:
-        dry = run_rsync(rsync_cmd(folders, True, staging), True)
+        dry = run_rsync(rsync_cmd(folders, True, staging, rules), True)
         if dry.returncode != 0:
             raise HostError("rsync dry run failed: " + dry.stderr[:500])
-        files = check_transfer_list(dry.stdout.splitlines())
-        real = run_rsync(rsync_cmd(folders, False, staging), False)
+        files = check_transfer_list(dry.stdout.splitlines(), allowed)
+        real = run_rsync(rsync_cmd(folders, False, staging, rules), False)
         if real.returncode != 0:
             raise HostError("rsync failed: " + real.stderr[:500])
-        check_transfer_list(real.stdout.splitlines())
+        check_transfer_list(real.stdout.splitlines(), allowed)
         after = fetch_state()
         if state_key(*after) != state_key(*before):
             raise HostError("the queue launched, finished, converted or renamed something during the copy "
                             "(it changed during the copy); nothing was merged into the local copy. Run again.")
-        launch = {a["folder"]: a for rows in attempts.values() for a in rows if a["folder"]}
+        launch = ({a["folder"]: a for rows in attempts.values() for a in rows if a["folder"]}
+                  if attempts is not None else {})
         for f in folders:
             src = staging / f
             if src.exists():
                 shutil.copytree(src, NEW_COPY / f, dirs_exist_ok=True)
-            a = launch[f]
-            (NEW_COPY / f).mkdir(parents=True, exist_ok=True)
-            (NEW_COPY / f / ".rescore_attempt.json").write_text(
-                json.dumps({"name": a["name"], "launch_ts": a["launch_ts"], "attempt": a["attempt"], "settled": True}))
+            if attempts is not None:
+                a = launch[f]
+                (NEW_COPY / f).mkdir(parents=True, exist_ok=True)
+                (NEW_COPY / f / ".rescore_attempt.json").write_text(
+                    json.dumps({"name": a["name"], "launch_ts": a["launch_ts"], "attempt": a["attempt"], "settled": True}))
+        # the e8 folders and markers sit directly under live_campaign/: bring the markers too
+        if attempts is None:
+            for m in (staging / "live_campaign").glob("EXCLUDED_*.json") if (staging / "live_campaign").is_dir() else []:
+                (NEW_COPY / "live_campaign").mkdir(parents=True, exist_ok=True)
+                shutil.copy2(m, NEW_COPY / "live_campaign" / m.name)
         return files
     finally:
         shutil.rmtree(staging, ignore_errors=True)
@@ -757,6 +781,200 @@ def reconcile_local_copy(attempt_map: dict, stamp: str) -> list:
                 local.rename(dest)
                 moves.append({"from": str(local), "to": str(dest), "why": "owner folder not found or taken"})
     return moves
+
+
+# --------------------------------------------------------------------------
+# The November ASP runs (Amendment 3, its Note): listing, copy, validity
+# --------------------------------------------------------------------------
+
+def parse_e8_listing(text: str) -> dict:
+    """The e8 runs, running-markers and EXCLUDED markers in runs/live_campaign/, picked only by the
+    anchored name pattern. A dry run (dryrun_e8_...) matches nothing. After an `=====AGES=====` line the
+    host's clock and each marker's modification time give the marker's age on the host's own clock."""
+    import paper_compare as pc
+    text, _, ages_text = text.partition("=====AGES=====\n")
+    names = [l.strip() for l in text.splitlines() if l.strip()]
+    runs = sorted({n for n in names if pc.NOV_RE.match(n)})
+    active = sorted({n[len(".active_"):] for n in names if n.startswith(".active_") and pc.NOV_RE.match(n[len(".active_"):])})
+    excluded = sorted({n[len("EXCLUDED_"):-len(".json")] for n in names
+                       if n.startswith("EXCLUDED_") and n.endswith(".json") and pc.NOV_RE.match(n[len("EXCLUDED_"):-len(".json")])})
+    ages = {}
+    lines = [l.split() for l in ages_text.splitlines() if l.strip()]
+    if lines and len(lines[0]) == 1 and lines[0][0].isdigit():
+        now = int(lines[0][0])
+        for w in lines[1:]:
+            if len(w) == 2 and w[0].startswith(".active_") and w[1].isdigit() and w[0][len(".active_"):] in active:
+                ages[w[0][len(".active_"):]] = now - int(w[1])
+    return {"runs": runs, "active": active, "excluded": excluded, "ages_s": ages,
+            "stale": sorted(n for n, a in ages.items() if a > STALE_MARKER_S)}
+
+
+def e8_state(listing: dict) -> tuple:
+    """The listing as the (events, existing) pair that state_key compares."""
+    return ([], frozenset(listing["runs"]) | {".active_" + a for a in listing["active"]}
+            | {"EXCLUDED_" + e for e in listing["excluded"]})
+
+
+def e8_copy_folders(listing: dict) -> list:
+    """Runs the runner no longer holds. A running one is never copied."""
+    return ["live_campaign/" + r for r in listing["runs"] if r not in listing["active"]]
+
+
+def e8_rsync_rules(folders: list, excluded: list) -> list:
+    """The include list for e8 runs: stats and graphs, the policy log (members dropped), usage.jsonl (provider
+    and model of each call), roslaunch.log, and the EXCLUDED markers. Never a dsg file, never prompts_responses."""
+    rules = ["--include=/live_campaign/"]
+    for f in sorted(folders):
+        for suffix in ("/", "/stages/", "/stages/*/", "/stages/*/habitat_scene_graph_original_graph*.yaml",
+                       "/stages/*/navigation_stats.json", "/stages/*/live_policy.jsonl", "/logs/", "/logs/roslaunch.log",
+                       "/prompts/", "/prompts/usage.jsonl", "/EXCLUDED_*.json"):
+            rules.append(f"--include=/{f}{suffix}")
+    for e in sorted(excluded):
+        rules.append(f"--include=/live_campaign/EXCLUDED_{e}.json")
+    rules.append("--exclude=*")
+    return rules
+
+
+def fetch_e8_listing() -> dict:
+    p = ssh(f"cd {WS}/runs/live_campaign && (ls -1A | grep e8_ ; true) && echo '=====AGES=====' && date +%s "
+            f"&& (stat -c '%n %Y' .active_e8_* 2>/dev/null ; true)")
+    if p.returncode != 0:
+        raise HostError("cannot list runs/live_campaign: " + p.stderr[:300])
+    return parse_e8_listing(p.stdout)
+
+
+def check_nov_b(pipeline_b: float) -> None:
+    """A3.3: B for the November runs is fixed at 632.1751 s. The pipeline's B must agree, or the row stops."""
+    if abs(pipeline_b - NOV_B_S) > NOV_B_PIN_TOL:
+        raise HostError(f"B for 853 in this run is {pipeline_b!r} s, but A3.3 fixes it at {NOV_B_S} s for the November runs "
+                        f"(tolerance {NOV_B_PIN_TOL}); the November row is not scored")
+
+
+def _jsonl_first_bad(path: Path):
+    """Line number of the first line that is not JSON (blank lines are skipped), or None; and the count of good lines."""
+    good = 0
+    for i, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            json.loads(line)
+        except ValueError:
+            return i, good
+        good += 1
+    return None, good
+
+
+def e8_runs_to_assess(camp_dir: Path, listing: dict) -> tuple:
+    """(names to assess, originals that never started). One folder per seed: a relaunch beside an original that
+    holds a stage stops the run with an error that names both."""
+    import paper_compare as pc
+    try:
+        kept = pc.check_nov_pairs([Path(camp_dir) / r for r in listing["runs"]])
+    except ValueError as e:
+        raise HostError(str(e))
+    names = [p.name for p in kept]
+    return names, [r for r in listing["runs"] if r not in names]
+
+
+def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active: bool = False) -> dict:
+    """One November run under A3.2 and its Note.
+
+    reached_b: the last stage that holds navigation_stats.json and both graph files shows a navigation time
+    of at least B (B is the caller's; the pipeline holds it). A run that did not reach B keeps its 10% and 50%
+    values. A run that fails (b) or (c) is left out of every cell and listed with the reason:
+    (b) roslaunch.log holds no 'out of memory' line and no 'nvblox_node has died' line (the e7 check's own
+    grep_count); (c) no EXCLUDED marker (in the run, or in the campaign folder as the runner writes it), every
+    call served by DeepInfra with the pinned model, not more than half the ensemble members dropped (the
+    runner's own gates, imported)."""
+    import check_paper_runs as cpr
+    import paper_compare as pc
+    check_nov_b(B)
+    run_dir = Path(run_dir)
+    res = {"run": run_dir.name, "open": bool(active), "reached_b": False, "end_s": None, "end_stage": None,
+           "counts_in_cells": False, "reasons": [], "notes": []}
+    if active:
+        res["notes"].append("the runner still holds this run (.active marker): not scored")
+        return res
+    if not run_dir.is_dir():
+        res["reasons"].append("the run folder is not in the local copy")
+        return res
+    stages, _, _ = pc.load_stages(run_dir, [])
+    full = [s for s in stages if len(s["graphs"]) == 2]
+    if full:
+        res["end_s"], res["end_stage"] = full[-1]["time_s"], full[-1]["stage"]
+    res["reached_b"] = bool(full and res["end_s"] >= NOV_B_S)      # "at least 632.1751 s": no slack
+    if not res["reached_b"]:
+        res["notes"].append("ended before B" + (f" ({res['end_s']:.1f} s)" if res["end_s"] is not None else "")
+                            + ": no 100% value, the 10% and 50% values stay")
+    rl = str(run_dir / "logs" / "roslaunch.log")
+    oom = cpr.grep_count(rl, r"out of memory")
+    died = cpr.grep_count(rl, r"nvblox_node.*(process has died|has died)")
+    if oom is None:
+        res["reasons"].append("no logs/roslaunch.log: the GPU check cannot be made")
+    else:
+        if oom:
+            res["reasons"].append(f"roslaunch.log holds {oom} 'out of memory' line(s)")
+        if died:
+            res["reasons"].append("roslaunch.log says nvblox_node has died")
+    markers = sorted(run_dir.glob("EXCLUDED_*"))
+    if campaign_dir is not None and (Path(campaign_dir) / f"EXCLUDED_{run_dir.name}.json").exists():
+        markers.append(Path(campaign_dir) / f"EXCLUDED_{run_dir.name}.json")
+    for m in markers:
+        try:
+            why = json.loads(m.read_text()).get("reason", "no reason given")
+        except ValueError:
+            why = "unreadable marker"
+        res["reasons"].append(f"EXCLUDED marker: {why}")
+    # The runner's own gates read these files leniently (a bad line ends the read, a missing file passes). On a
+    # finished copy that would hide a failure, so each file is checked first and a bad copy fails closed.
+    usage = run_dir / "prompts" / "usage.jsonl"
+    if not usage.is_file():
+        res["reasons"].append("no prompts/usage.jsonl: the provider and model of the calls cannot be checked")
+    else:
+        bad_line, good = _jsonl_first_bad(usage)
+        if bad_line is not None:
+            res["reasons"].append(f"cannot check: prompts/usage.jsonl line {bad_line} is not valid JSON, so the calls after it are unread")
+        elif good == 0:
+            res["reasons"].append("cannot check: prompts/usage.jsonl holds no call")
+        else:
+            bad = Runner.provider_violations(run_dir)
+            if bad:
+                res["reasons"].append(f"{len(bad)} call(s) served by another provider or model than {REQUIRED_PROVIDER} / {REQUIRED_MODEL_TAG}")
+    policy = sorted(run_dir.glob("stages/*/live_policy.jsonl"))
+    unreadable = None
+    for f in policy:
+        bad_line, _ = _jsonl_first_bad(f)
+        if bad_line is not None:
+            unreadable = f"cannot check: stages/{f.parent.name}/live_policy.jsonl line {bad_line} is not valid JSON, so members dropped are miscounted"
+            break
+    slots, available = Runner.member_stats(run_dir)
+    if not policy:
+        res["reasons"].append("cannot check: no stages/*/live_policy.jsonl, so members dropped are unknown")
+    elif unreadable:
+        res["reasons"].append(unreadable)
+    elif slots == 0:
+        res["reasons"].append("cannot check: live_policy.jsonl holds no member count")
+    elif slots >= MIN_STAGES_FOR_DROP_GATE * ENSEMBLE_SLOTS and 1 - available / slots > MAX_DROPPED_FRACTION:
+        res["reasons"].append(f"more than half of the ensemble members dropped ({100 * (1 - available / slots):.0f}%)")
+    res["counts_in_cells"] = not res["reasons"]
+    return res
+
+
+def build_score_argv(out_dir: Path, rows: dict, budgets: dict, budget_key: str, ged_file: Path, nov_paths: list) -> list:
+    """The paper_compare.py command. With no November run on the host it is the command written before the arm."""
+    argv = [sys.executable, str(LIVE / "paper_compare.py"), "--out-dir", str(out_dir)]
+    first = ("frontier_end", "crashed_frontier_1st", "crashed_frontier_rerun", "crashed_frontier_3rd")
+    for arm in first:
+        for scene, folder in sorted(rows.get(arm, [])):
+            argv += ["--add-run", f"{arm}={scene}={NEW_COPY / folder}"]
+    for arm in sorted(set(rows) - set(first)):
+        for scene, folder in sorted(rows[arm]):
+            argv += ["--add-run", f"{arm}={scene}={NEW_COPY / folder}"]
+    for p in nov_paths:
+        argv += ["--add-run", f"official_nov={NOV_SCENE}={p}"]
+    for scene in SCENES:
+        argv += ["--apr", f"{scene}={NEW_COPY / 'apr' / f'apr_{scene}_a'}", "--budget", f"{scene}={budgets[scene][budget_key]!r}"]
+    return argv + ["--ged-json", str(ged_file)]
 
 
 # --------------------------------------------------------------------------
@@ -964,6 +1182,14 @@ def run_pipeline(args) -> int:
         (out / f"rsync_dryrun_{stamp}.txt").write_text("\n".join(files) + ("\n" if files else ""))
         log("rsync", folders_copied=len(to_copy), files=len(files), moves=len(moves),
             list=f"rsync_dryrun_{stamp}.txt")
+    # the November runs (Amendment 3): listed and copied only if there are any
+    e8_list = fetch_e8_listing()
+    if e8_list["runs"] and not args.no_copy:
+        f8 = e8_copy_folders(e8_list)
+        files8 = copy_settled(f8, None, stamp + "_e8", e8_state(e8_list), lambda: e8_state(fetch_e8_listing()),
+                              rules_fn=lambda fs: e8_rsync_rules(fs, e8_list["excluded"]), allowed=ALLOWED_E8)
+        (out / f"rsync_dryrun_e8_{stamp}.txt").write_text("\n".join(files8) + ("\n" if files8 else ""))
+        log("rsync_e8", runs=len(f8), files=len(files8))
     old_fp = {d.name: tree_fingerprint(d) for g in ("apr", "frontier_seeds") if (OLD_COPY / g).is_dir()
               for d in (OLD_COPY / g).iterdir() if d.is_dir()}
     copy_check = {}
@@ -1029,6 +1255,19 @@ def run_pipeline(args) -> int:
     (out / f"budgets_{stamp}.json").write_text(json.dumps(budgets, indent=1))
     log("budget", **{f"B_{s}": budgets[s]["primary_s"] for s in SCENES}, **{f"rule_{s}": budgets[s]["primary_rule"] for s in SCENES})
 
+    # the November runs, judged with the B held above
+    nov = None
+    if e8_list["runs"]:
+        camp8 = NEW_COPY / "live_campaign"
+        check_nov_b(budgets[NOV_SCENE]["primary_s"])
+        names8, never8 = e8_runs_to_assess(camp8, e8_list)
+        assessed = [assess_e8(camp8 / r, budgets[NOV_SCENE]["primary_s"], camp8, active=(r in e8_list["active"]))
+                    for r in names8]
+        nov = {"B_s": NOV_B_S, "runs": assessed, "listing": e8_list, "never_started": never8}
+        log("e8", runs=len(assessed), counted=sum(a["counts_in_cells"] for a in assessed),
+            reached_b=sum(a["reached_b"] for a in assessed))
+    nov_paths = [NEW_COPY / "live_campaign" / a["run"] for a in (nov["runs"] if nov else []) if a["counts_in_cells"]]
+
     # scene state and mode
     pend_names = {p_["name"] for p_ in pend}
     scene_state = {}
@@ -1044,6 +1283,8 @@ def run_pipeline(args) -> int:
     for arm, items in cls["rows"].items():
         for scene, folder in items:
             wanted.append({"folder": folder, "scene": scene, "path": NEW_COPY / folder, "arm": arm})
+    for p_ in nov_paths:
+        wanted.append({"folder": f"live_campaign/{p_.name}", "scene": NOV_SCENE, "path": p_, "arm": "official_nov"})
     pool = load_ged_pool(OLD_GED_FILES)
     reuse, compute = plan_ged(wanted, pool, stage_rows_local)
     no_stage = [w["folder"] for w in wanted if not stage_rows_local(w["path"])]
@@ -1085,16 +1326,7 @@ def run_pipeline(args) -> int:
 
     # 7 score
     def score(out_dir: Path, budget_key: str) -> None:
-        argv = [sys.executable, str(LIVE / "paper_compare.py"), "--out-dir", str(out_dir)]
-        for arm in ("frontier_end", "crashed_frontier_1st", "crashed_frontier_rerun", "crashed_frontier_3rd"):
-            for scene, folder in sorted(cls["rows"].get(arm, [])):
-                argv += ["--add-run", f"{arm}={scene}={NEW_COPY / folder}"]
-        for arm in sorted(set(cls["rows"]) - {"frontier_end", "crashed_frontier_1st", "crashed_frontier_rerun", "crashed_frontier_3rd"}):
-            for scene, folder in sorted(cls["rows"][arm]):
-                argv += ["--add-run", f"{arm}={scene}={NEW_COPY / folder}"]
-        for scene in SCENES:
-            argv += ["--apr", f"{scene}={NEW_COPY / 'apr' / f'apr_{scene}_a'}", "--budget", f"{scene}={budgets[scene][budget_key]!r}"]
-        argv += ["--ged-json", str(ged_file)]
+        argv = build_score_argv(out_dir, cls["rows"], budgets, budget_key, ged_file, nov_paths)
         r = subprocess.run(argv, capture_output=True, text=True, env={**os.environ, "PYTHONPATH": str(LIVE.parent)})
         if r.returncode != 0:
             raise HostError("paper_compare.py failed: " + r.stderr[-800:])
@@ -1137,6 +1369,8 @@ def run_pipeline(args) -> int:
                                                                           | {"n_different": len(comparison[s]["different"])} for s in SCENES},
                "alt_B_scored": alt_done, "deviation_46_table": table46, "unmapped_folders": fm["unmapped"], "skips": fm["skips"],
                "pre_queue": pre_queue, "deviation_sentences": [deviation_sentence(p_) for p_ in pre_queue]}
+    if nov:
+        summary["nov"] = nov
     (out / "rescore_summary.json").write_text(json.dumps(summary, indent=1, default=str))
     (out / "NOTES.md").write_text(write_notes(summary, comparison, old_budgets, pc))
     log("done", mode=mode, out=str(out))
@@ -1216,6 +1450,37 @@ def scene_vs_1112(sc: str, cmp_: dict, budgets: dict, rows: dict) -> str:
     return txt
 
 
+def nov_notes(nov: dict) -> list:
+    """The section on the November ASP row (Amendment 3). Written only when the host holds an e8 run."""
+    runs = nov["runs"]
+    counted = [a for a in runs if a["counts_in_cells"]]
+    reached = [a for a in counted if a["reached_b"]]
+    L = ["", "## November ASP row (Amendment 3)", "",
+         f"The row \"ASP + DeepSeek, November\" holds `e8_00853_s42..44_official_105m` (a `_relaunch1` name where the rule gave one). "
+         f"Its runs are never pooled with October's `official` arm: the two rows have their own n beside every cell. "
+         f"B for 853 is {nov['B_s']:.4f} s, the same B as above. {len(counted)} of 3 runs count in the cells "
+         f"({len(runs)} are on the host); {len(reached)} reached B and have a 100% value. A run that did not reach B keeps its "
+         "10% and 50% values. A run that fails the GPU check or an E1 exclusion is left out of every cell and listed here. "
+         "A `dryrun_e8_` folder is never scored.", ""]
+    stale = nov.get("listing", {}).get("stale", [])
+    if runs:
+        L += ["| Run | State | Navigation time at its last full stage (s) | Reached B | In the cells | Left out because | Note |",
+              "|---|---|---|---|---|---|---|"]
+        for a in runs:
+            state = ("running (stale marker: check by hand)" if a["run"] in stale else "running") if a["open"] else "finished"
+            end = "n/a" if a["end_s"] is None else f"{a['end_s']:.1f}"
+            L.append(f"| `{a['run']}` | {state} | {end} | {'yes' if a['reached_b'] else 'no'} | "
+                     f"{'yes' if a['counts_in_cells'] else 'no'} | {'; '.join(a['reasons']) or '-'} | {'; '.join(a['notes']) or '-'} |")
+    ages = nov.get("listing", {}).get("ages_s", {})
+    for n in stale:
+        L += ["", f"stale marker: check by hand: `.active_{n}` is {ages.get(n, 0) / 3600:.1f} h old on the host's clock "
+                  f"(over {STALE_MARKER_S // 3600} h). The run stays unscored until the marker is gone."]
+    if nov.get("never_started"):
+        L += ["", "A relaunch replaces an original that never started (the Note to Amendment 3): "
+              + ", ".join(f"`{n}`" for n in nov["never_started"]) + " holds no stage and is not scored."]
+    return L
+
+
 def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
     """NOTES.md. Every sentence that depends on the state of the runs is generated from that state."""
     b = s["budgets"]
@@ -1262,6 +1527,8 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
           "|---|---|---|---|---|---|"]
     for sc in SCENES:
         L.append(f"| {sc} | {b[sc]['primary_s']:.4f} | {b[sc]['primary_rule']} | {b[sc]['n_primary']} | {b[sc]['with_capped_s']:.4f} | {old_budgets[sc]:.4f} |")
+    if s.get("nov"):
+        L += nov_notes(s["nov"])
     L += ["", "## Tours (A2.4)", "",
           "Object nodes count every object node, doors included, as the frozen test counts them (the F1 count, which leaves out doors, is in `c2_*.json`). "
           "Frozen means the final graph0 holds the same object nodes as stage 0.", "", tour_table(s["tours"])]
