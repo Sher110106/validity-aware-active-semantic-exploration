@@ -1,0 +1,27 @@
+{
+ "run": "e1_00871_s42_official_60m",
+ "stage": 8,
+ "scene": "00871",
+ "observed_object_nodes": 47,
+ "observed_room_nodes": 12,
+ "regions": 16,
+ "seen": 7,
+ "partly_seen": 1,
+ "unobserved": 8,
+ "open_types": [
+  "bathroom",
+  "bedroom"
+ ],
+ "open_type_regions": {
+  "bathroom": [
+   11
+  ],
+  "bedroom": [
+   12,
+   14
+  ]
+ },
+ "open_classes": 65,
+ "path_points": 356,
+ "reach_m": 0.5
+}
