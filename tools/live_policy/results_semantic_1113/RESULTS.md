@@ -7,6 +7,7 @@ Every number here has a row in `numbers_part3.csv`, with its file and its path i
 Every verdict below holds for two houses, on a truth that is a proxy for what the camera saw, on static replays. It says nothing about other houses.
 
 **Words used here.**
+- *Exploratory*: DeepSeek, Gemini and the placebo scored as a model. The scorer was written after DeepSeek's numbers were seen, so these results carry no verdict weight; the Claude replays are the blind test.
 - *ASP*: the robot exploration method of the author's paper (arXiv 2510.05430), which the pipeline tests. *M2*: the part of the study that asks whether right meaning would be enough for ASP's score (section 8).
 - *Row*: one stage of one saved run. There are 44<!--n:frame_rows-->. *Member*: one completion of a row's observed graph by a model; 4<!--n:rule_members--> per row. *Cluster*: scene × seed × arm; 12<!--n:frame_clusters--> in all. The cluster is the unit of every test.
 - *Observed graph*: what the robot has mapped at that stage. *Mapped*: an observed object of the same class lies within 0.5<!--n:rule_reach_m--> m of the true one. *New object* and *new room*: a node more than 0.5<!--n:rule_reach_m--> m from every observed node of its kind.
@@ -31,7 +32,7 @@ Every verdict below holds for two houses, on a truth that is a proxy for what th
 
 - **The frame.** 44<!--n:frame_rows--> rows in 12<!--n:frame_clusters--> clusters. 36<!--n:frame_rows_runs--> rows are stages 3, 8 and 13<!--n:frame_stages--> of 12<!--n:frame_runs--> saved DeepSeek runs (houses 00853 and 00871). 8<!--n:frame_rows_gemini--> rows are the inputs Gemini saw in October.
 - **The models.** Claude Opus 5.5 and Claude Haiku 5.5, the blind, confirmatory test. Effort medium, 4<!--n:rule_members--> members per row, at most 50<!--n:rule_turns--> turns, `max_tokens` 64,000<!--n:rule_max_tokens-->, no temperature, no seed, no fallback model. The prompt, the collision tool and the parser are the author's. The rows came in 4<!--n:rounds_used--> rounds, and both models finished all of them.
-- **The members.** 352<!--n:mem_total--> members, 176<!--n:mem_opus_n--> for each model. Opus: 176<!--n:status_opus_ok--> scored, 0<!--n:status_opus_dropped--> dropped. Haiku: 175<!--n:status_haiku_ok--> scored and 1<!--n:status_haiku_dropped--> dropped (row `e2_00871_s43_filter_st03`, member 3). Its final text did not parse (1<!--n:mem_haiku_parse_fail--> member); it was not refused and did not reach the turn limit. A member makes 2.35<!--n:mem_opus_calls--> calls (Opus) or 2.52<!--n:mem_haiku_calls--> (Haiku) on average, and 8.9<!--n:mem_opus_tools--> or 6.2<!--n:mem_haiku_tools--> collision checks.
+- **The members.** 352<!--n:mem_total--> members, 176<!--n:mem_opus_n--> for each model. Opus: 176<!--n:status_opus_ok--> scored, 0<!--n:status_opus_dropped--> dropped. Haiku: 175<!--n:status_haiku_ok--> scored and 1<!--n:status_haiku_dropped--> dropped (row `e2_00871_s43_filter_st03`, member 3). It stopped at the token limit (the `stop_max_tokens` flag in the `flags` field of its `record.json`; it is the only Haiku member with that flag, 1<!--n:mem_haiku_maxtok--> of 176<!--n:mem_haiku_n-->), and its final text did not parse (1<!--n:mem_haiku_parse_fail--> member). It was not refused and did not reach the turn limit. A member makes 2.35<!--n:mem_opus_calls--> calls (Opus) or 2.52<!--n:mem_haiku_calls--> (Haiku) on average, and 8.9<!--n:mem_opus_tools--> or 6.2<!--n:mem_haiku_tools--> collision checks.
 - **Spend.** The replays cost $35.78<!--n:spend_replay-->: Opus $34.68<!--n:spend_replay_opus-->, Haiku $1.10<!--n:spend_replay_haiku-->. The caps were $280<!--n:rule_cap_opus--> and $20<!--n:rule_cap_haiku-->. The smoke test cost $2.84<!--n:spend_smoke--> and the no-hint replay $0.30<!--n:spend_nohint-->. The three ledgers sum to $38.92<!--n:spend_all-->. Prices come from the price card bundled with the tools, not from the live page.
 - **Order of events** (13 Nov).
   - 18:59<!--n:t_prereg_hash-->: we hash the pre-registration (sha256 59c97ad6<!--n:hash_prereg-->…) and push it at 19:00<!--n:t_prereg_push-->.
@@ -57,7 +58,7 @@ Every verdict below holds for two houses, on a truth that is a proxy for what th
 
 ## 3. The confirmatory result
 
-A score is the model's mean hit rate over the 12<!--n:frame_clusters--> clusters. A difference is the model minus the comparator, in points. It uses only the rows where both sides have a score; the Rows column counts them (rows for the named comparator). At L1 a model has no score in a row where it proposed no typed new room, and 2<!--n:l1_impossible_opus--> rows have no open room type at all. So the L1 contrasts rest on 41<!--n:l1_rows_opus--> rows for Opus (44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 1<!--n:l1_noclaim_opus-->), 24<!--n:l1_rows_haiku--> for Haiku (44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 18<!--n:l1_noclaim_haiku-->) and 42<!--n:l1_rows_deepseek--> for DeepSeek (44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 0<!--n:l1_noclaim_deepseek-->). L3 against D uses 43<!--n:c_opus_L3_rows--> rows: a row with fewer than two unobserved regions has no D score. "Largest p" is the largest p over the hypothesis's comparators.
+A score is the model's mean hit rate over the 12<!--n:frame_clusters--> clusters. A difference is the model minus the comparator, in points. It uses only the rows where both sides have a score; the Rows column counts them (rows for the named comparator). At L1 a model has no score in a row where it proposed no typed new room, and 2<!--n:l1_impossible_opus--> rows have no open room type at all. So the L1 contrasts rest on 41<!--n:l1_rows_opus--> rows for Opus (44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 1<!--n:l1_noclaim_opus-->), 24<!--n:l1_rows_haiku--> for Haiku (44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 18<!--n:l1_noclaim_haiku-->) and 42<!--n:l1_rows_deepseek--> for DeepSeek (exploratory; 44<!--n:frame_rows--> − 2<!--n:l1_impossible_opus--> − 0<!--n:l1_noclaim_deepseek-->). L3 against D uses 43<!--n:c_opus_L3_rows--> rows: a row with fewer than two unobserved regions has no D score. "Largest p" is the largest p over the hypothesis's comparators.
 
 **L1 and L2.**
 
@@ -98,11 +99,11 @@ A score is the model's mean hit rate over the 12<!--n:frame_clusters--> clusters
 
 ## 4. What the table shows, and what it does not
 
-At L1 and L2 each Claude model scores below the prior built from 179<!--n:rule_houses--> other houses, which makes the same number of claims as the model; at L2 the difference is -35.1<!--n:c_opus_L2_B3_diff--> points for Opus and -24.9<!--n:c_haiku_L2_B3_diff--> for Haiku, and the interval lies wholly below zero. At L3 the comparison is with the model's own content traded across unobserved regions (D): the differences are +0.5<!--n:c_opus_L3_D_diff--> points for Opus and +0.8<!--n:c_haiku_L3_D_diff--> for Haiku, both intervals include zero, and the data show no detectable difference (the registered detectable difference is 1.1<!--n:mdd_L3_mdd--> points; section 5 says why it is too small for this contrast), so gains up to 2.95<!--n:p_opus_L3_D_hi2--> (Opus) and 2.36<!--n:p_haiku_L3_D_hi2--> (Haiku) points are not ruled out. The table does not show that the guesses reach the map: L3 hit rates are 4.2%<!--n:c_opus_L3_score--> for Opus and 4.4%<!--n:c_haiku_L3_score--> for Haiku, in two houses, on a proxy truth, on static replays.
+At L1 and L2 each Claude model scores below the prior built from 179<!--n:rule_houses--> other houses, which makes the same number of claims as the model; at L2 the difference is -35.1<!--n:c_opus_L2_B3_diff--> points for Opus and -24.9<!--n:c_haiku_L2_B3_diff--> for Haiku, and the interval lies wholly below zero. At L3 the comparison is with the model's own content traded across unobserved regions (D): the differences are +0.5<!--n:c_opus_L3_D_diff--> points [-1.9<!--n:c_opus_L3_Dci_lo-->, +2.9<!--n:c_opus_L3_Dci_hi-->] for Opus and +0.8<!--n:c_haiku_L3_D_diff--> [-0.8<!--n:c_haiku_L3_Dci_lo-->, +2.4<!--n:c_haiku_L3_Dci_hi-->] for Haiku, both intervals include zero, and the data show no detectable difference (the registered detectable difference is 1.1<!--n:mdd_L3_mdd--> points, computed on the placebo's contrast; section 5 says why it is too small here), so gains up to 2.95<!--n:p_opus_L3_D_hi2--> (Opus) and 2.36<!--n:p_haiku_L3_D_hi2--> (Haiku) points are not ruled out. The table does not show that the guesses reach the map: L3 hit rates are 4.2%<!--n:c_opus_L3_score--> for Opus and 4.4%<!--n:c_haiku_L3_score--> for Haiku, in two houses, on a proxy truth, on static replays.
 
 Two facts weigh against the main result.
 1. Opus at L3 is 0.05<!--n:p_opus_L3_D_gap--> points inside the margin: its interval's upper end is 2.95<!--n:p_opus_L3_D_hi2--> points against a margin of 3<!--n:c_opus_L3_margin-->. The reruns of section 3 stayed below 3<!--n:c_opus_L3_margin-->, but one crossing would have changed the verdict.
-2. One contrast favours a Claude model. Haiku scores +8.2<!--n:c_haiku_L2_B1_diff--> points above the placebo at L2 (p 0.014<!--n:c_haiku_L2_B1_p-->, one contrast, not adjusted). Its hypothesis stays Rejected: the hypothesis's p is the largest over B3 and B1, and B3 gives 1.000<!--n:c_haiku_L2_B3_p-->. Opus at L2 differs from B1 by -2.3<!--n:c_opus_L2_B1_diff--> points (p 0.830<!--n:c_opus_L2_B1_p-->): no detectable difference, the detectable difference being 5.2<!--n:mdd_L2_mdd--> points.
+2. One contrast favours a Claude model. Haiku scores +8.2<!--n:c_haiku_L2_B1_diff--> points above the placebo at L2 (p 0.014<!--n:c_haiku_L2_B1_p-->, one contrast, not adjusted). Its hypothesis stays Rejected: the hypothesis's p is the largest over B3 and B1, and B3 gives 1.000<!--n:c_haiku_L2_B3_p-->. Opus at L2 differs from the placebo by -2.3<!--n:c_opus_L2_B1_diff--> points [-7.4<!--n:p_opus_L2_B1ci_lo-->, +2.7<!--n:p_opus_L2_B1ci_hi-->] (p 0.830<!--n:c_opus_L2_B1_p-->): no detectable difference. The registered detectable difference at L2, 5.2<!--n:mdd_L2_mdd--> points, was computed on the placebo's own B1 minus B3 contrast, so it is only a guide to this contrast.
 
 ## 5. The detectable differences
 
@@ -122,7 +123,7 @@ What they mean for reading "Rejected":
 - At L2 the upper ends against B3 are -29.1<!--n:p_opus_L2_B3_hi--> (Opus) and -18.1<!--n:p_haiku_L2_B3_hi--> (Haiku) points: there "Rejected" means the model scores below the prior. At L1 the upper ends are 0.0<!--n:p_opus_L1_B3_hi--> and 0.0<!--n:p_haiku_L1_B3_hi-->: no gain over the prior shows, and the lower ends are well below zero.
 - At L3 the intervals include zero. There, Rejected says only that the interval rules out a gain as large as 3<!--n:c_opus_L3_margin--> points. Gains up to 2.95<!--n:p_opus_L3_D_hi2--> (Opus) and 2.36<!--n:p_haiku_L3_D_hi2--> (Haiku) points are not ruled out.
 - The registered L3 figure (1.1<!--n:mdd_L3_mdd--> points) comes from the placebo's B5 minus D contrast. That contrast varies less than a Claude model's contrast with D: the half-widths are 0.7<!--n:mdd_L3_hw--> points for the placebo and 2.4<!--n:p_opus_L3_D_hw--> and 1.6<!--n:p_haiku_L3_D_hw--> for Opus and Haiku. So a gain of 1.1<!--n:mdd_L3_mdd--> points could not have been seen in these data.
-- Shuffling the model's labels (B5) or trading them across regions (D) moves its L3 score by -0.2<!--n:c_opus_L3_B5_diff--> and +0.5<!--n:c_opus_L3_D_diff--> points for Opus and -0.5<!--n:c_haiku_L3_B5_diff--> and +0.8<!--n:c_haiku_L3_D_diff--> for Haiku: no detectable difference.
+- Against B5 (the labels shuffled among the model's own items) the L3 difference is -0.2<!--n:c_opus_L3_B5_diff--> points [-1.8<!--n:p_opus_L3_B5ci_lo-->, +1.2<!--n:p_opus_L3_B5ci_hi-->] for Opus and -0.5<!--n:c_haiku_L3_B5_diff--> [-1.2<!--n:p_haiku_L3_B5ci_lo-->, +0.2<!--n:p_haiku_L3_B5ci_hi-->] for Haiku: no detectable difference. The registered figure, 1.1<!--n:mdd_L3_mdd--> points, is for the placebo's B5 minus D contrast.
 - Haiku's L1 result rests on few claims (48<!--n:claims_haiku_l1--> claims, against 147<!--n:claims_opus_l1--> for Opus). Many of its new rooms have no scored type: 43<!--n:sup_haiku_untyped--> of 91<!--n:sup_haiku_rooms--> (47.3%<!--n:sup_haiku_share_u-->).
 
 ## 6. Exploratory results: DeepSeek, Gemini and the placebo
@@ -134,12 +135,12 @@ These are exploratory. The scorer was written after DeepSeek's numbers were seen
 <!-- table:exp_l12 -->
 | Hypothesis | Rows | Clusters | Score | Placebo's own score | Diff vs B3 (p) | Diff vs B1 placebo (p) | 95% interval vs B3 | Margin (points) | Largest p | Holm p | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| DeepSeek L1 | 42 | 12 | 89.2% | 87.5% | -1.7 (p 1.000) | +1.7 (p 0.301) | [-5.2, 0.0] | 5 | 1.000 | 1.000 | Rejected |
-| Gemini L1 | 8 | 3 | 100.0% | 87.5% | 0.0 (p 1.000) | 0.0 (p 1.000) | unbounded | 5 | 1.000 | 1.000 | Inconclusive |
-| Placebo L1 | 42 | 12 | 87.5% | 87.5% | -4.9 (p 1.000) | n/a | [-8.3, -0.8] | 5 | 1.000 | 1.000 | Rejected |
-| DeepSeek L2 | 44 | 12 | 66.4% | 60.6% | -26.3 (p 1.000) | +5.8 (p 0.024) | [-33.2, -19.4] | 5 | 1.000 | 1.000 | Rejected |
-| Gemini L2 | 8 | 3 | 88.1% | 60.6% | -10.5 (p 1.000) | +22.7 (p 0.125) | unbounded | 5 | 1.000 | 1.000 | Inconclusive |
-| Placebo L2 | 44 | 12 | 60.6% | 60.6% | -32.6 (p 1.000) | n/a | [-36.2, -29.1] | 5 | 1.000 | 1.000 | Rejected |
+| DeepSeek (exploratory) L1 | 42 | 12 | 89.2% | 87.5% | -1.7 (p 1.000) | +1.7 (p 0.301) | [-5.2, 0.0] | 5 | 1.000 | 1.000 | Rejected |
+| Gemini (exploratory) L1 | 8 | 3 | 100.0% | 87.5% | 0.0 (p 1.000) | 0.0 (p 1.000) | unbounded | 5 | 1.000 | 1.000 | Inconclusive |
+| Placebo (exploratory) L1 | 42 | 12 | 87.5% | 87.5% | -4.9 (p 1.000) | n/a | [-8.3, -0.8] | 5 | 1.000 | 1.000 | Rejected |
+| DeepSeek (exploratory) L2 | 44 | 12 | 66.4% | 60.6% | -26.3 (p 1.000) | +5.8 (p 0.024) | [-33.2, -19.4] | 5 | 1.000 | 1.000 | Rejected |
+| Gemini (exploratory) L2 | 8 | 3 | 88.1% | 60.6% | -10.5 (p 1.000) | +22.7 (p 0.125) | unbounded | 5 | 1.000 | 1.000 | Inconclusive |
+| Placebo (exploratory) L2 | 44 | 12 | 60.6% | 60.6% | -32.6 (p 1.000) | n/a | [-36.2, -29.1] | 5 | 1.000 | 1.000 | Rejected |
 <!-- /table:exp_l12 -->
 
 **L3.**
@@ -147,9 +148,9 @@ These are exploratory. The scorer was written after DeepSeek's numbers were seen
 <!-- table:exp_l3 -->
 | Hypothesis | Rows | Clusters | Score | Placebo's own score | Diff vs B5 (p) | Diff vs D (p) | Diff vs B3L (p) | 95% interval vs D | Margin (points) | Largest p | Holm p | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| DeepSeek L3 | 43 | 12 | 4.8% | 1.7% | -0.6 (p 0.925) | -0.6 (p 0.852) | -4.8 (p 0.998) | [-1.9, +0.6] | 3 | 0.998 | 1.000 | Rejected |
-| Gemini L3 | 8 | 3 | 9.9% | 1.7% | -1.3 (p 1.000) | +0.4 (p 0.500) | -3.2 (p 1.000) | unbounded | 3 | 1.000 | 1.000 | Inconclusive |
-| Placebo L3 | 43 | 12 | 1.7% | 1.7% | -0.1 (p 0.634) | -0.2 (p 0.739) | -4.1 (p 1.000) | [-1.0, +0.5] | 3 | 1.000 | 1.000 | Rejected |
+| DeepSeek (exploratory) L3 | 43 | 12 | 4.8% | 1.7% | -0.6 (p 0.925) | -0.6 (p 0.852) | -4.8 (p 0.998) | [-1.9, +0.6] | 3 | 0.998 | 1.000 | Rejected |
+| Gemini (exploratory) L3 | 8 | 3 | 9.9% | 1.7% | -1.3 (p 1.000) | +0.4 (p 0.500) | -3.2 (p 1.000) | unbounded | 3 | 1.000 | 1.000 | Inconclusive |
+| Placebo (exploratory) L3 | 43 | 12 | 1.7% | 1.7% | -0.1 (p 0.634) | -0.2 (p 0.739) | -4.1 (p 1.000) | [-1.0, +0.5] | 3 | 1.000 | 1.000 | Rejected |
 <!-- /table:exp_l3 -->
 
 **The wrong-house gate.** The 8<!--n:frame_rows_gemini--> Gemini rows have no partner house, so there is no gate for Gemini.
@@ -157,10 +158,10 @@ These are exploratory. The scorer was written after DeepSeek's numbers were seen
 <!-- table:gate_exp -->
 | Row | Mean difference (points) | Pairs | p | Passes |
 |---|---|---|---|---|
-| DeepSeek L1 | -1.7 | 6 | 1.000 | no |
-| Gemini L1 | none | 0 | n/a | no |
-| DeepSeek L2 | -5.3 | 6 | 1.000 | no |
-| Gemini L2 | none | 0 | n/a | no |
+| DeepSeek (exploratory) L1 | -1.7 | 6 | 1.000 | no |
+| Gemini (exploratory) L1 | none | 0 | n/a | no |
+| DeepSeek (exploratory) L2 | -5.3 | 6 | 1.000 | no |
+| Gemini (exploratory) L2 | none | 0 | n/a | no |
 <!-- /table:gate_exp -->
 
 - DeepSeek is Rejected at all three levels. Against the placebo it scores +5.8<!--n:e_deepseek_L2_B1_diff--> points at L2 (p 0.024<!--n:e_deepseek_L2_B1_p-->, not adjusted).
@@ -169,7 +170,7 @@ These are exploratory. The scorer was written after DeepSeek's numbers were seen
 
 ## 7. The secondary readouts
 
-No verdict rests on these. Nothing is corrected for the number of looks. Each view is scored against comparators built under the same view. In every table of this section a difference uses only the rows where both sides have a score, while the scores and shares beside it use all the rows a side has. The two need not agree.
+No verdict rests on these. Nothing is corrected for the number of looks. Each view is scored against comparators built under the same view. Rows for DeepSeek, Gemini and the placebo are exploratory; each is marked. In every table of this section a difference uses only the rows where both sides have a score, while the scores and shares beside it use all the rows a side has. The two need not agree.
 
 **Claims behind the scores.** The claims and items each model made. "Rows behind the L1 contrasts" counts rows with a possible hit and an L1 score, so it agrees with the Rows column of section 3.
 
@@ -178,12 +179,12 @@ No verdict rests on these. Nothing is corrected for the number of looks. Each vi
 |---|---|---|---|---|---|
 | Opus | 176 | 41 | 147 | 1279 | 1495 |
 | Haiku | 175 | 24 | 48 | 819 | 942 |
-| DeepSeek | 160 | 42 | 181 | 1546 | 2046 |
-| Gemini | 29 | 8 | 36 | 294 | 385 |
-| Placebo | 176 | 42 | 221 | 1224 | 1942 |
+| DeepSeek (exploratory) | 160 | 42 | 181 | 1546 | 2046 |
+| Gemini (exploratory) | 29 | 8 | 36 | 294 | 385 |
+| Placebo (exploratory) | 176 | 42 | 221 | 1224 | 1942 |
 <!-- /table:claims -->
 
-**L1 and L2 under other rules.** *Looser rule*: a hit needs only an unseen region of the type, or one holding the class, mapped or not. *Detector words only*: the L2 classes in the detector's 52<!--n:rule_vocab-->-word vocabulary. *Without extended table*: "answers to" uses `synonym_primary` alone. Under the looser rule no member's score changed (0<!--n:loose_diff_opus--> of 176<!--n:loose_n_opus--> Opus members, 0<!--n:loose_diff_haiku--> of 175<!--n:loose_n_haiku--> Haiku, 0<!--n:loose_diff_deepseek--> of 160<!--n:loose_n_deepseek--> DeepSeek), so its rows repeat the primary rows: in these two houses the two rules find the same hits. The reason lies in the truth sets (`supplement/supplement.json`). The looser sets differ from the primary ones in 2<!--n:loose_rows--> of the 44<!--n:frame_rows--> rows: by one class, "fridge<!--n:loose_label-->", in 2<!--n:loose_rows_classes--> rows, and by a room type in 0<!--n:loose_rows_types-->. In those rows no member proposed a new object of that class: 0<!--n:loose_claims_opus--> of 8<!--n:loose_members_in_rows_opus--> Opus members, 0<!--n:loose_claims_haiku--> of 8<!--n:loose_members_in_rows_haiku--> Haiku, 0<!--n:loose_claims_deepseek--> of 6<!--n:loose_members_in_rows_deepseek--> DeepSeek. Two facts from the scorer's notes. A guess labelled "stove" can never hit in either house under the frozen label rules: in 00853 the annotation "oven and stove" answers to "oven", and in 00871 "stovetop" answers to "gas stove". In the view without the extended table, a bed answers only to "bed", and no detector "duvet" maps a bed.
+**L1 and L2 under other rules.** *Looser rule*: a hit needs only an unseen region of the type, or one holding the class, mapped or not. *Detector words only*: the L2 classes in the detector's 52<!--n:rule_vocab-->-word vocabulary. *Without extended table*: "answers to" uses `synonym_primary` alone. Under the looser rule no member's score changed (0<!--n:loose_diff_opus--> of 176<!--n:loose_n_opus--> Opus members, 0<!--n:loose_diff_haiku--> of 175<!--n:loose_n_haiku--> Haiku, 0<!--n:loose_diff_deepseek--> of 160<!--n:loose_n_deepseek--> DeepSeek members, exploratory), so its rows repeat the primary rows: in these two houses the two rules find the same hits. The reason lies in the truth sets (`supplement/supplement.json`). The looser sets differ from the primary ones in 2<!--n:loose_rows--> of the 44<!--n:frame_rows--> rows: by one class, "fridge<!--n:loose_label-->", in 2<!--n:loose_rows_classes--> rows, and by a room type in 0<!--n:loose_rows_types-->. In those rows no member proposed a new object of that class: 0<!--n:loose_claims_opus--> of 8<!--n:loose_members_in_rows_opus--> Opus members, 0<!--n:loose_claims_haiku--> of 8<!--n:loose_members_in_rows_haiku--> Haiku, 0<!--n:loose_claims_deepseek--> of 6<!--n:loose_members_in_rows_deepseek--> DeepSeek. Two facts from the scorer's notes. A guess labelled "stove" can never hit in either house under the frozen label rules: in 00853 the annotation "oven and stove" answers to "oven", and in 00871 "stovetop" answers to "gas stove". In the view without the extended table, a bed answers only to "bed", and no detector "duvet" maps a bed.
 
 <!-- table:sec_l1l2 -->
 | Reading | Score | Diff vs B3 [interval] | Diff vs B1 placebo [interval] |
@@ -192,14 +193,14 @@ No verdict rests on these. Nothing is corrected for the number of looks. Each vi
 | Looser rule, Opus L2 | 58.3% | -35.1 [-41.3, -29.1] | -2.3 [-7.4, +2.7] |
 | Looser rule, Haiku L1 | 89.6% | -10.4 [-20.8, 0.0] | -5.2 [-16.2, +5.2] |
 | Looser rule, Haiku L2 | 68.8% | -24.9 [-31.5, -18.1] | +8.2 [+1.1, +14.9] |
-| Looser rule, DeepSeek L1 | 89.2% | -1.7 [-5.2, 0.0] | +1.7 [-4.2, +7.5] |
-| Looser rule, DeepSeek L2 | 66.4% | -26.3 [-33.2, -19.4] | +5.8 [+0.1, +11.4] |
+| Looser rule, DeepSeek (exploratory) L1 | 89.2% | -1.7 [-5.2, 0.0] | +1.7 [-4.2, +7.5] |
+| Looser rule, DeepSeek (exploratory) L2 | 66.4% | -26.3 [-33.2, -19.4] | +5.8 [+0.1, +11.4] |
 | Detector words only, Opus L2 | 78.9% | -15.1 [-26.8, -5.1] | +7.0 [-0.5, +14.0] |
 | Detector words only, Haiku L2 | 84.4% | -9.5 [-15.4, -3.7] | +12.4 [+1.7, +23.1] |
-| Detector words only, DeepSeek L2 | 74.9% | -18.7 [-28.9, -8.6] | +3.0 [+0.3, +5.7] |
+| Detector words only, DeepSeek (exploratory) L2 | 74.9% | -18.7 [-28.9, -8.6] | +3.0 [+0.3, +5.7] |
 | Without extended table, Opus L2 | 58.4% | -27.3 [-33.8, -21.7] | -2.9 [-8.5, +2.4] |
 | Without extended table, Haiku L2 | 66.5% | -16.9 [-26.2, -6.9] | +5.2 [-2.0, +12.4] |
-| Without extended table, DeepSeek L2 | 65.5% | -19.6 [-25.1, -13.9] | +4.2 [-0.9, +9.2] |
+| Without extended table, DeepSeek (exploratory) L2 | 65.5% | -19.6 [-25.1, -13.9] | +4.2 [-0.9, +9.2] |
 <!-- /table:sec_l1l2 -->
 
 **L3 under other rules.** *Partly seen regions* replace the unobserved ones. The partly seen view leaves out rows with no such region.
@@ -209,13 +210,13 @@ No verdict rests on these. Nothing is corrected for the number of looks. Each vi
 |---|---|---|---|---|---|
 | Partly seen regions, Opus | 3.1% | 17 | +0.7 [-0.3, +2.1] | +2.9 [-2.8, +12.9] | -1.0 [-2.3, 0.0] |
 | Partly seen regions, Haiku | 3.4% | 17 | -0.4 [-1.4, +0.3] | +3.9 [-2.3, +13.3] | -4.7 [-13.6, +1.6] |
-| Partly seen regions, DeepSeek | 1.8% | 17 | -0.6 [-1.4, +0.1] | +0.8 [-2.0, +3.9] | -2.7 [-7.0, 0.0] |
+| Partly seen regions, DeepSeek (exploratory) | 1.8% | 17 | -0.6 [-1.4, +0.1] | +0.8 [-2.0, +3.9] | -2.7 [-7.0, 0.0] |
 | Detector words only, Opus | 4.4% | 0 | -1.1 [-3.4, +1.0] | +0.2 [-3.3, +3.8] | -6.3 [-11.4, -1.4] |
 | Detector words only, Haiku | 5.8% | 0 | -0.7 [-2.1, +0.6] | +0.9 [-2.0, +3.9] | -5.5 [-8.8, -2.4] |
-| Detector words only, DeepSeek | 6.1% | 0 | -1.3 [-2.5, -0.2] | -0.2 [-1.7, +1.3] | -5.1 [-9.0, -1.2] |
+| Detector words only, DeepSeek (exploratory) | 6.1% | 0 | -1.3 [-2.5, -0.2] | -0.2 [-1.7, +1.3] | -5.1 [-9.0, -1.2] |
 | Without extended table, Opus | 4.2% | 0 | -0.2 [-1.8, +1.2] | +0.5 [-1.9, +3.0] | -5.1 [-8.0, -2.4] |
 | Without extended table, Haiku | 4.4% | 0 | -0.4 [-1.2, +0.3] | +0.8 [-0.8, +2.5] | -5.2 [-9.0, -1.9] |
-| Without extended table, DeepSeek | 4.8% | 0 | -0.5 [-1.4, +0.4] | -0.6 [-1.8, +0.7] | -4.6 [-7.5, -1.7] |
+| Without extended table, DeepSeek (exploratory) | 4.8% | 0 | -0.5 [-1.4, +0.4] | -0.6 [-1.8, +0.7] | -4.6 [-7.5, -1.7] |
 <!-- /table:sec_l3 -->
 
 Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
@@ -225,7 +226,7 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|
 | Opus | 10 | 7 |
 | Haiku | 10 | 7 |
-| DeepSeek | 10 | 7 |
+| DeepSeek (exploratory) | 10 | 7 |
 <!-- /table:sec_partly_n -->
 
 **The prior under three sensitivity forms** (diff vs the prior, in points).
@@ -235,10 +236,10 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|
 | Opus L1 | -5.8 [-12.2, 0.0] | -9.0 [-16.9, -1.4] | -5.8 [-12.2, 0.0] | -11.8 [-21.6, -2.1] |
 | Haiku L1 | -10.4 [-20.8, 0.0] | -10.4 [-20.8, 0.0] | -10.4 [-20.8, 0.0] | -10.4 [-20.8, 0.0] |
-| DeepSeek L1 | -1.7 [-5.2, 0.0] | -5.2 [-11.7, 0.0] | -1.7 [-5.2, 0.0] | -8.0 [-18.3, 0.0] |
+| DeepSeek (exploratory) L1 | -1.7 [-5.2, 0.0] | -5.2 [-11.7, 0.0] | -1.7 [-5.2, 0.0] | -8.0 [-18.3, 0.0] |
 | Opus L2 | -35.1 [-41.3, -29.1] | -33.7 [-40.0, -27.6] | -34.7 [-41.3, -28.2] | -33.4 [-39.0, -28.0] |
 | Haiku L2 | -24.9 [-31.5, -18.1] | -24.4 [-29.9, -18.6] | -24.8 [-31.8, -17.7] | -22.8 [-28.8, -16.2] |
-| DeepSeek L2 | -26.3 [-33.2, -19.4] | -24.6 [-31.2, -18.0] | -25.2 [-31.1, -19.2] | -23.9 [-29.3, -18.4] |
+| DeepSeek (exploratory) L2 | -26.3 [-33.2, -19.4] | -24.6 [-31.2, -18.0] | -25.2 [-31.1, -19.2] | -23.9 [-29.3, -18.4] |
 <!-- /table:sec_prior -->
 
 **B2, copy the map.** B2 claims what the observed graph already holds. It is reported only, beside the comparators of the family.
@@ -248,26 +249,26 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|
 | Opus L1 | 41 | +5.3 (p 0.113) | [-3.9, +14.3] |
 | Haiku L1 | 24 | +2.4 (p 0.312) | [-5.6, +10.4] |
-| DeepSeek L1 | 42 | +8.6 (p 0.023) | [+0.4, +17.7] |
+| DeepSeek (exploratory) L1 | 42 | +8.6 (p 0.023) | [+0.4, +17.7] |
 | Opus L2 | 44 | -15.3 (p 1.000) | [-20.8, -9.9] |
 | Haiku L2 | 44 | -4.8 (p 0.931) | [-11.2, +1.8] |
-| DeepSeek L2 | 44 | -7.2 (p 0.996) | [-12.0, -2.3] |
+| DeepSeek (exploratory) L2 | 44 | -7.2 (p 0.996) | [-12.0, -2.3] |
 <!-- /table:b2 -->
 
-**One claim for one region, rooms and objects apart.** The comparison is with the placebo. For every Claude member the one-claim L1 score equals the plain L1 score (0<!--n:oneclaim_diff_opus--> of 136<!--n:oneclaim_n_opus--> Opus members and 0<!--n:oneclaim_diff_haiku--> of 47<!--n:oneclaim_n_haiku--> Haiku members differ); for DeepSeek 4<!--n:oneclaim_diff_deepseek--> of 155<!--n:oneclaim_n_deepseek--> differ.
+**One claim for one region, rooms and objects apart.** The comparison is with the placebo. For every Claude member the one-claim L1 score equals the plain L1 score (0<!--n:oneclaim_diff_opus--> of 136<!--n:oneclaim_n_opus--> Opus members and 0<!--n:oneclaim_diff_haiku--> of 47<!--n:oneclaim_n_haiku--> Haiku members differ); for DeepSeek (exploratory) 4<!--n:oneclaim_diff_deepseek--> of 155<!--n:oneclaim_n_deepseek--> differ.
 
 <!-- table:x_misc -->
 | Readout | Model | Model's share | Placebo's share | Diff vs placebo [interval] | p |
 |---|---|---|---|---|---|
 | L1, one claim to one region | Opus | 85.4% | 78.2% | +7.2 [-2.2, +16.5] | 0.057 |
 | L1, one claim to one region | Haiku | 89.6% | 78.2% | +5.2 [-7.8, +18.8] | 0.216 |
-| L1, one claim to one region | DeepSeek | 88.3% | 78.2% | +10.1 [+3.6, +16.5] | 0.004 |
+| L1, one claim to one region | DeepSeek (exploratory) | 88.3% | 78.2% | +10.1 [+3.6, +16.5] | 0.004 |
 | L3, rooms only | Opus | 16.7% | 2.7% | +13.9 [+1.4, +27.1] | 0.016 |
 | L3, rooms only | Haiku | 6.0% | 2.7% | +2.1 [-7.3, +11.1] | 0.359 |
-| L3, rooms only | DeepSeek | 5.9% | 2.7% | +3.1 [-3.0, +9.6] | 0.164 |
+| L3, rooms only | DeepSeek (exploratory) | 5.9% | 2.7% | +3.1 [-3.0, +9.6] | 0.164 |
 | L3, objects only | Opus | 3.1% | 1.5% | +1.6 [-1.0, +4.4] | 0.122 |
 | L3, objects only | Haiku | 4.3% | 1.5% | +2.8 [-0.2, +6.0] | 0.034 |
-| L3, objects only | DeepSeek | 4.8% | 1.5% | +3.3 [+0.9, +5.7] | 0.006 |
+| L3, objects only | DeepSeek (exploratory) | 4.8% | 1.5% | +3.3 [+0.9, +5.7] | 0.006 |
 <!-- /table:x_misc -->
 
 **Items that reach two regions.** The share of L3 items that reach two or more regions.
@@ -277,10 +278,10 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|---|
 | Share reaching two or more regions | Opus | 26.2% | 22.8% | +3.4 [-1.6, +8.6] | 0.089 |
 | Share reaching two or more regions | Haiku | 25.1% | 22.8% | +2.3 [-4.5, +9.2] | 0.233 |
-| Share reaching two or more regions | DeepSeek | 23.7% | 22.8% | +1.0 [-5.1, +6.9] | 0.361 |
+| Share reaching two or more regions | DeepSeek (exploratory) | 23.7% | 22.8% | +1.0 [-5.1, +6.9] | 0.361 |
 | Share reaching two or more unobserved regions | Opus | 3.8% | 0.6% | +3.2 [+0.1, +6.4] | 0.021 |
 | Share reaching two or more unobserved regions | Haiku | 3.2% | 0.6% | +2.6 [-0.4, +6.0] | 0.051 |
-| Share reaching two or more unobserved regions | DeepSeek | 4.3% | 0.6% | +3.7 [+0.7, +6.9] | 0.005 |
+| Share reaching two or more unobserved regions | DeepSeek (exploratory) | 4.3% | 0.6% | +3.7 [+0.7, +6.9] | 0.005 |
 <!-- /table:x_multi -->
 
 **L4.** The share of new objects within a distance of an unmapped reference object of their class in an unseen region.
@@ -290,16 +291,16 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|---|
 | Within 0.5 m | Opus | 0.2% | 0.2% | 0.0 [-0.2, +0.2] | 0.562 |
 | Within 0.5 m | Haiku | 0.4% | 0.2% | +0.2 [-0.3, +0.9] | 0.406 |
-| Within 0.5 m | DeepSeek | 0.5% | 0.2% | +0.3 [0.0, +0.8] | 0.062 |
+| Within 0.5 m | DeepSeek (exploratory) | 0.5% | 0.2% | +0.3 [0.0, +0.8] | 0.062 |
 | Within 1 m | Opus | 0.7% | 0.7% | +0.1 [-0.7, +0.9] | 0.404 |
 | Within 1 m | Haiku | 1.1% | 0.7% | +0.5 [-0.7, +1.7] | 0.201 |
-| Within 1 m | DeepSeek | 2.1% | 0.7% | +1.4 [+0.2, +2.8] | 0.015 |
+| Within 1 m | DeepSeek (exploratory) | 2.1% | 0.7% | +1.4 [+0.2, +2.8] | 0.015 |
 | Within 2 m | Opus | 3.1% | 1.9% | +1.2 [-0.6, +3.2] | 0.111 |
 | Within 2 m | Haiku | 5.9% | 1.9% | +4.0 [+0.4, +7.9] | 0.016 |
-| Within 2 m | DeepSeek | 5.0% | 1.9% | +3.1 [+1.6, +4.9] | <0.001 |
+| Within 2 m | DeepSeek (exploratory) | 5.0% | 1.9% | +3.1 [+1.6, +4.9] | <0.001 |
 | Within 3 m | Opus | 6.1% | 5.2% | +0.9 [-2.2, +4.1] | 0.271 |
 | Within 3 m | Haiku | 9.5% | 5.2% | +4.3 [-0.1, +9.0] | 0.027 |
-| Within 3 m | DeepSeek | 8.7% | 5.2% | +3.6 [+0.6, +6.6] | 0.010 |
+| Within 3 m | DeepSeek (exploratory) | 8.7% | 5.2% | +3.6 [+0.6, +6.6] | 0.010 |
 <!-- /table:x_l4 -->
 
 **What the guesses hold.** The scorer does not save these counts; `supplement/supplement.py` counts them with the scorer's own loaders and label functions. A new object is "other" if its label has no class in the label table, and "structure" if it maps to a structure class. The flag is `is_predicted`. A new room typed dining is left out of L1 and L3 and counted here (deviation 51). Opus flags all its new objects; Haiku flags 51<!--n:sup_haiku_flag--> of 898<!--n:sup_haiku_objects-->; Gemini flags none. No model has a new room typed dining.
@@ -309,9 +310,9 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Opus | 176 | 1363 | 15 | 0 | 1.1% | 1363 | 0 | 190 | 43 | 22.6% | 0 |
 | Haiku | 175 | 898 | 4 | 0 | 0.4% | 51 | 847 | 91 | 43 | 47.3% | 0 |
-| DeepSeek | 160 | 1872 | 13 | 0 | 0.7% | 1849 | 23 | 198 | 11 | 5.6% | 0 |
-| Gemini | 29 | 350 | 1 | 0 | 0.3% | 0 | 350 | 44 | 8 | 18.2% | 0 |
-| Placebo | 176 | 1686 | 26 | 0 | 1.5% | 1686 | 0 | 282 | 0 | 0.0% | 0 |
+| DeepSeek (exploratory) | 160 | 1872 | 13 | 0 | 0.7% | 1849 | 23 | 198 | 11 | 5.6% | 0 |
+| Gemini (exploratory) | 29 | 350 | 1 | 0 | 0.3% | 0 | 350 | 44 | 8 | 18.2% | 0 |
+| Placebo (exploratory) | 176 | 1686 | 26 | 0 | 1.5% | 1686 | 0 | 282 | 0 | 0.0% | 0 |
 <!-- /table:sup_labels -->
 
 **The placement-error sample** (the input to M2's F3): the distance from each new object to the nearest unmapped object of its class in an unseen region. A guess with no such object is left out.
@@ -321,9 +322,9 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|
 | Opus | 800 | 548 | 8.12 |
 | Haiku | 617 | 277 | 7.13 |
-| DeepSeek | 1249 | 610 | 7.67 |
-| Gemini | 314 | 35 | 5.81 |
-| Placebo | 1030 | 630 | 8.95 |
+| DeepSeek (exploratory) | 1249 | 610 | 7.67 |
+| Gemini (exploratory) | 314 | 35 | 5.81 |
+| Placebo (exploratory) | 1030 | 630 | 8.95 |
 <!-- /table:err -->
 
 **The paper's room test.** A region not seen at stage 0 counts as predicted before it is found if, at some stage before it is seen, at least 2<!--n:rule_room_k--> of the members put a new room within 2.5<!--n:rule_room_m--> m of its centre. The paper's figure is below. The placebo arm gives the chance rate: 8.7%<!--n:room_live_placebo_all_stages_typed_rate--> of its regions typed, 58.0%<!--n:room_live_placebo_all_stages_untyped_rate--> untyped, over all stages.
@@ -334,7 +335,7 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 | The paper | 28 | 9 |
 <!-- /table:room_paper -->
 
-*Live runs (DeepSeek, 8 members at most; the placebo arm is the chance rate).*
+*Live runs (DeepSeek, exploratory; 8 members at most; the placebo arm is the chance rate).*
 
 <!-- table:room_live -->
 | Live arm | Regions | Typed, all stages | Untyped, all stages | Typed, 8-member stages | Untyped, 8-member stages |
@@ -352,9 +353,9 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|---|
 | Opus | 171 | 11 | 47 | 6 | 38 |
 | Haiku | 171 | 2 | 27 | 1 | 17 |
-| DeepSeek | 171 | 11 | 46 | 7 | 28 |
-| Gemini | 33 | 3 | 8 | 2 | 7 |
-| Placebo | 171 | 8 | 40 | 2 | 15 |
+| DeepSeek (exploratory) | 171 | 11 | 46 | 7 | 28 |
+| Gemini (exploratory) | 33 | 3 | 8 | 2 | 7 |
+| Placebo (exploratory) | 171 | 8 | 40 | 2 | 15 |
 <!-- /table:room_replay -->
 
 **The validity layer.** The validator is the E2 filter. First, the share of guesses it removes, by reason, for all five models.
@@ -364,9 +365,9 @@ Clusters behind the partly seen contrasts (of 12<!--n:frame_clusters-->):
 |---|---|---|---|---|---|---|
 | Opus | 1553 | 132 | 8.5% | 22 | 110 | - |
 | Haiku | 989 | 200 | 20.2% | 70 | 130 | - |
-| DeepSeek | 2070 | 663 | 32.0% | 527 | 124 | 12 |
-| Gemini | 394 | 14 | 3.6% | 4 | 10 | - |
-| Placebo | 1968 | 1355 | 68.9% | 1168 | 187 | - |
+| DeepSeek (exploratory) | 2070 | 663 | 32.0% | 527 | 124 | 12 |
+| Gemini (exploratory) | 394 | 14 | 3.6% | 4 | 10 | - |
+| Placebo (exploratory) | 1968 | 1355 | 68.9% | 1168 | 187 | - |
 <!-- /table:val_removed -->
 
 Second, kept against removed guesses, in points, with the registered reading. The reading is "no detectable difference" only when the interval lies within ±5<!--n:rule_valid_band--> points; otherwise the interval is too wide to read.
@@ -376,14 +377,14 @@ Second, kept against removed guesses, in points, with the registered reading. Th
 |---|---|---|---|---|
 | Opus L2 | 17 | 10 | -4.3 [-25.6, +18.7] | interval reaches beyond ±5 points |
 | Haiku L2 | 36 | 12 | -3.4 [-12.7, +7.8] | interval reaches beyond ±5 points |
-| DeepSeek L2 | 43 | 12 | +0.4 [-4.7, +6.1] | interval reaches beyond ±5 points |
-| Gemini L2 | 2 | 2 | -10.6 unbounded | interval reaches beyond ±5 points |
-| Placebo L2 | 44 | 12 | +0.5 [-4.7, +5.8] | interval reaches beyond ±5 points |
+| DeepSeek (exploratory) L2 | 43 | 12 | +0.4 [-4.7, +6.1] | interval reaches beyond ±5 points |
+| Gemini (exploratory) L2 | 2 | 2 | -10.6 unbounded | interval reaches beyond ±5 points |
+| Placebo (exploratory) L2 | 44 | 12 | +0.5 [-4.7, +5.8] | interval reaches beyond ±5 points |
 | Opus L3 | 32 | 12 | -12.6 [-28.4, +1.0] | interval reaches beyond ±5 points |
 | Haiku L3 | 37 | 12 | +0.1 [-4.7, +4.7] | no detectable difference |
-| DeepSeek L3 | 43 | 12 | -0.1 [-2.3, +2.0] | no detectable difference |
-| Gemini L3 | 6 | 3 | -4.5 unbounded | interval reaches beyond ±5 points |
-| Placebo L3 | 44 | 12 | -0.2 [-1.9, +1.4] | no detectable difference |
+| DeepSeek (exploratory) L3 | 43 | 12 | -0.1 [-2.3, +2.0] | no detectable difference |
+| Gemini (exploratory) L3 | 6 | 3 | -4.5 unbounded | interval reaches beyond ±5 points |
+| Placebo (exploratory) L3 | 44 | 12 | -0.2 [-1.9, +1.4] | no detectable difference |
 <!-- /table:val_kept -->
 
 Before the first scoring run, a worker's check script printed whether this readout lay inside or beyond the band for DeepSeek, the placebo and Gemini. It printed no number, and the scorer was not changed (deviation 52).
@@ -395,7 +396,7 @@ Third, member support against L3 truth: Brier score and expected calibration err
 |---|---|---|---|
 | Opus | 1495 | 0.257 | 0.379 |
 | Haiku | 942 | 0.136 | 0.248 |
-| DeepSeek | 2046 | 0.166 | 0.275 |
+| DeepSeek (exploratory) | 2046 | 0.166 | 0.275 |
 <!-- /table:val_reliab -->
 
 Raw support against the calibrated score, by test house:
@@ -407,8 +408,8 @@ Raw support against the calibrated score, by test house:
 | Opus, tested on 00871 | 0.239 | 0.080 | 0.330 | 0.061 |
 | Haiku, tested on 00853 | 0.157 | 0.056 | 0.257 | 0.040 |
 | Haiku, tested on 00871 | 0.116 | 0.044 | 0.239 | 0.013 |
-| DeepSeek, tested on 00853 | 0.175 | 0.051 | 0.286 | 0.005 |
-| DeepSeek, tested on 00871 | 0.156 | 0.055 | 0.264 | 0.005 |
+| DeepSeek (exploratory), tested on 00853 | 0.175 | 0.051 | 0.286 | 0.005 |
+| DeepSeek (exploratory), tested on 00871 | 0.156 | 0.055 | 0.264 | 0.005 |
 <!-- /table:val_cross -->
 
 The reliability curve behind them: support is the share of the 4 members that hold the guess.
@@ -424,10 +425,10 @@ The reliability curve behind them: support is the share of the 4 members that ho
 | Haiku 0.50 | 87 | 4.6% |
 | Haiku 0.75 | 7 | 0.0% |
 | Haiku 1.00 | 29 | 0.0% |
-| DeepSeek 0.25 | 1626 | 6.3% |
-| DeepSeek 0.50 | 248 | 2.4% |
-| DeepSeek 0.75 | 99 | 6.1% |
-| DeepSeek 1.00 | 73 | 1.4% |
+| DeepSeek (exploratory) 0.25 | 1626 | 6.3% |
+| DeepSeek (exploratory) 0.50 | 248 | 2.4% |
+| DeepSeek (exploratory) 0.75 | 99 | 6.1% |
+| DeepSeek (exploratory) 1.00 | 73 | 1.4% |
 <!-- /table:val_curve -->
 
 Fourth, guesses kept and hits kept at each vote level. The paper's 2-of-8 view exists for DeepSeek only, the one model with live members; the file holds one such view, over the stages it holds.
@@ -445,12 +446,12 @@ Fourth, guesses kept and hits kept at each vote level. The paper's 2-of-8 view e
 | Haiku, validator + vote 0.5 | 116 | 64 | 79 | 3 | 105 |
 | Haiku, validator + vote 0.75 | 33 | 9 | 9 | 0 | 31 |
 | Haiku, validator + vote 1.0 | 26 | 5 | 5 | 0 | 24 |
-| DeepSeek, raw | 2070 | 1039 | 1546 | 115 | 2046 |
-| DeepSeek, validator | 1407 | 730 | 1095 | 77 | 1396 |
-| DeepSeek, validator + the paper's 2-of-8 rule | 472 | 267 | 347 | 23 | 471 |
-| DeepSeek, validator + vote 0.5 | 292 | 153 | 196 | 7 | 292 |
-| DeepSeek, validator + vote 0.75 | 113 | 35 | 44 | 4 | 113 |
-| DeepSeek, validator + vote 1.0 | 40 | 1 | 1 | 0 | 40 |
+| DeepSeek (exploratory), raw | 2070 | 1039 | 1546 | 115 | 2046 |
+| DeepSeek (exploratory), validator | 1407 | 730 | 1095 | 77 | 1396 |
+| DeepSeek (exploratory), validator + the paper's 2-of-8 rule | 472 | 267 | 347 | 23 | 471 |
+| DeepSeek (exploratory), validator + vote 0.5 | 292 | 153 | 196 | 7 | 292 |
+| DeepSeek (exploratory), validator + vote 0.75 | 113 | 35 | 44 | 4 | 113 |
+| DeepSeek (exploratory), validator + vote 1.0 | 40 | 1 | 1 | 0 | 40 |
 <!-- /table:val_votes -->
 
 **The balance checks** (section 12). The drop rate is members not scored over members; the flag is a rate above 25<!--n:rule_drop_flag-->%. The "rejected because history was edited" count comes from the records: the loop sends history append-only and asks the API to fail on any edit, so a rejection would show as a ledger line whose `status` is not `ok`, or as a member record with an `error` or a `status` other than `ok`. Opus has 176<!--n:bal_records_opus--> member records and 457<!--n:bal_ledger_lines_opus--> ledger lines, Haiku 176<!--n:bal_records_haiku--> and 488<!--n:bal_ledger_lines_haiku-->. None has an error or a status other than `ok`.
@@ -462,13 +463,13 @@ Fourth, guesses kept and hits kept at each vote level. The paper's 2-of-8 view e
 | Haiku | 176 | 1 | 0.6% | 0 | 0 |
 <!-- /table:sup_balance -->
 
-**The prompt's hint (exploratory).** Haiku on the 12<!--n:frame_round1--> round-1 rows with the sentence "Scene may contain more than one bedroom and more than one bathroom" removed: 48<!--n:nohint_members--> members, all parsed, $0.30<!--n:spend_nohint-->. It ran after the confirmatory result was known (deviation 56). The hinted figures are the same 12<!--n:frame_round1--> rows of the confirmatory run. Rows with no L1 claim have no L1 score, so the row sets differ. The no-hint run's own results file gives the same L1 score (87.5%<!--n:nohint_file_score-->). The counts are small and decide nothing.
+**The prompt's hint (exploratory).** Haiku on the 12<!--n:frame_round1--> round-1 rows with the sentence "Scene may contain more than one bedroom and more than one bathroom" removed: 48<!--n:nohint_members--> members, all parsed, $0.30<!--n:spend_nohint-->. It ran after the confirmatory result was known (deviation 56). The hinted figures are the same 12<!--n:frame_round1--> rows of the confirmatory run. Rows with no L1 claim have no L1 score, so the row sets differ. The no-hint run's own results file gives the same L1 score (87.5%<!--n:nohint_file_score-->). The counts are small and decide nothing. Haiku's object claims that hit: 146<!--n:nohint_hint_l2h--> of 219<!--n:nohint_hint_l2n--> with the sentence and 150<!--n:nohint_nohint_l2h--> of 230<!--n:nohint_nohint_l2n--> without it.
 
 <!-- table:nohint -->
-| Run | Rows with an L1 score | L1 claims | L1 hits | L1 score (mean of row scores) | Members with a claim |
-|---|---|---|---|---|---|
-| With the hint | 6 | 9 | 5 | 66.7% | 9 |
-| Without the hint | 8 | 12 | 11 | 87.5% | 12 |
+| Run | Rows with an L1 score | L1 claims | L1 hits | L1 score (mean of row scores) | Members with a claim | L2 claims | L2 hits |
+|---|---|---|---|---|---|---|---|
+| With the hint | 6 | 9 | 5 | 66.7% | 9 | 219 | 146 |
+| Without the hint | 8 | 12 | 11 | 87.5% | 12 | 230 | 150 |
 <!-- /table:nohint -->
 
 New rooms are room nodes more than 0.5 m, horizontally, from every room node of the row's observed graph. Over the 48<!--n:nhr_hint_members--> hinted members Haiku proposed 22<!--n:nhr_hint_total--> new rooms; over the 48<!--n:nhr_nohint_members--> members without the hint, 28<!--n:nhr_nohint_total-->. Names are as the model wrote them, with "an image of a" removed.
@@ -490,7 +491,7 @@ New rooms are room nodes more than 0.5 m, horizontally, from every room node of 
 
 ## 8. M2: would right meaning be enough for ASP's score?
 
-M2 is descriptive, not blind; its reading rule was set in advance (pre-registration sha256 5b8a8400<!--n:m2_prereg_hash-->…). It reads ASP's own viewpoint score on 384<!--n:m2_stages--> bench stages from 24<!--n:m2_runs--> runs, and uses the Spearman correlation between the score and a yardstick of unmapped objects a candidate could see. F1 holds the true guesses, F5 the placebo, F6 none, F0 every true unmapped object, F3 the true objects moved by a model's placement error (its median error sits beside its row), and F-room only objects typical of each unseen region's type.
+M2 is descriptive, not blind; its reading rule was set in advance (pre-registration sha256 5b8a8400<!--n:m2_prereg_hash-->…). It reads ASP's own viewpoint score on 384<!--n:m2_stages--> bench stages from 24<!--n:m2_runs--> runs, and uses the Spearman correlation between the score and a yardstick of unmapped objects a candidate could see. F1 holds the true guesses, F5 the placebo, F6 none, F0 every true unmapped object, F3 the true objects moved by a model's placement error (its median error sits beside its row; DeepSeek's error file is exploratory), and F-room only objects typical of each unseen region's type.
 
 <!-- table:m2_arms -->
 | Arm | Mean correlation [interval] | Median per stage | Median placement error (m) |
@@ -519,7 +520,7 @@ The reading rule. A = F1 minus F5. If A lies wholly above 0, a candidate X is *s
 | F6 minus F5 | -0.093 [-0.109, -0.078] | - | not part of the reading rule |
 <!-- /table:m2_reading -->
 
-On the primary yardstick, every M2 verdict is "not shown sufficient, on a provisional yardstick". No arm comes near the half of A that the rule asks for. F3 with Haiku's error differs from F5 by -0.006<!--n:m2_B_haiku_mean--> and with Opus's error by -0.029<!--n:m2_B_opus_mean-->: the Haiku interval includes 0 and the Opus interval lies below it. F-room differs from F5 by +0.024<!--n:m2_C_mean-->. F0 differs from F5 by -0.017<!--n:m2_F0F5_mean-->. F0 is a property of the score, reported as it came out; `ig` is 0 for every candidate in only 2<!--n:m2_f0_ig_zero--> of 384<!--n:m2_f0_ig_zero_of--> stages (0.5%<!--n:m2_f0_ig_zero_share-->), so this does not explain F0 ≈ F5. No correction was made for running F3 for 3<!--n:rule_f3_models--> models.
+On the primary yardstick, every M2 verdict is "not shown sufficient, on a provisional yardstick". No arm comes near the half of A that the rule asks for. F3 with Haiku's error differs from F5 by -0.006<!--n:m2_B_haiku_mean--> and with Opus's error by -0.029<!--n:m2_B_opus_mean-->: the Haiku interval includes 0 and the Opus interval lies below it. F-room differs from F5 by +0.024<!--n:m2_C_mean-->. F0 scores below F5: the difference is -0.017<!--n:m2_F0F5_mean--> [-0.031<!--n:m2_F0F5_lo-->, -0.004<!--n:m2_F0F5_hi-->], and the interval excludes zero. `ig` is 0 for every candidate in only 2<!--n:m2_f0_ig_zero--> of 384<!--n:m2_f0_ig_zero_of--> stages (0.5%<!--n:m2_f0_ig_zero_share-->). We have no tested account of why F0 falls below F5. The pre-registration (M2 §7) names it a property of the score: the score counts disagreement between members. No correction was made for running F3 for 3<!--n:rule_f3_models--> models.
 
 Repeats on other yardsticks and subsets. The columns from A to C are X minus F5; the verdicts come from X minus half of A. Where a cell says "not shown", read "not shown sufficient, on a provisional yardstick".
 
@@ -628,7 +629,7 @@ The other yardsticks, on the official-arm stages alone:
 | U_360 | 119 | +0.311 [+0.263, +0.359] | +0.089 [+0.034, +0.145] | +0.080 [+0.006, +0.154] | +0.069 [-0.002, +0.143] | +0.180 [+0.080, +0.279] | B: not shown; C: inconclusive |
 <!-- /table:m2_secondary_off -->
 
-Counts. 384<!--n:m2_stages--> stages are usable and 0<!--n:m2_left_out--> are left out. F-room has 9.63<!--n:m2_froom_objects--> objects per member against 10.05<!--n:m2_f1_objects--> for F1, because 115<!--n:m2_froom_members--> of 2841<!--n:m2_members_total--> members had no unseen typed region (in 22<!--n:m2_froom_stages--> stages, and in 8<!--n:m2_froom_stages_all--> of them every member). No F3 member fell back to placebo objects (0<!--n:m2_fallback_deepseek-->, 0<!--n:m2_fallback_haiku--> and 0<!--n:m2_fallback_opus-->). F0 holds 151.4<!--n:m2_froom_f0_objects--> objects per member. The official-arm repeat uses 119<!--n:m2_official_stages--> stages from 7<!--n:m2_official_runs--> runs.
+Counts. 384<!--n:m2_stages--> stages are usable and 0<!--n:m2_left_out--> are left out. F-room has 9.63<!--n:m2_froom_objects--> objects per member against 10.05<!--n:m2_f1_objects--> for F1, because 115<!--n:m2_froom_members--> of 2841<!--n:m2_members_total--> members had no unseen typed region (in 22<!--n:m2_froom_stages--> stages, and in 8<!--n:m2_froom_stages_all--> of them every member). No F3 member fell back to placebo objects (0<!--n:m2_fallback_deepseek-->, 0<!--n:m2_fallback_haiku--> and 0<!--n:m2_fallback_opus-->). F0 holds 151.45<!--n:m2_froom_f0_objects--> objects per member. The official-arm repeat uses 119<!--n:m2_official_stages--> stages from 7<!--n:m2_official_runs--> runs.
 
 The registered biases:
 - Toward "not shown sufficient": F1's objects are the very objects the yardstick counts.
@@ -647,7 +648,7 @@ Readings where the frozen M2 file is silent (deviation 54): F0's "unmapped" obje
 - The scorer was written after DeepSeek's numbers were seen, and frozen before any Claude output was scored. The margin at L3 was set knowing the gap between Gemini and DeepSeek at 1 m.
 - One Haiku member was dropped (1<!--n:status_haiku_dropped--> of 176<!--n:mem_haiku_n-->): its final text did not parse.
 - The 8<!--n:frame_rows_gemini--> Gemini rows have no wrong-house partner, and Gemini's 3<!--n:gemini_clusters--> clusters leave its intervals unbounded.
-- At L1 the contrasts rest on 24<!--n:l1_rows_haiku--> rows for Haiku, 41<!--n:l1_rows_opus--> for Opus and 42<!--n:l1_rows_deepseek--> for DeepSeek, not 44<!--n:frame_rows-->.
+- At L1 the contrasts rest on 24<!--n:l1_rows_haiku--> rows for Haiku, 41<!--n:l1_rows_opus--> for Opus and 42<!--n:l1_rows_deepseek--> for DeepSeek (exploratory), not 44<!--n:frame_rows-->.
 - A worker's check script printed, before the first scoring run, whether one secondary readout (kept against removed guesses) lay inside or beyond the ±5<!--n:rule_valid_band-->-point band for DeepSeek, the placebo and Gemini. It printed no number, and the scorer was not changed in response (deviation 52).
 - A guess labelled "stove" can never hit in either house under the frozen label rules (section 7).
 - The close L3 verdict was checked again after the result was seen (deviation 55). The no-hint replay was run after it too (deviation 56).
@@ -657,8 +658,8 @@ Readings where the frozen M2 file is silent (deviation 54): F0's "unmapped" obje
 
 ## 10. What this lets the talk say
 
-The registered outcome is "The claim fails<!--n:thesis-->": both Claude models are Rejected at L2 and at L3. In plain words, the intervals rule out a gain over the named comparator as large as the margin; they do not say the models are worse. This holds for two houses, on a truth that is a proxy for what the camera saw, on static replays, and says nothing about other houses. At L2 each model scores below the prior from 179<!--n:rule_houses--> other houses, and the interval lies wholly below zero. At L3 the difference from the model's own content traded across unobserved regions shows no detectable difference (the registered detectable difference is 1.1<!--n:mdd_L3_mdd--> points; it comes from the placebo's contrast and is too small for this one), and gains up to 2.95<!--n:p_opus_L3_D_hi2--> points for Opus and 2.36<!--n:p_haiku_L3_D_hi2--> for Haiku are not ruled out. Opus's interval ends 0.05<!--n:p_opus_L3_D_gap--> points below the margin. At L1 the contrasts rest on 41<!--n:l1_rows_opus--> rows for Opus, 24<!--n:l1_rows_haiku--> for Haiku and 42<!--n:l1_rows_deepseek--> for DeepSeek, of 44<!--n:frame_rows-->. M2 does not show that right meaning is sufficient: on the primary yardstick every arm is "not shown sufficient, on a provisional yardstick".
+The registered outcome is "The claim fails<!--n:thesis-->": both Claude models are Rejected at L2 and at L3. In plain words, the intervals rule out a gain over the named comparator as large as the margin. The verdict alone does not say the models are worse; at L2 the interval does. This holds for two houses, on a truth that is a proxy for what the camera saw, on static replays, and says nothing about other houses. At L2 each model scores below the prior from 179<!--n:rule_houses--> other houses, and the interval lies wholly below zero. At L3 the difference from the model's own content traded across unobserved regions shows no detectable difference (intervals [-1.9<!--n:c_opus_L3_Dci_lo-->, +2.9<!--n:c_opus_L3_Dci_hi-->] for Opus and [-0.8<!--n:c_haiku_L3_Dci_lo-->, +2.4<!--n:c_haiku_L3_Dci_hi-->] for Haiku; the registered detectable difference, 1.1<!--n:mdd_L3_mdd--> points, comes from the placebo's contrast and is too small for these), and gains up to 2.95<!--n:p_opus_L3_D_hi2--> points for Opus and 2.36<!--n:p_haiku_L3_D_hi2--> for Haiku are not ruled out. Opus's interval ends 0.05<!--n:p_opus_L3_D_gap--> points below the margin. At L1 the contrasts rest on 41<!--n:l1_rows_opus--> rows for Opus, 24<!--n:l1_rows_haiku--> for Haiku and 42<!--n:l1_rows_deepseek--> for DeepSeek (exploratory), of 44<!--n:frame_rows-->. M2 does not show that right meaning is sufficient: on the primary yardstick every arm is "not shown sufficient, on a provisional yardstick".
 
 ## What it does not let the talk say
 
-It does not say where the guesses sit. Supported at L3 would have meant beating the named comparators at placing content in the right unobserved region; no model did. It does not say the guesses reach the map. It does not say Claude's guesses are no better than random: Haiku scores +8.2<!--n:c_haiku_L2_B1_diff--> points above the placebo at L2 (p 0.014<!--n:c_haiku_L2_B1_p-->, one contrast, not adjusted). It does not use "equal", "did as well" or "failed to replicate". It does not speak for other houses, live runs, other models, or the paper's scale. It does not say M2's second half is settled: its yardstick is provisional and its net bias is unknown. The Opus verdict at L3 is close: the registered figure is 2.95<!--n:p_opus_L3_D_hi2--> against a margin of 3<!--n:c_opus_L3_margin-->, and the 15<!--n:rc_opus_below--> reruns stayed below it. A crossing would have made the thesis line "Inconclusive".
+It does not say where the guesses sit. Supported at L3 would have meant beating the named comparators at placing content in the right unobserved region; no model did. It does not say the guesses reach the map. It does not say Claude's guesses are no better than random: Haiku scores +8.2<!--n:c_haiku_L2_B1_diff--> points above the placebo at L2 (p 0.014<!--n:c_haiku_L2_B1_p-->, one contrast, not adjusted). It does not use "equal", "did as well" or "failed to replicate". It does not speak for other houses, live runs, other models, or the paper's scale. It does not show that a language model cannot help exploration. It does not say M2's second half is settled: its yardstick is provisional and its net bias is unknown. The Opus verdict at L3 is close: the registered figure is 2.95<!--n:p_opus_L3_D_hi2--> against a margin of 3<!--n:c_opus_L3_margin-->, and the 15<!--n:rc_opus_below--> reruns stayed below it. A crossing would have made the thesis line "Inconclusive".

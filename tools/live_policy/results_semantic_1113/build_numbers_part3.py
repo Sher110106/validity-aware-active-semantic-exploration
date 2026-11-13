@@ -50,7 +50,8 @@ M2DIR = "tools/live_policy/results_m2_1113/"
 REPLAY = CVP / "replay_outputs"
 INPUTS = CVP / "replay_inputs" / "frame_inputs"
 
-NAMES = {"opus": "Opus", "haiku": "Haiku", "deepseek": "DeepSeek", "gemini": "Gemini", "placebo": "Placebo"}
+NAMES = {"opus": "Opus", "haiku": "Haiku", "deepseek": "DeepSeek (exploratory)", "gemini": "Gemini (exploratory)",
+         "placebo": "Placebo (exploratory)"}
 MODEL_ID = {"opus": OPUS, "haiku": HAIKU, "deepseek": "deepseek", "gemini": "gemini", "placebo": "placebo"}
 MODEL_FILE = {"opus": CL + "results.json", "haiku": CL + "results.json",
               "deepseek": EX + "results.json", "gemini": EX + "results.json", "placebo": EX + "results.json"}
@@ -904,7 +905,7 @@ def m2_numbers():
     regj("m2_f0_ig_zero_share", src, c + ("ig_zero_stage_share", "F0", "share"), f_pct, "share")
     regj("m2_froom_objects", src, c + ("objects_per_member", "F-room", "mean_per_member"), f_num(2), "objects")
     regj("m2_f1_objects", src, c + ("objects_per_member", "F1", "mean_per_member"), f_num(2), "objects")
-    regj("m2_froom_f0_objects", src, c + ("objects_per_member", "F0", "mean_per_member"), f_num(1), "objects")
+    regj("m2_froom_f0_objects", src, c + ("objects_per_member", "F0", "mean_per_member"), f_num(2), "objects")
     regj("m2_froom_members", src, c + ("froom_no_unseen_typed", "members"), f_int, "members")
     regj("m2_members_total", src, c + ("froom_no_unseen_typed", "members_total"), f_int, "members")
     regj("m2_froom_stages", src, c + ("froom_no_unseen_typed", "stages_with_a_member"), f_int, "stages")
@@ -961,6 +962,16 @@ def replay_numbers(skip_replay):
         reg(f"mem_{short}_calls", statistics.fmean(calls), f_num(2), "calls per member", rel, "mean of len(calls)")
         reg(f"mem_{short}_tools", statistics.fmean(tools), f_num(1), "tool calls per member", rel,
             "mean of len(tool_calls)")
+    for model, short in ((OPUS, "opus"), (HAIKU, "haiku")):
+        files = sorted((REPLAY / "m4" / model / "effort_medium").glob("*/member_*/record.json"))
+        flagged = [p for p in files if "stop_max_tokens" in json.loads(p.read_text()).get("flags", [])]
+        if short == "haiku":
+            reg(f"mem_{short}_maxtok", len(flagged), f_int, "members", relsrc(REPLAY / "m4" / model / "effort_medium") +
+                "/<row>/member_<k>/record.json", "count of records whose flags hold stop_max_tokens")
+    drop = REPLAY / "m4" / HAIKU / "effort_medium" / "e2_00871_s43_filter_st03" / "member_3"
+    dr = json.loads((drop / "record.json").read_text())
+    if "stop_max_tokens" not in dr["flags"] or dr["stop_reasons"][-1] != "max_tokens" or json.loads((drop / "parse.json").read_text())["ok"]:
+        raise Fail("the dropped Haiku member is no longer the max_tokens member that failed to parse")
     reg("mem_total", sum(len(list((REPLAY / "m4" / m / "effort_medium").glob("*/member_*/record.json")))
                          for m in (OPUS, HAIKU)), f_int, "members", "replay_outputs/m4", "count of record.json files")
     log = (REPLAY / "m4" / "replay_run.log").read_text().splitlines()
@@ -1098,6 +1109,12 @@ def recompute_numbers():
         reg(f"p_{short}_L3_D_gap", 0.03 - ci[1], lambda v: f_pts(v, 2), "points", base,
             "margin 0.03 minus ci[1] of " + jp(*lkeys(m, "L3"), "comparators", "D", "ci"))
     for short, m in (("opus", "opus"), ("haiku", "haiku")):
+        for comp, L, tag in ((("B1", "L2", "B1ci"),) if short == "opus" else ()) + (("B5", "L3", "B5ci"),):
+            ci = at(J(CL + "results.json"), *lkeys(m, L), "comparators", comp, "ci")
+            for i, part in enumerate(("lo", "hi")):
+                reg(f"p_{short}_{L}_{tag}_{part}", ci[i], lambda v: f_pts(v, 1, True), "points", CL + "results.json",
+                    jp(*lkeys(m, L), "comparators", comp, "ci", i))
+    for short, m in (("opus", "opus"), ("haiku", "haiku")):
         for L in ("L1", "L2"):
             node = at(J(CL + "results.json"), *lkeys(m, L), "comparators", "B3")
             reg(f"p_{short}_{L}_B3_hi", node["ci"][1], lambda v: f_pts(v, 1, True), "points", CL + "results.json",
@@ -1154,13 +1171,13 @@ def nohint_tables(rows, rnd, skip_replay):
     hint_src = CL + f"records_{HAIKU}.json"
     nh_src = NH + f"records_{HAIKU}.json"
     tab = Tab("nohint", ["Run", "Rows with an L1 score", "L1 claims", "L1 hits", "L1 score (mean of row scores)",
-                         "Members with a claim"])
+                         "Members with a claim", "L2 claims", "L2 hits"])
     for label, src in (("With the hint", hint_src), ("Without the hint", nh_src)):
         recs = [r for r in J(src)["records"] if r["round"] == 1]
         if len(recs) != len(r1):
             raise Fail("round 1 rows differ from the frame")
         row_scores = []
-        claims = hits = withc = 0
+        claims = hits = withc = l2n = l2h = 0
         for r in recs:
             sc = [m["L1"] for m in r["model"].values() if m["L1"] is not None]
             if sc:
@@ -1168,6 +1185,8 @@ def nohint_tables(rows, rnd, skip_replay):
             for m in r["model"].values():
                 claims += m["counts"]["l1_n"]
                 hits += m["counts"]["l1_hits"]
+                l2n += m["counts"]["l2_n"]
+                l2h += m["counts"]["l2_hits"]
                 withc += m["counts"]["l1_n"] > 0
         k = "nohint_" + ("hint" if label.startswith("With the") else "nohint")
         w = lambda c: tab.where(label, c)   # noqa: E731
@@ -1178,7 +1197,9 @@ def nohint_tables(rows, rnd, skip_replay):
             reg(k + "_hits", hits, f_int, "hits", src, path + "sum of model/*/counts/l1_hits", w("L1 hits")),
             reg(k + "_score", statistics.fmean(row_scores), f_pct, "share", src,
                 path + "mean over rows of the mean of model/*/L1", w("L1 score (mean of row scores)")),
-            reg(k + "_members", withc, f_int, "members", src, path + "count of members with l1_n > 0", w("Members with a claim"))])
+            reg(k + "_members", withc, f_int, "members", src, path + "count of members with l1_n > 0", w("Members with a claim")),
+            reg(k + "_l2n", l2n, f_int, "claims", src, path + "sum of model/*/counts/l2_n", w("L2 claims")),
+            reg(k + "_l2h", l2h, f_int, "hits", src, path + "sum of model/*/counts/l2_hits", w("L2 hits"))])
     tab.done()
     # the no-hint run's own file: the same score
     nh = J(NH + "results.json")
