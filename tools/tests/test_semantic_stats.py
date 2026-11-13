@@ -432,3 +432,31 @@ def test_cluster_means_builds_d():
     assert ids == ids_b
     d = np.asarray(llm) - np.asarray(base)
     assert d == pytest.approx([0.3, 0.0])
+
+
+# ---- reliability helpers (§11 readout 3)
+
+def test_brier_and_ece_by_hand():
+    p, y = [0.25, 0.25, 0.5, 1.0], [0, 1, 1, 1]
+    assert st.brier_score(p, y) == pytest.approx((0.0625 + 0.5625 + 0.25 + 0.0) / 4)
+    curve = st.reliability_curve(p, y)
+    assert [(b["lo"], b["n"], b["mean_y"]) for b in curve] == [(0.25, 2, 0.5), (0.5, 1, 1.0), (1.0, 1, 1.0)]
+    assert st.expected_calibration_error(p, y) == pytest.approx((2 * 0.25 + 1 * 0.5 + 0) / 4)
+    assert st.expected_calibration_error([0.5, 0.5], [0, 1]) == 0.0           # calibrated
+    with pytest.raises(ValueError):
+        st.brier_score([0.5], [1, 0])
+
+
+def test_reliability_curve_uses_equal_width_bins_when_there_are_many_values():
+    p = [i / 20 for i in range(21)]
+    curve = st.reliability_curve(p, [1 if x > 0.5 else 0 for x in p], max_bins=5)
+    assert sum(b["n"] for b in curve) == 21 and len(curve) == 5 and curve[0]["lo"] == 0.0 and curve[-1]["hi"] == 1.0
+
+
+def test_isotonic_map_pools_violators_and_is_monotone():
+    f = st.IsotonicMap([0.25, 0.5, 0.75, 1.0], [1, 0, 1, 1])
+    assert [f(x) for x in (0.25, 0.5, 0.75, 1.0)] == [0.5, 0.5, 1.0, 1.0]      # 0.25 and 0.5 pooled
+    vals = [f(x / 10) for x in range(0, 13)]
+    assert vals == sorted(vals)
+    g = st.IsotonicMap([0.5, 0.5, 1.0], [0, 1, 1])                            # equal scores pool first
+    assert g(0.5) == 0.5 and g(0.9) == 1.0 and g(2.0) == 1.0

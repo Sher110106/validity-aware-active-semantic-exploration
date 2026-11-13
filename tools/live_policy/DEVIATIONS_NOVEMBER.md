@@ -55,3 +55,10 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - **Structure words (§6, rule 4).** The label table also maps names ending in beam, column or pillar to a structure class. Structure classes and "other" both take no part in L2 or L3, so no score changes.
     - **The head-noun step (§6, step 7)** gives a few names in other houses an odd class: "dog bed" answers to bed, although it marks no bedroom. Neither test house holds such a name; the only effect is on the other-house prior's counts.
     - **Items that reach two regions (§8).** The share is reported twice: over all regions, and over unobserved regions only.
+
+52. **11-13 19:40: more points the frozen semantic pre-registration left open, and one disclosure,** all before the first scoring run and before the scorer's independent code review.
+    - **Disclosure.** While wiring the scorer, a worker's own check script printed the wording of one secondary readout (kept against removed guesses, §11) for DeepSeek, the placebo and Gemini: whether each difference lay inside or beyond the ±5-point band. It printed no number, the scorer was not changed in response, and nothing in the repository prints a result in its dry mode.
+    - **"Live stages with 8 members" (§11).** Stage 0 of a live run holds 4 members. The room test and the 2-of-8 view are reported twice: over all stages, and over the stages that hold all 8.
+    - **The 2-of-8 view (§11).** The file names the paper's rule without defining it as a filter. The reading used is written in `semantic/README.md`.
+    - **The prior that knows the house's size (§9).** The file does not say where the thirds are cut or how this form relates to the form with truly seen counts. Three sensitivity lines are reported: seen counts, size, and both.
+    - **The room test on 4-member replays (§11).** "Before it is seen" needs later stages, which a replay of one stage does not have. The replay's count uses the states of the run the row came from.

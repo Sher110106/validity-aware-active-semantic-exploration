@@ -646,9 +646,11 @@ def test_read_member_claims_items_and_counts(tmp_path, observed):
     assert mem.n_objects_flagged == 1 and mem.n_objects_unflagged == 5   # the flag as written, not a rule
     rooms = sorted((i.label, i.xy) for i in mem.l3_items if i.kind == "room")
     objs = sorted((i.label, i.xy) for i in mem.l3_items if i.kind == "object")
-    assert rooms == [("bathroom", (9.0, 1.0)), ("dining", (9.0, 5.0)), ("kitchen", (6.0, 3.0))]
+    # item 51 of DEVIATIONS_NOVEMBER: a new room typed dining is left out of the L3 items, and counted
+    assert rooms == [("bathroom", (9.0, 1.0)), ("kitchen", (6.0, 3.0))]
+    assert mem.n_rooms_dining == 1
     assert objs == [("lamp", (9.0, 9.0)), ("lamp", (9.1, 9.0)), ("sofa", (7.0, 5.0)), ("table", (0.51, 0.0))]
-    assert len(mem.l3_items) == 7
+    assert len(mem.l3_items) == 6
 
 
 def test_broken_positions_are_skipped_and_counted(tmp_path, observed):
@@ -819,7 +821,9 @@ def test_members_claude_layout_and_root_is_a_parameter(campaign, tmp_path):
     root = tmp_path / "claude"
     for m in (0, 2):
         write_graph(root / "claude-opus-5-5" / "r1_e1" / f"member_{m}" / "parsed_graph.yaml", new_lamp(80 + m, float(m)))
+        (root / "claude-opus-5-5" / "r1_e1" / f"member_{m}" / "parse.json").write_text('{"ok": true}')
     write_graph(root / "claude-haiku-5-5" / "r1_e1" / "member_1" / "parsed_graph.yaml", new_lamp(90, 1.0))
+    (root / "claude-haiku-5-5" / "r1_e1" / "member_1" / "parse.json").write_text('{"ok": true}')
     row = ep.load_row("r1_e1", runs_root=runs, frame_path=frame)
     opus = ep.members_for(row, "claude-opus-5-5", runs_root=runs, claude_root=root, frame_path=frame)
     haiku = ep.members_for(row, "claude-haiku-5-5", runs_root=runs, claude_root=root, frame_path=frame)
@@ -911,3 +915,104 @@ def _real_labels_or_stub():
         answers_to = staticmethod(lambda n: frozenset())
     print("smoke check uses the stub label layer")
     return Stub
+
+
+# ---- added with the wiring: open_type_regions, Claude drops, live members, the labels switch
+
+def test_open_type_regions_agree_with_open_types_in_every_scenario(truth, two_bedrooms):
+    scenarios = [(truth, mk_row()),
+                 (truth, mk_row(objects=[N(1, "object", "bed", (3.0, 1.0), canon="bed")])),
+                 (truth, mk_row(rooms=[N(100, "room", "bathroom", (-0.3, 1.0), rtype="bathroom")])),
+                 (truth, mk_row(rooms=[N(100, "room", "bathroom", (1.0, 2.2), rtype="bathroom")])),
+                 (two_bedrooms, mk_row(rooms=[N(100, "room", "bedroom", (2.15, 1.0), rtype="bedroom")])),
+                 (two_bedrooms, mk_row(rooms=[N(100, "room", "bedroom", (1.9, 1.0), rtype="bedroom")], path=[(1.0, 1.0)]))]
+    for t, row in scenarios:
+        st = rt.stage_state(t, row)
+        assert {k for k, v in st.open_type_regions.items() if v} == set(st.open_types)
+        for typ, regs in st.open_type_regions.items():
+            assert regs <= st.unseen and all(typ in t.regions[r].types for r in regs)
+
+
+def test_open_type_regions_keeps_only_the_unclosed_bedroom(two_bedrooms):
+    node = N(100, "room", "bedroom", (1.9, 1.0), rtype="bedroom")
+    st = rt.stage_state(two_bedrooms, mk_row(rooms=[node], path=[(1.0, 1.0)]))
+    assert st.open_type_regions == {"bedroom": frozenset({3})}        # A is seen; B stays open next to the node
+
+
+def test_claude_member_status_and_drops(tmp_path):
+    root = tmp_path / "claude" / "claude-opus-5-5" / "row1"
+    def member(k, parse, graph=True):
+        d = root / f"member_{k}"
+        d.mkdir(parents=True)
+        if parse is not None:
+            (d / "parse.json").write_text(parse)
+        if graph:
+            write_graph(d / "parsed_graph.yaml", OBS_NODES)
+    member(0, '{"ok": true}')
+    member(1, '{"ok": false}')                 # the parse failed: dropped
+    member(2, None)                            # no parse.json: cannot be confirmed, dropped
+    (root / "member_3").mkdir()                # a folder with nothing in it: dropped
+    status = ep.claude_member_status(tmp_path / "claude", "claude-opus-5-5", "row1")
+    assert status == {0: "ok", 1: "dropped", 2: "dropped", 3: "dropped"}
+    member_ok_graph_missing = root.parent / "row2" / "member_0"
+    member_ok_graph_missing.mkdir(parents=True)
+    (member_ok_graph_missing / "parse.json").write_text('{"ok": true}')    # ok, but no parsed_graph.yaml
+    assert ep.claude_member_status(tmp_path / "claude", "claude-opus-5-5", "row2")[0] == "dropped"
+    assert ep.claude_member_status(tmp_path / "claude", "claude-opus-5-5", "row3") == {k: "absent" for k in range(4)}
+    assert ep.claude_member_status(tmp_path / "claude", "claude-haiku-5-5", "row1") == {k: "absent" for k in range(4)}
+
+
+def test_live_member_files_and_raw_member_files(tmp_path):
+    run = "e2_00853_s42_filter_only_60m"
+    sd = tmp_path / run / "stages" / "4"
+    for k in (0, 1, 5):
+        write_graph(sd / f"habitat_scene_graph_new_graph_{k}.yaml", OBS_NODES)
+    assert sorted(ep.live_member_files(run, 4, tmp_path)) == [0, 1, 5]
+    assert sorted(ep.raw_member_files(run, 4, tmp_path)) == [0, 1, 5]           # no raw folder: the stage files
+    for k in (0, 1, 2, 5, 6):
+        write_graph(sd / "live_policy_raw" / "attempt_1" / f"habitat_scene_graph_new_graph_{k}.yaml", OBS_NODES)
+    write_graph(sd / "live_policy_raw" / "attempt_0" / "habitat_scene_graph_new_graph_3.yaml", OBS_NODES)
+    raw = ep.raw_member_files(run, 4, tmp_path)
+    assert sorted(raw) == [0, 1, 2, 5, 6] and all("attempt_1" in str(p) for p in raw.values())
+
+
+def test_load_stage_row_and_run_info(tmp_path):
+    run = "e1_00871_s43_placebo_60m"
+    for k in (0, 1, 2):
+        write_graph(tmp_path / run / "stages" / str(k) / "habitat_scene_graph_original_graph0.yaml", OBS_NODES)
+    (tmp_path / run / "stages" / "1" / "executed_path.json").write_text(
+        json.dumps({"world_frame_path": [[1.0, 2.0, 1.1], [1.5, 2.0, 1.1]]}))
+    (tmp_path / run / "stages" / "2" / "executed_path.json").write_text(
+        json.dumps({"world_frame_path": [[1.5, 2.0, 1.1], [2.0, 2.0, 1.1]]}))
+    assert ep.run_info(run) == ("00871", 43, "placebo")
+    assert ep.run_info("e3_00853_s42_oracle_visible_60m_rerun1") == ("00853", 42, "oracle_visible")
+    with pytest.raises(ValueError):
+        ep.run_info("e4_00853_s42_frontier_60m")
+    assert ep.stage_numbers(run, tmp_path) == [0, 1, 2]
+    r0, r2 = ep.load_stage_row(run, 0, tmp_path), ep.load_stage_row(run, 2, tmp_path)
+    assert r0.path_xy == ((1.0, 2.0),)                        # stage 0: the start pose alone
+    assert r2.path_xy == ((1.0, 2.0), (1.0, 2.0), (1.5, 2.0), (1.5, 2.0), (2.0, 2.0))
+    assert r2.row_id == f"{run}#st02" and (r2.scene, r2.seed, r2.arm, r2.stage, r2.round) == ("00871", 43, "placebo", 2, 0)
+
+
+def test_the_labels_switch_reaches_the_truth(tmp_path, monkeypatch):
+    import importlib.util as _u
+    _spec = _u.spec_from_file_location("_real_labels_for_switch", os.path.join(SEM, "labels.py"))
+    real_labels = _u.module_from_spec(_spec)
+    _spec.loader.exec_module(real_labels)
+    monkeypatch.setattr(rt, "labels", real_labels)
+    objs = [{"id": 1, "name": "bed", "region": 1, "n_tri": 5, "world_min": [0, 0, 0], "world_max": [1, 1, 1]},
+            {"id": 2, "name": "refrigerator", "region": 1, "n_tri": 5, "world_min": [2, 0, 0], "world_max": [3, 1, 1]}]
+    import numpy as np
+    mask = np.zeros((1, 10, 10), dtype=bool)
+    mask[0, 2:6, 2:6] = True
+    np.savez(tmp_path / "77777_region_footprints.npz", cell_size=0.05, region_ids=np.array([1]), any_masks=mask,
+             floor_masks=mask, origin_xy=np.array([0.0, 0.0]))
+    (tmp_path / "77777_semantic_geometry.json").write_text(json.dumps(
+        {"scene": "77777", "n_objects": 2, "objects": {str(o["id"]): o for o in objs}}))
+    (tmp_path / "77777_regions.json").write_text(json.dumps({"scene": "77777", "regions": [{"region_id": 1, "centroid_xy": [0.0, 0.0]}]}))
+    both = rt.load_scene_truth("77777", truth_dir=tmp_path)
+    prim = rt.load_scene_truth("77777", truth_dir=tmp_path, include_extended=False)
+    answers = lambda t: {o.raw_name: set(o.answers_to) for o in t.regions[1].ref_objects}      # noqa: E731
+    assert answers(both)["bed"] == {"bed", "duvet"} and answers(prim)["bed"] == {"bed"}
+    assert answers(both)["refrigerator"] == answers(prim)["refrigerator"] == {"fridge"}

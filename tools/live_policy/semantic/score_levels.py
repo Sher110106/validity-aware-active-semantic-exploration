@@ -91,7 +91,8 @@ def possible(level: str, truth, state) -> bool:
     """§8, last sentence: can any hit occur at this level on this row?
     L1: some type is open. L2: some class is open. L3: some region is unobserved."""
     if level == "L1":
-        return bool(state.open_types)
+        # dining is reported, never scored (§5.2, §7): an open dining room makes no hit possible
+        return bool(set(state.open_types) & set(model.ROOM_TYPES))
     if level == "L2":
         return bool(state.open_classes)
     if level == "L3":
@@ -148,22 +149,51 @@ def _l1_matched(member, truth, state, observed=None) -> Tuple[int, int]:
     claims = [n.room_type for n in member.new_rooms if n.room_type in scored]
     if not claims:
         return 0, 0
-    open_by_type = {t: _open_regions(truth, state, t, observed) for t in set(claims)}
+    if state.open_type_regions or not state.open_types:   # §5.5 as stage_state computed it, second rule included
+        open_by_type = {t: sorted(state.open_type_regions.get(t, ())) for t in set(claims)}
+    else:                            # a state built by hand
+        open_by_type = {t: _open_regions(truth, state, t, observed) for t in set(claims)}
     regions = sorted({r for rs in open_by_type.values() for r in rs})
     index = {r: i for i, r in enumerate(regions)}
     adj = [[index[r] for r in open_by_type[t]] for t in claims]
     return _max_matching(adj, len(regions)), len(claims)
 
 
-def _l4(member, truth, state) -> Dict[str, float]:
-    """§11 L4: share of new objects within 0.5, 1, 2, 3 m of an unmapped reference object that
-    answers to the same class, in an unseen region."""
+def unmapped_unseen_targets(truth, state) -> Dict[str, List[Tuple[float, float]]]:
+    """Class -> centres of the reference objects that answer to it, are not mapped, and lie in an unseen
+    region (§11 L4; §4 F3-m of PREREGISTRATION_M2.md)."""
     targets: Dict[str, List[Tuple[float, float]]] = {}
-    for rid in state.unseen:
+    for rid in sorted(state.unseen):
         for o in truth.regions[rid].ref_objects:
             if o.object_id not in state.mapped_objects:
                 for c in o.answers_to:
                     targets.setdefault(c, []).append(o.xy)
+    return targets
+
+
+def placement_errors(member, truth, state) -> Tuple[List[float], int]:
+    """The error sample of PREREGISTRATION_M2.md §4 F3-m, for one member of one row: for each new object
+    with a canonical class (not "other", not a structure class), the horizontal distance in metres from its
+    centre to the nearest unmapped reference object that answers to its class in an unseen region. Returns
+    (distances, number of such guesses left out because the scene holds no such reference object)."""
+    targets = unmapped_unseen_targets(truth, state)
+    dists: List[float] = []
+    left_out = 0
+    for n in member.new_objects:
+        if not n.canon:
+            continue
+        pts = targets.get(n.canon)
+        if not pts:
+            left_out += 1
+            continue
+        dists.append(min(((n.xy[0] - x) ** 2 + (n.xy[1] - y) ** 2) ** 0.5 for x, y in pts))
+    return dists, left_out
+
+
+def _l4(member, truth, state) -> Dict[str, float]:
+    """§11 L4: share of new objects within 0.5, 1, 2, 3 m of an unmapped reference object that
+    answers to the same class, in an unseen region."""
+    targets = unmapped_unseen_targets(truth, state)
     objs = [n for n in member.new_objects if n.canon]
     out: Dict[str, float] = {}
     for radius in L4_RADII_M:
@@ -194,7 +224,7 @@ def score_member(member, truth, state, observed=None) -> "model.MemberScore":
       l1_matched                one new room (a claim) matched to one open region
       l3_multi, l3_multi_unobs  share of L3 items that reach two or more regions (any region /
                                 unobserved regions only; §8)
-      l4_0p5m .. l4_3m          share of new objects within r metres of an unmapped same-class
+      l4_0p5m, l4_1p0m, l4_2p0m, l4_3p0m          share of new objects within r metres of an unmapped same-class
                                 reference object in an unseen region
     """
     ms = model.MemberScore(member=member.member)

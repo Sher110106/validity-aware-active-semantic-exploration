@@ -133,8 +133,19 @@ def _object_canon(name: str) -> Optional[str]:
 
 def parse_nodes(path: Path) -> Tuple[list, FrozenSet[int], int]:
     """(room and object nodes with a position, ids of ALL nodes, number skipped for bad id/position)."""
+    return parse_doc_nodes(_load_yaml(Path(path)))
+
+
+def _check_doc(doc) -> dict:
+    if not isinstance(doc, dict) or not isinstance(doc.get("nodes"), list):
+        raise ValueError("not a scene graph (no top-level 'nodes' list)")
+    return doc
+
+
+def parse_doc_nodes(doc: dict) -> Tuple[list, FrozenSet[int], int]:
+    """Like parse_nodes, for a graph already loaded as a dict (a file's YAML, or a placebo graph)."""
     lab = _need_labels()
-    doc = _load_yaml(Path(path))
+    doc = _check_doc(doc)
     nodes, ids, skipped = [], set(), 0
     for raw in doc["nodes"]:
         if not isinstance(raw, dict):
@@ -178,16 +189,16 @@ def _far_from_all(xy, others: np.ndarray, d: float) -> bool:
     return not bool((np.hypot(others[:, 0] - xy[0], others[:, 1] - xy[1]) <= d).any())
 
 
-def read_member(path: Path, observed: "M.ObservedGraph", member: int) -> "M.Member":
-    nodes, _, _ = parse_nodes(path)
-    obs_obj = np.asarray([n.xy for n in observed.objects], dtype=float).reshape(-1, 2)
-    obs_room = np.asarray([n.xy for n in observed.rooms], dtype=float).reshape(-1, 2)
-    new_rooms = tuple(n for n in nodes if n.kind == "room" and _far_from_all(n.xy, obs_room, M.NEW_NODE_M))
-    new_objects = tuple(n for n in nodes if n.kind == "object" and _far_from_all(n.xy, obs_obj, M.NEW_NODE_M))
+def member_from_nodes(member: int, new_rooms: Sequence["M.Node"], new_objects: Sequence["M.Node"]) -> "M.Member":
+    """Reduce a member's guesses (§7) to claims and items (§7, item 51 of DEVIATIONS_NOVEMBER).
 
+    L1 claims: distinct typed room types, dining left out. L2 claims: distinct canonical classes.
+    L3 items: each new room with a type other than dining, and each new object with a class. A new
+    room typed dining is left out of the items too (item 51) and counted in `n_rooms_dining`."""
+    new_rooms, new_objects = tuple(new_rooms), tuple(new_objects)
     l1 = frozenset(n.room_type for n in new_rooms if n.room_type in M.ROOM_TYPES)
     l2 = frozenset(n.canon for n in new_objects if n.canon is not None)
-    items = tuple(M.Item("room", n.room_type, n.xy) for n in new_rooms if n.room_type is not None) + \
+    items = tuple(M.Item("room", n.room_type, n.xy) for n in new_rooms if n.room_type in M.ROOM_TYPES) + \
         tuple(M.Item("object", n.canon, n.xy) for n in new_objects if n.canon is not None)
     flagged = sum(1 for n in new_objects if n.is_predicted is True)
     return M.Member(
@@ -195,7 +206,26 @@ def read_member(path: Path, observed: "M.ObservedGraph", member: int) -> "M.Memb
         l1_claims=l1, l2_claims=l2, l3_items=items,
         n_rooms_untyped=sum(1 for n in new_rooms if n.room_type is None),
         n_objects_unlabelled=sum(1 for n in new_objects if n.canon is None),
-        n_objects_flagged=flagged, n_objects_unflagged=len(new_objects) - flagged)
+        n_objects_flagged=flagged, n_objects_unflagged=len(new_objects) - flagged,
+        n_rooms_dining=sum(1 for n in new_rooms if n.room_type == "dining"))
+
+
+def guesses_of(nodes: Sequence["M.Node"], observed: "M.ObservedGraph") -> Tuple[Tuple["M.Node", ...], Tuple["M.Node", ...]]:
+    """§7: (new rooms, new objects) among the nodes of one completion, by place alone."""
+    obs_obj = np.asarray([n.xy for n in observed.objects], dtype=float).reshape(-1, 2)
+    obs_room = np.asarray([n.xy for n in observed.rooms], dtype=float).reshape(-1, 2)
+    return (tuple(n for n in nodes if n.kind == "room" and _far_from_all(n.xy, obs_room, M.NEW_NODE_M)),
+            tuple(n for n in nodes if n.kind == "object" and _far_from_all(n.xy, obs_obj, M.NEW_NODE_M)))
+
+
+def member_from_doc(doc: dict, observed: "M.ObservedGraph", member: int) -> "M.Member":
+    nodes, _, _ = parse_doc_nodes(doc)
+    return member_from_nodes(member, *guesses_of(nodes, observed))
+
+
+def read_member(path: Path, observed: "M.ObservedGraph", member: int) -> "M.Member":
+    nodes, _, _ = parse_nodes(path)
+    return member_from_nodes(member, *guesses_of(nodes, observed))
 
 
 # ------------------------------------------------------------------------------ the frame
@@ -223,6 +253,9 @@ def parse_frame(path: Path = FRAME_PATH) -> List[Tuple[str, str, int, int]]:
 
 
 _RUN_RE = re.compile(r"^e[12]_(\d{5})_s(\d+)_(official|filter_only)_")
+# Every live arm of the saved runs (the paper's room test, §11): official, filter_only, placebo, oracle.
+_LIVE_RUN_RE = re.compile(r"^e\d_(\d{5})_s(\d+)_(official|filter_only|placebo|oracle_visible)_")
+LIVE_ARMS = ("official", "filter_only", "placebo", "oracle_visible")
 
 
 @functools.lru_cache(maxsize=None)
@@ -242,6 +275,18 @@ def _world_path(stage_dir: Path) -> List[Tuple[float, float]]:
     return pts
 
 
+def _path_up_to(run_dir: Path, stage: int) -> Tuple[Tuple[float, float], ...]:
+    """§5.4: the start pose, then every point of `world_frame_path` of stages 1..stage. Stage 0 has
+    no path file: its path is the start pose, the first point of stage 1's file."""
+    first = _world_path(run_dir / "stages" / "1")
+    if not first:
+        raise ValueError(f"{run_dir.name}: stage 1 holds no path point, so there is no start pose")
+    path: List[Tuple[float, float]] = [first[0]]
+    for k in range(1, stage + 1):
+        path.extend(_world_path(run_dir / "stages" / str(k)))
+    return tuple(path)
+
+
 def load_row(row_id: str, runs_root: Path = RUNS_ROOT, frame_path: Path = FRAME_PATH) -> "M.Row":
     index = _frame_index(str(frame_path))
     if row_id not in index:
@@ -254,15 +299,39 @@ def load_row(row_id: str, runs_root: Path = RUNS_ROOT, frame_path: Path = FRAME_
     run_dir = Path(runs_root) / run
     stage_dir = run_dir / "stages" / str(stage)
     observed = read_graph(stage_dir / "habitat_scene_graph_original_graph0.yaml")
-    first = _world_path(run_dir / "stages" / "1")
-    if not first:
-        raise ValueError(f"{run}: stage 1 holds no path point, so there is no start pose")
-    path: List[Tuple[float, float]] = [first[0]]
-    for k in range(1, stage + 1):
-        path.extend(_world_path(run_dir / "stages" / str(k)))
     return M.Row(row_id=row_id, scene=scene, seed=seed, arm=arm, stage=stage,
                  cluster=f"{scene}_s{seed}_{arm}", round=rnd, is_gemini_row=(rnd == 4),
-                 observed=observed, path_xy=tuple(path))
+                 observed=observed, path_xy=_path_up_to(run_dir, stage))
+
+
+def run_info(run: str) -> Tuple[str, int, str]:
+    """(scene, seed, arm) of a live run folder name, for every live arm."""
+    m = _LIVE_RUN_RE.match(run)
+    if not m:
+        raise ValueError(f"cannot read scene, seed and arm from run name {run!r}")
+    return m.group(1), int(m.group(2)), m.group(3)
+
+
+def stage_numbers(run: str, runs_root: Path = RUNS_ROOT) -> List[int]:
+    """Stage folders of a run that hold an observed graph, ascending."""
+    out = []
+    root = Path(runs_root) / run / "stages"
+    if root.is_dir():
+        for d in root.iterdir():
+            if d.name.isdigit() and (d / "habitat_scene_graph_original_graph0.yaml").is_file():
+                out.append(int(d.name))
+    return sorted(out)
+
+
+def load_stage_row(run: str, stage: int, runs_root: Path = RUNS_ROOT, track: int = 0) -> "M.Row":
+    """A Row for any (run, stage) of a live run, not only the frame's. Round 0, never a Gemini row.
+    `track` 0 or 1 picks the observed graph of that track (members 0-3 use track 0, 4-7 track 1)."""
+    scene, seed, arm = run_info(run)
+    run_dir = Path(runs_root) / run
+    observed = read_graph(run_dir / "stages" / str(stage) / f"habitat_scene_graph_original_graph{track}.yaml")
+    return M.Row(row_id=f"{run}#st{stage:02d}", scene=scene, seed=seed, arm=arm, stage=stage,
+                 cluster=f"{scene}_s{seed}_{arm}", round=0, is_gemini_row=False,
+                 observed=observed, path_xy=_path_up_to(run_dir, stage))
 
 
 # ---------------------------------------------------------------------------------- members
@@ -299,9 +368,31 @@ def gemini_dir(row: "M.Row", gemini_root: Path = GEMINI_ROOT, frame_path: Path =
     return None
 
 
-def members_for(row: "M.Row", model: str, runs_root: Path = RUNS_ROOT, gemini_root: Path = GEMINI_ROOT,
-                claude_root: Optional[Path] = None, frame_path: Path = FRAME_PATH) -> List["M.Member"]:
-    """Track-0 members 0..3 that exist, in member order. A missing file is a missing member."""
+def claude_member_status(claude_root: Path, model: str, row_id: str) -> Dict[int, str]:
+    """Per member 0..3: "ok" (parsed_graph.yaml with parse.json {"ok": true}), "dropped" (the folder
+    exists but parse.json says ok false, is missing or unreadable, or there is no parsed_graph.yaml:
+    counted, not scored), or "absent" (no member folder: never run)."""
+    base = Path(claude_root) / model / row_id
+    out: Dict[int, str] = {}
+    for m in range(N_MEMBERS):
+        d = base / f"member_{m}"
+        if not d.is_dir():
+            out[m] = "absent"
+            continue
+        ok = False
+        try:
+            doc = json.loads((d / "parse.json").read_text())
+            ok = isinstance(doc, dict) and doc.get("ok") is True
+        except (OSError, ValueError):
+            ok = False
+        out[m] = "ok" if ok and (d / "parsed_graph.yaml").is_file() else "dropped"
+    return out
+
+
+def member_files(row: "M.Row", model: str, runs_root: Path = RUNS_ROOT, gemini_root: Path = GEMINI_ROOT,
+                 claude_root: Optional[Path] = None, frame_path: Path = FRAME_PATH) -> List[Tuple[int, Path]]:
+    """The completion files of a row's members 0..3 that exist, in member order (a Claude member that
+    is dropped has no file here; see claude_member_status). filter_only rows give the raw files (§7)."""
     if model not in MODELS:
         raise ValueError(f"unknown model {model!r}; expected one of {MODELS}")
     if model == "deepseek":
@@ -315,15 +406,48 @@ def members_for(row: "M.Row", model: str, runs_root: Path = RUNS_ROOT, gemini_ro
             base = att
         else:
             base = stage_dir
-        return _read_all(row, [(m, base / f"habitat_scene_graph_new_graph_{m}.yaml") for m in range(N_MEMBERS)])
-    if model == "gemini":
+        files = [(m, base / f"habitat_scene_graph_new_graph_{m}.yaml") for m in range(N_MEMBERS)]
+    elif model == "gemini":
         if not row.is_gemini_row:
             return []
         d = gemini_dir(row, gemini_root, frame_path)
         if d is None:
             return []
-        return _read_all(row, [(m, d / f"gemini_new_graph_{m}.yaml") for m in range(N_MEMBERS)])
-    if claude_root is None:
-        raise ValueError("claude_root is required for a Claude model")
-    base = Path(claude_root) / model / row.row_id
-    return _read_all(row, [(m, base / f"member_{m}" / "parsed_graph.yaml") for m in range(N_MEMBERS)])
+        files = [(m, d / f"gemini_new_graph_{m}.yaml") for m in range(N_MEMBERS)]
+    else:
+        if claude_root is None:
+            raise ValueError("claude_root is required for a Claude model")
+        status = claude_member_status(claude_root, model, row.row_id)
+        base = Path(claude_root) / model / row.row_id
+        files = [(m, base / f"member_{m}" / "parsed_graph.yaml") for m in range(N_MEMBERS) if status[m] == "ok"]
+    return [(m, f) for m, f in files if f.is_file()]
+
+
+def members_for(row: "M.Row", model: str, runs_root: Path = RUNS_ROOT, gemini_root: Path = GEMINI_ROOT,
+                claude_root: Optional[Path] = None, frame_path: Path = FRAME_PATH) -> List["M.Member"]:
+    """Track-0 members 0..3 that exist, in member order. A missing file is a missing member."""
+    return _read_all(row, member_files(row, model, runs_root, gemini_root, claude_root, frame_path))
+
+
+def live_member_files(run: str, stage: int, runs_root: Path = RUNS_ROOT) -> Dict[int, Path]:
+    """The members on disk of a live stage, 0..7 (track = id // 4). For a filter_only run these are the
+    files the planner read (after the filter); live_policy_raw holds the others (see raw_member_files)."""
+    d = Path(runs_root) / run / "stages" / str(stage)
+    return {k: d / f"habitat_scene_graph_new_graph_{k}.yaml" for k in range(2 * N_MEMBERS)
+            if (d / f"habitat_scene_graph_new_graph_{k}.yaml").is_file()}
+
+
+def raw_member_files(run: str, stage: int, runs_root: Path = RUNS_ROOT) -> Dict[int, Path]:
+    """Members 0..7 as the model produced them: the highest live_policy_raw attempt if the stage has one
+    (filter_only), else the stage files."""
+    d = Path(runs_root) / run / "stages" / str(stage)
+    att = _highest_attempt(d / "live_policy_raw")
+    if att is None:
+        return live_member_files(run, stage, runs_root)
+    return {k: att / f"habitat_scene_graph_new_graph_{k}.yaml" for k in range(2 * N_MEMBERS)
+            if (att / f"habitat_scene_graph_new_graph_{k}.yaml").is_file()}
+
+
+def load_doc(path: Path) -> dict:
+    """A completion file as a dict (the YAML top level)."""
+    return _load_yaml(Path(path))

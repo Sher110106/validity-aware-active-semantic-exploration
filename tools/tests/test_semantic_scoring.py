@@ -827,15 +827,29 @@ class Boom:
         raise AssertionError(f"model output was touched: {name}")
 
 
-def test_guards_refuse_before_touching_model_output(monkeypatch, tmp_path):
+class Reached(Exception):
+    pass
+
+
+def guard_files(monkeypatch, tmp_path, text="the frozen text"):
+    md = tmp_path / "PRE.md"
+    md.write_text(text)
+    sha = hashlib.sha256(md.read_bytes()).hexdigest()
     hashfile = tmp_path / "PRE.sha256"
-    hashfile.write_text("abc123  PREREGISTRATION_SEMANTIC.md\n")
+    hashfile.write_text(sha.upper() + "  PRE.md\n")
     freeze = tmp_path / "FREEZE.sha256"
+    monkeypatch.setattr(rs, "PREREG_MD_PATH", md)
     monkeypatch.setattr(rs, "PREREG_HASH_PATH", hashfile)
     monkeypatch.setattr(rs, "FREEZE_PATH", freeze)
+    return md, hashfile, freeze, sha
+
+
+def test_guards_refuse_before_touching_model_output(monkeypatch, tmp_path):
+    md, hashfile, freeze, sha = guard_files(monkeypatch, tmp_path)
     monkeypatch.setattr(rs, "extract_preds", Boom())
     monkeypatch.setattr(rs, "region_truth", Boom())
-    out = tmp_path / "o.json"
+    monkeypatch.setattr(rs, "run", lambda *a, **k: (_ for _ in ()).throw(AssertionError("run was called")))
+    out = tmp_path / "o"
     base = ["--models", "deepseek", "--out", str(out)]
     with pytest.raises(SystemExit) as e:
         rs.main(base)                                          # no hash given
@@ -844,30 +858,47 @@ def test_guards_refuse_before_touching_model_output(monkeypatch, tmp_path):
         rs.main(base + ["--prereg-sha256", "deadbeef"])        # wrong hash
     # right hash, Claude model, no freeze file
     with pytest.raises(SystemExit) as e:
-        rs.main(["--models", "deepseek,claude-opus-5-5", "--out", str(out), "--prereg-sha256", "abc123"])
+        rs.main(["--models", "deepseek,claude-opus-5-5", "--out", str(out), "--prereg-sha256", sha])
     assert "FREEZE" in str(e.value)
-    assert not out.exists()
+    # the pre-registration text was edited after it was hashed
+    md.write_text("an edited text")
+    with pytest.raises(SystemExit) as e:
+        rs.main(base + ["--prereg-sha256", sha])
+    assert "edited" in str(e.value)
+    with pytest.raises(SystemExit):
+        rs.main(base + ["--prereg-sha256", sha, "--dry"])     # the dry run is guarded too
+    md.write_text("the frozen text")
     hashfile.unlink()
     with pytest.raises(SystemExit):
-        rs.main(base + ["--prereg-sha256", "abc123"])          # the pre-registration is not hashed
+        rs.main(base + ["--prereg-sha256", sha])               # the pre-registration is not hashed
+    assert not out.exists()
 
 
 def test_guards_pass_with_hash_and_freeze(monkeypatch, tmp_path):
-    hashfile = tmp_path / "PRE.sha256"
-    hashfile.write_text("ABC123  file\n")
-    freeze = tmp_path / "FREEZE.sha256"
-    monkeypatch.setattr(rs, "PREREG_HASH_PATH", hashfile)
-    monkeypatch.setattr(rs, "FREEZE_PATH", freeze)
+    md, hashfile, freeze, sha = guard_files(monkeypatch, tmp_path)
     seen = []
-    monkeypatch.setattr(rs, "run", lambda models, frame, rounds=None: seen.append((list(models), rounds)) or {"x": float("inf")})
-    out = tmp_path / "o.json"
-    # a non-Claude model needs no freeze
-    assert rs.main(["--models", "deepseek", "--out", str(out), "--prereg-sha256", "abc123"]) == 0
-    assert seen == [(["deepseek"], None)]
-    assert json.loads(out.read_text())["x"] == "inf"          # JSON stays valid
+
+    def fake_run(models, frame, rounds=None, **kw):
+        seen.append((list(models), rounds, kw.get("claude_root")))
+        raise Reached
+
+    monkeypatch.setattr(rs, "run", fake_run)
+    out = tmp_path / "o"
+    with pytest.raises(Reached):                               # a non-Claude model needs no freeze
+        rs.main(["--models", "deepseek", "--out", str(out), "--prereg-sha256", sha.upper()])
+    assert seen == [(["deepseek"], None, None)]
+    with pytest.raises(SystemExit):                            # Claude: freeze file missing
+        rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", sha, "--claude-root", "/c"])
     freeze.write_text("x")
-    assert rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", "abc123", "--rounds", "1,2"]) == 0
-    assert seen[-1] == (["claude-haiku-5-5"], [1, 2])
+    with pytest.raises(SystemExit) as e:                       # Claude: no root of parsed outputs
+        rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", sha])
+    assert "claude-root" in str(e.value)
+    with pytest.raises(Reached):
+        rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", sha, "--rounds", "1,2",
+                 "--claude-root", "/c"])
+    assert seen[-1] == (["claude-haiku-5-5"], [1, 2], "/c")
+    with pytest.raises(SystemExit):
+        rs.main(["--models", "gpt", "--out", str(out), "--prereg-sha256", sha])      # unknown model
 
 
 def test_observed_path_follows_the_frame(monkeypatch, tmp_path):
@@ -875,45 +906,308 @@ def test_observed_path_follows_the_frame(monkeypatch, tmp_path):
     monkeypatch.setattr(rs, "extract_preds", fake)
     p = rs.observed_path(mkrow("r1"))
     assert p == tmp_path / "runX" / "stages" / "8" / "habitat_scene_graph_original_graph0.yaml"
+    assert rs.observed_path(mkrow("r1"), tmp_path / "other").parent.parent.parent.parent == tmp_path / "other"
 
 
-def test_run_end_to_end_with_fakes(monkeypatch, tmp_path):
+def fake_ctx(tmp_path, rows=None):
     t = world()
     a = mkrow("a", "00853", 42, "official", 8)
     b = mkrow("b", "00871", 42, "official", 8)
-    rows = {"a": a, "b": b}
     states = {"a": STATE_A, "b": STATE_B}
-    frame = tmp_path / "frame.txt"
-    frame.write_text("# Round 1\na /x/run 8\nb /x/run 8\n")
+    summary = write_summary(tmp_path)
+    prior = bl.Prior(summary)
+    return types.SimpleNamespace(
+        rows=rows or [a, b], truths={"00853": t, "00871": t}, truths_primary={"00853": t, "00871": t},
+        states=states, states_primary=states, prior=prior, prior_primary=prior, run_of_row={"a": "run", "b": "run"},
+        runs_root=tmp_path, frame=tmp_path / "frame.txt", timing={})
+
+
+def fake_inputs():
     deep = {"a": [member(0, l1={"kitchen"}, l2={"oven"}, items=[item("room", "kitchen", (2, 8))]),
                   member(1, l1={"bedroom"}, l2={"bed"}, items=[item("room", "bedroom", (2, 2))])],
             "b": [member(0, l1={"bedroom"}, l2={"bed"}, items=[item("room", "bedroom", (2, 2))])]}
-    fake_ep = types.SimpleNamespace(load_row=lambda rid: rows[rid], members_for=lambda r, m: deep[r.row_id],
-                                    read_member=lambda *a, **k: None)
-    fake_rt = types.SimpleNamespace(load_scene_truth=lambda s: t, stage_state=lambda truth, r: states[r.row_id])
-    monkeypatch.setattr(rs, "extract_preds", fake_ep)
-    monkeypatch.setattr(rs, "region_truth", fake_rt)
-    summary = write_summary(tmp_path)
-    monkeypatch.setattr(bl, "Prior", lambda p=summary, cls=bl.Prior: cls(p))
-    monkeypatch.setattr(bl, "make_placebo_fn", lambda *a, **k: (lambda row, k: member(k, l1={"kitchen"}, l2={"oven"},
-                                                                                         items=[item("room", "kitchen", (2, 8))])))
-    out = rs.run(["deepseek", "claude-opus-5-5"], frame)
+    pm = {r: [member(k, l1={"kitchen"}, l2={"oven"}, items=[item("room", "kitchen", (2, 8))]) for k in range(4)] for r in "ab"}
+    return deep, pm
+
+
+def test_run_core_end_to_end_with_fakes(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    inputs = {"deepseek": (deep, {}, None, {}), "claude-opus-5-5": (deep, {}, None, {})}
+    out = rs.run_core(ctx, ["deepseek", "claude-opus-5-5"], inputs, (pm, {}), None, True, False)
     ds = out["models"]["deepseek"]
     assert ds["role"] == "exploratory" and len(ds["records"]) == 2
     ra, rb = ds["records"]
     assert ra["model"]["0"]["L1"] == 1.0 and ra["model"]["1"]["L1"] == 0.0
     assert ra["possible"] == {"L1": True, "L2": True, "L3": True}
-    assert set(ra["comparators"]) >= {"B3", "B3L", "B5", "D", "B1", "B2", "B4"}
+    assert set(ra["comparators"]) >= {"B3", "B3L", "B5", "D", "B1", "B2", "B4", "B3_seen", "B3_size", "B3_seen_size"}
     # a's partner is b: b's member (claims bedroom, bed) scored against a's state (STATE_A: neither open)
     assert ra["comparators"]["B4"]["0"]["L1"] == 0.0
     assert set(ra["comparators"]["B1"]) == {"0", "1", "2", "3"} and ra["comparators"]["B5"]["0"]["L3"] is not None
     assert out["finished_rounds"] == [1] and out["family"]["thesis"] is not None
     assert out["models"]["claude-opus-5-5"]["role"] == "confirmatory"
     assert set(out["mdd"]) == {"L1", "L2", "L3"}
-    json.dumps(rs._jsonable(out))                       # serialisable, infinities included
+    assert set(ds["secondary"]) == {"loose", "l3_partly_seen", "detector_vocab", "synonym_primary_only"}
+    assert set(ds["exploratory_family"]["hypotheses"]) == {"deepseek|L1", "deepseek|L2", "deepseek|L3"}
+    json.dumps(rs._jsonable({k: v for k, v in out.items() if k not in ("ctx", "members")}))   # serialisable
 
 
 def test_finished_rounds():
     r1, r2 = mkrow("a", rnd=1), mkrow("b", rnd=2)
     mb = {"m1": {"a": [member()], "b": [member()]}, "m2": {"a": [member()], "b": []}}
     assert rs.finished_rounds([r1, r2], mb) == [1]
+
+
+# ======================================================================================
+# Added with the wiring of run_semantic.py: each test below would have caught a mismatch between a
+# module and the frozen spec, or covers a §11 readout.
+# ======================================================================================
+
+# ---- §7 and item 51: dining is left out of L1 and of L3 (mismatch: it was an L3 item)
+
+def test_possible_l1_ignores_an_open_dining_room():
+    only_dining = M.StageState(**{**STATE_A.__dict__, "open_types": fs("dining"), "open_type_regions": {}})
+    assert not sl.possible("L1", world(), only_dining)          # dining is never scored (§5.2, §7)
+    both = M.StageState(**{**STATE_A.__dict__, "open_types": fs("dining", "kitchen")})
+    assert sl.possible("L1", world(), both)
+
+
+def test_b3l_never_gives_a_room_the_label_dining():
+    # §9: "at L1 the labels are the five scored room types". With dining standing as a sixth type, an observed
+    # map that holds all five scored types made the prior's best room label "dining".
+    obs = observed(rooms=["bathroom", "bedroom", "kitchen", "laundry", "living"])
+    p = bl.Prior.__new__(bl.Prior)
+    p.room_n = {t: [1, 1, 1] for t in M.REPORTED_ROOM_TYPES}
+    p.room_n["dining"] = [2, 2, 2]                              # dining would win: its share above m = 0 is 1
+    p.class_n, p.holders, p.n_houses = {}, {"room": {t: 3 for t in M.REPORTED_ROOM_TYPES}, "object": {}}, 3
+    items = [item("room", "kitchen", (0, 0)), item("room", "bedroom", (1, 1))]
+    out = bl.b3l_items(p, obs, member(0, items=items))
+    assert all(i.label in M.ROOM_TYPES for i in out)
+
+
+# ---- §5.5 second rule reaches l1_matched (mismatch: it used "reaches" alone)
+
+def test_l1_matched_follows_the_open_regions_of_stage_state():
+    t = world()
+    rooms = [node(1, "room", (0, 0), room_type="kitchen"), node(2, "room", (0, 0), room_type="kitchen")]
+    mm = member(l1={"kitchen"}, rooms=rooms)
+    two = M.StageState(**{**STATE_A.__dict__, "open_type_regions": {"kitchen": fs(3, 5)}})
+    assert sl.score_member(mm, t, two).extra["l1_matched"] == 1.0        # two kitchens, two open regions
+    one = M.StageState(**{**STATE_A.__dict__, "open_type_regions": {"kitchen": fs(3)}})
+    assert sl.score_member(mm, t, one).extra["l1_matched"] == 0.5
+    none = M.StageState(**{**STATE_A.__dict__, "open_types": fs(), "open_type_regions": {}})
+    assert sl.score_member(mm, t, none).extra["l1_matched"] == 0.0       # a state with no open type: no fallback
+
+
+# ---- §10: the family is six hypotheses, whatever was run
+
+def test_family_holm_counts_six_when_only_one_registered_model_ran():
+    r = mkres({"L1": 0.004, "L2": 0.9, "L3": 0.9}, {"L1": 0.5, "L2": 0.5, "L3": 0.5})
+    fam = rs.family({"claude-opus-5-5": r})
+    h = fam["hypotheses"]["claude-opus-5-5|L1"]
+    assert h["p"] == 0.004 and h["p_holm"] == pytest.approx(0.024)       # x 6, not x 3
+    assert fam["m_hypotheses"] == 6
+    assert "claude-haiku-5-5|L1" not in fam["hypotheses"]
+
+
+def test_the_claim_fails_needs_both_registered_models():
+    r = mkres({lv: 0.9 for lv in ("L1", "L2", "L3")}, {"L1": 0.5, "L2": 0.0, "L3": 0.0})
+    assert rs.family({"claude-opus-5-5": r})["thesis"] == "Inconclusive"
+    assert rs.family({"claude-opus-5-5": r, "claude-haiku-5-5": r})["thesis"] == "The claim fails"
+
+
+# ---- §11: the labels switch, B3's two sensitivity forms
+
+def test_prior_variants_seen_counts_and_size_third(prior):
+    obs = observed()
+    base = prior.room_scores(obs)
+    seen = prior.room_scores(obs, counts={"bedroom": 2})                 # two bedrooms seen: m = 2
+    n_bed = prior.room_n["bedroom"]
+    ge = [n for n in n_bed if n >= 2]
+    assert seen["bedroom"] == pytest.approx(sum(1 for n in ge if n > 2) / len(ge))
+    cls = prior.class_scores(obs, counts={"bed": 3})
+    assert cls["bed"] == bl._share_above(prior.class_n["bed"], 3)
+    third = prior.size_third(2)
+    assert set(third) <= set(range(prior.n_houses)) and len(third) >= 1
+    assert prior.room_scores(obs, houses=third)["kitchen"] == bl._share_above([prior.room_n["kitchen"][i] for i in third], 0)
+    # every house falls in exactly one third
+    parts = {tuple(prior.size_third(n)) for n in (0, 1, 2, 3, 4, 100)}
+    assert sorted(i for p in parts for i in p) == list(range(prior.n_houses))
+
+
+def test_seen_counts_from_the_truth():
+    room_m, class_n = bl.seen_counts(world(), STATE_A)
+    assert room_m == {"bedroom": 1} and class_n == {"bed": 1, "duvet": 1, "toilet": 1}   # seen region 1; mapped objects 1 and 3
+
+
+def test_b3_member_sensitivity_arguments(prior):
+    obs = observed()
+    m = member(0, l1={"kitchen", "bedroom"}, l2={"bed", "oven"})
+    plain = bl.b3_member(prior, obs, m)
+    seen = bl.b3_member(prior, obs, m, room_counts={"bedroom": 3, "kitchen": 3, "bathroom": 3, "living": 3, "laundry": 0})
+    assert len(plain.l1_claims) == 2 and len(seen.l1_claims) == 2
+    det = bl.b3_member(prior, obs, m, allowed={"oven", "couch"})
+    assert det.l2_claims <= fs("oven", "couch") and len(det.l2_claims) == 2
+
+
+# ---- §11: the placement-error sample of PREREGISTRATION_M2.md F3-m
+
+def test_placement_errors_unmapped_unseen_same_class():
+    t = world()
+    objs = [node(1, "object", (1, 8), canon="oven"),              # oven at (1,7) in unobserved region 3: 1.0 m
+            node(2, "object", (3, 3), canon="fridge"),            # fridge at (3,7), answers fridge: 4.0 m
+            node(3, "object", (7, 5), canon="toilet"),            # toilet 3 is mapped: no such object: left out
+            node(4, "object", (0, 0), canon="bed"),               # bed 1 is mapped and in a seen region: left out
+            node(5, "object", (5, 5), canon=None),                # no class: neither a distance nor left out
+            node(6, "object", (2, 8), canon="couch")]             # couch at (7,7): 5.099 m
+    d, left = sl.placement_errors(member(objects=objs), t, STATE_A)
+    assert sorted(round(x, 3) for x in d) == [1.0, 4.0, 5.099] and left == 2
+    # the nearest of several; horizontal only (z plays no part)
+    two = [node(7, "object", (7, 7), canon="couch")]
+    assert sl.placement_errors(member(objects=two), t, STATE_A) == ([0.0], 0)
+    # a state that has seen everything: nothing to measure against, every classed guess is left out
+    seen_all = M.StageState(**{**STATE_A.__dict__, "partly_seen": fs(), "unobserved": fs()})
+    assert sl.placement_errors(member(objects=objs), t, seen_all) == ([], 5)
+
+
+def test_placement_errors_use_answers_to_of_the_class():
+    t = world()
+    # a "refrigerator" guess finds the object whose raw name is fridge and answers to refrigerator too
+    d, left = sl.placement_errors(member(objects=[node(1, "object", (3, 7.5), canon="refrigerator")]), t, STATE_A)
+    assert d == [0.5] and left == 0
+
+
+# ---- §11 secondary readouts, through secondary_records
+
+def test_secondary_views_rescore_under_their_own_rule(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    mm = member(0, l1={"bathroom"}, l2={"oven", "toilet"},
+                items=[item("room", "bathroom", (6, 1)), item("object", "oven", (1, 7)), item("object", "toilet", (6, 1))])
+    deep = {"a": [mm], "b": []}
+    pm = {r: [member(k) for k in range(4)] for r in "ab"}
+    v = rs.secondary_records(ctx, "deepseek", deep, pm)
+    assert set(v) == {"loose", "l3_partly_seen", "detector_vocab", "synonym_primary_only"}
+    ra = rs.build_record(ctx.rows[0], ctx.truths["00853"], STATE_A, [mm], ctx.prior)["model"]["0"]
+    assert ra["L1"] == 0.0                                    # bathroom: region 2 is only partly seen, so not open
+    loose = v["loose"][0]["model"]["0"]
+    assert loose["L1"] == 1.0                                 # the plan's looser rule: an unseen bathroom exists
+    assert loose["L2"] == pytest.approx(1.0)                  # oven open; toilet: an unseen region holds it (loose)
+    assert ra["L2"] == 0.5                                    # toilet is mapped, so not open
+    assert ra["L3"] == pytest.approx(1 / 3)                   # only the oven item lands in an unobserved region
+    part = v["l3_partly_seen"][0]["model"]["0"]
+    assert part["L3"] == pytest.approx(2 / 3)                 # the bathroom room and the toilet reach partly seen region 2
+    det = v["detector_vocab"][0]["model"]["0"]
+    assert det["L2"] == 1.0 and det["counts"]["l2_n"] == 1    # toilet is not a detector word here
+    assert det["counts"]["l3_n"] == 1                         # room items are not detector words
+    assert v["detector_vocab"][0]["comparators"]["B3"]["0"]["L2"] is not None
+    # the views keep the row's metadata, so analyse() accepts them
+    assert v["loose"][0]["cluster"] == "00853_s42_official" and v["loose"][0]["possible"]["L3"] is True
+    out = rs.analyse_views(v, "deepseek", rs.view_specs(ctx))
+    assert set(out["detector_vocab"]["levels"]) == {"L2", "L3"} and set(out["loose"]["levels"]) == {"L1", "L2"}
+
+
+def test_sensitivity_comparators_are_member_paired_and_in_the_record(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    kw = rs.sensitivity_kwargs(ctx, ctx.rows[0])
+    assert set(kw) == {"B3_seen", "B3_size", "B3_seen_size"} and "houses" in kw["B3_size"] and "room_counts" in kw["B3_seen"]
+    rec = rs.build_record(ctx.rows[0], ctx.truths["00853"], STATE_A, deep["a"], ctx.prior, pm["a"], {}, sens=kw)
+    for name in rs.SENSITIVITY_B3:
+        assert set(rec["comparators"][name]) == {"0", "1"}
+        assert name in rs.MEMBER_PAIRED
+    an = rs.analyse([rec], "deepseek", levels=("L1",))
+    assert {"B3_seen", "B3_size", "B3_seen_size"} <= set(an["levels"]["L1"]["comparators"])
+
+
+# ---- the dry run writes counts only
+
+def _walk(x, path=()):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            yield from _walk(v, path + (str(k),))
+    elif isinstance(x, (list, tuple)):
+        for i, v in enumerate(x):
+            yield from _walk(v, path + (str(i),))
+    else:
+        yield path, x
+
+
+FORBIDDEN_KEYS = {"p", "p_holm", "ci", "mean_diff", "verdict", "thesis", "rate", "sd", "mdd",
+                  "half_width", "distances", "records", "analysis", "hits", "diff"}
+
+
+def test_dry_output_holds_only_counts(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    inputs = {"deepseek": (deep, {}, None, {}), "placebo": (pm, {}, None, {})}
+    out = rs.run_core(ctx, ["deepseek", "placebo"], inputs, (pm, {}), None, True, False)
+    dry = rs.dry_summary(out, ["deepseek", "placebo"])
+    for path, v in _walk(dry):
+        assert not (set(path) & FORBIDDEN_KEYS), path
+        if isinstance(v, bool) or isinstance(v, str) or v is None:
+            continue
+        assert isinstance(v, (int, float)), (path, v)
+        if isinstance(v, float):                              # only a median of counts and the timing
+            assert path[-1] == "median" or path[0] == "timing", (path, v)
+    json.dumps(rs._jsonable(dry))
+    # what it says: rows, members, comparators that produced a score, rows left out
+    assert dry["frame_rows"] == 2 and dry["models"]["deepseek"]["members_total"] == 3
+    assert dry["models"]["deepseek"]["comparators_produced_a_score"]["B3"]["L1"] is True
+    assert dry["rows_left_out"] == {"L1": 0, "L2": 0, "L3": 0}
+    assert dry["models"]["deepseek"]["error_sample"]["n_distances"] >= 0      # a count, never the distances
+    assert dry["mdd_table_ran"]["L1"] >= 0
+
+
+def test_the_real_run_writes_one_error_sample_file_per_model(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    objs = [node(1, "object", (1, 8), canon="oven"), node(2, "object", (3, 3), canon="fridge")]
+    deep = {"a": [member(0, objects=objs)], "b": []}
+    pm = {r: [member(k) for k in range(4)] for r in "ab"}
+    out = rs.run_core(ctx, ["deepseek", "placebo"], {"deepseek": (deep, {}, None, {}), "placebo": (pm, {}, None, {})},
+                      (pm, {}), None, True, False)
+    names = rs.write_real(out, tmp_path / "real", {"models": ["deepseek", "placebo"]})
+    assert "error_sample_deepseek.json" in names and "error_sample_placebo.json" in names
+    sample = json.loads((tmp_path / "real" / "error_sample_deepseek.json").read_text())
+    assert sorted(sample) == [1.0, 4.0]                       # a plain list of metres
+    assert json.loads((tmp_path / "real" / "error_sample_placebo.json").read_text()) == []
+    assert out["models"]["deepseek"]["error_sample_left_out"] == 0
+    summary = json.loads((tmp_path / "real" / "results.json").read_text())
+    assert "error_sample" not in summary["models"]["deepseek"] and summary["models"]["deepseek"]["error_sample_n"] == 2
+
+
+def test_the_dry_run_never_writes_the_error_sample(monkeypatch, tmp_path):
+    md, hashfile, freeze, sha = guard_files(monkeypatch, tmp_path)
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    result = rs.run_core(ctx, ["deepseek"], {"deepseek": (deep, {}, None, {})}, (pm, {}), None, True, False)
+    monkeypatch.setattr(rs, "run", lambda *a, **k: result)
+    out = tmp_path / "dryout"
+    assert rs.main(["--models", "deepseek", "--out", str(out), "--prereg-sha256", sha, "--dry"]) == 0
+    assert sorted(p.name for p in out.iterdir()) == ["dry_run.json"]
+
+
+def test_placebo_as_a_model_has_no_b1_and_no_b4(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    _, pm = fake_inputs()
+    out = rs.run_core(ctx, ["placebo"], {"placebo": (pm, {}, None, {})}, (pm, {}), None, False, False)
+    r = out["models"]["placebo"]["records"][0]
+    assert r["comparators"]["B1"] == {} and r["comparators"]["B4"] == {} and set(r["model"]) == {"0", "1", "2", "3"}
+    assert out["placebo_records"] is out["models"]["placebo"]["records"]
+
+
+def test_extras_summary_reads_the_keys_score_member_writes(tmp_path):
+    # mismatch caught: the summary asked for l4_1m, l4_2m, l4_3m; score_member writes l4_1p0m, l4_2p0m, l4_3p0m
+    t = world()
+    rooms = [node(1, "room", (0, 0), room_type="kitchen")]
+    mm = member(l1={"kitchen"}, rooms=rooms, objects=[node(2, "object", (1.3, 7), canon="oven")],
+                items=[item("object", "oven", (1.3, 7)), item("room", "kitchen", (2, 8))])
+    ex = sl.score_member(mm, t, STATE_A).extra
+    for key in rs.EXTRA_LEVEL:
+        assert key in ex, key
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    rec = rs.build_record(ctx.rows[0], t, STATE_A, [mm], ctx.prior, [mm], {})
+    out = rs.extras_summary([rec])
+    assert set(out) == set(rs.EXTRA_LEVEL)
+    assert out["l4_0p5m"]["model_clusters"] == {"00853_s42_official": 1.0}
+    assert out["l4_3p0m"]["placebo_clusters"] == {"00853_s42_official": 1.0}

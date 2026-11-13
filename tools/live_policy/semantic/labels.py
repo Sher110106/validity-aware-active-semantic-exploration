@@ -179,18 +179,40 @@ def marker_types(raw_name: str) -> FrozenSet[str]:
 
 # ------------------------------------------------------------------------------ answers_to (§5.3)
 
-def answers_to(raw_name: str) -> FrozenSet[str]:
+def _primary_names() -> FrozenSet[str]:
+    """The raw names that label_mapping.json lists under `synonym_primary` (§11: the primary rule
+    leaves `extended_sensitivity_only` out). Read from truth/label_mapping.json, the file the table
+    was built from; the two tables share no name."""
+    global _PRIMARY_NAMES
+    if _PRIMARY_NAMES is None:
+        path = os.path.join(_DIR, "truth", "label_mapping.json")
+        with open(path, "rb") as f:
+            doc = json.loads(f.read().decode("utf-8"))
+        _PRIMARY_NAMES = frozenset(doc["tables"]["synonym_primary"])
+    return _PRIMARY_NAMES
+
+
+_PRIMARY_NAMES: Optional[FrozenSet[str]] = None
+
+
+def answers_to(raw_name: str, include_extended: bool = True) -> FrozenSet[str]:
     """§5.3: the non-structure canonical classes an annotated object answers to. These are
     normalise(raw_name), and normalise of the detector's label for the lower-cased raw name
     (`detector_label` in the table: label_mapping.json's synonym_primary and
-    extended_sensitivity_only), each kept only if it is not a structure class."""
+    extended_sensitivity_only), each kept only if it is not a structure class.
+
+    `include_extended=False` is the §11 sensitivity rule: the detector's label counts only when it
+    comes from `synonym_primary`."""
     if not isinstance(raw_name, str):
         return frozenset()
     out = set()
     own = normalise(raw_name)
     if own is not None and own not in _STRUCTURE:
         out.add(own)
-    label = _DETECTOR_LABEL.get(raw_name.lower())
+    key = raw_name.lower()
+    if not include_extended and key not in _primary_names():
+        return frozenset(out)
+    label = _DETECTOR_LABEL.get(key)
     if label is not None:
         c = normalise(label)
         if c is not None and c not in _STRUCTURE:

@@ -86,11 +86,13 @@ def _canon_of(raw_name: str) -> Optional[str]:
     return c
 
 
-def _answers_to(raw_name: str) -> FrozenSet[str]:
+def _answers_to(raw_name: str, include_extended: bool = True) -> FrozenSet[str]:
     """§5.3: the non-structure classes an annotated object answers to (labels.answers_to; structure
-    classes are dropped again here, so a label layer that forgets cannot let one through)."""
+    classes are dropped again here, so a label layer that forgets cannot let one through).
+    include_extended=False is the §11 sensitivity rule (synonym_primary alone)."""
     lab = _need_labels()
-    return frozenset(c for c in lab.answers_to(raw_name) if c is not None and not lab.is_structure(c))
+    got = lab.answers_to(raw_name) if include_extended else lab.answers_to(raw_name, include_extended=False)
+    return frozenset(c for c in got if c is not None and not lab.is_structure(c))
 
 
 def _centre(obj: dict) -> Optional[Point]:
@@ -204,8 +206,9 @@ class GridSceneTruth(model.SceneTruth):
         return frozenset(out)
 
 
-def load_scene_truth(scene: str, truth_dir: Path = TRUTH_DIR) -> "GridSceneTruth":
-    """Read `<scene>_region_footprints.npz`, `<scene>_semantic_geometry.json`, `<scene>_regions.json`."""
+def load_scene_truth(scene: str, truth_dir: Path = TRUTH_DIR, include_extended: bool = True) -> "GridSceneTruth":
+    """Read `<scene>_region_footprints.npz`, `<scene>_semantic_geometry.json`, `<scene>_regions.json`.
+    include_extended=False builds "answers to" from `synonym_primary` alone (§11 sensitivity)."""
     truth_dir = Path(truth_dir)
     lab = _need_labels()
     z = np.load(truth_dir / f"{scene}_region_footprints.npz", allow_pickle=False)
@@ -229,7 +232,7 @@ def load_scene_truth(scene: str, truth_dir: Path = TRUTH_DIR) -> "GridSceneTruth
         oid = int(obj["id"])
         name = str(obj["name"])
         xy = _centre(obj)
-        answers = _answers_to(name)
+        answers = _answers_to(name, include_extended)
         mt = frozenset(lab.marker_types(name))
         if mt:
             markers[rid].append(model.Marker(object_id=oid, region_id=rid, raw_name=name, types=mt,
@@ -332,6 +335,7 @@ def stage_state(truth: "SceneTruth", row: "model.Row") -> "model.StageState":
 
     open_types, open_types_loose = set(), set()
     open_classes, open_classes_loose = set(), set()
+    open_type_regions: Dict[str, set] = {}
     for rid in partly | unobs:
         reg = truth.regions[rid]
         open_types_loose |= set(reg.types)
@@ -339,6 +343,7 @@ def stage_state(truth: "SceneTruth", row: "model.Row") -> "model.StageState":
             t_markers = [m for m in reg.markers if t in m.types]
             if not any(m.object_id in mapped_markers for m in t_markers) and rid not in closed_by_room.get(t, ()):
                 open_types.add(t)
+                open_type_regions.setdefault(t, set()).add(rid)
         for o in reg.ref_objects:
             open_classes_loose |= set(o.answers_to)
             if o.object_id not in mapped_ids:
@@ -349,4 +354,5 @@ def stage_state(truth: "SceneTruth", row: "model.Row") -> "model.StageState":
         mapped_objects=frozenset(mapped_ids),
         open_types=frozenset(open_types), open_classes=frozenset(open_classes),
         open_types_loose=frozenset(open_types_loose), open_classes_loose=frozenset(open_classes_loose),
+        open_type_regions={t: frozenset(r) for t, r in open_type_regions.items()},
     )

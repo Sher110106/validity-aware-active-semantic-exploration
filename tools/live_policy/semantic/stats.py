@@ -298,3 +298,72 @@ def cluster_means(values: Sequence[float], cluster_ids: Sequence[Any]) -> tuple[
         groups.setdefault(cid, []).append(float(v))
     order = sorted(groups)
     return order, np.array([math.fsum(groups[c]) / len(groups[c]) for c in order])
+
+
+# ----------------------------------------------------------------------------- reliability (§11)
+
+def brier_score(p: Sequence[float], y: Sequence[float]) -> float:
+    """Mean squared gap between a stated probability and the 0/1 outcome."""
+    pv, yv = _as_vector(p, "p"), _as_vector(y, "y")
+    if pv.size != yv.size:
+        raise ValueError("p and y must have the same length")
+    return float(np.mean((pv - yv) ** 2))
+
+
+def reliability_curve(p: Sequence[float], y: Sequence[float], max_bins: int = 10) -> list[dict]:
+    """Bins of a stated probability against the observed share. With at most `max_bins` distinct values
+    (support takes 0.25, 0.5, 0.75, 1.0 under 4 intended members) each value is its own bin; otherwise
+    `max_bins` equal-width bins on [0, 1]. Each row: lo, hi, n, mean_p, mean_y."""
+    pv, yv = _as_vector(p, "p"), _as_vector(y, "y")
+    if pv.size != yv.size:
+        raise ValueError("p and y must have the same length")
+    values = np.unique(np.round(pv, 9))
+    if values.size <= max_bins:
+        groups = [(float(v), float(v), np.isclose(pv, v)) for v in values]
+    else:
+        edges = np.linspace(0.0, 1.0, max_bins + 1)
+        idx = np.clip(np.digitize(pv, edges[1:-1], right=False), 0, max_bins - 1)
+        groups = [(float(edges[i]), float(edges[i + 1]), idx == i) for i in range(max_bins)]
+    out = []
+    for lo, hi, mask in groups:
+        n = int(mask.sum())
+        if n:
+            out.append({"lo": lo, "hi": hi, "n": n, "mean_p": float(pv[mask].mean()), "mean_y": float(yv[mask].mean())})
+    return out
+
+
+def expected_calibration_error(p: Sequence[float], y: Sequence[float], max_bins: int = 10) -> float:
+    """ECE: the n-weighted mean of |mean_y - mean_p| over the bins of reliability_curve."""
+    curve = reliability_curve(p, y, max_bins)
+    total = sum(b["n"] for b in curve)
+    return float(sum(b["n"] * abs(b["mean_y"] - b["mean_p"]) for b in curve) / total)
+
+
+class IsotonicMap:
+    """Least-squares non-decreasing map from a score to the share of positives (pool adjacent violators).
+    Equal scores pool first. A score outside the fitted range takes the nearest block's value."""
+
+    def __init__(self, x: Sequence[float], y: Sequence[float]):
+        xv, yv = _as_vector(x, "x"), _as_vector(y, "y")
+        if xv.size != yv.size:
+            raise ValueError("x and y must have the same length")
+        pooled = {}
+        for a, b in zip(xv.tolist(), yv.tolist()):
+            pooled.setdefault(a, []).append(b)
+        blocks = []  # [x_min, x_max, mean, weight]
+        for a in sorted(pooled):
+            blocks.append([a, a, math.fsum(pooled[a]) / len(pooled[a]), float(len(pooled[a]))])
+            while len(blocks) >= 2 and blocks[-2][2] > blocks[-1][2]:
+                l, r = blocks[-2], blocks[-1]
+                w = l[3] + r[3]
+                blocks[-2:] = [[l[0], r[1], (l[2] * l[3] + r[2] * r[3]) / w, w]]
+        self._blocks = blocks
+
+    def predict(self, x: float) -> float:
+        for b in self._blocks:
+            if x <= b[1]:
+                return b[2]
+        return self._blocks[-1][2]
+
+    def __call__(self, x: float) -> float:
+        return self.predict(x)

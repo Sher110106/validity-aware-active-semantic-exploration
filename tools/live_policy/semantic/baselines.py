@@ -86,7 +86,8 @@ class Prior:
     still count in N_c.
     """
 
-    def __init__(self, summary_path=SUMMARY_PATH):
+    def __init__(self, summary_path=SUMMARY_PATH, include_extended: bool = True):
+        self.include_extended = include_extended
         with open(summary_path) as f:
             data = json.load(f)
         seen = set()
@@ -103,7 +104,8 @@ class Prior:
 
         def answers(name: str) -> FrozenSet[str]:
             if name not in ans_cache:
-                ans_cache[name] = frozenset(c for c in labels.answers_to(name) if not labels.is_structure(c))
+                got = labels.answers_to(name) if include_extended else labels.answers_to(name, include_extended=False)
+                ans_cache[name] = frozenset(c for c in got if not labels.is_structure(c))
             return ans_cache[name]
 
         def marks(name: str) -> FrozenSet[str]:
@@ -113,6 +115,7 @@ class Prior:
 
         self.room_n: Dict[str, List[int]] = {t: [] for t in model.REPORTED_ROOM_TYPES}
         class_n: List[Dict[str, int]] = []
+        self.n_regions: List[int] = [sum(1 for rid in h["regions"] if int(rid) >= 0) for h in houses]
         for h in houses:
             n_t = {t: 0 for t in model.REPORTED_ROOM_TYPES}
             n_c: Dict[str, int] = {}
@@ -139,57 +142,93 @@ class Prior:
         }
 
     # §9 rooms: m_T is presence (0 or 1) of a typed room node in the observed graph.
-    def room_scores(self, observed, include_dining: bool = False) -> Dict[str, float]:
+    # `counts` (type -> m_T) replaces it in the sensitivity form of §9 that knows the truly seen regions;
+    # `houses` (indices) limits the houses, for the house-size form.
+    def room_scores(self, observed, include_dining: bool = False, counts: Optional[Mapping[str, int]] = None,
+                    houses: Optional[Sequence[int]] = None) -> Dict[str, float]:
         present = {n.room_type for n in observed.rooms if n.room_type}
         types = model.REPORTED_ROOM_TYPES if include_dining else model.ROOM_TYPES
-        return {t: _share_above(self.room_n[t], 1 if t in present else 0) for t in types}
 
-    # §9 objects: n_c is the number of observed object nodes of the class.
-    def class_scores(self, observed) -> Dict[str, float]:
-        n = Counter(o.canon for o in observed.objects if o.canon)
-        return {c: _share_above(v, n.get(c, 0)) for c, v in self.class_n.items()}
+        def m_of(t):
+            return int(counts.get(t, 0)) if counts is not None else (1 if t in present else 0)
 
-    def top_k(self, scores: Mapping[str, float], k: int, kind: str) -> List[str]:
-        """The k best labels: score, then houses holding it (N >= 1), then alphabetical."""
+        return {t: _share_above(self._pick(self.room_n[t], houses), m_of(t)) for t in types}
+
+    # §9 objects: n_c is the number of observed object nodes of the class (or `counts`, the number of
+    # mapped reference objects of the class, in the sensitivity form).
+    def class_scores(self, observed, counts: Optional[Mapping[str, int]] = None,
+                     houses: Optional[Sequence[int]] = None) -> Dict[str, float]:
+        n = Counter(o.canon for o in observed.objects if o.canon) if counts is None else counts
+        return {c: _share_above(self._pick(v, houses), int(n.get(c, 0))) for c, v in self.class_n.items()}
+
+    @staticmethod
+    def _pick(values: Sequence[int], houses: Optional[Sequence[int]]) -> Sequence[int]:
+        return values if houses is None else [values[i] for i in houses]
+
+    def size_third(self, n_regions: int) -> Tuple[int, ...]:
+        """Indices of the houses in the same third, by number of regions, as a house with `n_regions`
+        (§9 sensitivity). The cuts are the 1/3 and 2/3 percentiles of the houses' region counts; a
+        house falls in third (n > cut1) + (n > cut2)."""
+        c1, c2 = (float(x) for x in np.percentile(self.n_regions, [100.0 / 3.0, 200.0 / 3.0]))
+
+        def third(n):
+            return int(n > c1) + int(n > c2)
+
+        t = third(n_regions)
+        return tuple(i for i, n in enumerate(self.n_regions) if third(n) == t)
+
+    def top_k(self, scores: Mapping[str, float], k: int, kind: str,
+              allowed: Optional[Iterable[str]] = None) -> List[str]:
+        """The k best labels: score, then houses holding it (N >= 1), then alphabetical. `allowed`
+        limits the labels (the detector vocabulary, in the §11 line on it)."""
         if kind not in KINDS:
             raise ValueError(f"kind must be one of {KINDS}")
         held = self.holders[kind]
-        order = sorted(scores, key=lambda lab: (-scores[lab], -held.get(lab, 0), lab))
+        keep = None if allowed is None else set(allowed)
+        names = [lab for lab in scores if keep is None or lab in keep]
+        order = sorted(names, key=lambda lab: (-scores[lab], -held.get(lab, 0), lab))
         return order[:max(0, int(k))]
 
 
-def b3_claims(prior: Prior, observed, k: int, level: str) -> FrozenSet[str]:
+def b3_claims(prior: Prior, observed, k: int, level: str, allowed: Optional[Iterable[str]] = None,
+              counts: Optional[Mapping[str, int]] = None, houses: Optional[Sequence[int]] = None) -> FrozenSet[str]:
     if level == "L1":
-        return frozenset(prior.top_k(prior.room_scores(observed), k, "room"))
+        return frozenset(prior.top_k(prior.room_scores(observed, counts=counts, houses=houses), k, "room"))
     if level == "L2":
-        return frozenset(prior.top_k(prior.class_scores(observed), k, "object"))
+        return frozenset(prior.top_k(prior.class_scores(observed, counts=counts, houses=houses), k, "object", allowed))
     raise ValueError("B3 claims exist at L1 and L2 only")
 
 
-def b3_member(prior: Prior, observed, member) -> "model.Member":
-    """B3: as many claims as the member made at each level; no L3 items."""
+def b3_member(prior: Prior, observed, member, allowed: Optional[Iterable[str]] = None,
+              room_counts: Optional[Mapping[str, int]] = None, class_counts: Optional[Mapping[str, int]] = None,
+              houses: Optional[Sequence[int]] = None) -> "model.Member":
+    """B3: as many claims as the member made at each level; no L3 items. `allowed` limits the L2 labels
+    (detector vocabulary); `room_counts`, `class_counts` and `houses` give the sensitivity forms."""
     return model.Member(
         member=member.member, new_rooms=(), new_objects=(),
-        l1_claims=b3_claims(prior, observed, len(member.l1_claims), "L1"),
-        l2_claims=b3_claims(prior, observed, len(member.l2_claims), "L2"),
+        l1_claims=frozenset(prior.top_k(prior.room_scores(observed, counts=room_counts, houses=houses),
+                                        len(member.l1_claims), "room")),
+        l2_claims=frozenset(prior.top_k(prior.class_scores(observed, counts=class_counts, houses=houses),
+                                        len(member.l2_claims), "object", allowed)),
         l3_items=(),
     )
 
 
-def b3l_items(prior: Prior, observed, member) -> Tuple["model.Item", ...]:
+def b3l_items(prior: Prior, observed, member, allowed: Optional[Iterable[str]] = None) -> Tuple["model.Item", ...]:
     """B3L: rank the member's distinct labels of each kind by frequency (ties alphabetical);
     the i-th is replaced everywhere by the prior's i-th label of that kind. Centres are kept.
-    Rooms are ranked over six types (dining added), so a member's dining room has a stand-in.
+    Rooms are ranked over the five scored types (§9: "at L1 the labels are the five scored room types";
+    a dining room is never an item, item 51). Objects over the canonical classes, or over `allowed`.
     An item whose rank exceeds the prior's list is dropped."""
     mapping: Dict[str, Dict[str, str]] = {}
     for kind in KINDS:
         counts = Counter(it.label for it in member.l3_items if it.kind == kind)
         ranked = sorted(counts, key=lambda lab: (-counts[lab], lab))
         if kind == "room":
-            scores = prior.room_scores(observed, include_dining=True)
+            scores, keep = prior.room_scores(observed), None
         else:
-            scores = prior.class_scores(observed)
-        repl = prior.top_k(scores, len(ranked), kind)
+            scores, keep = prior.class_scores(observed), allowed
+        repl = prior.top_k(scores, len(ranked), kind, keep)
         mapping[kind] = {lab: repl[i] for i, lab in enumerate(ranked) if i < len(repl)}
     out = []
     for it in member.l3_items:
@@ -199,10 +238,26 @@ def b3l_items(prior: Prior, observed, member) -> Tuple["model.Item", ...]:
     return tuple(out)
 
 
-def b3l_member(prior: Prior, observed, member) -> "model.Member":
+def b3l_member(prior: Prior, observed, member, allowed: Optional[Iterable[str]] = None) -> "model.Member":
     return model.Member(member=member.member, new_rooms=(), new_objects=(),
                         l1_claims=frozenset(), l2_claims=frozenset(),
-                        l3_items=b3l_items(prior, observed, member))
+                        l3_items=b3l_items(prior, observed, member, allowed))
+
+
+def seen_counts(truth, state) -> Tuple[Dict[str, int], Dict[str, int]]:
+    """Counts for the §9 sensitivity form that knows what the robot truly saw (§5.4): (m_T, n_c) with m_T
+    the number of seen regions of type T and n_c the number of mapped reference objects that answer to c."""
+    room_m: Dict[str, int] = {}
+    for rid in state.seen:
+        for t in truth.regions[rid].types:
+            room_m[t] = room_m.get(t, 0) + 1
+    class_n: Dict[str, int] = {}
+    for reg in truth.regions.values():
+        for o in reg.ref_objects:
+            if o.object_id in state.mapped_objects:
+                for c in o.answers_to:
+                    class_n[c] = class_n.get(c, 0) + 1
+    return room_m, class_n
 
 
 def b2_member(observed, member: int = 0) -> "model.Member":
@@ -358,6 +413,16 @@ def make_placebo_fn(read_observed_raw: Callable, reduce_graph: Callable, calib: 
         graph = lp.placebo_graph(read_observed_raw(row), np.random.default_rng(placebo_rng_key(row, k)), cal)
         return reduce_graph(graph, row, k)
     return placebo_fn
+
+
+def placebo_graphs(row, read_observed_raw: Callable, calib: Optional[dict] = None,
+                   n_members: int = N_PLACEBO_MEMBERS) -> List[dict]:
+    """The placebo's four graphs for a row, as live_policy.placebo_graph makes them:
+    placebo_graph(observed, np.random.default_rng([seed, stage, k]), load_calibration()), k = 0..3."""
+    lp = _load_live_policy()
+    cal = calib if calib is not None else lp.load_calibration()
+    observed = read_observed_raw(row)
+    return [lp.placebo_graph(observed, np.random.default_rng(placebo_rng_key(row, k)), cal) for k in range(n_members)]
 
 
 # ----------------------------------------------------------------------------- B4 wrong house

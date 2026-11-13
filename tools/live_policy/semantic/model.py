@@ -8,7 +8,7 @@ horizontal, z is up, and every distance used by the rules is horizontal.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, FrozenSet, List, Optional, Sequence, Tuple
+from typing import Dict, FrozenSet, List, Mapping, Optional, Sequence, Tuple
 
 Point = Tuple[float, float]  # (x, y), metres
 
@@ -131,6 +131,7 @@ class Member:
     n_objects_unlabelled: int = 0         # "other" or structure class
     n_objects_flagged: int = 0            # new objects carrying is_predicted == True
     n_objects_unflagged: int = 0
+    n_rooms_dining: int = 0               # new rooms typed dining: left out of L1 and L3, counted (item 51)
 
 
 @dataclass(frozen=True)
@@ -164,6 +165,9 @@ class StageState:
                                              # in an unseen region
     open_types_loose: FrozenSet[str]         # §11: an unseen region of the type exists
     open_classes_loose: FrozenSet[str]       # §11: an unseen region holds the class
+    # §5.5, by region: for each type T, the unseen regions that keep T open. A type is open iff it has
+    # a region here. Empty when a test builds a state by hand; score_levels then falls back.
+    open_type_regions: Mapping[str, FrozenSet[int]] = field(default_factory=dict)
 
     @property
     def unseen(self) -> FrozenSet[int]:
