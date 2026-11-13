@@ -1,0 +1,26 @@
+{
+  "00853": {
+    "navmesh_start_island_m2": 77.00389099121094,
+    "waypoint_grid_m2": 191.25,
+    "paper_m2": 207.63,
+    "cell_size_m": 0.05,
+    "n_regions": 12,
+    "labelled_floor_m2": 102.42000000000002,
+    "labelled_footprint_m2": 165.05,
+    "floor_hull_m2": 196.43874999999994,
+    "footprint_hull_m2": 213.20874999999998,
+    "footprint_box_m2": 268.605
+  },
+  "00871": {
+    "navmesh_start_island_m2": 59.27443313598633,
+    "waypoint_grid_m2": 148.5,
+    "paper_m2": 235.03,
+    "cell_size_m": 0.05,
+    "n_regions": 16,
+    "labelled_floor_m2": 104.88500000000002,
+    "labelled_footprint_m2": 168.0825,
+    "floor_hull_m2": 211.07375000000008,
+    "footprint_hull_m2": 252.91999999999996,
+    "footprint_box_m2": 301.665
+  }
+}
