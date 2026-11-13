@@ -177,3 +177,33 @@ A2.1 adds conditions 2 and 3 to §2a. It is a change, not a restatement.
 **A3.6 Not run.** 00871: its budget is not yet fixed, and its runs are longer.
 
 **Not changed.** §1 to §3, the readouts of §4, and Amendments 1 and 2.
+
+## Note to Amendment 3 (2026-11-13 21:37 IST, before any run of Amendment 3, the dry run included, has started)
+
+An independent review of Amendment 3 found one false statement and several cases its rules did not decide. This note corrects the first and settles the rest. When it was written the GPU was still held by another user's job, the rerun queue of Amendment 2 was still waiting, and the campaign folder held no `e8_` folder and no dry run of this amendment.
+
+**Correction of fact.** A3.1 says the arm runs "with the same files as E1 ran". It runs E1's official code path, not E1's files. The manifests of E1's counted official runs on 00853 give md5 9326c553… for `live_policy.py`, 2db5e73c… for `run_live_run.sh` and 6040198b… for `exploration_pipeline.py`. The host now holds eaf477c5…, 68aeef7e… and 223ed036…; the sha256 values A3.1 quotes are of these newer files. What changed between them:
+- `live_policy.py`: the oracle arm, and a fresh random stream for reruns of the no-LLM arms. Both sit in the code of the no-LLM arms; the official arm does not pass through it.
+- `run_live_run.sh`: one more line in the manifest.
+- `exploration_pipeline.py`: the quiet-wait option, which acts only when its two variables are set. They stay unset.
+
+`llm_completion.py` (md5 dc70801e…) and `calculate_uncertainty.py` (9cec96c6…) are the files E1 ran.
+
+**A3.1, more.**
+- Each seed is launched on its own, with its own queue file, in the order 42, 43, 44. The runner has no GPU check of its own, so before each launch these are checked by hand: the rerun queue has ended (waiting is not ended); the container holds no process but its first; at least 12 GB of GPU memory is free; at least 60 GB of host memory and 20 GB of disk are free; the four hashes above still match.
+- A run is used up once the runner has started its launcher. If the runner skips it (`skipped_exists`, `skipped_campaign_cap`, `skipped_host_memory`) or the launcher fails to start (`launch_failed`), the run has not happened and may be launched once later; if a folder was left behind, the later launch adds `_relaunch1` to the name.
+- A run stopped by hand, to protect the host or to end a run that is already void under A3.2, counts as a run that ended before B. We stop by hand when the run's `logs/roslaunch.log` shows a line of A3.2, or when free host memory falls under 20 GB.
+
+**A3.2, made exact.**
+- A run reached B if its last stage that holds `navigation_stats.json` and both graph files shows a total navigation time of at least 632.1751 s. Its 100% value is then read as §4 says, at the last stage whose navigation time is at most B.
+- "No rerun of any kind" includes a run killed because another user's job took the GPU's memory, a run stopped by the runner (cost, calls, wall clock, stall, planning errors, host memory), and a run stopped by hand. In each case the next seed is still launched, once the checks of A3.1 pass again.
+- §4's sensitivity readout at B × 1.2 needs 759 s of navigation time, about 110 to 121 m of path. A 105 m run will most likely not reach it; where it does not, that cell is empty.
+
+**A3.5, changed and made exact.**
+- The dry run's cost limit is $1.00, not $0.30. About 200 calls and the launcher's reserve for calls in flight come to about $0.27, which leaves $0.30 too little room: the cost check, not the stack, could end the dry run.
+- The dry run passes if the runner launches it, it writes at least two stages, every call is served by DeepInfra with the pinned model, and its `logs/roslaunch.log` holds no line of A3.2. It is not repeated; only a dry run the runner skipped or failed to launch may be launched once more.
+- No folder whose name starts with `dryrun_` is ever scored.
+
+**Projection, on record before the runs.** From October's official runs on 00853, a 105 m run should take 31 to 39 stages, 2,030 to 2,640 calls, 5 to 10 hours, $1.5 to $2.2, and end at 660 to 723 s of navigation time. The reviewer's guess: one run in three ends before B. The likeliest cause is the shared GPU; after it, host memory on a slow night.
+
+**Scoring.** The runs enter the tables as their own arm, `official_nov`, picked by the name pattern `e8_00853_s(42|43|44)_official_105m` (with `_relaunch1` where the rule above gave it), so that no code path can pool them with October's `official` arm.
