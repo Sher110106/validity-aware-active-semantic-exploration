@@ -50,15 +50,15 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
   - the M4 round order and the cost addendum;
   - the full list of numbers already seen.
 - [x] Opus review, then hash, commit and push (commit 49307ed).
-- [ ] Truth files hashed as an addendum before the first score.
+- [x] Truth files, label table and frame hashed (`semantic/TRUTH.sha256`, pushed 20:12) before the first score.
 
 **M1, the semantic test on saved data ($0)**
-- [~] `tools/live_policy/semantic/`: labels, region truth, extraction, level scoring, comparators, statistics and driver are written (366 tests); integration, the validity views and the room test are in progress.
-- [ ] Tests on synthetic houses with known answers.
-- [ ] Opus review of the code against the pre-registration.
-- [ ] Scorer freeze: hash and commit (order rule 3).
-- [ ] Run on the saved DeepSeek, Gemini and placebo guesses. DeepSeek's verdicts are exploratory.
-- [ ] Opus recompute of the headline numbers with its own code.
+- [x] `tools/live_policy/semantic/`: labels, region truth, extraction, level scoring, comparators, statistics, the validity views, the room test and one driver (437 tests).
+- [x] Tests on synthetic houses with known answers.
+- [x] Opus review of the code against the pre-registration: a hand-computed toy house agreed on every number; one must-fix and six smaller items, all fixed.
+- [x] Scorer freeze: `semantic/FREEZE.sha256`, committed and pushed 11-13 20:14 (04e6afc), before any Claude output was scored.
+- [x] Run on the saved DeepSeek, Gemini and placebo guesses (`results_semantic_1113/exploratory/`). DeepSeek's verdicts are exploratory.
+- [~] Opus recompute of the headline numbers with its own code, written from the rules without reading the scorer: running.
 
 **M2, would right meaning be enough? ($0)**
 - [x] Rebuild the bench from a copy and reproduce 9,600 of 9,600 picks (done on the laptop, `tools/live_policy/m2/`; the same on tyrone's CPUs is in progress).
@@ -161,3 +161,8 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 19:10-19:18: Claude smoke test: 28 of 28 members ok, $2.84. Opus at effort medium costs about $0.15 a member, Haiku about half a cent: both models make their tool calls in one or two turns. All 28 texts parse with the author's parser on the host.
 - 11-13 19:13: part-2 rescore pipeline ran in interim mode: 853 equals the 11-12 numbers cell for cell; C2 for 853 is 0.751, below the 0.90 line (commit 7948b04). 871 awaits its third attempts.
 - 11-13 19:25: cost addendum hashed (cb0a131a…) and pushed (2e8a06c) after an Opus check of the smoke records. 19:26: the full Claude replay started (both models, four rounds). Its outputs are not scored until the scorer is frozen.
+- 11-13 20:02: Opus code review of the scorer: its hand-computed toy house agreed with the code on every number; one must-fix (how a finished round is judged) and six smaller items, fixed by 20:10 (437 tests).
+- 11-13 20:12: truth files, label table and frame hashed and pushed (61d5965). 20:13: first real scoring run, exploratory (DeepSeek, Gemini, placebo). 20:14: scorer frozen and pushed (04e6afc), before any Claude output is scored.
+- Detectable differences from the freeze: 5.7 points at L1, 5.2 at L2, 1.1 at L3. All three levels can decide; the plan had feared 20 points at L1.
+- Exploratory result, DeepSeek on the 44 rows: against the other-house prior, L1 −1.7 points (−5.2 to 0.0) and L2 −26.3 (−33.2 to −19.4); against the placebo, L1 +1.7 and L2 +5.8; at L3, −0.6 (−1.9 to +0.6) against the region trade. Rejected at all three levels under the frozen rules. Its guesses lie a median 7.7 m from the nearest unseen object they could name (Gemini 5.8 m, placebo 9.0 m).
+- 11-13 20:05: tyrone reproduces the bench's 9,600 picks in about 10 minutes on 48 cores; the factorial code is staged there and under Opus review.
