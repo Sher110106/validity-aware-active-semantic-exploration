@@ -32,7 +32,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [ ] The author's GED on the host for the new runs.
 - [ ] Rescore: budget by script as Amendment 2 A2.3 says, C2 written to file first, crashed rows pointed at the right folders, the 11-12 values for 871 marked superseded.
 - [x] The C1 area table: navmesh island, HM3D labelled floor, waypoint grid, the paper's figure (`results_paper_compare_1113/c1_area_table.md`, deviation 59). The paper's figure is 2.7 and 4.0 times the navmesh island, and within 7% of the convex hull of all labelled geometry.
-- [~] ASP on 853 to the full budget, behind the readiness check (§6). Approved 11-13. Rules set and reviewed: Amendment 3 (hashed 21:20) and its Note (hashed 21:37, deviation 58). Scoring code for its own row is being added. The runs wait for the GPU.
+- [~] ASP on 853 to the full budget, behind the readiness check (§6). Approved 11-13. Rules set and reviewed: Amendment 3 (hashed 21:20) and its Note (hashed 21:37, deviation 58). Scoring code for its own row is written, reviewed by Opus and fixed (6fb5888); the checks made before each launch are a script (`host/e8_prelaunch_check.sh`). The runs wait for the GPU.
 
 ### 3.2 Part 3: the author's defense
 
@@ -82,7 +82,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [~] Deck with parts 1 to 3 (`docs/endsem_2026-11/`): rebuilt after a first Opus review (20 slides), then part 3 filled from the result files (22 slides and 2 backup). Second Opus review done: no wrong number in 165 checked; wording and layout fixes in progress.
 - [x] A numbers table for every part-3 number (`results_semantic_1113/numbers_part3.csv`, 1,247 rows, built and audited by script).
 - [~] Write-up (`results_semantic_1113/RESULTS.md`, commit f5101c3) and the limits slide. Opus review: about 400 numbers traced, none wrong; eight sentences said too much and seven required items were missing. Fixes in progress.
-- [~] Independent recompute from raw files: M1 and M4 reproduced (`results_semantic_1113/independent_recompute/`); M2's summary and verdicts are being recomputed from its per-stage files.
+- [x] Independent recompute from raw files: M1 and M4 reproduced (`results_semantic_1113/independent_recompute/`); M2's summary and verdicts reproduced from its per-stage files to within 1.4e-16 (`results_m2_1113/independent_recompute/`). How M2's arms were built was checked by code review, not rebuilt.
 - [~] Opus review of the deck against its sources: done once (see above); a second look follows the fixes.
 
 ## 4. Rules for runs on the host
@@ -177,3 +177,8 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 21:41: Opus review of the deck with part 3 filled: no wrong number in about 165 checked against the raw files; three wrong labels, ten sentences that said too much (the answer slide above all), too many words on every part-3 slide, and one missing answer (why Claude, when the paper used Gemini). A lane is fixing these.
 - 11-13 21:44: the C1 area table (9b245c7, deviation 59).
 - 11-13 21:47: the GPU is still held by the other user's job (43.0 of 48 GB); the queue checks every five minutes and waits up to 72 hours. Nothing GPU-bound has moved since 18:05.
+- 11-13 21:49: an independent recompute of M2's summary, written from the frozen rules without reading the summary code, matches every mean, interval end and verdict (6c94a74). On one secondary yardstick (U_360) room types alone read "inconclusive"; on every other view every arm reads "not shown sufficient".
+- 11-13 21:56: the write-up revised after its review and pushed (41ebff0): eight sentences cut back, the required items added, and a supplement script for the counts the frozen scorer does not save (deviation 60); 1,738 numbers audited. The deck with part 3 and its review fixes pushed (42fdbc9): 23 main slides and 3 backup.
+- 11-13 22:00: scoring code for the November ASP row pushed (6fb5888) after an Opus code review: the runs enter only through the checks of A3.2, as their own arm, one folder per seed; with no such run every output is unchanged (1,063 tests pass).
+- 11-13 22:04: a second Opus look at the write-up and the deck together: about 250 more numbers traced and eight supplement counts redone from the raw graphs, no mismatch. It asked for eight more small wording changes in the write-up and for the deck's answer slides to follow the write-up's own lists; both are in progress.
+- 11-13 22:07: the GPU is still held (43.0 of 48 GB). The 871 tour, the four 871 seeds and ASP on 853 have not moved.
