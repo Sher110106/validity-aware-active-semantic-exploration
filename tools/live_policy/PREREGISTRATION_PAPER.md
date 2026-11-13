@@ -149,3 +149,31 @@ A2.1 adds conditions 2 and 3 to §2a. It is a change, not a restatement.
 - The frozen-tour test is coarse by design: a tour with one new object passes. So the report also gives each tour's count of object nodes at stage 0 and at the end.
 
 **Why an e7 run is thrown out when nvblox dies, but a tour is not.** The frontier explorer plans on the map nvblox builds. When nvblox dies it has no map to plan on, and the robot stops exploring: the run no longer shows where the explorer would have gone. A tour follows navmesh paths that do not depend on the map, and Hydra went on growing the graph after nvblox died (`results_paper_compare_1112/NOTES.md`, item 4), so the tour still visits what it was meant to visit. The damage to a tour's graph is disclosed, not ignored (A2.5).
+
+## Amendment 3 (2026-11-13 21:20 IST, before any run below has started)
+
+**Why.** §4 says "ASP runs stopped at 60 m, so they have no 100% value". So the paper's headline column (ASP at 100% of the budget) has no ASP value of ours beside it. Three new ASP runs on 00853 fill that cell. The student approved them on 11-13. They are descriptive, like the rest of this file.
+
+**What had been seen when this was written.**
+- Every October result, and the 853 readouts at 10% and 50% of B for ASP, the filter, the placebo and frontier, and frontier at 100% (`results_paper_compare_1112/` and the interim `results_paper_compare_1113/`, where 853 is final and equal to 11-12).
+- C2 for 853: the two tours agree at F1 0.751.
+- The semantic test and M2 (`results_semantic_1113/`, `results_m2_1113/`), finished the same evening. They use other data and decide nothing here.
+- No run of this amendment had started. The GPU was held by another user's job, and the rerun queue of Amendment 2 was waiting before the 871 APR-b tour.
+
+**A3.1 Runs.** `e8_00853_s<seed>_official_105m`, seeds 42, 43 and 44, one at a time in container asp-noetic, in that order.
+- The arm is E1's official arm, with the same files as E1 ran: the author's pipeline at f1ea141b; `live_policy.py` (sha256 6e4710cf…), `run_live_run.sh` (25cfe606…) and `live_runner.py` (940be66b…) as they stand on the host; model `deepseek/deepseek-v4.1-flash-1017` on OpenRouter, pinned to DeepInfra fp8, no fallback, reasoning effort low, max_tokens 16,000. (On 11-13 that model was still listed with DeepInfra at fp8.) The quiet-wait option of the determinism step is left unset.
+- Target path 105 m, so that navigation time passes B for 853 (632.18 s; October's official runs moved at 6.4 to 6.7 s per metre). The runner stops at the first checkpoint at or past 105 m.
+- Limits: 12 h per run; $3 per run; the launcher's 3,000-call limit, unchanged (October's 60 m runs used 1,022 to 1,362 calls).
+- October's scheduler is not used. The runner is started once the rerun queue has ended, the rescoring's work on the host is done, nothing else runs in the container, and at least 12 GB of GPU memory is free.
+
+**A3.2 Which runs count.** A run counts at 100% of B if its navigation time reached B, its `logs/roslaunch.log` holds no "out of memory" line and no line saying `nvblox_node` has died (case ignored), and no E1 exclusion applies (a call not served by DeepInfra with the pinned model; more than half the members dropped). A run that ends before B, whatever the reason, has no 100% value and is reported with the values it has. There is no rerun of any kind.
+
+**A3.3 Readouts.** §4's, at 10%, 50% and 100% of B = 632.18 s (fixed on 11-12 from the five e7 runs on 853; Amendment 2 does not change it): F1 as the stage value and as the running maximum, and GED with the author's code. One row, "ASP + DeepSeek, November", with mean, min, max and n. No p-value.
+
+**A3.4 Not pooled.** The three runs are never pooled with October's official runs, whose rows at 10% and 50% stay as they are. The slide gives n beside every cell.
+
+**A3.5 Dry run.** One run of 5 m (`dryrun_e8_00853_s42_official_5m`, cost limit $0.30) checks the stack after the reboot of 11-11. It is not scored. If it fails, the three runs are not started, and that is reported.
+
+**A3.6 Not run.** 00871: its budget is not yet fixed, and its runs are longer.
+
+**Not changed.** §1 to §3, the readouts of §4, and Amendments 1 and 2.
