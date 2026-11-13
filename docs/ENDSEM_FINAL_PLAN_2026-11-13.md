@@ -154,6 +154,6 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - Readiness for ASP on 853, item 1: the pinned DeepSeek model is still served by DeepInfra at fp8 (checked 18:20). October's 60 m runs used 1,022 to 1,362 calls, so a 105 m run fits under the launcher's 3,000-call cap.
 - 11-13 18:59: `PREREGISTRATION_SEMANTIC.md` hashed (59c97ad6…) after three Opus reviews, pushed 19:00 (49307ed). The reviews changed: the footprint (all triangles, not the floor), "answers to" (the detector calls a bed "duvet"), the open-room rule, the guess rule (place only; ids and flags ignored), the wrong-house comparator (a separate gate over 6 pairs), and the label table's rules.
 - 11-13 19:00: the paper runs that exist pass or fail Amendment 2's tests as expected: 853 seeds 42-46 and 871 seed 46 valid; the eight crashed 871 attempts invalid; the 853 APR-b rerun not frozen (117 object nodes), so C2 for 853 can be computed.
-- 11-13 19:05: Opus review of the Claude loop: four must-fix items before any paid call (gateway address, per-model caps, the per-round cost check, reserves); fixes in progress.
-- 11-13 19:10: tyrone's CPUs taken into use for the bench and the factorial (`~/endsem_cpu`), at the student's request, while the GPU is held by another user's job.
-- 11-13 19:15: lanes running: scorer integration; M2 pre-registration review; bench and factorial code on tyrone; part-2 rescore pipeline; Claude loop fixes.
+- 11-13 18:57: Opus review of the Claude loop: four must-fix items before any paid call (gateway address, per-model caps, the per-round cost check, reserves); fixes in progress.
+- 11-13 18:47: tyrone's CPUs taken into use for the bench and the factorial (`~/endsem_cpu`), at the student's request, while the GPU is held by another user's job.
+- 11-13 19:02: lanes running: scorer integration; M2 pre-registration review; bench and factorial code on tyrone; part-2 rescore pipeline; Claude loop fixes.

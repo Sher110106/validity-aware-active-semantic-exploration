@@ -49,7 +49,7 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - The crashed attempts were scored in rows of their own, which §4 does not list.
     - gmatch4py was installed from its source with its package init trimmed to the GED modules, not by `pip --target` as §4 says.
 
-51. **11-13 19:10: points the frozen semantic pre-registration left open,** settled before any score exists and before the scorer has run on any model output. `PREREGISTRATION_SEMANTIC.md` (sha256 59c97ad6…, hashed 18:59) is not edited.
+51. **11-13 19:01: points the frozen semantic pre-registration left open,** settled before any score exists and before the scorer has run on any model output. `PREREGISTRATION_SEMANTIC.md` (sha256 59c97ad6…, hashed 18:59) is not edited.
     - **Thesis rows (§10).** A result can meet both "mixed" and "the claim fails": a model Supported at L1 that passes the wrong-house gate, with every model Rejected at L2 and L3. The rows apply in the table's order, so that result is "mixed".
     - **Dining at L3 (§7).** The marker table calls dining "reported only", and §7 leaves it out of L1 claims but does not say so for L3 items. A new room typed dining is left out of the L3 items too, and counted.
     - **Structure words (§6, rule 4).** The label table also maps names ending in beam, column or pillar to a structure class. Structure classes and "other" both take no part in L2 or L3, so no score changes.
