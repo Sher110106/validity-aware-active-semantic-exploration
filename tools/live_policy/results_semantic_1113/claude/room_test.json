@@ -1,0 +1,1641 @@
+{
+ "live": {
+  "by_arm": {
+   "arms": {
+    "filter_only": {
+     "of": 69,
+     "predicted_all_stages_typed": 7,
+     "predicted_all_stages_untyped": 37,
+     "predicted_stages_with_8_members_typed": 2,
+     "predicted_stages_with_8_members_untyped": 11,
+     "rate_all_stages_typed": 0.10144927536231885,
+     "rate_all_stages_untyped": 0.5362318840579711,
+     "rate_stages_with_8_members_typed": 0.028985507246376812,
+     "rate_stages_with_8_members_untyped": 0.15942028985507245,
+     "runs": 6,
+     "stages": 106,
+     "stages_with_8_members": 32
+    },
+    "official": {
+     "of": 59,
+     "predicted_all_stages_typed": 13,
+     "predicted_all_stages_untyped": 52,
+     "predicted_stages_with_8_members_typed": 10,
+     "predicted_stages_with_8_members_untyped": 37,
+     "rate_all_stages_typed": 0.22033898305084745,
+     "rate_all_stages_untyped": 0.8813559322033898,
+     "rate_stages_with_8_members_typed": 0.1694915254237288,
+     "rate_stages_with_8_members_untyped": 0.6271186440677966,
+     "runs": 5,
+     "stages": 93,
+     "stages_with_8_members": 37
+    },
+    "oracle_visible": {
+     "of": 39,
+     "predicted_all_stages_typed": 5,
+     "predicted_all_stages_untyped": 26,
+     "predicted_stages_with_8_members_typed": 5,
+     "predicted_stages_with_8_members_untyped": 26,
+     "rate_all_stages_typed": 0.1282051282051282,
+     "rate_all_stages_untyped": 0.6666666666666666,
+     "rate_stages_with_8_members_typed": 0.1282051282051282,
+     "rate_stages_with_8_members_untyped": 0.6666666666666666,
+     "runs": 3,
+     "stages": 42,
+     "stages_with_8_members": 42
+    },
+    "placebo": {
+     "of": 69,
+     "predicted_all_stages_typed": 6,
+     "predicted_all_stages_untyped": 40,
+     "predicted_stages_with_8_members_typed": 6,
+     "predicted_stages_with_8_members_untyped": 40,
+     "rate_all_stages_typed": 0.08695652173913043,
+     "rate_all_stages_untyped": 0.5797101449275363,
+     "rate_stages_with_8_members_typed": 0.08695652173913043,
+     "rate_stages_with_8_members_untyped": 0.5797101449275363,
+     "runs": 6,
+     "stages": 110,
+     "stages_with_8_members": 110
+    }
+   },
+   "paper": {
+    "of": 28,
+    "predicted": 9
+   }
+  },
+  "runs": [
+   {
+    "arm": "official",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 18,
+    "n_stages_with_8_members": 4,
+    "n_stages_with_members": 18,
+    "predicted_all_stages_typed": [
+     1,
+     12
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     5,
+     6,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "predicted_stages_with_8_members_typed": [
+     1,
+     12
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     1,
+     3,
+     5,
+     6,
+     9,
+     10,
+     12
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e1_00853_s42_official_60m",
+    "scene": "00853",
+    "seed": 42
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 16,
+    "n_stages_with_8_members": 16,
+    "n_stages_with_members": 16,
+    "predicted_all_stages_typed": [
+     10
+    ],
+    "predicted_all_stages_untyped": [
+     3,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "predicted_stages_with_8_members_typed": [
+     10
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     3,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e1_00853_s42_placebo_60m",
+    "scene": "00853",
+    "seed": 42
+   },
+   {
+    "arm": "official",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 21,
+    "n_stages_with_8_members": 11,
+    "n_stages_with_members": 21,
+    "predicted_all_stages_typed": [
+     1,
+     12
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     6,
+     7,
+     8,
+     9,
+     10,
+     12
+    ],
+    "predicted_stages_with_8_members_typed": [
+     12
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     3,
+     6,
+     7,
+     8,
+     9,
+     10,
+     12
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e1_00853_s43_official_60m",
+    "scene": "00853",
+    "seed": 43
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 18,
+    "n_stages_with_8_members": 18,
+    "n_stages_with_members": 18,
+    "predicted_all_stages_typed": [
+     10,
+     12
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     9,
+     10,
+     12
+    ],
+    "predicted_stages_with_8_members_typed": [
+     10,
+     12
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     9,
+     10,
+     12
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e1_00853_s43_placebo_60m",
+    "scene": "00853",
+    "seed": 43
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 21,
+    "n_stages_with_8_members": 21,
+    "n_stages_with_members": 21,
+    "predicted_all_stages_typed": [],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     5,
+     7,
+     9,
+     10
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [
+     1,
+     3,
+     5,
+     7,
+     9,
+     10
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e1_00853_s44_placebo_60m",
+    "scene": "00853",
+    "seed": 44
+   },
+   {
+    "arm": "official",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 17,
+    "n_stages_with_8_members": 4,
+    "n_stages_with_members": 17,
+    "predicted_all_stages_typed": [
+     12,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "predicted_stages_with_8_members_typed": [
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     10,
+     11,
+     12,
+     14
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s42_official_60m",
+    "scene": "00871",
+    "seed": 42
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 15,
+    "n_stages_with_8_members": 15,
+    "n_stages_with_members": 15,
+    "predicted_all_stages_typed": [
+     12,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     10,
+     11,
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_typed": [
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     10,
+     11,
+     12,
+     14
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s42_placebo_60m",
+    "scene": "00871",
+    "seed": 42
+   },
+   {
+    "arm": "official",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 18,
+    "n_stages_with_8_members": 10,
+    "n_stages_with_members": 18,
+    "predicted_all_stages_typed": [
+     4,
+     11,
+     12,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "predicted_stages_with_8_members_typed": [
+     4,
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     10,
+     11,
+     12,
+     14,
+     15
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s43_official_60m",
+    "scene": "00871",
+    "seed": 43
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 12,
+    "n_stages_with_8_members": 12,
+    "n_stages_with_members": 12,
+    "predicted_all_stages_typed": [],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     11
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     11
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s43_placebo_60m_rerun1",
+    "scene": "00871",
+    "seed": 43
+   },
+   {
+    "arm": "official",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 19,
+    "n_stages_with_8_members": 8,
+    "n_stages_with_members": 19,
+    "predicted_all_stages_typed": [
+     11,
+     12,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "predicted_stages_with_8_members_typed": [
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s44_official_60m",
+    "scene": "00871",
+    "seed": 44
+   },
+   {
+    "arm": "placebo",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 28,
+    "n_stages_with_8_members": 28,
+    "n_stages_with_members": 28,
+    "predicted_all_stages_typed": [
+     4
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5
+    ],
+    "predicted_stages_with_8_members_typed": [
+     4
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e1_00871_s44_placebo_60m",
+    "scene": "00871",
+    "seed": 44
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 16,
+    "n_stages_with_8_members": 4,
+    "n_stages_with_members": 16,
+    "predicted_all_stages_typed": [
+     1
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "predicted_stages_with_8_members_typed": [
+     1
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     1,
+     3
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e2_00853_s42_filter_only_60m",
+    "scene": "00853",
+    "seed": 42
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 19,
+    "n_stages_with_8_members": 6,
+    "n_stages_with_members": 19,
+    "predicted_all_stages_typed": [
+     1,
+     10
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     6,
+     10,
+     11
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [
+     6,
+     10,
+     11
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e2_00853_s43_filter_only_60m",
+    "scene": "00853",
+    "seed": 43
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 10,
+    "n_stages": 20,
+    "n_stages_with_8_members": 7,
+    "n_stages_with_members": 20,
+    "predicted_all_stages_typed": [
+     1
+    ],
+    "predicted_all_stages_untyped": [
+     1,
+     3,
+     6,
+     7,
+     9,
+     10,
+     12
+    ],
+    "predicted_stages_with_8_members_typed": [
+     1
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     1,
+     3,
+     6,
+     9
+    ],
+    "regions_unseen_at_stage0": [
+     1,
+     3,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "run": "e2_00853_s44_filter_only_60m",
+    "scene": "00853",
+    "seed": 44
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 20,
+    "n_stages_with_8_members": 7,
+    "n_stages_with_members": 20,
+    "predicted_all_stages_typed": [
+     11,
+     12,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     8,
+     9,
+     10,
+     11,
+     12,
+     14
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e2_00871_s42_filter_only_60m",
+    "scene": "00871",
+    "seed": 42
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 16,
+    "n_stages_with_8_members": 2,
+    "n_stages_with_members": 16,
+    "predicted_all_stages_typed": [],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [
+     8
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e2_00871_s43_filter_only_60m",
+    "scene": "00871",
+    "seed": 43
+   },
+   {
+    "arm": "filter_only",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 15,
+    "n_stages_with_8_members": 6,
+    "n_stages_with_members": 15,
+    "predicted_all_stages_typed": [],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     9
+    ],
+    "predicted_stages_with_8_members_typed": [],
+    "predicted_stages_with_8_members_untyped": [
+     5
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e2_00871_s44_filter_only_60m",
+    "scene": "00871",
+    "seed": 44
+   },
+   {
+    "arm": "oracle_visible",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 13,
+    "n_stages_with_8_members": 13,
+    "n_stages_with_members": 13,
+    "predicted_all_stages_typed": [
+     4,
+     12
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     10,
+     11,
+     12
+    ],
+    "predicted_stages_with_8_members_typed": [
+     4,
+     12
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     10,
+     11,
+     12
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e3_00871_s42_oracle_visible_60m",
+    "scene": "00871",
+    "seed": 42
+   },
+   {
+    "arm": "oracle_visible",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 12,
+    "n_stages_with_8_members": 12,
+    "n_stages_with_members": 12,
+    "predicted_all_stages_typed": [
+     12
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     9,
+     10,
+     11,
+     12,
+     15
+    ],
+    "predicted_stages_with_8_members_typed": [
+     12
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     9,
+     10,
+     11,
+     12,
+     15
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e3_00871_s43_oracle_visible_60m",
+    "scene": "00871",
+    "seed": 43
+   },
+   {
+    "arm": "oracle_visible",
+    "n_regions_unseen_at_stage0": 13,
+    "n_stages": 17,
+    "n_stages_with_8_members": 17,
+    "n_stages_with_members": 17,
+    "predicted_all_stages_typed": [
+     4,
+     14
+    ],
+    "predicted_all_stages_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     11,
+     13,
+     14
+    ],
+    "predicted_stages_with_8_members_typed": [
+     4,
+     14
+    ],
+    "predicted_stages_with_8_members_untyped": [
+     2,
+     3,
+     4,
+     5,
+     8,
+     11,
+     13,
+     14
+    ],
+    "regions_unseen_at_stage0": [
+     2,
+     3,
+     4,
+     5,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "run": "e3_00871_s44_oracle_visible_60m",
+    "scene": "00871",
+    "seed": 44
+   }
+  ]
+ },
+ "replay": {
+  "claude-haiku-5-5": {
+   "runs": {
+    "e1_00853_s42_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      12
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00853_s42_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 1,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      4
+     ]
+    },
+    "e1_00853_s43_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3,
+      6,
+      7,
+      9
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3,
+      6,
+      9
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00853_s43_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3
+     ],
+     "stages": [
+      1,
+      2,
+      5
+     ]
+    },
+    "e1_00853_s44_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      10
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s42_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      10,
+      11,
+      12
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      10,
+      11,
+      12
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s42_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 4,
+     "predicted_1of4_typed": [
+      11
+     ],
+     "predicted_1of4_untyped": [
+      8,
+      10,
+      11,
+      12,
+      14
+     ],
+     "predicted_2of4_typed": [
+      11
+     ],
+     "predicted_2of4_untyped": [
+      8,
+      10,
+      11
+     ],
+     "stages": [
+      2,
+      3,
+      5,
+      6
+     ]
+    },
+    "e1_00871_s43_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      11
+     ],
+     "predicted_1of4_untyped": [
+      10,
+      11,
+      12,
+      14
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      10,
+      11,
+      12,
+      14
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s44_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      11
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s42_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3,
+      9,
+      10,
+      11
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3,
+      9
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s43_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s44_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s42_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      5
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s43_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s44_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    }
+   },
+   "totals": {
+    "of": 171,
+    "predicted_1of4_typed": 2,
+    "predicted_1of4_untyped": 27,
+    "predicted_2of4_typed": 1,
+    "predicted_2of4_untyped": 17,
+    "runs": 15
+   }
+  },
+  "claude-opus-5-5": {
+   "runs": {
+    "e1_00853_s42_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      12
+     ],
+     "predicted_1of4_untyped": [
+      10,
+      12
+     ],
+     "predicted_2of4_typed": [
+      12
+     ],
+     "predicted_2of4_untyped": [
+      12
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00853_s42_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 1,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [],
+     "stages": [
+      4
+     ]
+    },
+    "e1_00853_s43_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3,
+      5,
+      6,
+      9
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3,
+      6,
+      9
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00853_s43_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3
+     ],
+     "stages": [
+      1,
+      2,
+      5
+     ]
+    },
+    "e1_00853_s44_official_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      9
+     ],
+     "predicted_1of4_untyped": [
+      6,
+      9,
+      10
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      6,
+      9,
+      10
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s42_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      12,
+      14
+     ],
+     "predicted_1of4_untyped": [
+      10,
+      11,
+      12,
+      14
+     ],
+     "predicted_2of4_typed": [
+      12,
+      14
+     ],
+     "predicted_2of4_untyped": [
+      10,
+      11,
+      12,
+      14
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s42_official_60m_FAILED_ATTEMPT1_false_exit_host_oom": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 4,
+     "predicted_1of4_typed": [
+      4,
+      11,
+      12,
+      14
+     ],
+     "predicted_1of4_untyped": [
+      3,
+      4,
+      8,
+      10,
+      11,
+      12,
+      14
+     ],
+     "predicted_2of4_typed": [
+      11
+     ],
+     "predicted_2of4_untyped": [
+      8,
+      10,
+      11,
+      12,
+      14
+     ],
+     "stages": [
+      2,
+      3,
+      5,
+      6
+     ]
+    },
+    "e1_00871_s43_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      12,
+      14
+     ],
+     "predicted_1of4_untyped": [
+      2,
+      10,
+      11,
+      12,
+      13,
+      14
+     ],
+     "predicted_2of4_typed": [
+      12,
+      14
+     ],
+     "predicted_2of4_untyped": [
+      10,
+      11,
+      12,
+      14
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e1_00871_s44_official_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      8,
+      10,
+      11
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      8
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s42_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3,
+      9,
+      10,
+      11
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3,
+      9,
+      10
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s43_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      6,
+      9,
+      10,
+      11
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      6,
+      9,
+      10,
+      11
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00853_s44_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 10,
+     "n_rows": 3,
+     "predicted_1of4_typed": [
+      12
+     ],
+     "predicted_1of4_untyped": [
+      3,
+      7,
+      12
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3,
+      7,
+      12
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s42_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      2,
+      3,
+      13,
+      15
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      2,
+      3,
+      13,
+      15
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s43_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      3
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      3
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    },
+    "e2_00871_s44_filter_only_60m": {
+     "n_regions_unseen_at_stage0": 13,
+     "n_rows": 3,
+     "predicted_1of4_typed": [],
+     "predicted_1of4_untyped": [
+      2
+     ],
+     "predicted_2of4_typed": [],
+     "predicted_2of4_untyped": [
+      2
+     ],
+     "stages": [
+      3,
+      8,
+      13
+     ]
+    }
+   },
+   "totals": {
+    "of": 171,
+    "predicted_1of4_typed": 11,
+    "predicted_1of4_untyped": 47,
+    "predicted_2of4_typed": 6,
+    "predicted_2of4_untyped": 38,
+    "runs": 15
+   }
+  }
+ }
+}
