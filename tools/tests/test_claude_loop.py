@@ -64,8 +64,8 @@ def no_network(monkeypatch):
 # ---- fakes -------------------------------------------------------------------------------------
 
 class Raise:
-    def __init__(self, exc, where="enter"):
-        self.exc, self.where = exc, where
+    def __init__(self, exc, where="enter", snapshot_usage=None):
+        self.exc, self.where, self.snapshot_usage = exc, where, snapshot_usage
 
 
 def rate_limit(retry_after=None):
@@ -126,6 +126,13 @@ class FakeStream:
     def __exit__(self, *a):
         return False
 
+    @property
+    def current_message_snapshot(self):  # what the SDK has accumulated when a stream breaks
+        su = getattr(self.item, "snapshot_usage", None)
+        if su is None:
+            raise RuntimeError("no snapshot yet")
+        return SimpleNamespace(usage=su)
+
     def get_final_message(self):
         if isinstance(self.item, Raise):
             raise self.item.exc
@@ -140,6 +147,7 @@ class FakeClient:
         self.script, self.responder = list(script or []), responder
         self.calls: list = []
         self._lock = threading.Lock()
+        self.base_url = "https://api.anthropic.com"
         self.beta = SimpleNamespace(messages=SimpleNamespace(stream=self._stream, create=self._create))
 
     def _next(self, api, kw):
@@ -239,14 +247,14 @@ def test_images_only_in_first_message_and_tool_ids_pair_in_order(tmp_path):
     assert [t["id"] for t in rec["tool_calls"]] == ["toolu_A", "toolu_B"]
 
 
-def test_error_result_sets_is_error():
+def test_tool_result_carries_the_authors_content_only_no_is_error_flag():
     client = FakeClient([reply(("tool", "check_collision", {"label": "x"}, "toolu_E")), reply(("text", "ok"))])
     cb = author_tool.make_author_callback(YAML_TEXT, author_tool.load_author_feasibility().fn)
     rec = run_member(client, OPUS, "P", YAML_TEXT, [], cb)
     block = client.requests[1]["messages"][2]["content"][0]
-    assert block["is_error"] is True
+    assert set(block) == {"type", "tool_use_id", "content"}  # the author's loop sends no error flag
     assert "missing argument(s)" in json.loads(block["content"])["error"]
-    assert rec["status"] == "ok"
+    assert rec["status"] == "ok" and rec["tool_calls"][0]["result"] == json.loads(block["content"])
 
 
 def test_each_request_starts_with_previous_messages_byte_for_byte(tmp_path):
@@ -366,19 +374,30 @@ def test_served_model_mismatch_is_flagged():
     assert rec["flags"] == ["served_model_mismatch:claude-opus-5-5-other"]
 
 
-def test_max_tokens_truncated_empty_and_other_stop_and_callback_error():
+def test_only_registered_drop_reasons_exist():
+    # §12: dropped = refused, 50 turns, still failing after the retries. A short or empty text is not a drop
+    # here: it goes to the parser, which drops what does not parse.
+    assert claude_loop.FINAL_STATUSES == {"ok", "dropped_refusal", "dropped_turn_limit", "dropped_error"}
+    assert claude_loop.OPEN_STATUSES == {"error", "cap_stopped"}
     r = run_member(FakeClient([reply(("text", "part"), stop="max_tokens")]), OPUS, "P", YAML_TEXT, [], echo_cb)
-    assert r["status"] == "truncated" and r["final_text"] == "part"
+    assert r["status"] == "ok" and r["final_text"] == "part" and "stop_max_tokens" in r["flags"]
     r = run_member(FakeClient([reply(("thinking", "S"), stop="end_turn")]), OPUS, "P", YAML_TEXT, [], echo_cb)
-    assert r["status"] == "dropped_empty" and r["final_text"] is None
+    assert r["status"] == "ok" and r["final_text"] == "" and "empty_text" in r["flags"]
     r = run_member(FakeClient([reply(("text", "x"), stop="pause_turn")]), OPUS, "P", YAML_TEXT, [], echo_cb)
-    assert r["status"] == "dropped_other_stop"
+    assert r["status"] == "dropped_error" and "pause_turn" in json.dumps(r["error"])
 
     def bad_cb(name, args):
         raise KeyError("id")
     r = run_member(FakeClient([reply(("tool", "check_collision", FREE, "t"))]), OPUS, "P", YAML_TEXT, [], bad_cb)
-    assert r["status"] == "dropped_tool_error" and r["error"]["type"] == "KeyError"
-    assert r["status"] in claude_loop.FINAL_STATUSES
+    assert r["status"] == "dropped_error" and r["error"]["where"] == "tool_callback"
+    assert r["error"]["type"] == "KeyError" and r["dropped"] is True
+
+
+def test_member_cap_is_a_cap_stop_not_a_drop(tmp_path):
+    mt = Meter(tmp_path / "u.jsonl", caps=Caps(member=0.01), reserve_usd={OPUS: 0.02})
+    r = run_member(FakeClient([reply(("text", "x"))]), OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt)
+    assert r["status"] == "cap_stopped" and r["error"]["scope"] == "member" and r["dropped"] is False
+    assert r["status"] in claude_loop.OPEN_STATUSES
 
 
 def test_non_jpeg_is_refused(tmp_path):
@@ -388,9 +407,15 @@ def test_non_jpeg_is_refused(tmp_path):
         run_member(FakeClient([]), OPUS, "P", YAML_TEXT, [p], echo_cb)
 
 
-def test_make_client_sets_timeout_and_retries_without_network():
+def test_make_client_pins_direct_url_and_owns_the_retries(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_BASE_URL", "http://127.0.0.1:4000")
+    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "gateway-token-123")
     c = claude_loop.make_client("sk-ant-test-not-real")
-    assert c.timeout == 300.0 and c.max_retries == 3
+    assert str(c.base_url).startswith("https://api.anthropic.com")
+    assert c.timeout == 300.0
+    assert c.max_retries == 0  # every retry is ours: metered, logged, three at most (§12)
+    assert c.auth_token is None  # the gateway token is not picked up beside the key
+    assert claude_loop.LoopSettings().retries == 3
 
 
 # ---- transport: 429 backoff, stream breaks -----------------------------------------------------
@@ -418,7 +443,7 @@ def test_429_backoff_uses_retry_after_then_succeeds(tmp_path):
     rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt, gate=clk.gate(), rng=lambda: 0.0)
     assert rec["status"] == "ok" and len(client.calls) == 3
     assert clk.sleeps == [3.0, 3.0]
-    assert rec["flags"] == ["rate_limited_turn_0", "rate_limited_turn_0"]
+    assert rec["flags"] == ["retry_turn_0", "retry_turn_0"]
     lines = [json.loads(l) for l in (tmp_path / "usage.jsonl").read_text().splitlines()]
     assert [l["status"] for l in lines] == ["not_billed", "not_billed", "ok"]
     assert mt.held_total == pytest.approx(0.0)  # reservations released
@@ -426,12 +451,13 @@ def test_429_backoff_uses_retry_after_then_succeeds(tmp_path):
 
 def test_429_without_retry_after_backs_off_exponentially_and_gives_up():
     clk = Clock()
-    s = LoopSettings(rate_limit_retries=2)
+    s = LoopSettings(retries=2)
     client = FakeClient([Raise(rate_limit()), Raise(rate_limit()), Raise(rate_limit())])
     rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, s, gate=clk.gate(), rng=lambda: 0.0)
     assert clk.sleeps == [2.0, 4.0]
-    assert rec["status"] == "error" and rec["error"]["type"] == "RateLimitError"
-    assert rec["status"] in claude_loop.OPEN_STATUSES
+    # still failing after the retries: the member is dropped, and a drop is final
+    assert rec["status"] == "dropped_error" and rec["error"]["type"] == "RateLimitError"
+    assert rec["status"] in claude_loop.FINAL_STATUSES and rec["dropped"] is True
 
 
 def test_gate_pauses_every_worker_that_shares_it():
@@ -452,24 +478,55 @@ def test_stream_break_retries_once_and_books_the_failed_attempt(tmp_path):
     client = FakeClient([Raise(conn_error(), where="final"), reply(("text", "ok"))])
     mt = Meter(tmp_path / "usage.jsonl", reserve_usd={OPUS: 0.25})
     rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt)
-    assert rec["status"] == "ok" and rec["flags"] == ["turn_retry_0"] and len(client.calls) == 2
+    assert rec["status"] == "ok" and rec["flags"] == ["retry_turn_0"] and len(client.calls) == 2
     lines = [json.loads(l) for l in (tmp_path / "usage.jsonl").read_text().splitlines()]
     assert lines[0]["status"] == "failed_estimated" and lines[0]["cost"] == 0.25
     assert lines[1]["status"] == "ok"
 
 
-def test_two_stream_breaks_end_the_member_with_error(tmp_path):
-    client = FakeClient([Raise(sse_error(), where="final"), Raise(sse_error(), where="final")])
-    rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb)
-    assert rec["status"] == "error" and len(client.calls) == 2
-    assert rec["final_text"] is None
+def test_transient_errors_retry_three_times_then_the_member_is_dropped():
+    breaks = [conn_error, sse_error, lambda: anthropic.APITimeoutError(request=REQ),
+              lambda: anthropic.InternalServerError("overloaded", response=httpx2.Response(529, request=REQ), body=None)]
+    ok = FakeClient([Raise(breaks[0](), "final"), Raise(breaks[1](), "final"), Raise(breaks[2](), "final"),
+                     reply(("text", "fine"))])
+    rec = run_member(ok, OPUS, "P", YAML_TEXT, [], echo_cb, gate=Clock().gate(), rng=lambda: 0.0)
+    assert rec["status"] == "ok" and len(ok.calls) == 4  # three retries allowed
+    bad = FakeClient([Raise(b(), "final") for b in breaks])
+    rec = run_member(bad, OPUS, "P", YAML_TEXT, [], echo_cb, gate=Clock().gate(), rng=lambda: 0.0)
+    assert rec["status"] == "dropped_error" and len(bad.calls) == 4 and rec["final_text"] is None
+    assert rec["status"] in claude_loop.FINAL_STATUSES  # a resume does not run it again
 
 
-def test_400_is_not_billed_and_not_retried(tmp_path):
+def test_a_broken_stream_is_booked_at_the_larger_of_reserve_and_usage(tmp_path):
+    big = usage(inp=100_000, out=50_000)  # (100000*4 + 50000*20)/1e6 = 1.40
+    client = FakeClient([Raise(sse_error(), "final", snapshot_usage=big), Raise(sse_error(), "final",
+                                                                               snapshot_usage=usage(10, 10)),
+                         reply(("text", "ok"))])
+    mt = Meter(tmp_path / "usage.jsonl", reserve_usd={OPUS: 0.25})
+    rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt, gate=Clock().gate(), rng=lambda: 0.0)
+    lines = [json.loads(l) for l in (tmp_path / "usage.jsonl").read_text().splitlines()]
+    assert [l["status"] for l in lines] == ["failed_estimated", "failed_estimated", "ok"]
+    assert lines[0]["cost"] == pytest.approx(1.40)  # usage shows more than the reserve
+    assert lines[1]["cost"] == 0.25  # usage shows less: the reserve stands
+    assert rec["status"] == "ok"
+
+
+def test_5xx_before_the_stream_is_not_billed_but_is_retried(tmp_path):
+    e = anthropic.InternalServerError("overloaded", response=httpx2.Response(529, request=REQ), body=None)
+    client = FakeClient([Raise(e), reply(("text", "ok"))])
+    mt = Meter(tmp_path / "usage.jsonl")
+    rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt, gate=Clock().gate(), rng=lambda: 0.0)
+    lines = [json.loads(l) for l in (tmp_path / "usage.jsonl").read_text().splitlines()]
+    assert rec["status"] == "ok" and [l["status"] for l in lines] == ["not_billed", "ok"]
+
+
+def test_400_is_not_billed_not_retried_and_leaves_the_member_unfinished(tmp_path):
     client = FakeClient([Raise(bad_request())])
     mt = Meter(tmp_path / "usage.jsonl")
     rec = run_member(client, OPUS, "P", YAML_TEXT, [], echo_cb, meter=mt)
+    # a bad request is a fault in our harness, not a member that failed after retries: open, not dropped
     assert rec["status"] == "error" and rec["error"]["status_code"] == 400 and len(client.calls) == 1
+    assert rec["status"] in claude_loop.OPEN_STATUSES and rec["dropped"] is False
     assert json.loads((tmp_path / "usage.jsonl").read_text())["status"] == "not_billed"
     assert mt.settled_run == 0.0
 
@@ -507,6 +564,10 @@ def test_usage_from_api_splits_cache_writes_by_ttl():
                            "cache_read_input_tokens": 0})
     assert bare.cache_write_5m == 9
     assert Usage.from_api({"cache_creation_input_tokens": 9}, default_ttl="1h").cache_write_1h == 9
+
+
+def test_default_reserves_cover_the_worst_call():
+    assert meter_mod.DEFAULT_RESERVE_USD[OPUS] == 1.50 and meter_mod.DEFAULT_RESERVE_USD[HAIKU] == 0.35
 
 
 def test_unknown_model_is_not_priced_at_zero(tmp_path):
@@ -652,14 +713,44 @@ def test_input_loader_checks_files_images_and_meta(tmp_path):
         claude_static.load_input(root / "a")
 
 
-def test_order_file_rounds():
-    text = "# stage 8\nb\nc  # note\n\n\na\n"
-    assert claude_static.parse_order(text, {"a", "b", "c"}) == [["b", "c"], ["a"]]
+def mdir_of(out, model, i, k, effort="medium"):
+    return claude_static.member_dir(out, model, effort, i, k)
+
+
+def test_order_file_rounds_in_the_sample_frame_format(tmp_path):
+    root = tmp_path / "in"
+    for name in ("b", "c", "a"):
+        make_input(root, name)  # meta: run r1, stage 8
+    specs = claude_static.load_inputs(root)
+    text = ("# The sample frame: 3 rows. <row_id> <run_dir in the container> <stage>\n"
+            "# Round 1: stage 8\n"
+            "b /workspace/runs/live_campaign/r1 8\n"
+            "c /workspace/runs/live_campaign/r1 8   # trailing note\n"
+            "\n"
+            "# Round 2: the rest\n"
+            "a /workspace/runs/live_campaign/r1 8\n")
+    assert claude_static.parse_order(text, specs) == [["b", "c"], ["a"]]
+    assert claude_static.plan_rounds(specs, text) == [["b", "c"], ["a"]]
+    assert claude_static.plan_rounds(specs, None) == [["a", "b", "c"]]
     with pytest.raises(ValueError, match="unknown"):
-        claude_static.parse_order("zzz\n", {"a"})
+        claude_static.parse_order("# Round 1\nzzz /w/r1 8\n", specs)
     with pytest.raises(ValueError, match="twice"):
-        claude_static.parse_order("a\na\n", {"a"})
-    assert claude_static.plan_rounds(["b", "a"], None) == [["a", "b"]]
+        claude_static.parse_order("# Round 1\na /w/r1 8\na /w/r1 8\n", specs)
+    with pytest.raises(ValueError, match="stage"):
+        claude_static.parse_order("# Round 1\na /w/r1 9\n", specs)  # the saved input says stage 8
+    with pytest.raises(ValueError, match="run"):
+        claude_static.parse_order("# Round 1\na /w/other_run 8\n", specs)
+
+
+def test_sample_frame_file_parses_when_inputs_match():
+    frame = Path(__file__).resolve().parents[1] / "live_policy" / "semantic" / "sample_frame.txt"
+    if not frame.exists():
+        pytest.skip("sample_frame.txt not present")
+    rows = [l.split() for l in frame.read_text().splitlines() if l.strip() and not l.startswith("#")]
+    fake = {r[0]: SimpleNamespace(meta={"run": Path(r[1]).name, "stage": int(r[2])}) for r in rows}
+    rounds = claude_static.parse_order(frame.read_text(), fake)
+    assert sum(len(r) for r in rounds) == len(rows) == 44 and len(rounds) == 4
+    assert [len(r) for r in rounds][:2] == [12, 12]
 
 
 def test_campaign_writes_one_folder_per_model_input_member(tmp_path):
@@ -672,7 +763,8 @@ def test_campaign_writes_one_folder_per_model_input_member(tmp_path):
     for model in (HAIKU, OPUS):
         for i in ("a", "b"):
             for k in (0, 1):
-                d = out / model / i / f"member_{k}"
+                d = mdir_of(out, model, i, k)
+                assert d == out / model / "effort_medium" / i / f"member_{k}"
                 rec = json.loads((d / "record.json").read_text())
                 assert rec["status"] == "ok" and rec["model"] == model and rec["input"] == i and rec["member"] == k
                 assert (d / "final.txt").read_text() == f"FINAL for PROMPT for {i}"
@@ -688,14 +780,16 @@ def test_cap_stop_falls_between_whole_members(tmp_path):
     root = tmp_path / "in"
     make_input(root, "a")
     specs = claude_static.load_inputs(root)
-    # each call: 1000 in + 1000 out = 0.024; a member is two calls = 0.048; admit estimate 0.05 >= that
+    # each call: 1000 in + 1000 out = 0.024; a member is two calls = 0.048. The round projection fits
+    # (3 x 0.04 = 0.12 <= 0.12), so the round starts; the third member finds no room at admission.
     client = FakeClient(responder=campaign_responder(flat=True))
-    summary, mt, out = run_static(tmp_path, specs, client=client, members=5, caps=Caps(run=0.12),
-                                  reserve={OPUS: 0.03}, admit={OPUS: 0.05})
-    assert summary["counts"] == {"ok": 2, "skipped_cap": 3}
+    summary, mt, out = run_static(tmp_path, specs, client=client, members=3, caps=Caps(run=0.12),
+                                  reserve={OPUS: 0.03}, admit={OPUS: 0.04})
+    assert summary["round_skips"] == []
+    assert summary["counts"] == {"ok": 2, "skipped_cap": 1}
     assert summary["stopped_by_cap"] is True
     assert mt.settled_run == pytest.approx(0.096) and mt.settled_run <= 0.12
-    recs = [json.loads(p.read_text()) for p in out.glob("*/*/member_*/record.json")]
+    recs = [json.loads(p.read_text()) for p in out.glob("*/*/*/member_*/record.json")]
     assert len(recs) == 2 and all(r["status"] == "ok" for r in recs)  # no half-finished member on disk
 
 
@@ -708,10 +802,10 @@ def test_cap_hit_mid_member_is_recorded_as_open_and_reruns_on_resume(tmp_path):
     summary, mt, out = run_static(tmp_path, specs, client=client, members=2, caps=Caps(run=0.07),
                                   reserve={OPUS: 0.03}, admit={OPUS: 0.01})
     assert summary["counts"] == {"ok": 1, "cap_stopped": 1}
-    m1 = out / OPUS / "a" / "member_1"
+    m1 = mdir_of(out, OPUS, "a", 1)
     rec = json.loads((m1 / "record.json").read_text())
     assert rec["status"] == "cap_stopped" and rec["final_text"] is None
-    assert not claude_static.is_finished(m1) and claude_static.is_finished(out / OPUS / "a" / "member_0")
+    assert not claude_static.is_finished(m1, "medium") and claude_static.is_finished(mdir_of(out, OPUS, "a", 0), "medium")
     # resume with more room: only the open member runs
     client2 = FakeClient(responder=campaign_responder(flat=True))
     summary2, _, _ = run_static(tmp_path, specs, client=client2, members=2, caps=Caps(run=5), resume=True)
@@ -733,8 +827,9 @@ def test_resume_never_pays_for_a_finished_member_twice(tmp_path):
     assert c2.calls == [] and summary["counts"] == {"resumed": 4}
     assert (out / "usage.jsonl").read_text() == ledger_before  # nothing new was billed
     # an errored member is open: it runs again; a dropped one is final: it does not
-    (out / OPUS / "a" / "member_0" / "record.json").write_text(json.dumps({"status": "error"}))
-    (out / OPUS / "a" / "member_1" / "record.json").write_text(json.dumps({"status": "dropped_refusal"}))
+    med = {"effort": "medium"}
+    (mdir_of(out, OPUS, "a", 0) / "record.json").write_text(json.dumps({"status": "error", "settings": med}))
+    (mdir_of(out, OPUS, "a", 1) / "record.json").write_text(json.dumps({"status": "dropped_error", "settings": med}))
     c3 = FakeClient(responder=campaign_responder())
     summary3, _, _ = run_static(tmp_path, specs, client=c3, members=2, resume=True)
     assert summary3["counts"] == {"ok": 1, "resumed": 3} and len(c3.calls) == 2
@@ -762,7 +857,7 @@ def test_prewarm_then_members_and_first_call_reads_the_cache(tmp_path):
         assert p["kw"]["messages"] == member_first["kw"]["messages"]  # same first message, same marker
         assert "cache_control" not in p["kw"]  # explicit marker only; no top-level one
     assert summary["warnings"] == [] and summary["counts"] == {"ok": 4}
-    for p in out.glob("*/*/member_*/record.json"):
+    for p in out.glob("*/*/*/member_*/record.json"):
         rec = json.loads(p.read_text())
         assert rec["calls"][0]["usage"]["cache_read"] == 5000 and "first_call_no_cache_read" not in rec["flags"]
     kinds = [json.loads(l)["kind"] for l in (out / "usage.jsonl").read_text().splitlines()]
@@ -782,7 +877,7 @@ def test_prewarm_warns_when_a_first_call_does_not_read_the_cache(tmp_path):
         raise AssertionError
     summary, _, out = run_static(tmp_path, specs, client=FakeClient(responder=responder), members=1, prewarm=True)
     assert any("first call read no cache" in w for w in summary["warnings"])
-    rec = json.loads((out / OPUS / "a" / "member_0" / "record.json").read_text())
+    rec = json.loads((mdir_of(out, OPUS, "a", 0) / "record.json").read_text())
     assert "first_call_no_cache_read" in rec["flags"]
 
 
@@ -793,7 +888,99 @@ def test_prewarm_failure_skips_the_input_without_running_members(tmp_path):
     client = FakeClient(responder=lambda idx, kw: Raise(bad_request()))
     summary, _, out = run_static(tmp_path, specs, client=client, members=2, prewarm=True)
     assert summary["counts"] == {"skipped_prewarm_failed": 2} and len(client.calls) == 1
-    assert not list(out.glob("*/*/member_*"))
+    assert not list(out.glob("*/*/*/member_*"))
+
+
+def test_one_models_cap_stops_only_that_model(tmp_path):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    specs = claude_static.load_inputs(root)
+    client = FakeClient(responder=campaign_responder(flat=True))
+    # Haiku's reserve (0.02) is above its cap (0.01): its first call is refused with scope "model".
+    # Its admit estimate is tiny so the round projection lets it start.
+    summary, mt, out = run_static(tmp_path, specs, client=client, members=2, models=(HAIKU, OPUS),
+                                  caps=Caps(run=100, by_model={HAIKU: 0.01}),
+                                  reserve={HAIKU: 0.02, OPUS: 0.03}, admit={HAIKU: 0.001, OPUS: 0.05})
+    by = {(o["model"], o["status"]) for o in summary["outcomes"]}
+    assert (HAIKU, "cap_stopped") in by and (HAIKU, "skipped_cap") in by
+    assert [o["status"] for o in summary["outcomes"] if o["model"] == OPUS] == ["ok", "ok"]  # Opus went on
+    assert summary["stopped_models"] == [HAIKU] and summary["stopped_all"] is False
+    assert all(c["kw"]["model"] == OPUS for c in client.calls if c["kw"]["max_tokens"] != 0)
+
+
+def test_run_cap_stops_every_model(tmp_path):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    specs = claude_static.load_inputs(root)
+    client = FakeClient(responder=campaign_responder(flat=True))
+    summary, mt, out = run_static(tmp_path, specs, client=client, members=3, models=(HAIKU, OPUS),
+                                  caps=Caps(run=0.05), reserve={HAIKU: 0.03, OPUS: 0.03},
+                                  admit={HAIKU: 0.01, OPUS: 0.01})
+    assert summary["stopped_all"] is True
+    assert not any(o["status"] == "ok" and o["model"] == OPUS for o in summary["outcomes"])
+
+
+def test_round_projection_stops_a_model_that_cannot_finish_the_round(tmp_path):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    make_input(root, "b")
+    specs = claude_static.load_inputs(root)
+    client = FakeClient(responder=campaign_responder(flat=True))  # a member costs 0.048 (two calls)
+    logs = []
+    out_dir = tmp_path / "out"
+    mt = Meter(out_dir / "usage.jsonl", caps=Caps(run=100, by_model={OPUS: 0.20}),
+               reserve_usd={OPUS: 0.03, HAIKU: 0.03}, admit_usd={OPUS: 0.06, HAIKU: 0.06})
+    factory, feas = author_tool.default_callback_factory()
+    summary = claude_static.run_campaign(
+        client=client, specs=specs, rounds=[["a"], ["b"]], models=[HAIKU, OPUS], members=2, settings=LoopSettings(),
+        meter=mt, out_dir=out_dir, concurrency=1, resume=True, do_prewarm=False, callback_factory=factory,
+        sleep=lambda d: None, log=logs.append)
+    # round 1: Opus projected 2 x 0.06 = 0.12 <= 0.20, runs and settles 0.096.
+    # round 2: projected 0.12 > 0.20 - 0.096 = 0.104, so Opus stops before the round. Haiku has no cap and goes on.
+    st = {(o["model"], o["input"]): [] for o in summary["outcomes"]}
+    for o in summary["outcomes"]:
+        st[(o["model"], o["input"])].append(o["status"])
+    assert st[(OPUS, "a")] == ["ok", "ok"] and (OPUS, "b") not in st
+    assert st[(HAIKU, "a")] == ["ok", "ok"] and st[(HAIKU, "b")] == ["ok", "ok"]
+    assert [(s["round"], s["model"], s["scope"]) for s in summary["round_skips"]] == [(2, OPUS, "model")]
+    assert summary["round_skips"][0]["projected_usd"] == pytest.approx(0.12)
+    assert any("stops before round 2" in l and OPUS in l for l in logs)
+    assert summary["stopped_models"] == [OPUS] and summary["stopped_all"] is False
+    # Haiku ran first inside each round
+    order = [c["kw"]["model"] for c in client.calls]
+    assert order[: 4] == [HAIKU] * 4 and OPUS in order[4:8]
+
+
+def test_effort_is_part_of_the_resume_key(tmp_path):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    specs = claude_static.load_inputs(root)
+    c1 = FakeClient(responder=campaign_responder(flat=True))
+    _, _, out = run_static(tmp_path, specs, client=c1, members=1, settings=LoopSettings(effort="medium"))
+    c2 = FakeClient(responder=campaign_responder(flat=True))
+    summary, _, _ = run_static(tmp_path, specs, client=c2, members=1, resume=True, settings=LoopSettings(effort="low"))
+    assert summary["counts"] == {"ok": 1} and len(c2.calls) == 2  # not "resumed": a new effort is new work
+    assert c2.requests[0]["output_config"] == {"effort": "low"}
+    assert (out / OPUS / "effort_medium" / "a" / "member_0" / "record.json").exists()  # the first run is intact
+    assert (out / OPUS / "effort_low" / "a" / "member_0" / "record.json").exists()
+    # a record whose saved effort differs from its folder is not done either
+    rec = json.loads((mdir_of(out, OPUS, "a", 0, "low") / "record.json").read_text())
+    rec["settings"]["effort"] = "medium"
+    (mdir_of(out, OPUS, "a", 0, "low") / "record.json").write_text(json.dumps(rec))
+    assert not claude_static.is_finished(mdir_of(out, OPUS, "a", 0, "low"), "low")
+
+
+def test_out_dir_lock_is_exclusive_for_the_life_of_the_process(tmp_path):
+    out = tmp_path / "out"
+    with claude_static.out_lock(out):
+        with pytest.raises(SystemExit, match="lock"):
+            with claude_static.out_lock(out):
+                pass
+        with pytest.raises(SystemExit, match="lock"):  # a shared ledger path is locked too
+            with claude_static.out_lock(tmp_path / "other_out", ledger=out / "usage.jsonl"):
+                pass
+    with claude_static.out_lock(out):  # free again once released
+        pass
 
 
 # ---- CLI ---------------------------------------------------------------------------------------
@@ -810,7 +997,11 @@ def test_dry_run_builds_requests_calls_nothing_and_never_shows_the_key(tmp_path,
     shown = capsys.readouterr()
     assert rc == 0
     assert "sk-ant-SECRET" not in shown.out + shown.err
-    assert "images=6" in shown.out and "members to run=3/3" in shown.out and "count_tokens" in shown.out
+    assert "image blocks=6" in shown.out and "members to run=3/3" in shown.out and "count_tokens" in shown.out
+    import re
+    sizes = [int(m) for m in re.findall(r"request bytes=(\d+)", shown.out)]
+    assert len(sizes) == 4 and all(s > 780 for s in sizes)  # 2 inputs x 2 models; the whole request, not a stub
+    assert "projected" in shown.out
     assert not (tmp_path / "out").exists()
 
 
@@ -822,12 +1013,13 @@ def test_main_runs_with_a_fake_client_and_never_writes_the_key(tmp_path, monkeyp
     seen = {}
     client = FakeClient(responder=campaign_responder())
 
-    def fake_make_client(key, settings=None):
+    def fake_make_client(key, settings=None, **kw):
         seen["key"] = key
         return client
     monkeypatch.setattr(claude_loop, "make_client", fake_make_client)
     out = tmp_path / "out"
-    argv = [str(root), str(out), "--models", "opus", "--members", "2", "--cap-run", "5", "--cap-model", "opus=3"]
+    argv = [str(root), str(out), "--models", "opus", "--members", "2", "--cap-run", "5", "--cap-model", "opus=3",
+            "--admit", "opus=0.5", "--reserve", "opus=0.1"]
     rc = claude_static.main(argv)
     cap = capsys.readouterr()
     assert rc == 0 and seen["key"] == secret
@@ -839,6 +1031,183 @@ def test_main_runs_with_a_fake_client_and_never_writes_the_key(tmp_path, monkeyp
     # without --resume a second run over finished members is refused
     with pytest.raises(SystemExit, match="--resume"):
         claude_static.main(argv)
+
+
+def sse(events):
+    return "".join(f"event: {e['type']}\ndata: {json.dumps(e)}\n\n" for e in events).encode()
+
+
+def stream_events(model, blocks, stop, use):
+    """Server-sent events for one reply. blocks: ('thinking', sig) | ('text', s) | ('tool', id, name, input)."""
+    ev = [{"type": "message_start", "message": {
+        "id": "msg_1", "type": "message", "role": "assistant", "model": model, "content": [], "stop_reason": None,
+        "stop_sequence": None, "usage": {**use, "output_tokens": 1}}}]
+    for i, b in enumerate(blocks):
+        if b[0] == "thinking":
+            ev += [{"type": "content_block_start", "index": i, "content_block": {"type": "thinking", "thinking": "", "signature": ""}},
+                   {"type": "content_block_delta", "index": i, "delta": {"type": "signature_delta", "signature": b[1]}}]
+        elif b[0] == "text":
+            ev += [{"type": "content_block_start", "index": i, "content_block": {"type": "text", "text": ""}},
+                   {"type": "content_block_delta", "index": i, "delta": {"type": "text_delta", "text": b[1]}}]
+        else:
+            ev += [{"type": "content_block_start", "index": i, "content_block": {"type": "tool_use", "id": b[1], "name": b[2], "input": {}}},
+                   {"type": "content_block_delta", "index": i, "delta": {"type": "input_json_delta", "partial_json": json.dumps(b[3])}}]
+        ev.append({"type": "content_block_stop", "index": i})
+    ev += [{"type": "message_delta", "delta": {"stop_reason": stop, "stop_sequence": None}, "usage": {"output_tokens": 42}},
+           {"type": "message_stop"}]
+    return sse(ev)
+
+
+class Wire:
+    """A real anthropic client over httpx2.MockTransport. Records the exact URL, headers and JSON body sent."""
+
+    def __init__(self, model, script):
+        self.model, self.script, self.captured = model, list(script), []
+
+    def handler(self, request):
+        body = json.loads(request.content)
+        self.captured.append({"url": str(request.url), "method": request.method,
+                              "headers": {k.lower(): v for k, v in request.headers.items()}, "body": body})
+        use = {"input_tokens": 100, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 5000}
+        if not body.get("stream"):  # the pre-warm
+            return httpx2.Response(200, headers={"request-id": "req_pre"}, json={
+                "id": "msg_pre", "type": "message", "role": "assistant", "model": self.model, "content": [],
+                "stop_reason": "max_tokens", "stop_sequence": None,
+                "usage": {"input_tokens": 10, "output_tokens": 0, "cache_creation_input_tokens": 5000,
+                          "cache_read_input_tokens": 0}})
+        blocks, stop = self.script.pop(0)
+        return httpx2.Response(200, headers={"content-type": "text/event-stream", "request-id": f"req_m{len(self.captured)}"},
+                               content=stream_events(self.model, blocks, stop, use))
+
+    def client(self, settings=None, **kw):
+        return claude_loop.make_client("sk-ant-WIRE-KEY", settings, http_client=anthropic.DefaultHttpxClient(
+            transport=httpx2.MockTransport(self.handler)), **kw)
+
+
+def test_gateway_environment_is_ignored_and_the_key_stays_out_of_every_output(tmp_path, monkeypatch, capsys):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    secret = "sk-ant-GATEWAY-TEST-KEY"
+    monkeypatch.setenv("ANTHROPIC_API_KEY", secret)
+    monkeypatch.setenv("ANTHROPIC_BASE_URL", "http://127.0.0.1:4000")
+    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "gateway-token-123")
+    monkeypatch.delenv("ANTHROPIC_CUSTOM_HEADERS", raising=False)
+    wire = Wire(OPUS, [([("text", "FINAL")], "end_turn")])
+    real_make = claude_loop.make_client
+    # the real constructor (pinned URL, no env auth) with only the transport swapped for the recorder
+    monkeypatch.setattr(claude_loop, "make_client", lambda key, settings=None, **kw: real_make(
+        key, settings, http_client=anthropic.DefaultHttpxClient(transport=httpx2.MockTransport(wire.handler))))
+    out = tmp_path / "out"
+    rc = claude_static.main([str(root), str(out), "--models", "opus", "--members", "1", "--cap-run", "5", "--prewarm"])
+    cap = capsys.readouterr()
+    assert rc == 0 and len(wire.captured) == 2
+    for c in wire.captured:
+        assert c["url"].startswith("https://api.anthropic.com/v1/messages")  # not the local gateway
+        blob = json.dumps(c["headers"])
+        assert "gateway-token-123" not in blob and "127.0.0.1" not in blob
+        assert "authorization" not in c["headers"] or c["headers"]["authorization"] == f"Bearer {secret}"
+    texts = cap.out + cap.err + "".join(p.read_text() for p in out.rglob("*") if p.is_file())
+    for needle in (secret, "gateway-token-123"):
+        assert needle not in texts
+    # the real constructor pins the URL too (the patched one above only swaps the transport)
+    c = real_make(secret)
+    assert str(c.base_url).startswith("https://api.anthropic.com") and c.auth_token is None
+
+
+def test_main_refuses_custom_headers_or_a_client_that_points_elsewhere(tmp_path, monkeypatch):
+    root = tmp_path / "in"
+    make_input(root, "a")
+    argv = [str(root), str(tmp_path / "out"), "--models", "opus", "--cap-run", "5"]
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-x")
+    monkeypatch.setenv("ANTHROPIC_CUSTOM_HEADERS", "X-Gateway: 1")
+    with pytest.raises(SystemExit, match="ANTHROPIC_CUSTOM_HEADERS"):
+        claude_static.main(argv, client_factory=lambda s: FakeClient())
+    monkeypatch.setenv("ANTHROPIC_CUSTOM_HEADERS", "")  # empty counts as unset
+    elsewhere = FakeClient()
+    elsewhere.base_url = "http://127.0.0.1:4000"
+    with pytest.raises(SystemExit, match="base_url"):
+        claude_static.main(argv, client_factory=lambda s: elsewhere)
+    nourl = FakeClient()
+    del nourl.base_url
+    with pytest.raises(SystemExit, match="base_url"):
+        claude_static.main(argv, client_factory=lambda s: nourl)
+    assert not (tmp_path / "out" / "usage.jsonl").exists()  # nothing was spent or even opened
+
+
+@pytest.mark.parametrize("model", [OPUS, HAIKU])
+def test_real_sdk_wire_format_for_prewarm_first_call_and_second_call(model, tmp_path):
+    paths = make_images(tmp_path, ["z_2.jpg", "z_0.jpg", "z_1.jpg", "z_4.jpg", "z_3.jpg", "z_5.jpg"])
+    wire = Wire(model, [([("thinking", "SIGX"), ("text", "checking"), ("tool", "toolu_W1", "check_collision", FREE)],
+                         "tool_use"), ([("text", "```yaml\nnodes: []\n```")], "end_turn")])
+    client = wire.client()
+    cb = author_tool.default_callback_factory()[0](YAML_TEXT)
+    pre = claude_loop.prewarm(client, model, "PROMPT", YAML_TEXT, paths)
+    rec = run_member(client, model, "PROMPT", YAML_TEXT, paths, cb)
+    assert pre["cache_written"] and rec["status"] == "ok" and rec["final_text"].startswith("```yaml")
+    assert len(wire.captured) == 3
+    a, b, c = wire.captured
+    tool = {"name": "check_collision", "description": "Checks collision for a box centered at (center_x, center_y, center_z).",
+            "strict": True,
+            "input_schema": {"type": "object", "additionalProperties": False,
+                             "required": ["label", "center_x", "center_y", "center_z", "size_x", "size_y", "size_z"],
+                             "properties": {"label": {"type": "string"}, **{k: {"type": "number"} for k in (
+                                 "center_x", "center_y", "center_z", "size_x", "size_y", "size_z")}}}}
+    by_name = {"z_2.jpg": 0, "z_0.jpg": 1, "z_1.jpg": 2, "z_4.jpg": 3, "z_3.jpg": 4, "z_5.jpg": 5}
+    expect_data = [base64.b64encode(jpeg(by_name[n])).decode() for n in sorted(by_name)]
+    for req in (a, b, c):
+        assert req["method"] == "POST" and req["url"].split("?")[0] == "https://api.anthropic.com/v1/messages"
+        h = req["headers"]
+        assert h["anthropic-beta"] == "thinking-binding-controls-2026-08-01"  # exactly this one beta
+        assert h["content-type"] == "application/json"
+        assert "sk-ant-WIRE-KEY" in json.dumps(h)  # the key goes out only in the auth header ...
+        assert json.dumps(h).count("sk-ant-WIRE-KEY") == 1  # ... and in one place
+        body = req["body"]
+        assert body["model"] == model
+        assert body["thinking"] == {"type": "adaptive", "block_binding": {"prefix_mismatch_behavior": "error"}}
+        assert body["output_config"] == {"effort": "medium"}
+        assert body["tools"] == [tool] and body["tool_choice"] == {"type": "auto"}
+        for banned in ("temperature", "top_p", "top_k", "seed", "fallbacks", "speed", "system", "metadata"):
+            assert banned not in body
+        first = body["messages"][0]
+        assert first["role"] == "user"
+        assert [x["type"] for x in first["content"]] == ["text", "text"] + ["image"] * 6
+        assert first["content"][0]["text"] == "PROMPT" and first["content"][1]["text"] == YAML_TEXT
+        imgs = first["content"][2:]
+        assert [i["source"]["media_type"] for i in imgs] == ["image/jpeg"] * 6
+        assert [i["source"]["type"] for i in imgs] == ["base64"] * 6
+        assert [i["source"]["data"] for i in imgs] == expect_data  # sorted by file name
+        marked = [i for i, blk in enumerate(first["content"]) if "cache_control" in blk]
+        assert marked == [7] and first["content"][7]["cache_control"] == {"type": "ephemeral"}  # last image only
+    # (a) the pre-warm: max_tokens 0, no stream, no top-level cache_control
+    assert a["body"]["max_tokens"] == 0 and "stream" not in a["body"] and "cache_control" not in a["body"]
+    assert set(a["body"]) == {"model", "max_tokens", "thinking", "output_config", "tools", "tool_choice", "messages"}
+    assert len(a["body"]["messages"]) == 1
+    # (b) first member call: streamed, top-level cache_control for the tail
+    assert b["body"]["max_tokens"] == 64000 and b["body"]["stream"] is True
+    assert b["body"]["cache_control"] == {"type": "ephemeral"}
+    assert set(b["body"]) == {"model", "max_tokens", "thinking", "output_config", "tools", "tool_choice", "messages",
+                              "stream", "cache_control"}
+    assert b["body"]["messages"] == a["body"]["messages"]  # the pre-warm wrote exactly this prefix
+    # (c) second call, after the tool use: history grew by two messages and nothing earlier changed
+    msgs = c["body"]["messages"]
+    assert json.dumps(msgs[0]) == json.dumps(b["body"]["messages"][0]) and len(msgs) == 3
+    assert msgs[1] == {"role": "assistant", "content": [
+        {"type": "thinking", "thinking": "", "signature": "SIGX"}, {"type": "text", "text": "checking"},
+        {"type": "tool_use", "id": "toolu_W1", "name": "check_collision", "input": FREE}]}
+    assert msgs[2]["role"] == "user" and [x["type"] for x in msgs[2]["content"]] == ["tool_result"]
+    assert msgs[2]["content"][0]["tool_use_id"] == "toolu_W1" and "is_error" not in msgs[2]["content"][0]
+    assert json.loads(msgs[2]["content"][0]["content"])["valid"] is True
+    assert c["body"]["stream"] is True and c["body"]["cache_control"] == {"type": "ephemeral"}
+    assert rec["request_ids"] == ["req_m2", "req_m3"] and rec["served_models"] == [model, model]
+    assert rec["calls"][0]["usage"]["cache_read"] == 5000
+
+
+def test_ipv4_flag_is_off_by_default_and_changes_only_the_transport():
+    plain = claude_loop.make_client("sk-ant-x")
+    v4 = claude_loop.make_client("sk-ant-x", ipv4=True)
+    assert str(v4.base_url) == str(plain.base_url) and v4.timeout == plain.timeout
+    assert isinstance(v4._client._transport, httpx2.HTTPTransport)
+    assert claude_static.build_parser().parse_args(["i", "o"]).ipv4 is False
 
 
 def test_main_refuses_a_live_run_without_caps_or_key(tmp_path, monkeypatch):
@@ -864,8 +1233,9 @@ def test_default_callback_calls_the_authors_own_function():
     hit = cb("check_collision", COLLIDING)
     assert hit["valid"] is False and hit["collision_count"] == 1 and hit["collisions"][0]["name"] == "Table"
     assert cb("check_collision", FREE)["valid"] is True
-    ints = {**FREE, "center_x": 3, "size_x": 1}  # Claude may send integers; the author's loop gets floats
-    assert cb("check_collision", ints)["position"] == [3.0, 3.0, 0.5]
+    ints = {**FREE, "center_x": 3, "size_x": 1}  # Claude may send integers; they go to his function as sent
+    pos = cb("check_collision", ints)["position"]
+    assert pos == [3, 3.0, 0.5] and isinstance(pos[0], int)
     assert cb("nope", {}) == {"error": "Unknown function nope"}
     assert cb("check_collision", {"label": "x"})["error"].startswith("check_collision missing argument(s): center_x")
 
@@ -956,66 +1326,108 @@ def run_author_loop(monkeypatch, tmp_path, script, prompt, yaml_text, image_dir)
     return text, state
 
 
-def claude_side(script, paths, max_turns=50):
+REAL_GRAPH = Path("/Users/sher/project/cvp/replay_inputs/smoke_inputs/smoke_00871_s44_official_st17/graph.yaml")
+
+
+@pytest.fixture
+def real_graph():
+    if not REAL_GRAPH.exists():
+        pytest.skip("smoke graph not present")
+    import yaml as _yaml
+    text = REAL_GRAPH.read_text()  # read only
+    nodes = [n for n in _yaml.safe_load(text)["nodes"] if n.get("node_type") in ("object", "structure")]
+    assert len(nodes) > 20
+    return text, nodes
+
+
+def _vec(v):
+    return json.loads(v) if isinstance(v, str) else v
+
+
+def real_boxes(nodes):
+    """Boxes made from the real graph. Integers on purpose: the author's loop gets whatever type the model sends,
+    and the comparison below is exact, so a silent int-to-float change would show."""
+    n = nodes[0]
+    px, py, pz = _vec(n["position"])
+    on_node = {"label": "OnFirst", "center_x": px, "center_y": py, "center_z": pz, "size_x": 1, "size_y": 1, "size_z": 1}
+    huge = {"label": "Huge", "center_x": int(px), "center_y": int(py), "center_z": 1, "size_x": 30, "size_y": 30, "size_z": 30}
+    far = {"label": "Far", "center_x": 5000, "center_y": 5000, "center_z": 5000, "size_x": 1, "size_y": 1, "size_z": 1}
+    return on_node, huge, far
+
+
+def claude_side(script, paths, yaml_text, max_turns=50):
     """Same logical script, as Claude replies; our loop with the default (author) callback."""
     replies = [reply(*([("text", s["text"])] if s.get("text") else []),
                      *[("tool", n, a, f"toolu_{i}_{j}") for j, (n, a) in enumerate(s.get("calls", []))])
                for i, s in enumerate(script)]
     client = FakeClient(replies)
-    cb = author_tool.default_callback_factory()[0](YAML_TEXT)
-    rec = run_member(client, OPUS, "AUTHOR PROMPT", YAML_TEXT, paths, cb, LoopSettings(max_turns=max_turns))
+    cb = author_tool.default_callback_factory()[0](yaml_text)
+    rec = run_member(client, OPUS, "AUTHOR PROMPT", yaml_text, paths, cb, LoopSettings(max_turns=max_turns))
     return rec, client
 
 
-def norm(x):
-    return json.loads(json.dumps(x, default=float))
+def parity_scripts(nodes):
+    on_node, huge, far = real_boxes(nodes)
+    return {
+        "text_only": [{"text": "```yaml\nnodes: []\n```"}],
+        "one_call": [{"calls": [("check_collision", on_node)]}, {"text": "final A"}],
+        "parallel_and_errors": [
+            {"text": "thinking out loud", "calls": [("check_collision", on_node), ("check_collision", far)]},
+            {"calls": [("check_collision", huge), ("unknown_tool", {"a": 1})]},
+            {"calls": [("check_collision", {"label": "x", "center_x": 1})]},
+            {"calls": [("check_collision", {**far, "label": "Rug", "size_z": 0.01})]},
+            {"text": "final B\nmore"},
+        ],
+    }
 
 
-PARITY_SCRIPTS = {
-    "text_only": [{"text": "```yaml\nnodes: []\n```"}],
-    "one_call": [{"calls": [("check_collision", COLLIDING)]}, {"text": "final A"}],
-    "parallel_and_errors": [
-        {"text": "thinking out loud", "calls": [("check_collision", COLLIDING), ("check_collision", FREE)]},
-        {"calls": [("check_collision", {"label": "x", "center_x": 1.0}), ("unknown_tool", {"a": 1})]},
-        {"calls": [("check_collision", {**FREE, "label": "Rug", "size_z": 0.01})]},
-        {"text": "final B\nmore"},
-    ],
-}
-
-
-@pytest.mark.parametrize("name", sorted(PARITY_SCRIPTS))
-def test_parity_with_the_authors_loop_on_scripted_replies(name, monkeypatch, tmp_path):
-    script = PARITY_SCRIPTS[name]
+@pytest.mark.parametrize("name", ["text_only", "one_call", "parallel_and_errors"])
+def test_parity_with_the_authors_loop_on_scripted_replies(name, monkeypatch, tmp_path, real_graph):
+    yaml_text, nodes = real_graph
+    script = parity_scripts(nodes)[name]
     paths = make_images(tmp_path)
-    a_text, a_state = run_author_loop(monkeypatch, tmp_path, script, "AUTHOR PROMPT", YAML_TEXT, tmp_path / "slices")
-    rec, client = claude_side(script, paths)
-    # same tool calls, same results, same final text
-    mine = [(t["name"], norm(t["result"])) for t in rec["tool_calls"]]
-    theirs = [(n, norm(r)) for n, r in a_state["responses"]]
-    assert mine == theirs
+    a_text, a_state = run_author_loop(monkeypatch, tmp_path, script, "AUTHOR PROMPT", yaml_text, tmp_path / "slices")
+    rec, client = claude_side(script, paths, yaml_text)
+    mine = [(t["name"], json.dumps(t["result"])) for t in rec["tool_calls"]]
+    theirs = [(n, json.dumps(r)) for n, r in a_state["responses"]]
+    assert mine == theirs  # exact: same names, same keys in the same order, same numbers, ints stay ints
+    assert len(mine) == sum(len(s.get("calls", [])) for s in script)
     assert rec["final_text"] == a_text == script[-1]["text"]
-    # what the tool results looked like on the wire matches what we computed
-    wire = [json.loads(b["content"]) for req in client.requests[1:] for b in req["messages"][-1]["content"]
+    # on the wire the tool result is that same JSON text
+    wire = [b["content"] for req in client.requests[1:] for b in req["messages"][-1]["content"]
             if b["type"] == "tool_result"]
-    assert wire[: len(mine)] == [r for _, r in mine][: len(wire)]
+    assert wire == [j for _, j in mine]
+    if name == "parallel_and_errors":
+        results = [json.loads(j) for _, j in mine]
+        assert results[0]["valid"] is False and results[0]["collisions"]  # real collisions on the real graph
+        assert results[1]["valid"] is True
+        assert results[2]["collision_count"] > 1  # the huge box meets many nodes
+        assert results[3] == {"error": "Unknown function unknown_tool"}
+        assert results[4]["error"].startswith("check_collision missing argument(s)")
+        assert results[0]["position"][0] == _vec(nodes[0]["position"])[0]
+        assert results[2]["position"] == [int(_vec(nodes[0]["position"])[0]), int(_vec(nodes[0]["position"])[1]), 1]
+        assert isinstance(results[2]["position"][2], int)  # an integer went in, an integer came out
     # same first message: prompt, YAML, same images (his order is the file system's; ours is sorted)
     sent = a_state["sent"][0]
-    assert sent[0] == "AUTHOR PROMPT" and sent[1].text == YAML_TEXT
+    assert sent[0] == "AUTHOR PROMPT" and sent[1].text == yaml_text
     assert sorted(p.data for p in sent[2:]) == sorted(
         base64.b64decode(b["source"]["data"]) for b in client.requests[0]["messages"][0]["content"][2:])
-    # his config: temperature 0.2, VALIDATED function calling, dynamic thinking. Ours cannot copy those.
+    assert client.requests[0]["messages"][0]["content"][1]["text"] == yaml_text
+    # his config: temperature 0.2, dynamic thinking. Ours cannot copy those.
     cfg = a_state["chat_configs"][0]
     assert cfg.temperature == 0.2 and cfg.thinking_config.thinking_budget == -1
 
 
-def test_parity_turn_limit_same_tool_calls_and_no_text(monkeypatch, tmp_path):
+def test_parity_turn_limit_same_tool_calls_and_no_text(monkeypatch, tmp_path, real_graph):
+    yaml_text, nodes = real_graph
+    _, huge, far = real_boxes(nodes)
     paths = make_images(tmp_path)
-    script = [{"calls": [("check_collision", {**FREE, "label": f"L{i}"})]} for i in range(60)]
-    a_text, a_state = run_author_loop(monkeypatch, tmp_path, script, "AUTHOR PROMPT", YAML_TEXT, tmp_path / "slices")
-    rec, client = claude_side(script, paths)
+    script = [{"calls": [("check_collision", {**(huge if i % 2 else far), "label": f"L{i}"})]} for i in range(60)]
+    a_text, a_state = run_author_loop(monkeypatch, tmp_path, script, "AUTHOR PROMPT", yaml_text, tmp_path / "slices")
+    rec, client = claude_side(script, paths, yaml_text)
     assert a_text is None and rec["final_text"] is None and rec["status"] == "dropped_turn_limit"
-    mine = [(t["name"], norm(t["result"])) for t in rec["tool_calls"]]
-    theirs = [(n, norm(r)) for n, r in a_state["responses"]]
+    mine = [(t["name"], json.dumps(t["result"])) for t in rec["tool_calls"]]
+    theirs = [(n, json.dumps(r)) for n, r in a_state["responses"]]
     assert len(mine) == len(theirs) == 50 and mine == theirs
-    # his loop makes one more call (51st) and throws the reply away; ours does not make it
+    # his loop makes one more call (the 51st) and throws the reply away; ours does not make it
     assert len(a_state["sent"]) == 51 and len(client.calls) == 50

@@ -37,6 +37,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional, Sequence
 
 import anthropic
+import httpx2
 import numpy as np
 
 from llm_anthropic.author_tool import TOOL_DEF, TOOL_NAME
@@ -45,13 +46,15 @@ from llm_anthropic.meter import CapStop, Usage, call_cost
 BETA_BLOCK_BINDING = "thinking-binding-controls-2026-08-01"
 EFFORTS = ("low", "medium", "high", "xhigh", "max")
 
-# A member whose record carries one of these is done; resume never pays for it again.
-FINAL_STATUSES = frozenset({
-    "ok", "truncated", "dropped_turn_limit", "dropped_refusal", "dropped_other_stop", "dropped_empty",
-    "dropped_tool_error", "dropped_member_cap",
-})
-# Not final: a re-run starts the member from the beginning.
+# Registered rules (PREREGISTRATION_SEMANTIC §12). A member is DROPPED, and counted, only if it is refused,
+# reaches 50 turns, or still fails after the retries. Whether its final text parses is decided later, by the
+# author's parser, not here. A dropped member is final: resume never pays for it again.
+FINAL_STATUSES = frozenset({"ok", "dropped_refusal", "dropped_turn_limit", "dropped_error"})
+# Unfinished, not dropped: a cap stop, or a fault of ours (a bad request: 400, 401, 403, 404, 413, 422, or an
+# unexpected exception). A resume runs the member again from the start. A killed process leaves no record.
 OPEN_STATUSES = frozenset({"error", "cap_stopped"})
+
+DIRECT_BASE_URL = "https://api.anthropic.com"
 
 
 @dataclass(frozen=True)
@@ -63,13 +66,13 @@ class LoopSettings:
     thinking_display: Optional[str] = None  # None -> API default ("omitted": empty thinking text)
     block_binding: Optional[str] = "error"  # "error", "drop_block", or None (do not send)
     timeout_s: float = 300.0
-    max_retries: int = 3  # SDK-level retries (connection errors, 408, 409, 429, 5xx)
-    turn_retries: int = 1  # one more try at the turn level if a stream breaks
-    rate_limit_retries: int = 6  # extra tries after the SDK's own, on 429
+    retries: int = 3  # per call, for any transient error (429, 408/409, 5xx, timeout, broken stream). §12.
     backoff_base_s: float = 2.0
     backoff_max_s: float = 120.0
 
     def __post_init__(self):
+        if self.retries < 0:
+            raise ValueError("retries must be >= 0")
         if self.effort not in EFFORTS:
             raise ValueError(f"effort must be one of {EFFORTS}")
         if self.cache_ttl not in ("5m", "1h"):
@@ -80,10 +83,22 @@ class LoopSettings:
             raise ValueError("thinking_display must be None, 'summarized', 'omitted' or 'updates'")
 
 
-def make_client(api_key: str, settings: Optional[LoopSettings] = None):
-    """Real client. Reads nothing from disk; makes no call."""
+def make_client(api_key: str, settings: Optional[LoopSettings] = None, *, http_client=None, ipv4: bool = False):
+    """Real client. Reads nothing from disk; makes no call.
+
+    - base_url is pinned to the Anthropic API. The SDK would otherwise take ANTHROPIC_BASE_URL from the
+      environment (this machine sets it to a local gateway).
+    - the key is passed explicitly, so the SDK does not read ANTHROPIC_AUTH_TOKEN or a profile.
+      (ANTHROPIC_CUSTOM_HEADERS it still reads; `claude_static.check_direct` refuses to run if that is set.)
+    - max_retries is 0: every retry is ours, so the meter sees it and there are never more than `retries`.
+    - ipv4=True sends from 0.0.0.0, which makes the connection use IPv4. Off by default. A custom transport
+      makes httpx ignore the proxy environment variables.
+    """
     s = settings or LoopSettings()
-    return anthropic.Anthropic(api_key=api_key, timeout=s.timeout_s, max_retries=s.max_retries)
+    if http_client is None and ipv4:
+        http_client = anthropic.DefaultHttpxClient(transport=httpx2.HTTPTransport(local_address="0.0.0.0"))
+    return anthropic.Anthropic(api_key=api_key, base_url=DIRECT_BASE_URL, timeout=s.timeout_s, max_retries=0,
+                               http_client=http_client)
 
 
 # ---- rate gate ---------------------------------------------------------------------------------
@@ -221,68 +236,79 @@ class _Caller:
         return delay + 0.1 * delay * self.rng()
 
     def send(self, kwargs_fn: Callable[[], dict], *, stream: bool, turn: int):
-        """Returns (reply, request_id, cost). Raises CapStop or MemberAbort."""
+        """One model call with the §12 retry rule. Returns (reply, request_id, cost, usage).
+
+        Transient errors (429, 408, 409, 5xx, timeout, broken stream) are retried up to `settings.retries`
+        times with backoff; a worker that gets a 429 holds every worker on the same gate. A call that still
+        fails raises MemberAbort("dropped_error"). A request the API rejects (400, 401, 403, 404, 413, 422)
+        is not retried and raises MemberAbort("error"): that is a fault of ours, and the member stays open.
+        Raises CapStop when a cap refuses the reserve.
+        """
         s = self.settings
-        turn_tries = 0
-        rl_tries = 0
+        tries = 0
         while True:
             self.gate.wait()
             res = self.meter.reserve(self.model, self.member_key, kind=self.kind) if self.meter else None
             kwargs = kwargs_fn()
             extra = {"attempt_turn": turn}
+            st = None
             try:
                 if stream:
-                    with self.client.beta.messages.stream(**kwargs) as st:
+                    with self.client.beta.messages.stream(**kwargs) as st_:
+                        st = st_
                         reply = st.get_final_message()
                         request_id = getattr(st, "request_id", None)
                 else:
                     reply = self.client.beta.messages.create(**kwargs)
                     request_id = getattr(reply, "_request_id", None)
-            except anthropic.RateLimitError as e:
-                if res:
-                    self.meter.release(res, "http 429", turn=turn, extra=extra)
-                if rl_tries >= s.rate_limit_retries:
-                    raise MemberAbort("error", _err(e)) from e
-                delay = self._backoff(e, rl_tries)
-                rl_tries += 1
-                self.flags.append(f"rate_limited_turn_{turn}")
-                self.gate.trip(delay)
-                continue
-            except anthropic.APIStatusError as e:
-                mid_stream = e.status_code == 200  # an SSE error event after the stream began
+            except anthropic.APIStatusError as e:  # includes RateLimitError and InternalServerError
+                mid_stream = e.status_code == 200  # an SSE error event after the stream began: may be billed
+                transient = mid_stream or e.status_code in (408, 409, 429) or e.status_code >= 500
                 if res:
                     if mid_stream:
-                        self.meter.settle_failed(res, repr(e), turn=turn, extra=extra)
+                        self.meter.settle_failed(res, repr(e), usage=self._partial_usage(st), turn=turn, extra=extra)
                     else:
                         self.meter.release(res, f"http {e.status_code}", turn=turn, extra=extra)
-                if (mid_stream or e.status_code >= 500) and turn_tries < s.turn_retries:
-                    turn_tries += 1
-                    self.flags.append(f"turn_retry_{turn}")
-                    continue
-                raise MemberAbort("error", _err(e)) from e
+                if not transient:
+                    raise MemberAbort("error", _err(e)) from e
+                err = e
             except anthropic.APIConnectionError as e:  # includes timeouts; may have been billed
                 if res:
-                    self.meter.settle_failed(res, repr(e), turn=turn, extra=extra)
-                if turn_tries < s.turn_retries:
-                    turn_tries += 1
-                    self.flags.append(f"turn_retry_{turn}")
-                    continue
-                raise MemberAbort("error", _err(e)) from e
-            except Exception as e:  # a bug or a bad response; do not retry
+                    self.meter.settle_failed(res, repr(e), usage=self._partial_usage(st), turn=turn, extra=extra)
+                err = e
+            except Exception as e:  # a bug in our code or a response we cannot read: do not retry
                 if res:
-                    self.meter.settle_failed(res, repr(e), turn=turn, extra=extra)
+                    self.meter.settle_failed(res, repr(e), usage=self._partial_usage(st), turn=turn, extra=extra)
                 raise MemberAbort("error", _err(e)) from e
-            usage = Usage.from_api(reply.usage, default_ttl=s.cache_ttl)
-            cost = None
-            if res:
-                cost = self.meter.settle(res, usage, request_id=request_id, served_model=getattr(reply, "model", None),
-                                         stop_reason=getattr(reply, "stop_reason", None), turn=turn, extra=extra)
             else:
-                try:
-                    cost = call_cost(self.model, usage)[0]
-                except KeyError:
-                    cost = None
-            return reply, request_id, cost, usage
+                usage = Usage.from_api(reply.usage, default_ttl=s.cache_ttl)
+                cost = None
+                if res:
+                    cost = self.meter.settle(res, usage, request_id=request_id,
+                                             served_model=getattr(reply, "model", None),
+                                             stop_reason=getattr(reply, "stop_reason", None), turn=turn, extra=extra)
+                else:
+                    try:
+                        cost = call_cost(self.model, usage)[0]
+                    except KeyError:
+                        cost = None
+                return reply, request_id, cost, usage
+            # a transient error: back off and go again, or give up
+            if tries >= s.retries:
+                raise MemberAbort("dropped_error", _err(err)) from err
+            self.gate.trip(self._backoff(err, tries))
+            tries += 1
+            self.flags.append(f"retry_turn_{turn}")
+
+    def _partial_usage(self, st) -> Optional[Usage]:
+        """Usage the stream had accumulated when it broke, if the SDK has any."""
+        if st is None:
+            return None
+        try:
+            u = st.current_message_snapshot.usage
+        except Exception:
+            return None
+        return Usage.from_api(u, default_ttl=self.settings.cache_ttl) if u is not None else None
 
 
 def _err(e: Exception) -> dict:
@@ -358,16 +384,19 @@ def run_member(client, model: str, prompt_text: str, yaml_text: str, image_paths
             messages.append({"role": "assistant", "content": content})
             tool_uses = [b for b in content if b.get("type") == "tool_use"]
 
-            if stop_reason == "max_tokens":
+            if stop_reason == "max_tokens" or not tool_uses:
+                # A final text. We do not judge it: a cut-off or empty text is passed on with a flag, and the
+                # author's parser drops what does not parse (§12).
                 text = "".join(b.get("text", "") for b in content if b.get("type") == "text")
-                status = "truncated"
-                break
-            if not tool_uses:
-                if stop_reason in ("end_turn", "stop_sequence"):
-                    text = "".join(b.get("text", "") for b in content if b.get("type") == "text")
-                    status = "ok" if text.strip() else "dropped_empty"
-                else:
-                    status = "dropped_other_stop"
+                if stop_reason == "max_tokens":
+                    flags.append("stop_max_tokens")
+                elif stop_reason not in ("end_turn", "stop_sequence"):
+                    rec["error"] = {"where": "stop_reason", "message": f"unexpected stop_reason {stop_reason!r}"}
+                    text = None
+                    raise MemberAbort("dropped_error", rec["error"])
+                if not text.strip():
+                    flags.append("empty_text")
+                status = "ok"
                 break
 
             results = []
@@ -377,16 +406,12 @@ def run_member(client, model: str, prompt_text: str, yaml_text: str, image_paths
                 except Exception as e:  # the author's pipeline loses the member here too
                     rec["error"] = {"where": "tool_callback", "type": type(e).__name__, "message": str(e)[:500],
                                     "trace": traceback.format_exc()[-1500:]}
-                    status = "dropped_tool_error"
-                    raise MemberAbort(status, rec["error"]) from e
-                is_error = isinstance(result, dict) and set(result) == {"error"}
-                block = {"type": "tool_result", "tool_use_id": tu["id"],
-                         "content": json.dumps(result, default=_json_default)}
-                if is_error:
-                    block["is_error"] = True
-                results.append(block)
+                    raise MemberAbort("dropped_error", rec["error"]) from e
+                # The author's loop sends his result dict and nothing else: no error flag.
+                results.append({"type": "tool_result", "tool_use_id": tu["id"],
+                                "content": json.dumps(result, default=_json_default)})
                 rec["tool_calls"].append({"turn": turn, "id": tu["id"], "name": tu["name"], "input": tu["input"],
-                                          "result": result, "is_error": is_error})
+                                          "result": result})
             messages.append({"role": "user", "content": results})
             rec["tool_rounds"] += 1
             if rec["tool_rounds"] >= s.max_turns:
@@ -394,16 +419,16 @@ def run_member(client, model: str, prompt_text: str, yaml_text: str, image_paths
                 # can only be thrown away, so we do not make it. Same tool calls, same result (no text).
                 status = "dropped_turn_limit"
                 break
-    except CapStop as e:
-        status = "dropped_member_cap" if e.scope == "member" else "cap_stopped"
+    except CapStop as e:  # cut short by a cap: unfinished, not dropped (a resume runs it again)
+        status = "cap_stopped"
         rec["error"] = {"where": "meter", "scope": e.scope, "message": str(e)}
     except MemberAbort as e:
         status = e.status
         rec["error"] = rec["error"] or e.detail
 
     rec["status"] = status
-    rec["final_text"] = text if status in ("ok", "truncated") else None
-    rec["dropped"] = status not in ("ok", "truncated")
+    rec["final_text"] = text if status == "ok" else None
+    rec["dropped"] = status.startswith("dropped")
     rec["cost_usd"] = round(rec["cost_usd"], 9)
     rec["wall_s"] = round(time.monotonic() - t0, 3)
     return rec

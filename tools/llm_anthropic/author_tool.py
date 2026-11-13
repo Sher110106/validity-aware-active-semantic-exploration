@@ -134,8 +134,7 @@ def make_author_callback(yaml_text: str, validate: Callable) -> Callable[[str, d
     - an unknown tool name gives {"error": "Unknown function <name>"};
     - missing arguments give {"error": "check_collision missing argument(s): ..."};
     - otherwise `validate(label, [cx, cy, cz, sx, sy, sz], existing_nodes)`.
-    The author's loop gets floats from the genai SDK. Claude may send an integer such as 2, so the six
-    numbers go through float() to keep his function's output the same.
+    The arguments go to his function as the model sent them. We do not turn integers into floats.
     """
     existing_nodes = yaml.safe_load(yaml_text).get("nodes", [])
 
@@ -144,11 +143,7 @@ def make_author_callback(yaml_text: str, validate: Callable) -> Callable[[str, d
             missing = [n for n in ARG_NAMES if n not in args]
             if missing:
                 return {"error": "check_collision missing argument(s): " + ", ".join(missing)}
-            try:
-                box = [float(args[n]) for n in NUMERIC_ARGS]
-            except (TypeError, ValueError) as e:
-                return {"error": f"check_collision bad argument: {e}"}
-            return validate(args["label"], box, existing_nodes)
+            return validate(args["label"], [args[n] for n in NUMERIC_ARGS], existing_nodes)
         return {"error": f"Unknown function {name}"}
 
     return callback

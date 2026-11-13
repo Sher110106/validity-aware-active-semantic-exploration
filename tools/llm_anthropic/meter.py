@@ -82,8 +82,9 @@ PRICES: dict[str, ModelPrice] = {
 }
 
 # PLACEHOLDERS. Replace with the measured p99 call cost / member cost after the smoke test
-# (plan M3). They are deliberately high.
-DEFAULT_RESERVE_USD = {"claude-opus-5-5": 1.00, "claude-haiku-5-5": 0.15, "claude-sonnet-5-5": 0.50}
+# (plan M3). The reserve sits above a bad call: 64K output tokens ($1.28 on Opus, $0.16 on Haiku's long card)
+# plus a 100K-token prompt with no cache hit ($0.50 written to the cache on Opus, $0.06 on Haiku).
+DEFAULT_RESERVE_USD = {"claude-opus-5-5": 1.50, "claude-haiku-5-5": 0.35, "claude-sonnet-5-5": 0.75}
 DEFAULT_ADMIT_USD = {"claude-opus-5-5": 2.00, "claude-haiku-5-5": 0.20, "claude-sonnet-5-5": 1.00}
 DEFAULT_MEMBER_CAP_USD = {"claude-opus-5-5": 8.00, "claude-haiku-5-5": 0.80, "claude-sonnet-5-5": 4.00}
 
@@ -320,9 +321,17 @@ class Meter:
             self._cond.notify_all()
         return cost
 
-    def settle_failed(self, res: Reservation, error: str, *, turn=None, extra: Optional[dict] = None) -> float:
-        """The call broke after it may have been billed: book the reserve as an estimate."""
+    def settle_failed(self, res: Reservation, error: str, *, usage: Optional[Usage] = None, turn=None,
+                      extra: Optional[dict] = None) -> float:
+        """The call broke after it may have been billed. Book the larger of the reserve and what the usage
+        seen so far would cost (the stream's first event already carries the prompt tokens)."""
         cost = res.amount
+        if usage is not None:
+            try:
+                cost = max(cost, call_cost(res.model, usage)[0])
+            except UnknownModel:
+                pass
+            extra = {**usage.to_dict(), **(extra or {})}
         with self._cond:
             self._unhold(res)
             self._book(res, cost)
@@ -374,6 +383,25 @@ class Meter:
                         self.stopped = blocked
                     raise blocked
                 self._cond.wait(timeout=0.5)
+
+    def projection_fits(self, model: str, projected_usd: float) -> tuple[bool, Optional[str], Optional[float]]:
+        """Round check (§12): does `projected_usd` fit under what is left of every cap that applies to `model`?
+
+        Looks at settled spend only (call it between rounds). Returns (fits, scope of the first cap it
+        breaks, what was left under that cap).
+        """
+        with self._cond:
+            for scope, limit, settled in (
+                ("model", self.caps.by_model.get(model), self.settled_model.get(model, 0.0)),
+                ("run", self.caps.run, self.settled_run),
+                ("campaign", self.caps.campaign, self.settled_campaign),
+            ):
+                if limit is None:
+                    continue
+                left = limit - settled
+                if projected_usd > left + _EPS:
+                    return False, scope, left
+            return True, None, None
 
     def end_member(self, model: str, member_key: str) -> None:
         with self._cond:
