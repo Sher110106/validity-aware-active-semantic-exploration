@@ -1,0 +1,45 @@
+== scene 00871
+asset -> habitat  (x,y,z) -> (x,z,-y); matrix:
+ [[ 1.  0.  0.]
+ [ 0.  0.  1.]
+ [ 0. -1.  0.]]
+initial agent state: {'position': [1.9025284051895142, 0.046541884541511536, -3.326138734817505], 'rotation_wxyz': [0.9158252477645874, 0.0, 0.40157702565193176, 0.0]}
+habitat -> world R (4x4 top-left):
+ [[-0.041067  0.       -0.999156]
+ [-0.999156  0.        0.041067]
+ [ 0.        1.        0.      ]]
+habitat -> world t: [-3.245202  2.037517  0.      ]
+world z = habitat y? row 3 of R = [0. 1. 0.]  (so world z is the vertical axis)
+objects in semantic.txt: 849
+triangle stats: {'total_tri': 398937, 'unmatched_tri': 19459, 'recovered_by_vertex_texel': 2878, 'duplicate_colour_groups': 1}
+cross-check vs 00871_semantic_geometry.json: objects compared 833, triangle-count mismatches 0, max world-AABB difference 0.00e+00 m
+grid: origin (x0,y0)=(-7.30,-7.95) cell=0.05 size nx=358 ny=377
+axis check: floor triangles world z median 0.00 (p5 -0.02, p95 0.03); ceiling triangles z median 2.68. Floor x span -6.2..9.8, y span -7.3..10.3, z span -0.08..0.11.  Horizontal = (x, y); vertical = z.
+
+(a) floor area, regions >=0: sum of per-region areas 105.69 m2; union 104.89 m2
+    region   0: floor    11.51 m2  any    19.91 m2  floor tris    970  objects  93
+    region   1: floor     2.02 m2  any     2.27 m2  floor tris     91  objects   9
+    region   2: floor     0.56 m2  any     1.25 m2  floor tris     96  objects   9
+    region   3: floor     1.17 m2  any     2.50 m2  floor tris    289  objects  35
+    region   4: floor     2.24 m2  any     7.66 m2  floor tris    441  objects 103
+    region   5: floor     0.34 m2  any     0.73 m2  floor tris     39  objects   5
+    region   6: floor    32.48 m2  any    41.87 m2  floor tris   4452  objects 111
+    region   7: floor    32.70 m2  any    39.16 m2  floor tris   3872  objects 110
+    region   8: floor     2.93 m2  any     6.50 m2  floor tris    237  objects  37
+    region   9: floor     0.00 m2  any    17.54 m2  floor tris      0  objects  59
+    region  10: floor     1.72 m2  any     3.07 m2  floor tris    152  objects  18
+    region  11: floor     1.94 m2  any     5.47 m2  floor tris    199  objects  68
+    region  12: floor     7.36 m2  any    13.22 m2  floor tris   1091  objects  93
+    region  13: floor     0.85 m2  any     2.77 m2  floor tris    125  objects  28
+    region  14: floor     5.98 m2  any    14.42 m2  floor tris    761  objects  40
+    region  15: floor     1.89 m2  any     3.05 m2  floor tris    426  objects  31
+
+(b) object centres vs own-region mask (833 objects with a region id >=0 and geometry; 16 listed objects have no geometry and are skipped)
+    any mask: inside 820/833 = 0.9844; inside or within 0.5 m 832/833 = 0.9988
+    floor mask (extra): inside 236/833 = 0.2833; inside or within 0.5 m 701/833 = 0.8415
+    first misses (id, category, region, centre xy): [(582, 'door frame', 10, [2.99, -3.19])]
+    note: raw_objects.json holds zero centres for every object, so centres come from this script's own world AABBs.
+
+(c) floor area in more than one region's floor mask: 0.800 m2 of 104.89 m2 = 0.0076 (share of union); 0.0076 of the summed per-region areas
+wrote 00871_region_footprints.npz 15011 bytes sha256 b07a60ec6c3f658741bf7838f68ee189762d0222f36176db230abee491e9372b
+wrote 00871_regions.json 21092 bytes sha256 d63a745337f6e6d5bf120e19249780e6e3bafa3a6b7d834a4437ba8d5855bd20

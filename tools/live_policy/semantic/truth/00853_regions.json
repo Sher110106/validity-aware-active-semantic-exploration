@@ -1,0 +1,849 @@
+{
+ "scene": "00853",
+ "grid": {
+  "origin_xy": [
+   -2.4000000000000004,
+   -17.75
+  ],
+  "cell_size_m": 0.05,
+  "nx": 302,
+  "ny": 401,
+  "mask_index": "[region_index, iy, ix]"
+ },
+ "horizontal_axes": [
+  "x",
+  "y"
+ ],
+ "vertical_axis": "z",
+ "transform": {
+  "asset_to_habitat": "(x,y,z)->(x,z,-y)",
+  "habitat_to_world_R": [
+   [
+    -0.04106662171631295,
+    4.3297802811774664e-17,
+    -0.9991564130593853
+   ],
+   [
+    -0.9991564130593851,
+    4.329780281177467e-17,
+    0.04106662171631303
+   ],
+   [
+    4.5039371839984e-17,
+    1.0,
+    4.148318286154667e-17
+   ]
+  ],
+  "habitat_to_world_t": [
+   4.636026585233693,
+   -4.9497418711482295,
+   1.358318258856721e-17
+  ],
+  "init": {
+   "position": [
+    -4.755180358886719,
+    0.294646292924881,
+    4.835384845733643
+   ],
+   "rotation_wxyz": [
+    0.9158252477645874,
+    0.0,
+    0.40157702565193176,
+    0.0
+   ]
+  }
+ },
+ "triangle_stats": {
+  "total_tri": 385691,
+  "unmatched_tri": 4251,
+  "recovered_by_vertex_texel": 2292,
+  "duplicate_colour_groups": 0
+ },
+ "checks": {
+  "a_floor_area_m2": {
+   "sum_over_regions": 103.243,
+   "union": 102.42
+  },
+  "b_object_centres": {
+   "n": 525,
+   "inside_any": 522,
+   "inside_or_within_0p5m_any": 525,
+   "share_inside_any": 0.9943,
+   "share_inside_or_near_any": 1.0,
+   "share_inside_floor": 0.4267,
+   "share_inside_or_near_floor": 0.8648,
+   "skipped_no_geometry": 3
+  },
+  "c_floor_overlap": {
+   "multi_region_area_m2": 0.82,
+   "share_of_union": 0.008,
+   "share_of_summed": 0.0079
+  },
+  "reference_cross_check": {
+   "objects_compared": 525,
+   "tri_count_mismatches": 0,
+   "max_aabb_diff_m": 0.0
+  }
+ },
+ "regions": [
+  {
+   "region_id": 1,
+   "unassigned": false,
+   "n_objects": 51,
+   "n_objects_with_geometry": 51,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 7,
+    "shower floor": 6,
+    "shampoo": 4,
+    "ceiling lamp": 3,
+    "shower wall": 3,
+    "shower wall cubby": 3,
+    "hanger": 2,
+    "painting": 2,
+    "toilet brush holder": 2,
+    "towel": 2,
+    "bath faucet": 1,
+    "bath wall": 1,
+    "bathtub": 1,
+    "calendar": 1,
+    "ceiling": 1,
+    "door frame": 1,
+    "floor": 1,
+    "flower vase": 1,
+    "holy cross": 1,
+    "mirror": 1,
+    "shower knob": 1,
+    "showerhead": 1,
+    "step stool": 1,
+    "toilet": 1,
+    "vase": 1,
+    "wall toilet paper": 1,
+    "window": 1
+   },
+   "floor_area_m2": 2.803,
+   "any_area_m2": 7.615,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 514,
+   "floor_z_range": [
+    -0.114,
+    0.213
+   ],
+   "z_range": [
+    -0.145,
+    2.549
+   ],
+   "centroid_xy": [
+    0.721,
+    0.639
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.039,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "2": 0.078,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 2,
+   "unassigned": false,
+   "n_objects": 25,
+   "n_objects_with_geometry": 25,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 6,
+    "bathroom cabinet": 3,
+    "ceiling lamp": 3,
+    "cosmetic": 3,
+    "faucet": 2,
+    "sink": 2,
+    "bathroom counter": 1,
+    "ceiling": 1,
+    "door": 1,
+    "door frame": 1,
+    "floor": 1,
+    "mirror": 1
+   },
+   "floor_area_m2": 2.628,
+   "any_area_m2": 3.705,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 126,
+   "floor_z_range": [
+    0.011,
+    0.073
+   ],
+   "z_range": [
+    0.011,
+    2.153
+   ],
+   "centroid_xy": [
+    -0.191,
+    -1.292
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.031,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.078,
+    "3": 0.033,
+    "4": 0.04,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 3,
+   "unassigned": false,
+   "n_objects": 71,
+   "n_objects_with_geometry": 70,
+   "n_floor_objects": 1,
+   "categories": {
+    "shoe": 29,
+    "box": 8,
+    "hanging clothes": 6,
+    "wall": 5,
+    "clothes container": 3,
+    "shelf": 3,
+    "bag": 2,
+    "clothes hanger": 2,
+    "storage box": 2,
+    "appliance": 1,
+    "ceiling": 1,
+    "ceiling lamp": 1,
+    "closet storage area": 1,
+    "clothes hanger rod": 1,
+    "floor": 1,
+    "rug": 1,
+    "shelf with clutter": 1,
+    "storage shelving": 1,
+    "vase": 1,
+    "wardrobe": 1
+   },
+   "floor_area_m2": 1.29,
+   "any_area_m2": 4.113,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 410,
+   "floor_z_range": [
+    -0.017,
+    0.173
+   ],
+   "z_range": [
+    -0.017,
+    2.573
+   ],
+   "centroid_xy": [
+    1.508,
+    -1.57
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.051,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.033,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 4,
+   "unassigned": false,
+   "n_objects": 45,
+   "n_objects_with_geometry": 45,
+   "n_floor_objects": 1,
+   "categories": {
+    "pillow": 9,
+    "wall": 5,
+    "painting": 4,
+    "lamp": 3,
+    "book": 2,
+    "box": 2,
+    "door": 2,
+    "nightstand": 2,
+    "wardrobe": 2,
+    "air conditioner": 1,
+    "armchair": 1,
+    "bed": 1,
+    "cabinet": 1,
+    "casket": 1,
+    "ceiling": 1,
+    "ceiling fan": 1,
+    "curtain": 1,
+    "door frame": 1,
+    "floor": 1,
+    "mirror": 1,
+    "mirror frame": 1,
+    "rug": 1,
+    "sliding door": 1
+   },
+   "floor_area_m2": 11.833,
+   "any_area_m2": 18.653,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 864,
+   "floor_z_range": [
+    -0.055,
+    0.053
+   ],
+   "z_range": [
+    -0.182,
+    2.465
+   ],
+   "centroid_xy": [
+    1.541,
+    -4.08
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": -0.002,
+   "pinholes_filled_floor": 3,
+   "pinholes_filled_any": 1,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.04,
+    "3": 0.0,
+    "5": 0.053,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 5,
+   "unassigned": false,
+   "n_objects": 81,
+   "n_objects_with_geometry": 81,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 16,
+    "dining chair": 6,
+    "pillow": 6,
+    "ceiling lamp": 3,
+    "curtain": 3,
+    "flower vase": 3,
+    "painting": 3,
+    "wall hanging decoration": 3,
+    "cabinet": 2,
+    "carpet": 2,
+    "display cabinet": 2,
+    "door": 2,
+    "door frame": 2,
+    "end table": 2,
+    "floor lamp": 2,
+    "mirror": 2,
+    "speaker": 2,
+    "armchair": 1,
+    "ceiling": 1,
+    "ceiling fan": 1,
+    "coffee table": 1,
+    "curtain rod": 1,
+    "dining table": 1,
+    "firewood holder": 1,
+    "floor": 1,
+    "flowerpot": 1,
+    "l-shaped sofa": 1,
+    "lamp": 1,
+    "mirror frame": 1,
+    "roomba": 1,
+    "sliding glass door": 1,
+    "smoke detector": 1,
+    "table": 1,
+    "throw blanket": 1,
+    "vase": 1,
+    "wall clock": 1,
+    "wall tv": 1
+   },
+   "floor_area_m2": 31.498,
+   "any_area_m2": 52.015,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 2504,
+   "floor_z_range": [
+    -0.045,
+    0.06
+   ],
+   "z_range": [
+    -0.045,
+    2.613
+   ],
+   "centroid_xy": [
+    2.56,
+    -8.948
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": -0.004,
+   "pinholes_filled_floor": 4,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.053,
+    "6": 0.055,
+    "7": 0.04,
+    "8": 0.0,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 6,
+   "unassigned": false,
+   "n_objects": 11,
+   "n_objects_with_geometry": 11,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 4,
+    "appliance": 1,
+    "ceiling": 1,
+    "door": 1,
+    "floor": 1,
+    "painting": 1,
+    "thermostat": 1,
+    "wall lamp": 1
+   },
+   "floor_area_m2": 3.79,
+   "any_area_m2": 4.093,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 116,
+   "floor_z_range": [
+    -0.008,
+    0.053
+   ],
+   "z_range": [
+    -0.008,
+    2.133
+   ],
+   "centroid_xy": [
+    6.204,
+    -11.107
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.003,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.055,
+    "7": 0.083,
+    "8": 0.003,
+    "9": 0.048,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 7,
+   "unassigned": false,
+   "n_objects": 58,
+   "n_objects_with_geometry": 58,
+   "n_floor_objects": 1,
+   "categories": {
+    "kitchen cabinet": 16,
+    "ceiling": 7,
+    "ceiling lamp": 6,
+    "wall": 6,
+    "kitchen decoration": 3,
+    "kitchen shelf": 3,
+    "kitchen counter": 2,
+    "window": 2,
+    "calendar": 1,
+    "dishwasher": 1,
+    "door frame": 1,
+    "floor": 1,
+    "fume cupboard": 1,
+    "microwave": 1,
+    "oven and stove": 1,
+    "painting": 1,
+    "refrigerator": 1,
+    "sink": 1,
+    "soap dispenser": 1,
+    "window curtain": 1,
+    "window frame": 1
+   },
+   "floor_area_m2": 12.865,
+   "any_area_m2": 18.643,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 550,
+   "floor_z_range": [
+    -0.017,
+    0.073
+   ],
+   "z_range": [
+    -0.017,
+    2.448
+   ],
+   "centroid_xy": [
+    5.362,
+    -14.241
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.001,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.04,
+    "6": 0.083,
+    "8": 0.255,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 8,
+   "unassigned": false,
+   "n_objects": 64,
+   "n_objects_with_geometry": 64,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 11,
+    "decoration": 8,
+    "shelf": 7,
+    "painting": 4,
+    "pillow": 4,
+    "book": 2,
+    "calendar": 2,
+    "monitor": 2,
+    "pc tower": 2,
+    "sliding glass door": 2,
+    "sofa": 2,
+    "appliance": 1,
+    "bucket": 1,
+    "ceiling": 1,
+    "ceiling fan": 1,
+    "coffee table": 1,
+    "computer desk": 1,
+    "curtain": 1,
+    "decorative bowl": 1,
+    "door frame": 1,
+    "end table": 1,
+    "fireplace": 1,
+    "floor": 1,
+    "lamp": 1,
+    "office chair": 1,
+    "rug": 1,
+    "speaker": 1,
+    "tray": 1,
+    "wall tv": 1
+   },
+   "floor_area_m2": 10.53,
+   "any_area_m2": 18.723,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 1081,
+   "floor_z_range": [
+    -0.031,
+    0.091
+   ],
+   "z_range": [
+    -0.031,
+    2.461
+   ],
+   "centroid_xy": [
+    9.234,
+    -15.102
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.009,
+   "pinholes_filled_floor": 6,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.003,
+    "7": 0.255,
+    "9": 0.0,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 9,
+   "unassigned": false,
+   "n_objects": 17,
+   "n_objects_with_geometry": 17,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 4,
+    "ceiling": 2,
+    "washing machine": 2,
+    "box": 1,
+    "door": 1,
+    "door frame": 1,
+    "floor": 1,
+    "mirror": 1,
+    "mirror frame": 1,
+    "sliding door": 1,
+    "smoke detector": 1,
+    "support beam": 1
+   },
+   "floor_area_m2": 3.528,
+   "any_area_m2": 5.163,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 101,
+   "floor_z_range": [
+    -0.011,
+    0.093
+   ],
+   "z_range": [
+    -0.011,
+    2.195
+   ],
+   "centroid_xy": [
+    6.955,
+    -9.24
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.003,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.048,
+    "7": 0.0,
+    "8": 0.0,
+    "10": 0.045,
+    "11": 0.043,
+    "12": 0.053
+   }
+  },
+  {
+   "region_id": 10,
+   "unassigned": false,
+   "n_objects": 39,
+   "n_objects_with_geometry": 38,
+   "n_floor_objects": 1,
+   "categories": {
+    "shampoo": 4,
+    "shower wall": 3,
+    "wall": 3,
+    "bathroom cabinet": 2,
+    "bathroom towel": 2,
+    "shower door frame": 2,
+    "vent": 2,
+    "ceiling": 1,
+    "ceiling lamp": 1,
+    "cosmetics": 1,
+    "door": 1,
+    "door frame": 1,
+    "floor": 1,
+    "mirror": 1,
+    "mirror frame": 1,
+    "plant": 1,
+    "rug": 1,
+    "shower bar": 1,
+    "shower floor": 1,
+    "shower wall cubby": 1,
+    "sink": 1,
+    "step stool": 1,
+    "toilet": 1,
+    "toilet brush": 1,
+    "towel bar": 1,
+    "trash can": 1,
+    "wall lamp": 1,
+    "wall toilet paper": 1
+   },
+   "floor_area_m2": 2.015,
+   "any_area_m2": 5.353,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 266,
+   "floor_z_range": [
+    -0.107,
+    0.073
+   ],
+   "z_range": [
+    -0.107,
+    2.533
+   ],
+   "centroid_xy": [
+    6.511,
+    -6.96
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": -0.001,
+   "pinholes_filled_floor": 0,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.045,
+    "11": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 11,
+   "unassigned": false,
+   "n_objects": 26,
+   "n_objects_with_geometry": 26,
+   "n_floor_objects": 1,
+   "categories": {
+    "wall": 4,
+    "wardrobe": 3,
+    "bar chair": 2,
+    "curtain": 2,
+    "door frame": 2,
+    "sliding door": 2,
+    "box": 1,
+    "cabinet": 1,
+    "casket": 1,
+    "ceiling": 1,
+    "ceiling fan": 1,
+    "door": 1,
+    "floor": 1,
+    "island": 1,
+    "wall lamp": 1,
+    "window": 1,
+    "window frame": 1
+   },
+   "floor_area_m2": 12.923,
+   "any_area_m2": 16.34,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 454,
+   "floor_z_range": [
+    -0.012,
+    0.046
+   ],
+   "z_range": [
+    -0.012,
+    2.475
+   ],
+   "centroid_xy": [
+    9.892,
+    -7.191
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.004,
+   "pinholes_filled_floor": 1,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.043,
+    "10": 0.0,
+    "12": 0.0
+   }
+  },
+  {
+   "region_id": 12,
+   "unassigned": false,
+   "n_objects": 40,
+   "n_objects_with_geometry": 39,
+   "n_floor_objects": 1,
+   "categories": {
+    "pillow": 7,
+    "painting": 4,
+    "wall": 4,
+    "bedside lamp": 2,
+    "box": 2,
+    "chest drawer": 2,
+    "closet door": 2,
+    "curtain": 2,
+    "door frame": 2,
+    "window": 2,
+    "bed": 1,
+    "cabinet": 1,
+    "carpet roll": 1,
+    "ceiling": 1,
+    "ceiling fan": 1,
+    "decoration": 1,
+    "floor": 1,
+    "rug": 1,
+    "seat": 1,
+    "wall hanging decoration": 1,
+    "window frame": 1
+   },
+   "floor_area_m2": 7.543,
+   "any_area_m2": 13.413,
+   "has_floor_triangles": true,
+   "n_floor_triangles": 567,
+   "floor_z_range": [
+    -0.035,
+    0.053
+   ],
+   "z_range": [
+    -0.035,
+    2.467
+   ],
+   "centroid_xy": [
+    9.571,
+    -10.699
+   ],
+   "centroid_source": "floor_mask",
+   "centroid_z": 0.004,
+   "pinholes_filled_floor": 1,
+   "pinholes_filled_any": 0,
+   "floor_overlap_m2": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.053,
+    "10": 0.0,
+    "11": 0.0
+   }
+  }
+ ]
+}

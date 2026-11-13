@@ -1,0 +1,4 @@
+# Smoke-test inputs, all outside the sample frame. <row_id> <run_dir> <stage>
+smoke_00069_dry2_st01 /workspace/runs/live_campaign/dryrun2_00069_s42_filter_only_10m 1
+smoke_00069_dry2_st03 /workspace/runs/live_campaign/dryrun2_00069_s42_filter_only_10m 3
+smoke_00871_s44_official_st17 /workspace/runs/live_campaign/e1_00871_s44_official_60m 17

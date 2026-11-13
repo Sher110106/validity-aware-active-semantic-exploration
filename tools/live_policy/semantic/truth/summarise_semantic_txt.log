@@ -1,0 +1,4 @@
+houses: 185 {'val': 36, 'train': 145, 'minival': 4}
+marked: {'00853': '00853-5cdEh9F2hJL', '00871': '00871-VBzV5z6i1WS'} named not found: ['00069', '00573']
+dirs without semantic.txt: 725
+wrote hm3d_semantic_summary.json 737547 bytes sha256 3ef2136f491eb2a4cd15f43aa8d67b13e3c180d37af5d9e8f80c72e10fb437a4

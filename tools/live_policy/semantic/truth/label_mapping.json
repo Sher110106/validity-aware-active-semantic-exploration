@@ -1,0 +1,3560 @@
+{
+ "vocab_path": "/workspace/catkin_ws/src/active_semantic_perception/task_def/objects_habitat_apartment.yaml",
+ "vocab": [
+  "television",
+  "bicycle",
+  "garment",
+  "tree",
+  "sofa",
+  "pillow",
+  "umbrella",
+  "chair",
+  "fridge",
+  "washing machine",
+  "plates",
+  "cabinet",
+  "curtain",
+  "blinds",
+  "mirror",
+  "dishes",
+  "gas stove",
+  "table",
+  "duvet",
+  "lamp",
+  "toilet",
+  "shower",
+  "bathtub",
+  "wardrobe",
+  "dresser",
+  "countertop",
+  "dishwasher",
+  "microwave",
+  "flower",
+  "nightstand",
+  "rug",
+  "waste bin",
+  "picture frame",
+  "toaster",
+  "towel bar",
+  "oven",
+  "computer",
+  "sink",
+  "piano",
+  "drain",
+  "shampoo",
+  "faucet",
+  "ceiling fan",
+  "window",
+  "exhaust hood",
+  "towel",
+  "printing",
+  "laptop",
+  "document",
+  "clock",
+  "toilet paper",
+  "glass table"
+ ],
+ "n_vocab": 52,
+ "tables": {
+  "synonym_primary": {
+   "refrigerator": "fridge",
+   "trash can": "waste bin",
+   "trashcan": "waste bin",
+   "tv": "television",
+   "wall tv": "television",
+   "couch": "sofa",
+   "l-shaped sofa": "sofa",
+   "picture": "picture frame",
+   "dining chair": "chair",
+   "office chair": "chair",
+   "bar chair": "chair",
+   "desk chair": "chair",
+   "folding chair": "chair",
+   "rocking chair": "chair",
+   "kitchen cabinet": "cabinet",
+   "bathroom cabinet": "cabinet",
+   "display cabinet": "cabinet",
+   "wall cabinet": "cabinet",
+   "dining table": "table",
+   "coffee table": "table",
+   "end table": "table",
+   "bed stand": "nightstand",
+   "ceiling lamp": "lamp",
+   "bedside lamp": "lamp",
+   "floor lamp": "lamp",
+   "wall lamp": "lamp",
+   "bath faucet": "faucet",
+   "tap": "faucet",
+   "bath towel": "towel",
+   "bathroom towel": "towel",
+   "washer-dryer": "washing machine",
+   "wall clock": "clock",
+   "alarm clock": "clock",
+   "antique clock": "clock",
+   "ventilation hood": "exhaust hood",
+   "carpet": "rug",
+   "window curtain": "curtain",
+   "kitchen counter": "countertop",
+   "bathroom counter": "countertop",
+   "plate": "plates",
+   "stovetop": "gas stove",
+   "wall toilet paper": "toilet paper"
+  },
+  "extended_sensitivity_only": {
+   "bed": "duvet",
+   "painting": "picture frame",
+   "armchair": "chair",
+   "sofa chair": "sofa",
+   "clothes": "garment",
+   "hanging clothes": "garment",
+   "desk": "table",
+   "computer desk": "table",
+   "monitor": "computer",
+   "pc tower": "computer",
+   "oven and stove": "oven",
+   "showerhead": "shower",
+   "shower hose/head": "shower",
+   "shower stall": "shower",
+   "blanket": "duvet",
+   "throw blanket": "duvet",
+   "window shutter": "blinds",
+   "printer": "printing",
+   "flowerpot": "flower",
+   "vase": "flower",
+   "flower vase": "flower",
+   "toilet paper dispenser": "toilet paper",
+   "shower tap": "faucet",
+   "cup": "dishes",
+   "bowl": "dishes"
+  },
+  "door_excluded": [
+   "closet door",
+   "door",
+   "sliding door",
+   "sliding glass door"
+  ],
+  "structural_never_mapped": [
+   "bath wall",
+   "ceiling",
+   "ceiling dome",
+   "ceiling fixture",
+   "curtain rod",
+   "door frame",
+   "door/window",
+   "door/window frame",
+   "floor",
+   "kitchen wall",
+   "mirror frame",
+   "parapet",
+   "recessed wall",
+   "shower ceiling",
+   "shower door",
+   "shower door frame",
+   "shower floor",
+   "shower glass",
+   "shower wall",
+   "shower wall cubby",
+   "support beam",
+   "unknown",
+   "unknown/remove",
+   "wall",
+   "window frame"
+  ]
+ },
+ "notes": [
+  "exact (case-insensitive) matches first; then SYNONYM (primary reference); EXTENDED only in *_hm3d_reference_extended.yaml",
+  "structural classes (wall, floor, ceiling, door frame, window frame, shower wall, ...) are never mapped: none is in the vocabulary",
+  "door leaf classes are excluded: 'door' is not in the vocabulary; evaluator/graph_io.py drops door-named nodes on both sides; pipeline 'door' nodes align with HM3D 'door frame' objects (structural, not to be mapped) -- see alignment report",
+  "no HM3D class exists for the pipeline labels 'glass table', 'plates'/'dishes' (partly), 'printing', 'document', 'tree', 'umbrella', 'bicycle', 'drain', 'toaster', 'shower' (primary), 'blinds' (primary), 'duvet' (primary)"
+ ],
+ "scenes": {
+  "00853": {
+   "n_raw_objects": 528,
+   "n_distinct_raw_names": 123,
+   "mapping_table": [
+    {
+     "raw": "wall",
+     "count": 75,
+     "count_with_geometry": 75,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shoe",
+     "count": 29,
+     "count_with_geometry": 28,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "pillow",
+     "count": 26,
+     "count_with_geometry": 26,
+     "primary_label": "pillow",
+     "primary_tier": "exact",
+     "extended_label": "pillow",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "ceiling",
+     "count": 19,
+     "count_with_geometry": 19,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "painting",
+     "count": 19,
+     "count_with_geometry": 19,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "picture frame",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "ceiling lamp",
+     "count": 17,
+     "count_with_geometry": 16,
+     "primary_label": "lamp",
+     "primary_tier": "synonym",
+     "extended_label": "lamp",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "kitchen cabinet",
+     "count": 16,
+     "count_with_geometry": 16,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "box",
+     "count": 14,
+     "count_with_geometry": 14,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "door frame",
+     "count": 13,
+     "count_with_geometry": 13,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "floor",
+     "count": 12,
+     "count_with_geometry": 12,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shelf",
+     "count": 10,
+     "count_with_geometry": 10,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "curtain",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": "curtain",
+     "primary_tier": "exact",
+     "extended_label": "curtain",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "decoration",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "door",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": null,
+     "primary_tier": "door_excluded",
+     "extended_label": null,
+     "extended_tier": "door_excluded"
+    },
+    {
+     "raw": "shampoo",
+     "count": 8,
+     "count_with_geometry": 8,
+     "primary_label": "shampoo",
+     "primary_tier": "exact",
+     "extended_label": "shampoo",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "mirror",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": "mirror",
+     "primary_tier": "exact",
+     "extended_label": "mirror",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "shower floor",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "dining chair",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "hanging clothes",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "garment",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "shower wall",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "wardrobe",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": "wardrobe",
+     "primary_tier": "exact",
+     "extended_label": "wardrobe",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "window",
+     "count": 6,
+     "count_with_geometry": 5,
+     "primary_label": "window",
+     "primary_tier": "exact",
+     "extended_label": "window",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "bathroom cabinet",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "cabinet",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "cabinet",
+     "primary_tier": "exact",
+     "extended_label": "cabinet",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "ceiling fan",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "ceiling fan",
+     "primary_tier": "exact",
+     "extended_label": "ceiling fan",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "lamp",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "lamp",
+     "primary_tier": "exact",
+     "extended_label": "lamp",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "rug",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "rug",
+     "primary_tier": "exact",
+     "extended_label": "rug",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "book",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "calendar",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "flower vase",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "flower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "mirror frame",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shower wall cubby",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "sink",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": "sink",
+     "primary_tier": "exact",
+     "extended_label": "sink",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "sliding door",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "door_excluded",
+     "extended_label": null,
+     "extended_tier": "door_excluded"
+    },
+    {
+     "raw": "wall hanging decoration",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "appliance",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "clothes container",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "cosmetic",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "end table",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": "table",
+     "primary_tier": "synonym",
+     "extended_label": "table",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "kitchen decoration",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "kitchen shelf",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "sliding glass door",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "door_excluded",
+     "extended_label": null,
+     "extended_tier": "door_excluded"
+    },
+    {
+     "raw": "speaker",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "vase",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "flower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "wall lamp",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": "lamp",
+     "primary_tier": "synonym",
+     "extended_label": "lamp",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "window frame",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "armchair",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "chair",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "bag",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bar chair",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bathroom towel",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "towel",
+     "primary_tier": "synonym",
+     "extended_label": "towel",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bed",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "duvet",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "bedside lamp",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "lamp",
+     "primary_tier": "synonym",
+     "extended_label": "lamp",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "carpet",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "rug",
+     "primary_tier": "synonym",
+     "extended_label": "rug",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "casket",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "chest drawer",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "closet door",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "door_excluded",
+     "extended_label": null,
+     "extended_tier": "door_excluded"
+    },
+    {
+     "raw": "clothes hanger",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "coffee table",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "table",
+     "primary_tier": "synonym",
+     "extended_label": "table",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "display cabinet",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "faucet",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "faucet",
+     "primary_tier": "exact",
+     "extended_label": "faucet",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "floor lamp",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "lamp",
+     "primary_tier": "synonym",
+     "extended_label": "lamp",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "hanger",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "kitchen counter",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "countertop",
+     "primary_tier": "synonym",
+     "extended_label": "countertop",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "monitor",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "computer",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "nightstand",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "nightstand",
+     "primary_tier": "exact",
+     "extended_label": "nightstand",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "pc tower",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "computer",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "shower door frame",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "smoke detector",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "sofa",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "sofa",
+     "primary_tier": "exact",
+     "extended_label": "sofa",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "step stool",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "storage box",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "toilet",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "toilet",
+     "primary_tier": "exact",
+     "extended_label": "toilet",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "toilet brush holder",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "towel",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "towel",
+     "primary_tier": "exact",
+     "extended_label": "towel",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "vent",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "wall toilet paper",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "toilet paper",
+     "primary_tier": "synonym",
+     "extended_label": "toilet paper",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "wall tv",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "television",
+     "primary_tier": "synonym",
+     "extended_label": "television",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "washing machine",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "washing machine",
+     "primary_tier": "exact",
+     "extended_label": "washing machine",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "air conditioner",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bath faucet",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "faucet",
+     "primary_tier": "synonym",
+     "extended_label": "faucet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bath wall",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "bathroom counter",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "countertop",
+     "primary_tier": "synonym",
+     "extended_label": "countertop",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bathtub",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "bathtub",
+     "primary_tier": "exact",
+     "extended_label": "bathtub",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "bucket",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "carpet roll",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "closet storage area",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "clothes hanger rod",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "computer desk",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "table",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "cosmetics",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "curtain rod",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "decorative bowl",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "dining table",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "table",
+     "primary_tier": "synonym",
+     "extended_label": "table",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "dishwasher",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "dishwasher",
+     "primary_tier": "exact",
+     "extended_label": "dishwasher",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "fireplace",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "firewood holder",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "flowerpot",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "flower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "fume cupboard",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "holy cross",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "island",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "l-shaped sofa",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "sofa",
+     "primary_tier": "synonym",
+     "extended_label": "sofa",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "microwave",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "microwave",
+     "primary_tier": "exact",
+     "extended_label": "microwave",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "office chair",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "oven and stove",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "oven",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "plant",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "refrigerator",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "fridge",
+     "primary_tier": "synonym",
+     "extended_label": "fridge",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "roomba",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "seat",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shelf with clutter",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower bar",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower knob",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "showerhead",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "shower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "soap dispenser",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "storage shelving",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "support beam",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "table",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "table",
+     "primary_tier": "exact",
+     "extended_label": "table",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "thermostat",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "throw blanket",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "duvet",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "toilet brush",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "towel bar",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "towel bar",
+     "primary_tier": "exact",
+     "extended_label": "towel bar",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "trash can",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "waste bin",
+     "primary_tier": "synonym",
+     "extended_label": "waste bin",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "tray",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "wall clock",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "clock",
+     "primary_tier": "synonym",
+     "extended_label": "clock",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "window curtain",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "curtain",
+     "primary_tier": "synonym",
+     "extended_label": "curtain",
+     "extended_tier": "synonym"
+    }
+   ],
+   "n_mapped_primary": 180,
+   "n_mapped_extended": 225,
+   "unmapped_primary": [
+    {
+     "raw": "wall",
+     "count": 75,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shoe",
+     "count": 29,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "ceiling",
+     "count": 19,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "painting",
+     "count": 19,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "picture frame"
+    },
+    {
+     "raw": "box",
+     "count": 14,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "door frame",
+     "count": 13,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "floor",
+     "count": 12,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shelf",
+     "count": 10,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "decoration",
+     "count": 9,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "door",
+     "count": 9,
+     "reason": "door_excluded",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower floor",
+     "count": 7,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "hanging clothes",
+     "count": 6,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "garment"
+    },
+    {
+     "raw": "shower wall",
+     "count": 6,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "book",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "calendar",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "flower vase",
+     "count": 4,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "flower"
+    },
+    {
+     "raw": "mirror frame",
+     "count": 4,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower wall cubby",
+     "count": 4,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "sliding door",
+     "count": 4,
+     "reason": "door_excluded",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "wall hanging decoration",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "appliance",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clothes container",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "cosmetic",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "kitchen decoration",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "kitchen shelf",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "sliding glass door",
+     "count": 3,
+     "reason": "door_excluded",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "speaker",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "vase",
+     "count": 3,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "flower"
+    },
+    {
+     "raw": "window frame",
+     "count": 3,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "armchair",
+     "count": 2,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "chair"
+    },
+    {
+     "raw": "bag",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bed",
+     "count": 2,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "duvet"
+    },
+    {
+     "raw": "casket",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "chest drawer",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "closet door",
+     "count": 2,
+     "reason": "door_excluded",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clothes hanger",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "hanger",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "monitor",
+     "count": 2,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "computer"
+    },
+    {
+     "raw": "pc tower",
+     "count": 2,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "computer"
+    },
+    {
+     "raw": "shower door frame",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "smoke detector",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "step stool",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "storage box",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "toilet brush holder",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "vent",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "air conditioner",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bath wall",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bucket",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "carpet roll",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "closet storage area",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clothes hanger rod",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "computer desk",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "table"
+    },
+    {
+     "raw": "cosmetics",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "curtain rod",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "decorative bowl",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "fireplace",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "firewood holder",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "flowerpot",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "flower"
+    },
+    {
+     "raw": "fume cupboard",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "holy cross",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "island",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "oven and stove",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "oven"
+    },
+    {
+     "raw": "plant",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "roomba",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "seat",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shelf with clutter",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower bar",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower knob",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "showerhead",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "shower"
+    },
+    {
+     "raw": "soap dispenser",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "storage shelving",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "support beam",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "thermostat",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "throw blanket",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "duvet"
+    },
+    {
+     "raw": "toilet brush",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "tray",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    }
+   ],
+   "unmapped_primary_total": 346,
+   "unmapped_by_reason": {
+    "structural": 148,
+    "door_excluded": 18,
+    "unmapped_extended_candidate": 45,
+    "unmapped": 135
+   }
+  },
+  "00871": {
+   "n_raw_objects": 849,
+   "n_distinct_raw_names": 139,
+   "mapping_table": [
+    {
+     "raw": "wall",
+     "count": 104,
+     "count_with_geometry": 104,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "unknown",
+     "count": 92,
+     "count_with_geometry": 90,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "bathroom utensil",
+     "count": 47,
+     "count_with_geometry": 39,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "lamp",
+     "count": 30,
+     "count_with_geometry": 29,
+     "primary_label": "lamp",
+     "primary_tier": "exact",
+     "extended_label": "lamp",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "clothes",
+     "count": 26,
+     "count_with_geometry": 26,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "garment",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "picture",
+     "count": 25,
+     "count_with_geometry": 25,
+     "primary_label": "picture frame",
+     "primary_tier": "synonym",
+     "extended_label": "picture frame",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "book",
+     "count": 24,
+     "count_with_geometry": 24,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "decoration",
+     "count": 22,
+     "count_with_geometry": 22,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "ceiling",
+     "count": 18,
+     "count_with_geometry": 18,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "ventilation",
+     "count": 18,
+     "count_with_geometry": 17,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "floor",
+     "count": 17,
+     "count_with_geometry": 17,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "clutter",
+     "count": 16,
+     "count_with_geometry": 16,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "pillow",
+     "count": 16,
+     "count_with_geometry": 16,
+     "primary_label": "pillow",
+     "primary_tier": "exact",
+     "extended_label": "pillow",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "door frame",
+     "count": 14,
+     "count_with_geometry": 14,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "door",
+     "count": 13,
+     "count_with_geometry": 13,
+     "primary_label": null,
+     "primary_tier": "door_excluded",
+     "extended_label": null,
+     "extended_tier": "door_excluded"
+    },
+    {
+     "raw": "chair",
+     "count": 12,
+     "count_with_geometry": 12,
+     "primary_label": "chair",
+     "primary_tier": "exact",
+     "extended_label": "chair",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "curtain",
+     "count": 12,
+     "count_with_geometry": 12,
+     "primary_label": "curtain",
+     "primary_tier": "exact",
+     "extended_label": "curtain",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "rug",
+     "count": 12,
+     "count_with_geometry": 12,
+     "primary_label": "rug",
+     "primary_tier": "exact",
+     "extended_label": "rug",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "kitchen cabinet",
+     "count": 11,
+     "count_with_geometry": 11,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "shower wall",
+     "count": 10,
+     "count_with_geometry": 10,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "device",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "mirror",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": "mirror",
+     "primary_tier": "exact",
+     "extended_label": "mirror",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "shoe",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "towel",
+     "count": 9,
+     "count_with_geometry": 9,
+     "primary_label": "towel",
+     "primary_tier": "exact",
+     "extended_label": "towel",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "hanger",
+     "count": 8,
+     "count_with_geometry": 8,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "plant",
+     "count": 8,
+     "count_with_geometry": 8,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bath towel",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": "towel",
+     "primary_tier": "synonym",
+     "extended_label": "towel",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "cabinet",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": "cabinet",
+     "primary_tier": "exact",
+     "extended_label": "cabinet",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "cloth",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "dresser",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": "dresser",
+     "primary_tier": "exact",
+     "extended_label": "dresser",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "table",
+     "count": 7,
+     "count_with_geometry": 7,
+     "primary_label": "table",
+     "primary_tier": "exact",
+     "extended_label": "table",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "basket",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "blanket",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "duvet",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "cardboard box",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "ceiling fan",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": "ceiling fan",
+     "primary_tier": "exact",
+     "extended_label": "ceiling fan",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "sink",
+     "count": 6,
+     "count_with_geometry": 6,
+     "primary_label": "sink",
+     "primary_tier": "exact",
+     "extended_label": "sink",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "bag",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bathroom cabinet",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "flowerpot",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "flower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "window shutter",
+     "count": 5,
+     "count_with_geometry": 5,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "blinds",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "box",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "case",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "casket",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "container",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "newspaper",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "stand",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "tv",
+     "count": 4,
+     "count_with_geometry": 4,
+     "primary_label": "television",
+     "primary_tier": "synonym",
+     "extended_label": "television",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "basket of something",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bed",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "duvet",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "bed stand",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": "nightstand",
+     "primary_tier": "synonym",
+     "extended_label": "nightstand",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bottle",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "couch",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": "sofa",
+     "primary_tier": "synonym",
+     "extended_label": "sofa",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "cup",
+     "count": 3,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "dishes",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "door/window frame",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "flower",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": "flower",
+     "primary_tier": "exact",
+     "extended_label": "flower",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "kitchen utensil",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "parapet",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "sofa chair",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "sofa",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "table stand",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "tap",
+     "count": 3,
+     "count_with_geometry": 2,
+     "primary_label": "faucet",
+     "primary_tier": "synonym",
+     "extended_label": "faucet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "tray",
+     "count": 3,
+     "count_with_geometry": 3,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "alarm clock",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "clock",
+     "primary_tier": "synonym",
+     "extended_label": "clock",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bathroom accessory",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bathroom art",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bathroom towel",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "towel",
+     "primary_tier": "synonym",
+     "extended_label": "towel",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bowl of fruit",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "ceiling dome",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "clock",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "clock",
+     "primary_tier": "exact",
+     "extended_label": "clock",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "cutting board",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "desk chair",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "desk clutter",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "door/window",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "kitchen wall",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "liquid soap",
+     "count": 2,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "plush toy",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "refrigerator",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "fridge",
+     "primary_tier": "synonym",
+     "extended_label": "fridge",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "shelf",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower ceiling",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shower dial",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower floor",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "soap",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "telephone",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "wall cabinet",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "wardrobe",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "wardrobe",
+     "primary_tier": "exact",
+     "extended_label": "wardrobe",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "washer-dryer",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "washing machine",
+     "primary_tier": "synonym",
+     "extended_label": "washing machine",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "window",
+     "count": 2,
+     "count_with_geometry": 2,
+     "primary_label": "window",
+     "primary_tier": "exact",
+     "extended_label": "window",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "antique clock",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "clock",
+     "primary_tier": "synonym",
+     "extended_label": "clock",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "bathtub",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "bathtub",
+     "primary_tier": "exact",
+     "extended_label": "bathtub",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "bathtub utensil",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "bowl",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "dishes",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "ceiling fixture",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "ceiling lamp",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "lamp",
+     "primary_tier": "synonym",
+     "extended_label": "lamp",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "chair stand",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "clothes rack",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "coffee machine",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "computer",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "computer",
+     "primary_tier": "exact",
+     "extended_label": "computer",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "computer mouse",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "decorative bowl",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "desk",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "table",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "display cabinet",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "cabinet",
+     "primary_tier": "synonym",
+     "extended_label": "cabinet",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "folding chair",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "holy cross",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "laptop",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "laptop",
+     "primary_tier": "exact",
+     "extended_label": "laptop",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "microwave",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "microwave",
+     "primary_tier": "exact",
+     "extended_label": "microwave",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "monitor",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "computer",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "oven",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "oven",
+     "primary_tier": "exact",
+     "extended_label": "oven",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "paper towel dispenser",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "piano",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "piano",
+     "primary_tier": "exact",
+     "extended_label": "piano",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "piano bench",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "plate",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "plates",
+     "primary_tier": "synonym",
+     "extended_label": "plates",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "printer",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "printing",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "recessed wall",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "rocking chair",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "chair",
+     "primary_tier": "synonym",
+     "extended_label": "chair",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "scale",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower bench",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower door",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shower door frame",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shower glass",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "shower hose/head",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "shower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "shower rail",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower soap shelf",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "shower stall",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "shower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "shower tap",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "faucet",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "stovetop",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "gas stove",
+     "primary_tier": "synonym",
+     "extended_label": "gas stove",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "table cloth",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "toilet",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "toilet",
+     "primary_tier": "exact",
+     "extended_label": "toilet",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "toilet paper dispenser",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "toilet paper",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "tool",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "toy",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "trash can",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "waste bin",
+     "primary_tier": "synonym",
+     "extended_label": "waste bin",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "trashcan",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "waste bin",
+     "primary_tier": "synonym",
+     "extended_label": "waste bin",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "unknown/remove",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "vacuum cleaner",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    },
+    {
+     "raw": "vase",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped_extended_candidate",
+     "extended_label": "flower",
+     "extended_tier": "extended"
+    },
+    {
+     "raw": "ventilation hood",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "exhaust hood",
+     "primary_tier": "synonym",
+     "extended_label": "exhaust hood",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "wall clock",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "clock",
+     "primary_tier": "synonym",
+     "extended_label": "clock",
+     "extended_tier": "synonym"
+    },
+    {
+     "raw": "washing machine",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": "washing machine",
+     "primary_tier": "exact",
+     "extended_label": "washing machine",
+     "extended_tier": "exact"
+    },
+    {
+     "raw": "window frame",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "structural",
+     "extended_label": null,
+     "extended_tier": "structural"
+    },
+    {
+     "raw": "wine",
+     "count": 1,
+     "count_with_geometry": 1,
+     "primary_label": null,
+     "primary_tier": "unmapped",
+     "extended_label": null,
+     "extended_tier": "unmapped"
+    }
+   ],
+   "n_mapped_primary": 232,
+   "n_mapped_extended": 290,
+   "unmapped_primary": [
+    {
+     "raw": "wall",
+     "count": 104,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "unknown",
+     "count": 92,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bathroom utensil",
+     "count": 47,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clothes",
+     "count": 26,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "garment"
+    },
+    {
+     "raw": "book",
+     "count": 24,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "decoration",
+     "count": 22,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "ceiling",
+     "count": 18,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "ventilation",
+     "count": 18,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "floor",
+     "count": 17,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clutter",
+     "count": 16,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "door frame",
+     "count": 14,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "door",
+     "count": 13,
+     "reason": "door_excluded",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower wall",
+     "count": 10,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "device",
+     "count": 9,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shoe",
+     "count": 9,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "hanger",
+     "count": 8,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "plant",
+     "count": 8,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "cloth",
+     "count": 7,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "basket",
+     "count": 6,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "blanket",
+     "count": 6,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "duvet"
+    },
+    {
+     "raw": "cardboard box",
+     "count": 6,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bag",
+     "count": 5,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "flowerpot",
+     "count": 5,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "flower"
+    },
+    {
+     "raw": "window shutter",
+     "count": 5,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "blinds"
+    },
+    {
+     "raw": "box",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "case",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "casket",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "container",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "newspaper",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "stand",
+     "count": 4,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "basket of something",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bed",
+     "count": 3,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "duvet"
+    },
+    {
+     "raw": "bottle",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "cup",
+     "count": 3,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "dishes"
+    },
+    {
+     "raw": "door/window frame",
+     "count": 3,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "kitchen utensil",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "parapet",
+     "count": 3,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "sofa chair",
+     "count": 3,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "sofa"
+    },
+    {
+     "raw": "table stand",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "tray",
+     "count": 3,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bathroom accessory",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bathroom art",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bowl of fruit",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "ceiling dome",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "cutting board",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "desk clutter",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "door/window",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "kitchen wall",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "liquid soap",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "plush toy",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shelf",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower ceiling",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower dial",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower floor",
+     "count": 2,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "soap",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "telephone",
+     "count": 2,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bathtub utensil",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "bowl",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "dishes"
+    },
+    {
+     "raw": "ceiling fixture",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "chair stand",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "clothes rack",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "coffee machine",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "computer mouse",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "decorative bowl",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "desk",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "table"
+    },
+    {
+     "raw": "holy cross",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "monitor",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "computer"
+    },
+    {
+     "raw": "paper towel dispenser",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "piano bench",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "printer",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "printing"
+    },
+    {
+     "raw": "recessed wall",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "scale",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower bench",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower door",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower door frame",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower glass",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower hose/head",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "shower"
+    },
+    {
+     "raw": "shower rail",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower soap shelf",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "shower stall",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "shower"
+    },
+    {
+     "raw": "shower tap",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "faucet"
+    },
+    {
+     "raw": "table cloth",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "toilet paper dispenser",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "toilet paper"
+    },
+    {
+     "raw": "tool",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "toy",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "unknown/remove",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "vacuum cleaner",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "vase",
+     "count": 1,
+     "reason": "unmapped_extended_candidate",
+     "extended_would_map_to": "flower"
+    },
+    {
+     "raw": "window frame",
+     "count": 1,
+     "reason": "structural",
+     "extended_would_map_to": null
+    },
+    {
+     "raw": "wine",
+     "count": 1,
+     "reason": "unmapped",
+     "extended_would_map_to": null
+    }
+   ],
+   "unmapped_primary_total": 615,
+   "unmapped_by_reason": {
+    "structural": 278,
+    "door_excluded": 13,
+    "unmapped_extended_candidate": 60,
+    "unmapped": 264
+   }
+  }
+ }
+}
