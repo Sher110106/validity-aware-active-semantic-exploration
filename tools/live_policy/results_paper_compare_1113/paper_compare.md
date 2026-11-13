@@ -1,6 +1,6 @@
 <!-- written by rescore_paper.py; the figures are paper_compare.py's own output -->
 
-**Interim rescore, written 2026-11-13T19:13:50+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 809.0840 s (fallback, n = 1).
+**Interim rescore, written 2026-11-13T19:44:32+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 809.0840 s (fallback, n = 1).
 - 00853: final.
 - 00871: interim: awaiting the third attempts.
 

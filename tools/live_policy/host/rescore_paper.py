@@ -120,14 +120,24 @@ def ssh(remote_cmd: str, stdin_text: str | None = None, retries: int = 3, timeou
 EVENT_RE = re.compile(r"^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d) (launch|finished|skip) ([^\s:]+)(.*)$")
 
 
+CONV_RE = re.compile(r"^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d) converted (\d+) stages of (\S+) and compressed")
+
+
 def parse_queue_log(text: str) -> list:
-    """The launch, finished and skip lines, in order. ROS noise and other lines are dropped."""
+    """The launch, finished, skip and converted lines, in order. ROS noise and other lines are dropped.
+
+    The queue writes `converted N stages of <name>` after `finished`: the author's converter makes
+    the YAML files then. Before that line the run's YAML is not complete."""
     events = []
     for i, line in enumerate(text.splitlines()):
         m = EVENT_RE.match(line.strip())
         if m:
             events.append({"i": i, "ts": m.group(1), "kind": m.group(2), "name": m.group(3),
                            "rest": m.group(4).lstrip(": ").strip()})
+            continue
+        m = CONV_RE.match(line.strip())
+        if m:
+            events.append({"i": i, "ts": m.group(1), "kind": "converted", "name": m.group(3), "rest": m.group(2)})
     return events
 
 
@@ -144,12 +154,25 @@ def attempts_by_name(events: list) -> dict:
     for e in events:
         if e["kind"] == "launch":
             lst = out.setdefault(e["name"], [])
-            lst.append({"attempt": len(lst) + 1, "launch_ts": e["ts"], "finish_ts": None, "finish_reason": None})
+            lst.append({"attempt": len(lst) + 1, "launch_ts": e["ts"], "finish_ts": None, "finish_reason": None,
+                        "convert_ts": None})
         elif e["kind"] == "finished":
             lst = out.get(e["name"])
             if lst and lst[-1]["finish_reason"] is None:
                 lst[-1]["finish_ts"], lst[-1]["finish_reason"] = e["ts"], e["rest"]
+        elif e["kind"] == "converted":
+            lst = out.get(e["name"])
+            if lst and lst[-1]["finish_reason"] is not None and lst[-1]["convert_ts"] is None:
+                lst[-1]["convert_ts"] = e["ts"]
     return out
+
+
+OPEN_STATES = ("in_progress", "converting")
+
+
+def is_open(attempt: dict) -> bool:
+    """An attempt that is running, or finished but not yet converted: it can still change."""
+    return attempt["status"] in OPEN_STATES
 
 
 def tracked(name: str) -> bool:
@@ -182,7 +205,8 @@ def folder_map(events: list, existing: set) -> dict:
             row = dict(a, name=name, folder=None, folder_exists=False, matched_by=None, status=None)
             if k == len(lst) - 1:
                 row["folder"], row["matched_by"] = name, "latest launch keeps the plain name"
-                row["status"] = "finished" if a["finish_reason"] is not None else "in_progress"
+                row["status"] = ("in_progress" if a["finish_reason"] is None else
+                                 "converting" if a["convert_ts"] is None else "finished")
             else:
                 row["status"] = "finished" if a["finish_reason"] is not None else "no_finish_line"
                 exp = f"{name}_FAILED_ATTEMPT_{hhmm(lst[k + 1]['launch_ts'])}"
@@ -217,8 +241,10 @@ def pending_items(attempts: dict) -> list:
     out = []
     for name, rows in sorted(attempts.items()):
         cap = ATTEMPT_CAP.get(name, 1)
-        if rows[-1]["status"] == "in_progress":
-            out.append({"name": name, "why": "attempt %d is running or has no finish line yet" % len(rows)})
+        if is_open(rows[-1]):
+            out.append({"name": name, "why": "attempt %d is %s" % (len(rows), "running or has no finish line yet"
+                                                                    if rows[-1]["status"] == "in_progress"
+                                                                    else "finished but its YAML is not converted yet")})
         elif len(rows) < cap:
             out.append({"name": name, "why": "%d of %d attempts launched" % (len(rows), cap)})
     return out
@@ -252,8 +278,9 @@ def attempt_validity(acc: dict, finish_reason: str | None) -> dict:
 def classify(attempt_map: dict, acceptance: dict) -> dict:
     """Per e7 seed: each attempt's validity, the counted attempt, and the paper_compare rows.
 
-    The counted attempt is the latest finished one, if it is valid (A2.2). Every other finished
-    attempt keeps its own crashed row. A running attempt is left out of everything.
+    The counted attempt is the LAST LAUNCHED one, once it has finished and is converted, if it is
+    valid (A2.2). Every other invalid attempt keeps its own crashed row; a valid earlier attempt
+    stays in no row. An open attempt is left out of everything.
     """
     acc_by = {r["run"]: r for r in acceptance["runs"]}
     seeds, rows = [], {}
@@ -263,12 +290,11 @@ def classify(attempt_map: dict, acceptance: dict) -> dict:
             continue
         scene, seed = m.group(1), int(m.group(2))
         info = {"name": name, "scene": scene, "seed": seed, "attempts": [], "counted": None, "state": None}
-        finished = [a for a in atts if a["status"] != "in_progress" and a["folder_exists"]]
         for a in atts:
             rec = {"attempt": a["attempt"], "folder": a["folder"], "status": a["status"],
                    "finish_reason": a["finish_reason"]}
             acc = acc_by.get(a["folder"]) if a["folder"] else None
-            if a["status"] == "in_progress":
+            if is_open(a):
                 rec["valid"] = None
             elif acc is None:
                 rec["valid"], rec["why_invalid"] = None, ["no acceptance entry for this folder"]
@@ -277,23 +303,27 @@ def classify(attempt_map: dict, acceptance: dict) -> dict:
                 rec["checker_valid"] = acc.get("valid")
                 rec["end_navigation_time_s_checker"] = acc.get("end_navigation_time_s")
             info["attempts"].append(rec)
-        last = finished[-1] if finished else None
-        if last is not None and info["attempts"][last["attempt"] - 1].get("valid"):
+        # A2.2: only the last launched attempt can count, and only once it has finished and its
+        # YAML is converted. No earlier attempt takes its place.
+        last = atts[-1]
+        if (not is_open(last) and last["folder_exists"]
+                and info["attempts"][-1].get("valid")):
             info["counted"] = last["attempt"]
         cap = ATTEMPT_CAP.get(name, 1)
-        running = atts[-1]["status"] == "in_progress"
         if info["counted"] is not None:
             info["state"] = "valid"
-        elif running or len(atts) < cap:
+        elif is_open(last) or len(atts) < cap:
             info["state"] = "pending"
         else:
             info["state"] = "missing"
         for rec in info["attempts"]:
-            if rec["valid"] is None and rec["status"] == "in_progress":
-                continue
+            if rec["valid"] is None:
+                continue                      # open, or no acceptance entry: in no row
             if rec["attempt"] == info["counted"]:
                 rows.setdefault("frontier_end", []).append((scene, rec["folder"]))
-            elif rec["valid"] is not None:
+            elif rec["valid"]:
+                rec["superseded_valid"] = True    # valid, but not the last launch: in no row (A2.2)
+            else:
                 arm = CRASH_ARM.get(rec["attempt"], "crashed_frontier_%dth" % rec["attempt"])
                 rows.setdefault(arm, []).append((scene, rec["folder"]))
         seeds.append(info)
@@ -374,10 +404,11 @@ def tour_counts(run_dir: Path) -> dict:
 
 def c2_status(b_attempts: list, acc_by: dict) -> dict:
     """Whether C2 can be computed for one scene (A2.5 and the Note's A2.4/A2.5 cases)."""
-    done = [a for a in b_attempts if a["status"] != "in_progress" and a["folder_exists"]]
-    if not done:
-        return {"status": "in_progress", "folder": None}
-    last = done[-1]
+    last = b_attempts[-1]
+    if is_open(last):
+        return {"status": "in_progress", "folder": None, "attempt": last["attempt"]}
+    if not last["folder_exists"]:
+        return {"status": "no_folder", "folder": last["folder"], "attempt": last["attempt"]}
     acc = acc_by.get(last["folder"])
     if acc is None:
         return {"status": "no_acceptance_entry", "folder": last["folder"]}
@@ -474,6 +505,8 @@ def plan_ged(wanted: list, pool: dict, local_rows) -> tuple:
     e7_entries = {n: e for n, e in pool["runs"].items() if n.startswith("e7_")}
     for w in wanted:
         local = local_rows(w["path"])
+        if not local:          # an attempt that made no stage has nothing to score: never sent to the host
+            continue
         hit = None
         leaf = Path(w["folder"]).name
         for n in sorted(e7_entries, key=lambda n: (n != leaf, n)):
@@ -513,13 +546,67 @@ def build_ged_file(pool: dict, reuse: list, computed: dict) -> dict:
 def ged_host_script(refs: list, run_specs: list, stamp: str, vlimit_kb: int = 8388608) -> str:
     """The script fed to `docker exec -i <container> bash -s`: one nice'd CPU process."""
     args = " ".join(["--ref " + shlex.quote(r) for r in refs] + [shlex.quote(s) for s in run_specs])
+    f = f"paper_ged_new_1113_{stamp}"
     return f"""set -u
 cd /workspace/scratch
+echo $$ > {f}.pid
 ulimit -v {vlimit_kb}
 export SETUPTOOLS_USE_DISTUTILS=stdlib PYTHONPATH=/workspace/scratch/gm MPLBACKEND=Agg OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-nice -n 19 /workspace/environments/semantic_perception/bin/python -B paper_ged.py {args} > paper_ged_new_1113_{stamp}.json 2> paper_ged_new_1113_{stamp}.err
-echo rc=$?
+nice -n 19 /workspace/environments/semantic_perception/bin/python -B paper_ged.py {args} > {f}.json 2> {f}.err
+echo $? > {f}.rc
 """
+
+
+def ged_start_cmd(script: str) -> str:
+    """Start the job detached in the container. The call returns at once, so a dropped ssh cannot
+    leave a job running unseen, and a retry cannot start a second copy without a check first."""
+    return f"docker exec -d {CONTAINER} bash -c {shlex.quote(script)}"
+
+
+def ged_state_cmd(stamp: str) -> str:
+    f = f"{WS}/scratch/paper_ged_new_1113_{stamp}"
+    return (f"if [ -f {f}.rc ]; then echo \"RC $(cat {f}.rc)\"; "
+            f"elif [ -f {f}.pid ] && docker exec {CONTAINER} test -d /proc/$(cat {f}.pid); then echo RUNNING; "
+            f"elif [ -f {f}.pid ]; then echo DEAD; else echo NOTSTARTED; fi")
+
+
+def parse_ged_state(out: str) -> tuple:
+    w = out.strip().split()
+    if w and w[0] == "RC" and len(w) > 1 and w[1].lstrip("-").isdigit():
+        return ("done", int(w[1]))
+    return ({"RUNNING": "running", "DEAD": "dead"}.get(w[0] if w else "", "notstarted"), None)
+
+
+def run_ged_job(script: str, stamp: str, log=None, poll_s: int = 15, max_wait_s: int = 7200, sleep=time.sleep) -> str:
+    """Start the GED job once, then watch its rc file. After an ssh failure, look for the job's pid and
+    rc files before any second start. Returns the host path of the JSON, or raises."""
+    def state():
+        return parse_ged_state(ssh(ged_state_cmd(stamp)).stdout)
+
+    try:
+        ssh(ged_start_cmd(script), retries=1, timeout=120)
+    except HostError:
+        sleep(30)                                   # the start may have gone through: look first
+        if state()[0] == "notstarted":
+            sleep(30)
+            if state()[0] == "notstarted":
+                ssh(ged_start_cmd(script), retries=1, timeout=120)    # one more start, and only now
+    waited, quiet = 0, 0
+    while waited <= max_wait_s:
+        st, rc = state()
+        if st == "done":
+            if rc != 0:
+                raise HostError(f"GED on the host ended with rc={rc}; see scratch/paper_ged_new_1113_{stamp}.err")
+            return f"{WS}/scratch/paper_ged_new_1113_{stamp}.json"
+        if st == "dead":
+            raise HostError("the GED job on the host is gone with no rc file; it was not started again. "
+                            f"Look at scratch/paper_ged_new_1113_{stamp}.err")
+        quiet = quiet + 1 if st == "notstarted" else 0
+        if quiet > 8:
+            raise HostError("the GED job never started on the host")
+        sleep(poll_s)
+        waited += poll_s
+    raise HostError("the GED job did not finish in time; it was not stopped and not restarted")
 
 
 # --------------------------------------------------------------------------
@@ -554,9 +641,79 @@ def check_transfer_list(lines: list) -> list:
     return files
 
 
-def rsync_cmd(folders: list, dry: bool) -> list:
+def rsync_cmd(folders: list, dry: bool, dest: Path | None = None) -> list:
     cmd = ["rsync", "-rt", "-v"] + (["-n"] if dry else []) + rsync_rules(folders)
-    return cmd + ["-e", "ssh -o BatchMode=yes -o ConnectTimeout=20", f"{HOST}:{WS}/runs/", str(NEW_COPY) + "/"]
+    return cmd + ["-e", "ssh -o BatchMode=yes -o ConnectTimeout=20", f"{HOST}:{WS}/runs/", str(dest or NEW_COPY) + "/"]
+
+
+def state_key(events: list, existing) -> tuple:
+    """What the queue did, as one comparable value: every launch, finish, skip and conversion line,
+    and the folders that exist. A rename shows up as a changed folder set."""
+    return (tuple((e["kind"], e["name"], e["ts"], e["rest"]) for e in events), frozenset(existing))
+
+
+def _local_marker(folder: str):
+    p = NEW_COPY / folder / ".rescore_attempt.json"
+    try:
+        return json.loads(p.read_text()) if p.exists() else None
+    except ValueError:
+        return None
+
+
+def folders_to_copy(attempts: dict) -> list:
+    """Settled attempts whose local folder is not already a settled copy of that same launch.
+    Open attempts (running, or finished with no conversion yet) are never copied."""
+    out = []
+    for rows in attempts.values():
+        for a in rows:
+            if not a["folder"] or is_open(a):
+                continue
+            m = _local_marker(a["folder"])
+            if not (m and m.get("launch_ts") == a["launch_ts"] and m.get("settled") is True):
+                out.append(a["folder"])
+    return sorted(set(out))
+
+
+def _run_rsync(cmd: list, dry: bool):
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
+
+
+def copy_settled(folders: list, attempts: dict, stamp: str, before: tuple, fetch_state, run_rsync=_run_rsync) -> list:
+    """Copy into a staging folder, read the queue again, and merge only if nothing changed.
+
+    `before` is (events, existing) read before the copy. A launch, a finish, a conversion or a
+    rename during the copy stops the run with the local copy untouched, so files of a new attempt
+    never land in the folder of an old one."""
+    if not folders:
+        return []
+    staging = NEW_COPY / f"_incoming_{stamp}"
+    shutil.rmtree(staging, ignore_errors=True)
+    staging.mkdir(parents=True)
+    try:
+        dry = run_rsync(rsync_cmd(folders, True, staging), True)
+        if dry.returncode != 0:
+            raise HostError("rsync dry run failed: " + dry.stderr[:500])
+        files = check_transfer_list(dry.stdout.splitlines())
+        real = run_rsync(rsync_cmd(folders, False, staging), False)
+        if real.returncode != 0:
+            raise HostError("rsync failed: " + real.stderr[:500])
+        check_transfer_list(real.stdout.splitlines())
+        after = fetch_state()
+        if state_key(*after) != state_key(*before):
+            raise HostError("the queue launched, finished, converted or renamed something during the copy "
+                            "(it changed during the copy); nothing was merged into the local copy. Run again.")
+        launch = {a["folder"]: a for rows in attempts.values() for a in rows if a["folder"]}
+        for f in folders:
+            src = staging / f
+            if src.exists():
+                shutil.copytree(src, NEW_COPY / f, dirs_exist_ok=True)
+            a = launch[f]
+            (NEW_COPY / f).mkdir(parents=True, exist_ok=True)
+            (NEW_COPY / f / ".rescore_attempt.json").write_text(
+                json.dumps({"name": a["name"], "launch_ts": a["launch_ts"], "attempt": a["attempt"], "settled": True}))
+        return files
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
 
 def tree_fingerprint(folder: Path) -> str:
@@ -651,13 +808,47 @@ def compare_cells(old: dict, new: dict, scenes, tol: float = 1e-9) -> dict:
     return out
 
 
+def describe_unmapped(folder: str, acc: dict | None) -> dict:
+    """A folder the queue log never launched (an attempt from before the log), from its acceptance entry."""
+    leaf = folder.split("/", 1)[-1]
+    m = re.match(r"e7_(\d{5})_s(\d+)_", leaf)
+    acc = acc or {}
+    n_graph = acc.get("n_stages_with_graph")
+    oom, died = acc.get("out_of_memory_lines"), acc.get("nvblox_died_lines")
+    made = ("made no stage graph" if not n_graph else f"made {n_graph} stage graphs")
+    d = {"folder": folder, "scene": m.group(1) if m else None, "seed": int(m.group(2)) if m else None,
+         "oom_lines": oom, "nvblox_died_lines": died, "graph_stages": n_graph}
+    d["sentence"] = (f"The folder `{leaf}` holds an attempt from before the queue log (11-06) that {made}: its roslaunch.log "
+                     f"shows {oom} out-of-memory line(s) and {died} line(s) saying nvblox_node died. The queue log has no launch "
+                     f"line for it, so it is in no row. " + (f"Seed {int(m.group(2))} of {m.group(1)} is scored from its later attempt."
+                                                              if m else ""))
+    return d
+
+
+def tour_table(tours: dict) -> str:
+    """A2.4: for every tour, whether nvblox died, the 'Timeout! Did not find' lines, the last archived stop
+    whose graph changed, and the object-node counts at stage 0 and at the end."""
+    lines = ["| Tour folder | Attempt | Frozen | nvblox died | Timeout lines | Last stop whose graph changed | "
+             "Objects, stage 0 | Objects, end | Waypoints reached/listed |", "|---|---|---|---|---|---|---|---|---|"]
+    yn = lambda v: "n/a" if v is None else ("yes" if v else "no")
+    for folder, t in sorted(tours.items()):
+        died = t.get("nvblox_died_lines")
+        last = t.get("last_stop_whose_graph_changed")
+        wp = (f"{t['waypoints_reached']}/{t['waypoints_listed']}" if t.get("waypoints_listed") is not None else "n/a")
+        lines.append(f"| `{folder.split('/', 1)[-1]}` | {t.get('attempt')} | {yn(t.get('checker_frozen'))} | "
+                     f"{'n/a' if died is None else ('yes' if died else 'no')} | {t.get('timeout_lines')} | "
+                     f"{'none' if last is None else last} | {t.get('object_nodes_first')} | {t.get('object_nodes_final')} | {wp} |")
+    return "\n".join(lines)
+
+
 def table_deviation_46(attempt_map: dict) -> str:
     """The markdown table that completes deviation 46: every e7 871 seed and every tour."""
     def cell(rows, k, cap):
         if k <= len(rows):
             a = rows[k - 1]
             leaf = a["folder"].split("/", 1)[1] if a["folder"] else "(no folder)"
-            state = {"in_progress": "running", "no_finish_line": "no finish line"}.get(a["status"], "finished")
+            state = {"in_progress": "running", "converting": "finished, not converted yet",
+                     "no_finish_line": "no finish line"}.get(a["status"], "finished")
             ok = "" if a["folder_exists"] else ", folder missing"
             return f"`{leaf}` ({state}{ok})"
         return "not launched yet (queued)" if k <= cap else "none"
@@ -732,8 +923,8 @@ def run_pipeline(args) -> int:
         raise HostError("check_paper_runs.py failed on the host: " + p.stderr[:500])
     acceptance = json.loads(p.stdout)
     events, existing = fetch_queue_state()
-    if launch_signature(events) != launch_signature(events_a) or existing != existing_a:
-        raise HostError("the queue launched or renamed a folder while the acceptance check ran; run again")
+    if state_key(events, existing) != state_key(events_a, existing_a):
+        raise HostError("the queue launched, finished, converted or renamed something while the acceptance check ran; run again")
     acc_path = out / f"acceptance_{stamp}.json"
     acc_path.write_text(p.stdout)
     (out / f"queue_events_{stamp}.txt").write_text("".join(
@@ -749,36 +940,30 @@ def run_pipeline(args) -> int:
         raise HostError("no host folder found for: " + ", ".join(missing))
     pend = pending_items(attempts)
     table46 = table_deviation_46(attempts)
+    pre_queue = [describe_unmapped(f, acc_by.get(f)) for f in fm["unmapped"]]
     (out / f"folder_map_{stamp}.json").write_text(json.dumps(
         {"made_at": now_iso(), "rule": "latest launch keeps the plain name; an older attempt sits in "
-         "<name>_FAILED_ATTEMPT_<HHMM of the next launch>", "attempts": attempts, "unmapped_folders": fm["unmapped"],
-         "skips": fm["skips"], "pending": pend}, indent=1))
-    (out / f"folder_map_{stamp}.md").write_text(table46 + "\n")
+         "<name>_FAILED_ATTEMPT_<HHMM of the next launch>; an attempt counts as open until the queue logs "
+         "`converted ... of <name>` after its `finished` line", "attempts": attempts, "unmapped_folders": fm["unmapped"],
+         "pre_queue_attempts": pre_queue, "skips": fm["skips"], "pending": pend}, indent=1))
+    (out / f"folder_map_{stamp}.md").write_text(table46 + "\n" + "".join(
+        f"\nNot in the queue log: {p_['sentence']}\n" for p_ in pre_queue))
     log("folder_map", pending=len(pend), unmapped=len(fm["unmapped"]))
     print("\n" + table46 + "\n")
+    for p_ in pre_queue:
+        print("For the deviations file: " + deviation_sentence(p_) + "\n")
 
-    # 3 copy
-    folders = sorted({a["folder"] for rows in attempts.values() for a in rows if a["status"] != "in_progress"})
+    # 3 copy: into a staging folder, merged only if the queue did not move during the copy
+    folders = sorted({a["folder"] for rows in attempts.values() for a in rows if not is_open(a)})
     moves = []
     if not args.no_copy:
         NEW_COPY.mkdir(parents=True, exist_ok=True)
         moves = reconcile_local_copy(attempts, stamp)
-        dry = subprocess.run(rsync_cmd(folders, True), capture_output=True, text=True, timeout=1800)
-        if dry.returncode != 0:
-            raise HostError("rsync dry run failed: " + dry.stderr[:500])
-        (out / f"rsync_dryrun_{stamp}.txt").write_text(dry.stdout)
-        files = check_transfer_list(dry.stdout.splitlines())
-        log("rsync_dry_run", files=len(files), list=f"rsync_dryrun_{stamp}.txt")
-        real = subprocess.run(rsync_cmd(folders, False), capture_output=True, text=True, timeout=3600)
-        if real.returncode != 0:
-            raise HostError("rsync failed: " + real.stderr[:500])
-        sent = check_transfer_list(real.stdout.splitlines())
-        for rows in attempts.values():
-            for a in rows:
-                if a["folder"] in folders:
-                    (NEW_COPY / a["folder"] / ".rescore_attempt.json").write_text(
-                        json.dumps({"name": a["name"], "launch_ts": a["launch_ts"], "attempt": a["attempt"]}))
-        log("rsync", files_listed=len(files), files_sent=len(sent), moves=len(moves))
+        to_copy = folders_to_copy(attempts)
+        files = copy_settled(to_copy, attempts, stamp, (events, existing), fetch_queue_state)
+        (out / f"rsync_dryrun_{stamp}.txt").write_text("\n".join(files) + ("\n" if files else ""))
+        log("rsync", folders_copied=len(to_copy), files=len(files), moves=len(moves),
+            list=f"rsync_dryrun_{stamp}.txt")
     old_fp = {d.name: tree_fingerprint(d) for g in ("apr", "frontier_seeds") if (OLD_COPY / g).is_dir()
               for d in (OLD_COPY / g).iterdir() if d.is_dir()}
     copy_check = {}
@@ -805,8 +990,12 @@ def run_pipeline(args) -> int:
     for name, rows in sorted(attempts.items()):
         if TOUR_RE.match(name):
             for a in rows:
+                if is_open(a):
+                    continue
                 tours[a["folder"]] = dict(tour_counts(NEW_COPY / a["folder"]),
                                           attempt=a["attempt"], launch_ts=a["launch_ts"],
+                                          waypoints_reached=acc_by.get(a["folder"], {}).get("waypoints_reached"),
+                                          waypoints_listed=acc_by.get(a["folder"], {}).get("waypoints_listed"),
                                           checker_frozen=acc_by.get(a["folder"], {}).get("frozen"),
                                           nvblox_died_lines=acc_by.get(a["folder"], {}).get("nvblox_died_lines"),
                                           timeout_lines=acc_by.get(a["folder"], {}).get("timeout_lines"),
@@ -857,6 +1046,9 @@ def run_pipeline(args) -> int:
             wanted.append({"folder": folder, "scene": scene, "path": NEW_COPY / folder, "arm": arm})
     pool = load_ged_pool(OLD_GED_FILES)
     reuse, compute = plan_ged(wanted, pool, stage_rows_local)
+    no_stage = [w["folder"] for w in wanted if not stage_rows_local(w["path"])]
+    if no_stage:
+        log("ged_no_stages", runs=no_stage)
     recheck = sorted(reuse, key=lambda w: len(stage_rows_local(w["path"])))[:max(0, args.ged_recheck)]
     to_run = compute + recheck
     new_rows, recheck_report = {}, []
@@ -870,10 +1062,8 @@ def run_pipeline(args) -> int:
             raise HostError("the host's scratch/paper_ged.py differs from the repo copy; stop and report")
         specs = [f"/workspace/runs/{w['folder']}={w['scene']}" for w in to_run]
         log("ged_host_start", n_runs=len(specs), runs=[w["folder"] for w in to_run])
-        res = ssh(f"docker exec -i {CONTAINER} bash -s", stdin_text=ged_host_script(e7_refs, specs, stamp), timeout=7200)
-        if "rc=0" not in res.stdout:
-            raise HostError("GED on the host failed: " + (res.stdout + res.stderr)[-500:])
-        got = ssh(f"cat {WS}/scratch/paper_ged_new_1113_{stamp}.json")
+        json_path = run_ged_job(ged_host_script(e7_refs, specs, stamp), stamp)
+        got = ssh(f"cat {json_path}")
         data = json.loads(got.stdout)
         (out / "ged" / f"paper_ged_new_1113_{stamp}.json").write_text(got.stdout)
         for run in data["runs"]:
@@ -945,7 +1135,8 @@ def run_pipeline(args) -> int:
                "ged": {"reused": [dict(w, path=str(w["path"])) for w in reuse], "computed": [w["folder"] for w in compute],
                        "recheck": recheck_report}, "comparison_vs_1112": {s: {k: v for k, v in comparison[s].items() if k != "different"}
                                                                           | {"n_different": len(comparison[s]["different"])} for s in SCENES},
-               "alt_B_scored": alt_done, "deviation_46_table": table46, "unmapped_folders": fm["unmapped"], "skips": fm["skips"]}
+               "alt_B_scored": alt_done, "deviation_46_table": table46, "unmapped_folders": fm["unmapped"], "skips": fm["skips"],
+               "pre_queue": pre_queue, "deviation_sentences": [deviation_sentence(p_) for p_ in pre_queue]}
     (out / "rescore_summary.json").write_text(json.dumps(summary, indent=1, default=str))
     (out / "NOTES.md").write_text(write_notes(summary, comparison, old_budgets, pc))
     log("done", mode=mode, out=str(out))
@@ -983,30 +1174,61 @@ def fmt_c2(s: dict) -> str:
     return {"awaiting_rerun": "not computed. The only APR-b run is frozen and its rerun has not run. C2 waits for it.",
             "not_computable_frozen_again": "not computable: the rerun is frozen too, and there is no further attempt.",
             "below_80_percent_rule": "not computed: the APR-b run misses the 80% use rule.",
-            "in_progress": "not computed: the APR-b run has not finished."}.get(st, st)
+            "in_progress": "not computed: the APR-b rerun is running (or finished and not yet converted). C2 waits for it.",
+            "no_folder": "not computed: the folder of the APR-b run is missing.",
+            }.get(st, st)
 
 
 def _group_invalid(bad: list) -> str:
     """Invalid attempts grouped by their reasons, so one reason is said once."""
     groups = {}
     for name, a in bad:
-        tag = f"s{E7_RE.match(name).group(2)} #{a['attempt']}" if E7_RE.match(name) else name
-        groups.setdefault(", ".join(a["why_invalid"]), []).append(f"{E7_RE.match(name).group(1) if E7_RE.match(name) else ''} {tag}".strip())
+        m = E7_RE.match(name)
+        tag = f"{m.group(1)} s{m.group(2)} #{a['attempt']}" if m else name
+        groups.setdefault(", ".join(a["why_invalid"]), []).append(tag)
     return "; ".join(f"{', '.join(v)}: {k}" for k, v in groups.items())
 
 
+def deviation_sentence(pre: dict) -> str:
+    """The text the lead adds to the deviations file for an attempt that the queue log does not hold."""
+    return f"**11-06: an attempt of e7 {pre['scene']} seed {pre['seed']} that made no stage.** " + pre["sentence"]
+
+
+def scene_vs_1112(sc: str, cmp_: dict, budgets: dict, rows: dict) -> str:
+    """What differs from 11-12 for one scene, said from the comparison and never assumed."""
+    d = cmp_[sc]
+    n_new = len(d.get("only_in_1113", []))
+    new_arms = sorted({c[1] for c in d.get("only_in_1113", [])})
+    third = [f for s_, f in rows.get("crashed_frontier_3rd", []) if s_ == sc]
+    head = f"{d['compared']} cells compared; {d['identical']} identical, {len(d['different'])} different."
+    if d["b_changed"]:
+        return (head + f" B moved, from {d.get('b_1112_s', float('nan')):.4f} s to {budgets[sc]['primary_s']:.4f} s, so the cells differ"
+                + (f" and {n_new} cells are new ({', '.join(new_arms)})" if n_new else "")
+                + f". Every {sc} number in `results_paper_compare_1112/` is superseded by this folder.")
+    if not d["different"] and not n_new and not d.get("only_in_1112"):
+        return head + " B did not move and the inputs match 11-12's, so these numbers equal 11-12's."
+    txt = head + " B did not move."
+    if n_new:
+        txt += (f" {n_new} new cells appear, in {', '.join(new_arms)}"
+                + (f" ({len(third)} third attempt(s) that fail A2.1; they stay out of every paper cell)" if "crashed_frontier_3rd" in new_arms else "") + ".")
+    if d.get("only_in_1112"):
+        txt += f" {len(d.get('only_in_1112', []))} cells of 11-12 have no counterpart now."
+    return txt
+
+
 def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
-    mode = s["mode"]
+    """NOTES.md. Every sentence that depends on the state of the runs is generated from that state."""
     b = s["budgets"]
-    L = []
-    L.append("# Notes on the 13 Nov paper-scale rescore")
-    L.append("")
-    L.append(f"**State: {mode}.** Written {s['written_at']}. Rerun with `bash tools/live_policy/host/rescore_paper.sh`. "
+    rows = s["classification"].get("rows", {})
+    state = s["scene_state"]
+    interim = not all(v["complete"] for v in state.values())
+    for sc in SCENES:                      # 11-12 budget for the move test
+        cmp_[sc].setdefault("b_1112_s", old_budgets[sc])
+    L = ["# Notes on the 13 Nov paper-scale rescore", ""]
+    L.append(f"**State: {s['mode']}.** Written {s['written_at']}. Rerun with `bash tools/live_policy/host/rescore_paper.sh`. "
              "The rules are `PREREGISTRATION_PAPER.md`, Amendment 2 and its Note. Tables: `paper_compare.md` and `.json`. "
              "Evidence: `acceptance_*.json`, `folder_map_*`, `c2_*.json`, `budgets_*.json`, `comparison_vs_1112.json`, `rescore_summary.json`.")
-    L.append("")
-    L.append("## What changed against 11-12, and why")
-    L.append("")
+    L += ["", "## What changed against 11-12, and why", ""]
     valid = [(x["name"], x["counted"]) for x in s["classification"]["seeds"] if x["counted"]]
     bad = [(x["name"], a) for x in s["classification"]["seeds"] for a in x["attempts"] if a.get("valid") is False]
     L.append(f"1. **Acceptance first.** `check_paper_runs.py` ran on the host before any score (`{s['acceptance_file']}`). "
@@ -1014,52 +1236,48 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
              f"{len(bad)} other attempts fail A2.1 and stay out of every paper cell: " + _group_invalid(bad) + ".")
     L.append("2. **Budget B** is now set by script (A2.3). The primary B is the median end time of the valid runs that logged "
              "\"Exploration complete\"; fewer than 2 means the registered fallback. " + "; ".join(
-                 f"{sc}: B = {b[sc]['primary_s']:.4f} s ({b[sc]['primary_rule']}, {b[sc]['n_primary']} run(s)); 11-12 used {old_budgets[sc]:.4f} s"
+                 f"{sc}: B = {b[sc]['primary_s']:.4f} s ({b[sc]['primary_rule']}, {b[sc]['n_primary']} valid run(s)); 11-12 used {old_budgets[sc]:.4f} s"
                  for sc in SCENES) + ". "
              + ("No valid run stopped at a cap, so the second line (B with capped runs) equals the primary."
                 if not any(b[sc]["second_line_differs"] for sc in SCENES) else
                 "A capped run changes the second line; it is scored in `alt_B_with_capped/`."))
-    L.append("3. **C2** was computed and filed (`" + s["c2_file"] + "`) before any run was scored. 00853: " + fmt_c2(s["c2"]["00853"])
-             + " 00871: " + fmt_c2(s["c2"]["00871"]) + " " + DAMAGE_NOTE)
-    t = s["tours"]
-    L.append("4. **Tours.** Object nodes at stage 0 and at the end (every object node, as the frozen test counts them; the F1 count, "
-             "which leaves out doors, is in `c2_*.json`): " + "; ".join(
-                 f"`{k.split('/')[1]}` {v.get('object_nodes_first')} to {v.get('object_nodes_final')}"
-                 + (" (frozen)" if v.get("checker_frozen") else "") for k, v in sorted(t.items())) + ".")
+    L.append(f"3. **C2** was computed and filed (`{s['c2_file']}`) before any run was scored. "
+             + " ".join(f"{sc}: {fmt_c2(s['c2'][sc])}" for sc in SCENES) + " " + DAMAGE_NOTE)
+    L.append("4. **Tours.** The table below gives, for every tour, whether nvblox died, the \"Timeout! Did not find\" lines, "
+             "the last archived stop whose graph changed, and the object nodes at stage 0 and at the end (A2.4).")
+    pre = s.get("pre_queue", [])
     L.append("5. **Folders.** The queue renames an older attempt to `*_FAILED_ATTEMPT_HHMM` when the next one launches, and HHMM is that "
              "launch's time. The map is in `folder_map_*.json`. The laptop copy for this run is `runs_1113/` beside the 11-12 `runs/`, "
              "which stays as it was: in the old copy the folder `apr_00853_b` holds the old frozen tour, which on the host now sits in "
-             "`apr_00853_b_FAILED_ATTEMPT_1707`.")
+             "`apr_00853_b_FAILED_ATTEMPT_1707`." + "".join(" " + p["sentence"] for p in pre))
     g = s["ged"]
     L.append(f"6. **GED.** {len(g['reused'])} runs reuse their 11-12 GED, because their stage list (stage, path length, time) is equal. "
              f"{len(g['computed'])} runs were computed on the host. Recheck of reused values on the host: "
-             + (", ".join(f"`{r['run'].split('/')[1]}` max difference {r['max_abs_diff']:.3g} over {r['stages']} stages" for r in g["recheck"]) or "none")
+             + (", ".join(f"`{r['run'].split('/')[1]}` max difference {r['max_abs_diff']:.3g} over {r['stages']} stages" for r in g["recheck"]) or "not asked for")
              + ". Reuse goes by content, not by folder name, because the queue gives the plain name to the next attempt.")
-    d3, d7 = cmp_["00853"], cmp_["00871"]
-    L.append(f"7. **00853 against 11-12.** {d3['compared']} cells compared; {d3['identical']} identical, {len(d3['different'])} different"
-             + ("." if not d3["different"] else ": see `comparison_vs_1112.json`.") + f" B moved: {d3['b_changed']}."
-             + (" Nothing changed for 00853 (same five valid runs, same B, same reference), so its numbers are final and equal 11-12's."
-                if not d3["different"] and not d3["b_changed"] else ""))
-    L.append(f"8. **00871 against 11-12.** {d7['compared']} cells compared; {d7['identical']} identical, {len(d7['different'])} different. B moved: {d7['b_changed']}. "
-             + ("The inputs are the same as on 11-12 (one valid run, the fallback B, the same crashed attempts), so the numbers are the same, "
-                "and they are interim." if not d7["different"] and not d7["b_changed"] else "See `comparison_vs_1112.json`."))
-    L.append("")
-    L.append("## Budgets")
-    L.append("")
-    L.append("| Scene | Primary B (s) | Rule | Valid runs with \"Exploration complete\" | B with capped runs (s) | 11-12 B (s) |")
-    L.append("|---|---|---|---|---|---|")
+    for i, sc in enumerate(SCENES):
+        L.append(f"{7 + i}. **{sc} against 11-12.** " + scene_vs_1112(sc, cmp_, b, rows))
+    L += ["", "## Budgets", "",
+          "| Scene | Primary B (s) | Rule | Valid runs with \"Exploration complete\" | B with capped runs (s) | 11-12 B (s) |",
+          "|---|---|---|---|---|---|"]
     for sc in SCENES:
         L.append(f"| {sc} | {b[sc]['primary_s']:.4f} | {b[sc]['primary_rule']} | {b[sc]['n_primary']} | {b[sc]['with_capped_s']:.4f} | {old_budgets[sc]:.4f} |")
-    L.append("")
-    L.append("## Status of the two scenes")
-    L.append("")
+    L += ["", "## Tours (A2.4)", "",
+          "Object nodes count every object node, doors included, as the frozen test counts them (the F1 count, which leaves out doors, is in `c2_*.json`). "
+          "Frozen means the final graph0 holds the same object nodes as stage 0.", "", tour_table(s["tours"])]
+    L += ["", "## Status of the two scenes", ""]
     for sc in SCENES:
-        v = s["scene_state"][sc]
+        v = state[sc]
         if v["complete"]:
-            L.append(f"- **{sc}: final.**" + (
-                f" B moved from {old_budgets[sc]:.4f} s to {b[sc]['primary_s']:.4f} s, so every {sc} number in "
-                f"`results_paper_compare_1112/` is **superseded** by this folder." if cmp_[sc]["b_changed"] else
-                f" B did not move; the {sc} cells equal 11-12's."))
+            t = f"- **{sc}: final.**"
+            if cmp_[sc]["b_changed"]:
+                t += (f" B moved from {old_budgets[sc]:.4f} s to {b[sc]['primary_s']:.4f} s, so every {sc} number in "
+                      f"`results_paper_compare_1112/` is **superseded** by this folder.")
+            else:
+                t += " B did not move."
+            if b[sc]["primary_rule"] == "fallback":
+                t += (f" B stays at the fallback, {b[sc]['primary_s']:.4f} s, because only {b[sc]['n_primary']} valid run(s) exist (A2.3).")
+            L.append(t)
         else:
             wait = []
             if v["e7_pending"]:
@@ -1069,40 +1287,59 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
                 wait.append("the APR-b rerun")
             L.append(f"- **{sc}: interim, awaiting {' and '.join(wait)}.** B is " + (
                 "the registered fallback, from fewer than 2 valid runs. " if b[sc]["primary_rule"] == "fallback" else "set by the valid runs so far. ")
-                + "Every 00871 number in this folder is provisional. "
-                + ("The 00871 numbers in `results_paper_compare_1112/` are **superseded** as soon as B changes; until then they equal these."
-                   if not cmp_[sc]["b_changed"] else "The 00871 numbers in `results_paper_compare_1112/` are **superseded**: B changed."))
-    L.append("")
-    L.append("## Carried over from 11-12 (`results_paper_compare_1112/NOTES.md`)")
-    L.append("")
+                + f"Every {sc} number in this folder is provisional. "
+                + (f"The {sc} numbers in `results_paper_compare_1112/` are **superseded** as soon as B changes; until then they equal these."
+                   if not cmp_[sc]["b_changed"] else f"The {sc} numbers in `results_paper_compare_1112/` are **superseded**: B changed."))
+    L += ["", "## Carried over from 11-12 (`results_paper_compare_1112/NOTES.md`)", ""]
     L.append("- Item 1, order of the checks: C1-C5 were computed with the first scoring on 11-12 (deviation 42). Still true as history. This run files C2 first.")
-    L.append("- Item 2, C2 not valid: superseded for 00853 by the rerun above. Still open for 00871 until its APR-b rerun runs.")
+    c2s = s["c2"]
+    parts = []
+    for sc in SCENES:
+        st = c2s[sc]["status"]
+        parts.append({"compute": f"superseded for {sc} by its APR-b rerun (F1 {c2s[sc].get('f1') if c2s[sc].get('f1') is None else format(c2s[sc]['f1'], '.4f')})",
+                      "awaiting_rerun": f"still open for {sc} until its APR-b rerun runs",
+                      "in_progress": f"open for {sc}: its APR-b rerun is running",
+                      "not_computable_frozen_again": f"closed for {sc}: the rerun is frozen too, C2 is not computable, and there is no further attempt",
+                      }.get(st, f"{sc}: {st}"))
+    L.append("- Item 2, C2 not valid: " + "; ".join(parts) + ".")
     L.append("- Item 3, APR-a final graphs end about 60 s early: holds. APR-a is unchanged and stays the reference on both scenes.")
-    L.append("- Item 4, nvblox died partway through APR-a on both scenes and through APR-b on 00871: holds. The 00853 APR-b rerun is in the table above.")
+    died = sorted(k.split("/", 1)[1] for k, t in s["tours"].items() if t.get("nvblox_died_lines"))
+    L.append("- Item 4, nvblox died partway through some tours: the tour table above gives it per tour"
+             + (f" (died in {', '.join(died)})" if died else "") + ". APR-a is still used because the tours move on navmesh paths and Hydra kept growing the graph.")
     L.append("- Item 5, end times leave out the final leg: holds, and B uses the same rule for every run.")
-    L.append("- Item 6, the 853 100% cell covers 3 of 5 runs: holds while B is 632.1751 s; read the n in each cell.")
-    L.append("- Item 7, stages without a graph take the graph of the stage before: holds for the crashed first attempt of seed 44.")
-    L.append("- Item 8, GPU sharing: corrected by deviation 40. The first attempt of seed 42 launched under the 12 GB check. The third attempts launch under it too.")
+    L.append("- Item 6, the 853 100% cell covers 3 of 5 runs: " + (
+        f"holds while B is {b['00853']['primary_s']:.4f} s; read the n in each cell." if not cmp_["00853"]["b_changed"] else
+        "B moved for 853, so read the n in each cell again."))
+    cc = s.get("copy_check", {}).get("frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358", {}).get("equals_old_copy_folder")
+    L.append("- Item 7, stages without a graph take the graph of the stage before: holds for the crashed first attempt of seed 44 "
+             + ("(its folder is unchanged since 11-12)." if cc else "(check the copy check in `rescore_summary.json`)."))
+    L.append("- Item 8, GPU sharing: the Note to Amendment 2 corrects the statement (the first attempt of seed 42 launched under the 12 GB check), "
+             "and so does deviation 40. The third attempts were queued under the 12 GB check (deviation 45); this pipeline does not test the GPU at launch.")
     L.append("- Item 9, C1 floor area far off: holds. C1, C3, C4 and C5 depend on APR-a only and are not recomputed (`results_paper_compare_1112/c_checks.json`).")
     L.append("- The frontier clock finding (11-12 NOTES, last section): holds, unchanged.")
-    L.append("")
-    L.append("## When the third attempts land")
-    L.append("")
-    L.append("Run the same command. It reads the queue log, maps the folders, copies, recomputes B and C2, and computes GED only for runs "
-             "whose stage list has no 11-12 value. It refuses `--mode final` while an attempt is running or not yet launched. "
-             "Then the lead updates deviation 46 from `folder_map_*.md` and marks the 11-12 00871 numbers superseded.")
+    if pre:
+        L += ["", "## For the deviations file", ""] + [deviation_sentence(p) for p in pre]
+    if interim:
+        L += ["", "## When the third attempts land", "",
+              "Run the same command. It reads the queue log, maps the folders, copies, recomputes B and C2, and computes GED only for runs "
+              "whose stage list has no 11-12 value. It refuses `--mode final` while an attempt is running, not yet converted, or not yet launched. "
+              "Then the lead updates deviation 46 from `folder_map_*.md` and marks the 11-12 00871 numbers superseded."]
     return "\n".join(L) + "\n"
 
 
-def main(argv=None) -> int:
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--mode", choices=["auto", "interim", "final"], default="auto",
                     help="auto: final only when no attempt is pending; final refuses when one is")
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--no-copy", action="store_true", help="use the laptop copy as it is")
-    ap.add_argument("--ged-recheck", type=int, default=1,
-                    help="recompute this many reused GED runs on the host and compare (default 1)")
-    args = ap.parse_args(argv)
+    ap.add_argument("--ged-recheck", type=int, default=0,
+                    help="recompute this many reused GED runs on the host and compare (default 0: only when asked)")
+    return ap
+
+
+def main(argv=None) -> int:
+    args = build_parser().parse_args(argv)
     try:
         return run_pipeline(args)
     except HostError as e:

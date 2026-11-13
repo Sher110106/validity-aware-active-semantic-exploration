@@ -1,24 +1,11 @@
-{"t": "2026-11-13T19:09:13+05:30", "step": "acceptance", "file": "acceptance_20261113T190902.json", "sha256": "1a6226ef2ab37082c0009e1497def866c5f2f2c961ddf19b7d87c41a7ef83569", "n_runs": 20}
-{"t": "2026-11-13T19:09:13+05:30", "step": "folder_map", "pending": 5, "unmapped": 1}
-{"t": "2026-11-13T19:09:16+05:30", "step": "rsync_dry_run", "files": 2032, "list": "rsync_dryrun_20261113T190902.txt"}
-{"t": "2026-11-13T19:11:32+05:30", "step": "rsync", "files_listed": 2032, "files_sent": 2032, "moves": 0}
-{"t": "2026-11-13T19:11:33+05:30", "step": "copy_check", "folders": 19, "new_content": 1}
-{"t": "2026-11-13T19:11:33+05:30", "step": "c2", "file": "c2_20261113T190902.json", "sha256": "f068b3d61ee7ce223508b663a6aac4bcb45b00f132ca9d40fc12617335e42224", "status_00853": "compute", "status_00871": "awaiting_rerun", "f1_00853": 0.751131221719457, "f1_00871": null}
-{"t": "2026-11-13T19:11:33+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 809.084, "rule_00853": "median", "rule_00871": "fallback"}
-{"t": "2026-11-13T19:11:34+05:30", "step": "ged_host_start", "n_runs": 1, "runs": ["frontier_seeds/e7_00871_s45_frontier_end"]}
-{"t": "2026-11-13T19:11:46+05:30", "step": "ged_host_done", "n_runs": 1}
-{"t": "2026-11-13T19:11:46+05:30", "step": "ged_file", "reused": 14, "computed": 0, "recheck": "[{\"run\": \"frontier_seeds/e7_00871_s45_frontier_end\", \"stages\": 11, \"max_abs_diff\": 0.0}]"}
-{"t": "2026-11-13T19:11:58+05:30", "step": "score", "mode": "interim", "cells_diff_00853": 0, "cells_diff_00871": 0, "cells_same_00853": 162, "cells_same_00871": 243}
-{"t": "2026-11-13T19:11:58+05:30", "step": "done", "mode": "interim", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
-{"t": "2026-11-13T19:13:14+05:30", "step": "acceptance", "file": "acceptance_20261113T191301.json", "sha256": "1a6226ef2ab37082c0009e1497def866c5f2f2c961ddf19b7d87c41a7ef83569", "n_runs": 20}
-{"t": "2026-11-13T19:13:14+05:30", "step": "folder_map", "pending": 5, "unmapped": 1}
-{"t": "2026-11-13T19:13:17+05:30", "step": "rsync_dry_run", "files": 0, "list": "rsync_dryrun_20261113T191301.txt"}
-{"t": "2026-11-13T19:13:22+05:30", "step": "rsync", "files_listed": 0, "files_sent": 0, "moves": 0}
-{"t": "2026-11-13T19:13:22+05:30", "step": "copy_check", "folders": 19, "new_content": 1}
-{"t": "2026-11-13T19:13:23+05:30", "step": "c2", "file": "c2_20261113T191301.json", "sha256": "b6f511f08a7c4e8b1c5706ac869b1babdb882873ae127cab7a17d0314999c37a", "status_00853": "compute", "status_00871": "awaiting_rerun", "f1_00853": 0.751131221719457, "f1_00871": null}
-{"t": "2026-11-13T19:13:23+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 809.084, "rule_00853": "median", "rule_00871": "fallback"}
-{"t": "2026-11-13T19:13:25+05:30", "step": "ged_host_start", "n_runs": 1, "runs": ["frontier_seeds/e7_00871_s45_frontier_end"]}
-{"t": "2026-11-13T19:13:39+05:30", "step": "ged_host_done", "n_runs": 1}
-{"t": "2026-11-13T19:13:39+05:30", "step": "ged_file", "reused": 14, "computed": 0, "recheck": "[{\"run\": \"frontier_seeds/e7_00871_s45_frontier_end\", \"stages\": 11, \"max_abs_diff\": 0.0}]"}
-{"t": "2026-11-13T19:13:50+05:30", "step": "score", "mode": "interim", "cells_diff_00853": 0, "cells_diff_00871": 0, "cells_same_00853": 162, "cells_same_00871": 243}
-{"t": "2026-11-13T19:13:50+05:30", "step": "done", "mode": "interim", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
+{"t": "2026-11-13T19:40:58+05:30", "step": "acceptance", "file": "acceptance_20261113T194049.json", "sha256": "1a6226ef2ab37082c0009e1497def866c5f2f2c961ddf19b7d87c41a7ef83569", "n_runs": 20}
+{"t": "2026-11-13T19:40:58+05:30", "step": "folder_map", "pending": 5, "unmapped": 1}
+{"t": "2026-11-13T19:43:57+05:30", "step": "rsync", "folders_copied": 19, "files": 2032, "moves": 0, "list": "rsync_dryrun_20261113T194049.txt"}
+{"t": "2026-11-13T19:43:59+05:30", "step": "copy_check", "folders": 19, "new_content": 1}
+{"t": "2026-11-13T19:43:59+05:30", "step": "c2", "file": "c2_20261113T194049.json", "sha256": "4155b960b75258957fb8c34fc9c08468223c31410cfce23472d1195d6826d14c", "status_00853": "compute", "status_00871": "awaiting_rerun", "f1_00853": 0.751131221719457, "f1_00871": null}
+{"t": "2026-11-13T19:43:59+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 809.084, "rule_00853": "median", "rule_00871": "fallback"}
+{"t": "2026-11-13T19:44:00+05:30", "step": "ged_host_start", "n_runs": 1, "runs": ["frontier_seeds/e7_00871_s45_frontier_end"]}
+{"t": "2026-11-13T19:44:21+05:30", "step": "ged_host_done", "n_runs": 1}
+{"t": "2026-11-13T19:44:21+05:30", "step": "ged_file", "reused": 14, "computed": 0, "recheck": "[{\"run\": \"frontier_seeds/e7_00871_s45_frontier_end\", \"stages\": 11, \"max_abs_diff\": 0.0}]"}
+{"t": "2026-11-13T19:44:32+05:30", "step": "score", "mode": "interim", "cells_diff_00853": 0, "cells_diff_00871": 0, "cells_same_00853": 162, "cells_same_00871": 243}
+{"t": "2026-11-13T19:44:32+05:30", "step": "done", "mode": "interim", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}

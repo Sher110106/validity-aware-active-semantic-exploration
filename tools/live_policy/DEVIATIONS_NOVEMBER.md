@@ -62,3 +62,5 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - **The 2-of-8 view (§11).** The file names the paper's rule without defining it as a filter. The reading used is written in `semantic/README.md`.
     - **The prior that knows the house's size (§9).** The file does not say where the thirds are cut or how this form relates to the form with truly seen counts. Three sensitivity lines are reported: seen counts, size, and both.
     - **The room test on 4-member replays (§11).** "Before it is seen" needs later stages, which a replay of one stage does not have. The replay's count uses the states of the run the row came from.
+
+53. **11-06 17:01: a first launch of e7 853 seed 42 that made no stage.** The earlier e7 queue launched it beside another user's GPU job; nvblox ran out of GPU memory at start, and the run was stopped by hand at 17:15 (`runs/frontier_seeds/e7_queue.log` on the host; end-sem plan §B7). Its folder, `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom`, holds no stage graph and is in no row. Seed 42 of 853 is scored from its run of 11-09, which passes Amendment 2's test.

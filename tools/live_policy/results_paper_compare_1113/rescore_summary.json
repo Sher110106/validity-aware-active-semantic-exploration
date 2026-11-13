@@ -1,9 +1,9 @@
 {
- "written_at": "2026-11-13T19:13:50+05:30",
- "stamp": "20261113T191301",
+ "written_at": "2026-11-13T19:44:32+05:30",
+ "stamp": "20261113T194049",
  "mode": "interim",
- "acceptance_file": "acceptance_20261113T191301.json",
- "c2_file": "c2_20261113T191301.json",
+ "acceptance_file": "acceptance_20261113T194049.json",
+ "c2_file": "c2_20261113T194049.json",
  "scene_state": {
   "00853": {
    "e7_pending": [],
@@ -142,6 +142,8 @@
    "frozen_local": false,
    "attempt": 1,
    "launch_ts": "2026-11-09T19:51:21+05:30",
+   "waypoints_reached": 85,
+   "waypoints_listed": 85,
    "checker_frozen": false,
    "nvblox_died_lines": 1,
    "timeout_lines": 0,
@@ -158,6 +160,8 @@
    "frozen_local": true,
    "attempt": 1,
    "launch_ts": "2026-11-09T21:57:15+05:30",
+   "waypoints_reached": 85,
+   "waypoints_listed": 85,
    "checker_frozen": true,
    "nvblox_died_lines": 0,
    "timeout_lines": 18,
@@ -174,6 +178,8 @@
    "frozen_local": false,
    "attempt": 2,
    "launch_ts": "2026-11-13T17:07:41+05:30",
+   "waypoints_reached": 85,
+   "waypoints_listed": 85,
    "checker_frozen": false,
    "nvblox_died_lines": 0,
    "timeout_lines": 0,
@@ -190,6 +196,8 @@
    "frozen_local": false,
    "attempt": 1,
    "launch_ts": "2026-11-09T21:06:24+05:30",
+   "waypoints_reached": 66,
+   "waypoints_listed": 66,
    "checker_frozen": false,
    "nvblox_died_lines": 1,
    "timeout_lines": 7,
@@ -206,6 +214,8 @@
    "frozen_local": true,
    "attempt": 1,
    "launch_ts": "2026-11-09T23:01:47+05:30",
+   "waypoints_reached": 66,
+   "waypoints_listed": 66,
    "checker_frozen": true,
    "nvblox_died_lines": 1,
    "timeout_lines": 14,
@@ -812,5 +822,19 @@
  ],
  "skips": {
   "apr/apr_00871_a": 1
- }
+ },
+ "pre_queue": [
+  {
+   "folder": "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom",
+   "scene": "00853",
+   "seed": 42,
+   "oom_lines": 2,
+   "nvblox_died_lines": 1,
+   "graph_stages": 0,
+   "sentence": "The folder `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom` holds an attempt from before the queue log (11-06) that made no stage graph: its roslaunch.log shows 2 out-of-memory line(s) and 1 line(s) saying nvblox_node died. The queue log has no launch line for it, so it is in no row. Seed 42 of 00853 is scored from its later attempt."
+  }
+ ],
+ "deviation_sentences": [
+  "**11-06: an attempt of e7 00853 seed 42 that made no stage.** The folder `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom` holds an attempt from before the queue log (11-06) that made no stage graph: its roslaunch.log shows 2 out-of-memory line(s) and 1 line(s) saying nvblox_node died. The queue log has no launch line for it, so it is in no row. Seed 42 of 00853 is scored from its later attempt."
+ ]
 }

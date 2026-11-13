@@ -66,15 +66,19 @@ LOG = """\
 2026-11-09T21:01:24+05:30 restarted (by hand: apr:00871:a was skipped) with: apr:00871:a
 2026-11-09T21:06:24+05:30 launch apr/apr_00871_a (mem 101 GB, disk 45 GB, GPU free 5250 MB)
 2026-11-09T21:51:42+05:30 finished apr/apr_00871_a: exploration_complete at 124.6 m
+2026-11-09T21:52:14+05:30 converted 5 stages of apr/apr_00871_a and compressed their DSG
 2026-11-09T21:57:15+05:30 launch apr/apr_00853_b (mem 101 GB)
 2026-11-09T22:56:39+05:30 finished apr/apr_00853_b: exploration_complete at 183.3 m
 2026-11-09T23:01:47+05:30 launch apr/apr_00871_b (mem 98 GB)
 2026-11-09T23:48:06+05:30 finished apr/apr_00871_b: exploration_complete at 137.1 m
+2026-11-09T23:48:14+05:30 converted 2 stages of apr/apr_00871_b and compressed their DSG
 2026-11-09T16:25:07+05:30 launch apr/dryrun_apr_00853_a_3wp (mem 109 GB)
 2026-11-10T12:13:42+05:30 launch frontier_seeds/e7_00871_s42_frontier_end (mem 102 GB)
 2026-11-10T13:05:58+05:30 finished frontier_seeds/e7_00871_s42_frontier_end: stalled: no new stage for 20 min at 57.6 m
+2026-11-10T13:08:39+05:30 converted 40 stages of frontier_seeds/e7_00871_s42_frontier_end and compressed their DSG
 2026-11-13T17:07:41+05:30 launch apr/apr_00853_b (mem 100 GB)
 2026-11-13T18:04:00+05:30 finished apr/apr_00853_b: exploration_complete at 183.3 m
+2026-11-13T18:04:54+05:30 converted 10 stages of apr/apr_00853_b and compressed their DSG
 """
 
 EXISTING = {"apr/apr_00871_a", "apr/apr_00853_b", "apr/apr_00853_b_FAILED_ATTEMPT_1707", "apr/apr_00871_b",
@@ -85,7 +89,7 @@ EXISTING = {"apr/apr_00871_a", "apr/apr_00853_b", "apr/apr_00853_b_FAILED_ATTEMP
 
 def test_parse_drops_noise_and_hand_restart_lines():
     ev = rp.parse_queue_log(LOG)
-    assert {e["kind"] for e in ev} == {"launch", "finished", "skip"}
+    assert {e["kind"] for e in ev} == {"launch", "finished", "skip", "converted"}
     assert not any("restarted" in e["name"] for e in ev)
     fin = [e for e in ev if e["kind"] == "finished"][0]
     assert fin["name"] == "frontier_seeds/e7_00871_s42_frontier_end" and fin["rest"].startswith("host_memory_stop")
@@ -119,7 +123,8 @@ def test_unclaimed_folder_is_reported_not_guessed():
 
 def test_third_launch_moves_attempt_two_aside_and_takes_the_plain_name():
     log = LOG + ("2026-11-14T09:00:10+05:30 launch frontier_seeds/e7_00871_s42_frontier_end (mem 100 GB)\n"
-                 "2026-11-14T10:20:00+05:30 finished frontier_seeds/e7_00871_s42_frontier_end: exploration_complete at 150 m\n")
+                 "2026-11-14T10:20:00+05:30 finished frontier_seeds/e7_00871_s42_frontier_end: exploration_complete at 150 m\n"
+                 "2026-11-14T10:24:00+05:30 converted 50 stages of frontier_seeds/e7_00871_s42_frontier_end and compressed their DSG\n")
     existing = EXISTING | {"frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_0900"}
     fm = rp.folder_map(rp.parse_queue_log(log), existing)
     s42 = fm["attempts"]["frontier_seeds/e7_00871_s42_frontier_end"]
@@ -174,7 +179,8 @@ def e7_table(*pairs):
         for i, (ts, reason) in enumerate(atts):
             lines.append(f"{ts} launch {name} (x)")
             if reason:
-                lines.append(f"{ts[:11]}23:59:00+05:30 finished {name}: {reason}")
+                lines.append(f"{ts[:11]}23:58:00+05:30 finished {name}: {reason}")
+                lines.append(f"{ts[:11]}23:59:00+05:30 converted 9 stages of {name} and compressed their DSG")
         for i in range(len(atts) - 1):
             existing.add(f"{name}_FAILED_ATTEMPT_{atts[i + 1][0][11:13]}{atts[i + 1][0][14:16]}")
         existing.add(name)
@@ -461,3 +467,316 @@ def test_notes_mark_interim_and_say_when_old_numbers_are_superseded():
     final = rp.write_notes(_summary(True), _cmp(True), old, None)
     assert "**00871: final.** B moved from 809.0840 s to 1300.0000 s" in final and "superseded" in final
     assert "not computable: the rerun is frozen too" in final
+
+
+# =====================================================================================
+# Review round: items 1-8
+# =====================================================================================
+
+import shlex  # noqa: E402
+
+APRB_LOG = """\
+2026-11-09T23:01:47+05:30 launch apr/apr_00871_b (mem 98 GB)
+2026-11-09T23:48:06+05:30 finished apr/apr_00871_b: exploration_complete at 137.1 m
+2026-11-09T23:48:14+05:30 converted 2 stages of apr/apr_00871_b and compressed their DSG (disk 43 GB free)
+2026-11-14T09:00:10+05:30 launch apr/apr_00871_b (mem 100 GB)
+"""
+APRB_EXISTING = {"apr/apr_00871_b", "apr/apr_00871_b_FAILED_ATTEMPT_0900"}
+
+
+# --- 1. C2 while the rerun runs ---------------------------------------------------
+
+def test_c2_while_the_last_tour_attempt_runs_is_in_progress_not_frozen_again():
+    fm = rp.folder_map(rp.parse_queue_log(APRB_LOG), APRB_EXISTING)
+    att = fm["attempts"]["apr/apr_00871_b"]
+    assert att[-1]["status"] == "in_progress"
+    acc_by = {"apr/apr_00871_b_FAILED_ATTEMPT_0900": {"frozen": True, "meets_80_percent_rule": True},
+              "apr/apr_00871_b": {"frozen": True, "meets_80_percent_rule": True}}
+    st = rp.c2_status(att, acc_by)
+    assert st["status"] == "in_progress"
+    text = rp.fmt_c2(st)
+    assert "frozen" not in text and "running" in text
+
+
+def test_c2_after_the_rerun_finished_and_converted_reads_the_rerun():
+    log = APRB_LOG + ("2026-11-14T10:00:00+05:30 finished apr/apr_00871_b: exploration_complete at 137 m\n"
+                      "2026-11-14T10:00:09+05:30 converted 66 stages of apr/apr_00871_b and compressed their DSG\n")
+    att = rp.folder_map(rp.parse_queue_log(log), APRB_EXISTING)["attempts"]["apr/apr_00871_b"]
+    ok = {"apr/apr_00871_b": {"frozen": False, "meets_80_percent_rule": True}}
+    assert rp.c2_status(att, ok)["status"] == "compute"
+
+
+# --- finished but not yet converted ------------------------------------------------
+
+def test_a_finished_attempt_whose_yaml_is_not_converted_yet_is_still_open():
+    log = ("2026-11-09T10:00:00+05:30 launch frontier_seeds/e7_00871_s42_frontier_end (x)\n"
+           "2026-11-09T11:00:00+05:30 finished frontier_seeds/e7_00871_s42_frontier_end: exploration_complete at 100 m\n")
+    fm = rp.folder_map(rp.parse_queue_log(log), {"frontier_seeds/e7_00871_s42_frontier_end"})
+    a = fm["attempts"]["frontier_seeds/e7_00871_s42_frontier_end"][0]
+    assert a["status"] == "converting" and rp.is_open(a)
+    c = rp.classify(fm["attempts"], {"runs": [acc("frontier_seeds/e7_00871_s42_frontier_end")]})
+    assert c["rows"] == {} and c["seeds"][0]["state"] == "pending"
+    done = log + "2026-11-09T11:03:00+05:30 converted 40 stages of frontier_seeds/e7_00871_s42_frontier_end and compressed their DSG\n"
+    a2 = rp.folder_map(rp.parse_queue_log(done), {"frontier_seeds/e7_00871_s42_frontier_end"})["attempts"][
+        "frontier_seeds/e7_00871_s42_frontier_end"][0]
+    assert a2["status"] == "finished" and not rp.is_open(a2)
+
+
+# --- 2. an earlier attempt never counts --------------------------------------------
+
+def three(t3_reason, converted=True):
+    name = N871
+    lines = [f"2026-11-09T10:00:00+05:30 launch {name} (x)", f"2026-11-09T11:00:00+05:30 finished {name}: stalled",
+             f"2026-11-09T11:03:00+05:30 converted 5 stages of {name} and compressed",
+             f"2026-11-10T10:00:00+05:30 launch {name} (x)", f"2026-11-10T11:00:00+05:30 finished {name}: exploration_complete at 90 m",
+             f"2026-11-10T11:03:00+05:30 converted 5 stages of {name} and compressed",
+             f"2026-11-13T20:00:00+05:30 launch {name} (x)"]
+    if t3_reason:
+        lines += [f"2026-11-13T21:00:00+05:30 finished {name}: {t3_reason}"]
+        if converted:
+            lines += [f"2026-11-13T21:03:00+05:30 converted 9 stages of {name} and compressed"]
+    existing = {name, f"{name}_FAILED_ATTEMPT_1000", f"{name}_FAILED_ATTEMPT_2000"}
+    return rp.folder_map(rp.parse_queue_log("\n".join(lines)), existing)["attempts"]
+
+
+def three_acc(a3):
+    return {"runs": [acc(f"{N871}_FAILED_ATTEMPT_1000", False, 1, 1), acc(f"{N871}_FAILED_ATTEMPT_2000"), a3]}
+
+
+def test_valid_second_attempt_does_not_count_while_the_third_runs():
+    c = rp.classify(three(None), three_acc(acc(N871, False, 0, 0, False)))
+    assert "frontier_end" not in c["rows"] and c["seeds"][0]["counted"] is None and c["seeds"][0]["state"] == "pending"
+    # the valid second attempt is in no row: it is not crashed, and it does not count
+    assert f"{N871}_FAILED_ATTEMPT_2000" not in [f for rows in c["rows"].values() for _, f in rows]
+
+
+def test_valid_second_attempt_does_not_take_the_place_of_an_invalid_third():
+    c = rp.classify(three("stalled"), three_acc(acc(N871, False, 1, 1)))
+    assert c["seeds"][0]["state"] == "missing" and c["seeds"][0]["counted"] is None
+    assert "frontier_end" not in c["rows"]
+    assert c["rows"]["crashed_frontier_3rd"] == [("00871", N871)]
+
+
+def test_a_valid_third_attempt_counts_and_the_valid_second_stays_out():
+    c = rp.classify(three("exploration_complete at 100 m"), three_acc(acc(N871)))
+    assert c["rows"]["frontier_end"] == [("00871", N871)] and c["seeds"][0]["counted"] == 3
+    assert f"{N871}_FAILED_ATTEMPT_2000" not in [f for rows in c["rows"].values() for _, f in rows]
+
+
+# --- 3. the copy race ---------------------------------------------------------------
+
+def _state(extra=()):
+    return (rp.parse_queue_log(APRB_LOG + "".join(extra)), set(APRB_EXISTING))
+
+
+def test_state_key_changes_on_a_launch_a_finish_or_a_rename():
+    base = rp.state_key(*_state())
+    assert rp.state_key(*_state()) == base
+    fin = ["2026-11-14T10:00:00+05:30 finished apr/apr_00871_b: exploration_complete at 137 m\n"]
+    assert rp.state_key(*_state(fin)) != base
+    ev, ex = _state()
+    assert rp.state_key(ev, ex | {"apr/apr_00871_b_FAILED_ATTEMPT_1000"}) != base
+
+
+def _fake_rsync(files):
+    def run(cmd, dry):
+        dest = cmd[-1]
+        if dry:
+            return type("P", (), {"returncode": 0, "stdout": "Transfer starting: 1 files\n" + "\n".join(files) + "\n", "stderr": ""})()
+        import pathlib
+        for f in files:
+            p = pathlib.Path(dest) / f
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text("NEW")
+        return type("P", (), {"returncode": 0, "stdout": "\n".join(files) + "\n", "stderr": ""})()
+    return run
+
+
+def test_a_change_during_the_copy_stops_and_leaves_the_local_copy_untouched(tmp_path, monkeypatch):
+    monkeypatch.setattr(rp, "NEW_COPY", tmp_path)
+    folder = "apr/apr_00871_b"
+    local = tmp_path / folder / "stages" / "0"
+    local.mkdir(parents=True)
+    (local / "navigation_stats.json").write_text("OLD")
+    (tmp_path / folder / ".rescore_attempt.json").write_text(json.dumps({"name": folder, "launch_ts": "T0"}))
+    before = _state()
+    changed = _state(["2026-11-14T10:00:00+05:30 finished apr/apr_00871_b: exploration_complete at 1 m\n"])
+    attempts = {folder: [{"name": folder, "attempt": 1, "launch_ts": "T0", "folder": folder}]}
+    with pytest.raises(rp.HostError, match="changed during the copy"):
+        rp.copy_settled([folder], attempts, "S", before, lambda: changed,
+                        _fake_rsync([f"{folder}/stages/0/navigation_stats.json"]))
+    assert (local / "navigation_stats.json").read_text() == "OLD"      # nothing merged
+    assert not (tmp_path / "_incoming_S").exists()
+
+
+def test_a_quiet_copy_merges_the_staged_folder_and_writes_the_marker(tmp_path, monkeypatch):
+    monkeypatch.setattr(rp, "NEW_COPY", tmp_path)
+    folder = "apr/apr_00871_b"
+    attempts = {folder: [{"name": folder, "attempt": 1, "launch_ts": "T0", "folder": folder}]}
+    before = _state()
+    files = rp.copy_settled([folder], attempts, "S", before, lambda: _state(),
+                            _fake_rsync([f"{folder}/stages/0/navigation_stats.json"]))
+    assert files == [f"{folder}/stages/0/navigation_stats.json"]
+    assert (tmp_path / folder / "stages" / "0" / "navigation_stats.json").read_text() == "NEW"
+    assert json.loads((tmp_path / folder / ".rescore_attempt.json").read_text())["settled"] is True
+    assert not (tmp_path / "_incoming_S").exists()
+
+
+def test_settled_local_folders_are_not_copied_again(tmp_path, monkeypatch):
+    monkeypatch.setattr(rp, "NEW_COPY", tmp_path)
+    f = tmp_path / "apr" / "a"
+    f.mkdir(parents=True)
+    (f / ".rescore_attempt.json").write_text(json.dumps({"launch_ts": "T0", "settled": True}))
+    att = {"apr/a": [{"name": "apr/a", "attempt": 1, "launch_ts": "T0", "folder": "apr/a", "status": "finished"}]}
+    assert rp.folders_to_copy(att) == []
+    (f / ".rescore_attempt.json").write_text(json.dumps({"launch_ts": "T0"}))       # an older marker, no "settled"
+    assert rp.folders_to_copy(att) == ["apr/a"]
+
+
+def test_open_attempts_are_never_in_the_copy_list(tmp_path, monkeypatch):
+    monkeypatch.setattr(rp, "NEW_COPY", tmp_path)
+    fm = rp.folder_map(rp.parse_queue_log(APRB_LOG), APRB_EXISTING)
+    assert rp.folders_to_copy(fm["attempts"]) == ["apr/apr_00871_b_FAILED_ATTEMPT_0900"]
+
+
+# --- 4. the attempt from before the queue log ------------------------------------
+
+def test_pre_queue_attempt_is_described_from_its_acceptance_entry():
+    folder = "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom"
+    d = rp.describe_unmapped(folder, acc(folder, complete=False, oom=2, died=1, differs=None, n_stages_with_graph=0))
+    assert d["scene"] == "00853" and d["seed"] == 42 and d["graph_stages"] == 0
+    assert "no stage" in d["sentence"] and "e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom" in d["sentence"]
+    assert "2 out-of-memory" in d["sentence"] and "in no row" in d["sentence"]
+
+
+# --- 6. the tour table --------------------------------------------------------------
+
+TOURS = {"apr/apr_00853_b_FAILED_ATTEMPT_1707": {"attempt": 1, "object_nodes_first": 2, "object_nodes_final": 2,
+                                                  "checker_frozen": True, "nvblox_died_lines": 0, "timeout_lines": 18,
+                                                  "last_stop_whose_graph_changed": None, "waypoints_reached": 85, "waypoints_listed": 85},
+         "apr/apr_00853_b": {"attempt": 2, "object_nodes_first": 4, "object_nodes_final": 117, "checker_frozen": False,
+                             "nvblox_died_lines": 0, "timeout_lines": 0, "last_stop_whose_graph_changed": 85,
+                             "waypoints_reached": 85, "waypoints_listed": 85}}
+
+
+def test_tour_table_has_every_a2_4_column_for_every_tour():
+    t = rp.tour_table(TOURS)
+    assert "nvblox died" in t and "Timeout" in t and "Last stop" in t and "stage 0" in t
+    assert "| `apr_00853_b_FAILED_ATTEMPT_1707` | 1 | yes | no | 18 | none | 2 | 2 | 85/85 |" in t
+    assert "| `apr_00853_b` | 2 | no | no | 0 | 85 | 4 | 117 | 85/85 |" in t
+
+
+# --- 5. NOTES in final mode ---------------------------------------------------------
+
+def _final(third_valid):
+    """A summary and comparison for a state where all four 871 third attempts have run."""
+    rows = {"frontier_end": [("00871", "frontier_seeds/e7_00871_s46_frontier_end")],
+            "crashed_frontier_1st": [("00871", f"frontier_seeds/e7_00871_s{s}_frontier_end_FAILED_ATTEMPT_1000") for s in (42, 43, 44, 45)],
+            "crashed_frontier_rerun": [("00871", f"frontier_seeds/e7_00871_s{s}_frontier_end_FAILED_ATTEMPT_2000") for s in (42, 43, 44, 45)]}
+    seeds = []
+    for s, ok in zip((42, 43, 44, 45), third_valid):
+        name = f"frontier_seeds/e7_00871_s{s}_frontier_end"
+        seeds.append({"name": name, "counted": 3 if ok else None, "attempts": [
+            {"attempt": 1, "valid": False, "why_invalid": ["oom"]}, {"attempt": 2, "valid": False, "why_invalid": ["oom"]},
+            {"attempt": 3, "valid": ok, "why_invalid": [] if ok else ["oom"]}]})
+        rows.setdefault("frontier_end" if ok else "crashed_frontier_3rd", []).append(("00871", name))
+    n_valid = 1 + sum(third_valid)
+    moved = n_valid >= 2
+    b871 = {"primary_s": 1300.0 if moved else 809.084, "primary_rule": "median" if moved else "fallback", "n_primary": n_valid,
+            "with_capped_s": 1300.0 if moved else 809.084, "second_line_differs": False}
+    b853 = {"primary_s": 632.0, "primary_rule": "median", "n_primary": 5, "with_capped_s": 632.0, "second_line_differs": False}
+    s = {"mode": "final", "written_at": "t", "acceptance_file": "a.json", "c2_file": "c.json",
+         "classification": {"seeds": seeds, "rows": rows}, "budgets": {"00853": b853, "00871": b871},
+         "c2": {"00853": {"status": "compute", "f1": 0.75, "precision": 0.75, "recall": 0.75, "n_objects_apr_a": 10,
+                          "n_objects_apr_b": 10, "nvblox_died_lines": 0, "below_0_90": True},
+                "00871": {"status": "compute", "f1": 0.95, "precision": 0.95, "recall": 0.95, "n_objects_apr_a": 10,
+                          "n_objects_apr_b": 10, "nvblox_died_lines": 1, "below_0_90": False}},
+         "tours": TOURS, "ged": {"reused": [], "computed": [], "recheck": []}, "copy_check": {},
+         "pre_queue": [], "alt_B_scored": False,
+         "scene_state": {sc: {"complete": True, "e7_pending": [], "tours_pending": []} for sc in rp.SCENES}}
+    new_cells = [["00871", "crashed_frontier_3rd", "apr", "B", "50"]] * (4 - sum(third_valid))
+    cmp_ = {"00853": {"compared": 10, "identical": 10, "different": [], "only_in_1112": [], "only_in_1113": [], "b_changed": False},
+            "00871": {"compared": 10, "identical": 4 if moved else 10, "different": [{"cell": "x", "diffs": []}] if moved else [],
+                      "only_in_1112": [], "only_in_1113": new_cells, "b_changed": moved}}
+    return s, cmp_
+
+
+OLD_B = {"00853": 632.0, "00871": 809.084}
+
+
+def _lines(text, scene="00871"):
+    return [l for l in text.splitlines() if scene in l]
+
+
+@pytest.mark.parametrize("third", [[True] * 4, [True, False, True, False]])
+def test_final_notes_when_third_attempts_moved_b(third):
+    s, c = _final(third)
+    text = rp.write_notes(s, c, OLD_B, None)
+    assert "## When the third attempts land" not in text
+    assert "awaiting" not in text and "still open" not in text and "Every 00871 number in this folder is provisional" not in text
+    assert "**00871: final.** B moved from 809.0840 s to 1300.0000 s" in text and "superseded" in text
+    assert "C2 for 00871 is" in text or "F1 0.9500" in text            # C2 on the rerun is reported
+    assert "the same crashed attempts" not in text and "equal 11-12's" not in text.split("## Carried over")[0].split("00871 against 11-12")[1]
+
+
+def test_final_notes_when_no_third_attempt_is_valid_say_what_is_true():
+    s, c = _final([False] * 4)
+    text = rp.write_notes(s, c, OLD_B, None)
+    body = text.split("00871 against 11-12.")[1].split("\n")[0]
+    assert "B did not move" in body and "crashed_frontier_3rd" in body and "4 new cells" in body
+    assert "the same crashed attempts" not in text and "equal 11-12's" not in body
+    assert "## When the third attempts land" not in text and "awaiting" not in text
+    assert "B stays at the fallback" in text
+    assert "superseded" not in text.split("## Status of the two scenes")[1].split("## Carried over")[0]
+
+
+def test_final_notes_gpu_item_cites_the_note_to_amendment_2():
+    s, c = _final([True] * 4)
+    text = rp.write_notes(s, c, OLD_B, None)
+    assert "Note to Amendment 2" in text.split("Item 8")[1].split("\n")[0]
+
+
+def test_notes_carry_the_tour_table_and_the_pre_queue_attempt():
+    s, c = _final([True] * 4)
+    s["pre_queue"] = [{"folder": "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom", "scene": "00853", "seed": 42,
+                       "oom_lines": 2, "nvblox_died_lines": 1, "graph_stages": 0, "sentence": "S-PRE-QUEUE"}]
+    text = rp.write_notes(s, c, OLD_B, None)
+    assert "| Tour folder |" in text and "S-PRE-QUEUE" in text
+
+
+def test_interim_notes_do_not_say_a_running_rerun_is_frozen():
+    s = _summary(False)
+    s["c2"]["00871"] = {"status": "in_progress", "f1": None}
+    text = rp.write_notes(s, _cmp(False), {"00853": 632.0, "00871": 809.084}, None)
+    assert "rerun is frozen too" not in text and "00871: not computed: the APR-b rerun is running" in text
+
+
+# --- 8. GED job handling -------------------------------------------------------------
+
+def test_ged_skips_a_run_without_stages_and_never_sends_it_to_the_host():
+    pool = ged_pool([])
+    w = [{"folder": "frontier_seeds/e7_00871_s42_frontier_end", "scene": "00871", "path": "p"}]
+    reuse, compute = rp.plan_ged(w, pool, lambda p: [])
+    assert reuse == [] and compute == []
+
+
+def test_ged_host_job_is_started_detached_with_pid_and_rc_files():
+    script = rp.ged_host_script(["apr:00853=/workspace/x.yaml"], ["/workspace/runs/apr/a=00853"], "T1")
+    assert "paper_ged_new_1113_T1.pid" in script and "paper_ged_new_1113_T1.rc" in script
+    cmd = rp.ged_start_cmd(script)
+    parts = shlex.split(cmd)
+    assert parts[:3] == ["docker", "exec", "-d"] and parts[-1] == script and parts[-2] == "-c"
+
+
+def test_ged_state_is_read_from_rc_and_process_not_guessed():
+    assert rp.parse_ged_state("RC 0\n") == ("done", 0)
+    assert rp.parse_ged_state("RC 3\n") == ("done", 3)
+    assert rp.parse_ged_state("RUNNING\n") == ("running", None)
+    assert rp.parse_ged_state("DEAD\n") == ("dead", None)
+    assert rp.parse_ged_state("NOTSTARTED\n") == ("notstarted", None)
+    assert "paper_ged_new_1113_T1.rc" in rp.ged_state_cmd("T1")
+
+
+def test_recheck_runs_only_when_asked():
+    assert rp.build_parser().parse_args([]).ged_recheck == 0
+    assert rp.build_parser().parse_args(["--ged-recheck", "2"]).ged_recheck == 2
