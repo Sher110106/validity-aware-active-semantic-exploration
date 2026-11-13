@@ -1,0 +1,816 @@
+{
+ "written_at": "2026-11-13T19:13:50+05:30",
+ "stamp": "20261113T191301",
+ "mode": "interim",
+ "acceptance_file": "acceptance_20261113T191301.json",
+ "c2_file": "c2_20261113T191301.json",
+ "scene_state": {
+  "00853": {
+   "e7_pending": [],
+   "tours_pending": [],
+   "complete": true
+  },
+  "00871": {
+   "e7_pending": [
+    "frontier_seeds/e7_00871_s42_frontier_end",
+    "frontier_seeds/e7_00871_s43_frontier_end",
+    "frontier_seeds/e7_00871_s44_frontier_end",
+    "frontier_seeds/e7_00871_s45_frontier_end"
+   ],
+   "tours_pending": [
+    "apr/apr_00871_b"
+   ],
+   "complete": false
+  }
+ },
+ "pending": [
+  {
+   "name": "apr/apr_00871_b",
+   "why": "1 of 2 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s42_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s43_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s44_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s45_frontier_end",
+   "why": "2 of 3 attempts launched"
+  }
+ ],
+ "budgets": {
+  "00853": {
+   "scene": "00853",
+   "primary_s": 632.1750566959381,
+   "primary_rule": "median",
+   "n_primary": 5,
+   "primary_runs": [
+    "frontier_seeds/e7_00853_s42_frontier_end",
+    "frontier_seeds/e7_00853_s43_frontier_end",
+    "frontier_seeds/e7_00853_s44_frontier_end",
+    "frontier_seeds/e7_00853_s45_frontier_end",
+    "frontier_seeds/e7_00853_s46_frontier_end"
+   ],
+   "with_capped_s": 632.1750566959381,
+   "with_capped_rule": "median",
+   "n_with_capped": 5,
+   "capped_runs": [],
+   "fallback_s": 632.1256,
+   "second_line_differs": false,
+   "end_times_s": {
+    "frontier_seeds/e7_00853_s42_frontier_end": 629.1769733428955,
+    "frontier_seeds/e7_00853_s43_frontier_end": 867.5785331726074,
+    "frontier_seeds/e7_00853_s44_frontier_end": 632.1750566959381,
+    "frontier_seeds/e7_00853_s45_frontier_end": 739.2068409919739,
+    "frontier_seeds/e7_00853_s46_frontier_end": 611.8250911235809
+   },
+   "b_1112_s": 632.1750566959381
+  },
+  "00871": {
+   "scene": "00871",
+   "primary_s": 809.084,
+   "primary_rule": "fallback",
+   "n_primary": 1,
+   "primary_runs": [
+    "frontier_seeds/e7_00871_s46_frontier_end"
+   ],
+   "with_capped_s": 809.084,
+   "with_capped_rule": "fallback",
+   "n_with_capped": 1,
+   "capped_runs": [],
+   "fallback_s": 809.084,
+   "second_line_differs": false,
+   "end_times_s": {
+    "frontier_seeds/e7_00871_s46_frontier_end": 1263.4898099899292
+   },
+   "b_1112_s": 809.084
+  }
+ },
+ "c2": {
+  "00853": {
+   "folder": "apr/apr_00853_b",
+   "attempt": 2,
+   "frozen": false,
+   "meets_80_percent_rule": true,
+   "nvblox_died_lines": 0,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 85,
+   "objects_first": 4,
+   "objects_final": 117,
+   "status": "compute",
+   "apr_a_graph": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00853_a/stages/85/habitat_scene_graph_original_graph0.yaml",
+   "apr_b_graph": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00853_b/stages/85/habitat_scene_graph_original_graph0.yaml",
+   "apr_a_sha256": "f2be70ffafbdc5c24a2d0e54742f7916e90307160ba3061863d5fa25ce6d67ef",
+   "apr_b_sha256": "5239dd527e17b70a1f8e41377ccb6df6a374bf47334dd7230b63e2abdf8a145f",
+   "f1": 0.751131221719457,
+   "precision": 0.7545454545454545,
+   "recall": 0.7477477477477478,
+   "n_objects_apr_a": 111,
+   "n_objects_apr_b": 110,
+   "below_0_90": true,
+   "reading": "below 0.90: the reference moves by more than the paper's margins (2.7-7.9 points), but this C2 also holds APR-a's damage"
+  },
+  "00871": {
+   "folder": "apr/apr_00871_b",
+   "attempt": 1,
+   "frozen": true,
+   "meets_80_percent_rule": true,
+   "nvblox_died_lines": 1,
+   "timeout_lines": 14,
+   "last_stop_whose_graph_changed": null,
+   "objects_first": 4,
+   "objects_final": 4,
+   "status": "awaiting_rerun",
+   "f1": null
+  }
+ },
+ "tours": {
+  "apr/apr_00853_a": {
+   "first_stage": 0,
+   "final_stage": 85,
+   "object_nodes_first": 5,
+   "object_nodes_final": 118,
+   "f1_objects_first": 5,
+   "f1_objects_final": 111,
+   "frozen_local": false,
+   "attempt": 1,
+   "launch_ts": "2026-11-09T19:51:21+05:30",
+   "checker_frozen": false,
+   "nvblox_died_lines": 1,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 85,
+   "meets_80_percent_rule": true
+  },
+  "apr/apr_00853_b_FAILED_ATTEMPT_1707": {
+   "first_stage": 0,
+   "final_stage": 85,
+   "object_nodes_first": 2,
+   "object_nodes_final": 2,
+   "f1_objects_first": 2,
+   "f1_objects_final": 2,
+   "frozen_local": true,
+   "attempt": 1,
+   "launch_ts": "2026-11-09T21:57:15+05:30",
+   "checker_frozen": true,
+   "nvblox_died_lines": 0,
+   "timeout_lines": 18,
+   "last_stop_whose_graph_changed": null,
+   "meets_80_percent_rule": true
+  },
+  "apr/apr_00853_b": {
+   "first_stage": 0,
+   "final_stage": 85,
+   "object_nodes_first": 4,
+   "object_nodes_final": 117,
+   "f1_objects_first": 4,
+   "f1_objects_final": 110,
+   "frozen_local": false,
+   "attempt": 2,
+   "launch_ts": "2026-11-13T17:07:41+05:30",
+   "checker_frozen": false,
+   "nvblox_died_lines": 0,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 85,
+   "meets_80_percent_rule": true
+  },
+  "apr/apr_00871_a": {
+   "first_stage": 0,
+   "final_stage": 66,
+   "object_nodes_first": 3,
+   "object_nodes_final": 117,
+   "f1_objects_first": 3,
+   "f1_objects_final": 103,
+   "frozen_local": false,
+   "attempt": 1,
+   "launch_ts": "2026-11-09T21:06:24+05:30",
+   "checker_frozen": false,
+   "nvblox_died_lines": 1,
+   "timeout_lines": 7,
+   "last_stop_whose_graph_changed": 66,
+   "meets_80_percent_rule": true
+  },
+  "apr/apr_00871_b": {
+   "first_stage": 0,
+   "final_stage": 66,
+   "object_nodes_first": 4,
+   "object_nodes_final": 4,
+   "f1_objects_first": 4,
+   "f1_objects_final": 4,
+   "frozen_local": true,
+   "attempt": 1,
+   "launch_ts": "2026-11-09T23:01:47+05:30",
+   "checker_frozen": true,
+   "nvblox_died_lines": 1,
+   "timeout_lines": 14,
+   "last_stop_whose_graph_changed": null,
+   "meets_80_percent_rule": true
+  }
+ },
+ "classification": {
+  "seeds": [
+   {
+    "name": "frontier_seeds/e7_00853_s42_frontier_end",
+    "scene": "00853",
+    "seed": 42,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00853_s42_frontier_end",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 88.2000000000019 m (GPU free 41838 MB)",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 629.18
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   },
+   {
+    "name": "frontier_seeds/e7_00853_s43_frontier_end",
+    "scene": "00853",
+    "seed": 43,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00853_s43_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 126.00000000000334 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 867.58
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   },
+   {
+    "name": "frontier_seeds/e7_00853_s44_frontier_end",
+    "scene": "00853",
+    "seed": 44,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00853_s44_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 80.62500000000162 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 632.18
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   },
+   {
+    "name": "frontier_seeds/e7_00853_s45_frontier_end",
+    "scene": "00853",
+    "seed": 45,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00853_s45_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 115.50000000000294 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 739.21
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   },
+   {
+    "name": "frontier_seeds/e7_00853_s46_frontier_end",
+    "scene": "00853",
+    "seed": 46,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00853_s46_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 92.47500000000207 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 611.83
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   },
+   {
+    "name": "frontier_seeds/e7_00871_s42_frontier_end",
+    "scene": "00871",
+    "seed": 42,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+      "status": "finished",
+      "finish_reason": "host_memory_stop at 85.3500000000018 m",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 707.58
+     },
+     {
+      "attempt": 2,
+      "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 57.67500000000076 m (GPU free 676 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 494.23
+     }
+    ],
+    "counted": null,
+    "state": "pending"
+   },
+   {
+    "name": "frontier_seeds/e7_00871_s43_frontier_end",
+    "scene": "00871",
+    "seed": 43,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 54.52500000000064 m (GPU free 726 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 442.95
+     },
+     {
+      "attempt": 2,
+      "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 27.749999999999826 m (GPU free 574 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 261.52
+     }
+    ],
+    "counted": null,
+    "state": "pending"
+   },
+   {
+    "name": "frontier_seeds/e7_00871_s44_frontier_end",
+    "scene": "00871",
+    "seed": 44,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 80.1750000000016 m (GPU free 726 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 638.77
+     },
+     {
+      "attempt": 2,
+      "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 26.699999999999836 m (GPU free 535 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 222.8
+     }
+    ],
+    "counted": null,
+    "state": "pending"
+   },
+   {
+    "name": "frontier_seeds/e7_00871_s45_frontier_end",
+    "scene": "00871",
+    "seed": 45,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+      "status": "finished",
+      "finish_reason": "stalled: no new stage for 20 min at 80.70000000000162 m (GPU free 726 MB)",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 645.68
+     },
+     {
+      "attempt": 2,
+      "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+      "status": "finished",
+      "finish_reason": "host_memory_stop at 15.374999999999943 m",
+      "valid": false,
+      "exploration_complete": false,
+      "capped": false,
+      "why_invalid": [
+       "no 'Exploration complete' and no 250 m / 4 h stop",
+       "roslaunch.log shows out of memory or nvblox_node dead"
+      ],
+      "checker_valid": false,
+      "end_navigation_time_s_checker": 125.39
+     }
+    ],
+    "counted": null,
+    "state": "pending"
+   },
+   {
+    "name": "frontier_seeds/e7_00871_s46_frontier_end",
+    "scene": "00871",
+    "seed": 46,
+    "attempts": [
+     {
+      "attempt": 1,
+      "folder": "frontier_seeds/e7_00871_s46_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 188.0999999999943 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 1263.49
+     }
+    ],
+    "counted": 1,
+    "state": "valid"
+   }
+  ],
+  "rows": {
+   "frontier_end": [
+    [
+     "00853",
+     "frontier_seeds/e7_00853_s42_frontier_end"
+    ],
+    [
+     "00853",
+     "frontier_seeds/e7_00853_s43_frontier_end"
+    ],
+    [
+     "00853",
+     "frontier_seeds/e7_00853_s44_frontier_end"
+    ],
+    [
+     "00853",
+     "frontier_seeds/e7_00853_s45_frontier_end"
+    ],
+    [
+     "00853",
+     "frontier_seeds/e7_00853_s46_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s46_frontier_end"
+    ]
+   ],
+   "crashed_frontier_1st": [
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438"
+    ]
+   ],
+   "crashed_frontier_rerun": [
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s42_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s43_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s44_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s45_frontier_end"
+    ]
+   ]
+  }
+ },
+ "copy_moves": [],
+ "copy_check": {
+  "apr/apr_00853_a": {
+   "equals_old_copy_folder": [
+    "apr_00853_a"
+   ]
+  },
+  "apr/apr_00853_b": {
+   "equals_old_copy_folder": []
+  },
+  "apr/apr_00853_b_FAILED_ATTEMPT_1707": {
+   "equals_old_copy_folder": [
+    "apr_00853_b"
+   ]
+  },
+  "apr/apr_00871_a": {
+   "equals_old_copy_folder": [
+    "apr_00871_a"
+   ]
+  },
+  "apr/apr_00871_b": {
+   "equals_old_copy_folder": [
+    "apr_00871_b"
+   ]
+  },
+  "frontier_seeds/e7_00853_s42_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00853_s42_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00853_s43_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00853_s43_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00853_s44_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00853_s44_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00853_s45_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00853_s45_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00853_s46_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00853_s46_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00871_s42_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00871_s42_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213": {
+   "equals_old_copy_folder": [
+    "e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213"
+   ]
+  },
+  "frontier_seeds/e7_00871_s43_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00871_s43_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313": {
+   "equals_old_copy_folder": [
+    "e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313"
+   ]
+  },
+  "frontier_seeds/e7_00871_s44_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00871_s44_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358": {
+   "equals_old_copy_folder": [
+    "e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358"
+   ]
+  },
+  "frontier_seeds/e7_00871_s45_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00871_s45_frontier_end"
+   ]
+  },
+  "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438": {
+   "equals_old_copy_folder": [
+    "e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438"
+   ]
+  },
+  "frontier_seeds/e7_00871_s46_frontier_end": {
+   "equals_old_copy_folder": [
+    "e7_00871_s46_frontier_end"
+   ]
+  }
+ },
+ "ged": {
+  "reused": [
+   {
+    "folder": "frontier_seeds/e7_00853_s42_frontier_end",
+    "scene": "00853",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00853_s42_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00853_s42_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00853_s43_frontier_end",
+    "scene": "00853",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00853_s43_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00853_s43_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00853_s44_frontier_end",
+    "scene": "00853",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00853_s44_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00853_s44_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00853_s45_frontier_end",
+    "scene": "00853",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00853_s45_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00853_s45_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00853_s46_frontier_end",
+    "scene": "00853",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00853_s46_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00853_s46_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s46_frontier_end",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s46_frontier_end",
+    "arm": "frontier_end",
+    "from_entry": "e7_00871_s46_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+    "arm": "crashed_frontier_1st",
+    "from_entry": "e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+    "arm": "crashed_frontier_1st",
+    "from_entry": "e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+    "arm": "crashed_frontier_1st",
+    "from_entry": "e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+    "arm": "crashed_frontier_1st",
+    "from_entry": "e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end",
+    "arm": "crashed_frontier_rerun",
+    "from_entry": "e7_00871_s42_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end",
+    "arm": "crashed_frontier_rerun",
+    "from_entry": "e7_00871_s43_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end",
+    "arm": "crashed_frontier_rerun",
+    "from_entry": "e7_00871_s44_frontier_end",
+    "same_name": true
+   },
+   {
+    "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+    "scene": "00871",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end",
+    "arm": "crashed_frontier_rerun",
+    "from_entry": "e7_00871_s45_frontier_end",
+    "same_name": true
+   }
+  ],
+  "computed": [],
+  "recheck": [
+   {
+    "run": "frontier_seeds/e7_00871_s45_frontier_end",
+    "stages": 11,
+    "max_abs_diff": 0.0
+   }
+  ]
+ },
+ "comparison_vs_1112": {
+  "00853": {
+   "compared": 162,
+   "identical": 162,
+   "only_in_1112": [],
+   "only_in_1113": [],
+   "b_1112_s": 632.1750566959381,
+   "b_1113_s": 632.1750566959381,
+   "b_changed": false,
+   "n_different": 0
+  },
+  "00871": {
+   "compared": 243,
+   "identical": 243,
+   "only_in_1112": [],
+   "only_in_1113": [],
+   "b_1112_s": 809.084,
+   "b_1113_s": 809.084,
+   "b_changed": false,
+   "n_different": 0
+  }
+ },
+ "alt_B_scored": false,
+ "deviation_46_table": "| Run | Attempt 1 | Attempt 2 | Attempt 3 |\n|---|---|---|---|\n| APR-a 00853 | `apr_00853_a` (finished) | none | none |\n| APR-b 00853 | `apr_00853_b_FAILED_ATTEMPT_1707` (finished) | `apr_00853_b` (finished) | none |\n| APR-a 00871 | `apr_00871_a` (finished) | none | none |\n| APR-b 00871 | `apr_00871_b` (finished) | not launched yet (queued) | none |\n| e7 00871 s42 | `e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213` (finished) | `e7_00871_s42_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s43 | `e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313` (finished) | `e7_00871_s43_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s44 | `e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358` (finished) | `e7_00871_s44_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s45 | `e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438` (finished) | `e7_00871_s45_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s46 | `e7_00871_s46_frontier_end` (finished) | none | none |",
+ "unmapped_folders": [
+  "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom"
+ ],
+ "skips": {
+  "apr/apr_00871_a": 1
+ }
+}

@@ -1,0 +1,271 @@
+{
+ "made_at": "2026-11-13T19:13:14+05:30",
+ "rule": "latest launch keeps the plain name; an older attempt sits in <name>_FAILED_ATTEMPT_<HHMM of the next launch>",
+ "attempts": {
+  "frontier_seeds/e7_00853_s42_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T16:54:25+05:30",
+    "finish_ts": "2026-11-09T17:49:41+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 88.2000000000019 m (GPU free 41838 MB)",
+    "name": "frontier_seeds/e7_00853_s42_frontier_end",
+    "folder": "frontier_seeds/e7_00853_s42_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00871_s42_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T17:57:58+05:30",
+    "finish_ts": "2026-11-09T19:01:16+05:30",
+    "finish_reason": "host_memory_stop at 85.3500000000018 m",
+    "name": "frontier_seeds/e7_00871_s42_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+    "folder_exists": true,
+    "matched_by": "renamed when attempt 2 launched",
+    "status": "finished"
+   },
+   {
+    "attempt": 2,
+    "launch_ts": "2026-11-10T12:13:42+05:30",
+    "finish_ts": "2026-11-10T13:05:58+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 57.67500000000076 m (GPU free 676 MB)",
+    "name": "frontier_seeds/e7_00871_s42_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "apr/apr_00853_a": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T19:51:21+05:30",
+    "finish_ts": "2026-11-09T20:45:39+05:30",
+    "finish_reason": "exploration_complete at 154.4999999999994 m",
+    "name": "apr/apr_00853_a",
+    "folder": "apr/apr_00853_a",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "apr/apr_00871_a": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T21:06:24+05:30",
+    "finish_ts": "2026-11-09T21:51:42+05:30",
+    "finish_reason": "exploration_complete at 124.65000000000329 m",
+    "name": "apr/apr_00871_a",
+    "folder": "apr/apr_00871_a",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "apr/apr_00853_b": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T21:57:15+05:30",
+    "finish_ts": "2026-11-09T22:56:39+05:30",
+    "finish_reason": "exploration_complete at 183.29999999999504 m",
+    "name": "apr/apr_00853_b",
+    "folder": "apr/apr_00853_b_FAILED_ATTEMPT_1707",
+    "folder_exists": true,
+    "matched_by": "renamed when attempt 2 launched",
+    "status": "finished"
+   },
+   {
+    "attempt": 2,
+    "launch_ts": "2026-11-13T17:07:41+05:30",
+    "finish_ts": "2026-11-13T18:04:00+05:30",
+    "finish_reason": "exploration_complete at 183.29999999999504 m",
+    "name": "apr/apr_00853_b",
+    "folder": "apr/apr_00853_b",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "apr/apr_00871_b": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T23:01:47+05:30",
+    "finish_ts": "2026-11-09T23:48:06+05:30",
+    "finish_reason": "exploration_complete at 137.10000000000204 m",
+    "name": "apr/apr_00871_b",
+    "folder": "apr/apr_00871_b",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00853_s43_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-09T23:53:14+05:30",
+    "finish_ts": "2026-11-10T00:35:30+05:30",
+    "finish_reason": "exploration_complete at 126.00000000000334 m",
+    "name": "frontier_seeds/e7_00853_s43_frontier_end",
+    "folder": "frontier_seeds/e7_00853_s43_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00871_s43_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T00:45:14+05:30",
+    "finish_ts": "2026-11-10T01:39:33+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 54.52500000000064 m (GPU free 726 MB)",
+    "name": "frontier_seeds/e7_00871_s43_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+    "folder_exists": true,
+    "matched_by": "renamed when attempt 2 launched",
+    "status": "finished"
+   },
+   {
+    "attempt": 2,
+    "launch_ts": "2026-11-10T13:13:39+05:30",
+    "finish_ts": "2026-11-10T13:51:53+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 27.749999999999826 m (GPU free 574 MB)",
+    "name": "frontier_seeds/e7_00871_s43_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00853_s44_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T01:47:38+05:30",
+    "finish_ts": "2026-11-10T02:21:52+05:30",
+    "finish_reason": "exploration_complete at 80.62500000000162 m",
+    "name": "frontier_seeds/e7_00853_s44_frontier_end",
+    "folder": "frontier_seeds/e7_00853_s44_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00871_s44_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T02:30:23+05:30",
+    "finish_ts": "2026-11-10T03:29:42+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 80.1750000000016 m (GPU free 726 MB)",
+    "name": "frontier_seeds/e7_00871_s44_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+    "folder_exists": true,
+    "matched_by": "renamed when attempt 2 launched",
+    "status": "finished"
+   },
+   {
+    "attempt": 2,
+    "launch_ts": "2026-11-10T13:58:18+05:30",
+    "finish_ts": "2026-11-10T14:32:31+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 26.699999999999836 m (GPU free 535 MB)",
+    "name": "frontier_seeds/e7_00871_s44_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00853_s45_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T03:37:07+05:30",
+    "finish_ts": "2026-11-10T04:11:19+05:30",
+    "finish_reason": "exploration_complete at 115.50000000000294 m",
+    "name": "frontier_seeds/e7_00853_s45_frontier_end",
+    "folder": "frontier_seeds/e7_00853_s45_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00871_s45_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T04:18:45+05:30",
+    "finish_ts": "2026-11-10T05:20:02+05:30",
+    "finish_reason": "stalled: no new stage for 20 min at 80.70000000000162 m (GPU free 726 MB)",
+    "name": "frontier_seeds/e7_00871_s45_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+    "folder_exists": true,
+    "matched_by": "renamed when attempt 2 launched",
+    "status": "finished"
+   },
+   {
+    "attempt": 2,
+    "launch_ts": "2026-11-10T14:38:26+05:30",
+    "finish_ts": "2026-11-10T15:06:37+05:30",
+    "finish_reason": "host_memory_stop at 15.374999999999943 m",
+    "name": "frontier_seeds/e7_00871_s45_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00853_s46_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T05:28:26+05:30",
+    "finish_ts": "2026-11-10T05:57:37+05:30",
+    "finish_reason": "exploration_complete at 92.47500000000207 m",
+    "name": "frontier_seeds/e7_00853_s46_frontier_end",
+    "folder": "frontier_seeds/e7_00853_s46_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ],
+  "frontier_seeds/e7_00871_s46_frontier_end": [
+   {
+    "attempt": 1,
+    "launch_ts": "2026-11-10T06:04:30+05:30",
+    "finish_ts": "2026-11-10T07:14:48+05:30",
+    "finish_reason": "exploration_complete at 188.0999999999943 m",
+    "name": "frontier_seeds/e7_00871_s46_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s46_frontier_end",
+    "folder_exists": true,
+    "matched_by": "latest launch keeps the plain name",
+    "status": "finished"
+   }
+  ]
+ },
+ "unmapped_folders": [
+  "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom"
+ ],
+ "skips": {
+  "apr/apr_00871_a": 1
+ },
+ "pending": [
+  {
+   "name": "apr/apr_00871_b",
+   "why": "1 of 2 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s42_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s43_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s44_frontier_end",
+   "why": "2 of 3 attempts launched"
+  },
+  {
+   "name": "frontier_seeds/e7_00871_s45_frontier_end",
+   "why": "2 of 3 attempts launched"
+  }
+ ]
+}

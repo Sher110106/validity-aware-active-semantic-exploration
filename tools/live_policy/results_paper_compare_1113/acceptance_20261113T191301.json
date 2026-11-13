@@ -1,0 +1,598 @@
+{
+ "workspace": "/home/sher/active-semantic-perception-workspace",
+ "runs": [
+  {
+   "run": "frontier_seeds/e7_00853_s42_frontier_end",
+   "kind": "e7",
+   "stages_total": 40,
+   "stages_with_graph": [
+    0,
+    38
+   ],
+   "n_stages_with_graph": 39,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-09T17:49:41+05:30",
+     "stalled: no new stage for 20 min at 88.2000000000019 m (GPU free 41838 MB)"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 38,
+   "objects_first": 2,
+   "objects_final": 75,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 629.18
+  },
+  {
+   "run": "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom",
+   "kind": "e7",
+   "stages_total": 1,
+   "stages_with_graph": [],
+   "n_stages_with_graph": 0,
+   "exploration_complete": false,
+   "out_of_memory_lines": 2,
+   "nvblox_died_lines": 1,
+   "queue_finished": [],
+   "final_differs_from_first": null,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": false,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 0.0
+  },
+  {
+   "run": "frontier_seeds/e7_00853_s43_frontier_end",
+   "kind": "e7",
+   "stages_total": 44,
+   "stages_with_graph": [
+    0,
+    42
+   ],
+   "n_stages_with_graph": 43,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-10T00:35:30+05:30",
+     "exploration_complete at 126.00000000000334 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 42,
+   "objects_first": 2,
+   "objects_final": 73,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 867.58
+  },
+  {
+   "run": "frontier_seeds/e7_00853_s44_frontier_end",
+   "kind": "e7",
+   "stages_total": 36,
+   "stages_with_graph": [
+    0,
+    34
+   ],
+   "n_stages_with_graph": 35,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-10T02:21:52+05:30",
+     "exploration_complete at 80.62500000000162 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 34,
+   "objects_first": 1,
+   "objects_final": 70,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 632.18
+  },
+  {
+   "run": "frontier_seeds/e7_00853_s45_frontier_end",
+   "kind": "e7",
+   "stages_total": 35,
+   "stages_with_graph": [
+    0,
+    33
+   ],
+   "n_stages_with_graph": 34,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-10T04:11:19+05:30",
+     "exploration_complete at 115.50000000000294 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 33,
+   "objects_first": 2,
+   "objects_final": 86,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 739.21
+  },
+  {
+   "run": "frontier_seeds/e7_00853_s46_frontier_end",
+   "kind": "e7",
+   "stages_total": 29,
+   "stages_with_graph": [
+    0,
+    27
+   ],
+   "n_stages_with_graph": 28,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-10T05:57:37+05:30",
+     "exploration_complete at 92.47500000000207 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 27,
+   "objects_first": 2,
+   "objects_final": 86,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 611.83
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s42_frontier_end",
+   "kind": "e7",
+   "stages_total": 40,
+   "stages_with_graph": [
+    0,
+    39
+   ],
+   "n_stages_with_graph": 40,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-09T19:01:16+05:30",
+     "host_memory_stop at 85.3500000000018 m"
+    ],
+    [
+     "2026-11-10T13:05:58+05:30",
+     "stalled: no new stage for 20 min at 57.67500000000076 m (GPU free 676 MB)"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 39,
+   "objects_first": 7,
+   "objects_final": 57,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 494.23
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213",
+   "kind": "e7",
+   "stages_total": 53,
+   "stages_with_graph": [
+    0,
+    52
+   ],
+   "n_stages_with_graph": 52,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [],
+   "first_stage": 0,
+   "final_stage": 52,
+   "objects_first": 6,
+   "objects_final": 80,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 707.58
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s43_frontier_end",
+   "kind": "e7",
+   "stages_total": 21,
+   "stages_with_graph": [
+    0,
+    20
+   ],
+   "n_stages_with_graph": 21,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-10T01:39:33+05:30",
+     "stalled: no new stage for 20 min at 54.52500000000064 m (GPU free 726 MB)"
+    ],
+    [
+     "2026-11-10T13:51:53+05:30",
+     "stalled: no new stage for 20 min at 27.749999999999826 m (GPU free 574 MB)"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 20,
+   "objects_first": 6,
+   "objects_final": 42,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 261.52
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313",
+   "kind": "e7",
+   "stages_total": 41,
+   "stages_with_graph": [
+    0,
+    39
+   ],
+   "n_stages_with_graph": 32,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [],
+   "first_stage": 0,
+   "final_stage": 39,
+   "objects_first": 6,
+   "objects_final": 65,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 442.95
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s44_frontier_end",
+   "kind": "e7",
+   "stages_total": 16,
+   "stages_with_graph": [
+    0,
+    15
+   ],
+   "n_stages_with_graph": 16,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-10T03:29:42+05:30",
+     "stalled: no new stage for 20 min at 80.1750000000016 m (GPU free 726 MB)"
+    ],
+    [
+     "2026-11-10T14:32:31+05:30",
+     "stalled: no new stage for 20 min at 26.699999999999836 m (GPU free 535 MB)"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 15,
+   "objects_first": 5,
+   "objects_final": 29,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 222.8
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358",
+   "kind": "e7",
+   "stages_total": 46,
+   "stages_with_graph": [
+    1,
+    45
+   ],
+   "n_stages_with_graph": 39,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [],
+   "first_stage": 1,
+   "final_stage": 45,
+   "objects_first": 6,
+   "objects_final": 71,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 638.77
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s45_frontier_end",
+   "kind": "e7",
+   "stages_total": 11,
+   "stages_with_graph": [
+    0,
+    10
+   ],
+   "n_stages_with_graph": 11,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-10T05:20:02+05:30",
+     "stalled: no new stage for 20 min at 80.70000000000162 m (GPU free 726 MB)"
+    ],
+    [
+     "2026-11-10T15:06:37+05:30",
+     "host_memory_stop at 15.374999999999943 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 10,
+   "objects_first": 6,
+   "objects_final": 30,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 125.39
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438",
+   "kind": "e7",
+   "stages_total": 51,
+   "stages_with_graph": [
+    0,
+    50
+   ],
+   "n_stages_with_graph": 51,
+   "exploration_complete": false,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [],
+   "first_stage": 0,
+   "final_stage": 50,
+   "objects_first": 5,
+   "objects_final": 80,
+   "final_differs_from_first": true,
+   "a2_1_stop": false,
+   "a2_1_clean_log": false,
+   "a2_1_graph_grew": true,
+   "valid": false,
+   "capped": false,
+   "end_navigation_time_s": 645.68
+  },
+  {
+   "run": "frontier_seeds/e7_00871_s46_frontier_end",
+   "kind": "e7",
+   "stages_total": 80,
+   "stages_with_graph": [
+    0,
+    78
+   ],
+   "n_stages_with_graph": 79,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-10T07:14:48+05:30",
+     "exploration_complete at 188.0999999999943 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 78,
+   "objects_first": 5,
+   "objects_final": 111,
+   "final_differs_from_first": true,
+   "a2_1_stop": true,
+   "a2_1_clean_log": true,
+   "a2_1_graph_grew": true,
+   "valid": true,
+   "capped": false,
+   "end_navigation_time_s": 1263.49
+  },
+  {
+   "run": "apr/apr_00853_a",
+   "kind": "tour",
+   "stages_total": 86,
+   "stages_with_graph": [
+    0,
+    85
+   ],
+   "n_stages_with_graph": 10,
+   "exploration_complete": true,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-09T20:45:39+05:30",
+     "exploration_complete at 154.4999999999994 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 85,
+   "objects_first": 5,
+   "objects_final": 118,
+   "final_differs_from_first": true,
+   "frozen": false,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 85,
+   "waypoints_listed": 85,
+   "waypoints_reached": 85,
+   "tour_complete": true,
+   "meets_80_percent_rule": true,
+   "end_navigation_time_s": 969.12
+  },
+  {
+   "run": "apr/apr_00853_b",
+   "kind": "tour",
+   "stages_total": 86,
+   "stages_with_graph": [
+    0,
+    85
+   ],
+   "n_stages_with_graph": 10,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [
+    [
+     "2026-11-09T22:56:39+05:30",
+     "exploration_complete at 183.29999999999504 m"
+    ],
+    [
+     "2026-11-13T18:04:00+05:30",
+     "exploration_complete at 183.29999999999504 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 85,
+   "objects_first": 4,
+   "objects_final": 117,
+   "final_differs_from_first": true,
+   "frozen": false,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 85,
+   "waypoints_listed": 85,
+   "waypoints_reached": 85,
+   "tour_complete": true,
+   "meets_80_percent_rule": true,
+   "end_navigation_time_s": 1087.07
+  },
+  {
+   "run": "apr/apr_00853_b_FAILED_ATTEMPT_1707",
+   "kind": "tour",
+   "stages_total": 86,
+   "stages_with_graph": [
+    0,
+    85
+   ],
+   "n_stages_with_graph": 2,
+   "exploration_complete": true,
+   "out_of_memory_lines": 0,
+   "nvblox_died_lines": 0,
+   "queue_finished": [],
+   "first_stage": 0,
+   "final_stage": 85,
+   "objects_first": 2,
+   "objects_final": 2,
+   "final_differs_from_first": false,
+   "frozen": true,
+   "timeout_lines": 18,
+   "last_stop_whose_graph_changed": null,
+   "waypoints_listed": 85,
+   "waypoints_reached": 85,
+   "tour_complete": true,
+   "meets_80_percent_rule": true,
+   "end_navigation_time_s": 1113.7
+  },
+  {
+   "run": "apr/apr_00871_a",
+   "kind": "tour",
+   "stages_total": 67,
+   "stages_with_graph": [
+    0,
+    66
+   ],
+   "n_stages_with_graph": 5,
+   "exploration_complete": true,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-09T21:51:42+05:30",
+     "exploration_complete at 124.65000000000329 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 66,
+   "objects_first": 3,
+   "objects_final": 117,
+   "final_differs_from_first": true,
+   "frozen": false,
+   "timeout_lines": 7,
+   "last_stop_whose_graph_changed": 66,
+   "waypoints_listed": 66,
+   "waypoints_reached": 66,
+   "tour_complete": true,
+   "meets_80_percent_rule": true,
+   "end_navigation_time_s": 821.17
+  },
+  {
+   "run": "apr/apr_00871_b",
+   "kind": "tour",
+   "stages_total": 67,
+   "stages_with_graph": [
+    0,
+    66
+   ],
+   "n_stages_with_graph": 2,
+   "exploration_complete": true,
+   "out_of_memory_lines": 1,
+   "nvblox_died_lines": 1,
+   "queue_finished": [
+    [
+     "2026-11-09T23:48:06+05:30",
+     "exploration_complete at 137.10000000000204 m"
+    ]
+   ],
+   "first_stage": 0,
+   "final_stage": 66,
+   "objects_first": 4,
+   "objects_final": 4,
+   "final_differs_from_first": false,
+   "frozen": true,
+   "timeout_lines": 14,
+   "last_stop_whose_graph_changed": null,
+   "waypoints_listed": 66,
+   "waypoints_reached": 66,
+   "tour_complete": true,
+   "meets_80_percent_rule": true,
+   "end_navigation_time_s": 862.13
+  }
+ ]
+}

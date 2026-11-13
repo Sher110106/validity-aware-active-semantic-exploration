@@ -1,0 +1,23 @@
+Transfer starting: 3027 files
+apr/apr_00853_a/
+apr/apr_00853_b/
+apr/apr_00853_b_FAILED_ATTEMPT_1707/
+apr/apr_00871_a/
+apr/apr_00871_b/
+frontier_seeds/e7_00853_s42_frontier_end/
+frontier_seeds/e7_00853_s43_frontier_end/
+frontier_seeds/e7_00853_s44_frontier_end/
+frontier_seeds/e7_00853_s45_frontier_end/
+frontier_seeds/e7_00853_s46_frontier_end/
+frontier_seeds/e7_00871_s42_frontier_end/
+frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213/
+frontier_seeds/e7_00871_s43_frontier_end/
+frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313/
+frontier_seeds/e7_00871_s44_frontier_end/
+frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358/
+frontier_seeds/e7_00871_s45_frontier_end/
+frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438/
+frontier_seeds/e7_00871_s46_frontier_end/
+
+sent 10059 bytes  received 82948 bytes  930070000 bytes/sec
+total size is 25782624  speedup is 277.21

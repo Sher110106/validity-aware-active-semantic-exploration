@@ -1,0 +1,48 @@
+{
+ "00853": {
+  "scene": "00853",
+  "primary_s": 632.1750566959381,
+  "primary_rule": "median",
+  "n_primary": 5,
+  "primary_runs": [
+   "frontier_seeds/e7_00853_s42_frontier_end",
+   "frontier_seeds/e7_00853_s43_frontier_end",
+   "frontier_seeds/e7_00853_s44_frontier_end",
+   "frontier_seeds/e7_00853_s45_frontier_end",
+   "frontier_seeds/e7_00853_s46_frontier_end"
+  ],
+  "with_capped_s": 632.1750566959381,
+  "with_capped_rule": "median",
+  "n_with_capped": 5,
+  "capped_runs": [],
+  "fallback_s": 632.1256,
+  "second_line_differs": false,
+  "end_times_s": {
+   "frontier_seeds/e7_00853_s42_frontier_end": 629.1769733428955,
+   "frontier_seeds/e7_00853_s43_frontier_end": 867.5785331726074,
+   "frontier_seeds/e7_00853_s44_frontier_end": 632.1750566959381,
+   "frontier_seeds/e7_00853_s45_frontier_end": 739.2068409919739,
+   "frontier_seeds/e7_00853_s46_frontier_end": 611.8250911235809
+  },
+  "b_1112_s": 632.1750566959381
+ },
+ "00871": {
+  "scene": "00871",
+  "primary_s": 809.084,
+  "primary_rule": "fallback",
+  "n_primary": 1,
+  "primary_runs": [
+   "frontier_seeds/e7_00871_s46_frontier_end"
+  ],
+  "with_capped_s": 809.084,
+  "with_capped_rule": "fallback",
+  "n_with_capped": 1,
+  "capped_runs": [],
+  "fallback_s": 809.084,
+  "second_line_differs": false,
+  "end_times_s": {
+   "frontier_seeds/e7_00871_s46_frontier_end": 1263.4898099899292
+  },
+  "b_1112_s": 809.084
+ }
+}

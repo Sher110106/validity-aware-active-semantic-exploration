@@ -1,0 +1,22 @@
+{
+ "00853": {
+  "compared": 162,
+  "identical": 162,
+  "different": [],
+  "only_in_1112": [],
+  "only_in_1113": [],
+  "b_1112_s": 632.1750566959381,
+  "b_1113_s": 632.1750566959381,
+  "b_changed": false
+ },
+ "00871": {
+  "compared": 243,
+  "identical": 243,
+  "different": [],
+  "only_in_1112": [],
+  "only_in_1113": [],
+  "b_1112_s": 809.084,
+  "b_1113_s": 809.084,
+  "b_changed": false
+ }
+}
