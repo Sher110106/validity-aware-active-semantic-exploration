@@ -144,6 +144,10 @@ class GridSceneTruth(model.SceneTruth):
             self._trees[rid] = cKDTree(pts)
             self._bbox[rid] = (cx.min() - h, cy.min() - h, cx.max() + h, cy.max() + h)
 
+    def regions_with_cells(self):
+        """Ids of the regions whose `any` mask holds at least one cell."""
+        return frozenset(rid for rid, tree in self._trees.items() if tree is not None)
+
     # ------------------------------------------------------------------ geometry
     def _cell(self, p: Point) -> Optional[Tuple[int, int]]:
         x, y = float(p[0]), float(p[1])

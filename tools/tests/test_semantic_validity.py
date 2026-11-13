@@ -516,3 +516,21 @@ def test_real_stage_state_loader_reaches_any_run_and_stage():
     assert s0.seen and s5.seen and (s0.seen | s0.partly_seen | s0.unobserved) == set(truth.regions)
     assert ep.run_info(run) == ("00871", 42, "oracle_visible")
     assert 0 in ep.stage_numbers("e1_00853_s42_placebo_60m", RUNS)
+
+
+# ---- §8: a row where no hit is possible at a level is left out of the level's readouts
+
+def test_validity_readouts_leave_out_rows_where_no_hit_is_possible():
+    imposs = {**_vrec("B", 0.0, 1.0), "possible": {"L1": True, "L2": True, "L3": False}}
+    ok = {**_vrec("A", 0.5, 0.5), "possible": {"L1": True, "L2": True, "L3": True}}
+    out = vl.kept_vs_removed([ok, imposs], "L3")
+    assert out["n_rows"] == 1 and out["n_rows_left_out"] == 1 and set(out["kept"]) == {"A"}
+    assert vl.kept_vs_removed([ok, imposs], "L2")["n_rows"] == 2      # still possible at L2
+    kg = vl.kept_vs_guesses([ok, imposs])
+    assert kg["V"]["l3_items"] == 2 and kg["V"]["l2_claims"] == 4 and set(kg["V"]["cluster_mean_L3"]) == {"A"}
+    assert kg["V"]["guesses_kept"] == 12                            # a count of guesses, not a level score
+    ok["validity"]["support_items"] = [[0.5, 1]]
+    imposs["validity"]["support_items"] = [[0.25, 0]]
+    assert vl.summarise([ok, imposs])["reliability"]["n_items"] == 1   # the support curve is read against L3 truth
+    # a record without "possible" (a hand-made one) keeps every row
+    assert vl.kept_vs_removed([_vrec("A", .5, .5)], "L3")["n_rows"] == 1

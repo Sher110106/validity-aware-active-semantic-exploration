@@ -71,6 +71,8 @@ HERE = Path(__file__).resolve().parent
 PREREG_MD_PATH = HERE.parent / "PREREGISTRATION_SEMANTIC.md"
 PREREG_HASH_PATH = HERE.parent / "PREREGISTRATION_SEMANTIC.sha256"
 FREEZE_PATH = HERE / "FREEZE.sha256"
+FREEZE_SEMANTIC_DIR = HERE
+FREEZE_REPO = HERE.parent.parent.parent
 FRAME_PATH = HERE / "sample_frame.txt"
 
 LEVELS = ("L1", "L2", "L3")
@@ -287,7 +289,7 @@ def mdd_table(placebo_records: Sequence[Mapping[str, Any]], alpha: float = ALPHA
         cl = _cluster_values(pairs)
         d = [cl[c] for c in sorted(cl)]
         entry: Dict[str, Any] = {"contrast": label, "n_clusters": len(d), "sd": None, "mdd": None,
-                                 "ci": None, "half_width": None, "mean": float(sum(d) / len(d)) if d else None}
+                                 "delta": DELTA[lv], "ci": None, "half_width": None, "mean": float(sum(d) / len(d)) if d else None}
         if len(d) >= 2:
             sd = statistics.stdev(d)
             entry["sd"] = sd
@@ -297,6 +299,14 @@ def mdd_table(placebo_records: Sequence[Mapping[str, Any]], alpha: float = ALPHA
             entry["half_width"] = (hi - lo) / 2.0 if math.isfinite(lo) and math.isfinite(hi) else None
         out[lv] = entry
     return out
+
+
+def mdd_table_file(mdd: Mapping[str, Any], alpha: float = ALPHA, power: float = 0.8, m_tests: int = 6) -> Dict[str, Any]:
+    """The table that goes into the freeze (§10, §14): per level the number of clusters, the SD of the named
+    placebo contrast, the detectable difference, and the interval half-width beside the margin delta."""
+    keys = ("contrast", "n_clusters", "sd", "mdd", "half_width", "delta")
+    return {"levels": {lv: {k: e[k] for k in keys} for lv, e in mdd.items()},
+            "alpha": alpha, "power": power, "m_tests": m_tests}
 
 
 # -------------------------------------------------------------------------- row records
@@ -575,11 +585,36 @@ def analyse_views(per_view: Mapping[str, Sequence[Mapping[str, Any]]], model: st
 
 # -------------------------------------------------------------------------------- the whole run
 
-def finished_rounds(rows: Sequence, members_by_model: Mapping[str, Mapping[str, Sequence]]) -> List[int]:
-    """§10: the rounds in which every model holds at least one member on every row of the round."""
+FINAL_MEMBER_STATUSES = ("ok", "dropped")
+
+
+def finished_rounds(rows: Sequence, status_by_model: Mapping[str, Mapping[str, Mapping[int, str]]]) -> List[int]:
+    """§10: "the whole rounds that both models finished". A round is finished for a model when, for every
+    row of the round, each of the 4 members is "ok" (parsed) or "dropped" (a final drop; §3, §12: counted,
+    not scored). A member that is absent or unfinished holds the round back. A row whose members were all
+    dropped stays in its round and has no score. The result is the rounds finished for every model given."""
     rounds = sorted({r.round for r in rows})
-    return [rd for rd in rounds
-            if all(members_by_model[m].get(r.row_id) for m in members_by_model for r in rows if r.round == rd)]
+    out = []
+    for rd in rounds:
+        ok = True
+        for st in status_by_model.values():
+            for r in rows:
+                if r.round != rd:
+                    continue
+                s = st.get(r.row_id, {})
+                if len(s) != 4 or any(v not in FINAL_MEMBER_STATUSES for v in s.values()):
+                    ok = False
+        if ok:
+            out.append(rd)
+    return out
+
+
+def require_finished_rounds(done: Sequence[int], rounds: Optional[Sequence[int]]) -> None:
+    """`--rounds auto` with no finished round has no analysis set: refuse, rather than report verdicts on nothing."""
+    if rounds is None and not done:
+        raise Refused("refused: no round is finished for every Claude model, so --rounds auto has no analysis set "
+                      "(a round is finished when each of its rows holds 4 members that are ok or dropped). "
+                      "Wait for the replay, or name rounds with --rounds.")
 
 
 def run(models: Sequence[str], frame: Path, rounds: Optional[Sequence[int]] = None, *,
@@ -593,7 +628,7 @@ def run(models: Sequence[str], frame: Path, rounds: Optional[Sequence[int]] = No
     runs_root = Path(runs_root or ep.RUNS_ROOT)
     t_all = time.perf_counter()
     ctx = build_context(frame, runs_root, truth_dir)
-    log(f"truth and states: {ctx.timing['truth_and_states_s']:.1f}s")
+    log(f"truth and states: {ctx.timing.get('truth_and_states_s', 0.0):.1f}s")
     t = time.perf_counter()
     placebo = placebo_inputs(ctx)
     ctx.timing["placebo_s"] = time.perf_counter() - t
@@ -603,6 +638,9 @@ def run(models: Sequence[str], frame: Path, rounds: Optional[Sequence[int]] = No
         inputs[m] = model_inputs(ctx, m, claude_root, placebo)
         ctx.timing[f"load_{m}_s"] = time.perf_counter() - t
         log(f"loaded {m}")
+    claude = [m for m in models if is_claude(m)]
+    if claude:
+        require_finished_rounds(finished_rounds(ctx.rows, {m: inputs[m][3] for m in claude}), rounds)
     out = run_core(ctx, models, inputs, placebo, rounds, with_validity, with_room_test, log, room_test_runs)
     ctx.timing["total_s"] = time.perf_counter() - t_all
     return out
@@ -615,7 +653,7 @@ def run_core(ctx, models: Sequence[str], inputs: Mapping[str, Tuple], placebo: T
     live docs by row or None, Claude member status by row); `placebo` is (members, docs) of the placebo."""
     out: Dict[str, Any] = {"ctx": ctx, "models": {}, "timing": ctx.timing, "members": {m: inputs[m][0] for m in models}}
     claude = [m for m in models if is_claude(m)]
-    done = finished_rounds(ctx.rows, {m: inputs[m][0] for m in claude}) if claude else []
+    done = finished_rounds(ctx.rows, {m: inputs[m][3] for m in claude}) if claude else []
     use = set(rounds) if rounds is not None else (set(done) if claude else None)
     out.update(finished_rounds=done, rounds_used=sorted(use) if use is not None else None)
     specs = view_specs(ctx)
@@ -704,7 +742,7 @@ def dry_summary(result: Mapping[str, Any], models: Sequence[str]) -> Dict[str, A
     out: Dict[str, Any] = {"mode": "dry", "frame_rows": len(rows),
                            "rows_by_round": {str(rd): sum(1 for r in rows if r.round == rd) for rd in sorted({r.round for r in rows})},
                            "clusters": len({r.cluster for r in rows}), "scenes": sorted(ctx.truths)}
-    out["truth"] = {s: {"regions": len(t.regions), "regions_with_footprint_cells": len(t.regions),
+    out["truth"] = {s: {"regions": len(t.regions), "regions_with_footprint_cells": len(t.regions_with_cells()) if hasattr(t, "regions_with_cells") else len(t.regions),
                         "reference_objects": sum(len(g.ref_objects) for g in t.regions.values()),
                         "markers": sum(len(g.markers) for g in t.regions.values())} for s, t in sorted(ctx.truths.items())}
     out["prior"] = {"houses": ctx.prior.n_houses,
@@ -795,8 +833,12 @@ def check_guards(models: Sequence[str], prereg_sha256: Optional[str]) -> None:
         raise Refused(f"refused: {PREREG_HASH_PATH} does not exist; the pre-registration is not hashed")
     if prereg_sha256.strip().lower() != _first_field(PREREG_HASH_PATH):
         raise Refused("refused: --prereg-sha256 does not equal the registered hash")
-    if any(is_claude(m) for m in models) and not Path(FREEZE_PATH).is_file():
-        raise Refused(f"refused: {FREEZE_PATH} does not exist; Claude output cannot be scored before the freeze")
+    if any(is_claude(m) for m in models):
+        if not Path(FREEZE_PATH).is_file():
+            raise Refused(f"refused: {FREEZE_PATH} does not exist; Claude output cannot be scored before the freeze")
+        problems = _sibling("freeze").check(FREEZE_PATH, FREEZE_SEMANTIC_DIR, FREEZE_REPO)
+        if problems:
+            raise Refused("refused: the freeze does not hold (freeze.py check): " + "; ".join(problems))
 
 
 def verify_prereg_file(md_path: Path = None, hash_path: Path = None) -> str:
@@ -863,7 +905,7 @@ def write_real(result: Mapping[str, Any], out_dir: Path, run_info: Mapping[str, 
                "models": {m: {k: v for k, v in e.items() if k not in ("records", "views", "error_sample")}
                           | {"error_sample_n": len(e["error_sample"])} for m, e in result["models"].items()}}
     put("results.json", summary)
-    put("mdd_table.json", result["mdd"])
+    put("mdd_table.json", mdd_table_file(result["mdd"]))
     if result.get("room_test"):
         put("room_test.json", result["room_test"])
     put("validity.json", {m: e.get("validity") for m, e in result["models"].items()})

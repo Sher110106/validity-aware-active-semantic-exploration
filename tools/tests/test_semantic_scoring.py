@@ -889,7 +889,13 @@ def test_guards_pass_with_hash_and_freeze(monkeypatch, tmp_path):
     assert seen == [(["deepseek"], None, None)]
     with pytest.raises(SystemExit):                            # Claude: freeze file missing
         rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", sha, "--claude-root", "/c"])
-    freeze.write_text("x")
+    sem = tmp_path / "repo" / "tools" / "live_policy" / "semantic"      # a tiny frozen tree for the real freeze check
+    (sem / "truth").mkdir(parents=True)
+    for name in ("canon_labels.json", "sample_frame.txt"):
+        (sem / name).write_text("x")
+    monkeypatch.setattr(rs, "FREEZE_SEMANTIC_DIR", sem)
+    monkeypatch.setattr(rs, "FREEZE_REPO", tmp_path / "repo")
+    rs._sibling("freeze").write(freeze, sem, tmp_path / "repo")
     with pytest.raises(SystemExit) as e:                       # Claude: no root of parsed outputs
         rs.main(["--models", "claude-haiku-5-5", "--out", str(out), "--prereg-sha256", sha])
     assert "claude-root" in str(e.value)
@@ -933,7 +939,7 @@ def fake_inputs():
 def test_run_core_end_to_end_with_fakes(tmp_path):
     ctx = fake_ctx(tmp_path)
     deep, pm = fake_inputs()
-    inputs = {"deepseek": (deep, {}, None, {}), "claude-opus-5-5": (deep, {}, None, {})}
+    inputs = {"deepseek": (deep, {}, None, {}), "claude-opus-5-5": (deep, {}, None, {"a": ALL_OK, "b": ALL_OK})}
     out = rs.run_core(ctx, ["deepseek", "claude-opus-5-5"], inputs, (pm, {}), None, True, False)
     ds = out["models"]["deepseek"]
     assert ds["role"] == "exploratory" and len(ds["records"]) == 2
@@ -952,10 +958,58 @@ def test_run_core_end_to_end_with_fakes(tmp_path):
     json.dumps(rs._jsonable({k: v for k, v in out.items() if k not in ("ctx", "members")}))   # serialisable
 
 
-def test_finished_rounds():
-    r1, r2 = mkrow("a", rnd=1), mkrow("b", rnd=2)
-    mb = {"m1": {"a": [member()], "b": [member()]}, "m2": {"a": [member()], "b": []}}
-    assert rs.finished_rounds([r1, r2], mb) == [1]
+def sts(*s):
+    return {k: v for k, v in enumerate(s)}
+
+
+ALL_OK = sts("ok", "ok", "ok", "ok")
+ALL_DROPPED = sts("dropped", "dropped", "dropped", "dropped")
+
+
+def test_finished_rounds_come_from_member_statuses():
+    r1, r2, r3 = mkrow("a", rnd=1), mkrow("b", rnd=2), mkrow("c", rnd=3)
+    # a row whose four members were all dropped stays in its round (a final drop; the row has no score)
+    assert rs.finished_rounds([r1], {"m": {"a": ALL_DROPPED}}) == [1]
+    # one member present and three absent: the replay has not finished the row, so the round is not finished
+    assert rs.finished_rounds([r1, r2], {"m": {"a": ALL_OK, "b": sts("ok", "absent", "absent", "absent")}}) == [1]
+    # an unfinished member (cap stop, error) is not a drop
+    assert rs.finished_rounds([r1], {"m": {"a": sts("ok", "ok", "ok", "unfinished")}}) == []
+    # a mix of ok and dropped is finished
+    assert rs.finished_rounds([r1], {"m": {"a": sts("ok", "dropped", "ok", "dropped")}}) == [1]
+    # a row the replay never wrote has no statuses: not finished
+    assert rs.finished_rounds([r1, r2], {"m": {"a": ALL_OK}}) == [1]
+    # the analysis set is the rounds finished for BOTH models
+    both = {"m1": {"a": ALL_OK, "b": ALL_OK, "c": ALL_DROPPED}, "m2": {"a": ALL_OK, "b": sts("ok", "ok", "absent", "ok"), "c": ALL_OK}}
+    assert rs.finished_rounds([r1, r2, r3], both) == [1, 3]
+    assert rs.finished_rounds([r1, r2], {}) == [1, 2]            # no model asked: nothing holds a round back
+
+
+def test_run_core_takes_finished_rounds_from_statuses_not_member_counts(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    deep = {"a": [], "b": deep["b"]}                             # row a: every member dropped
+    st_ok = {"a": ALL_DROPPED, "b": sts("ok", "dropped", "dropped", "dropped")}
+    out = rs.run_core(ctx, ["claude-opus-5-5"], {"claude-opus-5-5": (deep, {}, None, st_ok)}, (pm, {}), None, True, False)
+    assert out["finished_rounds"] == [1] and out["rounds_used"] == [1]
+    assert len(out["models"]["claude-opus-5-5"]["records"]) == 2     # the dropped row is still a row
+    st_cut = {"a": ALL_DROPPED, "b": sts("ok", "absent", "absent", "absent")}
+    out = rs.run_core(ctx, ["claude-opus-5-5"], {"claude-opus-5-5": (deep, {}, None, st_cut)}, (pm, {}), None, True, False)
+    assert out["finished_rounds"] == []
+
+
+def test_run_refuses_when_auto_finds_no_finished_round(monkeypatch, tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    cut = {"a": sts("ok", "absent", "absent", "absent"), "b": ALL_OK}
+    monkeypatch.setattr(rs, "build_context", lambda *a, **k: ctx)
+    monkeypatch.setattr(rs, "placebo_inputs", lambda c: (pm, {}))
+    monkeypatch.setattr(rs, "model_inputs", lambda c, m, root, p: (deep, {}, None, cut))
+    monkeypatch.setattr(rs, "run_core", lambda *a, **k: (_ for _ in ()).throw(AssertionError("scored with no finished round")))
+    with pytest.raises(SystemExit) as e:
+        rs.run(["claude-opus-5-5"], tmp_path / "frame.txt", None, runs_root=tmp_path, claude_root=tmp_path)
+    assert "no round" in str(e.value) and "--rounds" in str(e.value)
+    with pytest.raises(AssertionError):                           # an explicit --rounds is the analyst's choice
+        rs.run(["claude-opus-5-5"], tmp_path / "frame.txt", [1], runs_root=tmp_path, claude_root=tmp_path)
 
 
 # ======================================================================================
@@ -1211,3 +1265,27 @@ def test_extras_summary_reads_the_keys_score_member_writes(tmp_path):
     assert set(out) == set(rs.EXTRA_LEVEL)
     assert out["l4_0p5m"]["model_clusters"] == {"00853_s42_official": 1.0}
     assert out["l4_3p0m"]["placebo_clusters"] == {"00853_s42_official": 1.0}
+
+
+def test_dry_counts_regions_that_hold_a_footprint_cell(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    ctx.truths["00853"].regions_with_cells = lambda: {1, 2, 3}      # one of the five has an empty mask
+    out = rs.run_core(ctx, ["deepseek"], {"deepseek": (deep, {}, None, {})}, (pm, {}), None, False, False)
+    dry = rs.dry_summary(out, ["deepseek"])
+    assert dry["truth"]["00853"]["regions"] == 5 and dry["truth"]["00853"]["regions_with_footprint_cells"] == 3
+
+
+def test_mdd_table_file_holds_the_registered_fields(tmp_path):
+    ctx = fake_ctx(tmp_path)
+    deep, pm = fake_inputs()
+    out = rs.run_core(ctx, ["deepseek"], {"deepseek": (deep, {}, None, {})}, (pm, {}), None, False, False)
+    rs.write_real(out, tmp_path / "real", {})
+    f = json.loads((tmp_path / "real" / "mdd_table.json").read_text())
+    assert set(f) == {"levels", "alpha", "power", "m_tests"} and set(f["levels"]) == {"L1", "L2", "L3"}
+    assert f["alpha"] == 0.05 and f["power"] == 0.8 and f["m_tests"] == 6
+    for lv, delta, contrast in (("L1", 0.05, "B1-B3"), ("L2", 0.05, "B1-B3"), ("L3", 0.03, "B5-D")):
+        e = f["levels"][lv]
+        assert set(e) == {"contrast", "n_clusters", "sd", "mdd", "half_width", "delta"}
+        assert e["delta"] == delta and e["contrast"] == contrast
+    assert rs.mdd_table_file(out["mdd"]) == f

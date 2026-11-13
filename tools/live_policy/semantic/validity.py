@@ -298,6 +298,11 @@ def _cluster_mean(pairs: Sequence[Tuple[str, float]]) -> Dict[str, float]:
     return {c: float(m) for c, m in zip(ids, means)}
 
 
+def _possible(r: Mapping[str, Any], level: str) -> bool:
+    """§8: can any hit occur on this row at the level? A hand-made record without "possible" keeps the row."""
+    return bool(r.get("possible", {}).get(level, True))
+
+
 def share_removed(recs: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     """Readout 1: the share of guesses the validator removes, and by reason (over the records given;
     each record is {"validity": row_record, ...})."""
@@ -315,7 +320,10 @@ def kept_vs_removed(recs: Sequence[Mapping[str, Any]], level: str) -> Dict[str, 
     averaged member -> row -> cluster as in §8; the difference per cluster; its 95% two-sided sign-flip
     interval; "no detectable difference" if the interval lies within +-0.05."""
     kept_c, rem_c, diffs = [], [], []
+    left_out = sum(1 for r in recs if not _possible(r, level))     # §8: counted, not scored
     for r in recs:
+        if not _possible(r, level):
+            continue
         v = r["validity"]
         kept = _mean(m[level] for m in v["views"].get("V", {}).values())
         rem = _mean(m[level] for m in v["removed"].values())
@@ -326,7 +334,7 @@ def kept_vs_removed(recs: Sequence[Mapping[str, Any]], level: str) -> Dict[str, 
         if kept is not None and rem is not None:
             diffs.append((r["cluster"], kept - rem))
     d = _cluster_mean(diffs)
-    out: Dict[str, Any] = {"level": level, "n_rows": len(diffs), "n_clusters": len(d),
+    out: Dict[str, Any] = {"level": level, "n_rows": len(diffs), "n_rows_left_out": left_out, "n_clusters": len(d),
                            "kept": _cluster_mean(kept_c), "removed": _cluster_mean(rem_c),
                            "mean_diff": None, "ci": None, "verdict": "no interval"}
     if d:
@@ -371,7 +379,8 @@ def reliability(items_by_scene: Mapping[str, Sequence[Sequence[float]]]) -> Dict
 
 def kept_vs_guesses(recs: Sequence[Mapping[str, Any]], views: Sequence[str] = VIEWS) -> Dict[str, Any]:
     """Readout 4: for each view, the guesses kept, the L3 items and hits among them, the L2 claims and hits,
-    pooled over members, and the cluster mean of the member -> row -> cluster L2 and L3 shares."""
+    pooled over members, and the cluster mean of the member -> row -> cluster L2 and L3 shares. L2 figures
+    come from rows where a hit is possible at L2, L3 figures from rows where one is possible at L3 (§8)."""
     out: Dict[str, Any] = {}
     for view in views:
         n_kept = l3_n = l2_n = 0
@@ -381,13 +390,16 @@ def kept_vs_guesses(recs: Sequence[Mapping[str, Any]], views: Sequence[str] = VI
             per = r["validity"]["views"].get(view)
             if per is None:
                 continue
-            for m in per.values():
-                n_kept += m["n_kept"]
-                l3_n += m["l3_n"]
-                l3_h += m["l3_hits"]
-                l2_n += m["l2_n"]
-                l2_h += m["l2_hits"]
+            n_kept += sum(m["n_kept"] for m in per.values())
+            if _possible(r, "L3"):
+                l3_n += sum(m["l3_n"] for m in per.values())
+                l3_h += sum(m["l3_hits"] for m in per.values())
+            if _possible(r, "L2"):
+                l2_n += sum(m["l2_n"] for m in per.values())
+                l2_h += sum(m["l2_hits"] for m in per.values())
             for lv in LEVEL_KEYS:
+                if not _possible(r, lv):
+                    continue
                 s = _mean(m[lv] for m in per.values())
                 if s is not None:
                     rows[lv].append((r["cluster"], s))
@@ -402,7 +414,8 @@ def summarise(recs: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     with_v = [r for r in recs if r.get("validity")]
     by_scene: Dict[str, List[Sequence[float]]] = {}
     for r in with_v:
-        by_scene.setdefault(r["scene"], []).extend(r["validity"]["support_items"])
+        if _possible(r, "L3"):          # the curve is read against L3 truth (§8: rows with no possible hit are left out)
+            by_scene.setdefault(r["scene"], []).extend(r["validity"]["support_items"])
     return {"share_removed": share_removed(with_v),
             "kept_vs_removed": {lv: kept_vs_removed(with_v, lv) for lv in LEVEL_KEYS},
             "reliability": reliability(by_scene),

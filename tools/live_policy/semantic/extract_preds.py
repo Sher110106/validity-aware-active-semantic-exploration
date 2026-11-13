@@ -368,24 +368,57 @@ def gemini_dir(row: "M.Row", gemini_root: Path = GEMINI_ROOT, frame_path: Path =
     return None
 
 
+FINAL_RECORD_STATUSES = ("ok", "dropped_refusal", "dropped_turn_limit", "dropped_error")
+
+
+def claude_row_dir(claude_root: Path, model: str, row_id: str) -> Path:
+    """<root>/<model>/effort_medium/<row_id> if it exists, else <root>/<model>/<row_id>."""
+    base = Path(claude_root) / model
+    nested = base / "effort_medium" / row_id
+    return nested if nested.is_dir() else base / row_id
+
+
 def claude_member_status(claude_root: Path, model: str, row_id: str) -> Dict[int, str]:
-    """Per member 0..3: "ok" (parsed_graph.yaml with parse.json {"ok": true}), "dropped" (the folder
-    exists but parse.json says ok false, is missing or unreadable, or there is no parsed_graph.yaml:
-    counted, not scored), or "absent" (no member folder: never run)."""
-    base = Path(claude_root) / model / row_id
+    """Per member 0..3, from record.json (the replay's own `status`) and parse.json:
+      "ok"          parsed: parse.json {"ok": true}, a parsed_graph.yaml, and no drop in the record
+      "dropped"     a final drop: record status dropped_refusal, dropped_turn_limit or dropped_error; or the
+                    graph did not parse (parse.json ok false, or missing, with a status ok or no record)
+      "unfinished"  record status cap_stopped, error or anything not final; or a folder with no record,
+                    no parse.json and no graph
+      "absent"      no member folder: never run
+    Counted, not scored, for "dropped"; a row with any member "unfinished" or "absent" is not finished."""
+    base = claude_row_dir(claude_root, model, row_id)
     out: Dict[int, str] = {}
     for m in range(N_MEMBERS):
         d = base / f"member_{m}"
         if not d.is_dir():
             out[m] = "absent"
             continue
-        ok = False
+        rec = None
+        try:
+            doc = json.loads((d / "record.json").read_text())
+            rec = doc.get("status") if isinstance(doc, dict) else None
+        except (OSError, ValueError):
+            rec = None
+        if rec is not None and rec not in FINAL_RECORD_STATUSES:
+            out[m] = "unfinished"
+            continue
+        if rec is not None and rec.startswith("dropped"):
+            out[m] = "dropped"
+            continue
+        parse = None
         try:
             doc = json.loads((d / "parse.json").read_text())
-            ok = isinstance(doc, dict) and doc.get("ok") is True
+            parse = doc.get("ok") if isinstance(doc, dict) else None
         except (OSError, ValueError):
-            ok = False
-        out[m] = "ok" if ok and (d / "parsed_graph.yaml").is_file() else "dropped"
+            parse = None
+        has_graph = (d / "parsed_graph.yaml").is_file()
+        if parse is True and has_graph:
+            out[m] = "ok"
+        elif rec is None and parse is None and not has_graph:
+            out[m] = "unfinished"
+        else:
+            out[m] = "dropped"
     return out
 
 
@@ -418,7 +451,7 @@ def member_files(row: "M.Row", model: str, runs_root: Path = RUNS_ROOT, gemini_r
         if claude_root is None:
             raise ValueError("claude_root is required for a Claude model")
         status = claude_member_status(claude_root, model, row.row_id)
-        base = Path(claude_root) / model / row.row_id
+        base = claude_row_dir(claude_root, model, row.row_id)
         files = [(m, base / f"member_{m}" / "parsed_graph.yaml") for m in range(N_MEMBERS) if status[m] == "ok"]
     return [(m, f) for m, f in files if f.is_file()]
 

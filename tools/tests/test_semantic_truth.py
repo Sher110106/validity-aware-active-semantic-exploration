@@ -951,9 +951,9 @@ def test_claude_member_status_and_drops(tmp_path):
     member(0, '{"ok": true}')
     member(1, '{"ok": false}')                 # the parse failed: dropped
     member(2, None)                            # no parse.json: cannot be confirmed, dropped
-    (root / "member_3").mkdir()                # a folder with nothing in it: dropped
+    (root / "member_3").mkdir()                # a folder with nothing in it: not finished
     status = ep.claude_member_status(tmp_path / "claude", "claude-opus-5-5", "row1")
-    assert status == {0: "ok", 1: "dropped", 2: "dropped", 3: "dropped"}
+    assert status == {0: "ok", 1: "dropped", 2: "dropped", 3: "unfinished"}   # nothing in the folder: not final
     member_ok_graph_missing = root.parent / "row2" / "member_0"
     member_ok_graph_missing.mkdir(parents=True)
     (member_ok_graph_missing / "parse.json").write_text('{"ok": true}')    # ok, but no parsed_graph.yaml
@@ -1016,3 +1016,67 @@ def test_the_labels_switch_reaches_the_truth(tmp_path, monkeypatch):
     answers = lambda t: {o.raw_name: set(o.answers_to) for o in t.regions[1].ref_objects}      # noqa: E731
     assert answers(both)["bed"] == {"bed", "duvet"} and answers(prim)["bed"] == {"bed"}
     assert answers(both)["refrigerator"] == answers(prim)["refrigerator"] == {"fridge"}
+
+
+def _claude_member(d, record=None, parse=None, graph=True):
+    d.mkdir(parents=True, exist_ok=True)
+    if record is not None:
+        (d / "record.json").write_text(json.dumps({"status": record}))
+    if parse is not None:
+        (d / "parse.json").write_text(json.dumps({"ok": parse}))
+    if graph:
+        write_graph(d / "parsed_graph.yaml", OBS_NODES)
+
+
+def test_claude_status_reads_record_json_and_both_layouts(tmp_path):
+    for layout in ("effort_medium/", ""):
+        root = tmp_path / ("a" if layout else "b")
+        base = root / "claude-haiku-5-5" / (layout + "row1")
+        _claude_member(base / "member_0", "ok", True)
+        _claude_member(base / "member_1", "dropped_refusal", None, graph=False)
+        _claude_member(base / "member_2", "dropped_turn_limit", None, graph=False)
+        _claude_member(base / "member_3", "dropped_error", None, graph=False)
+        assert ep.claude_member_status(root, "claude-haiku-5-5", "row1") == {0: "ok", 1: "dropped", 2: "dropped", 3: "dropped"}
+        _claude_member(base.parent / "row2" / "member_0", "cap_stopped", None, graph=False)
+        _claude_member(base.parent / "row2" / "member_1", "error", None, graph=False)
+        st = ep.claude_member_status(root, "claude-haiku-5-5", "row2")
+        assert st == {0: "unfinished", 1: "unfinished", 2: "absent", 3: "absent"}
+
+
+def test_status_ok_with_parse_json_false_is_a_dropped_member(tmp_path):
+    base = tmp_path / "claude-opus-5-5" / "effort_medium" / "row1"
+    _claude_member(base / "member_0", "ok", False)                   # the replay wrote a graph, but it did not parse
+    _claude_member(base / "member_1", "ok", True)
+    _claude_member(base / "member_2", "ok", None, graph=False)       # ok in the record, nothing to read
+    _claude_member(base / "member_3", None, False, graph=False)      # no record: parse.json decides
+    st = ep.claude_member_status(tmp_path, "claude-opus-5-5", "row1")
+    assert st == {0: "dropped", 1: "ok", 2: "dropped", 3: "dropped"}
+
+
+def test_member_files_follow_the_layout_and_skip_dropped(tmp_path, campaign):
+    runs, frame, _ = campaign
+    base = tmp_path / "claude-opus-5-5" / "effort_medium" / "r1_e1"
+    _claude_member(base / "member_0", "ok", True)
+    _claude_member(base / "member_1", "ok", False)
+    row = ep.load_row("r1_e1", runs_root=runs, frame_path=frame)
+    files = ep.member_files(row, "claude-opus-5-5", runs_root=runs, claude_root=tmp_path, frame_path=frame)
+    assert [m for m, _ in files] == [0] and "effort_medium" in str(files[0][1])
+
+
+def test_regions_with_cells_counts_only_regions_whose_mask_has_a_cell(tmp_path, monkeypatch):
+    import importlib.util as _u
+    _spec = _u.spec_from_file_location("_real_labels_for_cells", os.path.join(SEM, "labels.py"))
+    real_labels = _u.module_from_spec(_spec)
+    _spec.loader.exec_module(real_labels)
+    monkeypatch.setattr(rt, "labels", real_labels)
+    import numpy as np
+    mask = np.zeros((2, 10, 10), dtype=bool)
+    mask[0, 2:6, 2:6] = True                                          # region 2 has an empty mask
+    np.savez(tmp_path / "66666_region_footprints.npz", cell_size=0.05, region_ids=np.array([1, 2]), any_masks=mask,
+             floor_masks=mask, origin_xy=np.array([0.0, 0.0]))
+    objs = [{"id": 1, "name": "bed", "region": 1, "n_tri": 5, "world_min": [0, 0, 0], "world_max": [1, 1, 1]}]
+    (tmp_path / "66666_semantic_geometry.json").write_text(json.dumps({"scene": "66666", "n_objects": 1, "objects": {"1": objs[0]}}))
+    (tmp_path / "66666_regions.json").write_text(json.dumps({"scene": "66666", "regions": [
+        {"region_id": 1, "centroid_xy": [0.0, 0.0]}, {"region_id": 2, "centroid_xy": [1.0, 1.0]}]}))
+    t = rt.load_scene_truth("66666", truth_dir=tmp_path)
+    assert len(t.regions) == 2 and t.regions_with_cells() == {1}
