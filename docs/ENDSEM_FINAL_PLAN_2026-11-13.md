@@ -66,14 +66,14 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [ ] Opus review. The verdict reads "not shown sufficient, on a yardstick biased toward rejection" unless the data say otherwise.
 
 **M3, the Claude loop**
-- [~] A direct port of the author's tool loop to the Anthropic SDK, with a test that it matches his loop on scripted replies (47 tests pass; Opus review running). It runs on the laptop.
-- [ ] Meter and caps: priced per call on the right price card, reserve the measured p99 call, check caps on settled spend, resume by (model, stage, member).
-- [ ] Opus review of the loop against the API reference.
-- [ ] Smoke test: 24 members (Opus medium, Opus low, Haiku medium), cap $30, scored for cost and plumbing only.
+- [x] A direct port of the author's tool loop to the Anthropic SDK, with a test that it matches his loop on scripted replies; reviewed by Opus, fixed (62 tests). It runs on the laptop.
+- [x] Meter and caps: priced per call on the right price card, reserves, caps on settled spend, resume by (model, effort, input, member).
+- [x] Opus review of the loop against the API reference (four must-fix items, all fixed).
+- [x] Smoke test: 28 members (Haiku medium, Opus medium, Opus low), $2.84 of a $30 cap; all ended ok and all parse; checked by Opus (`m4/COST_ADDENDUM.md`).
 
 **M4, Claude on the same 44 inputs**
-- [ ] Gate: scorer hash committed, smoke passed, cost addendum and round order hashed.
-- [ ] Rounds, Haiku first in each: stage 8 of all 12 runs; stage 13; stage 3; the 8 Gemini inputs. Caps: Opus $280, Haiku $20.
+- [x] Gate for running the replays: smoke passed, cost addendum hashed and pushed (the scorer freeze gates scoring, not running).
+- [~] Rounds, Haiku first in each: stage 8 of all 12 runs; stage 13; stage 3; the 8 Gemini inputs. Caps: Opus $280, Haiku $20. Running since 11-13 19:26; projected about $35 to $46.
 - [ ] Last, exploratory: Haiku without the prompt's room hint (about $5).
 - [ ] Score with the frozen scorer. Opus recompute.
 
@@ -157,3 +157,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 18:57: Opus review of the Claude loop: four must-fix items before any paid call (gateway address, per-model caps, the per-round cost check, reserves); fixes in progress.
 - 11-13 18:47: tyrone's CPUs taken into use for the bench and the factorial (`~/endsem_cpu`), at the student's request, while the GPU is held by another user's job.
 - 11-13 19:02: lanes running: scorer integration; M2 pre-registration review; bench and factorial code on tyrone; part-2 rescore pipeline; Claude loop fixes.
+- 11-13 19:15: `PREREGISTRATION_M2.md` hashed (5b8a8400…) after an Opus review, pushed (f30ee25), before any of its arms was scored.
+- 11-13 19:10-19:18: Claude smoke test: 28 of 28 members ok, $2.84. Opus at effort medium costs about $0.15 a member, Haiku about half a cent: both models make their tool calls in one or two turns. All 28 texts parse with the author's parser on the host.
+- 11-13 19:13: part-2 rescore pipeline ran in interim mode: 853 equals the 11-12 numbers cell for cell; C2 for 853 is 0.751, below the 0.90 line (commit 7948b04). 871 awaits its third attempts.
+- 11-13 19:25: cost addendum hashed (cb0a131a…) and pushed (2e8a06c) after an Opus check of the smoke records. 19:26: the full Claude replay started (both models, four rounds). Its outputs are not scored until the scorer is frozen.
