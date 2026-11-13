@@ -1,0 +1,207 @@
+{
+ "balance": {
+  "claude-haiku-5-5": {
+   "ledger_lines": 488,
+   "ledger_lines_not_ok": 0,
+   "member_records": 176,
+   "member_records_status_not_ok": 0,
+   "member_records_with_error": 0,
+   "members": 176,
+   "members_dropped": 1
+  },
+  "claude-opus-5-5": {
+   "ledger_lines": 457,
+   "ledger_lines_not_ok": 0,
+   "member_records": 176,
+   "member_records_status_not_ok": 0,
+   "member_records_with_error": 0,
+   "members": 176,
+   "members_dropped": 0
+  }
+ },
+ "claude_root": "replay_outputs/m4",
+ "frame_rows": 44,
+ "labels": {
+  "claude-haiku-5-5": {
+   "members": 175,
+   "new_objects": 898,
+   "new_rooms": 91,
+   "objects_class": 894,
+   "objects_flagged": 51,
+   "objects_other": 4,
+   "objects_structure": 0,
+   "objects_unflagged": 847,
+   "rooms_dining": 0,
+   "rooms_untyped": 43
+  },
+  "claude-opus-5-5": {
+   "members": 176,
+   "new_objects": 1363,
+   "new_rooms": 190,
+   "objects_class": 1348,
+   "objects_flagged": 1363,
+   "objects_other": 15,
+   "objects_structure": 0,
+   "objects_unflagged": 0,
+   "rooms_dining": 0,
+   "rooms_untyped": 43
+  },
+  "deepseek": {
+   "members": 160,
+   "new_objects": 1872,
+   "new_rooms": 198,
+   "objects_class": 1859,
+   "objects_flagged": 1849,
+   "objects_other": 13,
+   "objects_structure": 0,
+   "objects_unflagged": 23,
+   "rooms_dining": 0,
+   "rooms_untyped": 11
+  },
+  "gemini": {
+   "members": 29,
+   "new_objects": 350,
+   "new_rooms": 44,
+   "objects_class": 349,
+   "objects_flagged": 0,
+   "objects_other": 1,
+   "objects_structure": 0,
+   "objects_unflagged": 350,
+   "rooms_dining": 0,
+   "rooms_untyped": 8
+  },
+  "placebo": {
+   "members": 176,
+   "new_objects": 1686,
+   "new_rooms": 282,
+   "objects_class": 1660,
+   "objects_flagged": 1686,
+   "objects_other": 26,
+   "objects_structure": 0,
+   "objects_unflagged": 0,
+   "rooms_dining": 0,
+   "rooms_untyped": 0
+  }
+ },
+ "looser": {
+  "labels_that_differ": [
+   "fridge"
+  ],
+  "members_with_a_claim_of_a_differing_label": {
+   "claude-haiku-5-5": 0,
+   "claude-opus-5-5": 0,
+   "deepseek": 0,
+   "gemini": 0,
+   "placebo": 0
+  },
+  "new_objects_of_a_differing_class": {
+   "claude-haiku-5-5": 0,
+   "claude-opus-5-5": 0,
+   "deepseek": 0,
+   "gemini": 0,
+   "placebo": 0
+  },
+  "rows": [
+   {
+    "classes": [
+     "fridge"
+    ],
+    "proposed": {
+     "claude-haiku-5-5": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "claude-opus-5-5": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "deepseek": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "gemini": {
+      "members": 0,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "placebo": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     }
+    },
+    "row_id": "e2_00871_s42_filter_st08",
+    "scene": "00871",
+    "types": []
+   },
+   {
+    "classes": [
+     "fridge"
+    ],
+    "proposed": {
+     "claude-haiku-5-5": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "claude-opus-5-5": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "deepseek": {
+      "members": 2,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "gemini": {
+      "members": 0,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     },
+     "placebo": {
+      "members": 4,
+      "members_with_class_claim": 0,
+      "members_with_type_claim": 0,
+      "new_objects_of_those_classes": 0
+     }
+    },
+    "row_id": "e2_00871_s42_filter_st13",
+    "scene": "00871",
+    "types": []
+   }
+  ],
+  "rows_where_classes_differ": 2,
+  "rows_where_truth_sets_differ": 2,
+  "rows_where_types_differ": 0
+ },
+ "one_claim_vs_plain_l1": {
+  "claude-haiku-5-5": {
+   "members_where_one_claim_score_differs": 0,
+   "members_with_l1_score": 47
+  },
+  "claude-opus-5-5": {
+   "members_where_one_claim_score_differs": 0,
+   "members_with_l1_score": 136
+  },
+  "deepseek": {
+   "members_where_one_claim_score_differs": 4,
+   "members_with_l1_score": 155
+  }
+ },
+ "scorer": "tools/live_policy/semantic",
+ "skipped_counters": {},
+ "what": "counts the pre-registration asks for that the scorer's result files do not hold"
+}

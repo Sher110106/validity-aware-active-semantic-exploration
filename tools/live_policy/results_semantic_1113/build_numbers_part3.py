@@ -57,7 +57,8 @@ MODEL_FILE = {"opus": CL + "results.json", "haiku": CL + "results.json",
 RECORD_FILE = {"opus": CL + f"records_{OPUS}.json", "haiku": CL + f"records_{HAIKU}.json",
                "deepseek": EX + "records_deepseek.json", "gemini": EX + "records_gemini.json",
                "placebo": EX + "records_placebo.json"}
-VALID_FILE = {"opus": CL + "validity.json", "haiku": CL + "validity.json", "deepseek": EX + "validity.json"}
+VALID_FILE = {"opus": CL + "validity.json", "haiku": CL + "validity.json", "deepseek": EX + "validity.json",
+              "gemini": EX + "validity.json", "placebo": EX + "validity.json"}
 ERR_FILE = {"opus": CL + f"error_sample_{OPUS}.json", "haiku": CL + f"error_sample_{HAIKU}.json",
             "deepseek": EX + "error_sample_deepseek.json", "gemini": EX + "error_sample_gemini.json",
             "placebo": EX + "error_sample_placebo.json"}
@@ -297,10 +298,10 @@ def gate_keys(m, L):
 
 
 def conf_tables(prefix, models, t12, t3, clusters):
-    h12 = ["Hypothesis"] + (["Clusters"] if clusters else []) + [
+    h12 = ["Hypothesis", "Rows"] + (["Clusters"] if clusters else []) + [
         "Score", "Placebo's own score", "Diff vs B3 (p)", "Diff vs B1 placebo (p)", "95% interval vs B3",
         "Margin (points)", "Largest p", "Holm p", "Verdict"]
-    h3 = ["Hypothesis"] + (["Clusters"] if clusters else []) + [
+    h3 = ["Hypothesis", "Rows"] + (["Clusters"] if clusters else []) + [
         "Score", "Placebo's own score", "Diff vs B5 (p)", "Diff vs D (p)", "Diff vs B3L (p)", "95% interval vs D",
         "Margin (points)", "Largest p", "Holm p", "Verdict"]
     A, B = Tab(t12, h12), Tab(t3, h3)
@@ -316,7 +317,8 @@ def conf_tables(prefix, models, t12, t3, clusters):
                 if abs(node["ci"][1] - hyp["ci_upper_named"]) > 1e-12:
                     raise Fail(f"{label}: interval upper end differs from the hypothesis record")
             k = f"{prefix}{m}_{L}"
-            cells = []
+            cells = [reg(k + "_rows", node["n_rows"], f_int, "rows", src,
+                         jp(*lkeys(m, L), "comparators", named, "n_rows"), tab.where(label, "Rows"))]
             if clusters:
                 cells.append(reg(k + "_clusters", node["n_clusters"], f_int, "clusters", src,
                                  jp(*lkeys(m, L), "comparators", named, "n_clusters"),
@@ -369,8 +371,93 @@ def gate_table(name, models):
     tab.done()
 
 
+def b2_table():
+    tab = Tab("b2", ["Row", "Rows", "Diff vs B2 (p)", "Interval"])
+    for L in ("L1", "L2"):
+        for m in ("opus", "haiku", "deepseek"):
+            label = f"{NAMES[m]} {L}"
+            src = MODEL_FILE[m]
+            node = at(J(src), *lkeys(m, L), "comparators", "B2")
+            k = f"b2_{m}_{L}"
+            tab.row(label, [
+                reg(k + "_rows", node["n_rows"], f_int, "rows", src, jp(*lkeys(m, L), "comparators", "B2", "n_rows"),
+                    tab.where(label, "Rows")),
+                diff_p_cell(tab, label, "Diff vs B2 (p)", k, m, L, "B2"),
+                ci_cell(tab, label, "Interval", k + "ci", src, lkeys(m, L) + ("comparators", "B2", "ci"))])
+    tab.done()
+
+
+SUP = SEMDIR + "supplement/supplement.json"
+SUP_MODELS = (("opus", OPUS), ("haiku", HAIKU), ("deepseek", "deepseek"), ("gemini", "gemini"), ("placebo", "placebo"))
+
+
+def supplement_tables():
+    if not abspath(SUP).exists():
+        raise Fail(f"missing {SUP}: run supplement/supplement.py first")
+    tab = Tab("sup_labels", ["Model", "Members", "New objects", "Labelled other", "Labelled structure",
+                             "Share other or structure", "With the flag", "Without the flag", "New rooms",
+                             "Untyped", "Share untyped", "Typed dining (left out)"])
+    for m, mid in SUP_MODELS:
+        base = ("labels", mid)
+        k = f"sup_{m}"
+        w = lambda col: tab.where(NAMES[m], col)   # noqa: E731
+        d = at(J(SUP), *base)
+        share_o = (d["objects_other"] + d["objects_structure"]) / d["new_objects"]
+        share_u = d["rooms_untyped"] / d["new_rooms"] if d["new_rooms"] else 0.0
+        tab.row(NAMES[m], [
+            regj(k + "_members", SUP, base + ("members",), f_int, "members", w("Members")),
+            regj(k + "_objects", SUP, base + ("new_objects",), f_int, "objects", w("New objects")),
+            regj(k + "_other", SUP, base + ("objects_other",), f_int, "objects", w("Labelled other")),
+            regj(k + "_structure", SUP, base + ("objects_structure",), f_int, "objects", w("Labelled structure")),
+            reg(k + "_share_os", share_o, f_pct, "share", SUP,
+                "(objects_other + objects_structure) / new_objects of " + jp(*base), w("Share other or structure")),
+            regj(k + "_flag", SUP, base + ("objects_flagged",), f_int, "objects", w("With the flag")),
+            regj(k + "_noflag", SUP, base + ("objects_unflagged",), f_int, "objects", w("Without the flag")),
+            regj(k + "_rooms", SUP, base + ("new_rooms",), f_int, "rooms", w("New rooms")),
+            regj(k + "_untyped", SUP, base + ("rooms_untyped",), f_int, "rooms", w("Untyped")),
+            reg(k + "_share_u", share_u, f_pct, "share", SUP, "rooms_untyped / new_rooms of " + jp(*base), w("Share untyped")),
+            regj(k + "_dining", SUP, base + ("rooms_dining",), f_int, "rooms", w("Typed dining (left out)"))])
+    tab.done()
+    bt = Tab("sup_balance", ["Model", "Members", "Dropped", "Drop rate", "Ledger lines not ok", "Member records with an error"])
+    for m, mid in SUP_MODELS[:2]:
+        base = ("balance", mid)
+        k = f"bal_{m}"
+        d = at(J(SUP), *base)
+        w = lambda col: bt.where(NAMES[m], col)   # noqa: E731
+        bt.row(NAMES[m], [
+            regj(k + "_members", SUP, base + ("members",), f_int, "members", w("Members")),
+            regj(k + "_dropped", SUP, base + ("members_dropped",), f_int, "members", w("Dropped")),
+            reg(k + "_rate", d["members_dropped"] / d["members"], lambda v: f_pct(v, 1), "share", SUP,
+                "members_dropped / members of " + jp(*base), w("Drop rate")),
+            regj(k + "_ledger_bad", SUP, base + ("ledger_lines_not_ok",), f_int, "lines", w("Ledger lines not ok")),
+            regj(k + "_rec_err", SUP, base + ("member_records_with_error",), f_int, "records", w("Member records with an error"))])
+    bt.done()
+    # prose numbers
+    lo = ("looser",)
+    regj("loose_rows", SUP, lo + ("rows_where_truth_sets_differ",), f_int, "rows")
+    regj("loose_rows_types", SUP, lo + ("rows_where_types_differ",), f_int, "rows")
+    regj("loose_rows_classes", SUP, lo + ("rows_where_classes_differ",), f_int, "rows")
+    reg("loose_label", ", ".join(at(J(SUP), *lo, "labels_that_differ")), f_str, "label", SUP, jp(*lo, "labels_that_differ"))
+    for m, mid in SUP_MODELS:
+        if m in ("gemini", "placebo"):
+            continue
+        reg(f"loose_claims_{m}", at(J(SUP), *lo, "members_with_a_claim_of_a_differing_label", mid), f_int, "members", SUP,
+            jp(*lo, "members_with_a_claim_of_a_differing_label", mid))
+        reg(f"loose_members_in_rows_{m}", sum(x["proposed"][mid]["members"] for x in at(J(SUP), *lo, "rows")), f_int,
+            "members", SUP, "sum over looser/rows[*] of proposed/" + mid + "/members")
+    for m, mid in SUP_MODELS[:3]:
+        base = ("one_claim_vs_plain_l1", mid)
+        regj(f"oneclaim_diff_{m}", SUP, base + ("members_where_one_claim_score_differs",), f_int, "members")
+        regj(f"oneclaim_n_{m}", SUP, base + ("members_with_l1_score",), f_int, "members")
+    regj("bal_ledger_lines_opus", SUP, ("balance", OPUS, "ledger_lines"), f_int, "lines")
+    regj("bal_ledger_lines_haiku", SUP, ("balance", HAIKU, "ledger_lines"), f_int, "lines")
+    regj("bal_records_opus", SUP, ("balance", OPUS, "member_records"), f_int, "records")
+    regj("bal_records_haiku", SUP, ("balance", HAIKU, "member_records"), f_int, "records")
+
+
 def mdd_table():
     src = EX + "mdd_table.json"
+    regj("mdd_power", src, ("power",), lambda v: f_pct(v, 0), "power")
     tab = Tab("mdd", ["Level", "Contrast", "Clusters", "SD of the contrast (points)", "Detectable difference (points)",
                       "Margin (points)", "Interval half-width (points)"])
     for L in ("L1", "L2", "L3"):
@@ -397,19 +484,19 @@ def records(m):
 
 
 def claims_table():
-    tab = Tab("claims", ["Model", "Members scored", "Rows with an L1 score", "L1 claims", "L2 claims", "L3 items"])
+    tab = Tab("claims", ["Model", "Members scored", "Rows behind the L1 contrasts", "L1 claims", "L2 claims", "L3 items"])
     for m in ("opus", "haiku", "deepseek", "gemini", "placebo"):
         src = RECORD_FILE[m]
         recs = records(m)
         mem = sum(len(r["model"]) for r in recs)
-        rows1 = sum(1 for r in recs if any(x["L1"] is not None for x in r["model"].values()))
+        rows1 = sum(1 for r in recs if r["possible"]["L1"] and any(x["L1"] is not None for x in r["model"].values()))
         sums = {lv: sum(x["counts"][f"{lv}_n"] for r in recs for x in r["model"].values()) for lv in ("l1", "l2", "l3")}
         k = f"claims_{m}"
         w = lambda c: tab.where(NAMES[m], c)   # noqa: E731
         tab.row(NAMES[m], [
             reg(k + "_members", mem, f_int, "members", src, "count of records[*]/model/*", w("Members scored")),
-            reg(k + "_rows1", rows1, f_int, "rows", src, "count of records[*] with some model/*/L1 not null",
-                w("Rows with an L1 score")),
+            reg(k + "_rows1", rows1, f_int, "rows", src, "count of records[*] with possible/L1 true and some model/*/L1 not null",
+                w("Rows behind the L1 contrasts")),
             reg(k + "_l1", sums["l1"], f_int, "claims", src, "sum of records[*]/model/*/counts/l1_n", w("L1 claims")),
             reg(k + "_l2", sums["l2"], f_int, "claims", src, "sum of records[*]/model/*/counts/l2_n", w("L2 claims")),
             reg(k + "_l3", sums["l3"], f_int, "items", src, "sum of records[*]/model/*/counts/l3_n", w("L3 items"))])
@@ -566,9 +653,10 @@ def room_tables():
 
 def validity_tables():
     models = ("opus", "haiku", "deepseek")
+    models5 = models + ("gemini", "placebo")
     T1 = Tab("val_removed", ["Model", "Guesses", "Removed", "Share removed", "Box conflict", "Impassable crossing",
                              "Object parent"])
-    for m in models:
+    for m in models5:
         src = VALID_FILE[m]
         base = (MODEL_ID[m], "share_removed")
         k = f"val_rem_{m}"
@@ -587,7 +675,7 @@ def validity_tables():
     T1.done()
     T2 = Tab("val_kept", ["Row", "Rows", "Clusters", "Kept minus removed [interval]", "Reading"])
     for L in ("L2", "L3"):
-        for m in models:
+        for m in models5:
             src = VALID_FILE[m]
             base = (MODEL_ID[m], "kept_vs_removed", L)
             label = f"{NAMES[m]} {L}"
@@ -638,8 +726,11 @@ def validity_tables():
     T5 = Tab("val_votes", ["Model and view", "Guesses kept", "L2 hits", "L2 claims", "L3 hits", "L3 items"])
     for m in models:
         src = VALID_FILE[m]
-        for view, vlabel in (("raw", "raw"), ("V", "validator"), ("V+vote0.5", "validator + vote 0.5"),
+        for view, vlabel in (("raw", "raw"), ("V", "validator"), ("V+2of8", "validator + the paper's 2-of-8 rule"),
+                             ("V+vote0.5", "validator + vote 0.5"),
                              ("V+vote0.75", "validator + vote 0.75"), ("V+vote1.0", "validator + vote 1.0")):
+            if view not in at(J(src), MODEL_ID[m], "kept_vs_guesses"):
+                continue
             base = (MODEL_ID[m], "kept_vs_guesses", view)
             label = f"{NAMES[m]}, {vlabel}"
             k = f"val_vote_{m}_{view}"
@@ -674,83 +765,130 @@ def loose_equals_primary():
 
 # ------------------------------------------------------------------------------------------ M2
 
-def m2_tables():
-    src = M2DIR + "pass2/summary_factorial.json"
-    main = ("analysis", "main", "all")
-    errs = {"deepseek": (M2DIR + "pass1/err_deepseek.json", "F3-deepseek", "B_deepseek", "DeepSeek"),
-            "haiku": (M2DIR + "pass2/err_haiku.json", "F3-haiku", "B_haiku", "Haiku"),
-            "opus": (M2DIR + "pass2/err_opus.json", "F3-opus", "B_opus", "Opus")}
-    ci_f = lambda v: f_rho(v)   # noqa: E731
+M2SRC = M2DIR + "pass2/summary_factorial.json"
+M2ERR = {"deepseek": (M2DIR + "pass1/err_deepseek.json", "F3-deepseek", "B_deepseek", "DeepSeek"),
+         "haiku": (M2DIR + "pass2/err_haiku.json", "F3-haiku", "B_haiku", "Haiku"),
+         "opus": (M2DIR + "pass2/err_opus.json", "F3-opus", "B_opus", "Opus")}
+M2ARMS = (("F1", "F1 (true guesses)"), ("F5", "F5 (placebo)"), ("F6", "F6 (no guesses)"), ("F0", "F0 (all true)"),
+          ("F3-deepseek", "F3 with DeepSeek's error"), ("F3-haiku", "F3 with Haiku's error"),
+          ("F3-opus", "F3 with Opus's error"), ("F-room", "F-room (types only)"))
 
-    def interval(tab, row, col, key, keys, base_src=src):
-        node = at(J(base_src), *keys)
-        w = tab.where(row, col)
-        m = reg(key + "_mean", node["mean"], ci_f, "rho", base_src, jp(*keys, "mean"), w)
-        lo = reg(key + "_lo", node["lo"], ci_f, "rho", base_src, jp(*keys, "lo"), w)
-        hi = reg(key + "_hi", node["hi"], ci_f, "rho", base_src, jp(*keys, "hi"), w)
-        return f"{m} [{lo}, {hi}]"
 
-    arms = Tab("m2_arms", ["Arm", "Mean correlation [interval]", "Median per stage", "Median placement error (m)"])
-    for arm, label in (("F1", "F1 (true guesses)"), ("F5", "F5 (placebo)"), ("F6", "F6 (no guesses)"),
-                       ("F0", "F0 (all true)"), ("F3-deepseek", "F3 with DeepSeek's error"),
-                       ("F3-haiku", "F3 with Haiku's error"), ("F3-opus", "F3 with Opus's error"),
-                       ("F-room", "F-room (types only)")):
-        k = "m2_" + arm.replace("-", "_")
+def m2_interval(tab, row, col, key, keys):
+    node = at(J(M2SRC), *keys)
+    w = tab.where(row, col)
+    m = reg(key + "_mean", node["mean"], f_rho, "rho", M2SRC, jp(*keys, "mean"), w)
+    lo = reg(key + "_lo", node["lo"], f_rho, "rho", M2SRC, jp(*keys, "lo"), w)
+    hi = reg(key + "_hi", node["hi"], f_rho, "rho", M2SRC, jp(*keys, "hi"), w)
+    return f"{m} [{lo}, {hi}]"
+
+
+def m2_scope_tables(scope):
+    """The arm, reading, regret and count tables for all stages (scope 'all') or the official-arm stages."""
+    src = M2SRC
+    main = ("analysis", "main", scope)
+    sfx = "" if scope == "all" else "_off"
+    pre = "m2" + sfx
+    counts = ("counts_all_stages",) if scope == "all" else ("counts_official_stages",)
+    arms = Tab("m2_arms" + sfx, ["Arm", "Mean correlation [interval]", "Median per stage", "Median placement error (m)"])
+    for arm, label in M2ARMS:
+        k = pre + "_" + arm.replace("-", "_")
         med = "-"
-        for m, (efile, a, _b, _n) in errs.items():
+        for m, (efile, a, _b, _n) in M2ERR.items():
             if a == arm:
                 med = reg(f"m2_err_{m}_median", statistics.median(J(efile)), f_num(2), "m", efile,
                           "median of the list", arms.where(label, "Median placement error (m)"))
-        arms.row(label, [interval(arms, label, "Mean correlation [interval]", k, main + ("arm_mean_rho", arm)),
+        arms.row(label, [m2_interval(arms, label, "Mean correlation [interval]", k, main + ("arm_mean_rho", arm)),
                          regj(k + "_median", src, main + ("median_stage_rho", arm), f_rho, "rho",
-                              arms.where(label, "Median per stage")),
-                         med])
+                              arms.where(label, "Median per stage")), med])
     arms.done()
-
-    def verdict(arm_key):
-        return at(J(src), *main, "reading", "verdicts", arm_key)
-
-    rd = Tab("m2_reading", ["Contrast", "X minus F5 [interval]", "X minus half of A [interval]", "Verdict"])
+    verdict = lambda key: at(J(src), *main, "reading", "verdicts", key)   # noqa: E731
+    rd = Tab("m2_reading" + sfx, ["Contrast", "X minus F5 [interval]", "X minus half of A [interval]", "Verdict"])
     ra = "A = F1 minus F5"
-    rd.row(ra, [interval(rd, ra, "X minus F5 [interval]", "m2_A", main + ("differences", "A")), "-",
+    rd.row(ra, [m2_interval(rd, ra, "X minus F5 [interval]", pre + "_A", main + ("differences", "A")), "-",
                 "F1 separates from F5"])
-    for arm_key, label in (("B_deepseek", "B, F3 with DeepSeek's error"), ("B_haiku", "B, F3 with Haiku's error"),
-                           ("B_opus", "B, F3 with Opus's error"), ("C", "C, F-room")):
-        k = "m2_" + arm_key
-        rd.row(label, [interval(rd, label, "X minus F5 [interval]", k, main + ("differences", arm_key)),
-                       interval(rd, label, "X minus half of A [interval]", k + "_half", main + ("reading_series", arm_key)),
-                       reg(k + "_verdict", verdict(arm_key), f_str, "verdict", src,
-                           jp(*main, "reading", "verdicts", arm_key), rd.where(label, "Verdict"))])
-    rd.row("F0 minus F5", [interval(rd, "F0 minus F5", "X minus F5 [interval]", "m2_F0F5", main + ("differences", "F0-F5")),
-                           "-", "not part of the reading rule"])
-    rd.row("F6 minus F5", [interval(rd, "F6 minus F5", "X minus F5 [interval]", "m2_F6F5", main + ("differences", "F6-F5")),
-                           "-", "not part of the reading rule"])
+    for key, label in (("B_deepseek", "B, F3 with DeepSeek's error"), ("B_haiku", "B, F3 with Haiku's error"),
+                       ("B_opus", "B, F3 with Opus's error"), ("C", "C, F-room")):
+        k = pre + "_" + key
+        rd.row(label, [m2_interval(rd, label, "X minus F5 [interval]", k, main + ("differences", key)),
+                       m2_interval(rd, label, "X minus half of A [interval]", k + "_half", main + ("reading_series", key)),
+                       reg(k + "_verdict", verdict(key), f_str, "verdict", src, jp(*main, "reading", "verdicts", key),
+                           rd.where(label, "Verdict"))])
+    for key, label in (("F0-F5", "F0 minus F5"), ("F6-F5", "F6 minus F5")):
+        k = pre + "_" + key.replace("-", "")
+        rd.row(label, [m2_interval(rd, label, "X minus F5 [interval]", k, main + ("differences", key)), "-",
+                       "not part of the reading rule"])
     rd.done()
+    # regret
+    rg = Tab("m2_regret" + sfx, ["Arm", "R1 regret under U_wall [interval]", "R1 regret under U_wall_cone [interval]"])
+    for arm, label in M2ARMS:
+        cells = []
+        for yard, ycol in (("Uwall", "R1 regret under U_wall [interval]"), ("Ucone", "R1 regret under U_wall_cone [interval]")):
+            keys = main + ("regret_R1", yard, "arm_mean", arm)
+            node = at(J(src), *keys)
+            k = f"{pre}_regret_{yard}_{arm.replace('-', '_')}"
+            w = rg.where(label, ycol)
+            cells.append("{} [{}, {}]".format(
+                reg(k + "_mean", node["mean"], f_num(2), "R1 regret", src, jp(*keys, "mean"), w),
+                reg(k + "_lo", node["lo"], f_num(2), "R1 regret", src, jp(*keys, "lo"), w),
+                reg(k + "_hi", node["hi"], f_num(2), "R1 regret", src, jp(*keys, "hi"), w)))
+        rg.row(label, cells)
+    rg.done()
+    # objects per member and ig = 0
+    ob = Tab("m2_objects" + sfx, ["Arm", "Objects per member (mean)", "Fewest", "Most", "Stages with ig = 0 for every candidate"])
+    for arm, label in (("F1", "F1"), ("F5a", "F5, set A"), ("F5b", "F5, set B"), ("F6", "F6"), ("F0", "F0"),
+                       ("F3-deepseek", "F3 with DeepSeek's error"), ("F3-haiku", "F3 with Haiku's error"),
+                       ("F3-opus", "F3 with Opus's error"), ("F-room", "F-room")):
+        k = f"{pre}_obj_{arm.replace('-', '_')}"
+        base = counts + ("objects_per_member", arm)
+        zero = counts + ("ig_zero_stage_share", arm)
+        ob.row(label, [
+            regj(k + "_mean", src, base + ("mean_per_member",), f_num(2), "objects", ob.where(label, "Objects per member (mean)")),
+            regj(k + "_min", src, base + ("min",), f_int, "objects", ob.where(label, "Fewest")),
+            regj(k + "_max", src, base + ("max",), f_int, "objects", ob.where(label, "Most")),
+            "{} of {}".format(
+                regj(k + "_zero", src, zero + ("stages_ig_zero_for_every_candidate",), f_int, "stages",
+                     ob.where(label, "Stages with ig = 0 for every candidate")),
+                regj(k + "_zero_of", src, zero + ("n_stages",), f_int, "stages",
+                     ob.where(label, "Stages with ig = 0 for every candidate")))])
+    ob.done()
 
-    sec = Tab("m2_secondary", ["Repeat", "Stages", "A", "B DeepSeek", "B Haiku", "B Opus", "C", "Verdicts"])
-    reps = [("`ig` alone", ("analysis", "ig_alone", "all")), ("Audit's U_cone", ("analysis", "audit_Ucone", "all")),
-            ("U_360", ("analysis", "U360", "all")), ("Official-arm stages", ("analysis", "main", "official")),
-            ("Runs clustered by scene and seed (6)", None)]
-    for label, base in reps:
-        if base is None:
-            base = ("clustered_by_scene_seed", "main")
-        k = "m2_sec_" + re.sub(r"\W+", "_", label.lower()).strip("_")
-        node = at(J(src), *base)
-        vd = node["reading"]["verdicts"]
-        short = lambda v: "not shown" if v.startswith("not shown") else v   # noqa: E731
-        bv = {short(vd[x]) for x in ("B_deepseek", "B_haiku", "B_opus")}
-        vtext = ("B: " + "/".join(sorted(bv)) + "; C: " + short(vd["C"]))
-        cells = [regj(k + "_stages", src, base + ("n_stages_kept",), f_int, "stages", sec.where(label, "Stages"))
-                 if "n_stages_kept" in node else "-"]
-        for col, dk in (("A", "A"), ("B DeepSeek", "B_deepseek"), ("B Haiku", "B_haiku"), ("B Opus", "B_opus"),
-                        ("C", "C")):
-            cells.append(interval(sec, label, col, f"{k}_{dk}", base + ("differences", dk)))
-        cells.append(vtext)
-        for dk in vd:
-            reg(f"{k}_v_{dk}", vd[dk], f_str, "verdict", src, jp(*base, "reading", "verdicts", dk),
-                sec.where(label, "Verdicts"))
-        sec.row(label, cells)
-    sec.done()
+
+def m2_tables():
+    src = M2SRC
+    m2_scope_tables("all")
+    m2_scope_tables("official")
+    def secondary(name, reps, sfx):
+        sec = Tab(name, ["Repeat", "Stages", "A = F1 minus F5", "B DeepSeek (X minus F5)", "B Haiku (X minus F5)",
+                         "B Opus (X minus F5)", "C (X minus F5)", "Verdicts (from X minus half of A)"])
+        for label, base in reps:
+            k = "m2_sec" + sfx + "_" + re.sub(r"\W+", "_", label.lower()).strip("_")
+            node = at(J(src), *base)
+            vd = node["reading"]["verdicts"]
+            short = lambda v: "not shown" if v.startswith("not shown") else v   # noqa: E731
+            bv = {short(vd[x]) for x in ("B_deepseek", "B_haiku", "B_opus")}
+            vtext = ("B: " + "/".join(sorted(bv)) + "; C: " + short(vd["C"]))
+            cells = [regj(k + "_stages", src, base + ("n_stages_kept",), f_int, "stages", sec.where(label, "Stages"))
+                     if "n_stages_kept" in node else "-"]
+            for col, dk in (("A = F1 minus F5", "A"), ("B DeepSeek (X minus F5)", "B_deepseek"),
+                            ("B Haiku (X minus F5)", "B_haiku"), ("B Opus (X minus F5)", "B_opus"),
+                            ("C (X minus F5)", "C")):
+                cells.append(m2_interval(sec, label, col, f"{k}_{dk}", base + ("differences", dk)))
+            cells.append(vtext)
+            for dk in vd:
+                reg(f"{k}_v_{dk}", vd[dk], f_str, "verdict", src, jp(*base, "reading", "verdicts", dk),
+                    sec.where(label, "Verdicts (from X minus half of A)"))
+            sec.row(label, cells)
+        sec.done()
+
+    secondary("m2_secondary", [("`ig` alone", ("analysis", "ig_alone", "all")),
+                               ("Audit's U_cone", ("analysis", "audit_Ucone", "all")),
+                               ("U_360", ("analysis", "U360", "all")),
+                               ("Official-arm stages", ("analysis", "main", "official")),
+                               ("Runs clustered by scene and seed (6)", ("clustered_by_scene_seed", "main"))], "")
+    secondary("m2_secondary_off", [("`ig` alone", ("analysis", "ig_alone", "official")),
+                                   ("Audit's U_cone", ("analysis", "audit_Ucone", "official")),
+                                   ("U_360", ("analysis", "U360", "official"))], "_off")
 
 
 def m2_numbers():
@@ -881,6 +1019,7 @@ def rule_numbers():
             ("rule_f3_models", 3, "models", m2, r"F3 runs first for DeepSeek, and for Claude Haiku and Opus"),
             ("rule_m2_half", 0.5, "factor", m2, r"X − 0\.5 × A"),
             ("rule_vocab", 52, "words", pre, r"52-word detector vocabulary"),
+            ("rule_drop_flag", 25, "percent", pre, r"a rate above 25% is flagged"),
             ("rule_room_m", 2.5, "m", pre, r"within 2\.5 m of the region's `centroid_xy`"),
             ("rule_room_k", 2, "members", pre, r"at least 2 of the 8 members")):
         if not re.search(rx, T(fname)):
@@ -978,6 +1117,15 @@ def thesis_numbers():
     reg("gemini_members", sum(len(r["model"]) for r in records("gemini")), f_int, "members",
         RECORD_FILE["gemini"], "count of records[*]/model/*")
     # other-views of Haiku L1: rows behind each contrast
+    for short, m in (("opus", "opus"), ("haiku", "haiku"), ("deepseek", "deepseek")):
+        reg(f"l1_noclaim_{short}", sum(1 for r in records(m) if r["possible"]["L1"] and
+                                       all(x["L1"] is None for x in r["model"].values())), f_int, "rows", RECORD_FILE[m],
+            "count of records[*] with possible/L1 true and no model/*/L1 score")
+    s360 = ("analysis", "U360", "all", "reading_series", "C")
+    for part in ("mean", "lo", "hi"):
+        reg(f"m2_u360_Chalf_{part}", at(J(M2SRC), *s360, part), f_rho, "rho", M2SRC, jp(*s360, part))
+    reg("l1_rows_deepseek", at(J(EX + "results.json"), *lkeys("deepseek", "L1"), "comparators", "B3", "n_rows"), f_int,
+        "rows", EX + "results.json", jp(*lkeys("deepseek", "L1"), "comparators", "B3", "n_rows"))
     for short, m in (("opus", "opus"), ("haiku", "haiku")):
         reg(f"l1_rows_{short}", at(J(CL + "results.json"), *lkeys(m, "L1"), "comparators", "B3", "n_rows"), f_int,
             "rows", CL + "results.json", jp(*lkeys(m, "L1"), "comparators", "B3", "n_rows"))
@@ -1025,7 +1173,7 @@ def nohint_tables(rows, rnd, skip_replay):
         w = lambda c: tab.where(label, c)   # noqa: E731
         path = "round 1 rows: "
         tab.row(label, [
-            reg(k + "_rows", len(row_scores), f_int, "rows", src, path + "count of rows with a member L1 score", w("Rows with an L1 score")),
+            reg(k + "_rows", len(row_scores), f_int, "rows", src, path + "count of rows with a member L1 score", w("Rows behind the L1 contrasts")),
             reg(k + "_claims", claims, f_int, "claims", src, path + "sum of model/*/counts/l1_n", w("L1 claims")),
             reg(k + "_hits", hits, f_int, "hits", src, path + "sum of model/*/counts/l1_hits", w("L1 hits")),
             reg(k + "_score", statistics.fmean(row_scores), f_pct, "share", src,
@@ -1089,6 +1237,8 @@ def build(skip_replay=False, skip_git=False):
     conf_tables("e_", ["deepseek", "gemini", "placebo"], "exp_l12", "exp_l3", clusters=True)
     gate_table("gate_exp", ["deepseek", "gemini"])
     mdd_table()
+    b2_table()
+    supplement_tables()
     claims_table()
     secondary_tables()
     extras_tables()
