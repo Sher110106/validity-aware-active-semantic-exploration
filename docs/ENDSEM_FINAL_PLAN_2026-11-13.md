@@ -58,12 +58,12 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [x] Opus review of the code against the pre-registration: a hand-computed toy house agreed on every number; one must-fix and six smaller items, all fixed.
 - [x] Scorer freeze: `semantic/FREEZE.sha256`, committed and pushed 11-13 20:14 (04e6afc), before any Claude output was scored.
 - [x] Run on the saved DeepSeek, Gemini and placebo guesses (`results_semantic_1113/exploratory/`). DeepSeek's verdicts are exploratory.
-- [~] Opus recompute of the headline numbers with its own code, written from the rules without reading the scorer: running.
+- [x] Opus recompute of the headline numbers with its own code, written from the rules without reading the scorer: reproduced (DeepSeek and both Claude models).
 
 **M2, would right meaning be enough? ($0)**
 - [x] Rebuild the bench from a copy and reproduce 9,600 of 9,600 picks (done on the laptop, `tools/live_policy/m2/`; the same on tyrone's CPUs is in progress).
-- [ ] The trimmed factorial: ceiling and floor arms (F1, F5, F6), then F-room and F3 at DeepSeek's measured error, then each Claude model's error.
-- [ ] Opus review. The verdict reads "not shown sufficient, on a yardstick biased toward rejection" unless the data say otherwise.
+- [x] The trimmed factorial on tyrone's CPUs: F1, F5, F6, F0, F-room, and F3 with DeepSeek's, Haiku's and Opus's measured errors (`results_m2_1113/`).
+- [x] Opus review of the M2 rules (before the hash) and of the code (before the run). Every arm reads "not shown sufficient, on a provisional yardstick".
 
 **M3, the Claude loop**
 - [x] A direct port of the author's tool loop to the Anthropic SDK, with a test that it matches his loop on scripted replies; reviewed by Opus, fixed (62 tests). It runs on the laptop.
@@ -73,9 +73,9 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 **M4, Claude on the same 44 inputs**
 - [x] Gate for running the replays: smoke passed, cost addendum hashed and pushed (the scorer freeze gates scoring, not running).
-- [~] Rounds, Haiku first in each: stage 8 of all 12 runs; stage 13; stage 3; the 8 Gemini inputs. Caps: Opus $280, Haiku $20. Running since 11-13 19:26; projected about $35 to $46.
-- [ ] Last, exploratory: Haiku without the prompt's room hint (about $5).
-- [ ] Score with the frozen scorer. Opus recompute.
+- [x] Rounds, Haiku first in each: stage 8 of all 12 runs; stage 13; stage 3; the 8 Gemini inputs. Done 11-13 20:38: 352 members, $35.78; 351 parse, one Haiku member a counted drop.
+- [x] Exploratory: Haiku without the prompt's room hint on the round-1 rows ($0.30; `results_semantic_1113/nohint_haiku/`).
+- [x] Scored once with the frozen scorer (commit 2e46ec8); the independent recompute reproduces it.
 
 ### 3.3 The talk
 
@@ -166,3 +166,9 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - Detectable differences from the freeze: 5.7 points at L1, 5.2 at L2, 1.1 at L3. All three levels can decide; the plan had feared 20 points at L1.
 - Exploratory result, DeepSeek on the 44 rows: against the other-house prior, L1 −1.7 points (−5.2 to 0.0) and L2 −26.3 (−33.2 to −19.4); against the placebo, L1 +1.7 and L2 +5.8; at L3, −0.6 (−1.9 to +0.6) against the region trade. Rejected at all three levels under the frozen rules. Its guesses lie a median 7.7 m from the nearest unseen object they could name (Gemini 5.8 m, placebo 9.0 m).
 - 11-13 20:05: tyrone reproduces the bench's 9,600 picks in about 10 minutes on 48 cores; the factorial code is staged there and under Opus review.
+- 11-13 20:38: the Claude replays ended: 352 members, all four rounds for both models, $35.78 (with the smoke test, $38.62 of the $330 approved). 351 parse with the author's parser; one Haiku member, cut off at the token limit, is a counted drop.
+- **11-13 20:41: the blind test, scored once with the frozen scorer (commit 2e46ec8).** All six hypotheses read Rejected, and the thesis line is "the claim fails". Against the other-house prior: Opus L1 −5.8 points (−12.2 to 0.0), L2 −35.1 (−41.3 to −29.1); Haiku L1 −10.4 (−20.8 to 0.0), L2 −24.9 (−31.5 to −18.1). At L3 against the region trade: Opus +0.5 (−1.9 to +2.9), Haiku +0.8 (−0.8 to +2.4), margin 3. No model passes the wrong-house gate. Against the placebo, Haiku is ahead at L2 by 8.2 points (p 0.014); Opus is not.
+- 11-13 21:08: an independent recompute, from code written without reading the scorer, reproduces DeepSeek's and both Claude models' numbers, the six verdicts and the thesis line. The one close verdict, Opus at L3 (upper end 0.0295 against a margin of 0.03), held in fifteen reruns of the randomised control with other seeds and up to 5,000 draws (deviation 55).
+- 11-13 20:30 and 21:05: M2 on tyrone's CPUs, both passes complete (384 stages each). True objects at true places beat random guesses by +0.218 in rank correlation with the yardstick (+0.195 to +0.241). Moved by each model's own placement error (medians 7.7 m DeepSeek, 7.1 m Haiku, 8.1 m Opus) they fall to −0.020, −0.006 and −0.029; room types alone give +0.024. Every arm reads "not shown sufficient, on a provisional yardstick".
+- 11-13 20:55-21:02: tyrone was unreachable because Cloudflare WARP on the laptop was connected and blocks Tailscale. The student said to leave WARP off until the work is done; it is to be reconnected at the end.
+- Still blocked on the GPU (another user's job holds 43 of 48 GB since about 18:05): the 871 APR-b tour, the four 871 seeds, and ASP on 853. The queue waits at its check; nothing is harmed.
