@@ -24,7 +24,7 @@ Code, pre-registrations and results for the October-November live test of ASP (a
 
 ## Pre-registrations
 
-Do not edit these files or their hashes. sha256 values below were computed on 12 Nov 2026 from the files in this folder.
+Do not edit these files or their hashes. sha256 values below were computed on 12 Nov 2026 from the files in this folder, except the `PREREGISTRATION_PAPER.md` row, retaken on 13 Nov.
 
 | File | sha256 | Where it is pinned |
 |---|---|---|
@@ -34,9 +34,9 @@ Do not edit these files or their hashes. sha256 values below were computed on 12
 | `PREREGISTRATION_BENCH.md` | `2571a7ef15f7a3bef974ef37f8fddcb964bfa2954d91f08d9a581d24af842f22` | `PREREGISTRATION_BENCH.sha256` (in this folder; written 29 Oct 22:28 IST) |
 | `PREREGISTRATION_FRONTIER_SEEDS.md` | `c7ca42a198768f932ca53ab9395d33e4d73b7cf9ae33d679fff90c8e0dc9503d` | `results_2026-10-31/DEVIATIONS.md` item 36(b), which says it was frozen with its `.sha256`. That `.sha256` stayed on the host. |
 | `PREREGISTRATION_DETERMINISM.md` | `56d69fb6971f16038e723dca33adea4ca0daf1f91eaf59477089ea41fec72e78` | `results_2026-10-31/DEVIATIONS.md` item 36(c), same wording. That `.sha256` stayed on the host. |
-| `PREREGISTRATION_PAPER.md` | `1286c2c58f1019519dc16f4ab3ce02422f0ab30b73133482e8ddf62b06a05717` | `PREREGISTRATION_PAPER.sha256` (in this folder; retaken 13 Nov 17:54 IST with Amendment 2, before any third e7 871 attempt started. Before the amendment the hash was `fee16733…`, taken 6 Nov 17:59 IST) |
+| `PREREGISTRATION_PAPER.md` | `3576bd876e43659788a4c05aa927344a4cb29a462a4765c50a1335d7670d75fa` | `PREREGISTRATION_PAPER.sha256` (in this folder; retaken 13 Nov 18:35 IST with the Note to Amendment 2, before the 871 APR-b rerun or any third e7 871 attempt started. Earlier: `1286c2c5…` on 13 Nov 17:54 with Amendment 2; `fee16733…` on 6 Nov 17:59 before it) |
 
-The hashes of the two `.sha256` files themselves are `0d56e166…` (BENCH) and `69bfa386…` (PAPER, after Amendment 2; `445d5e19…` before it). The E1-E3 `.sha256` files are listed in `results_2026-10-31/COPY_MANIFEST.sha256` as `runs/live_campaign/PREREGISTRATION_E{1,2,3}.sha256`; they exist only in the off-host copy of the campaign, not in this repository. Hashes of the host-only FRONTIER_SEEDS and DETERMINISM `.sha256` files: not verifiable from the repo.
+The hashes of the two `.sha256` files themselves are `0d56e166…` (BENCH) and `dafb02b5…` (PAPER, after Amendment 2 and its Note; `445d5e19…` before it). The E1-E3 `.sha256` files are listed in `results_2026-10-31/COPY_MANIFEST.sha256` as `runs/live_campaign/PREREGISTRATION_E{1,2,3}.sha256`; they exist only in the off-host copy of the campaign, not in this repository. Hashes of the host-only FRONTIER_SEEDS and DETERMINISM `.sha256` files: not verifiable from the repo.
 
 ## Deviation logs
 

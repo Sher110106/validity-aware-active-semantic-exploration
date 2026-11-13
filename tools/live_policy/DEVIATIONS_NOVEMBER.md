@@ -3,10 +3,11 @@
 This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 and is pinned by hash. Items here start at 40. They record departures from `PREREGISTRATION_PAPER.md`, from `docs/ENDSEM_PLAN_2026-11-03.md`, and later from `PREREGISTRATION_SEMANTIC.md`. Times are IST.
 
 40. **11-09 19:46: the queue's free-GPU check was lowered from 12 GB to 5 GB.** The student asked for the runs to go ahead beside another user's GPU job, which held about 41.5 of the card's 48 GB. Every paper run from then until 11-10 15:07 used the 5 GB check. The reviewed script (sha256 6ffb5601…) waits for 12 GB.
-    - Effect on e7: 871 seeds 42-45 crashed (item 41). 853 seeds 43-46 and 871 seed 46 finished with no GPU error.
+    - Effect on e7: seven of the eight crashed attempts of 871 seeds 42-45 ran under the 5 GB check (item 41). The eighth, the first attempt of seed 42, launched earlier (11-09 17:57) under the 12 GB check with 46.9 GB free, and still lost nvblox to GPU memory when another user's job grew during the run: the check acts only at launch. 853 seeds 43-46 and 871 seed 46 finished with no GPU error.
+    - Correction to `results_paper_compare_1112/NOTES.md`, item 8: it says every 871 crash came from sharing the GPU at launch. The first attempt of seed 42 had the GPU to itself at launch.
     - Effect on the tours: nvblox ran out of GPU memory partway through APR-a on 853, APR-a on 871 and APR-b on 871. Both APR-b tours ended with a final graph equal to their stage-0 graph.
 
-41. **11-10 12:08: a second attempt of e7 871 seeds 42-45, which the pre-registration does not provide for.** The first attempts (11-09 17:57 to 11-10 05:20) ended at 85.4, 54.5, 80.2 and 80.7 m; the second (11-10 12:13 to 15:06) at 57.7, 27.7, 26.7 and 15.4 m. In all eight, nvblox ran out of GPU memory. None counts as a frontier-to-end run.
+41. **11-10 12:08: a second attempt of e7 871 seeds 42-45, which the pre-registration does not provide for.** The first attempts (11-09 17:57 to 11-10 05:20) ended at 85.4, 54.5, 80.2 and 80.7 m; the second (11-10 12:13 to 15:06) at 57.7, 27.7, 26.7 and 15.4 m. In all eight, each run's `roslaunch.log` shows nvblox out of GPU memory; the queue itself recorded two as `host_memory_stop` and six as `stalled`. None counts as a frontier-to-end run.
 
 42. **11-12: checks C1-C5 were not reported first.** §3 says they are reported before any arm is scored against APR. They were computed in the same session as the first APR scoring.
 
@@ -14,7 +15,7 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
 
 44. **11-12: compression came late.** §2a says each stage's DSG files are compressed after conversion. The container had no `zstd` until 11-12, so no file was compressed before then. On 11-12 every finished paper run was compressed and tested (`scratch/compress_1112.log` on the host).
 
-45. **11-13 17:02: a third attempt of e7 871 seeds 42-45 and a rerun of both APR-b tours,** under the reviewed 12 GB check, with no other GPU job running at launch. `PREREGISTRATION_PAPER.md` Amendment 2 (hashed 11-13 17:54) fixes how they are read. It was written while the 853 APR-b rerun was running (waypoint 72 of 85) and before the 871 APR-b rerun or any third e7 attempt had started. No rerun had been scored.
+45. **11-13 17:02: a third attempt of e7 871 seeds 42-45 and a rerun of both APR-b tours,** under the reviewed 12 GB check, with no other GPU job running at launch. `PREREGISTRATION_PAPER.md` Amendment 2 (hashed 11-13 17:54) sets, before the results exist, how they are read. A Note to it (hashed 11-13 18:35, after an independent review and before any 871 rerun started) corrects one statement and settles cases the amendment left open. It was written while the 853 APR-b rerun was running (waypoint 72 of 85) and before the 871 APR-b rerun or any third e7 attempt had started. No rerun had been scored.
 
 46. **Folders (Amendment 2, A2.6), as known on 11-13 17:54.** The table is completed before any rescoring.
 
@@ -34,3 +35,16 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - M4 runs after 11-15, the date at which §3 M3 would have stopped it.
     - The Claude backend is a direct port of the author's loop, not a patch of the genai client. Amendment 1 of the plan (the conversation store) no longer applies.
     - The one-pass driver computes F1, the room test and the validity views per stage. GED stays per run, computed on the host with the author's code.
+
+48. **11-09: a dry run and a reversed decision, neither in §2a.** A 3-waypoint dry run of the tour ran on 11-09 at 16:25, before the registered runs. At 19:46 the queue was restarted without e7 871 seed 42 ("is not rerun"); that decision was reversed on 11-10 (item 41).
+
+49. **11-09: two hand rulings on the queue's log.**
+    - e7 853 seed 42 was logged `stalled` at 88.2 m by the older queue, which could not see the explorer's buffered output. It counts as finished because its log holds "Exploration complete" (end-sem plan §B7). The Note to Amendment 2 now states this rule.
+    - APR-a on 871 was skipped at 20:56 for low host memory and requeued by hand at 21:01.
+
+50. **11-12: scoring departures recorded in `results_paper_compare_1112/NOTES.md`,** listed here so that one log holds them.
+    - End times leave out the final leg (NOTES item 5).
+    - A stage without a graph takes the graph of the stage before it (item 7).
+    - The 871 APR-a archive lacks stops 40-60, against "every 10 stops" in §2b, and both APR-a final graphs end about 60 s early (item 3).
+    - The crashed attempts were scored in rows of their own, which §4 does not list.
+    - gmatch4py was installed from its source with its package init trimmed to the GED modules, not by `pip --target` as §4 says.

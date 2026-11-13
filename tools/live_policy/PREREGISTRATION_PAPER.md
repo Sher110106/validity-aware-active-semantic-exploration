@@ -123,3 +123,29 @@ The test reads logs and files. It reads no score.
 **A2.6 Folders.** The queue moves an older attempt aside as `*_FAILED_ATTEMPT_HHMM` before a rerun. Before any rescoring, `tools/live_policy/DEVIATIONS_NOVEMBER.md` records which folder holds each attempt.
 
 **Not changed.** §1, §3, and the readouts of §4. Like the rest of this file, the amendment tests no hypothesis.
+
+## Note to Amendment 2 (2026-11-13 18:35 IST, before the 871 APR-b rerun or any third e7 871 attempt has started)
+
+An independent review of Amendment 2 found one false statement and several cases the rules did not decide. This note corrects the first and settles the rest. At 18:34 IST the queue had run only the 853 APR-b rerun (17:07 to 18:04); since about 18:05 it has waited for GPU memory, because another user's job came back. No rerun has been scored.
+
+**Correction of fact.** Amendment 2 says every crashed attempt ran with the free-GPU check lowered to 5 GB. That is wrong for one attempt. The first attempt of seed 42 launched on 11-09 at 17:57 under the 12 GB check, with 46.9 GB free, and ended at 19:01; the check was lowered at 19:46. In that attempt too nvblox ran out of GPU memory, after another user's job grew during the run. The 12 GB check acts only at launch. Also, the queue itself recorded two of the eight attempts as `host_memory_stop` and six as `stalled`; the out-of-memory cause comes from each run's `logs/roslaunch.log`.
+
+**What had been seen, added.** When Amendment 2 was written we also knew: the 11-12 scores for 871, computed with B = 809.08 s; that any valid third attempt raises 871's B toward seed 46's 1,263.5 s; and that the 853 rerun's graph was growing past stage 0 when the frozen-tour test was written.
+
+**A2.1, made exact.**
+1. A run ended by a §2a stop if its explorer log holds "Exploration complete", or the queue logged `path_cap_250m` or `wall_clock_4h` for it. A run the queue ended for any other reason (`stalled`, `host_memory_stop`, `disk_stop`, explorer process gone) counts only if its explorer log holds "Exploration complete".
+2. The search of `logs/roslaunch.log` ignores case. One "out of memory" line, or one line saying `nvblox_node` has died, disqualifies the run, wherever in the log it stands.
+3. "Differs" means the test of A2.4: the two graphs do not hold the same object nodes, compared by name and by centre as written in the file.
+4. The test is applied to every e7 run, including 853 seeds 42-46 and 871 seed 46, and the results are filed before any rescoring. A2.3 called 871 seed 46 valid on the strength of the 11-12 check (it logged "Exploration complete" and had no GPU error); condition 3 is still to be run on it.
+
+A2.1 adds conditions 2 and 3 to §2a. It is a change, not a restatement.
+
+**A2.2, one more case.** An attempt is used up when the queue logs `launch` for it. If the queue skips a job (memory, disk, or giving up on the GPU) or is stopped before launching it, that attempt has not happened and may be launched once later.
+
+**A2.3 is a change to §4, and the primary B is now named.** §4 speaks of the runs that finish and of the explorer's natural end. So the primary B is the median end-of-run navigation time of the valid runs that logged "Exploration complete". With an even number of runs the median is the mean of the two middle values. A valid run stopped by a cap does not enter the primary B; B with such runs entered at their stop time is reported beside it.
+
+**A2.4 and A2.5, two more cases.**
+- C2 is computed for an APR-b rerun only if it is not frozen and also meets §2b's 80% rule. Whether nvblox died during it is reported with C2 and does not block it.
+- The frozen-tour test is coarse by design: a tour with one new object passes. So the report also gives each tour's count of object nodes at stage 0 and at the end.
+
+**Why an e7 run is thrown out when nvblox dies, but a tour is not.** The frontier explorer plans on the map nvblox builds. When nvblox dies it has no map to plan on, and the robot stops exploring: the run no longer shows where the explorer would have gone. A tour follows navmesh paths that do not depend on the map, and Hydra went on growing the graph after nvblox died (`results_paper_compare_1112/NOTES.md`, item 4), so the tour still visits what it was meant to visit. The damage to a tour's graph is disclosed, not ignored (A2.5).
