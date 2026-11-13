@@ -1,7 +1,8 @@
 """Draw one real stage from files: the observed map, the region footprints and their state.
 
-Uses only the row's observed graph, the robot's path, and the truth files of
-tools/live_policy/semantic/truth/. It draws no model's guesses and computes no score.
+Uses the row's observed graph, the robot's path, and the truth files of
+tools/live_policy/semantic/truth/. It draws one saved guess that hits and one that misses (the scorer's own L3 test
+says which); it computes no score.
 A region is coloured by its state at the stage (seen, partly seen, unobserved; PREREGISTRATION_SEMANTIC.md
 section 5.4). The regions that keep a room type open (section 5.5) get a heavy outline and a 0.5 m halo:
 a room guess of that type that lands inside the halo reaches the region (L3, section 8).
@@ -26,10 +27,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROJECT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 sys.path.insert(0, os.path.join(PROJECT, "tools", "live_policy"))
 from semantic import extract_preds as E  # noqa: E402
+from semantic import score_levels as S  # noqa: E402
 from semantic import region_truth as R  # noqa: E402
 from semantic.model import REACH_M  # noqa: E402
 
 RUN, STAGE = "e1_00871_s42_official_60m", 8
+ROW_ID = "e1_00871_s42_official_st08"
+CLAUDE_ROOT = "/Users/sher/project/cvp/replay_outputs/m4"
+GUESS_MODEL, GUESS_MEMBER = "claude-opus-5-5", 0
+HIT_LABEL, MISS_LABEL = "bed", "toilet"   # one hit and one miss of this member, picked by hand from its items
 ACCENT, INK, MID = "#c2410c", "#111111", "#6b7280"
 FILL = {"seen": "#e5e7eb", "partly": "#cbd5e1", "unobserved": "#fde8dc"}
 SHORT = {"bathroom": "bath", "bedroom": "bed", "kitchen": "kitchen", "laundry": "laundry", "living": "living"}
@@ -82,11 +88,30 @@ def main():
     path = np.array(row.path_xy)
     ax.plot(path[:, 0], path[:, 1], color=MID, lw=1.2, alpha=0.8)
     ax.plot(*path[0], marker="*", color=INK, ms=16, ls="")
+    ax.text(path[0][0] + 0.35, path[0][1] - 0.35, "robot's start and path", ha="left", va="top", fontsize=18,
+            color=MID, zorder=10, path_effects=[pe.withStroke(linewidth=4, foreground="white")])
     objs = np.array([n.xy for n in row.observed.objects])
     rooms = np.array([n.xy for n in row.observed.rooms])
     ax.scatter(objs[:, 0], objs[:, 1], s=26, c=INK, zorder=5)
     ax.scatter(rooms[:, 0], rooms[:, 1], s=150, marker="s", facecolors="white", edgecolors=INK, linewidths=2.2,
                zorder=6)
+    # one saved guess that hits and one that misses (Opus, member 0): the scorer's own L3 test decides which is which
+    from pathlib import Path
+    state = st
+    member = {m.member: m for m in E.members_for(E.load_row(ROW_ID), GUESS_MODEL, claude_root=Path(CLAUDE_ROOT))}[GUESS_MEMBER]
+    guesses = {}
+    for item in member.l3_items:
+        if item.kind == "object" and item.label in (HIT_LABEL, MISS_LABEL) and item.label not in guesses:
+            guesses[item.label] = (item, bool(S.l3_hit(item, truth, state)))
+    assert guesses[HIT_LABEL][1] is True and guesses[MISS_LABEL][1] is False, guesses
+    hit, miss = guesses[HIT_LABEL][0], guesses[MISS_LABEL][0]
+    halo = [pe.withStroke(linewidth=4, foreground="white")]
+    ax.scatter([hit.xy[0]], [hit.xy[1]], s=420, marker="*", c=ACCENT, edgecolors=INK, linewidths=1.5, zorder=12)
+    ax.text(hit.xy[0] + 0.5, hit.xy[1] - 0.15, f"{hit.label}: hit", ha="left", va="top", fontsize=18, color=INK, zorder=13,
+            path_effects=halo)
+    ax.scatter([miss.xy[0]], [miss.xy[1]], s=260, marker="X", c=INK, edgecolors="white", linewidths=1.5, zorder=12)
+    ax.text(miss.xy[0] + 0.1, miss.xy[1] + 0.95, f"{miss.label}: miss", ha="left", va="bottom", fontsize=18, color=INK,
+            zorder=13, path_effects=halo)
     ax.set_aspect("equal")
     ax.set_xlim(extent[0] - 0.3, extent[1] + 0.3)
     ax.set_ylim(extent[2] - 0.3, extent[3] + 0.3)
@@ -105,6 +130,9 @@ def main():
         "unobserved": len(st.unobserved), "open_types": sorted(st.open_types),
         "open_type_regions": {k: sorted(v) for k, v in st.open_type_regions.items()},
         "open_classes": len(st.open_classes), "path_points": len(row.path_xy), "reach_m": REACH_M,
+        "guess_model": GUESS_MODEL, "guess_member": GUESS_MEMBER,
+        "guess_hit": {"label": hit.label, "xy": list(hit.xy), "l3_hit": True},
+        "guess_miss": {"label": miss.label, "xy": list(miss.xy), "l3_hit": False},
     }
     json.dump(n, open(os.path.join(HERE, "stage_numbers.json"), "w"), indent=1)
     print(json.dumps(n))

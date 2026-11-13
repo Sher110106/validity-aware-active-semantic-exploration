@@ -40,9 +40,10 @@ NUMBERS = os.path.join(LP, "results_2026-10-31", "numbers.csv")
 FRONTIER = os.path.join(LP, "results_2026-10-31", "frontier_seeds", "frontier_holm.json")
 CHECKS = os.path.join(LP, "results_paper_compare_1112", "c_checks.json")
 R1113 = os.path.join(LP, "results_paper_compare_1113")
+C1_TABLE = os.path.join(R1113, "c1_area_table.json")
 STAGE_PNG = os.path.join(HERE, "figures", "stage.png")
 STAGE_JSON = os.path.join(HERE, "figures", "stage_numbers.json")
-TOTAL = 23
+TOTAL = 24
 ACCENT = "c2410c"
 MINUS = "−"
 DASH = "–"
@@ -373,7 +374,7 @@ def why(prs, Nn):
       f"{sg(Nn['replay:oracle_minus_floor:00871:ci_lo'], 2)} to {sg(Nn['replay:oracle_minus_floor:00871:ci_hi'], 2)}).")
 
     R = 1000
-    lab(s, R, 250, 800, "View ranking, median ρ · 119 stages")
+    lab(s, R, 250, 800, "View ranking, median rho · 119 stages")
     cols = [("LLM's guesses", Nn["cf:rho_score_U360_median:official:actual"]),
             ("Random set", Nn["cf:rho_score_U360_median:official:plc"]),
             ("No guesses", Nn["cf:rho_score_U360_median:official:obs"]),
@@ -578,6 +579,7 @@ def table871(prs, C, budgets, slots):
 def limits_reference(prs, checks, f1):
     s = frame(prs, 10, "Part 2 · Limits of the reference", "The reference is rebuilt, and it moves")
     rec = [checks[sc]["C3"]["apr_a_recall_vs_hm3d"] for sc in ("00853", "00871")]
+    c1t = json.load(open(C1_TABLE))
     L, w = 120, 900
     y = P(s, L, 262, w, [("Rebuilt. ", "b"), (f"It holds {100 * rec[0]:.0f}% and {100 * rec[1]:.0f}% of the "
                                                 "human-labelled objects (853, 871).", "n")], B, BODY, 1.4)
@@ -594,19 +596,25 @@ def limits_reference(prs, checks, f1):
             ("Rooms, paper", [str(checks[sc]["C1"]["paper_rooms"]) for sc in ("00853", "00871")]),
             ("Navmesh island, m²", [f"{checks[sc]['C1']['start_island_area_m2']:.0f}" for sc in ("00853", "00871")]),
             ("Waypoint grid, m²", [num(checks[sc]["C1"]["kept_area_estimate_m2"], 0) for sc in ("00853", "00871")]),
+            ("Labelled floor, m²", [num(c1t[sc]["labelled_floor_m2"], 0) for sc in ("00853", "00871")]),
+            ("Outline of all labelled geometry, m²", [num(c1t[sc]["footprint_hull_m2"], 0) for sc in ("00853", "00871")]),
             ("Paper, m²", [f"{checks[sc]['C1']['paper_area_m2']:.0f}" for sc in ("00853", "00871")])]
     for j, hd in enumerate(("853", "871")):
-        svg_text(s, R + 520 + j * 110 + 40, 330, hd, 28, MID, anchor="middle", w=100)
+        svg_text(s, R + 560 + j * 90 + 40, 330, hd, 28, MID, anchor="middle", w=100)
     yy = 346
     hline(s, R, yy, R + 740, yy, LINE)
     for name, vals in rows:
-        text(s, R, yy + 14, 520, 40, [run(name, 28, BODY)], line=1.2)
+        text(s, R, yy + 14, 560, 40, [run(name, 26, BODY)], line=1.2)
         for j, v in enumerate(vals):
-            text(s, R + 520 + j * 110, yy + 12, 80, 40, [run(v, 32, INK, MONO)], PP_ALIGN.RIGHT, 1.2)
-        yy += 66
+            text(s, R + 560 + j * 90, yy + 12, 80, 40, [run(v, 32, INK, MONO)], PP_ALIGN.RIGHT, 1.2)
+        yy += 62
         hline(s, R, yy, R + 740, yy, RULE)
-    N(s, R, yy + 20, 740, "The gap is partly explained: the grid reaches under furniture, which the navmesh leaves "
-                          "out. On 853 it comes near the paper's figure; on 871 it does not.", limit=1000)
+    paper = {sc: checks[sc]["C1"]["paper_area_m2"] for sc in ("00853", "00871")}
+    ratio = [paper[sc] / c1t[sc]["navmesh_start_island_m2"] for sc in ("00853", "00871")]
+    within = max(abs(paper[sc] - c1t[sc]["footprint_hull_m2"]) / c1t[sc]["footprint_hull_m2"] for sc in paper)
+    N(s, R, yy + 14, 740, f"The paper's figure is {num(ratio[0], 1)} and {num(ratio[1], 1)} times the walkable floor "
+                          f"and within about {num(100 * within, 0)}% of the outline of everything labelled. We do not "
+                          "know how the paper measured area.", limit=1012)
 
 
 # ---------------------------------------------------------------- 11. Part 2, limits of the runs
@@ -651,52 +659,66 @@ def defense(prs):
     box_bottom(s, "Blind test:", "the scorer was frozen first.")
 
 
-# ---------------------------------------------------------------- 13. Part 3, one real stage and the levels
+# ---------------------------------------------------------------- 13. Part 3, a hit and a miss on one real stage
 
 def picture_levels(prs, slots):
     n = json.load(open(STAGE_JSON))
     chance = slots["blind"]["models"]["opus"]
-    s = frame(prs, 13, "Part 3 · One real stage", "A hit, on one real stage")
+    s = frame(prs, 13, "Part 3", "A hit and a miss, on one stage")
     s.shapes.add_picture(STAGE_PNG, px(120), px(250), px(730), px(730))
     X, w = 900, 900
     y = 256
-    cx, cy = X + 20, y + 20
-    rect(s, cx - 10, cy - 10, 20, 20, WHITE, INK, 3)
-    oval(s, cx + 44, cy, 6, INK)
-    text(s, X + 90, y + 2, w - 90, 38, [run("Mapped nodes", 28, BODY)], line=1.2)
-    y += 40
-    rect(s, X + 6, y + 8, 28, 22, "e5e7eb")
-    rect(s, X + 38, y + 8, 28, 22, "cbd5e1")
-    rect(s, X + 70, y + 8, 28, 22, "fde8dc")
-    text(s, X + 112, y + 2, w - 112, 38, [run("Seen, partly seen, unobserved", 28, BODY)], line=1.2)
-    y += 40
-    rect(s, X + 6, y + 8, 28, 22, "fde8dc", ACCENT, 4)
-    text(s, X + 56, y + 2, w - 56, 38, [run("Keeps a room type open", 28, BODY)], line=1.2)
-    y += 40
-    r = rect(s, X + 6, y + 8, 28, 22, WHITE, ACCENT, 2)
-    r.line.dash_style = MSO_LINE.DASH
-    text(s, X + 56, y + 2, w - 56, 38, [run("0.5 m reach", 28, BODY)], line=1.2)
-    y += 60
-    y = P(s, X, y, w, [("L1, which rooms: ", "b"), ("the type is still open.", "n")], B, BODY, 1.3)
-    y = P(s, X, y + 10, w, [("L2, which objects: ", "b"), ("the class is still open.", "n")], B, BODY, 1.3)
-    y = P(s, X, y + 10, w, [("L3, roughly where: ", "b"), ("the guess reaches an unobserved region of its type "
-                                                            "or class.", "n")], B, BODY, 1.3)
-    P(s, X, y + 26, w, [("Base rate: ", "b"), (f"random guesses score {num(100 * chance['L1']['placebo_score'])}% at L1, "
-                                               f"{num(100 * chance['L2']['placebo_score'])}% at L2, "
-                                               f"{num(100 * chance['L3']['placebo_score'])}% at L3.", "n")],
+
+    def row(draw, txt, dy=40):
+        nonlocal y
+        draw(y)
+        text(s, X + 112, y + 2, w - 112, 38, [run(txt, 28, BODY)], line=1.2)
+        y += dy
+
+    def d_nodes(yy):
+        rect(s, X + 10, yy + 10, 20, 20, WHITE, INK, 3)
+        oval(s, X + 64, yy + 20, 6, INK)
+
+    def d_regions(yy):
+        for i, c in enumerate(("e5e7eb", "cbd5e1", "fde8dc")):
+            rect(s, X + 6 + i * 32, yy + 8, 28, 22, c)
+
+    def d_open(yy):
+        rect(s, X + 6, yy + 8, 28, 22, "fde8dc", ACCENT, 4)
+        r = rect(s, X + 44, yy + 8, 28, 22, WHITE, ACCENT, 2)
+        r.line.dash_style = MSO_LINE.DASH
+
+    def d_hit(yy):
+        svg_text(s, X + 30, yy + 32, "★", 34, ACCENT, anchor="middle", w=60)
+
+    def d_miss(yy):
+        svg_text(s, X + 30, yy + 32, "✖", 28, INK, anchor="middle", w=60)
+
+    row(d_nodes, "Mapped rooms, objects")
+    row(d_regions, "Seen, partly seen, unobserved")
+    row(d_open, "Open room type, 0.5 m reach")
+    row(d_hit, f"Opus guess: {n['guess_hit']['label']}, a hit")
+    row(d_miss, f"Opus guess: {n['guess_miss']['label']}, a miss", 56)
+    y = P(s, X, y, w, [("L1, rooms: ", "b"), ("the type is still open.", "n")], B, BODY, 1.3)
+    y = P(s, X, y + 8, w, [("L2, objects: ", "b"), ("the class is still open.", "n")], B, BODY, 1.3)
+    y = P(s, X, y + 8, w, [("L3, roughly where: ", "b"), ("the guess reaches an unobserved region that fits it.", "n")], B, BODY, 1.3)
+    P(s, X, y + 22, w, [("Base rate: ", "b"), (f"random guesses score {num(100 * chance['L1']['placebo_score'])}%, "
+                                               f"{num(100 * chance['L2']['placebo_score'])}%, "
+                                               f"{num(100 * chance['L3']['placebo_score'])}%.", "n")],
       B, BODY, 1.3, limit=1000)
 
 
 # ---------------------------------------------------------------- 14. Part 3, controls
 
-def controls(prs):
-    s = frame(prs, 14, "Part 3 · Controls", "What each guess is compared with")
-    y = P(s, 120, 252, 1680, "A control sees the same map. The margin is the gain over it that we would still count.",
-          B, BODY, 1.4)
-    items = [("A prior from 179 other houses", "L1, L2 · named"), ("Random guesses", "L1, L2"),
-             ("The model's own labels, swapped among its guesses", "L3"),
-             ("The regions, trading contents", "L3 · named"),
-             ("The prior's labels at the model's places", "L3")]
+def controls(prs, slots):
+    mg = slots["blind"]["models"]["opus"]
+    s = frame(prs, 14, "Part 3", "What each guess is compared with")
+    mtxt = ", ".join(num(100 * mg[lv]["margin"], 0) for lv in ("L1", "L2", "L3"))
+    y = P(s, 120, 252, 1680, f"A control sees the same map. Margin: the gain over it we would count ({mtxt} "
+                             "points at L1, L2, L3). Named: the control the verdict uses.", B, BODY, 1.4)
+    items = [("Prior from 179 other houses", "L1, L2 · named"), ("Random guesses", "L1, L2"),
+             ("Own labels, swapped among guesses", "L3"), ("Regions, trading contents", "L3 · named"),
+             ("Prior's labels at the model's places", "L3")]
     y += 20
     for txt, lv in items:
         y0 = y
@@ -708,8 +730,9 @@ def controls(prs):
 
 # ---------------------------------------------------------------- 15. Part 3, the blind test
 
-def fnum(v, nd=3):
-    return sg(v, nd)
+def pts(v, nd=1):
+    """A fraction as signed points (x100)."""
+    return sg(100 * v, nd)
 
 
 def blind_table(prs, slots):
@@ -722,6 +745,7 @@ def blind_table(prs, slots):
         text(s, x, 246, cw - 10, 34, [kick(name, NT, 0.1)])
         if sub:
             text(s, x, 276, cw - 10, 30, [run(sub, NT, MID)])
+    text(s, X + 90, 276, lw - 90, 30, [run("difference, in points", NT, MID)])
     hline(s, X, 314, X + lw + 3 * cw, 314, LINE)
     rows = [("L1", "which rooms", "prior"), ("L2", "which objects", "prior"), ("L3", "roughly where", "region trade")]
     y = 322
@@ -729,26 +753,26 @@ def blind_table(prs, slots):
         text(s, X, y + 14, 90, 50, [run(lv, 36, INK, MONO)], line=1.2)
         text(s, X + 90, y + 12, lw - 90, 36, [run(what, 28, BODY)], line=1.2)
         e0 = b["opus"][lv]
-        text(s, X + 90, y + 50, lw - 90, 60, [run(f"v {named}, margin {num(e0['margin'], 2)}", NT, MID)], line=1.3)
+        text(s, X + 90, y + 50, lw - 90, 60, [run(f"v {named}, margin {num(100 * e0['margin'], 0)}", NT, MID)],
+             line=1.3)
         for x, (key, _, _) in zip(xs, cols):
             e = b[key][lv]
-            # four decimals only where the verdict turns on them: Opus L3's upper end, 0.0295 against 0.03
-            hi_nd = 4 if (key == "opus" and lv == "L3") else 3
-            text(s, x, y + 4, cw - 20, 44, [[run(fnum(e["diff"]), 32, INK, MONO),
+            # two decimals only where the verdict turns on them: Opus L3's upper end, 2.95 against 3
+            hi = pts(e["hi"], 2) if (key == "opus" and lv == "L3") else pts(e["hi"])
+            text(s, x, y + 4, cw - 20, 44, [[run(pts(e["diff"]), 32, INK, MONO),
                                              run("  " + e["verdict"], NT, INK, SANS, True)]], line=1.2)
-            text(s, x, y + 44, cw - 20, 32, [run(f"[{fnum(e['lo'])}, {fnum(e['hi'], hi_nd)}]", NT, MID, MONO)],
-                 line=1.2)
+            text(s, x, y + 44, cw - 20, 32, [run(f"[{pts(e['lo'])}, {hi}]", NT, MID, MONO)], line=1.2)
             if lv == "L3":
-                tail = f"score {num(e['score'], 3)} · random {num(e['placebo_score'], 3)}"
+                tail = f"score {num(100 * e['score'], 1)}% · random {num(100 * e['placebo_score'], 1)}%"
             else:
-                tail = f"score {num(e['score'], 3)} · v random {fnum(e['placebo']['diff'])}"
+                tail = f"score {num(100 * e['score'], 1)}% · v random {pts(e['placebo']['diff'])}"
             text(s, x, y + 78, cw - 20, 32, [run(tail, NT, MID)], line=1.2)
         y += 128
         hline(s, X, y, X + lw + 3 * cw, y, RULE)
     N(s, X, y + 8, 1680,
-      "Difference = model minus comparator. Score = mean over 12 clusters (home, seed, arm). One run with the "
-      "frozen scorer; no other run is recorded. Opus L3 shows four decimals: its upper end, 0.0295, is just under "
-      "the margin, 0.03.", limit=905)
+      "Difference = model minus comparator. Score = hit rate, mean over 12 clusters (home, seed, arm). One run with "
+      "the frozen scorer; no other run is recorded. Opus L3 shows two decimals: its upper end, 2.95, is just under "
+      "the margin, 3.", limit=905)
     box_bottom(s, "Rejected:", "the interval rules out a gain over the named comparator as large as the margin. It "
                                "does not say the model is worse. At L2 the interval lies wholly below zero, so both "
                                "models are worse than the prior.")
@@ -760,16 +784,17 @@ def facts(prs, slots):
     b = slots["blind"]["models"]
     chk = slots["blind"]["opus_l3_check"]
     hh = b["haiku"]["L2"]["placebo"]
-    s = frame(prs, 16, "Part 3", "Two facts against the headline")
-    t1 = (f"the interval's top is {num(chk['registered_upper'], 4)}, the margin {num(chk['margin'], 2)}. "
-          f"{chk['runs']} reruns of the region trade, made after the result (deviation 55), gave "
-          f"{num(chk['rerun_min'], 4)} to {num(chk['rerun_max'], 4)}.")
+    s = frame(prs, 16, "Part 3", "Two facts")
+    t1 = (f"the top of the interval is {num(100 * chk['registered_upper'], 2)} points, the margin "
+          f"{num(100 * chk['margin'], 0)}. {chk['runs']} reruns of the region trade after the result "
+          f"(deviation 55): {num(100 * chk['rerun_min'], 2)} to {num(100 * chk['rerun_max'], 2)}.")
     t2 = (f"is {num(100 * hh['diff'], 1)} points above random guesses (p {num(hh['p'], 3)}; one contrast, "
           "not adjusted).")
     hm = max(est_lines("Opus at L3 is close: " + t1, B, 764), est_lines("Haiku at L2 " + t2, B, 764)) * B * 1.5 + 44
     box(s, 120, 270, 820, "Opus at L3 is close:", t1, B, hmin=hm)
     box(s, 980, 270, 820, "Haiku at L2", t2, B, hmin=hm)
-    box_bottom(s, "Plainly:", "a list of the objects most houses have beats both models at naming unseen objects.")
+    box_bottom(s, "At L2,", "in these two houses, a prior from 179 other houses, making as many claims as the "
+                            "model, scored above both models at naming objects.")
 
 
 # ---------------------------------------------------------------- 17. Part 3, what the test could see
@@ -777,24 +802,25 @@ def facts(prs, slots):
 def detect(prs, slots):
     m = slots["blind"]["mdd"]
     ops = slots["blind"]["models"]
-    s = frame(prs, 17, "Part 3 · Power", "What the test could see")
+    s = frame(prs, 17, "Part 3", "What the test could see")
     L = 120
-    lab(s, L, 250, 1000, "Detectable difference, in points")
     for j, hd in enumerate(("Detectable", "Margin")):
-        text(s, L + 150 + j * 260, 290, 250, 34, [kick(hd, NT, 0.06)])
-    hline(s, L, 328, L + 700, 328, LINE)
-    y = 336
+        text(s, L + 150 + j * 260, 250, 250, 34, [kick(hd, NT, 0.06)])
+    hline(s, L, 288, L + 700, 288, LINE)
+    y = 296
     for lv in ("L1", "L2"):
         text(s, L, y + 12, 140, 44, [run(lv, 32, INK, MONO)], line=1.2)
         for j, v in enumerate((100 * m[lv]["mdd"], 100 * m[lv]["margin"])):
             text(s, L + 150 + j * 260, y + 12, 250, 44, [run(num(v, 1), 32, INK, MONO)], line=1.2)
         y += 64
         hline(s, L, y, L + 700, y, RULE)
-    y = P(s, L, y + 24, 1680, "A true gain equal to the margin would be found less than 80% of the time at L1 and L2. "
-                              "Rejected was still within reach at each level.", B, BODY, 1.4)
-    P(s, L, y + 20, 1680, f"At L3, gains up to {num(100 * ops['opus']['L3']['hi'], 2)} (Opus) and "
-                          f"{num(100 * ops['haiku']['L3']['hi'], 2)} (Haiku) points are not ruled out.", B, BODY, 1.4,
-      limit=990)
+    y = P(s, L, y + 20, 1680, "Rejected was within reach at each level. At L1 and L2 a true gain equal to the margin "
+                              "would be found less than 80% of the time.", B, BODY, 1.4)
+    y = P(s, L, y + 16, 1680, f"Gains up to {num(100 * ops['opus']['L3']['hi'], 2)} (Opus) and "
+                              f"{num(100 * ops['haiku']['L3']['hi'], 2)} (Haiku) points at L3 are not ruled out.",
+          B, BODY, 1.4)
+    P(s, L, y + 16, 1680, f"No L3 row: its registered figure, {num(100 * m['L3']['mdd'], 1)} points, comes "
+                          "from the random guesses' contrast.", B, BODY, 1.4, limit=990)
 
 
 # ---------------------------------------------------------------- 18. Part 3, the wrong-house check
@@ -819,23 +845,24 @@ def wrong_house(prs, slots):
     box_bottom(s, "No model passes:", "a pass needs p below 0.05 over 6 pairs.")
 
 
-# ---------------------------------------------------------------- 19. Part 3, wrong in place, measured
+# ---------------------------------------------------------------- 19. Part 3, how far a guess sits from an object it could name
 
 def placement_slide(prs, slots):
     p = slots["placement"]
-    s = frame(prs, 19, "Part 3", "Wrong in place: every source misses by metres")
-    lab(s, 120, 250, 1680, "Median miss: guess to nearest unseen object it could name")
+    s = frame(prs, 19, "Part 3", "How far a guess is from an object it could name")
+    text(s, 1330, 250, 470, 30, [run("guesses used / all", NT, MID)], PP_ALIGN.RIGHT)
     order = sorted(p.items(), key=lambda kv: kv[1]["median"])
-    names = {"gemini": "Gemini, exploratory", "haiku": "Haiku 5.5", "deepseek": "DeepSeek", "opus": "Opus 5.5",
-             "placebo": "Random guesses"}
-    y = 310
+    names = {"gemini": "Gemini, exploratory", "haiku": "Haiku 5.5", "deepseek": "DeepSeek, exploratory",
+             "opus": "Opus 5.5", "placebo": "Random guesses"}
+    y = 300
     for key, d in order:
-        text(s, 120, y, 420, 44, [run(names[key], 28, INK, SANS, True), ], line=1.2)
-        rect(s, 560, y + 6, d["median"] / 10.0 * 600, 34, MID if key == "placebo" else INK)
-        svg_text(s, 560 + d["median"] / 10.0 * 600 + 16, y + 34, f"{num(d['median'], 1)} m", 28, INK, MONO, w=140)
-        text(s, 1330, y + 4, 470, 40, [run(f"{d['n']:,} of {d['all_guesses']:,}", 24, MID, MONO)], PP_ALIGN.RIGHT, 1.2)
+        text(s, 120, y, 440, 44, [run(names[key], 28, INK, SANS, True), ], line=1.2)
+        rect(s, 580, y + 6, d["median"] / 10.0 * 560, 34, MID if key == "placebo" else INK)
+        svg_text(s, 580 + d["median"] / 10.0 * 560 + 16, y + 34, f"{num(d['median'], 1)} m", 28, INK, MONO, w=140)
+        text(s, 1330, y + 4, 470, 40, [run(f"{d['n']:,} / {d['all_guesses']:,}", 24, MID, MONO)], PP_ALIGN.RIGHT, 1.2)
         y += 62
-    N(s, 120, y + 20, 1680, "Gemini: 8 inputs. Right: guesses used, of all. The rest have no such object.", limit=900)
+    N(s, 120, y + 20, 1680, "Input to the next slide. The nearest object of a class is a minimum; guesses with none are "
+                            "left out.", limit=900)
 
 
 # ---------------------------------------------------------------- 20. Part 3, M2
@@ -843,17 +870,17 @@ def placement_slide(prs, slots):
 def factorial(prs, slots):
     m = slots["m2"]
     rho, dif = m["rho"], m["diff"]
-    s = frame(prs, 20, "Part 3", "Would right meaning be enough? Not shown")
+    s = frame(prs, 20, "Part 3", "Right meaning: not shown enough")
     R, W = 120, 1680
-    lab(s, R, 250, W, "Spearman ρ: view score vs unmapped objects in view")
+    lab(s, R, 250, W, "Spearman rho: ASP's view score vs unmapped objects in view (the yardstick)")
     x0, x1, lo, hi = R + 560, R + 1400, -0.1, 0.35
 
     def dx(v):
         return x0 + (min(max(v, lo), hi) - lo) / (hi - lo) * (x1 - x0)
 
     rows = [("True objects", rho["F1"]), ("Room type only", rho["F-room"]),
-            ("Moved by DeepSeek's error", rho["F3-deepseek"]), ("Moved by Haiku's error", rho["F3-haiku"]),
-            ("Moved by Opus's error", rho["F3-opus"]), ("Random guesses", rho["F5"]), ("No guesses", rho["F6"]),
+            ("Moved: DeepSeek (expl.)", rho["F3-deepseek"]), ("Moved: Haiku", rho["F3-haiku"]),
+            ("Moved: Opus", rho["F3-opus"]), ("Random guesses", rho["F5"]), ("No guesses", rho["F6"]),
             ("All true objects", rho["F0"])]
     top, step = 312, 50
     for v in (0.0, 0.1, 0.2, 0.3):
@@ -867,11 +894,12 @@ def factorial(prs, slots):
         oval(s, dx(d["mean"]), yy, 10, INK, WHITE, 3)
         svg_text(s, x1 + 40, yy + 8, sg(d["mean"], 3), NT, INK, MONO, w=120)
     A = dif["A"]
-    P(s, R, 756, W, f"True objects beat random guesses by {num(A['mean'], 3)}; half is "
-                    f"{num(A['mean'] / 2, 3)}. Not shown sufficient (provisional yardstick).", B, BODY, 1.35, limit=960)
+    P(s, R, 748, W, f"True objects beat random guesses by {num(A['mean'], 3)}. Enough: keep half of that, "
+                    f"{num(A['mean'] / 2, 3)}. No arm does. Not shown sufficient; yardstick provisional.",
+      B, BODY, 1.35, limit=960)
 
 
-# ---------------------------------------------------------------- 21. Limits
+# ---------------------------------------------------------------- 21. Limits of scope
 
 def limits(prs, slots):
     s = frame(prs, 21, "Limits", "What this talk cannot show")
@@ -885,43 +913,58 @@ def limits(prs, slots):
         y = P(s, 120, y, 1680, [(head + " ", "b"), (body, "n")], B, BODY, 1.4, limit=1000) + 28
 
 
-# ---------------------------------------------------------------- 22. The answer
+# ---------------------------------------------------------------- 22. Limits of method
 
-def answer(prs, slots):
-    s = frame(prs, 22, "The answer", "The one-line answer to the author")
-    P(s, 120, 252, 1680, [(slots["thesis"] + ".", "b")], 44, INK, 1.2)
-    y = P(s, 120, 330, 1680, "Registered line for the claim's first half: the guesses are right in meaning.",
-          B, BODY, 1.4)
-    y = P(s, 120, y + 20, 1680, "Both Claude models scored far below the other-house prior at naming objects. Neither beat a "
-                                "trade of region contents by the 3-point margin; a smaller gain is not ruled out.",
-          B, BODY, 1.4)
-    box(s, 120, y + 30, 1680, "M2, offline, on a provisional yardstick:",
-        "right labels moved by each model's error were not shown sufficient.")
-
-
-# ---------------------------------------------------------------- 23. What the answer does not show
-
-def not_shown(prs, slots):
+def limits_method(prs, slots):
     m = slots["blind"]["members"]
-    s = frame(prs, 23, "The answer", "What the answer does not show")
-    items = ["It does not show that an LLM cannot help exploration.",
-             "We wrote the scorer after we saw DeepSeek's numbers.",
+    s = frame(prs, 22, "Limits", "How the test was made")
+    items = ["We wrote the scorer after we saw DeepSeek's numbers.",
              "We set the L3 margin knowing the Gemini–DeepSeek gap.",
-             "M2 is provisional.",
-             f"One Haiku member's final text did not parse ({m['haiku']['parsed']} of {m['haiku']['members']} did).",
+             "M2 is provisional: its yardstick failed part of an October check.",
+             f"One Haiku member stopped at the token limit and its text did not parse "
+             f"({m['haiku']['parsed']} of {m['haiku']['members']} did).",
              "Part 2 is open: the 871 numbers and the 853 full-budget row."]
     y = 256
     for t in items:
-        y = P(s, 120, y, 1680, t, B, BODY, 1.4, limit=1000) + 22
+        y = P(s, 120, y, 1680, t, B, BODY, 1.4, limit=1000) + 26
+
+
+# ---------------------------------------------------------------- 23. The answer
+
+def answer(prs, slots):
+    s = frame(prs, 23, "Answer", "The answer to the author")
+    P(s, 120, 252, 1680, [(slots["thesis"] + ".", "b")], 44, INK, 1.2)
+    y = P(s, 120, 330, 1680, "The registered line for the first half of the claim (that the guesses are right in "
+                             "meaning).", B, BODY, 1.4)
+    y = P(s, 120, y + 20, 1680, "In these two houses, both Claude models scored far below the other-house prior at "
+                                "naming objects. Neither beat a trade of region contents by the 3-point margin; a "
+                                "smaller gain is not ruled out.", B, BODY, 1.4)
+    box(s, 120, y + 30, 1680, "M2 (offline, provisional):",
+        "right labels moved by each model's error were not shown sufficient.")
+
+
+# ---------------------------------------------------------------- 24. What the answer does not say
+
+def not_shown(prs, slots):
+    hh = slots["blind"]["models"]["haiku"]["L2"]["placebo"]
+    s = frame(prs, 24, "The answer", "What the answer does not say")
+    items = ["It does not say the guesses reach the map, or where they sit.",
+             f"It does not say the models are no better than random guesses: Haiku is "
+             f"{num(100 * hh['diff'], 1)} points above at L2 (one contrast, not adjusted).",
+             "It says nothing about live runs, other models or the paper's scale.",
+             "It does not show that a language model cannot help exploration."]
+    y = 256
+    for t in items:
+        y = P(s, 120, y, 1680, t, B, BODY, 1.4, limit=1000) + 26
 
 
 # ---------------------------------------------------------------- Backup 1. The paper's room test
 
 def room_test(prs, slots):
     rt, h = slots["room_test"], slots["hint"]
-    s = frame(prs, 24, "Backup · The paper's room test",
+    s = frame(prs, 25, "Backup · The paper's room test",
               "The paper's room test, on DeepSeek's live runs", backup=True)
-    X, lw, cw = 120, 420, 315
+    X, lw, cw = 120, 480, 300
     heads = ["Type matched", "No type", "Type matched", "No type"]
     text(s, X + lw, 246, 2 * cw, 30, [run("All stages", NT, MID, SANS, True)])
     text(s, X + lw + 2 * cw, 246, 2 * cw, 30, [run("8-member stages", NT, MID, SANS, True)])
@@ -929,41 +972,39 @@ def room_test(prs, slots):
         text(s, X + lw + j * cw, 278, cw - 10, 30, [run(hd, NT, MID)])
     hline(s, X, 314, X + lw + 4 * cw, 314, LINE)
     y = 322
-    for key, name in (("llm", "DeepSeek, live"), ("filter", "DeepSeek + our filter"), ("placebo", "Random: chance")):
+    for key, name in (("llm", "DeepSeek, expl."), ("filter", "DeepSeek + filter"), ("placebo", "Random: chance")):
         d = rt["live"][key]
         text(s, X, y + 16, lw - 10, 40, [run(name, 28, INK, SANS, True)], line=1.2)
         for j, k in enumerate(("typed_all", "untyped_all", "typed_8", "untyped_8")):
             text(s, X + lw + j * cw, y + 16, cw - 10, 40,
-                 [run(f"{d[k]} of {d['of']} · {num(100 * d[k] / d['of'], 0)}%", 28, INK, MONO)], line=1.2)
+                 [run(f"{d[k]} / {d['of']} · {num(100 * d[k] / d['of'], 0)}%", 28, INK, MONO)], line=1.2)
         y += 70
         hline(s, X, y, X + lw + 4 * cw, y, RULE)
     pp = rt["paper"]
-    y = P(s, X, y + 20, 1680, [("The paper: ", "b"), (f"a room counts if at least 2 of 8 members place a room within "
-                                                      f"2.5 m of its centre before the robot sees the region: "
-                                                      f"{pp['hit']} of {pp['of']} rooms "
-                                                      f"({num(100 * pp['hit'] / pp['of'], 0)}%).", "n")],
-          B, BODY, 1.35)
+    y = P(s, X, y + 18, 1680, [("The paper: ", "b"), (f"{pp['hit']} of {pp['of']} rooms "
+                                                      f"({num(100 * pp['hit'] / pp['of'], 0)}%); a room counts if at "
+                                                      "least 2 of 8 members place one within 2.5 m before the region "
+                                                      "is seen.", "n")], B, BODY, 1.3)
     rp = rt["replay"]
-    y = P(s, X, y + 10, 1680, [("Claude replays, 1 of 4 members, type matched, of "
-                                f"{rp['opus']['of']} rooms: ", "b"),
-                               (f"Opus {rp['opus']['t1']}, Haiku {rp['haiku']['t1']}, DeepSeek {rp['deepseek']['t1']}, "
-                                f"random {rp['placebo']['t1']}.", "n")], B, BODY, 1.35)
+    y = P(s, X, y + 8, 1680, [("Claude replays, 1 of 4, type matched, of "
+                               f"{rp['opus']['of']} rooms: ", "b"),
+                              (f"Opus {rp['opus']['t1']}, Haiku {rp['haiku']['t1']}, DeepSeek {rp['deepseek']['t1']}, "
+                               f"random {rp['placebo']['t1']}.", "n")], B, BODY, 1.3)
     wo, wi = h["without"], h["with"]
-    P(s, X, y + 10, 1680, [("Prompt hint, Haiku, 12 round-1 rows, run after the result (deviation 56): ", "b"),
-                           (f"room claims that hit: {wo['l1_hits']} of {wo['l1_n']} without the sentence, "
-                            f"{wi['l1_hits']} of {wi['l1_n']} with it. Object claims: {wo['l2_hits']} of "
-                            f"{wo['l2_n']} and {wi['l2_hits']} of {wi['l2_n']}. Exploratory.", "n")],
-      B, BODY, 1.35, limit=1000)
+    P(s, X, y + 8, 1680, [("Prompt hint (Haiku, 12 round-1 rows, after the result, deviation 56): ", "b"),
+                          (f"room claims that hit {wo['l1_hits']} of {wo['l1_n']} without the sentence, "
+                           f"{wi['l1_hits']} of {wi['l1_n']} with it; object claims {wo['l2_hits']} of {wo['l2_n']} "
+                           f"and {wi['l2_hits']} of {wi['l2_n']}.", "n")], B, BODY, 1.3, limit=1000)
 
 
 # ---------------------------------------------------------------- Backup 2. Do the filter and the vote keep right guesses?
 
 def validity(prs, slots):
     v = slots["validity"]
-    s = frame(prs, 25, "Backup · Our filter and vote", "Do the filter and the vote keep right guesses?",
+    s = frame(prs, 26, "Backup · Our filter and vote", "Do the filter and the vote keep right guesses?",
               backup=True)
-    X, lw = 120, 420
-    cws = [260, 360, 640]
+    X, lw = 120, 460
+    cws = [240, 340, 600]
     heads = ["Removed", "L3, kept minus removed", "Can the interval be read?"]
     xs = [X + lw]
     for c_ in cws[:-1]:
@@ -974,7 +1015,8 @@ def validity(prs, slots):
     text(s, xs[1], 280, cws[1], 30, [run("points", NT, MID)])
     hline(s, X, 326, X + lw + sum(cws), 326, LINE)
     y = 336
-    for key, name in (("opus", "Opus 5.5"), ("haiku", "Haiku 5.5"), ("deepseek", "DeepSeek"), ("random", "Random")):
+    for key, name in (("opus", "Opus 5.5"), ("haiku", "Haiku 5.5"), ("deepseek", "DeepSeek, expl."),
+                      ("random", "Random guesses")):
         d = v[key]
         text(s, X, y + 18, lw - 10, 40, [run(name, 28, INK, SANS, True)], line=1.2)
         text(s, xs[0], y + 14, cws[0] - 12, 44, [run(num(100 * d["removed_share"], 1), 32, INK, MONO)], line=1.2)
@@ -983,15 +1025,36 @@ def validity(prs, slots):
         text(s, xs[2], y + 18, cws[2] - 12, 40, [run(verdict, 28, BODY)], line=1.2)
         y += 76
         hline(s, X, y, X + lw + sum(cws), y, RULE)
-    box_bottom(s, "Reading.", "Where the interval can be read (Haiku, DeepSeek at L3), kept guesses are not right "
-                              "more often. Elsewhere it is too wide.")
+    box_bottom(s, "Reading.", "No detectable difference between kept and removed guesses (Haiku, DeepSeek and random "
+                              "guesses at L3). Elsewhere the interval is too wide to read.")
 
 
-# ---------------------------------------------------------------- Backup 3. The four outcomes
+# ---------------------------------------------------------------- Backup 3. Why does ASP not gain from all true objects?
+
+def f0_slide(prs, slots):
+    m = slots["m2"]
+    d, a = m["diff"]["F0-F5"], m["diff"]["A"]
+    z = m["f0_ig_zero"]
+    s = frame(prs, 27, "Backup · A likely question", "Why does ASP not gain from all true objects?",
+              backup=True)
+    y = P(s, 120, 256, 1680, "If every member holds every true object, why does ASP's score not rise?", B, INK, 1.4)
+    y = P(s, 120, y + 24, 1680, [("What we found: ", "b"),
+                                 (f"all true objects for every member scored {sg(d['mean'])} "
+                                  f"({sg(d['lo'])} to {sg(d['hi'])}) against random guesses. True objects in "
+                                  f"differing subsets scored {sg(a['mean'])} above them.", "n")], B, BODY, 1.4)
+    y = P(s, 120, y + 24, 1680, [("Why it should not rise: ", "b"),
+                                 ("the score counts disagreement between members. We registered that before the "
+                                  "run (M2, section 7).", "n")], B, BODY, 1.4)
+    P(s, 120, y + 24, 1680, [("What we cannot explain: ", "b"),
+                             (f"why it falls below random guesses. The gain is zero for every candidate in only "
+                              f"{z['stages']} of {z['of']} stages.", "n")], B, BODY, 1.4, limit=990)
+
+
+# ---------------------------------------------------------------- Backup 4. The four outcomes
 
 def outcomes(prs, slots):
     h = slots["blind"]["models"]
-    s = frame(prs, 26, "Backup · The four pre-written outcomes", "The four outcomes, and the rule that picked one",
+    s = frame(prs, 28, "Backup · The four outcomes", "The four outcomes, and the rule that picked one",
               backup=True)
     pick = slots["outcome"]
     cx = (120, 400, 1080)
@@ -1007,8 +1070,9 @@ def outcomes(prs, slots):
     y = 290
     for key, name, rule, met in rows:
         chosen = pick == key
-        hgt = max(est_lines(rule, B, 640), est_lines(met, B, 700)) * B * 1.35 + 28
-        rect(s, 110, y, 1700, hgt, WHITE if chosen else WASH, INK if chosen else RULE, 4 if chosen else 1)
+        # height from the text: the rule column is 640 px wide, the answer column 700 px
+        hgt = max(est_lines(rule, B * 0.83, 640), est_lines(met, B * 0.83, 700)) * B * 1.35 + 28
+        r = rect(s, 112, y + 2, 1696, hgt - 4, WHITE if chosen else WASH, INK if chosen else RULE, 3 if chosen else 1)
         text(s, 130, y + 14, 260, 44, [run(name, B, INK if chosen else MID, SANS, True)], line=1.3)
         P(s, cx[1], y + 14, 640, rule, B, BODY if chosen else MID, 1.35)
         P(s, cx[2], y + 14, 700, met, B, BODY if chosen else MID, 1.35)
@@ -1018,8 +1082,7 @@ def outcomes(prs, slots):
     ps = {h[k][lv]["p_holm"] for k in ("opus", "haiku") for lv in ("L1", "L2", "L3")}
     ptxt = f"all six Holm p-values are {num(ps.pop(), 2)}" if len(ps) == 1 else \
         f"the six Holm p-values are {num(min(ps), 2)} or higher"
-    N(s, 120, y, 1680, f"Supported needs a Holm-adjusted p below 0.05; {ptxt}. Rejected: the interval rules out a gain "
-                       "as large as the margin.", limit=1012)
+    N(s, 120, y, 1680, f"Supported needs a Holm-adjusted p below 0.05; {ptxt}.", limit=1012)
 
 
 # ---------------------------------------------------------------- notes and main
@@ -1056,7 +1119,7 @@ def main():
     limits_runs(prs, C)
     defense(prs)
     picture_levels(prs, slots)
-    controls(prs)
+    controls(prs, slots)
     blind_table(prs, slots)
     facts(prs, slots)
     detect(prs, slots)
@@ -1064,20 +1127,23 @@ def main():
     placement_slide(prs, slots)
     factorial(prs, slots)
     limits(prs, slots)
+    limits_method(prs, slots)
     answer(prs, slots)
     not_shown(prs, slots)
     room_test(prs, slots)
     validity(prs, slots)
+    f0_slide(prs, slots)
     outcomes(prs, slots)
-    assert len(prs.slides) == TOTAL + 3, len(prs.slides)
+    assert len(prs.slides) == TOTAL + 4, len(prs.slides)
     notes = speaker_notes()
-    assert len(notes) == TOTAL + 3, len(notes)
+    assert len(notes) == TOTAL + 4, len(notes)
     for slide, n in zip(prs.slides, notes):
         slide.notes_slide.notes_text_frame.text = n
     prs.core_properties.title = "Right in meaning, wrong in place?"
-    prs.core_properties.author = "Sher Partap Singh, Preesha Katial, Ananya Singla"
+    prs.core_properties.author = "ASP replication, end-sem"
+    prs.core_properties.last_modified_by = "ASP replication, end-sem"
     prs.save(OUT)
-    print(OUT, len(prs.slides), "slides (", TOTAL, "main + 3 backup )")
+    print(OUT, len(prs.slides), "slides (", TOTAL, "main + 4 backup )")
     for w in WARN:
         print("FIT WARNING:", w)
 
