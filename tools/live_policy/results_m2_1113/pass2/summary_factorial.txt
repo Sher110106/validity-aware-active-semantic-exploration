@@ -1,0 +1,105 @@
+stages: 384 usable of 384 rows; left out by the list: 0 (read from /home/sher/endsem_cpu/m2/pass1/left_out_stages.json); rho: audit.rho
+== main (all stages): 384 stages kept, 24 runs
+   F1             mean +0.284 [+0.261, +0.307]  median +0.293
+   F5             mean +0.065 [+0.042, +0.089]  median +0.064
+   F6             mean -0.028 [-0.048, -0.007]  median -0.028
+   F0             mean +0.048 [+0.027, +0.069]  median +0.045
+   F3-deepseek    mean +0.046 [+0.028, +0.063]  median +0.044
+   F3-haiku       mean +0.060 [+0.041, +0.078]  median +0.050
+   F3-opus        mean +0.036 [+0.019, +0.054]  median +0.034
+   F-room         mean +0.089 [+0.073, +0.106]  median +0.091
+   A              +0.218 [+0.195, +0.241]
+   F6-F5          -0.093 [-0.109, -0.078]
+   F0-F5          -0.017 [-0.031, -0.004]
+   B_deepseek     -0.020 [-0.036, -0.003]
+   B_haiku        -0.006 [-0.020, +0.009]
+   B_opus         -0.029 [-0.043, -0.015]
+   C              +0.024 [+0.001, +0.047]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== ig_alone (all stages): 382 stages kept, 24 runs
+   F1             mean +0.319 [+0.297, +0.342]  median +0.327
+   F5             mean +0.075 [+0.054, +0.096]  median +0.068
+   F6             mean -0.040 [-0.060, -0.021]  median -0.026
+   F0             mean +0.094 [+0.069, +0.119]  median +0.098
+   F3-deepseek    mean +0.056 [+0.040, +0.072]  median +0.054
+   F3-haiku       mean +0.070 [+0.053, +0.088]  median +0.062
+   F3-opus        mean +0.043 [+0.030, +0.056]  median +0.040
+   F-room         mean +0.094 [+0.074, +0.115]  median +0.096
+   A              +0.244 [+0.221, +0.268]
+   F6-F5          -0.116 [-0.135, -0.096]
+   F0-F5          +0.019 [-0.003, +0.041]
+   B_deepseek     -0.019 [-0.040, +0.002]
+   B_haiku        -0.005 [-0.024, +0.014]
+   B_opus         -0.032 [-0.050, -0.013]
+   C              +0.019 [-0.008, +0.046]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== audit_Ucone (all stages): 384 stages kept, 24 runs
+   F1             mean +0.667 [+0.642, +0.691]  median +0.687
+   F5             mean +0.161 [+0.122, +0.202]  median +0.191
+   F6             mean -0.037 [-0.081, +0.007]  median -0.011
+   F0             mean +0.131 [+0.088, +0.174]  median +0.156
+   F3-deepseek    mean +0.165 [+0.134, +0.196]  median +0.187
+   F3-haiku       mean +0.168 [+0.141, +0.196]  median +0.183
+   F3-opus        mean +0.136 [+0.105, +0.167]  median +0.142
+   F-room         mean +0.323 [+0.290, +0.357]  median +0.327
+   A              +0.505 [+0.467, +0.544]
+   F6-F5          -0.198 [-0.236, -0.161]
+   F0-F5          -0.030 [-0.072, +0.011]
+   B_deepseek     +0.004 [-0.025, +0.033]
+   B_haiku        +0.007 [-0.026, +0.040]
+   B_opus         -0.026 [-0.060, +0.008]
+   C              +0.162 [+0.121, +0.203]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== U360 (all stages): 384 stages kept, 24 runs
+   F1             mean +0.410 [+0.378, +0.442]  median +0.439
+   F5             mean +0.092 [+0.046, +0.139]  median +0.119
+   F6             mean -0.069 [-0.122, -0.016]  median -0.046
+   F0             mean +0.085 [+0.037, +0.133]  median +0.125
+   F3-deepseek    mean +0.153 [+0.112, +0.195]  median +0.178
+   F3-haiku       mean +0.152 [+0.112, +0.192]  median +0.146
+   F3-opus        mean +0.119 [+0.066, +0.172]  median +0.141
+   F-room         mean +0.286 [+0.241, +0.332]  median +0.287
+   A              +0.318 [+0.289, +0.346]
+   F6-F5          -0.161 [-0.190, -0.132]
+   F0-F5          -0.007 [-0.034, +0.020]
+   B_deepseek     +0.061 [+0.030, +0.092]
+   B_haiku        +0.060 [+0.028, +0.092]
+   B_opus         +0.026 [-0.016, +0.070]
+   C              +0.194 [+0.147, +0.240]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "inconclusive"}
+== main (official-arm stages): 119 stages kept, 7 runs
+   F1             mean +0.297 [+0.268, +0.326]  median +0.309
+   F5             mean +0.065 [+0.024, +0.106]  median +0.075
+   F6             mean -0.025 [-0.061, +0.010]  median -0.042
+   F0             mean +0.051 [+0.015, +0.086]  median +0.041
+   F3-deepseek    mean +0.056 [+0.013, +0.100]  median +0.052
+   F3-haiku       mean +0.059 [+0.018, +0.101]  median +0.054
+   F3-opus        mean +0.038 [-0.003, +0.078]  median +0.036
+   F-room         mean +0.092 [+0.078, +0.105]  median +0.089
+   A              +0.232 [+0.197, +0.268]
+   F6-F5          -0.090 [-0.108, -0.073]
+   F0-F5          -0.014 [-0.033, +0.005]
+   B_deepseek     -0.008 [-0.027, +0.011]
+   B_haiku        -0.005 [-0.019, +0.008]
+   B_opus         -0.027 [-0.048, -0.007]
+   C              +0.027 [-0.003, +0.058]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== main (clustered by scene and seed): 384 stages kept, 24 runs
+   F1             mean +0.284 [+0.251, +0.316]  median +0.293
+   F5             mean +0.065 [+0.034, +0.097]  median +0.064
+   F6             mean -0.028 [-0.044, -0.011]  median -0.028
+   F0             mean +0.048 [+0.026, +0.070]  median +0.045
+   F3-deepseek    mean +0.046 [+0.021, +0.071]  median +0.044
+   F3-haiku       mean +0.060 [+0.032, +0.087]  median +0.050
+   F3-opus        mean +0.036 [+0.014, +0.059]  median +0.034
+   F-room         mean +0.089 [+0.084, +0.094]  median +0.091
+   A              +0.218 [+0.189, +0.247]
+   F6-F5          -0.093 [-0.109, -0.077]
+   F0-F5          -0.017 [-0.034, -0.000]
+   B_deepseek     -0.020 [-0.037, -0.002]
+   B_haiku        -0.006 [-0.018, +0.006]
+   B_opus         -0.029 [-0.040, -0.019]
+   C              +0.024 [-0.005, +0.052]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "B_haiku": "not shown sufficient, on a provisional yardstick", "B_opus": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+share of stages with ig = 0 for every candidate: F-room 0.00, F0 0.01, F1 0.00, F3-deepseek 0.00, F3-haiku 0.00, F3-opus 0.00, F5a 0.00, F5b 0.00, F6 0.01
+objects per member: F-room 9.6, F0 151.4, F1 10.0, F3-deepseek 10.0, F3-haiku 10.0, F3-opus 10.0, F5a 10.1, F5b 10.0, F6 0.0

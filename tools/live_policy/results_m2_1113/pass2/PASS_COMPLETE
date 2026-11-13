@@ -1,0 +1,8 @@
+{
+ "n_rows": 384,
+ "arms": [
+  "F3-haiku",
+  "F3-opus"
+ ],
+ "sha256": "63db1fbd65add6a5251ea791803634365656e57278c90d9408b35d58dc1ecbd4"
+}
