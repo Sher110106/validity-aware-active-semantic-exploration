@@ -25,21 +25,21 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 ### 3.1 Part 2: the paper's scale
 
-- [x] Amendment 2 to `PREREGISTRATION_PAPER.md` (rerun rules, frozen-tour test, budget rule).
-- [~] `tools/live_policy/DEVIATIONS_NOVEMBER.md`, items 40 onward.
+- [x] Amendment 2 to `PREREGISTRATION_PAPER.md` (rerun rules, frozen-tour test, budget rule), reviewed by Opus; a Note corrects one statement and settles open cases (hashed 18:35, pushed before any 871 rerun).
+- [x] `tools/live_policy/DEVIATIONS_NOVEMBER.md`, items 40 to 47 (more are added as they arise).
 - [ ] When the queue ends: acceptance checks on all six runs (§4), and the folder map in deviation 46.
 - [ ] Copy only YAML and stats files to the laptop (rsync include list, dry run first; never a DSG file).
 - [ ] The author's GED on the host for the new runs.
 - [ ] Rescore: budget by script as Amendment 2 A2.3 says, C2 written to file first, crashed rows pointed at the right folders, the 11-12 values for 871 marked superseded.
 - [ ] The C1 area table: navmesh island, HM3D labelled floor, waypoint grid, the paper's figure.
-- [ ] Optional, needs the student's yes: ASP on 853 to the full budget (§6).
+- [ ] ASP on 853 to the full budget, behind the readiness check (§6). Approved 11-13.
 
 ### 3.2 Part 3: the author's defense
 
 **M0b, pre-registration**
-- [ ] Inventory of saved inputs and truth files (what is on the laptop, what needs the host).
-- [ ] Host session: region footprints rasterised from the semantic mesh, other houses' label files for the B3b prior, slices rendered for the smoke test and the 44 inputs.
-- [ ] `PREREGISTRATION_SEMANTIC.md` drafted. It fixes:
+- [x] Inventory of saved inputs and truth files (`semantic/DATA_INVENTORY.md`).
+- [x] Host session: region footprints from the semantic mesh, the label summary of 181 annotated houses, and the 44 frame inputs plus 3 smoke inputs exported and copied (0 hash mismatches; slices byte-identical to October's Gemini inputs on 4 rows).
+- [~] `PREREGISTRATION_SEMANTIC.md` drafted, reviewed once by Opus, rewritten; second check running. It fixes:
   - truth: region types, the "seen" rule, the unobserved stratum for L3;
   - levels L1 to L3, the label normaliser and the synonym table;
   - comparators B1, B2, B3, B4, B5 and D, and how B3a or B3b is chosen;
@@ -66,7 +66,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [ ] Opus review. The verdict reads "not shown sufficient, on a yardstick biased toward rejection" unless the data say otherwise.
 
 **M3, the Claude loop**
-- [ ] A direct port of the author's tool loop to the Anthropic SDK, with a test that it matches his loop on scripted replies. It runs outside the container's shared Python.
+- [~] A direct port of the author's tool loop to the Anthropic SDK, with a test that it matches his loop on scripted replies (47 tests pass; Opus review running). It runs on the laptop.
 - [ ] Meter and caps: priced per call on the right price card, reserve the measured p99 call, check caps on settled spend, resume by (model, stage, member).
 - [ ] Opus review of the loop against the API reference.
 - [ ] Smoke test: 24 members (Opus medium, Opus low, Haiku medium), cap $30, scored for cost and plumbing only.
@@ -79,7 +79,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 ### 3.3 The talk
 
-- [ ] Deck with parts 1 and 2 final, and part 3 slots for all four outcomes (works, mixed, fails, inconclusive).
+- [~] Deck with parts 1 and 2, and part 3 slots for all four outcomes: first build done (`docs/endsem_2026-11/`, 16 slides); review and numbers to come.
 - [ ] `numbers.csv` rows for every new number.
 - [ ] Write-up section and the limits slide (§5).
 - [ ] Independent recompute of M1, M2 and M4 from raw files.
@@ -117,20 +117,20 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
   | Inconclusive | The registered null wording, with the detectable differences. |
   | M4 dropped | DeepSeek's results are exploratory, and no thesis line applies. |
 
-## 6. Cut, and what stays optional
+## 6. Cut, and the one added run
 
 **Cut:** E6 (live Claude); M6; H5; the Sonnet replay; the direct probe; Haiku on 259 inputs; scenes 69 and 573; the genai shim; M2's subset repeats and error sweep; per-stage GED in the one-pass driver; ASP on 871 to the full budget.
 
-**Optional, needs the student's yes: ASP on 853 to the full budget.** Three seeds, about $6 of DeepSeek, one run at a time, 4 to 9 hours each, reported as its own row and never pooled with October. It fills the one column of the paper's table where we have no ASP value. It starts only if a readiness check passes: the DeepSeek model is still served, the runner can go past 60 m without the broken scheduler, and the plan and pre-registration are amended first. If the check fails or a run dies, it is dropped with no retry.
+**ASP on 853 to the full budget (approved 11-13).** Three seeds, about $6 of DeepSeek, one run at a time, 4 to 9 hours each, reported as its own row and never pooled with October. It fills the one column of the paper's table where we have no ASP value. It starts only if a readiness check passes: the DeepSeek model is still served, the runner can go past 60 m without the broken scheduler, and the plan and pre-registration are amended first. If the check fails or a run dies, it is dropped with no retry.
 
 ## 7. Decisions and the defaults in force
 
-| Decision | Default until the student says otherwise |
+| Decision | State |
 |---|---|
-| End-sem date | Rehearsals 26-27 Nov, numbers frozen 24 Nov. |
-| Claude spend | Nothing is spent until the student gives the key and the cap. Asked cap: $330 ($30 smoke, $280 Opus, $20 Haiku). |
-| Push to GitHub | Commits are local until the student agrees to a push. |
-| ASP on 853 | Not run. |
+| End-sem date | Assumed: rehearsals 26-27 Nov, numbers frozen 24 Nov. Not yet confirmed. |
+| Claude spend | Approved 11-13: up to $330 ($30 smoke, $280 Opus, $20 Haiku). The smoke test's measured cost is reported before the replays. |
+| Push to GitHub | Approved 11-13: hash commits go to the branch `endsem-2026-11`, not to main. The student merges later. |
+| ASP on 853 to the full budget | Approved 11-13, behind the readiness check in §6. |
 | The author's files | They change part 2 only if they arrive by 11-20. |
 
 ## 8. What the five reviews changed
@@ -144,3 +144,11 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 ## 9. Progress log
 
 - 11-13 17:54: Amendment 2 hashed (sha256 1286c2c5…). Deviations 40-47 written. This plan saved.
+- 11-13 17:55: committed as 60e2973. 18:00: pushed to `origin/endsem-2026-11`, before the first third attempt of an e7 871 seed started.
+- 11-13 18:04: the 853 APR-b rerun ended with "Exploration complete" at 183.3 m; its graph grew at every archived stop.
+- 11-13 18:05-18:20: lanes started: bench rebuild, Claude loop, data inventory, statistics module, deck, host truth files. The Claude key works against the API (a free model-list call).
+- 11-13 18:05-18:10: another user's GPU job came back (41.7 GB). The queue waits at its 12 GB check before the 871 APR-b tour. No run is harmed. GPU-bound work (871 tour, 871 seeds, ASP on 853) waits for that job to end.
+- 11-13 18:13: truth files built on the host (CPU only): 12 regions on 00853, 16 on 00871; floor masks hold too few object centres, so the footprint is the mask of all triangles.
+- 11-13 18:30: Opus reviews back. Amendment 2: one false statement and several open cases, fixed by a Note (commit aa3886d, pushed 18:35). Semantic pre-registration: ten must-fix items, all taken into a rewrite.
+- 11-13 18:40: frame and smoke inputs on the laptop. Scorer lanes started against a shared contract (`semantic/model.py`): labels, truth and extraction, scoring and comparators. Opus review of the Claude loop started.
+- Readiness for ASP on 853, item 1: the pinned DeepSeek model is still served by DeepInfra at fp8 (checked 18:20). October's 60 m runs used 1,022 to 1,362 calls, so a 105 m run fits under the launcher's 3,000-call cap.
