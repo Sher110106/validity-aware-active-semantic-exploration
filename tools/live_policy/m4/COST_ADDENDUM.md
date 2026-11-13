@@ -31,3 +31,11 @@ The smoke test was scored for cost and plumbing only. Its inputs are not in the 
 - Measured cost per member used for the check before each round: Opus $0.25, Haiku $0.01. Both sit above the largest member seen in the smoke test, to cover the pre-warm calls.
 - Reserve per call in flight: Opus $1.50, Haiku $0.35.
 - Projected spend for all four rounds (176 members per model, 44 pre-warms per model): about $40 for Opus and about $1.50 for Haiku.
+
+## Independent check of the smoke test (before round 1)
+
+An Opus reviewer read the 28 records. It reran the author's `validate_feasibility` on every tool call and matched every result that was sent back; recomputed all 77 ledger rows from the price table with no difference; and confirmed that every member's first call read its pre-warm's cache, that no observed node changed in any parsed graph, and that every final text holds one YAML block. Two things it noted:
+- The API shrinks the six 5,400 × 3,600 px slices without saying so: they cost about 4,700 tokens each, about 28,700 of the 32,600 prompt tokens of the smallest input. Both models count the same tokens.
+- 4 members run at a time, so that an input's four members all read that input's fresh pre-warm. The replays use that setting.
+
+The replays write to a new folder with a new ledger; the smoke test's $2.84 is not counted against their caps. The command line is in `m4/RUN_REPLAY.sh`.
