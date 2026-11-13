@@ -39,7 +39,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 **M0b, pre-registration**
 - [x] Inventory of saved inputs and truth files (`semantic/DATA_INVENTORY.md`).
 - [x] Host session: region footprints from the semantic mesh, the label summary of 181 annotated houses, and the 44 frame inputs plus 3 smoke inputs exported and copied (0 hash mismatches; slices byte-identical to October's Gemini inputs on 4 rows).
-- [~] `PREREGISTRATION_SEMANTIC.md` drafted, reviewed once by Opus, rewritten; second check running. It fixes:
+- [x] `PREREGISTRATION_SEMANTIC.md`: drafted, reviewed three times by Opus, hashed 11-13 18:59 IST (sha256 59c97ad6…) and pushed, before any model output was scored. It fixes:
   - truth: region types, the "seen" rule, the unobserved stratum for L3;
   - levels L1 to L3, the label normaliser and the synonym table;
   - comparators B1, B2, B3, B4, B5 and D, and how B3a or B3b is chosen;
@@ -49,11 +49,11 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
   - the paper's room test with a chance rate;
   - the M4 round order and the cost addendum;
   - the full list of numbers already seen.
-- [ ] Opus review, then hash, commit and push.
+- [x] Opus review, then hash, commit and push (commit 49307ed).
 - [ ] Truth files hashed as an addendum before the first score.
 
 **M1, the semantic test on saved data ($0)**
-- [ ] `tools/live_policy/semantic/`: region truth, prediction extraction, baselines, level scoring, the room test, statistics, and the one-pass driver with the validity views.
+- [~] `tools/live_policy/semantic/`: labels, region truth, extraction, level scoring, comparators, statistics and driver are written (366 tests); integration, the validity views and the room test are in progress.
 - [ ] Tests on synthetic houses with known answers.
 - [ ] Opus review of the code against the pre-registration.
 - [ ] Scorer freeze: hash and commit (order rule 3).
@@ -61,7 +61,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - [ ] Opus recompute of the headline numbers with its own code.
 
 **M2, would right meaning be enough? ($0)**
-- [ ] Rebuild the bench from a copy and reproduce 9,600 of 9,600 picks. Fallback: `audit/counterfactual.py` on the 121 official stages.
+- [x] Rebuild the bench from a copy and reproduce 9,600 of 9,600 picks (done on the laptop, `tools/live_policy/m2/`; the same on tyrone's CPUs is in progress).
 - [ ] The trimmed factorial: ceiling and floor arms (F1, F5, F6), then F-room and F3 at DeepSeek's measured error, then each Claude model's error.
 - [ ] Opus review. The verdict reads "not shown sufficient, on a yardstick biased toward rejection" unless the data say otherwise.
 
@@ -152,3 +152,8 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 18:30: Opus reviews back. Amendment 2: one false statement and several open cases, fixed by a Note (commit aa3886d, pushed 18:35). Semantic pre-registration: ten must-fix items, all taken into a rewrite.
 - 11-13 18:40: frame and smoke inputs on the laptop. Scorer lanes started against a shared contract (`semantic/model.py`): labels, truth and extraction, scoring and comparators. Opus review of the Claude loop started.
 - Readiness for ASP on 853, item 1: the pinned DeepSeek model is still served by DeepInfra at fp8 (checked 18:20). October's 60 m runs used 1,022 to 1,362 calls, so a 105 m run fits under the launcher's 3,000-call cap.
+- 11-13 18:59: `PREREGISTRATION_SEMANTIC.md` hashed (59c97ad6…) after three Opus reviews, pushed 19:00 (49307ed). The reviews changed: the footprint (all triangles, not the floor), "answers to" (the detector calls a bed "duvet"), the open-room rule, the guess rule (place only; ids and flags ignored), the wrong-house comparator (a separate gate over 6 pairs), and the label table's rules.
+- 11-13 19:00: the paper runs that exist pass or fail Amendment 2's tests as expected: 853 seeds 42-46 and 871 seed 46 valid; the eight crashed 871 attempts invalid; the 853 APR-b rerun not frozen (117 object nodes), so C2 for 853 can be computed.
+- 11-13 19:05: Opus review of the Claude loop: four must-fix items before any paid call (gateway address, per-model caps, the per-round cost check, reserves); fixes in progress.
+- 11-13 19:10: tyrone's CPUs taken into use for the bench and the factorial (`~/endsem_cpu`), at the student's request, while the GPU is held by another user's job.
+- 11-13 19:15: lanes running: scorer integration; M2 pre-registration review; bench and factorial code on tyrone; part-2 rescore pipeline; Claude loop fixes.
