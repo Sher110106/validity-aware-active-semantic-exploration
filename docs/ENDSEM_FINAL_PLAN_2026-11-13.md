@@ -79,11 +79,11 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 ### 3.3 The talk
 
-- [~] Deck with parts 1 to 3 (`docs/endsem_2026-11/`): rebuilt after a first Opus review (20 slides), then part 3 filled from the result files (22 slides and 2 backup). Second Opus review done: no wrong number in 165 checked; wording and layout fixes in progress.
+- [x] Deck with parts 1 to 3 (`docs/endsem_2026-11/`): rebuilt after a first Opus review (20 slides), then part 3 filled from the result files (22 slides and 2 backup). Two Opus reviews, no wrong number in either; their fixes are in (3ff6ffd): 24 main slides and 4 backup, about 15 minutes spoken.
 - [x] A numbers table for every part-3 number (`results_semantic_1113/numbers_part3.csv`, 1,247 rows, built and audited by script).
-- [~] Write-up (`results_semantic_1113/RESULTS.md`, commit f5101c3) and the limits slide. Opus review: about 400 numbers traced, none wrong; eight sentences said too much and seven required items were missing. Fixes in progress.
+- [x] Write-up (`results_semantic_1113/RESULTS.md`) and the limits slides. Two Opus reviews traced about 650 numbers, none wrong; their wording fixes and the required items are in (41ebff0, 4f3f96b); 1,749 numbers audited.
 - [x] Independent recompute from raw files: M1 and M4 reproduced (`results_semantic_1113/independent_recompute/`); M2's summary and verdicts reproduced from its per-stage files to within 1.4e-16 (`results_m2_1113/independent_recompute/`). How M2's arms were built was checked by code review, not rebuilt.
-- [~] Opus review of the deck against its sources: done once (see above); a second look follows the fixes.
+- [x] Opus review of the deck against its sources: done twice; the second also checked the deck against the write-up.
 
 ## 4. Rules for runs on the host
 
@@ -182,3 +182,6 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 22:06: scoring code for the November ASP row pushed (6fb5888) after an Opus code review: the runs enter only through the checks of A3.2, as their own arm, one folder per seed; with no such run every output is unchanged (1,063 tests pass).
 - 11-13 22:03: a second Opus look at the write-up and the deck together: about 250 more numbers traced and eight supplement counts redone from the raw graphs, no mismatch. It asked for eight more small wording changes in the write-up and for the deck's answer slides to follow the write-up's own lists; both are in progress.
 - 11-13 22:07: the GPU is still held (43.0 of 48 GB). The 871 tour, the four 871 seeds and ASP on 853 have not moved.
+- 11-13 22:13: the write-up's last eight wording changes pushed (4f3f96b); 1,749 numbers audited. 22:22: the deck brought in line with the write-up and pushed (3ff6ffd): the answer slides follow the write-up's own lists, part 3 uses points throughout, the stage slide draws one real hit and one real miss, the C1 table shows the labelled floor and the outline, and a backup answers why all true objects do not raise ASP's score. Parts 1 and 3 of the talk are finished; part 2 keeps its 871 cells and the 853 full-budget row marked as open.
+- 11-13 22:24: a mail to the paper's authors is drafted for the student to send (kept outside the repository). It asks for their reference graphs, the time budget, how rooms and area were counted, the runs behind Fig. 4, and any saved Gemini samples.
+- 11-13 22:24: the GPU is still held (43.0 of 48 GB, since 18:05). Open and waiting on it: the 871 tour and seeds, the acceptance checks, the final rescore with deviation 46's folder map, and ASP on 853.
