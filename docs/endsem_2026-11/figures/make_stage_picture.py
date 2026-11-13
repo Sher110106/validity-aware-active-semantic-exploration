@@ -17,6 +17,7 @@ import sys
 import matplotlib
 
 matplotlib.use("Agg")
+import matplotlib.patheffects as pe  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from scipy import ndimage  # noqa: E402
@@ -76,7 +77,8 @@ def main():
         reg = truth.regions[r]
         if reg.types:
             label = "/".join(SHORT[t] for t in sorted(reg.types))
-            ax.text(*reg.centroid_xy, label, ha="center", va="center", fontsize=18, color=INK)
+            ax.text(*reg.centroid_xy, label, ha="center", va="center", fontsize=18, color=INK, zorder=10,
+                    path_effects=[pe.withStroke(linewidth=4, foreground="white")])
     path = np.array(row.path_xy)
     ax.plot(path[:, 0], path[:, 1], color=MID, lw=1.2, alpha=0.8)
     ax.plot(*path[0], marker="*", color=INK, ms=16, ls="")
@@ -88,6 +90,10 @@ def main():
     ax.set_aspect("equal")
     ax.set_xlim(extent[0] - 0.3, extent[1] + 0.3)
     ax.set_ylim(extent[2] - 0.3, extent[3] + 0.3)
+    bx, by = extent[0] + 0.4, extent[2] + 0.5
+    ax.plot([bx, bx + 2.0], [by, by], color=INK, lw=5, solid_capstyle="butt", zorder=11)
+    ax.text(bx + 1.0, by + 0.25, "2 m", ha="center", va="bottom", fontsize=18, color=INK, zorder=11,
+            path_effects=[pe.withStroke(linewidth=4, foreground="white")])
     ax.axis("off")
     fig.subplots_adjust(0, 0, 1, 1)
     fig.savefig(os.path.join(HERE, "stage.png"))

@@ -1,79 +1,528 @@
 {
-  "_how": "null means pending: the slide shows TBD and a grey 'result pending' mark. Fill a value, run build_endsem_pptx.py again, and the number appears. A slide loses its pending mark when none of its values is null.",
-
-  "outcome": null,
-  "_outcome": "Slide 20. One of works, mixed, fails, inconclusive, as the registered rules decide. null shows all four alike.",
-
-  "paper_compare_json": "tools/live_policy/results_paper_compare_1113/paper_compare.json",
-  "table871_updated": false,
-  "_table871": "Slides 7 and 9. After the 871 reruns and the rescore, point paper_compare_json at the new file and set table871_updated to true. The 'to be updated' marks then go away and the 871 budget is read from the new file. The 11-13 file holds the same cells as the 11-12 file.",
-
-  "asp853_full_budget": {
-    "_what": "Slide 8, row 'Ours, ASP, full budget'. Per fraction of the budget (10, 50, 100): mean, min and max of F1 x 100 over the new ASP runs; runs is how many. Leave null if the runs are not made.",
-    "runs": null,
-    "10":  {"mean": null, "min": null, "max": null},
-    "50":  {"mean": null, "min": null, "max": null},
-    "100": {"mean": null, "min": null, "max": null}
+ "_how": "Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. Edit part 2 keys by hand; rerun the script after any result file changes.",
+ "paper_compare_json": "tools/live_policy/results_paper_compare_1113/paper_compare.json",
+ "_table871": "Slides 7 and 9. After the 871 reruns and the rescore, point paper_compare_json at the new file and set table871_updated to true. The 'to be updated' marks then go away and the 871 budget is read from the new file. The 11-13 file holds the same cells as the 11-12 file.",
+ "table871_updated": false,
+ "asp853_full_budget": {
+  "_what": "Slide 8, row 'Ours, ASP, full budget'. Per fraction of the budget (10, 50, 100): mean, min and max of F1 x 100 over the new ASP runs; runs is how many. Leave null if the runs are not made.",
+  "runs": null,
+  "10": {
+   "mean": null,
+   "min": null,
+   "max": null
   },
-
-  "base_rates": {
-    "_what": "Slide 14. Share of stages (0 to 1) in which an unseen region of that type remains, under the frozen truth rule. The 88, 82 and 56% in the pre-registration came from earlier, cruder rules.",
-    "unseen_bathroom": null,
-    "unseen_bedroom": null,
-    "unseen_kitchen": null
+  "50": {
+   "mean": null,
+   "min": null,
+   "max": null
   },
-
-  "room_test": {
-    "_what": "Slide 16. Rooms predicted before they were seen, by the paper's rule (at least 2 of 8 members within 2.5 m): hits and rooms counted. Live arms have 8 members. Claude replays have 4: 1-of-4 and 2-of-4, each with the placebo's chance count.",
-    "llm_live":     {"hit": null, "of": null},
-    "filter_live":  {"hit": null, "of": null},
-    "placebo_live": {"hit": null, "of": null},
-    "claude_1of4":  {"hit": null, "of": null, "chance_hit": null, "chance_of": null},
-    "claude_2of4":  {"hit": null, "of": null, "chance_hit": null, "chance_of": null}
-  },
-
-  "models": {
-    "_what": "Slide 17. For each model and level: lift = model rate minus the named comparator's rate (the prior at L1 and L2, the region trade at L3), in percentage points, with its 95% interval; verdict is Supported, Rejected or Inconclusive. mdd is the detectable difference per level in points. wrong_house is the p of the 6-pair wrong-house check at L1 and L2. l1_cannot_decide: true, false or null, as the freeze says.",
-    "opus": {
-      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
-    },
-    "haiku": {
-      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
-    },
-    "deepseek": {
-      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
-      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
-    },
-    "mdd": {"L1": null, "L2": null, "L3": null},
-    "wrong_house": {
-      "opus":  {"L1": null, "L2": null},
-      "haiku": {"L1": null, "L2": null}
-    },
-    "l1_cannot_decide": null
-  },
-
-  "factorial": {
-    "_what": "Slide 18. Spearman rho between ASP's score and the bench's wall-aware cone count, per arm, with the 95% wild-cluster-bootstrap interval of the mean over 24 runs. F0 also gives the share of stages where the gain is zero for every view.",
-    "F1_exact":        {"rho": null, "lo": null, "hi": null},
-    "F_room":          {"rho": null, "lo": null, "hi": null},
-    "F3_deepseek_err": {"rho": null, "lo": null, "hi": null},
-    "F3_haiku_err":    {"rho": null, "lo": null, "hi": null},
-    "F3_opus_err":     {"rho": null, "lo": null, "hi": null},
-    "F5_random":       {"rho": null, "lo": null, "hi": null},
-    "F6_none":         {"rho": null, "lo": null, "hi": null},
-    "F0_anchor":       {"rho": null, "lo": null, "hi": null, "share_ig_zero": null}
-  },
-
-  "validity": {
-    "_what": "Backup slide. Per model: removed_share of guesses (0 to 1); L3 hit rate (0 to 1) of kept and of removed guesses; Brier score of support against truth; yield at tau 1.0 = hits kept / guesses kept.",
-    "opus":     {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
-    "haiku":    {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
-    "deepseek": {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
-    "random":   {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null}
+  "100": {
+   "mean": null,
+   "min": null,
+   "max": null
   }
+ },
+ "outcome": "fails",
+ "thesis": "The claim fails",
+ "_sources": {
+  "blind": "results_semantic_1113/{claude,exploratory}/results.json: models.<m>.analysis.levels.<L>, family.hypotheses",
+  "mdd": "results_semantic_1113/exploratory/mdd_table.json: levels",
+  "wrong_house": "results_semantic_1113/{claude,exploratory}/results.json: family.wrong_house_gate",
+  "opus_check": "results_semantic_1113/independent_recompute/margin_summary.json: summary",
+  "placement": "results_semantic_1113/{claude,exploratory}/error_sample_*.json",
+  "room": "results_semantic_1113/claude/room_test.json: live.by_arm, replay.<m>.totals",
+  "hint": "results_semantic_1113/{claude,nohint_haiku}/records_claude-haiku-5-5.json: records[round 1].model.<member>.counts",
+  "m2": "results_m2_1113/pass2/summary_factorial.json: analysis.main.all",
+  "validity": "results_semantic_1113/{claude,exploratory}/validity.json",
+  "members": "results_semantic_1113/claude/results.json: models.<m>.status; cost $35.78 from docs/ENDSEM_FINAL_PLAN_2026-11-13.md (progress log 11-13 20:38)"
+ },
+ "blind": {
+  "models": {
+   "opus": {
+    "L1": {
+     "score": 0.8543981481481482,
+     "named": "B3",
+     "diff": -0.057638888888888885,
+     "lo": -0.12166666666666667,
+     "hi": 0.0,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": -0.020601851851851854,
+      "lo": -0.09666666666666666,
+      "hi": 0.04166666666666667,
+      "p": 0.7265625
+     },
+     "placebo_score": 0.875
+    },
+    "L2": {
+     "score": 0.5831637842426532,
+     "named": "B3",
+     "diff": -0.3511891699019675,
+     "lo": -0.413486050986051,
+     "hi": -0.29066184807256235,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": -0.022905996808526563,
+      "lo": -0.07352221191506905,
+      "hi": 0.026781031468531474,
+      "p": 0.830078125
+     },
+     "placebo_score": 0.6060697810511798
+    },
+    "L3": {
+     "score": 0.04201063211479878,
+     "named": "D",
+     "diff": 0.005320869283108875,
+     "lo": -0.018892569043610693,
+     "hi": 0.029495841350008017,
+     "margin": 0.03,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo_score": 0.016851367161569368
+    }
+   },
+   "haiku": {
+    "L1": {
+     "score": 0.8958333333333334,
+     "named": "B3",
+     "diff": -0.10416666666666667,
+     "lo": -0.20833333333333334,
+     "hi": 0.0,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": -0.052083333333333336,
+      "lo": -0.1625,
+      "hi": 0.052083333333333336,
+      "p": 0.859375
+     },
+     "placebo_score": 0.875
+    },
+    "L2": {
+     "score": 0.6881720049130764,
+     "named": "B3",
+     "diff": -0.24853434429327284,
+     "lo": -0.3151388888888889,
+     "hi": -0.18111111111111108,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": 0.08210222386189649,
+      "lo": 0.011112140725235984,
+      "hi": 0.1493679353054353,
+      "p": 0.01416015625
+     },
+     "placebo_score": 0.6060697810511798
+    },
+    "L3": {
+     "score": 0.04404230442176871,
+     "named": "D",
+     "diff": 0.007710066491874529,
+     "lo": -0.008486111111111113,
+     "hi": 0.023562813816002587,
+     "margin": 0.03,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo_score": 0.016851367161569368
+    }
+   },
+   "deepseek": {
+    "L1": {
+     "score": 0.8923611111111112,
+     "named": "B3",
+     "diff": -0.01736111111111111,
+     "lo": -0.05208333333333333,
+     "hi": 0.0,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": 0.01736111111111111,
+      "lo": -0.041666666666666664,
+      "hi": 0.075,
+      "p": 0.30078125
+     },
+     "placebo_score": 0.875
+    },
+    "L2": {
+     "score": 0.663890736043295,
+     "named": "B3",
+     "diff": -0.26268415511492954,
+     "lo": -0.33151229965568196,
+     "hi": -0.19449351566948606,
+     "margin": 0.05,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo": {
+      "diff": 0.05782095499211512,
+      "lo": 0.0007365782365782142,
+      "hi": 0.11386909205536658,
+      "p": 0.02392578125
+     },
+     "placebo_score": 0.6060697810511798
+    },
+    "L3": {
+     "score": 0.0479641352968673,
+     "named": "D",
+     "diff": -0.006065952781931147,
+     "lo": -0.018535479208419827,
+     "hi": 0.006493826483584893,
+     "margin": 0.03,
+     "verdict": "Rejected",
+     "p_holm": 1.0,
+     "placebo_score": 0.016851367161569368
+    }
+   }
+  },
+  "mdd": {
+   "L1": {
+    "mdd": 0.05708543373020257,
+    "half_width": 0.037500000000000006,
+    "margin": 0.05,
+    "contrast": "B1-B3",
+    "n_clusters": 12
+   },
+   "L2": {
+    "mdd": 0.05239358792436983,
+    "half_width": 0.03568677657219324,
+    "margin": 0.05,
+    "contrast": "B1-B3",
+    "n_clusters": 12
+   },
+   "L3": {
+    "mdd": 0.01089701994097552,
+    "half_width": 0.007116176043625506,
+    "margin": 0.03,
+    "contrast": "B5-D",
+    "n_clusters": 12
+   }
+  },
+  "wrong_house": {
+   "opus": {
+    "L1": {
+     "mean_diff": 0.08912037037037036,
+     "p": 0.125,
+     "n_pairs": 6,
+     "pass": false
+    },
+    "L2": {
+     "mean_diff": -0.06253607503607503,
+     "p": 1.0,
+     "n_pairs": 6,
+     "pass": false
+    }
+   },
+   "haiku": {
+    "L1": {
+     "mean_diff": -0.05,
+     "p": 1.0,
+     "n_pairs": 5,
+     "pass": false
+    },
+    "L2": {
+     "mean_diff": -0.04405588624338625,
+     "p": 0.953125,
+     "n_pairs": 6,
+     "pass": false
+    }
+   },
+   "deepseek": {
+    "L1": {
+     "mean_diff": -0.01736111111111111,
+     "p": 1.0,
+     "n_pairs": 6,
+     "pass": false
+    },
+    "L2": {
+     "mean_diff": -0.05275074152729381,
+     "p": 1.0,
+     "n_pairs": 6,
+     "pass": false
+    }
+   }
+  },
+  "opus_l3_check": {
+   "registered_upper": 0.029495841350008017,
+   "margin": 0.03,
+   "runs": 15,
+   "rerun_min": 0.028349017206,
+   "rerun_max": 0.029791872094,
+   "below_margin": 15
+  },
+  "members": {
+   "opus": {
+    "members": 176,
+    "parsed": 176
+   },
+   "haiku": {
+    "members": 176,
+    "parsed": 175
+   }
+  },
+  "replay_cost_usd": 35.78
+ },
+ "placement": {
+  "deepseek": {
+   "n": 1249,
+   "median": 7.671962127434883,
+   "left_out": 610,
+   "all_guesses": 1859
+  },
+  "gemini": {
+   "n": 314,
+   "median": 5.814135671953301,
+   "left_out": 35,
+   "all_guesses": 349
+  },
+  "haiku": {
+   "n": 617,
+   "median": 7.133523444739479,
+   "left_out": 277,
+   "all_guesses": 894
+  },
+  "opus": {
+   "n": 800,
+   "median": 8.122679127998033,
+   "left_out": 548,
+   "all_guesses": 1348
+  },
+  "placebo": {
+   "n": 1030,
+   "median": 8.94595012522771,
+   "left_out": 630,
+   "all_guesses": 1660
+  }
+ },
+ "room_test": {
+  "live": {
+   "llm": {
+    "of": 59,
+    "typed_all": 13,
+    "untyped_all": 52,
+    "typed_8": 10,
+    "untyped_8": 37,
+    "runs": 5,
+    "stages_8": 37
+   },
+   "filter": {
+    "of": 69,
+    "typed_all": 7,
+    "untyped_all": 37,
+    "typed_8": 2,
+    "untyped_8": 11,
+    "runs": 6,
+    "stages_8": 32
+   },
+   "placebo": {
+    "of": 69,
+    "typed_all": 6,
+    "untyped_all": 40,
+    "typed_8": 6,
+    "untyped_8": 40,
+    "runs": 6,
+    "stages_8": 110
+   }
+  },
+  "paper": {
+   "hit": 9,
+   "of": 28
+  },
+  "replay": {
+   "opus": {
+    "of": 171,
+    "t1": 11,
+    "t2": 6,
+    "u1": 47,
+    "u2": 38
+   },
+   "haiku": {
+    "of": 171,
+    "t1": 2,
+    "t2": 1,
+    "u1": 27,
+    "u2": 17
+   },
+   "deepseek": {
+    "of": 171,
+    "t1": 11,
+    "t2": 7,
+    "u1": 46,
+    "u2": 28
+   },
+   "placebo": {
+    "of": 171,
+    "t1": 8,
+    "t2": 2,
+    "u1": 40,
+    "u2": 15
+   }
+  }
+ },
+ "hint": {
+  "with": {
+   "l1_n": 9,
+   "l1_hits": 5,
+   "l2_n": 219,
+   "l2_hits": 146,
+   "l3_n": 251,
+   "l3_hits": 12.0,
+   "rows": 12
+  },
+  "without": {
+   "l1_n": 12,
+   "l1_hits": 11,
+   "l2_n": 230,
+   "l2_hits": 150,
+   "l3_n": 261,
+   "l3_hits": 13.0,
+   "rows": 12
+  }
+ },
+ "m2": {
+  "rho": {
+   "F1": {
+    "mean": 0.2835574870490251,
+    "lo": 0.26075595625286785,
+    "hi": 0.3069047199751466
+   },
+   "F5": {
+    "mean": 0.06547076217506996,
+    "lo": 0.04208461259013436,
+    "hi": 0.0892767048773556
+   },
+   "F6": {
+    "mean": -0.02765284357783895,
+    "lo": -0.04788241198413873,
+    "hi": -0.0071960394120950755
+   },
+   "F0": {
+    "mean": 0.048304922308377574,
+    "lo": 0.026892744195532527,
+    "hi": 0.06902945898991787
+   },
+   "F3-deepseek": {
+    "mean": 0.04594754639568425,
+    "lo": 0.028305799118878004,
+    "hi": 0.0630265025556208
+   },
+   "F3-haiku": {
+    "mean": 0.05972232230144154,
+    "lo": 0.041009734886268204,
+    "hi": 0.07791015226270977
+   },
+   "F3-opus": {
+    "mean": 0.03630345157316959,
+    "lo": 0.018833760811585446,
+    "hi": 0.05364854999997617
+   },
+   "F-room": {
+    "mean": 0.08912803291690859,
+    "lo": 0.07312242975577113,
+    "hi": 0.10562185980711028
+   }
+  },
+  "diff": {
+   "A": {
+    "mean": 0.21808672487395517,
+    "lo": 0.19515663428247698,
+    "hi": 0.24140063076617108
+   },
+   "F6-F5": {
+    "mean": -0.0931236057529089,
+    "lo": -0.10865276704110774,
+    "hi": -0.07762222854756323
+   },
+   "F0-F5": {
+    "mean": -0.01716583986669237,
+    "lo": -0.030950544394252502,
+    "hi": -0.0036375598745933594
+   },
+   "B_deepseek": {
+    "mean": -0.01952321577938571,
+    "lo": -0.03551620071216127,
+    "hi": -0.0030425329033414647
+   },
+   "B_haiku": {
+    "mean": -0.005748439873628409,
+    "lo": -0.01988192204061254,
+    "hi": 0.008663273676765336
+   },
+   "B_opus": {
+    "mean": -0.029167310601900354,
+    "lo": -0.04322360440706542,
+    "hi": -0.015068240678916607
+   },
+   "C": {
+    "mean": 0.023657270741838644,
+    "lo": 0.0011465452878885285,
+    "hi": 0.046942907456096604
+   }
+  },
+  "verdicts": {
+   "B_deepseek": "not shown sufficient, on a provisional yardstick",
+   "B_haiku": "not shown sufficient, on a provisional yardstick",
+   "B_opus": "not shown sufficient, on a provisional yardstick",
+   "C": "not shown sufficient, on a provisional yardstick"
+  },
+  "a_separates": true,
+  "n_stages": 384,
+  "n_runs": 24,
+  "f0_ig_zero": {
+   "stages": 2,
+   "of": 384
+  },
+  "f3_error_median": {
+   "deepseek": 7.671962127434883,
+   "haiku": 7.133523444739479,
+   "opus": 8.122679127998033
+  }
+ },
+ "validity": {
+  "opus": {
+   "removed_share": 0.0849967804249839,
+   "n_removed": 132,
+   "n_guesses": 1553,
+   "l3_diff": -0.12586667768959434,
+   "l3_verdict": "interval reaches beyond +-0.05",
+   "brier": 0.25668896321070234,
+   "tau1_l3_hits": 4.0,
+   "tau1_l3_items": 122
+  },
+  "haiku": {
+   "removed_share": 0.20222446916076844,
+   "n_removed": 200,
+   "n_guesses": 989,
+   "l3_diff": 0.001355820105820105,
+   "l3_verdict": "no detectable difference",
+   "brier": 0.1362791932059448,
+   "tau1_l3_hits": 0.0,
+   "tau1_l3_items": 24
+  },
+  "deepseek": {
+   "removed_share": 0.32028985507246377,
+   "n_removed": 663,
+   "n_guesses": 2070,
+   "l3_diff": -0.000593031123785092,
+   "l3_verdict": "no detectable difference",
+   "brier": 0.16584188660801563,
+   "tau1_l3_hits": 0.0,
+   "tau1_l3_items": 40
+  },
+  "random": {
+   "removed_share": 0.6885162601626016,
+   "n_removed": 1355,
+   "n_guesses": 1968,
+   "l3_diff": -0.002128644613763661,
+   "l3_verdict": "no detectable difference",
+   "brier": 0.13230561277033986,
+   "tau1_l3_hits": 0.0,
+   "tau1_l3_items": 59
+  }
+ }
 }
