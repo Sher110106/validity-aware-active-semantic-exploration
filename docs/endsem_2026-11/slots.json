@@ -1,0 +1,77 @@
+{
+  "_how": "null means pending: the slide shows TBD and a grey 'result pending' mark. Fill a value, run build_endsem_pptx.py again, and the number appears. A slide loses its pending mark when none of its values is null.",
+
+  "outcome": null,
+  "_outcome": "Slide 16. One of works, mixed, fails, inconclusive, as the registered rules decide. null shows all four alike.",
+
+  "paper_compare_json": "tools/live_policy/results_paper_compare_1112/paper_compare.json",
+  "table871_updated": false,
+  "_table871": "Slides 6 and 7. After the 871 reruns and the rescore, point paper_compare_json at the new file and set table871_updated to true. The 'to be updated' marks then go away and the 871 budget is read from the new file.",
+
+  "asp853_full_budget": {
+    "_what": "Slide 7, row 'ASP to the full budget on 853'. Mean F1 x 100 at 10, 50 and 100% of the budget, from the new ASP runs. Leave null if the runs are not made.",
+    "runs": null,
+    "f1_10": null,
+    "f1_50": null,
+    "f1_100": null
+  },
+
+  "base_rates": {
+    "_what": "Slide 10. Re-derived under the frozen truth rule. Share of stages (0 to 1) in which an unseen region of that type remains; share of the LLM's new rooms that are bedrooms or bathrooms.",
+    "unseen_bathroom": null,
+    "unseen_bedroom": null,
+    "unseen_kitchen": null,
+    "new_rooms_total": null,
+    "new_rooms_bedroom": null,
+    "new_rooms_bathroom": null
+  },
+
+  "room_test": {
+    "_what": "Slide 11. Rooms predicted before they were found, by the paper's rule (at least 2 of 8 samples within 2.5 m, same type): hits and rooms counted. Live arms have 8 members. Claude replays have 4: 1-of-4 and 2-of-4.",
+    "llm_live":     {"hit": null, "of": null},
+    "filter_live":  {"hit": null, "of": null},
+    "placebo_live": {"hit": null, "of": null},
+    "claude_1of4":  {"hit": null, "of": null, "chance_hit": null, "chance_of": null},
+    "claude_2of4":  {"hit": null, "of": null, "chance_hit": null, "chance_of": null}
+  },
+
+  "models": {
+    "_what": "Slide 12. For each model and level: lift = model rate minus the strongest comparator's rate, in percentage points, with its 95% interval; verdict is Supported, Rejected or Inconclusive.",
+    "deepseek": {
+      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
+    },
+    "haiku": {
+      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
+    },
+    "opus": {
+      "L1": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L2": {"lift_pp": null, "lo": null, "hi": null, "verdict": null},
+      "L3": {"lift_pp": null, "lo": null, "hi": null, "verdict": null}
+    }
+  },
+
+  "factorial": {
+    "_what": "Slide 13. Spearman rho between ASP's score and the true unseen count in view, per arm, with the 95% interval by run. share_kept is (F3 - F5) / (F1 - F5).",
+    "F1_exact":        {"rho": null, "lo": null, "hi": null},
+    "F_room":          {"rho": null, "lo": null, "hi": null},
+    "F3_deepseek_err": {"rho": null, "lo": null, "hi": null},
+    "F3_haiku_err":    {"rho": null, "lo": null, "hi": null},
+    "F3_opus_err":     {"rho": null, "lo": null, "hi": null},
+    "F5_random":       {"rho": null, "lo": null, "hi": null},
+    "F6_none":         {"rho": null, "lo": null, "hi": null},
+    "share_kept_deepseek_err": null,
+    "verdict": null
+  },
+
+  "validity": {
+    "_what": "Slide 14. Per model: removed_share of guesses (0 to 1); L3 hit rate (0 to 1) of kept and of removed guesses; Brier score of support against truth; yield at tau 1.0 = hits kept / guesses kept.",
+    "deepseek": {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
+    "haiku":    {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
+    "opus":     {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null},
+    "random":   {"removed_share": null, "hit_kept": null, "hit_removed": null, "brier": null, "yield_tau1": null}
+  }
+}
