@@ -112,6 +112,13 @@ def sem():
     return _MODS["rt"], _MODS["ep"], _MODS["M"]
 
 
+def pc():
+    """passcheck.py by file path: the completeness check shared with summarise_factorial.py."""
+    if "pc" not in _MODS:
+        _MODS["pc"] = _load_file("m2_passcheck", HERE / "passcheck.py")
+    return _MODS["pc"]
+
+
 def reg() -> Dict[str, Any]:
     """The registered bench and its imports. Needs the /tmp farm."""
     if not _REG:
@@ -228,7 +235,9 @@ def detector_label_of(raw_name: str, labels) -> Optional[str]:
     The detector table (labels._DETECTOR_LABEL, a private name) first; else the object's own canonical
     class if that is a detector class; else the first class it answers to that is one."""
     vocab = labels.detector_vocab()
-    tbl = getattr(labels, "_DETECTOR_LABEL", None) or {}
+    tbl = getattr(labels, "_DETECTOR_LABEL", None)
+    if not tbl:   # a renamed or emptied table would silently change every F-room label pool
+        raise RuntimeError("labels._DETECTOR_LABEL is missing or empty: F-room needs the detector table")
     w = tbl.get(str(raw_name).lower())
     if w is not None and labels.normalise(w) in vocab:
         return w
@@ -600,6 +609,34 @@ def job(a):
         return {"run": run, "stage": k, "error": repr(e), "tb": traceback.format_exc()[-2000:]}
 
 
+WATCHDOG_S = 900   # fail the pass if no row arrives for 15 minutes (a worker killed for memory loses its stage)
+
+
+class PassStalled(Exception):
+    pass
+
+
+def drain(it, handle, n_expected: int, watchdog_s: float) -> None:
+    """Take n_expected results from an imap_unordered iterator; raise PassStalled if none arrives within
+    watchdog_s seconds."""
+    from multiprocessing import TimeoutError as MpTimeout
+    for i in range(n_expected):
+        try:
+            res = it.next(timeout=watchdog_s)
+        except MpTimeout:
+            raise PassStalled(f"no row for {watchdog_s:.0f} s after {i} of {n_expected} rows")
+        handle(i, res)
+
+
+def finish_pass(out) -> None:
+    """Write PASS_COMPLETE if the pass is complete; else say what is wrong and exit 1 with no marker."""
+    try:
+        pc().write_marker(out)
+    except pc().IncompletePass as e:
+        print(f"PASS FAILED: {e}", flush=True)
+        raise SystemExit(1)
+
+
 def check_hashed() -> str:
     """Refuse to run unless PREREGISTRATION_M2.sha256 holds the sha256 of PREREGISTRATION_M2.md."""
     if not PREREG_SHA.exists():
@@ -646,6 +683,9 @@ def main(argv=None):
         raise SystemExit("F3 needs at least one --error-file")
     arms = expand_arms(spec, sorted(error_files))
     out = Path(args.out)
+    for stale in (out / pc().MARKER, out / "factorial_stages.jsonl", out / "factorial_meta.json"):
+        if stale.exists():
+            raise SystemExit(f"REFUSE: {stale} exists; move the old pass away first")
     out.mkdir(parents=True, exist_ok=True)
     jobs = stage_list(args.only)
     cfg = {"arms": arms, "error_files": error_files, "workdir": str(out)}
@@ -658,12 +698,19 @@ def main(argv=None):
     print("jobs", len(jobs), "arms", arms, flush=True)
     t0 = time.time()
     import multiprocessing as mp
-    with mp.Pool(args.nproc, initializer=_init, initargs=(cfg,)) as pool, open(out / "factorial_stages.jsonl", "w") as f:
-        for i, res in enumerate(pool.imap_unordered(job, jobs)):
-            f.write(json.dumps(res) + "\n")
-            f.flush()
-            print(i + 1, res["run"], res["stage"], res.get("error") or res.get("drop") or res.get("secs"),
-                  round(time.time() - t0), flush=True)
+    try:
+        with mp.Pool(args.nproc, initializer=_init, initargs=(cfg,)) as pool, open(out / "factorial_stages.jsonl", "w") as f:
+            def handle(i, res):
+                f.write(json.dumps(res) + "\n")
+                f.flush()
+                print(i + 1, res["run"], res["stage"], res.get("error") or res.get("drop") or res.get("secs"),
+                      round(time.time() - t0), flush=True)
+            drain(pool.imap_unordered(job, jobs), handle, len(jobs), WATCHDOG_S)
+    except PassStalled as e:   # leaving the `with` terminated the workers
+        print(f"PASS FAILED: {e}", flush=True)
+        raise SystemExit(3)
+    finish_pass(out)
+    print("pass complete:", out / pc().MARKER, flush=True)
 
 
 if __name__ == "__main__":

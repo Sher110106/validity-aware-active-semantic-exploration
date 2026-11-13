@@ -13,7 +13,7 @@
 set -euo pipefail
 
 MODE=${1:?first|later}; shift
-ROOT=/home/sher/endsem_cpu
+ROOT=${M2_ROOT:-/home/sher/endsem_cpu}
 REPO=$ROOT/repo
 M2=$REPO/tools/live_policy/m2
 PY=$ROOT/venv/bin/python
@@ -26,6 +26,7 @@ OUT=$ROOT/m2/$NAME
 LOG=$ROOT/m2/$NAME.log
 for f in "$@"; do [ -s "$f" ] || { echo "MISSING or empty error file: $f" >&2; exit 2; }; done
 if [ "$MODE" = later ]; then
+  [ -s $ROOT/m2/pass1/PASS_COMPLETE ] || { echo "REFUSE: pass1/PASS_COMPLETE is missing: the first pass is not complete" >&2; exit 2; }
   [ -s $ROOT/m2/pass1/left_out_stages.json ] || { echo "MISSING pass1/left_out_stages.json: run the first pass first" >&2; exit 2; }
   [ -s $ROOT/m2/pass1/factorial_stages.jsonl ] || { echo "MISSING pass1/factorial_stages.jsonl" >&2; exit 2; }
 fi
@@ -34,7 +35,7 @@ fi
 if [ -z "${M2_INNER:-}" ]; then   # detach: survive the ssh session
   export M2_INNER=1
   mkdir -p "$ROOT/m2"
-  setsid systemd-run --user --scope --quiet --unit="endsem-m2-$NAME-$(date +%H%M%S)" nice -n 19 bash "$0" "$MODE" "$@" > "$LOG" 2>&1 < /dev/null &
+  setsid systemd-run --user --scope --quiet -p MemoryMax=30G --unit="endsem-m2-$NAME-$(date +%H%M%S)" nice -n 19 bash "$0" "$MODE" "$@" > "$LOG" 2>&1 < /dev/null &
   echo "started $NAME; log $LOG; follow with: tail -f $LOG"
   exit 0
 fi

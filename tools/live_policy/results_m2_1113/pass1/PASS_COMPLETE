@@ -1,0 +1,13 @@
+{
+ "n_rows": 384,
+ "arms": [
+  "F1",
+  "F5a",
+  "F5b",
+  "F6",
+  "F0",
+  "F-room",
+  "F3-deepseek"
+ ],
+ "sha256": "7bfeb14a7352a97d04f65394ba1bca961910ac1b00405896926178ef6b0f3a50"
+}

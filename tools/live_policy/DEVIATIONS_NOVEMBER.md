@@ -64,3 +64,12 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - **The room test on 4-member replays (§11).** "Before it is seen" needs later stages, which a replay of one stage does not have. The replay's count uses the states of the run the row came from.
 
 53. **11-06 17:01: a first launch of e7 853 seed 42 that made no stage.** The earlier e7 queue launched it beside another user's GPU job; nvblox ran out of GPU memory at start, and the run was stopped by hand at 17:15 (`runs/frontier_seeds/e7_queue.log` on the host; end-sem plan §B7). Its folder, `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom`, holds no stage graph and is in no row. Seed 42 of 853 is scored from its run of 11-09, which passes Amendment 2's test.
+
+54. **11-13 20:25: readings where the frozen M2 pre-registration is silent,** fixed in code before its first pass ran and confirmed fair by an independent code review. `PREREGISTRATION_M2.md` (sha256 5b8a8400…) is not edited.
+    - F0's "unmapped" objects are those of the yardstick's mask, taken over both tracks.
+    - "The track's first F1 graph" is the first member id of that track, in the order the replay lists them.
+    - n_T enters F-room's draw as a proportion and is not rounded.
+    - A type with an empty label pool would get weight 0; this does not occur in either scene.
+    - A member whose oracle graph fell back to placebo objects would take its count of placebo objects as F-room's N; no member fell back.
+    - The secondary yardsticks leave out their own undefined stages, paired across arms.
+    - The clustering by scene and seed has 6 clusters, so its interval comes from 64 sign patterns and is coarse.

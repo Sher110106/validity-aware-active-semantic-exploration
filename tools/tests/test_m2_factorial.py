@@ -542,7 +542,7 @@ def test_left_out_rule_list_is_saved_and_reused(tmp_path):
     assert set(lo["left_out"][1]["undefined_for"]) == {"F1", "F5", "F6", "F-room", "F3-deepseek"}
     a = res["analysis"]["main"]["all"]
     assert a["n_stages_matched"] == 20 and a["n_left_out_by_list"] == 2 and a["n_stages_kept"] == 18
-    assert a["n_undefined_after_list_by_arm"]["F0"] == 1
+    assert a["kept_stages_without_value_by_arm"]["F0"] == 1
     # the left-out stages are gone for F1 too: run r00's mean is over its other four stages
     run0 = [r for r in rows if r["run"] == "r00" and r["stage"] != 2]
     expect = np.mean([S._rho_copy(r["arms"]["F1"]["score"], r["yard"]["Ucone"]) for r in run0])
@@ -768,3 +768,201 @@ def test_real_stage_shapes_and_bench_equality(which, tmp_path):
           + " ".join(f"{a}={scored[a]['secs']}s" for a in arms)
           + f" objects/member F1={sets['F1']['n_obj']} F0={sets['F0']['n_obj']} F-room={sets['F-room']['n_obj']}"
           + f" bench stage secs={reg_row['secs']}")
+
+
+# ------------------------------------------------------------------------------ a failed or incomplete pass
+
+ARMS_FIRST = ["F1", "F5a", "F5b", "F6", "F0", "F3-deepseek", "F-room"]
+
+
+def _write_pass(folder, rows, arms=ARMS_FIRST, n_jobs=None, marker=True, truncate=False):
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "factorial_meta.json").write_text(json.dumps({"n_jobs": len(rows) if n_jobs is None else n_jobs, "arms": arms}))
+    text = "\n".join(json.dumps(r) for r in rows) + "\n"
+    if truncate:
+        text = text[:-40]                                      # the last line is cut
+    (folder / "factorial_stages.jsonl").write_text(text)
+    if marker:
+        F.pc().write_marker(folder)
+    return folder / "factorial_stages.jsonl"
+
+
+def test_a_stage_that_raises_leaves_an_error_row_and_no_marker(tmp_path, monkeypatch, capsys):
+    def boom(*a, **k):
+        raise RuntimeError("stage exploded")
+    monkeypatch.setattr(F, "run_stage", boom)
+    monkeypatch.setattr(F, "_CFG", {"arms": ["F1"], "samples": {}, "workdir": str(tmp_path)})
+    err = F.job(("e1_00853_s42_official_60m", 3, {}))
+    assert "error" in err and "stage exploded" in err["error"]
+    rows = _rows(_spec(), n_runs=2, n_stages=2, seed=1)
+    rows[1] = err                                              # one stage failed in a pass of four
+    p = _write_pass(tmp_path / "p", rows, marker=False)
+    problems = F.pc().problems(tmp_path / "p")
+    assert any("error row" in x for x in problems)
+    with pytest.raises(SystemExit) as e:
+        F.finish_pass(tmp_path / "p")
+    assert e.value.code == 1 and not (tmp_path / "p" / "PASS_COMPLETE").exists()
+    assert "PASS FAILED" in capsys.readouterr().out
+    # the summary refuses, exits non-zero and freezes no left-out list
+    with pytest.raises(SystemExit) as e:
+        S.main([str(p), "--left-out", str(tmp_path / "lo.json"), "--out", str(tmp_path / "s.json")])
+    assert e.value.code == 2 and not (tmp_path / "lo.json").exists() and not (tmp_path / "s.json").exists()
+    assert "REFUSED" in capsys.readouterr().err
+    # even a forged marker does not help: the rows themselves are checked
+    (tmp_path / "p" / "PASS_COMPLETE").write_text(json.dumps({"sha256": F.pc().sha256_file(p)}))
+    with pytest.raises(SystemExit):
+        S.main([str(p), "--left-out", str(tmp_path / "lo.json"), "--out", str(tmp_path / "s.json")])
+    with pytest.raises(S.IncompleteData):
+        S.summarise(rows, rho=S._rho_copy)                     # and so does the function
+
+
+def test_a_drop_row_or_a_row_without_an_asked_for_arm_is_not_complete(tmp_path):
+    rows = _rows(_spec(), n_runs=2, n_stages=2, seed=1)
+    rows[0] = {"run": "r00", "stage": 0, "drop": "top10 mismatch"}
+    assert any("drop row" in x for x in F.pc().problems(_write_pass(tmp_path / "a", rows, marker=False).parent))
+    rows = _rows(_spec(), n_runs=2, n_stages=2, seed=1)
+    del rows[2]["arms"]["F-room"]
+    assert any("lacks arm" in x for x in F.pc().problems(_write_pass(tmp_path / "b", rows, marker=False).parent))
+    rows = _rows(_spec(), n_runs=2, n_stages=2, seed=1)
+    rows.append(rows[0])                                       # a duplicate row
+    assert any("duplicate" in x for x in F.pc().problems(_write_pass(tmp_path / "c", rows, n_jobs=5, marker=False).parent))
+
+
+def test_a_truncated_jsonl_is_not_complete(tmp_path, capsys):
+    rows = _rows(_spec(), n_runs=2, n_stages=3, seed=1)
+    p = _write_pass(tmp_path / "t", rows, marker=False, truncate=True)
+    probs = F.pc().problems(p.parent)
+    assert any("unreadable" in x for x in probs) and any("holds 5 rows" in x for x in probs)
+    with pytest.raises(SystemExit):
+        F.finish_pass(p.parent)
+    assert not (p.parent / "PASS_COMPLETE").exists()
+    # fewer rows than the meta says, with every line whole
+    p2 = _write_pass(tmp_path / "t2", rows[:4], n_jobs=6, marker=False)
+    assert any("holds 4 rows" in x for x in F.pc().problems(p2.parent))
+    with pytest.raises(SystemExit):
+        S.main([str(p2), "--left-out", str(tmp_path / "lo.json"), "--out", str(tmp_path / "s.json")])
+    assert not (tmp_path / "lo.json").exists()
+
+
+def test_a_complete_pass_gets_its_marker_and_is_summarised(tmp_path, capsys):
+    rows = _rows(_spec(), n_runs=4, n_stages=3, seed=1)
+    p = _write_pass(tmp_path / "ok", rows)                     # write_marker checks, then writes
+    assert (p.parent / "PASS_COMPLETE").exists() and F.pc().problems(p.parent) == []
+    S.main([str(p), "--left-out", str(tmp_path / "lo.json"), "--out", str(tmp_path / "s.json")])
+    assert (tmp_path / "lo.json").exists() and (tmp_path / "s.json").exists()
+    p.write_text(p.read_text() + "\n")                         # any change after the marker is caught
+    p.write_text(p.read_text().replace("0.", "1.", 1))
+    with pytest.raises(SystemExit):
+        S.main([str(p), "--left-out", str(tmp_path / "lo2.json"), "--out", str(tmp_path / "s2.json")])
+
+
+def test_a_later_pass_with_an_error_row_cannot_replace_the_first_pass_row(tmp_path, capsys):
+    first = _rows(_spec(), n_runs=4, n_stages=3, seed=2)
+    p1 = _write_pass(tmp_path / "pass1", first)
+    S.main([str(p1), "--left-out", str(tmp_path / "pass1" / "left_out_stages.json"), "--out", str(tmp_path / "s1.json")])
+    later_arms = ["F3-haiku", "F3-opus"]
+    later = _rows({"F3-haiku": half, "F3-opus": noise}, n_runs=4, n_stages=3, seed=2)
+    for a, b in zip(later, first):
+        a["yard"], a["d"] = b["yard"], b["d"]
+    # (a) the later pass has no marker: refused
+    p2 = _write_pass(tmp_path / "pass2", later, arms=later_arms, marker=False)
+    lo = str(tmp_path / "pass1" / "left_out_stages.json")
+    with pytest.raises(SystemExit) as e:
+        S.main([str(p1), str(p2), "--left-out", lo, "--out", str(tmp_path / "s2.json")])
+    assert e.value.code == 2
+    # (b) one stage of the later pass raised: an error row, even with a forged marker
+    later[3] = {"run": later[3]["run"], "stage": later[3]["stage"], "error": "RuntimeError('x')"}
+    p2 = _write_pass(tmp_path / "pass2", later, arms=later_arms, marker=False)
+    (tmp_path / "pass2" / "PASS_COMPLETE").write_text(json.dumps({"sha256": F.pc().sha256_file(p2)}))
+    with pytest.raises(SystemExit) as e:
+        S.main([str(p1), str(p2), "--left-out", lo, "--out", str(tmp_path / "s2.json")])
+    assert e.value.code == 2 and "error row" in capsys.readouterr().err
+    assert not (tmp_path / "s2.json").exists()
+    # (c) a whole later pass is accepted
+    later2 = _rows({"F3-haiku": half, "F3-opus": noise}, n_runs=4, n_stages=3, seed=2)
+    for a, b in zip(later2, first):
+        a["yard"], a["d"] = b["yard"], b["d"]
+    shutil_rm = __import__("shutil").rmtree
+    shutil_rm(tmp_path / "pass2")
+    p2 = _write_pass(tmp_path / "pass2", later2, arms=later_arms)
+    S.main([str(p1), str(p2), "--left-out", lo, "--out", str(tmp_path / "s2.json")])
+    assert "B_haiku" in json.loads((tmp_path / "s2.json").read_text())["analysis"]["main"]["all"]["differences"]
+
+
+def test_the_later_runner_refuses_without_the_first_pass_marker(tmp_path):
+    import subprocess
+    (tmp_path / "m2" / "pass1").mkdir(parents=True)
+    (tmp_path / "m2" / "pass1" / "left_out_stages.json").write_text("{}")
+    (tmp_path / "m2" / "pass1" / "factorial_stages.jsonl").write_text("{}\n")
+    for n in ("h.json", "o.json"):
+        (tmp_path / n).write_text("[1.0]")
+    env = {**os.environ, "M2_ROOT": str(tmp_path)}
+    r = subprocess.run(["bash", str(M2 / "run_m2_pass.sh"), "later", str(tmp_path / "h.json"), str(tmp_path / "o.json")],
+                       env=env, capture_output=True, text=True, timeout=60)
+    assert r.returncode == 2 and "PASS_COMPLETE" in r.stderr
+    assert not (tmp_path / "m2" / "pass2").exists()            # nothing started
+
+
+def test_watchdog_fails_a_pass_whose_rows_stop_coming():
+    from multiprocessing.pool import ThreadPool
+    import time as _t
+
+    def slow(x):
+        _t.sleep(0.05 if x < 2 else 5)
+        return x
+    got = []
+    with ThreadPool(2) as pool:
+        with pytest.raises(F.PassStalled):
+            F.drain(pool.imap_unordered(slow, [0, 1, 2, 3]), lambda i, r: got.append(r), 4, 0.5)
+        pool.terminate()
+    assert sorted(got) == [0, 1]
+    with ThreadPool(2) as pool:                                # a healthy run drains all its rows
+        got = []
+        F.drain(pool.imap_unordered(lambda x: x, [0, 1, 2, 3]), lambda i, r: got.append(r), 4, 5)
+    assert sorted(got) == [0, 1, 2, 3]
+    assert F.WATCHDOG_S == 900
+
+
+def test_detector_label_fails_loudly_without_the_table():
+    class NoTable(FakeLabels):
+        pass
+    NoTable._DETECTOR_LABEL = {}
+    with pytest.raises(RuntimeError, match="_DETECTOR_LABEL"):
+        F.detector_label_of("bed", NoTable)
+
+    class Gone:
+        detector_vocab = staticmethod(FakeLabels.detector_vocab)
+        normalise = staticmethod(FakeLabels.normalise)
+        answers_to = staticmethod(FakeLabels.answers_to)
+    with pytest.raises(RuntimeError, match="_DETECTOR_LABEL"):
+        F.detector_label_of("bed", Gone)
+    assert F.detector_label_of("bed", FakeLabels) == "duvet"
+
+
+def test_a_kept_stage_without_a_value_for_a_later_arm_is_counted_and_paired():
+    spec = {**_spec(), "F3-haiku": half}
+    rows = _rows(spec, n_runs=4, n_stages=4, seed=9)
+    first = {k: v for k, v in rows[0]["arms"].items()}
+    rows[5]["arms"]["F3-haiku"]["score"] = [2.0] * 40          # haiku undefined at one stage the list keeps
+    keys = {x for x in S.EXCLUSION_ARMS}
+    lo = S.compute_left_out([{**r, "arms": {k: v for k, v in r["arms"].items() if k != "F3-haiku"}} for r in rows], S._rho_copy)
+    assert lo["n_left_out"] == 0
+    res = S.summarise(rows, rho=S._rho_copy, left_out_path=None)
+    a = res["analysis"]["main"]["all"]
+    assert a["kept_stages_without_value_by_arm"]["F3-haiku"] == 1 and a["kept_stages_without_value_by_arm"]["F1"] == 0
+    pb = a["paired_where_defined"]["B_haiku"]
+    assert pb["n_kept_stages_without_value"] == 1
+    # A and X - 0.5 A on the stages where haiku is defined, by hand
+    per_run = {}
+    for r in rows:
+        rr = S.stage_rho(r, "score", "Ucone", S._rho_copy)
+        if rr["F3-haiku"] is None:
+            continue
+        per_run.setdefault(r["run"], []).append((rr["F1"] - rr["F5"], (rr["F3-haiku"] - rr["F5"]) - 0.5 * (rr["F1"] - rr["F5"])))
+    assert pb["A"]["mean"] == pytest.approx(np.mean([np.mean([x[0] for x in v]) for v in per_run.values()]))
+    assert pb["X_minus_half_A"]["mean"] == pytest.approx(np.mean([np.mean([x[1] for x in v]) for v in per_run.values()]))
+    assert pb["reading"]["step"] in (1, 2)
+    assert a["paired_where_defined"]["C"]["n_kept_stages_without_value"] == 0
+    # with no missing stage the paired figures equal the main ones
+    same = res["analysis"]["main"]["all"]["paired_where_defined"]["B_deepseek"]["X_minus_half_A"]["mean"]
+    assert same == pytest.approx(a["reading_series"]["B_deepseek"]["mean"])

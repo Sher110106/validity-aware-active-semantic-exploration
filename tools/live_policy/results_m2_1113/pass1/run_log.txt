@@ -1,0 +1,470 @@
+start 2026-11-13T20:20:39+05:30 mode=first nproc=48 available_memory_gb=88
+jobs 384 arms ['F1', 'F5a', 'F5b', 'F6', 'F0', 'F-room', 'F3-deepseek']
+1 e1_00853_s42_official_60m 0 17.7 18
+2 e1_00853_s42_official_60m 6 18.1 18
+3 e1_00853_s42_official_60m 7 19.3 20
+4 e1_00853_s43_official_60m 0 22.0 22
+5 e1_00853_s42_official_60m 9 22.4 23
+6 e1_00853_s42_placebo_60m 0 22.7 23
+7 e1_00853_s42_official_60m 1 28.2 28
+8 e1_00853_s42_official_60m 2 28.2 28
+9 e1_00853_s42_placebo_60m 1 28.6 29
+10 e1_00853_s43_official_60m 2 28.7 29
+11 e1_00853_s42_official_60m 4 29.7 30
+12 e1_00853_s43_official_60m 4 30.7 31
+13 e1_00853_s42_official_60m 3 30.9 31
+14 e1_00853_s43_official_60m 1 31.4 32
+15 e1_00853_s42_placebo_60m 3 31.4 32
+16 e1_00853_s42_placebo_60m 2 32.5 33
+17 e1_00853_s43_official_60m 6 32.7 33
+18 e1_00853_s42_placebo_60m 4 32.8 33
+19 e1_00853_s42_placebo_60m 5 34.5 35
+20 e1_00853_s43_official_60m 3 34.6 35
+21 e1_00853_s43_official_60m 8 35.0 35
+22 e1_00853_s42_official_60m 8 35.8 36
+23 e1_00853_s43_official_60m 5 36.1 36
+24 e1_00853_s43_official_60m 7 38.0 38
+25 e1_00853_s43_official_60m 9 39.4 40
+26 e1_00853_s42_placebo_60m 6 40.9 41
+27 e1_00853_s43_official_60m 10 41.1 41
+28 e1_00853_s42_official_60m 10 41.4 42
+29 e1_00853_s42_official_60m 14 41.7 42
+30 e1_00853_s42_official_60m 11 43.2 43
+31 e1_00853_s42_official_60m 5 43.3 44
+32 e1_00853_s42_official_60m 13 44.6 45
+33 e1_00853_s42_placebo_60m 7 45.5 46
+34 e1_00853_s42_placebo_60m 9 48.7 49
+35 e1_00853_s43_official_60m 11 49.0 49
+36 e1_00853_s43_official_60m 12 50.2 50
+37 e1_00853_s42_placebo_60m 8 50.9 51
+38 e1_00853_s42_official_60m 12 51.7 52
+39 e1_00853_s43_placebo_60m 0 27.3 56
+40 e1_00853_s43_official_60m 13 55.8 56
+41 e1_00853_s42_placebo_60m 11 56.5 57
+42 e1_00853_s42_placebo_60m 10 57.8 58
+43 e1_00853_s43_placebo_60m 1 30.1 58
+44 e1_00853_s42_official_60m 15 60.4 61
+45 e1_00853_s43_official_60m 14 42.9 61
+46 e1_00853_s43_placebo_60m 2 33.0 62
+47 e1_00853_s44_official_60m 1 22.2 62
+48 e1_00853_s42_placebo_60m 12 63.0 63
+49 e1_00853_s44_official_60m 0 26.0 64
+50 e1_00853_s43_placebo_60m 3 35.9 65
+51 e1_00853_s43_placebo_60m 4 35.2 65
+52 e1_00853_s43_official_60m 15 49.3 68
+53 e1_00853_s44_official_60m 2 27.2 68
+54 e1_00853_s42_placebo_60m 14 68.3 68
+55 e1_00853_s44_official_60m 4 29.3 71
+56 e1_00853_s42_placebo_60m 13 70.8 71
+57 e1_00853_s43_official_60m 16 52.2 72
+58 e1_00853_s44_official_60m 7 28.2 72
+59 e1_00853_s42_official_60m 16 73.2 73
+60 e1_00853_s42_official_60m 17 73.8 74
+61 e1_00853_s44_official_60m 5 33.0 75
+62 e1_00853_s44_official_60m 3 34.5 76
+63 e1_00853_s43_placebo_60m 5 45.0 76
+64 e1_00853_s44_official_60m 8 33.3 78
+65 e1_00853_s44_official_60m_rerun1 2 22.6 79
+66 e1_00853_s43_placebo_60m 6 48.3 79
+67 e1_00853_s42_placebo_60m 15 80.9 81
+68 e1_00853_s44_official_60m 6 39.7 83
+69 e1_00853_s44_official_60m_rerun1 0 27.5 83
+70 e1_00853_s43_official_60m 17 62.2 84
+71 e1_00853_s44_official_60m 9 38.9 85
+72 e1_00853_s44_official_60m_rerun1 1 28.6 85
+73 e1_00853_s43_placebo_60m 7 53.2 85
+74 e1_00853_s44_official_60m_rerun1 4 27.5 86
+75 e1_00853_s44_official_60m_rerun1 6 26.8 88
+76 e1_00853_s44_official_60m 10 39.5 88
+77 e1_00853_s43_official_60m 19 67.1 90
+78 e1_00853_s43_placebo_60m 8 58.5 90
+79 e1_00853_s44_official_60m_rerun1 5 30.1 91
+80 e1_00853_s43_placebo_60m 9 58.2 91
+81 e1_00853_s43_placebo_60m 12 57.1 92
+82 e1_00853_s44_placebo_60m 0 25.2 94
+83 e1_00853_s44_placebo_60m 1 27.3 96
+84 e1_00853_s44_official_60m_rerun1 3 37.8 96
+85 e1_00853_s43_official_60m 18 73.5 96
+86 e1_00853_s43_placebo_60m 10 63.6 96
+87 e1_00853_s43_placebo_60m 11 63.9 97
+88 e1_00853_s43_placebo_60m 13 62.1 97
+89 e1_00853_s44_official_60m 14 45.9 98
+90 e1_00853_s44_placebo_60m 2 28.9 100
+91 e1_00853_s44_official_60m 12 49.5 100
+92 e1_00853_s44_official_60m 11 51.9 101
+93 e1_00853_s43_placebo_60m 15 66.7 103
+94 e1_00853_s44_official_60m_rerun1 9 40.2 103
+95 e1_00853_s44_official_60m_rerun1 8 41.7 104
+96 e1_00853_s44_official_60m_rerun1 7 41.9 104
+97 e1_00853_s44_placebo_60m 3 34.0 105
+98 e1_00853_s44_official_60m 13 55.1 106
+99 e1_00853_s44_placebo_60m 4 35.0 107
+100 e1_00853_s44_placebo_60m 5 35.6 107
+101 e1_00853_s44_placebo_60m 8 32.9 108
+102 e1_00853_s44_placebo_60m 6 36.4 110
+103 e1_00853_s43_placebo_60m 14 74.7 110
+104 e1_00853_s44_placebo_60m 7 37.7 112
+105 e1_00853_s43_placebo_60m 16 75.5 112
+106 e1_00853_s44_placebo_60m 9 36.8 113
+107 e1_00853_s44_placebo_60m 10 40.1 116
+108 e1_00871_s42_official_60m 0 30.9 117
+109 e1_00853_s44_official_60m_rerun1 13 50.5 118
+110 e1_00871_s42_official_60m 1 31.3 119
+111 e1_00853_s44_placebo_60m 11 42.5 121
+112 e1_00853_s44_placebo_60m 12 43.4 123
+113 e1_00853_s44_official_60m_rerun1 12 58.2 123
+114 e1_00871_s42_official_60m 2 36.6 125
+115 e1_00853_s44_official_60m_rerun1 10 61.1 125
+116 e1_00871_s42_official_60m 3 36.8 127
+117 e1_00871_s42_placebo_60m 0 31.7 130
+118 e1_00853_s44_official_60m_rerun1 11 65.9 131
+119 e1_00853_s44_placebo_60m 13 52.4 132
+120 e1_00871_s42_official_60m 6 42.1 133
+121 e1_00871_s42_official_60m 5 43.2 134
+122 e1_00871_s42_official_60m 4 48.2 138
+123 e1_00853_s44_placebo_60m 14 58.1 139
+124 e1_00871_s42_placebo_60m 1 40.4 140
+125 e1_00871_s43_official_60m 0 34.7 146
+126 e1_00853_s44_placebo_60m 17 64.4 149
+127 e1_00871_s42_placebo_60m 2 49.5 149
+128 e1_00853_s44_placebo_60m 16 66.8 150
+129 e1_00853_s44_placebo_60m 15 67.6 151
+130 e1_00871_s43_official_60m 1 39.5 151
+131 e1_00853_s44_placebo_60m 18 68.6 153
+132 e1_00871_s43_official_60m 2 42.0 155
+133 e1_00871_s42_placebo_60m 3 53.9 155
+134 e1_00871_s42_official_60m 7 64.5 156
+135 e1_00871_s43_official_60m 4 41.2 158
+136 e1_00853_s44_placebo_60m 19 73.6 158
+137 e1_00871_s42_official_60m 8 66.1 160
+138 e1_00871_s43_official_60m 5 41.7 160
+139 e1_00853_s44_placebo_60m 20 75.7 160
+140 e1_00871_s42_placebo_60m 4 57.9 161
+141 e1_00871_s42_placebo_60m 5 57.6 161
+142 e1_00871_s42_official_60m 9 69.3 165
+143 e1_00871_s43_official_60m 3 49.6 166
+144 e1_00871_s43_official_60m 6 47.1 166
+145 e1_00871_s42_placebo_60m 6 66.7 170
+146 e1_00871_s42_official_60m 11 75.9 172
+147 e1_00871_s43_placebo_60m 0 33.9 172
+148 e1_00871_s43_placebo_60m_rerun1 0 33.3 173
+149 e1_00871_s42_official_60m 13 81.1 177
+150 e1_00871_s43_placebo_60m_rerun1 1 37.5 178
+151 e1_00871_s42_official_60m 16 84.7 182
+152 e1_00871_s42_placebo_60m 7 79.3 183
+153 e1_00871_s43_official_60m 12 58.2 185
+154 e1_00871_s42_official_60m 14 88.5 185
+155 e1_00871_s43_official_60m 7 67.3 188
+156 e1_00871_s43_official_60m 8 66.2 189
+157 e1_00871_s42_placebo_60m 8 84.0 189
+158 e1_00871_s43_official_60m 9 66.6 190
+159 e1_00871_s42_official_60m 15 93.0 190
+160 e1_00871_s42_placebo_60m 12 82.9 191
+161 e1_00871_s44_official_60m 2 32.2 192
+162 e1_00871_s43_official_60m 10 69.5 195
+163 e1_00871_s43_placebo_60m_rerun1 2 48.7 195
+164 e1_00871_s42_placebo_60m 14 85.5 195
+165 e1_00871_s44_official_60m 1 38.3 197
+166 e1_00871_s44_official_60m 0 39.0 197
+167 e1_00871_s42_placebo_60m 9 92.3 198
+168 e1_00871_s43_official_60m 13 69.0 199
+169 e1_00871_s44_official_60m 3 38.9 199
+170 e1_00871_s43_official_60m 11 74.7 200
+171 e1_00871_s42_placebo_60m 10 95.6 202
+172 e1_00871_s42_placebo_60m 11 95.4 203
+173 e1_00871_s43_placebo_60m_rerun1 4 54.2 204
+174 e1_00871_s42_placebo_60m 13 94.2 204
+175 e1_00871_s43_placebo_60m_rerun1 3 55.4 204
+176 e1_00871_s43_placebo_60m_rerun1 6 54.7 205
+177 e1_00871_s43_placebo_60m_rerun1 5 56.7 207
+178 e1_00871_s44_official_60m 4 47.8 208
+179 e1_00871_s43_official_60m 17 76.7 211
+180 e1_00871_s44_official_60m 5 50.3 211
+181 e1_00871_s43_placebo_60m_rerun1 9 58.6 213
+182 e1_00871_s43_official_60m 14 85.5 216
+183 e1_00871_s43_placebo_60m_rerun1 7 65.8 217
+184 e1_00871_s44_placebo_60m 0 34.5 219
+185 e1_00871_s44_official_60m 6 61.5 222
+186 e1_00871_s43_placebo_60m_rerun1 8 70.4 224
+187 e1_00871_s43_official_60m 15 92.1 224
+188 e1_00871_s43_placebo_60m_rerun1 10 70.8 226
+189 e1_00871_s43_placebo_60m_rerun1 11 70.9 227
+190 e1_00871_s44_official_60m 7 63.9 229
+191 e1_00871_s44_official_60m 8 67.4 233
+192 e1_00871_s44_placebo_60m 1 45.9 234
+193 e1_00871_s44_official_60m 10 63.8 234
+194 e1_00871_s43_official_60m 16 102.2 235
+195 e1_00871_s44_placebo_60m 2 47.1 236
+196 e2_00853_s42_filter_only_60m 0 23.2 239
+197 e1_00871_s44_placebo_60m 3 51.9 241
+198 e1_00871_s44_official_60m 9 77.3 243
+199 e1_00871_s44_placebo_60m 4 53.4 243
+200 e2_00853_s42_filter_only_60m 1 28.4 246
+201 e2_00853_s42_filter_only_60m 2 26.5 246
+202 e1_00871_s44_placebo_60m 5 56.5 246
+203 e1_00871_s44_official_60m 11 75.9 248
+204 e2_00853_s42_filter_only_60m 3 29.7 252
+205 e1_00871_s44_placebo_60m 6 62.8 254
+206 e1_00871_s44_placebo_60m 7 62.0 254
+207 e1_00871_s44_official_60m 13 81.5 254
+208 e2_00853_s42_filter_only_60m 4 30.9 255
+209 e2_00853_s42_filter_only_60m 5 32.9 257
+210 e1_00871_s44_placebo_60m 9 64.1 259
+211 e1_00871_s44_official_60m 12 90.4 263
+212 e1_00871_s44_placebo_60m 8 68.8 263
+213 e1_00871_s44_official_60m 14 86.8 264
+214 e2_00853_s42_filter_only_60m 6 38.5 264
+215 e2_00853_s43_filter_only_60m 0 21.5 265
+216 e1_00871_s44_placebo_60m 10 70.0 265
+217 e1_00871_s44_placebo_60m 12 71.6 269
+218 e1_00871_s44_placebo_60m 11 72.6 269
+219 e2_00853_s43_filter_only_60m 1 27.2 271
+220 e1_00871_s44_official_60m 15 93.7 271
+221 e1_00871_s44_official_60m 17 89.3 272
+222 e2_00853_s43_filter_only_60m 2 27.0 273
+223 e1_00871_s44_placebo_60m 14 74.9 274
+224 e1_00871_s44_placebo_60m 15 75.5 274
+225 e2_00853_s43_filter_only_60m 3 28.6 275
+226 e1_00871_s44_placebo_60m 13 76.2 275
+227 e1_00871_s44_placebo_60m 18 72.6 275
+228 e2_00853_s43_filter_only_60m 4 30.7 277
+229 e1_00871_s44_placebo_60m 19 73.7 277
+230 e1_00871_s44_placebo_60m 21 74.0 278
+231 e1_00871_s44_placebo_60m 16 78.8 279
+232 e1_00871_s44_placebo_60m 20 75.3 279
+233 e2_00853_s42_filter_only_60m 7 53.2 281
+234 e1_00871_s44_official_60m 16 100.5 282
+235 e2_00853_s42_filter_only_60m 9 49.9 283
+236 e2_00853_s43_filter_only_60m 6 37.1 285
+237 e2_00853_s42_filter_only_60m 8 56.0 285
+238 e1_00871_s44_placebo_60m 24 78.4 287
+239 e1_00871_s44_placebo_60m 17 85.6 288
+240 e1_00871_s44_placebo_60m 23 81.6 288
+241 e2_00853_s44_filter_only_60m 0 25.3 290
+242 e1_00871_s44_placebo_60m 22 86.6 292
+243 e2_00853_s43_filter_only_60m 10 39.4 293
+244 e1_00871_s44_placebo_60m 26 82.4 293
+245 e2_00853_s42_filter_only_60m 14 54.9 294
+246 e1_00871_s44_placebo_60m 27 81.4 295
+247 e2_00853_s42_filter_only_60m 10 61.0 295
+248 e2_00853_s43_filter_only_60m 7 43.5 296
+249 e1_00871_s44_official_60m 18 111.1 296
+250 e1_00871_s44_placebo_60m 25 86.1 297
+251 e2_00853_s44_filter_only_60m 1 31.4 297
+252 e2_00853_s44_filter_only_60m 2 29.7 298
+253 e2_00853_s44_filter_only_60m 3 30.0 299
+254 e2_00853_s43_filter_only_60m 9 49.1 303
+255 e2_00853_s42_filter_only_60m 15 62.3 303
+256 e2_00853_s43_filter_only_60m 8 49.7 303
+257 e2_00853_s42_filter_only_60m 11 70.3 304
+258 e2_00853_s43_filter_only_60m 11 52.5 307
+259 e2_00853_s43_filter_only_60m 14 44.6 307
+260 e2_00853_s44_filter_only_60m 8 38.8 311
+261 e2_00871_s42_filter_only_60m 2 30.3 313
+262 e2_00853_s44_filter_only_60m 4 43.5 314
+263 e2_00853_s43_filter_only_60m 12 57.4 314
+264 e2_00853_s42_filter_only_60m 12 81.3 316
+265 e2_00853_s43_filter_only_60m 13 57.3 317
+266 e2_00853_s42_filter_only_60m 13 80.7 317
+267 e2_00853_s44_filter_only_60m 6 53.5 325
+268 e2_00853_s44_filter_only_60m 7 53.2 325
+269 e2_00853_s44_filter_only_60m 9 52.5 326
+270 e2_00871_s43_filter_only_60m 1 27.1 326
+271 e2_00871_s42_filter_only_60m 1 44.6 327
+272 e2_00871_s43_filter_only_60m 0 29.5 328
+273 e2_00853_s43_filter_only_60m 18 64.3 329
+274 e2_00853_s43_filter_only_60m 15 66.3 330
+275 e2_00871_s43_filter_only_60m 2 27.6 331
+276 e2_00871_s42_filter_only_60m 5 44.6 331
+277 e2_00871_s42_filter_only_60m 4 47.4 332
+278 e2_00871_s42_filter_only_60m 3 48.7 333
+279 e2_00853_s44_filter_only_60m 11 59.0 334
+280 e2_00853_s43_filter_only_60m 16 70.6 335
+281 e2_00853_s44_filter_only_60m 15 57.3 335
+282 e2_00853_s44_filter_only_60m 13 61.9 337
+283 e2_00871_s42_filter_only_60m 6 52.6 340
+284 e2_00871_s43_filter_only_60m 3 38.2 342
+285 e2_00871_s44_filter_only_60m 4 21.0 346
+286 e2_00853_s44_filter_only_60m 10 72.7 347
+287 e2_00853_s44_filter_only_60m 12 72.6 347
+288 e2_00871_s43_filter_only_60m 4 45.1 348
+289 e2_00871_s42_filter_only_60m 17 52.6 349
+290 e2_00871_s42_filter_only_60m 7 61.4 350
+291 e2_00853_s44_filter_only_60m 14 73.3 350
+292 e2_00871_s44_filter_only_60m 0 33.9 350
+293 e2_00871_s42_filter_only_60m 8 61.0 351
+294 e2_00871_s43_filter_only_60m 5 49.6 354
+295 e2_00871_s42_filter_only_60m 13 60.3 355
+296 e2_00871_s44_filter_only_60m 1 38.2 355
+297 e2_00871_s43_filter_only_60m 6 48.7 356
+298 e2_00853_s44_filter_only_60m 16 79.4 358
+299 e2_00871_s43_filter_only_60m 7 51.9 359
+300 e2_00871_s42_filter_only_60m 10 68.6 361
+301 e2_00871_s44_filter_only_60m 6 34.6 361
+302 e2_00871_s44_filter_only_60m 2 44.4 361
+303 e3_00853_s42_oracle_visible_60m_rerun1 0 28.5 362
+304 e2_00853_s44_filter_only_60m 17 83.4 362
+305 e2_00871_s42_filter_only_60m 11 69.1 362
+306 e2_00853_s44_filter_only_60m 19 83.0 363
+307 e2_00871_s43_filter_only_60m 8 52.6 364
+308 e3_00853_s42_oracle_visible_60m_rerun1 2 31.7 367
+309 e2_00871_s42_filter_only_60m 15 72.5 367
+310 e2_00871_s42_filter_only_60m 12 74.0 367
+311 e2_00871_s42_filter_only_60m 14 73.4 368
+312 e3_00853_s42_oracle_visible_60m_rerun1 1 33.7 368
+313 e2_00871_s43_filter_only_60m 11 56.8 371
+314 e2_00871_s44_filter_only_60m 5 45.2 371
+315 e2_00871_s43_filter_only_60m 13 58.5 373
+316 e3_00853_s42_oracle_visible_60m_rerun1 3 35.8 373
+317 e2_00871_s44_filter_only_60m 3 48.8 374
+318 e2_00871_s43_filter_only_60m 9 65.0 378
+319 e2_00871_s42_filter_only_60m 18 82.2 379
+320 e2_00853_s44_filter_only_60m 18 101.8 381
+321 e3_00853_s42_oracle_visible_60m_rerun1 4 41.4 382
+322 e3_00853_s43_oracle_visible_60m 0 29.0 384
+323 e2_00871_s44_filter_only_60m 7 58.3 385
+324 e2_00871_s44_filter_only_60m 10 56.4 386
+325 e3_00853_s42_oracle_visible_60m_rerun1 5 46.5 388
+326 e2_00871_s42_filter_only_60m 19 91.3 388
+327 e3_00853_s43_oracle_visible_60m 1 32.5 388
+328 e2_00871_s42_filter_only_60m 16 93.1 389
+329 e2_00871_s44_filter_only_60m 8 64.8 393
+330 e3_00853_s43_oracle_visible_60m 2 37.5 395
+331 e2_00871_s44_filter_only_60m 9 70.0 399
+332 e2_00871_s44_filter_only_60m 12 68.0 399
+333 e3_00853_s43_oracle_visible_60m 3 40.1 399
+334 e3_00853_s42_oracle_visible_60m_rerun1 6 53.7 400
+335 e3_00871_s42_oracle_visible_60m 0 32.5 401
+336 e3_00853_s42_oracle_visible_60m_rerun1 7 55.8 403
+337 e3_00853_s43_oracle_visible_60m 4 42.3 403
+338 e2_00871_s44_filter_only_60m 11 74.1 405
+339 e3_00853_s43_oracle_visible_60m 5 44.2 405
+340 e2_00871_s44_filter_only_60m 13 73.3 406
+341 e2_00871_s44_filter_only_60m 14 76.3 410
+342 e3_00853_s42_oracle_visible_60m_rerun1 8 62.6 410
+343 e3_00853_s43_oracle_visible_60m 6 50.4 412
+344 e3_00853_s42_oracle_visible_60m_rerun1 9 64.0 412
+345 e3_00871_s42_oracle_visible_60m 1 41.7 413
+346 e3_00853_s43_oracle_visible_60m 8 55.4 418
+347 e3_00853_s43_oracle_visible_60m 7 55.9 418
+348 e3_00871_s43_oracle_visible_60m 0 30.8 419
+349 e3_00853_s42_oracle_visible_60m_rerun1 11 70.3 420
+350 e3_00871_s42_oracle_visible_60m 2 49.4 421
+351 e3_00853_s42_oracle_visible_60m_rerun1 10 73.6 422
+352 e3_00871_s43_oracle_visible_60m 1 34.4 423
+353 e3_00853_s43_oracle_visible_60m 9 60.7 423
+354 e3_00853_s42_oracle_visible_60m_rerun1 12 75.1 426
+355 e3_00871_s42_oracle_visible_60m 3 53.2 426
+356 e3_00853_s43_oracle_visible_60m 10 62.7 426
+357 e3_00871_s42_oracle_visible_60m 4 53.9 427
+358 e3_00871_s43_oracle_visible_60m 2 38.9 427
+359 e3_00853_s42_oracle_visible_60m_rerun1 13 78.3 429
+360 e3_00871_s42_oracle_visible_60m 5 55.2 429
+361 e3_00853_s43_oracle_visible_60m 11 66.2 430
+362 e3_00871_s43_oracle_visible_60m 3 41.5 430
+363 e3_00853_s42_oracle_visible_60m_rerun1 14 80.4 431
+364 e3_00853_s42_oracle_visible_60m_rerun1 15 77.6 432
+365 e3_00871_s43_oracle_visible_60m 4 40.4 433
+366 e3_00853_s42_oracle_visible_60m_rerun1 16 79.9 434
+367 e3_00853_s43_oracle_visible_60m 12 68.5 435
+368 e3_00871_s42_oracle_visible_60m 6 57.3 436
+369 e3_00871_s43_oracle_visible_60m 5 40.9 436
+370 e3_00871_s42_oracle_visible_60m 7 58.1 437
+371 e3_00853_s43_oracle_visible_60m 13 70.8 438
+372 e3_00853_s43_oracle_visible_60m 14 72.4 440
+373 e3_00871_s42_oracle_visible_60m 8 60.6 442
+374 e3_00871_s43_oracle_visible_60m 6 43.9 443
+375 e3_00853_s43_oracle_visible_60m 15 75.3 443
+376 e3_00871_s42_oracle_visible_60m 9 62.0 444
+377 e3_00871_s42_oracle_visible_60m 10 61.5 445
+378 e3_00871_s42_oracle_visible_60m 11 61.2 446
+379 e3_00871_s43_oracle_visible_60m 7 47.0 446
+380 e3_00871_s43_oracle_visible_60m 8 50.6 450
+381 e3_00871_s42_oracle_visible_60m 12 64.6 451
+382 e3_00871_s43_oracle_visible_60m 9 51.5 452
+383 e3_00871_s43_oracle_visible_60m 10 52.0 453
+384 e3_00871_s43_oracle_visible_60m 11 53.5 456
+pass complete: /home/sher/endsem_cpu/m2/pass1/PASS_COMPLETE
+study wall seconds: 458
+stages: 384 usable of 384 rows; left out by the list: 0 (computed on this pass and written to /home/sher/endsem_cpu/m2/pass1/left_out_stages.json); rho: audit.rho
+== main (all stages): 384 stages kept, 24 runs
+   F1             mean +0.284 [+0.261, +0.307]  median +0.293
+   F5             mean +0.065 [+0.042, +0.089]  median +0.064
+   F6             mean -0.028 [-0.048, -0.007]  median -0.028
+   F0             mean +0.048 [+0.027, +0.069]  median +0.045
+   F3-deepseek    mean +0.046 [+0.028, +0.063]  median +0.044
+   F-room         mean +0.089 [+0.073, +0.106]  median +0.091
+   A              +0.218 [+0.195, +0.241]
+   F6-F5          -0.093 [-0.109, -0.078]
+   F0-F5          -0.017 [-0.031, -0.004]
+   B_deepseek     -0.020 [-0.036, -0.003]
+   C              +0.024 [+0.001, +0.047]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== ig_alone (all stages): 382 stages kept, 24 runs
+   F1             mean +0.319 [+0.297, +0.342]  median +0.327
+   F5             mean +0.075 [+0.054, +0.096]  median +0.068
+   F6             mean -0.040 [-0.060, -0.021]  median -0.026
+   F0             mean +0.094 [+0.069, +0.119]  median +0.098
+   F3-deepseek    mean +0.056 [+0.040, +0.072]  median +0.054
+   F-room         mean +0.094 [+0.074, +0.115]  median +0.096
+   A              +0.244 [+0.221, +0.268]
+   F6-F5          -0.116 [-0.135, -0.096]
+   F0-F5          +0.019 [-0.003, +0.041]
+   B_deepseek     -0.019 [-0.040, +0.002]
+   C              +0.019 [-0.008, +0.046]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== audit_Ucone (all stages): 384 stages kept, 24 runs
+   F1             mean +0.667 [+0.642, +0.691]  median +0.687
+   F5             mean +0.161 [+0.122, +0.202]  median +0.191
+   F6             mean -0.037 [-0.081, +0.007]  median -0.011
+   F0             mean +0.131 [+0.088, +0.174]  median +0.156
+   F3-deepseek    mean +0.165 [+0.134, +0.196]  median +0.187
+   F-room         mean +0.323 [+0.290, +0.357]  median +0.327
+   A              +0.505 [+0.467, +0.544]
+   F6-F5          -0.198 [-0.236, -0.161]
+   F0-F5          -0.030 [-0.072, +0.011]
+   B_deepseek     +0.004 [-0.025, +0.033]
+   C              +0.162 [+0.121, +0.203]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== U360 (all stages): 384 stages kept, 24 runs
+   F1             mean +0.410 [+0.378, +0.442]  median +0.439
+   F5             mean +0.092 [+0.046, +0.139]  median +0.119
+   F6             mean -0.069 [-0.122, -0.016]  median -0.046
+   F0             mean +0.085 [+0.037, +0.133]  median +0.125
+   F3-deepseek    mean +0.153 [+0.112, +0.195]  median +0.178
+   F-room         mean +0.286 [+0.241, +0.332]  median +0.287
+   A              +0.318 [+0.289, +0.346]
+   F6-F5          -0.161 [-0.190, -0.132]
+   F0-F5          -0.007 [-0.034, +0.020]
+   B_deepseek     +0.061 [+0.030, +0.092]
+   C              +0.194 [+0.147, +0.240]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "inconclusive"}
+== main (official-arm stages): 119 stages kept, 7 runs
+   F1             mean +0.297 [+0.268, +0.326]  median +0.309
+   F5             mean +0.065 [+0.024, +0.106]  median +0.075
+   F6             mean -0.025 [-0.061, +0.010]  median -0.042
+   F0             mean +0.051 [+0.015, +0.086]  median +0.041
+   F3-deepseek    mean +0.056 [+0.013, +0.100]  median +0.052
+   F-room         mean +0.092 [+0.078, +0.105]  median +0.089
+   A              +0.232 [+0.197, +0.268]
+   F6-F5          -0.090 [-0.108, -0.073]
+   F0-F5          -0.014 [-0.033, +0.005]
+   B_deepseek     -0.008 [-0.027, +0.011]
+   C              +0.027 [-0.003, +0.058]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+== main (clustered by scene and seed): 384 stages kept, 24 runs
+   F1             mean +0.284 [+0.251, +0.316]  median +0.293
+   F5             mean +0.065 [+0.034, +0.097]  median +0.064
+   F6             mean -0.028 [-0.044, -0.011]  median -0.028
+   F0             mean +0.048 [+0.026, +0.070]  median +0.045
+   F3-deepseek    mean +0.046 [+0.021, +0.071]  median +0.044
+   F-room         mean +0.089 [+0.084, +0.094]  median +0.091
+   A              +0.218 [+0.189, +0.247]
+   F6-F5          -0.093 [-0.109, -0.077]
+   F0-F5          -0.017 [-0.034, -0.000]
+   B_deepseek     -0.020 [-0.037, -0.002]
+   C              +0.024 [-0.005, +0.052]
+   reading: {"B_deepseek": "not shown sufficient, on a provisional yardstick", "C": "not shown sufficient, on a provisional yardstick"}
+share of stages with ig = 0 for every candidate: F-room 0.00, F0 0.01, F1 0.00, F3-deepseek 0.00, F5a 0.00, F5b 0.00, F6 0.01
+objects per member: F-room 9.6, F0 151.4, F1 10.0, F3-deepseek 10.0, F5a 10.1, F5b 10.0, F6 0.0
+done 2026-11-13T20:28:31+05:30; total wall seconds: 472

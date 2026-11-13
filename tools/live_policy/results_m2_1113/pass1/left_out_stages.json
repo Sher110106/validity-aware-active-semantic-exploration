@@ -1,0 +1,14 @@
+{
+ "rule": "main correlation (R1 score vs Ucone) undefined for any of: F1, F5, F6, F-room, F3-deepseek",
+ "arms": [
+  "F1",
+  "F5",
+  "F6",
+  "F-room",
+  "F3-deepseek"
+ ],
+ "n_matched": 384,
+ "n_left_out": 0,
+ "left_out": [],
+ "source": "computed on this pass"
+}

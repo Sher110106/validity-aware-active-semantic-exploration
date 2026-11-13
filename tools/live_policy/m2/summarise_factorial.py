@@ -143,8 +143,40 @@ def load_rows(paths: Sequence[str]) -> List[dict]:
     return list(merged.values())
 
 
+class IncompleteData(ValueError):
+    """The rows are not a complete pass: an error row, a drop row, or a row without arms."""
+
+
+def _pc():
+    import importlib.util
+    key = "m2_passcheck"
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, Path(__file__).resolve().parent / "passcheck.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[key] = mod
+        spec.loader.exec_module(mod)
+    return sys.modules[key]
+
+
+def load_verified_rows(paths: Sequence[str]) -> List[dict]:
+    """The rows of complete passes only: each folder must hold PASS_COMPLETE and pass the completeness check
+    (row count as the meta says, no error or drop row, every asked-for arm on every row). Else IncompleteData."""
+    pc = _pc()
+    for p in paths:
+        try:
+            pc.require_complete(Path(p).parent)
+        except pc.IncompletePass as e:
+            raise IncompleteData(str(e))
+    return load_rows(paths)
+
+
 def _usable(rows):
-    return [r for r in rows if "error" not in r and "drop" not in r and "arms" in r]
+    """All rows, after checking that none is an error, a drop or lacks arms: a summary of a failed or incomplete
+    pass must not be made."""
+    bad = [f"{r.get('run')}:{r.get('stage')}" for r in rows if "error" in r or "drop" in r or "arms" not in r]
+    if bad:
+        raise IncompleteData(f"{len(bad)} row(s) are errors, drops or lack arms, first: {bad[:5]}; refusing to summarise")
+    return list(rows)
 
 
 def _key(r):
@@ -254,7 +286,7 @@ def analyse(rows: list, left_out_keys: set, variant: str, rho, cluster_of=None, 
         stages.append((r, rr))
     out: Dict[str, Any] = {"variant": variant, "score": score_key, "yardstick": yard, "n_stages_matched": len(rows),
                            "n_left_out_by_list": len(rows) - len(kept_rows), "n_dropped_extra_undefined": n_extra,
-                           "n_stages_kept": len(stages), "n_undefined_after_list_by_arm": undef_extra, "arms": arms}
+                           "n_stages_kept": len(stages), "kept_stages_without_value_by_arm": undef_extra, "arms": arms}
     if not stages:
         out["error"] = "no stage kept"
         return out
@@ -303,6 +335,21 @@ def analyse(rows: list, left_out_keys: set, variant: str, rho, cluster_of=None, 
             out["reading"] = {"error": "a series has no value"}
         else:
             out["reading"] = read_outcome(out["differences"]["A"], out["reading_series"])
+        # X - 0.5 A on the kept stages where X is defined (the same stages for X and A), per X; equals the
+        # main reading when no kept stage lacks a value for X
+        out["paired_where_defined"] = {}
+        for a in arms:
+            if not (a == "F-room" or a.startswith("F3-")):
+                continue
+            name = "C" if a == "F-room" else f"B_{a[3:]}"
+            ok = lambda rr, a=a: all(rr.get(k) is not None for k in (a, "F1", "F5"))
+            A_x = per_run(lambda rr: rr["F1"] - rr["F5"] if ok(rr) else None)
+            X_x = per_run(lambda rr, a=a: rr[a] - rr["F5"] if ok(rr) else None)
+            blk = _ci_block({"A": A_x, "X_minus_half_A": X_x - SUFFICIENT_FRACTION * A_x}, W)
+            blk["n_kept_stages_without_value"] = undef_extra[a]
+            blk["reading"] = ({"error": "a series has no value"} if any("error" in v for v in (blk["A"], blk["X_minus_half_A"]))
+                              else read_outcome(blk["A"], {name: blk["X_minus_half_A"]}))
+            out["paired_where_defined"][name] = blk
     else:
         out["reading"] = {"error": "F1 or F5 missing"}
     if with_regret:
@@ -374,7 +421,6 @@ def summarise(rows: list, rho=None, left_out_path: Optional[str] = None) -> Dict
     official = [r for r in usable if r.get("arm") == OFFICIAL_ARM]
     res: Dict[str, Any] = {
         "rho_source": rho_src, "n_rows": len(rows), "n_rows_usable": len(usable),
-        "n_rows_error": sum(1 for r in rows if "error" in r), "n_rows_dropped_replay": sum(1 for r in rows if "drop" in r),
         "left_out": {k: v for k, v in left.items() if k != "left_out"} | {"keys": sorted(keys)},
         "counts_all_stages": counts(usable), "counts_official_stages": counts(official) if official else None,
         "analysis": {}, "clustered_by_scene_seed": {}}
@@ -418,7 +464,11 @@ def main(argv=None):
     ap.add_argument("--left-out", help="the left-out list: read if it exists, else computed and written")
     ap.add_argument("--out", required=True)
     args = ap.parse_args(argv)
-    res = summarise(load_rows(args.stages), left_out_path=args.left_out)
+    try:
+        res = summarise(load_verified_rows(args.stages), left_out_path=args.left_out)
+    except IncompleteData as e:
+        print(f"REFUSED: {e}", file=sys.stderr)
+        raise SystemExit(2)
     Path(args.out).write_text(json.dumps(res, indent=1))
     print(format_text(res))
 

@@ -1,0 +1,41 @@
+{
+ "prereg_sha256": "5b8a84004c6f887cf9117bf6a4d6e9edc01aa5a6b0ad64763eeccf31f62d643c",
+ "arms": [
+  "F1",
+  "F5a",
+  "F5b",
+  "F6",
+  "F0",
+  "F-room",
+  "F3-deepseek"
+ ],
+ "n_jobs": 384,
+ "argv": [
+  "/home/sher/endsem_cpu/repo/tools/live_policy/m2/factorial.py",
+  "--out",
+  "/home/sher/endsem_cpu/m2/pass1",
+  "--nproc",
+  "48",
+  "--arms",
+  "F1,F5,F6,F0,F-room,F3",
+  "--error-file",
+  "deepseek=/home/sher/endsem_cpu/m2/err_deepseek.json"
+ ],
+ "error_files": {
+  "deepseek": {
+   "path": "/home/sher/endsem_cpu/m2/err_deepseek.json",
+   "sha256": "f85be8a66955b1dbd9ca832bc5f9d52eda8a6f411ecda6f6bbe09bd29d979d20",
+   "n": 1249
+  }
+ },
+ "arm_code": {
+  "F-room": 11,
+  "F3-deepseek": 21,
+  "F3-haiku": 22,
+  "F3-opus": 23
+ },
+ "master_seed": 20261113,
+ "lambda": 0.2,
+ "numpy": "2.3.5",
+ "python": "3.14.4"
+}
