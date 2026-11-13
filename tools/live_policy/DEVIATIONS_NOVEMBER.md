@@ -73,3 +73,7 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     - A member whose oracle graph fell back to placebo objects would take its count of placebo objects as F-room's N; no member fell back.
     - The secondary yardsticks leave out their own undefined stages, paired across arms.
     - The clustering by scene and seed has 6 clusters, so its interval comes from 64 sign patterns and is coarse.
+
+55. **11-13 21:10: a check made after the confirmatory result was seen.** One verdict is close: Claude Opus at L3 is Rejected because the upper end of its interval against the region trade (D) is 0.0295, under the 0.03 margin. D is a randomised control with 200 draws per member (§9), so its draws move that end. The independent checker reran it with ten other seeds at 200 draws and five at 5,000 draws: the upper end ran from 0.0283 to 0.0298, below 0.03 in all fifteen runs, and settled near 0.029 (`results_semantic_1113/independent_recompute/margin_summary.json`). The registered result is unchanged and is the one reported; this check is reported beside it, as a check made after the fact. A seed that crossed 0.03 would have made Opus at L3 "Inconclusive" and the thesis line "Inconclusive".
+
+56. **11-13 20:50: the no-hint replay (§11) was run after the confirmatory result was known.** Haiku on the 12 round-1 rows with the prompt's sentence about more than one bedroom and bathroom removed; 48 members, all parsed; $0.30. It is exploratory by registration.
