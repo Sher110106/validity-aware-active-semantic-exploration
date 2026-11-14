@@ -186,3 +186,4 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 - 11-13 22:24: a mail to the paper's authors is drafted for the student to send (kept outside the repository). It asks for their reference graphs, the time budget, how rooms and area were counted, the runs behind Fig. 4, and any saved Gemini samples.
 - 11-13 22:24: the GPU is still held (43.0 of 48 GB, since 18:05). Open and waiting on it: the 871 tour and seeds, the acceptance checks, the final rescore with deviation 46's folder map, and ASP on 853.
 - 11-14 06:14: twelve hours on, the GPU is still held by the other user's job (45.3 of 48 GB) and the queue still waits at its check; nothing GPU-bound has run since 11-13 18:04. A watch on the queue resumes the work when it launches a job or ends.
+- 11-14 17:50: a day on, the GPU is still held by the other user's job (43.0 of 48 GB) and the queue still waits at its check. It gives up at about 18:05 on 11-16.
