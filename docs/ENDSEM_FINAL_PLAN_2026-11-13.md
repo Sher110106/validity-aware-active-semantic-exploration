@@ -104,7 +104,7 @@ Status marks: `[ ]` open, `[~]` in progress, `[x]` done and reviewed.
 
 - Say "no detectable difference", never "did as well" or "failed to replicate".
 - On the paper's scale, say "did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference".
-- F0 is an identity, not a finding.
+- F0 is an identity, not a finding. (11-13: the result did not bear this out. All true objects for every member score below random guesses, -0.017 with an interval of -0.031 to -0.004, and `ig` is zero for every candidate in only 2 of 384 stages. The write-up and the deck report it as it came out, with no account of why.)
 - Under a null the verdict is Inconclusive, not Mixed. The slide says that L1 cannot decide at 44 inputs.
 - The limits slide carries the live test's open points: the interval reaches +0.040; the placebo differed in pacing and in member agreement; the LLM arm led at 60 m.
 - What each outcome lets the talk claim:

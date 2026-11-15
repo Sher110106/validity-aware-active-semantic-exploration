@@ -21,17 +21,29 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
    | ASP | paper | 34.4 | 60.8 | 66.7 |
 
    Our `filter_only` ASP arm scores 14.8 / 48.3 / no value. "No value" means no run reached the stage.
+4. **November semantic test: are the guesses right in meaning?** Source: [tools/live_policy/results_semantic_1113/RESULTS.md](tools/live_policy/results_semantic_1113/RESULTS.md). The test was pre-registered, and blind for the two Claude models: we replayed Claude Opus 5.5 and Haiku 5.5 on 44 saved planner inputs from scenes 853 and 871, with the author's prompt and tool loop, and scored them once with a scorer frozen beforehand. All six hypotheses read Rejected. The registered line is "the claim fails", for the first half of the author's claim (that the guesses are right in meaning), in these two houses.
+   - Naming unseen objects, against a prior built from 179 other HM3D houses that makes as many claims: Opus -35.1 points (-41.3 to -29.1), Haiku -24.9 (-31.5 to -18.1).
+   - Placing content in the right unseen region, against a trade of region contents: Opus +0.5 points (-1.9 to +2.95), Haiku +0.8 (-0.8 to +2.4), with a margin of 3. Rejected means the interval rules out a gain as large as the margin; a smaller gain is not ruled out.
+   - DeepSeek's saved guesses read the same way; that result is exploratory.
+   - A recompute written from the rules alone, without reading the scorer, reproduces every number.
+   - Limits: two houses; HM3D labels stand in for what the camera saw; static replays, not live runs. The paper used Gemini 2.5 Pro, so this does not speak for Gemini.
+5. **Would right meaning be enough for ASP's score?** Source: the same write-up, section 8. Offline, on a provisional yardstick: true objects at true places beat random guesses by +0.218 in rank correlation (+0.195 to +0.241). Moved by each model's own placement error they fall to -0.020 (DeepSeek), -0.006 (Haiku) and -0.029 (Opus); room types alone give +0.024. Every arm reads "not shown sufficient, on a provisional yardstick".
 
 ## Where things stand
 
-- Status: [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md).
-- What comes next: [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md).
+- Plan, checklist and progress log: [docs/ENDSEM_FINAL_PLAN_2026-11-13.md](docs/ENDSEM_FINAL_PLAN_2026-11-13.md).
+- The end-sem talk: [docs/endsem_2026-11/](docs/endsem_2026-11/) (deck, script and number sources).
+- Open: the 871 reruns for finding 3 and three ASP runs on 853 to the paper's full budget. Both wait for the shared GPU.
+- Earlier status: [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md). The plan the final one grew from: [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md).
 
 ## Doc map
 
 | Doc | Purpose |
 |---|---|
 | `README.md` | This page. |
+| [docs/ENDSEM_FINAL_PLAN_2026-11-13.md](docs/ENDSEM_FINAL_PLAN_2026-11-13.md) | The end-sem plan as carried out: checklist and progress log. |
+| [docs/endsem_2026-11/](docs/endsem_2026-11/) | End-sem deck, script and number sources. |
+| [tools/live_policy/results_semantic_1113/RESULTS.md](tools/live_policy/results_semantic_1113/RESULTS.md) | The semantic test and M2: results, limits, and what the talk may say. |
 | [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md) | What is done and what is open, 12 Nov. |
 | [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md) | End-semester plan, budget and cut rules. |
 | [docs/RESULTS.md](docs/RESULTS.md) | All results, metric definitions, costs and errata. |
