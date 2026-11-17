@@ -720,7 +720,7 @@ def build_markdown(result: dict) -> str:
     if nov_rows:
         nov = _span(nov_rows, (NOV_ARM,))
         asp_note = ("- October's ASP runs stop at 60 m of path" + (f", which took {asp} here" if asp else "")
-                    + f". The row \"{ARM_LABELS[NOV_ARM]}\" ran to about 105 m of path" + (f" ({nov})" if nov else "")
+                    + f". The row \"{ARM_LABELS[NOV_ARM]}\" ran to the first checkpoint at or past 105 m of path" + (f" ({nov})" if nov else "")
                     + ". A run has no value at a t past its last stage, so an October run's 100% readout is null, "
                     "a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.")
     else:

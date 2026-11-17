@@ -1,3 +1,7 @@
+<!-- written by rescore_paper.py: another reading of the November ASP row -->
+
+**Another reading of the row "ASP + DeepSeek, November": without `e8_00853_s43_official_105m`.** Every other row equals `../paper_compare.md`, which holds the runs as they ran. Why: `DEVIATIONS_NOVEMBER.md`.
+
 # Scores on the paper's scale
 
 F1 x 100, stage value at the last stage with navigation time at most t. Each cell reads `mean [min-max] n`; n counts runs with a value at t. The paper column is Fig. 4 (left) of arXiv 2510.05430v2. Budget B: 00853 = 632.1751 s (--budget), 00871 = 1300.2523 s (--budget).
@@ -223,7 +227,7 @@ Final navigation time over final path length, from each run's last scored stage.
 ## Not comparable
 
 - The references differ. The paper scores against a hand-driven full-scene map. We use the HM3D human-label map, the frontier-made map (biased toward frontier), and a coverage-tour map when one exists.
-- October's ASP runs stop at 60 m of path, which took 289-468 s here. The row "ASP + DeepSeek, November" ran to about 105 m of path (604-652 s). A run has no value at a t past its last stage, so an October run's 100% readout is null, a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.
+- October's ASP runs stop at 60 m of path, which took 289-468 s here. The row "ASP + DeepSeek, November" ran to the first checkpoint at or past 105 m of path (604-652 s). A run has no value at a t past its last stage, so an October run's 100% readout is null, a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.
 - The e4 frontier runs stop at 60 m too (405-574 s), so their 100% readout is null as well. Only the frontier-to-end runs reach B.
 - Navigation time counts moving time only, so it depends on seconds per metre, which differs by arm.
 - Scenes 00069 and 00573 have no run here; their paper cells stay in the JSON only.

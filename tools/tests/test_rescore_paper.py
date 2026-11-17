@@ -1165,30 +1165,158 @@ def test_nov_without_drops_one_run_and_says_when_there_is_no_second_reading():
     assert rp.nov_without(E8.format(43), []) is None
 
 
-def test_notes_give_the_november_row_with_and_without_a_run(tmp_path):
+def _alt_rows():
+    as_run = rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 20.0, 3, 3), _pc_cell("official_nov", "50", 40.0, 3, 3),
+                                     _pc_cell("official_nov", "100", 60.0, 2, 3)]})
+    stopped = rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 20.0, 3, 3), _pc_cell("official_nov", "50", 40.0, 3, 3),
+                                      _pc_cell("official_nov", "100", 61.0, 1, 3)]})
+    without = rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 21.0, 2, 2), _pc_cell("official_nov", "50", 41.0, 2, 2),
+                                      _pc_cell("official_nov", "100", None, 0, 2)]})
+    return {"as_run": as_run, "rows": [
+        {"kind": "stopped", "run": E8.format(43), "stage": 3, "end_s": 500.0, "folder": "alt_nov_x_stopped_after_stage_3", "cells": stopped},
+        {"kind": "without", "run": E8.format(43), "folder": "alt_nov_without_x", "cells": without}]}
+
+
+def test_notes_give_the_november_row_under_each_reading(tmp_path):
     s = _summary(True)
     s["nov"] = _nov_state(tmp_path)
     old = {"00853": 632.0, "00871": 809.084}
-    base = rp.write_notes(s, _cmp(False), dict(old), None)
-    assert "with and without" not in base
-    s["nov"]["also_without"] = {
-        "left_out": E8.format(43), "scored": True, "folder": "alt_nov_without_" + E8.format(43),
-        "with": rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 20.0, 3, 3), _pc_cell("official_nov", "50", 40.0, 3, 3),
-                                        _pc_cell("official_nov", "100", 60.0, 2, 3)]}),
-        "without": rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 21.0, 2, 2), _pc_cell("official_nov", "50", 41.0, 2, 2),
-                                           _pc_cell("official_nov", "100", None, 0, 2)]})}
+    assert "other readings of one run" not in rp.write_notes(s, _cmp(False), dict(old), None)
+    s["nov"]["alternatives"] = _alt_rows()
     text = rp.write_notes(s, _cmp(False), dict(old), None)
-    assert f"**The row with and without `{E8.format(43)}`.**" in text and "DEVIATIONS_NOVEMBER.md" in text
-    assert "| With it | 20.0 [19.0-21.0] n=3 | 40.0 [39.0-41.0] n=3 | 60.0 [59.0-61.0] n=2 of 3 |" in text
-    assert "| Without it | 21.0 [20.0-22.0] n=2 | 41.0 [40.0-42.0] n=2 | none (0 of 2) |" in text
-    s["nov"]["also_without"] = {"left_out": E8.format(43), "scored": False}
-    text = rp.write_notes(s, _cmp(False), dict(old), None)
-    assert "there is one reading only" in text and "| With it |" not in text
+    assert "**The row under the other readings of one run.** `DEVIATIONS_NOVEMBER.md` says why." in text
+    assert "| As the runs ran | 20.0 [19.0-21.0] n=3 | 40.0 [39.0-41.0] n=3 | 60.0 [59.0-61.0] n=2 of 3 | `paper_compare.md` |" in text
+    assert (f"| `{E8.format(43)}` read as stopped by hand after stage 3 (500.0 s): the Note's own rule, under which it ended before B "
+            "and keeps the values it has | 20.0 [19.0-21.0] n=3 | 40.0 [39.0-41.0] n=3 | 61.0 [60.0-62.0] n=1 of 3 | "
+            "`alt_nov_x_stopped_after_stage_3/` |") in text
+    assert (f"| Without `{E8.format(43)}`: a further sensitivity | 21.0 [20.0-22.0] n=2 | 41.0 [40.0-42.0] n=2 | none (0 of 2) | "
+            "`alt_nov_without_x/` |") in text
 
 
-def test_the_parser_takes_the_run_to_leave_out():
-    a = rp.build_parser().parse_args(["--mode", "final", "--nov-also-without", E8.format(43)])
-    assert a.nov_also_without == E8.format(43) and rp.build_parser().parse_args([]).nov_also_without is None
+def test_notes_print_the_a33_readouts_the_evidence_and_name_amendment_3(tmp_path):
+    s = _summary(True)
+    old = {"00853": 632.0, "00871": 809.084}
+    assert "Amendment 3 and its Note" not in rp.write_notes(s, _cmp(False), dict(old), None).split("\n")[2]
+    s["nov"] = _nov_state(tmp_path)
+    pcj = {"cells": [_pc_cell("official_nov", f, m, n, 3, reference=ref) for ref in ("apr", "hm3d")
+                     for f, m, n in (("10", 20.0, 3), ("50", 40.0, 3), ("100", 60.0, 2))]
+           + [_pc_cell("official_nov", "100", None, 0, 3, variant="1.2B"), _pc_cell("official", "10", 99.0, 2, 2)]}
+    s["nov"]["readouts"] = rp.nov_readouts(pcj)
+    assert sorted(s["nov"]["readouts"]) == ["apr", "hm3d"] and s["nov"]["readouts"]["apr"]["100"]["runmax"]["n"] == 2
+    s["nov"]["n_at_100pct_of_1_2B"] = 0
+    text = rp.write_notes(s, _cmp(False), dict(old), None)
+    assert "for the November ASP row Amendment 3 and its Note" in text.split("\n")[2]
+    assert "| apr | F1, running maximum | 20.0 [19.0-21.0] n=3 | 40.0 [39.0-41.0] n=3 | 60.0 [59.0-61.0] n=2 of 3 |" in text
+    assert "| hm3d | GED | 20.0 [19.0-21.0] n=3 |" in text and "No p-value." in text
+    assert "The Note expected the sensitivity cell at 100% of 1.2 B to be empty" in text
+    # the A3.2 evidence of each run is printed: the run with an out-of-memory line shows its count
+    assert "What the A3.2 checks read in each run's files:" in text
+    row = [l for l in text.splitlines() if l.startswith(f"| `{E8.format(44)}` | 1 |")]
+    assert len(row) == 1
+    ev = s["nov"]["runs"][0]["evidence"]
+    assert ev["out_of_memory_lines"] == 0 and ev["nvblox_died_lines"] == 0 and ev["calls"] == 2
+    assert ev["calls_by_another_provider_or_model"] == 0 and ev["members_dropped_pct"] == 0.0
+
+
+class _Args:
+    def __init__(self, without=None, stopped=None):
+        self.nov_also_without, self.nov_also_stopped = without, stopped
+
+
+def _full(_path):
+    return {0: 0.0, 1: 200.0, 2: 400.0, 3: 500.0, 4: 580.0, 5: 700.0}
+
+
+def test_the_other_readings_are_checked_before_anything_is_written(tmp_path):
+    paths = [tmp_path / E8.format(sd) for sd in (42, 43, 44)]
+    nov = {"runs": [{"run": p.name} for p in paths]}
+    assert rp.plan_nov_alternatives(_Args(), nov, paths, _full) == {}
+    assert rp.plan_nov_alternatives(_Args(), None, [], _full) == {}
+    plan = rp.plan_nov_alternatives(_Args(without=E8.format(43), stopped=E8.format(43) + "=3"), nov, paths, _full)
+    assert plan == {"stopped": {"run": E8.format(43), "stage": 3, "end_s": 500.0}, "without": {"run": E8.format(43)}}
+    for bad in (dict(without=E8.format(43)), dict(stopped=E8.format(43) + "=3")):
+        with pytest.raises(rp.HostError):
+            rp.plan_nov_alternatives(_Args(**bad), None, [], _full)                 # no November run counts
+    for bad in (dict(without="e8_00853_s45_official_105m"),                          # a misspelt or foreign name
+                dict(stopped="e8_00853_s45_official_105m=3"), dict(stopped=E8.format(43)), dict(stopped=E8.format(43) + "=three"),
+                dict(stopped=E8.format(43) + "=9"),                                  # not a full stage
+                dict(stopped=E8.format(43) + "=5")):                                 # the last full stage: nothing to cut
+        with pytest.raises(rp.HostError):
+            rp.plan_nov_alternatives(_Args(**bad), nov, paths, _full)
+    with pytest.raises(rp.HostError):
+        rp.plan_nov_alternatives(_Args(without=E8.format(42)), nov, paths[:1], _full)   # the only run
+
+
+def test_a_truncated_copy_ends_after_the_stage_and_leaves_the_source_alone(tmp_path):
+    src = _e8_run(tmp_path / "copy", E8.format(43))
+    cut = rp.truncated_run_copy(src, tmp_path / "tmp", 3)
+    assert cut.name == E8.format(43) and cut.parent == tmp_path / "tmp"
+    assert sorted(int(d.name) for d in (cut / "stages").iterdir()) == [0, 1, 2, 3]
+    assert sorted(int(d.name) for d in (src / "stages").iterdir()) == [0, 1, 2, 3, 4, 5]
+    assert (cut / "logs" / "roslaunch.log").read_text() == (src / "logs" / "roslaunch.log").read_text()
+    a = rp.assess_e8(cut, B853, tmp_path)
+    assert a["counts_in_cells"] and not a["reached_b"] and a["end_s"] == 500.0
+
+
+def test_the_other_readings_are_scored_into_their_own_folders(tmp_path):
+    copy, out = tmp_path / "copy", tmp_path / "out"
+    out.mkdir()
+    paths = [_e8_run(copy, E8.format(sd)) for sd in (42, 43, 44)]
+    nov = {"runs": [{"run": p.name} for p in paths]}
+    plan = rp.plan_nov_alternatives(_Args(without=E8.format(43), stopped=E8.format(43) + "=3"), nov, paths, _full)
+    calls = []
+
+    def score(folder, budget_key, nov_use):
+        stages = {Path(p).name: sorted(int(d.name) for d in (Path(p) / "stages").iterdir()) for p in nov_use}
+        calls.append((folder.name, budget_key, [str(p) for p in nov_use], stages))
+        folder.mkdir()
+        (folder / "paper_compare.json").write_text(json.dumps({"cells": [_pc_cell("official_nov", "100", 61.0, len(nov_use) - 2, len(nov_use))]}))
+        (folder / "paper_compare.md").write_text("# Scores\n")
+
+    main = {"cells": [_pc_cell("official_nov", "100", 60.0, 2, 3)]}
+    rp.score_nov_alternatives(plan, nov, paths, out, score, main)
+    name_stopped, name_without = f"alt_nov_{E8.format(43)}_stopped_after_stage_3", f"alt_nov_without_{E8.format(43)}"
+    assert [c[0] for c in calls] == [name_stopped, name_without] and all(c[1] == "primary_s" for c in calls)
+    # the stopped reading scores all three runs, with seed 43 cut after stage 3 and the others whole
+    assert calls[0][3] == {E8.format(42): [0, 1, 2, 3, 4, 5], E8.format(43): [0, 1, 2, 3], E8.format(44): [0, 1, 2, 3, 4, 5]}
+    assert str(paths[1]) not in calls[0][2] and str(paths[0]) in calls[0][2]
+    # the reading without the run scores the other two, whole
+    assert calls[1][3] == {E8.format(42): [0, 1, 2, 3, 4, 5], E8.format(44): [0, 1, 2, 3, 4, 5]}
+    assert not (out / "_nov_stopped_tmp").exists()                                  # the cut copy is gone
+    assert sorted(int(d.name) for d in (paths[1] / "stages").iterdir()) == [0, 1, 2, 3, 4, 5]   # the real copy is whole
+    alts = nov["alternatives"]
+    assert alts["as_run"]["100"]["n"] == 2 and [r["kind"] for r in alts["rows"]] == ["stopped", "without"]
+    assert alts["rows"][0]["folder"] == name_stopped and alts["rows"][0]["end_s"] == 500.0 and alts["rows"][0]["cells"]["100"]["n"] == 1
+    for name, what in ((name_stopped, "read as stopped by hand after stage 3 (500.0 s)"), (name_without, f"without `{E8.format(43)}`")):
+        md = (out / name / "paper_compare.md").read_text()
+        assert "Another reading of the row" in md and what in md and md.rstrip().endswith("# Scores")
+    # a later run archives these folders with the rest
+    (out / "paper_compare.md").write_text("x")
+    rp.archive_previous(out, "S")
+    assert not (out / name_stopped).exists() and (out / "previous_S" / name_stopped / "paper_compare.json").exists()
+    assert (out / "previous_S" / name_without / "paper_compare.md").exists()
+
+
+def test_a_failed_score_still_removes_the_cut_copy(tmp_path):
+    copy, out = tmp_path / "copy", tmp_path / "out"
+    out.mkdir()
+    paths = [_e8_run(copy, E8.format(sd)) for sd in (42, 43)]
+    nov = {"runs": [{"run": p.name} for p in paths]}
+    plan = rp.plan_nov_alternatives(_Args(stopped=E8.format(43) + "=3"), nov, paths, _full)
+
+    def score(folder, budget_key, nov_use):
+        raise rp.HostError("paper_compare.py failed")
+
+    with pytest.raises(rp.HostError):
+        rp.score_nov_alternatives(plan, nov, paths, out, score, {"cells": []})
+    assert not (out / "_nov_stopped_tmp").exists() and "alternatives" not in nov
+
+
+def test_the_parser_takes_the_other_readings():
+    a = rp.build_parser().parse_args(["--mode", "final", "--nov-also-without", E8.format(43), "--nov-also-stopped", E8.format(43) + "=22"])
+    assert a.nov_also_without == E8.format(43) and a.nov_also_stopped == E8.format(43) + "=22"
+    b = rp.build_parser().parse_args([])
+    assert b.nov_also_without is None and b.nov_also_stopped is None
 
 
 def test_score_command_has_no_default_pick_flag_even_with_november_runs():

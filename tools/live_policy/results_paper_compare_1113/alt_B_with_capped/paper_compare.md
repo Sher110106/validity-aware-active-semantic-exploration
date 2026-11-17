@@ -223,7 +223,7 @@ Final navigation time over final path length, from each run's last scored stage.
 ## Not comparable
 
 - The references differ. The paper scores against a hand-driven full-scene map. We use the HM3D human-label map, the frontier-made map (biased toward frontier), and a coverage-tour map when one exists.
-- October's ASP runs stop at 60 m of path, which took 289-468 s here. The row "ASP + DeepSeek, November" ran to about 105 m of path (604-652 s). A run has no value at a t past its last stage, so an October run's 100% readout is null, a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.
+- October's ASP runs stop at 60 m of path, which took 289-468 s here. The row "ASP + DeepSeek, November" ran to the first checkpoint at or past 105 m of path (604-652 s). A run has no value at a t past its last stage, so an October run's 100% readout is null, a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.
 - The e4 frontier runs stop at 60 m too (405-574 s), so their 100% readout is null as well. Only the frontier-to-end runs reach B.
 - Navigation time counts moving time only, so it depends on seconds per metre, which differs by arm.
 - Scenes 00069 and 00573 have no run here; their paper cells stay in the JSON only.

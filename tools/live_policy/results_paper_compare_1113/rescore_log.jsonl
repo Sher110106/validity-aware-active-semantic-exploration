@@ -36,3 +36,17 @@
 {"t": "2026-11-18T02:57:58+05:30", "step": "score_nov_without", "run": "e8_00853_s43_official_105m", "scored": true}
 {"t": "2026-11-18T02:57:58+05:30", "step": "score", "mode": "final", "cells_diff_00853": 0, "cells_diff_00871": 141, "cells_same_00853": 162, "cells_same_00871": 102}
 {"t": "2026-11-18T02:57:58+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
+{"t": "2026-11-18T03:13:48+05:30", "step": "acceptance", "file": "acceptance_20261118T031340.json", "sha256": "a3eb5a5a8dbc2988a02b2f0428c3220ce8c6c13c6c1143079fc0f92d4b12480b", "n_runs": 25}
+{"t": "2026-11-18T03:13:48+05:30", "step": "folder_map", "pending": 0, "unmapped": 1, "json_sha256": "214e57303925eb6247920e481d6a3ac3125a1a2a60f6a07c6f45b8a9e246ae77", "md_sha256": "07442a37c1bbedef3e69ba52cd267021619b7a0f178c48b0a3e11f3aa7df8ea7"}
+{"t": "2026-11-18T03:13:48+05:30", "step": "rsync", "folders_copied": 0, "files": 0, "moves": 0, "list": "rsync_dryrun_20261118T031340.txt"}
+{"t": "2026-11-18T03:13:57+05:30", "step": "rsync_e8", "runs": 3, "files": 328}
+{"t": "2026-11-18T03:14:04+05:30", "step": "copy_check", "folders": 24, "new_content": 6}
+{"t": "2026-11-18T03:14:05+05:30", "step": "c2", "file": "c2_20261118T031340.json", "sha256": "8e05cd6b0d74cbedef03d41a3c3ef0956e36b35937cc9a7c45c96afd61182ba5", "status_00853": "compute", "status_00871": "compute", "f1_00853": 0.751131221719457, "f1_00871": 0.7714285714285715}
+{"t": "2026-11-18T03:14:06+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 1300.2523394823074, "rule_00853": "median", "rule_00871": "median"}
+{"t": "2026-11-18T03:14:06+05:30", "step": "e8", "runs": 3, "counted": 3, "reached_b": 2}
+{"t": "2026-11-18T03:14:08+05:30", "step": "ged_host_start", "n_runs": 7, "runs": ["frontier_seeds/e7_00871_s42_frontier_end", "frontier_seeds/e7_00871_s43_frontier_end", "frontier_seeds/e7_00871_s44_frontier_end", "frontier_seeds/e7_00871_s45_frontier_end", "live_campaign/e8_00853_s42_official_105m", "live_campaign/e8_00853_s43_official_105m", "live_campaign/e8_00853_s44_official_105m"]}
+{"t": "2026-11-18T03:16:37+05:30", "step": "ged_host_done", "n_runs": 7}
+{"t": "2026-11-18T03:16:37+05:30", "step": "ged_file", "reused": 14, "computed": 7, "recheck": "[]"}
+{"t": "2026-11-18T03:20:03+05:30", "step": "score_nov_alternatives", "stopped": "alt_nov_e8_00853_s43_official_105m_stopped_after_stage_22", "without": "alt_nov_without_e8_00853_s43_official_105m"}
+{"t": "2026-11-18T03:20:03+05:30", "step": "score", "mode": "final", "cells_diff_00853": 0, "cells_diff_00871": 141, "cells_same_00853": 162, "cells_same_00871": 102}
+{"t": "2026-11-18T03:20:03+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}

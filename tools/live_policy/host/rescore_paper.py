@@ -909,6 +909,8 @@ def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active:
     rl = str(run_dir / "logs" / "roslaunch.log")
     oom = cpr.grep_count(rl, r"out of memory")
     died = cpr.grep_count(rl, r"nvblox_node.*(process has died|has died)")
+    ev = res["evidence"] = {"out_of_memory_lines": oom, "nvblox_died_lines": died, "calls": None,
+                            "calls_by_another_provider_or_model": None, "members_dropped_pct": None}
     if oom is None:
         res["reasons"].append("no logs/roslaunch.log: the GPU check cannot be made")
     else:
@@ -938,6 +940,7 @@ def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active:
             res["reasons"].append("cannot check: prompts/usage.jsonl holds no call")
         else:
             bad = Runner.provider_violations(run_dir)
+            ev["calls"], ev["calls_by_another_provider_or_model"] = good, len(bad)
             if bad:
                 res["reasons"].append(f"{len(bad)} call(s) served by another provider or model than {REQUIRED_PROVIDER} / {REQUIRED_MODEL_TAG}")
     policy = sorted(run_dir.glob("stages/*/live_policy.jsonl"))
@@ -948,6 +951,8 @@ def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active:
             unreadable = f"cannot check: stages/{f.parent.name}/live_policy.jsonl line {bad_line} is not valid JSON, so members dropped are miscounted"
             break
     slots, available = Runner.member_stats(run_dir)
+    if policy and not unreadable and slots:
+        ev["members_dropped_pct"] = round(100 * (1 - available / slots), 1)
     if not policy:
         res["reasons"].append("cannot check: no stages/*/live_policy.jsonl, so members dropped are unknown")
     elif unreadable:
@@ -988,6 +993,91 @@ def nov_without(run: str, nov_paths: list) -> list | None:
     then there is no second reading to score."""
     keep = [p for p in nov_paths if Path(p).name != run]
     return keep if keep and len(keep) < len(nov_paths) else None
+
+
+def nov_readouts(pc_json: dict) -> dict:
+    """A3.3's readouts for the November row at B: reference -> fraction -> stage value, running maximum, GED."""
+    out = {}
+    for c in pc_json["cells"]:
+        if c["arm"] == "official_nov" and c["variant"] == "B":
+            out.setdefault(c["reference"], {})[c["fraction"]] = {
+                "stage": c["stage_value_x100"], "runmax": c["running_max_x100"], "ged": c["ged"], "n_runs": c["n_runs"]}
+    return out
+
+
+def plan_nov_alternatives(args, nov: dict | None, nov_paths: list, full_stages) -> dict:
+    """The other readings of the November row that were asked for, checked before any table is written.
+    `full_stages(path)` gives {stage: navigation time} for the stages of a run that hold stats and both graphs."""
+    wo, st = getattr(args, "nov_also_without", None), getattr(args, "nov_also_stopped", None)
+    if not wo and not st:
+        return {}
+    names = [Path(p).name for p in nov_paths]
+    if not nov or not names:
+        raise HostError("--nov-also-without / --nov-also-stopped given, but no November run counts in the cells")
+    plan = {}
+    if st:
+        run, sep, stage = st.partition("=")
+        if not sep or not stage.isdigit():
+            raise HostError(f"--nov-also-stopped {st}: give RUN=STAGE, with STAGE a stage number")
+        if run not in names:
+            raise HostError(f"--nov-also-stopped: {run} is not among the November runs that count ({', '.join(names)})")
+        full = full_stages(next(p for p in nov_paths if Path(p).name == run))
+        if int(stage) not in full:
+            raise HostError(f"--nov-also-stopped: stage {stage} of {run} does not hold stats and both graphs")
+        if int(stage) >= max(full):
+            raise HostError(f"--nov-also-stopped: stage {stage} is the last full stage of {run}, so nothing would be cut")
+        plan["stopped"] = {"run": run, "stage": int(stage), "end_s": full[int(stage)]}
+    if wo:
+        if nov_without(wo, nov_paths) is None:
+            raise HostError(f"--nov-also-without: {wo} is not among the November runs that count ({', '.join(names)}), or it is the only one")
+        plan["without"] = {"run": wo}
+    return plan
+
+
+def truncated_run_copy(src: Path, dest_parent: Path, last_stage: int) -> Path:
+    """A copy of one run folder that ends after `last_stage`: the stages a stop at that point would have left."""
+    dest = Path(dest_parent) / Path(src).name
+    shutil.rmtree(dest, ignore_errors=True)
+    shutil.copytree(src, dest)
+    for d in sorted((dest / "stages").iterdir()):
+        if d.is_dir() and d.name.isdigit() and int(d.name) > last_stage:
+            shutil.rmtree(d)
+    return dest
+
+
+def _alt_banner(folder: Path, what: str) -> None:
+    md = folder / "paper_compare.md"
+    md.write_text("<!-- written by rescore_paper.py: another reading of the November ASP row -->\n\n"
+                  f"**Another reading of the row \"ASP + DeepSeek, November\": {what}.** Every other row equals "
+                  "`../paper_compare.md`, which holds the runs as they ran. Why: `DEVIATIONS_NOVEMBER.md`.\n\n" + md.read_text())
+
+
+def score_nov_alternatives(plan: dict, nov: dict, nov_paths: list, out: Path, score, main_json: dict) -> None:
+    """Score the other readings and file them under nov["alternatives"]. `score(folder, budget_key, paths)` runs
+    paper_compare.py with the given November run folders."""
+    rows = []
+    if "stopped" in plan:
+        st = plan["stopped"]
+        folder = out / f"alt_nov_{st['run']}_stopped_after_stage_{st['stage']}"
+        tmp = out / "_nov_stopped_tmp"
+        shutil.rmtree(folder, ignore_errors=True)
+        try:
+            cut = truncated_run_copy(next(p for p in nov_paths if Path(p).name == st["run"]), tmp, st["stage"])
+            score(folder, "primary_s", [cut if Path(p).name == st["run"] else p for p in nov_paths])
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+        _alt_banner(folder, f"`{st['run']}` read as stopped by hand after stage {st['stage']} ({st['end_s']:.1f} s)")
+        rows.append({"kind": "stopped", **st, "folder": folder.name,
+                     "cells": nov_cells(json.loads((folder / "paper_compare.json").read_text()))})
+    if "without" in plan:
+        run = plan["without"]["run"]
+        folder = out / f"alt_nov_without_{run}"
+        shutil.rmtree(folder, ignore_errors=True)
+        score(folder, "primary_s", nov_without(run, nov_paths))
+        _alt_banner(folder, f"without `{run}`")
+        rows.append({"kind": "without", "run": run, "folder": folder.name,
+                     "cells": nov_cells(json.loads((folder / "paper_compare.json").read_text()))})
+    nov["alternatives"] = {"as_run": nov_cells(main_json), "rows": rows}
 
 
 # --------------------------------------------------------------------------
@@ -1286,6 +1376,8 @@ def run_pipeline(args) -> int:
         log("e8", runs=len(assessed), counted=sum(a["counts_in_cells"] for a in assessed),
             reached_b=sum(a["reached_b"] for a in assessed))
     nov_paths = [NEW_COPY / "live_campaign" / a["run"] for a in (nov["runs"] if nov else []) if a["counts_in_cells"]]
+    nov_plan = plan_nov_alternatives(args, nov, nov_paths, lambda p_: {
+        st["stage"]: st["time_s"] for st in pc.load_stages(Path(p_), [])[0] if len(st["graphs"]) == 2})
 
     # scene state and mode
     pend_names = {p_["name"] for p_ in pend}
@@ -1366,25 +1458,22 @@ def run_pipeline(args) -> int:
               + ", ".join(f"{s} = {budgets[s]['primary_s']:.4f} s ({budgets[s]['primary_rule']}, n = {budgets[s]['n_primary']})" for s in SCENES) + "."]
     for s in SCENES:
         banner.append(f"- {s}: " + (labels[s] if s in labels else "final") + ".")
+    if nov_plan:
+        banner.append("- The row \"ASP + DeepSeek, November\" is given here as its runs ran. `NOTES.md` and the `alt_nov_*` folders give it "
+                      "under the other readings of one run that `DEVIATIONS_NOVEMBER.md` sets out. The running maximum and GED of every "
+                      "cell are in `paper_compare.json`; `NOTES.md` prints them for this row.")
     (out / "paper_compare.md").write_text("\n".join(banner) + "\n\n" + mark_interim_rows(md, labels))
     alt_done = False
     if any(budgets[s]["second_line_differs"] for s in SCENES):
         score(out / "alt_B_with_capped", "with_capped_s")
         alt_done = True
-    left_out = getattr(args, "nov_also_without", None)
-    if left_out:
-        if not nov:
-            raise HostError(f"--nov-also-without {left_out}: the host holds no November run")
-        keep = nov_without(left_out, nov_paths)
-        if keep is None:
-            nov["also_without"] = {"left_out": left_out, "scored": False}
-        else:
-            alt_dir = out / f"alt_nov_without_{left_out}"
-            shutil.rmtree(alt_dir, ignore_errors=True)
-            score(alt_dir, "primary_s", keep)
-            nov["also_without"] = {"left_out": left_out, "scored": True, "folder": alt_dir.name, "with": nov_cells(new_json),
-                                   "without": nov_cells(json.loads((alt_dir / "paper_compare.json").read_text()))}
-        log("score_nov_without", run=left_out, scored=nov["also_without"]["scored"])
+    if nov:
+        nov["readouts"] = nov_readouts(new_json)
+        nov["n_at_100pct_of_1_2B"] = next((c["stage_value_x100"]["n"] for c in new_json["cells"] if c["arm"] == "official_nov"
+                                           and c["reference"] == "apr" and c["variant"] == "1.2B" and c["fraction"] == "100"), None)
+    if nov_plan:
+        score_nov_alternatives(nov_plan, nov, nov_paths, out, score, new_json)
+        log("score_nov_alternatives", **{r["kind"]: r["folder"] for r in nov["alternatives"]["rows"]})
     comparison = compare_cells(old_json, new_json, SCENES)
     for s in SCENES:
         comparison[s]["b_1112_s"], comparison[s]["b_1113_s"] = old_budgets.get(s), budgets[s]["primary_s"]
@@ -1420,7 +1509,7 @@ def archive_previous(out: Path, stamp: str) -> None:
         dest.mkdir(exist_ok=True)
         for p in have:
             shutil.copy2(p, dest / p.name)
-        for alt in [out / "alt_B_with_capped"] + sorted(out.glob("alt_nov_without_*")):
+        for alt in [out / "alt_B_with_capped"] + sorted(out.glob("alt_nov_*")):
             if alt.exists():
                 shutil.copytree(alt, dest / alt.name, dirs_exist_ok=True)
                 shutil.rmtree(alt)
@@ -1515,6 +1604,15 @@ def nov_notes(nov: dict) -> list:
             end = "n/a" if a["end_s"] is None else f"{a['end_s']:.1f}"
             L.append(f"| `{a['run']}` | {state} | {end} | {'yes' if a['reached_b'] else 'no'} | "
                      f"{'yes' if a['counts_in_cells'] else 'no'} | {'; '.join(a['reasons']) or '-'} | {'; '.join(a['notes']) or '-'} |")
+        if any(a.get("evidence") for a in runs):
+            show = lambda v: "-" if v is None else str(v)
+            L += ["", "What the A3.2 checks read in each run's files:", "",
+                  "| Run | \"out of memory\" lines | nvblox-died lines | Calls | Calls by another provider or model | Members dropped (%) |",
+                  "|---|---|---|---|---|---|"]
+            for a in runs:
+                e = a.get("evidence") or {}
+                L.append(f"| `{a['run']}` | {show(e.get('out_of_memory_lines'))} | {show(e.get('nvblox_died_lines'))} | {show(e.get('calls'))} | "
+                         f"{show(e.get('calls_by_another_provider_or_model'))} | {show(e.get('members_dropped_pct'))} |")
     ages = nov.get("listing", {}).get("ages_s", {})
     for n in stale:
         L += ["", f"stale marker: check by hand: `.active_{n}` is {ages.get(n, 0) / 3600:.1f} h old on the host's clock "
@@ -1522,21 +1620,34 @@ def nov_notes(nov: dict) -> list:
     if nov.get("never_started"):
         L += ["", "A relaunch replaces an original that never started (the Note to Amendment 3): "
               + ", ".join(f"`{n}`" for n in nov["never_started"]) + " holds no stage and is not scored."]
-    alt = nov.get("also_without")
-    if alt and alt.get("scored"):
-        def cell(d: dict) -> str:
-            if not d or not d.get("n"):
-                return f"none (0 of {d.get('n_runs', 0) if d else 0})"
-            n = f"n={d['n']}" if d["n"] == d["n_runs"] else f"n={d['n']} of {d['n_runs']}"
-            return f"{d['mean']:.1f} [{d['min']:.1f}-{d['max']:.1f}] {n}"
-        L += ["", f"**The row with and without `{alt['left_out']}`.** `DEVIATIONS_NOVEMBER.md` says why this run may be read either way. "
-                  f"Object F1 x 100 against the APR reference, stage value, mean [min-max]. The full tables without the run are in `{alt['folder']}/`.", "",
-              "| Row | 10% | 50% | 100% |", "|---|---|---|---|",
-              "| With it | " + " | ".join(cell(alt["with"].get(f)) for f in ("10", "50", "100")) + " |",
-              "| Without it | " + " | ".join(cell(alt["without"].get(f)) for f in ("10", "50", "100")) + " |"]
-    elif alt:
-        L += ["", f"`--nov-also-without {alt['left_out']}` was asked for, but that run is not among the runs that count "
-                  "(or it is the only one), so there is one reading only."]
+    def cell(d: dict | None, nd: int = 1, n_runs: int | None = None) -> str:
+        total = n_runs if n_runs is not None else (d or {}).get("n_runs", 0)
+        if not d or not d.get("n"):
+            return f"none (0 of {total})"
+        n = f"n={d['n']}" if d["n"] == total else f"n={d['n']} of {total}"
+        return f"{d['mean']:.{nd}f} [{d['min']:.{nd}f}-{d['max']:.{nd}f}] {n}"
+    ro = nov.get("readouts")
+    if ro:
+        L += ["", "**The readouts A3.3 asks for,** at 10%, 50% and 100% of B: object F1 x 100 as the stage value and as the running "
+                  "maximum, and GED with the author's code (lower is better). Mean [min-max] and n. No p-value.", "",
+              "| Reference | Readout | 10% | 50% | 100% |", "|---|---|---|---|---|"]
+        for ref in sorted(ro):
+            for key, name in (("stage", "F1, stage value"), ("runmax", "F1, running maximum"), ("ged", "GED")):
+                L.append(f"| {ref} | {name} | " + " | ".join(
+                    cell(ro[ref].get(f, {}).get(key), 1, ro[ref].get(f, {}).get("n_runs", 0)) for f in ("10", "50", "100")) + " |")
+        if nov.get("n_at_100pct_of_1_2B") == 0:
+            L += ["", "The Note expected the sensitivity cell at 100% of 1.2 B to be empty, since a 105 m run would most likely end "
+                      "before 759 s. It is empty: no run reached it."]
+    alts = nov.get("alternatives")
+    if alts and alts.get("rows"):
+        L += ["", "**The row under the other readings of one run.** `DEVIATIONS_NOVEMBER.md` says why. Object F1 x 100 against the APR "
+                  "reference, stage value, mean [min-max]. The first line is the row as filed above.", "",
+              "| Reading | 10% | 50% | 100% | Full tables |", "|---|---|---|---|---|",
+              "| As the runs ran | " + " | ".join(cell(alts["as_run"].get(f)) for f in ("10", "50", "100")) + " | `paper_compare.md` |"]
+        for r in alts["rows"]:
+            name = (f"`{r['run']}` read as stopped by hand after stage {r['stage']} ({r['end_s']:.1f} s): the Note's own rule, "
+                    "under which it ended before B and keeps the values it has" if r["kind"] == "stopped" else f"Without `{r['run']}`: a further sensitivity")
+            L.append(f"| {name} | " + " | ".join(cell(r["cells"].get(f)) for f in ("10", "50", "100")) + f" | `{r['folder']}/` |")
     return L
 
 
@@ -1550,7 +1661,8 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
         cmp_[sc].setdefault("b_1112_s", old_budgets[sc])
     L = ["# Notes on the 13 Nov paper-scale rescore", ""]
     L.append(f"**State: {s['mode']}.** Written {s['written_at']}. Rerun with `bash tools/live_policy/host/rescore_paper.sh`. "
-             "The rules are `PREREGISTRATION_PAPER.md`, Amendment 2 and its Note. Tables: `paper_compare.md` and `.json`. "
+             "The rules are `PREREGISTRATION_PAPER.md`, Amendment 2 and its Note"
+             + (", and for the November ASP row Amendment 3 and its Note" if s.get("nov") else "") + ". Tables: `paper_compare.md` and `.json`. "
              "Evidence: `acceptance_*.json`, `folder_map_*`, `c2_*.json`, `budgets_*.json`, `comparison_vs_1112.json`, `rescore_summary.json`.")
     L += ["", "## What changed against 11-12, and why", ""]
     valid = [(x["name"], x["counted"]) for x in s["classification"]["seeds"] if x["counted"]]
@@ -1666,9 +1778,11 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--no-copy", action="store_true", help="use the laptop copy as it is")
     ap.add_argument("--ged-recheck", type=int, default=0,
                     help="recompute this many reused GED runs on the host and compare (default 0: only when asked)")
+    ap.add_argument("--nov-also-stopped", default=None, metavar="RUN=STAGE",
+                    help="also score the November ASP row with this run read as stopped by hand after that stage "
+                         "(the Note to Amendment 3: it then counts as a run that ended before B and keeps the values it has)")
     ap.add_argument("--nov-also-without", default=None, metavar="RUN",
-                    help="score the November ASP row a second time without this run, into alt_nov_without_<RUN>/ "
-                         "(for a run the deviations file says may be read either way)")
+                    help="also score the November ASP row without this run, as a further sensitivity")
     return ap
 
 

@@ -339,7 +339,7 @@ def test_footnote_names_both_stops_when_a_november_run_is_scored(tmp_path):
     assert pc.main(_argv(tmp_path, root, table, apr, ged, add=[("official_nov", run)])) == 0
     md = (tmp_path / "out" / "paper_compare.md").read_text()
     assert "- ASP runs stop at 60 m of path" not in md
-    assert "October's ASP runs stop at 60 m of path" in md and "ran to about 105 m of path" in md
+    assert "October's ASP runs stop at 60 m of path" in md and "ran to the first checkpoint at or past 105 m of path" in md
     assert "a November run has a 100% value only if it reached B" in md
 
 
