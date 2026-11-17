@@ -1142,6 +1142,55 @@ def test_the_listing_fails_loudly_and_every_mode_has_other_ssh_calls(monkeypatch
     assert "stat" in cmds[0] and "date +%s" in cmds[0]
 
 
+def _pc_cell(arm, frac, mean, n, n_runs, reference="apr", variant="B"):
+    v = {"mean": mean, "min": None if mean is None else mean - 1, "max": None if mean is None else mean + 1, "n": n}
+    return {"scene": "00853", "arm": arm, "reference": reference, "variant": variant, "fraction": frac, "n_runs": n_runs,
+            "stage_value_x100": v, "running_max_x100": v, "ged": v}
+
+
+def test_nov_cells_take_only_the_november_row_under_apr_at_b():
+    pcj = {"cells": [_pc_cell("official_nov", "10", 20.0, 3, 3), _pc_cell("official_nov", "100", 50.0, 2, 3),
+                     _pc_cell("official_nov", "10", 99.0, 3, 3, reference="hm3d"), _pc_cell("official_nov", "10", 98.0, 3, 3, variant="0.8B"),
+                     _pc_cell("official", "10", 97.0, 2, 2)]}
+    got = rp.nov_cells(pcj)
+    assert sorted(got) == ["10", "100"] and got["10"]["mean"] == 20.0 and got["100"] == {"mean": 50.0, "min": 49.0, "max": 51.0, "n": 2, "n_runs": 3}
+
+
+def test_nov_without_drops_one_run_and_says_when_there_is_no_second_reading():
+    paths = [rp.NEW_COPY / "live_campaign" / E8.format(sd) for sd in (42, 43, 44)]
+    keep = rp.nov_without(E8.format(43), paths)
+    assert [p.name for p in keep] == [E8.format(42), E8.format(44)]
+    assert rp.nov_without("e8_00853_s45_official_105m", paths) is None        # not among them
+    assert rp.nov_without(E8.format(42), paths[:1]) is None                    # nothing would be left
+    assert rp.nov_without(E8.format(43), []) is None
+
+
+def test_notes_give_the_november_row_with_and_without_a_run(tmp_path):
+    s = _summary(True)
+    s["nov"] = _nov_state(tmp_path)
+    old = {"00853": 632.0, "00871": 809.084}
+    base = rp.write_notes(s, _cmp(False), dict(old), None)
+    assert "with and without" not in base
+    s["nov"]["also_without"] = {
+        "left_out": E8.format(43), "scored": True, "folder": "alt_nov_without_" + E8.format(43),
+        "with": rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 20.0, 3, 3), _pc_cell("official_nov", "50", 40.0, 3, 3),
+                                        _pc_cell("official_nov", "100", 60.0, 2, 3)]}),
+        "without": rp.nov_cells({"cells": [_pc_cell("official_nov", "10", 21.0, 2, 2), _pc_cell("official_nov", "50", 41.0, 2, 2),
+                                           _pc_cell("official_nov", "100", None, 0, 2)]})}
+    text = rp.write_notes(s, _cmp(False), dict(old), None)
+    assert f"**The row with and without `{E8.format(43)}`.**" in text and "DEVIATIONS_NOVEMBER.md" in text
+    assert "| With it | 20.0 [19.0-21.0] n=3 | 40.0 [39.0-41.0] n=3 | 60.0 [59.0-61.0] n=2 of 3 |" in text
+    assert "| Without it | 21.0 [20.0-22.0] n=2 | 41.0 [40.0-42.0] n=2 | none (0 of 2) |" in text
+    s["nov"]["also_without"] = {"left_out": E8.format(43), "scored": False}
+    text = rp.write_notes(s, _cmp(False), dict(old), None)
+    assert "there is one reading only" in text and "| With it |" not in text
+
+
+def test_the_parser_takes_the_run_to_leave_out():
+    a = rp.build_parser().parse_args(["--mode", "final", "--nov-also-without", E8.format(43)])
+    assert a.nov_also_without == E8.format(43) and rp.build_parser().parse_args([]).nov_also_without is None
+
+
 def test_score_command_has_no_default_pick_flag_even_with_november_runs():
     argv = rp.build_score_argv(Path("/o"), ROWS, BUD, "primary_s", Path("/g.json"), [rp.NEW_COPY / "live_campaign" / E8.format(42)])
     assert f"official_nov=00853={rp.NEW_COPY}/live_campaign/{E8.format(42)}" in argv

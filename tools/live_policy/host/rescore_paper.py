@@ -977,6 +977,19 @@ def build_score_argv(out_dir: Path, rows: dict, budgets: dict, budget_key: str, 
     return argv + ["--ged-json", str(ged_file)]
 
 
+def nov_cells(pc_json: dict) -> dict:
+    """The November row under the APR reference at B: fraction -> stage value (mean, min, max, n) and n_runs."""
+    return {c["fraction"]: {**c["stage_value_x100"], "n_runs": c["n_runs"]} for c in pc_json["cells"]
+            if c["arm"] == "official_nov" and c["reference"] == "apr" and c["variant"] == "B"}
+
+
+def nov_without(run: str, nov_paths: list) -> list | None:
+    """The November runs that count, less `run`. None when `run` is not among them or nothing would be left:
+    then there is no second reading to score."""
+    keep = [p for p in nov_paths if Path(p).name != run]
+    return keep if keep and len(keep) < len(nov_paths) else None
+
+
 # --------------------------------------------------------------------------
 # Output text
 # --------------------------------------------------------------------------
@@ -1331,8 +1344,8 @@ def run_pipeline(args) -> int:
     log("ged_file", reused=len(reuse), computed=len(compute), recheck=json.dumps(recheck_report))
 
     # 7 score
-    def score(out_dir: Path, budget_key: str) -> None:
-        argv = build_score_argv(out_dir, cls["rows"], budgets, budget_key, ged_file, nov_paths)
+    def score(out_dir: Path, budget_key: str, nov_use: list | None = None) -> None:
+        argv = build_score_argv(out_dir, cls["rows"], budgets, budget_key, ged_file, nov_paths if nov_use is None else nov_use)
         r = subprocess.run(argv, capture_output=True, text=True, env={**os.environ, "PYTHONPATH": str(LIVE.parent)})
         if r.returncode != 0:
             raise HostError("paper_compare.py failed: " + r.stderr[-800:])
@@ -1358,6 +1371,20 @@ def run_pipeline(args) -> int:
     if any(budgets[s]["second_line_differs"] for s in SCENES):
         score(out / "alt_B_with_capped", "with_capped_s")
         alt_done = True
+    left_out = getattr(args, "nov_also_without", None)
+    if left_out:
+        if not nov:
+            raise HostError(f"--nov-also-without {left_out}: the host holds no November run")
+        keep = nov_without(left_out, nov_paths)
+        if keep is None:
+            nov["also_without"] = {"left_out": left_out, "scored": False}
+        else:
+            alt_dir = out / f"alt_nov_without_{left_out}"
+            shutil.rmtree(alt_dir, ignore_errors=True)
+            score(alt_dir, "primary_s", keep)
+            nov["also_without"] = {"left_out": left_out, "scored": True, "folder": alt_dir.name, "with": nov_cells(new_json),
+                                   "without": nov_cells(json.loads((alt_dir / "paper_compare.json").read_text()))}
+        log("score_nov_without", run=left_out, scored=nov["also_without"]["scored"])
     comparison = compare_cells(old_json, new_json, SCENES)
     for s in SCENES:
         comparison[s]["b_1112_s"], comparison[s]["b_1113_s"] = old_budgets.get(s), budgets[s]["primary_s"]
@@ -1393,9 +1420,10 @@ def archive_previous(out: Path, stamp: str) -> None:
         dest.mkdir(exist_ok=True)
         for p in have:
             shutil.copy2(p, dest / p.name)
-        if (out / "alt_B_with_capped").exists():
-            shutil.copytree(out / "alt_B_with_capped", dest / "alt_B_with_capped", dirs_exist_ok=True)
-            shutil.rmtree(out / "alt_B_with_capped")
+        for alt in [out / "alt_B_with_capped"] + sorted(out.glob("alt_nov_without_*")):
+            if alt.exists():
+                shutil.copytree(alt, dest / alt.name, dirs_exist_ok=True)
+                shutil.rmtree(alt)
 
 
 # --------------------------------------------------------------------------
@@ -1494,6 +1522,21 @@ def nov_notes(nov: dict) -> list:
     if nov.get("never_started"):
         L += ["", "A relaunch replaces an original that never started (the Note to Amendment 3): "
               + ", ".join(f"`{n}`" for n in nov["never_started"]) + " holds no stage and is not scored."]
+    alt = nov.get("also_without")
+    if alt and alt.get("scored"):
+        def cell(d: dict) -> str:
+            if not d or not d.get("n"):
+                return f"none (0 of {d.get('n_runs', 0) if d else 0})"
+            n = f"n={d['n']}" if d["n"] == d["n_runs"] else f"n={d['n']} of {d['n_runs']}"
+            return f"{d['mean']:.1f} [{d['min']:.1f}-{d['max']:.1f}] {n}"
+        L += ["", f"**The row with and without `{alt['left_out']}`.** `DEVIATIONS_NOVEMBER.md` says why this run may be read either way. "
+                  f"Object F1 x 100 against the APR reference, stage value, mean [min-max]. The full tables without the run are in `{alt['folder']}/`.", "",
+              "| Row | 10% | 50% | 100% |", "|---|---|---|---|",
+              "| With it | " + " | ".join(cell(alt["with"].get(f)) for f in ("10", "50", "100")) + " |",
+              "| Without it | " + " | ".join(cell(alt["without"].get(f)) for f in ("10", "50", "100")) + " |"]
+    elif alt:
+        L += ["", f"`--nov-also-without {alt['left_out']}` was asked for, but that run is not among the runs that count "
+                  "(or it is the only one), so there is one reading only."]
     return L
 
 
@@ -1623,6 +1666,9 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--no-copy", action="store_true", help="use the laptop copy as it is")
     ap.add_argument("--ged-recheck", type=int, default=0,
                     help="recompute this many reused GED runs on the host and compare (default 0: only when asked)")
+    ap.add_argument("--nov-also-without", default=None, metavar="RUN",
+                    help="score the November ASP row a second time without this run, into alt_nov_without_<RUN>/ "
+                         "(for a run the deviations file says may be read either way)")
     return ap
 
 
