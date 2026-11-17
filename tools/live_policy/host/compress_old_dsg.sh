@@ -14,12 +14,11 @@
 # With --go it refuses to work while a paper queue or a runner is live, or while the container
 # holds other processes: a timed run must not share the machine with it.
 #
-# COMPRESS_ROOTS="/workspace/runs/frontier_seeds" narrows the work to some folders.
-# COMPRESS_ALLOW_LIVE=1 lifts the refusal, for the one case where free disk nears the queue's
-# stop and a run would otherwise be lost; it then works with one job at the lowest priority.
+# COMPRESS_ROOTS="/workspace/runs/frontier_seeds" narrows the work to one of the two folders.
 #
 # For tests only: COMPRESS_LOCAL_ROOTS="dir1 dir2" COMPRESS_SCRATCH=dir runs the same steps in
-# a plain shell on those folders, with no container and no checks for live runs.
+# a plain shell on those folders, with no container and no checks for live runs. It refuses
+# any folder inside the workspace.
 
 set -u
 MODE="${1:?give --dry-run or --go}"
@@ -31,6 +30,7 @@ STAMP="$(date +%Y%m%dT%H%M%S)"
 
 if [ -n "${COMPRESS_LOCAL_ROOTS:-}" ]; then
   LOCAL=1; ROOTS="$COMPRESS_LOCAL_ROOTS"; SCRATCH="${COMPRESS_SCRATCH:?give COMPRESS_SCRATCH too}"; DFPATH="$SCRATCH"
+  for r in $ROOTS; do case "$r" in /workspace|/workspace/*|"$WS"|"$WS"/*) echo "REFUSED: the test mode does not work inside the workspace ($r)"; exit 2 ;; esac; done
   run() { bash -c "$1"; }
 else
   LOCAL=0; ROOTS="${COMPRESS_ROOTS:-/workspace/runs/frontier_seeds /workspace/runs/live_campaign}"; SCRATCH=/workspace/scratch; DFPATH="$WS"
@@ -42,10 +42,7 @@ export FAILS="$SCRATCH/dsg_compress_${STAMP}.failed"
 FIND="find $ROOTS -type f -name '*_dsg.json' -not -path '*/e7_00871_s4[2-5]_frontier_end/*'"
 free_gb() { df -Pk "$DFPATH" | awk 'NR==2{printf "%d", $4/1048576}'; }
 
-if [ "$MODE" = "--go" ] && [ "$LOCAL" = 0 ] && [ "${COMPRESS_ALLOW_LIVE:-0}" = 1 ]; then
-  export JOBS=1
-  echo "NOTE: COMPRESS_ALLOW_LIVE=1, so the checks for live runs are skipped; one job, lowest priority"
-elif [ "$MODE" = "--go" ] && [ "$LOCAL" = 0 ]; then
+if [ "$MODE" = "--go" ] && [ "$LOCAL" = 0 ]; then
   live="$(systemctl --user list-units 'paper-queue-*.scope' --state=active,activating --no-legend --plain 2>/dev/null | awk '{print $1}')"
   [ -n "$live" ] && { echo "REFUSED: a rerun queue is live: $(echo $live)"; exit 1; }
   pgrep -u "$(id -u)" -f 'paper_queue\.sh' >/dev/null && { echo "REFUSED: a paper_queue.sh process is running"; exit 1; }

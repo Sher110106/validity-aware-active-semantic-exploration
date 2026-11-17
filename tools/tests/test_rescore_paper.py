@@ -425,6 +425,17 @@ def test_comparison_reports_identical_and_different_cells():
     assert len(c["00871"]["different"]) == 1 and c["00871"]["different"][0]["diffs"][0][0] == "stage_value_x100.mean"
 
 
+def test_comparison_counts_empty_cells_and_cells_that_lost_their_value():
+    none = {"mean": None, "min": None, "max": None, "n": 0}
+    empty = dict(cell("00871", "official", 1.0), stage_value_x100=none, running_max_x100=none, ged=none, fraction="100")
+    kept = cell("00871", "frontier_end", 43.2)
+    had = dict(cell("00871", "placebo", 35.9, 1), fraction="50")
+    gone = dict(had, stage_value_x100=none, running_max_x100=none, ged=none)
+    c = rp.compare_cells({"cells": [empty, kept, had]}, {"cells": [empty, kept, gone]}, ("00853", "00871"))["00871"]
+    assert c["compared"] == 3 and c["identical"] == 2 and c["identical_empty"] == 1
+    assert len(c["different"]) == 1 and c["lost_value"] == [["00871", "placebo", "apr", "B", "50"]]
+
+
 # --- mode and notes ----------------------------------------------------------------
 
 def test_mode_auto_is_interim_while_anything_is_pending_and_final_refuses():
@@ -730,6 +741,25 @@ def test_final_notes_when_no_third_attempt_is_valid_say_what_is_true():
     assert "superseded" not in text.split("## Status of the two scenes")[1].split("## Carried over")[0]
 
 
+def test_final_notes_say_which_identical_cells_are_empty_and_which_values_were_lost():
+    s, c = _final([True] * 4)
+    c["00871"].update(identical=4, identical_empty=4,
+                      lost_value=[["00871", "filter_only", "apr", "B", "50"], ["00871", "placebo", "apr", "B", "50"]])
+    body = rp.write_notes(s, c, OLD_B, None).split("00871 against 11-12.")[1].split("\n")[0]
+    assert "Of the 4 identical cells, 4 hold no value in either filing; every cell that holds a value changed." in body
+    assert "2 cells held a value on 11-12 and hold none now (filter_only, placebo, at 50% of B)" in body
+    c["00871"].update(identical=6)
+    body = rp.write_notes(s, c, OLD_B, None).split("00871 against 11-12.")[1].split("\n")[0]
+    assert "Of the 6 identical cells, 4 hold no value in either filing." in body and "every cell that holds a value" not in body
+
+
+def test_final_notes_item_7_follows_the_budget():
+    s, c = _final([True] * 4)
+    assert "it decides no cell" in rp.write_notes(s, c, OLD_B, None).split("Item 7")[1].split("\n")[0]
+    s, c = _final([False] * 4)
+    assert "holds for the crashed first attempt of seed 44" in rp.write_notes(s, c, OLD_B, None).split("Item 7")[1].split("\n")[0]
+
+
 def test_final_notes_gpu_item_cites_the_note_to_amendment_2():
     s, c = _final([True] * 4)
     text = rp.write_notes(s, c, OLD_B, None)
@@ -988,7 +1018,7 @@ def test_notes_without_november_runs_are_byte_identical_to_before():
     assert _hash(rp.write_notes(_summary(False), _cmp(False), dict(old), None)) == \
         "2361077538a0d44231a34ebe3412e1e26d20ff8723f72ec75a692b9155eff45a"
     s, c = _final([True] * 4)
-    assert _hash(rp.write_notes(s, c, dict(old), None)) == "4f5f26500ebeb90c420cd8cd5b9fb6f9e0f995f23082d2c2bd085028f2830115"
+    assert _hash(rp.write_notes(s, c, dict(old), None)) == "f2134e29e2bb28086b19b1eccb3adcbc25ae942aba4415f68292a5367066b55e"
     s, c = _final([False] * 4)
     assert _hash(rp.write_notes(s, c, dict(old), None)) == "348e1630b26a5d9aa281a01ad7ad5d06d6a27d65bcfde0e1f95f7a8d7bfebfb5"
 

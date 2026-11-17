@@ -20,3 +20,5 @@
 {"t": "2026-11-17T17:03:47+05:30", "step": "ged_file", "reused": 14, "computed": 4, "recheck": "[]"}
 {"t": "2026-11-17T17:04:25+05:30", "step": "score", "mode": "final", "cells_diff_00853": 0, "cells_diff_00871": 141, "cells_same_00853": 162, "cells_same_00871": 102}
 {"t": "2026-11-17T17:04:25+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
+{"t": "2026-11-17T17:24:59+05:30", "step": "folder_map_hashes_added_after_review", "json_sha256": "862b0f60ffc4c82e8854824c7e5778edfa72546fc3cb2dc6024c8fd29c907805", "md_sha256": "07442a37c1bbedef3e69ba52cd267021619b7a0f178c48b0a3e11f3aa7df8ea7", "note": "the folder_map step of 17:01:05 logged no hash; these are the files as committed in bd5c403"}
+{"t": "2026-11-17T17:24:59+05:30", "step": "notes_rewritten", "why": "review of 11-17: wording of items 7, 8 and carried-over item 7; no score was recomputed and the host was not read", "notes_sha256": "8a7c9d49b99abd7cc5c35349408e622e720305714b9cd31cfbaf2f886b898174"}

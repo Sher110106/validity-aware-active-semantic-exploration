@@ -11,7 +11,7 @@
 5. **Folders.** The queue renames an older attempt to `*_FAILED_ATTEMPT_HHMM` when the next one launches, and HHMM is that launch's time. The map is in `folder_map_*.json`. The laptop copy for this run is `runs_1113/` beside the 11-12 `runs/`, which stays as it was: in the old copy the folder `apr_00853_b` holds the old frozen tour, which on the host now sits in `apr_00853_b_FAILED_ATTEMPT_1707`. The folder `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom` holds an attempt from before the queue log (11-06) that made no stage graph: its roslaunch.log shows 2 out-of-memory line(s) and 1 line(s) saying nvblox_node died. The queue log has no launch line for it, so it is in no row. Seed 42 of 00853 is scored from its later attempt.
 6. **GED.** 14 runs reuse their 11-12 GED, because their stage list (stage, path length, time) is equal. 4 runs were computed on the host. Recheck of reused values on the host: not asked for. Reuse goes by content, not by folder name, because the queue gives the plain name to the next attempt.
 7. **00853 against 11-12.** 162 cells compared; 162 identical, 0 different. B did not move and the inputs match 11-12's, so these numbers equal 11-12's.
-8. **00871 against 11-12.** 243 cells compared; 102 identical, 141 different. B moved, from 809.0840 s to 1300.2523 s, so the cells differ. Every 00871 number in `results_paper_compare_1112/` is superseded by this folder.
+8. **00871 against 11-12.** 243 cells compared; 102 identical, 141 different. B moved, from 809.0840 s to 1300.2523 s, so the cells differ. Of the 102 identical cells, 102 hold no value in either filing; every cell that holds a value changed. 42 cells held a value on 11-12 and hold none now (crashed_frontier_1st, crashed_frontier_rerun, filter_only, frontier_60m, frontier_end_ref, official, oracle_visible, placebo, at 50% and 100% of B): B grew, and those runs end before the new marks. Every 00871 number in `results_paper_compare_1112/` is superseded by this folder.
 
 ## Budgets
 
@@ -46,7 +46,7 @@ Object nodes count every object node, doors included, as the frozen test counts 
 - Item 4, nvblox died partway through some tours: the tour table above gives it per tour (died in apr_00853_a, apr_00871_a, apr_00871_b_FAILED_ATTEMPT_1020). APR-a is still used because the tours move on navmesh paths and Hydra kept growing the graph.
 - Item 5, end times leave out the final leg: holds, and B uses the same rule for every run.
 - Item 6, the 853 100% cell covers 3 of 5 runs: holds while B is 632.1751 s; read the n in each cell.
-- Item 7, stages without a graph take the graph of the stage before: holds for the crashed first attempt of seed 44 (its folder is unchanged since 11-12).
+- Item 7, stages without a graph take the graph of the stage before: the rule stands, but with the new B for 00871 it decides no cell. The review of 11-17 checked every run: none is read at a stage without a graph, and the crashed first attempt of seed 44 ends before the new 50% mark.
 - Item 8, GPU sharing: the Note to Amendment 2 corrects the statement (the first attempt of seed 42 launched under the 12 GB check), and so does deviation 40. The third attempts were queued under the 12 GB check (deviation 45); this pipeline does not test the GPU at launch.
 - Item 9, C1 floor area far off: holds. C1, C3, C4 and C5 depend on APR-a only and are not recomputed (`results_paper_compare_1112/c_checks.json`).
 - The frontier clock finding (11-12 NOTES, last section): holds, unchanged.

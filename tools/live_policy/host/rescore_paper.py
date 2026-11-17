@@ -997,7 +997,8 @@ def compare_cells(old: dict, new: dict, scenes, tol: float = 1e-9) -> dict:
     key = lambda c: (c["scene"], c["arm"], c["reference"], c["variant"], c["fraction"])
     o = {key(c): c for c in old["cells"] if c["scene"] in scenes}
     n = {key(c): c for c in new["cells"] if c["scene"] in scenes}
-    out = {s: {"compared": 0, "identical": 0, "different": [], "only_in_1112": [], "only_in_1113": []} for s in scenes}
+    out = {s: {"compared": 0, "identical": 0, "identical_empty": 0, "different": [], "lost_value": [],
+               "only_in_1112": [], "only_in_1113": []} for s in scenes}
 
     def same(x, y):
         if x is None or y is None:
@@ -1021,8 +1022,12 @@ def compare_cells(old: dict, new: dict, scenes, tol: float = 1e-9) -> dict:
                         diffs.append((f"{field}.{stat}", o[k][field][stat], n[k][field][stat]))
             if diffs:
                 out[scene]["different"].append({"cell": list(k), "diffs": diffs})
+                if o[k]["stage_value_x100"]["n"] and not n[k]["stage_value_x100"]["n"]:
+                    out[scene]["lost_value"].append(list(k))
             else:
                 out[scene]["identical"] += 1
+                if not any(n[k][field]["n"] for field in ("stage_value_x100", "running_max_x100", "ged")):
+                    out[scene]["identical_empty"] += 1
     return out
 
 
@@ -1166,7 +1171,8 @@ def run_pipeline(args) -> int:
          "pre_queue_attempts": pre_queue, "skips": fm["skips"], "pending": pend}, indent=1))
     (out / f"folder_map_{stamp}.md").write_text(table46 + "\n" + "".join(
         f"\nNot in the queue log: {p_['sentence']}\n" for p_ in pre_queue))
-    log("folder_map", pending=len(pend), unmapped=len(fm["unmapped"]))
+    log("folder_map", pending=len(pend), unmapped=len(fm["unmapped"]),
+        json_sha256=sha256_file(out / f"folder_map_{stamp}.json"), md_sha256=sha256_file(out / f"folder_map_{stamp}.md"))
     print("\n" + table46 + "\n")
     for p_ in pre_queue:
         print("For the deviations file: " + deviation_sentence(p_) + "\n")
@@ -1436,9 +1442,19 @@ def scene_vs_1112(sc: str, cmp_: dict, budgets: dict, rows: dict) -> str:
     third = [f for s_, f in rows.get("crashed_frontier_3rd", []) if s_ == sc]
     head = f"{d['compared']} cells compared; {d['identical']} identical, {len(d['different'])} different."
     if d["b_changed"]:
+        extra = ""
+        empty = d.get("identical_empty", 0)
+        if empty:
+            extra += (f" Of the {d['identical']} identical cells, {empty} hold no value in either filing"
+                      + ("; every cell that holds a value changed." if empty == d["identical"] else "."))
+        lost = d.get("lost_value", [])
+        if lost:
+            arms, fracs = sorted({c[1] for c in lost}), sorted({c[4] for c in lost}, key=float)
+            extra += (f" {len(lost)} cells held a value on 11-12 and hold none now ({', '.join(arms)}, at "
+                      f"{' and '.join(f + '%' for f in fracs)} of B): B grew, and those runs end before the new marks.")
         return (head + f" B moved, from {d.get('b_1112_s', float('nan')):.4f} s to {budgets[sc]['primary_s']:.4f} s, so the cells differ"
-                + (f" and {n_new} cells are new ({', '.join(new_arms)})" if n_new else "")
-                + f". Every {sc} number in `results_paper_compare_1112/` is superseded by this folder.")
+                + (f" and {n_new} cells are new ({', '.join(new_arms)})" if n_new else "") + "." + extra
+                + f" Every {sc} number in `results_paper_compare_1112/` is superseded by this folder.")
     if not d["different"] and not n_new and not d.get("only_in_1112"):
         return head + " B did not move and the inputs match 11-12's, so these numbers equal 11-12's."
     txt = head + " B did not move."
@@ -1578,8 +1594,13 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
         f"holds while B is {b['00853']['primary_s']:.4f} s; read the n in each cell." if not cmp_["00853"]["b_changed"] else
         "B moved for 853, so read the n in each cell again."))
     cc = s.get("copy_check", {}).get("frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358", {}).get("equals_old_copy_folder")
-    L.append("- Item 7, stages without a graph take the graph of the stage before: holds for the crashed first attempt of seed 44 "
-             + ("(its folder is unchanged since 11-12)." if cc else "(check the copy check in `rescore_summary.json`)."))
+    if cmp_["00871"]["b_changed"]:
+        L.append("- Item 7, stages without a graph take the graph of the stage before: the rule stands, but with the new B for 00871 it "
+                 "decides no cell. The review of 11-17 checked every run: none is read at a stage without a graph, and the crashed "
+                 "first attempt of seed 44 ends before the new 50% mark.")
+    else:
+        L.append("- Item 7, stages without a graph take the graph of the stage before: holds for the crashed first attempt of seed 44 "
+                 + ("(its folder is unchanged since 11-12)." if cc else "(check the copy check in `rescore_summary.json`)."))
     L.append("- Item 8, GPU sharing: the Note to Amendment 2 corrects the statement (the first attempt of seed 42 launched under the 12 GB check), "
              "and so does deviation 40. The third attempts were queued under the 12 GB check (deviation 45); this pipeline does not test the GPU at launch.")
     L.append("- Item 9, C1 floor area far off: holds. C1, C3, C4 and C5 depend on APR-a only and are not recomputed (`results_paper_compare_1112/c_checks.json`).")

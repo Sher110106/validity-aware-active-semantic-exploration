@@ -1,0 +1,10 @@
+Running as unit: dsg-compress-1117.scope; invocation ID: 00d5ab4b19674ed9b76d547275d86067
+start 2026-11-17 17:04:48 IST, mode --go, disk free 20 GB
+raw graph files to compress: 1478, 31.78 GB
+  /workspace/runs/frontier_seeds: 411 files, 9.77 GB
+  /workspace/runs/live_campaign: 1067 files, 22.01 GB
+compressed and checked: 1478 files
+not compressed: 0 files (list: /workspace/scratch/dsg_compress_20261117T170448.failed)
+hash list: /workspace/scratch/dsg_compress_20261117T170448.sha256, sha256 e5a8c656e4c87e7962b33e0173b7a740aeb3014376ebe6333853186e846d14e9
+raw graph files left: 0
+end 2026-11-17 17:05:59 IST, disk free 45 GB
