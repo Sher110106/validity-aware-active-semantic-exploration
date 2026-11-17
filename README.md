@@ -11,18 +11,19 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
    - E1, LLM guesses minus random guesses: +0.013 F1 AUC to 60 m, 95% interval -0.012 to +0.040, p 0.22. This is a pilot; effects up to +0.040 are not ruled out.
    - Our filter made no detectable difference.
    - E3, exact objects minus random guesses: +0.034 on scene 871, p 0.10. That p is the smallest a 3 v 3 test can give, so it cannot decide either way.
-3. **November paper-scale scores** (author's F1 rules, F1 x 100, reference rebuilt by our tours; final rescore of 17 Nov in `tools/live_policy/results_paper_compare_1113/paper_compare.md`, scenes 00853 and 00871). The paper columns are Fig. 4 of the paper, one run each; ours carry n (in brackets in the tables). The paper's 14-16 point ASP lead over frontier on 853 does not appear: our `official` arm leads our frontier by 4.1 at 10% and trails it by 0.8 at 50%.
+3. **November paper-scale scores** (author's F1 rules, F1 x 100, reference rebuilt by our tours; final rescore of 18 Nov in `tools/live_policy/results_paper_compare_1113/paper_compare.md`, scenes 00853 and 00871). The paper columns are Fig. 4 of the paper, one run each; ours carry n (in brackets in the tables). On 853, November's ASP runs (three runs to 105 m) sit above our frontier, as in the paper, by less than in the paper: at the full budget ASP reads 61.6 (n=2) and our frontier 55.6 (n=3) against the paper's 66.7 and 58.8, and the gaps at 10%, 50% and 100% are 4.8, 11.6 and 6.0 points against the paper's 15.8, 14.3 and 7.9. October's shorter ASP runs (to 60 m) led by 4.1 at 10% and trailed by 0.8 at 50%; the two ASP batches differ by 12.4 points at 50%, as much as November's gap there, and October's random-guess runs (no LLM) read 43.9 at 50%, between them. At 100% the gap depends on the reference: 6.0 here (`apr`), 1.5 under `hm3d` and -0.2 under `frontier_made`. This is one home with n of 3 (2 at 100%); it does not test the paper's claim. By the rule's letter (deviation 64) seed 43, a run that went through a short dip in host memory, keeps its 10% and 50% values and loses its 100% one, which then reads 62.9 (n=1 of 3); with seed 43 left out altogether the row reads 19.1 / 53.6 / 62.9 (n=2, 2, 1), a further sensitivity. The two ASP batches are never pooled.
 
    | Row | Arm | 10% | 50% | 100% |
    |---|---|---|---|---|
    | Frontier | ours (`frontier_end`) | 12.4 (n=5) | 39.5 (n=5) | 55.6 (n=3 of 5) |
    | Frontier | paper | 18.6 | 46.5 | 58.8 |
-   | ASP | ours (`official`) | 16.5 (n=2) | 38.7 (n=2) | no value |
+   | ASP, October (60 m) | ours (`official`) | 16.5 (n=2) | 38.7 (n=2) | no value |
+   | ASP, November (105 m) | ours (`official_nov`) | 17.2 (n=3) | 51.1 (n=3) | 61.6 (n=2 of 3) |
    | ASP | paper | 34.4 | 60.8 | 66.7 |
 
-   Our `filter_only` ASP arm scores 14.8 (n=3) / 48.3 (n=3) / no value. "No value" means no run reached the stage.
+   Our `filter_only` ASP arm scores 14.8 (n=3) / 48.3 (n=3) / no value. "No value" means no run reached the stage. One November run ended at 604 s, short of the 632 s budget, so it has no 100% value.
 
-   On 871 (budget 1,300 s: the median end of the 4 frontier runs that logged "Exploration complete"; the fifth stopped at the 250 m path cap and is left out) our ASP runs stop at 60 m, so they have a value at 10% only, and no ASP run of ours reaches 50% of the budget. Where the paper and we both have a cell, ours are within 1.3 to 3.5 points of the paper's (above it at B; two of the four gaps turn negative at 0.8 B); on 853 ours are 3.2 to 22.1 below. The paper's value lies inside our range in 3 of 4 cells. At 10% our `official` arm leads our frontier by 2.0 points (33.9 v 31.9; n=3 v n=5) and the paper's ASP leads its frontier by 1.3 (30.5 v 29.2); the ranges overlap. At 50% and 100% ASP and frontier cannot be compared. Our LLM is DeepSeek, the paper's Gemini 2.5 Pro, and our reference is a scripted stand-in for the author's hand-driven tour.
+   On 871 (budget 1,300 s: the median end of the 4 frontier runs that logged "Exploration complete"; the fifth stopped at the 250 m path cap and is left out) our ASP runs stop at 60 m, so they have a value at 10% only, and no ASP run of ours reaches 50% of the budget. Where the paper and we both have a cell, ours are within 1.3 to 3.5 points of the paper's (above it at B; two of the four gaps turn negative at 0.8 B); on 853 ours are 3.2 to 22.1 below. The paper's value lies inside our range in 3 of 4 cells. At 10% our `official` arm is 2.0 points above our frontier (33.9 v 31.9; n=3 v n=5) and the paper's ASP is 1.3 above its frontier (30.5 v 29.2); the ranges overlap. At 50% and 100% ASP and frontier cannot be compared. Our LLM is DeepSeek, the paper's Gemini 2.5 Pro, and our reference is a scripted stand-in for the author's hand-driven tour.
 
    | Row | Arm | 10% | 50% | 100% |
    |---|---|---|---|---|
@@ -44,8 +45,8 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
 
 - Plan, checklist and progress log: [docs/ENDSEM_FINAL_PLAN_2026-11-13.md](docs/ENDSEM_FINAL_PLAN_2026-11-13.md).
 - The end-sem talk: [docs/endsem_2026-11/](docs/endsem_2026-11/) (deck, script and number sources).
-- Done: the 871 reruns and the final rescore for finding 3 (17 Nov; `tools/live_policy/results_paper_compare_1113/NOTES.md`, state final).
-- Open: three ASP runs on 853 to the paper's full budget. They are running.
+- Done: part 2 is complete. The 871 reruns (17 Nov) and the three November ASP runs on 853 (to 105 m) are in the final rescore for finding 3 (`tools/live_policy/results_paper_compare_1113/NOTES.md`, state final, written 18 Nov).
+- Open: nothing in part 2.
 - Earlier status: [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md). The plan the final one grew from: [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md).
 
 ## Doc map

@@ -1,6 +1,6 @@
 # Speaker script: end-sem (24 slides and 4 backup, about 15 minutes)
 
-About 1,960 words for the 24 slides; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
+About 2,000 words for the 24 slides; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
 
 ---
 
@@ -8,7 +8,7 @@ About 1,960 words for the 24 slides; the times in the slide headings add to 900 
 
 ASP asks a language model to guess the rooms and objects a robot has not seen. Its author says the guesses are often in the wrong place but name the right things, and that this is enough. Is that so?
 
-Part 1 is the live test. Part 2 puts our scores on the paper's scale. Part 3 tests the author's defense with Claude. Parts 1 and 2 are final, except one 853 row.
+Part 1 is the live test. Part 2 puts our scores on the paper's scale. Part 3 tests the author's defense with Claude. Parts 1 and 2 are final.
 
 ---
 
@@ -62,21 +62,19 @@ Our filter, live: minus 0.003, no detectable difference. It removed 30% of new g
 
 ---
 
-## Slide 7: Same rules as the paper (about 35 s)
+## Slide 7: Same rules as the paper (about 30 s)
 
-Part 2. We score with the author's own F1 and GED code, on the paper's time axis, against a scripted stand-in for the author's hand-driven tour. Our model is DeepSeek; the paper's is Gemini 2.5 Pro.
+Part 2. We score with the author's F1 and GED code, on the paper's time axis, against a scripted stand-in for its hand-driven tour. Our model is DeepSeek; the paper's is Gemini 2.5 Pro.
 
-The paper gives no budget value. We use the median end of our frontier runs that ended on their own: 632 seconds on 853, from all five; 1300 on 871, from four of five. The fifth hit the 250 metre path cap.
+The paper gives no budget value. We use the median end of our frontier runs that ended on their own: 632 seconds on 853, from all five; 1300 on 871, from four. The fifth hit the 250 metre path cap.
 
 ---
 
-## Slide 8: On 853, the paper's ASP lead did not appear (about 40 s)
+## Slide 8: On 853, November's runs put ASP above frontier, as in the paper (about 40 s)
 
-Object F1 times 100; each cell shows the mean, the range and the runs.
+At the full budget ASP reads 61.6 with two runs and our frontier 55.6 with three; the paper has 66.7 and 58.8. In November's runs the gaps are 4.8, 11.6 and 6.0 points, against the paper's 15.8, 14.3 and 7.9. October's runs led by 4.1 at 10% and trailed by 0.8 at 50%.
 
-The paper's ASP leads its frontier by 15.8 points at 10% and 14.3 at 50%. Ours: ASP 16.5 and 38.7, from two runs; frontier 12.4 and 39.5. Our ASP lead is 4.1 points at 10% and minus 0.8 at 50%.
-
-The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference. One row is still to come: ASP to the full budget.
+The two ASP batches differ by 12.4 points at 50%. At 100% the gap is 1.5 and minus 0.2 under the other two references. By the rule's letter seed 43 loses its 100% value; that cell reads 62.9, one run. One home, two or three runs: not a test of the paper's claim.
 
 ---
 
@@ -96,9 +94,9 @@ Check C1: 13 and 14 rooms; the paper has 6 and 9. The paper's floor area, 208 an
 
 ---
 
-## Slide 11: What limits the runs (about 30 s)
+## Slide 11: What limits the runs (about 40 s)
 
-Two batches of one frontier explorer differ: on 853 at half the budget, 45.6 in October and 39.5 in November. The ranges overlap. Our ASP runs stop at 60 metres and ran in October; frontier ran in November. In the host's copy of the code, frontier's clock counts its waits; ASP's does not, so the one 871 comparison, at 130 seconds, is on clocks that differ. We have not checked that against the released code.
+Two batches of ASP: October's stop at 60 metres, November's go to 105, and two of three reach the full budget. At half the budget they score 38.7 and 51.1, and October's random-guess runs 43.9, between the two: as large as the gap between ASP and frontier. Our frontier batches differ too, 45.6 and 39.5; the ranges overlap. On 871 no ASP run reaches half the budget, and the one comparison, at 130 seconds, is on clocks that differ: in the host's copy of the code, frontier's clock counts its waits; ASP's does not. We have not checked that against the released code.
 
 ---
 
@@ -192,9 +190,9 @@ The paper used Gemini 2.5 Pro. We used Claude with the author's prompt and loop.
 
 ---
 
-## Slide 22: How the test was made (about 35 s)
+## Slide 22: How the test was made (about 30 s)
 
-We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did. And part 2 has one open row: ASP to the full budget on 853.
+We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did. And part 2 has no open row. Its 853 ASP batches differ by 12.4 points at 50%.
 
 ---
 

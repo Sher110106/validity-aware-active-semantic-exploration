@@ -6,8 +6,10 @@ notes, labels and chart text are 24 px (12 pt) or more. The builder warns if its
 text box runs past the slide.
 
 Every chart and table value comes from a result file (numbers.csv, paper_compare.json, budgets_*.json,
-c2_*.json, c_checks.json, frontier_holm.json, figures/stage_numbers.json) or, for part 3, from slots.json. A null in slots.json
-shows TBD and a grey "result pending" mark. SOURCES.md says which file and key stand behind each number.
+c2_*.json, c_checks.json, frontier_holm.json, figures/stage_numbers.json) or, for part 3, from slots.json.
+SOURCES.md says which file and key stand behind each number. A claim in a sentence (a lead, "smaller than the
+paper's", a sign) is guarded: if the cells no longer bear it, the build stops with BUILD STOPPED and a reason. The
+script and README hold typed figures too; check_text stops the build if one is missing.
 
 Usage (from the project root):
     .venv_offline/bin/python docs/endsem_2026-11/figures/make_stage_picture.py   # slide 13, once
@@ -71,12 +73,12 @@ def fail(msg):
     raise SystemExit("BUILD STOPPED: " + msg)
 
 
-def paper_cells(slots, variant="B"):
-    """The apr-reference cells for one budget variant: B (the slides) or 0.8B / 1.2B (the registered sensitivity)."""
-    d = json.load(open(os.path.join(PROJECT, slots["paper_compare_json"])))
+def paper_cells(slots, variant="B", reference="apr", path=None):
+    """The cells for one reference and budget variant: B (the slides) or 0.8B / 1.2B (the registered sensitivity)."""
+    d = json.load(open(path or os.path.join(PROJECT, slots["paper_compare_json"])))
     cells = {}
     for c in d["cells"]:
-        if c["reference"] == "apr" and c["variant"] == variant:
+        if c["reference"] == reference and c["variant"] == variant:
             cells[(c["scene"], c["arm"], c["fraction"])] = c
     return cells, d["meta"]["budgets"]
 
@@ -111,19 +113,6 @@ def budget_runs():
         out[sc] = {"b": b["primary_s"], "n": b["n_primary"], "of": len(b["end_times_s"]), "lo": min(ends),
                    "hi": max(ends), "capped": len(b["capped_runs"])}
     return out
-
-
-def leaves(d):
-    if isinstance(d, dict):
-        for k, v in d.items():
-            if not k.startswith("_"):
-                yield from leaves(v)
-    else:
-        yield d
-
-
-def is_pending(d):
-    return any(v is None for v in leaves(d))
 
 
 def rnd(v, nd):
@@ -245,7 +234,7 @@ def cover(prs):
                          "place but name the right things, and that this is enough. We test that in three parts.",
       B, BODY, 1.45)
     cols = [("Part 1 · Live test", "Do the guesses improve a live map? Done."),
-            ("Part 2 · Paper's scale", "Our scores beside the paper's, in both homes. One 853 row is still to come."),
+            ("Part 2 · Paper's scale", "On 853, ASP is above frontier in November's runs, by less than in the paper."),
             ("Part 3 · The author's defense", "Is the meaning right? Is it enough? Is it the model?")]
     for i, (name, body) in enumerate(cols):
         x = 160 + i * 552
@@ -540,16 +529,13 @@ def stat_cell(C, scene, arm, frac):
 
 
 def table(s, x, y, lw, cw, rows, rowh):
-    """rows: (label, cells, kind) with cells [(main, sub, main_color, sub_color)], kind paper|ours|slot."""
+    """rows: (label, cells, kind) with cells [(main, sub, main_color, sub_color)], kind paper|ours."""
     for j, head in enumerate(("10%", "50%", "100%")):
         svg_text(s, x + lw + j * cw + cw / 2, y + 34, head, 28, MID, SANS, anchor="middle", w=cw)
     y += 46
     hline(s, x, y, x + lw + 3 * cw, y, LINE)
     for lab_, cells, kind in rows:
         rh = rowh[kind]
-        if kind == "slot":
-            r = rect(s, x, y + 3, lw + 3 * cw, rh - 6, WASH, LINE, 2)
-            r.line.dash_style = MSO_LINE.DASH
         text(s, x + 8, y + (rh - 40) / 2, lw - 10, 40, [run(lab_, 28, INK if kind == "paper" else BODY)], line=1.2)
         for j, (main, sub, mc, sc) in enumerate(cells):
             cx = x + lw + j * cw
@@ -558,50 +544,54 @@ def table(s, x, y, lw, cw, rows, rowh):
             else:
                 text(s, cx, y + 8, cw, 40, [run(main, 32, mc, MONO)], PP_ALIGN.CENTER, 1.2)
                 if sub:
-                    text(s, cx, y + 50, cw, 30, [run(sub, NT, sc)], PP_ALIGN.CENTER, 1.2)
+                    text(s, cx, y + min(50, rh - 34), cw, 30, [run(sub, NT, sc)], PP_ALIGN.CENTER, 1.2)
         y += rh
         hline(s, x, y, x + lw + 3 * cw, y, RULE)
     return y
 
 
-def table_rows(C, scene, arms, full=None):
+def table_rows(C, scene, arms, names=None):
     def paper(arm):
         for f in ("10", "50", "100"):
             if C[(scene, arm, f)]["paper_f1_x100"] is None:
                 fail(f"the paper's value for {scene} {arm} {f}% is null")
         return [(num(C[(scene, arm, f)]['paper_f1_x100']), None, INK, MID) for f in ("10", "50", "100")]
     rows = [("Paper · ASP", paper("official"), "paper"), ("Paper · frontier", paper("frontier_end"), "paper")]
-    names = {"official": "Ours · ASP", "filter_only": "Ours · ASP + filter", "placebo": "Ours · random guesses",
-             "frontier_end": "Ours · frontier"}
+    all_names = {"official": "Ours · ASP", "filter_only": "Ours · ASP + filter", "placebo": "Ours · random guesses",
+                 "frontier_end": "Ours · frontier", **(names or {})}
     for arm in arms:
         cells = []
         for f in ("10", "50", "100"):
             main, sub = stat_cell(C, scene, arm, f)
             cells.append((main or "none", sub, INK if main else FAINT, MID))
-        rows.append((names[arm], cells, "ours"))
-    if full is not None:
-        cells = []
-        for f in ("10", "50", "100"):
-            d = full[f]
-            if d["mean"] is None:
-                cells.append(("TBD", "may be run", FAINT, MID))
-            else:
-                cells.append((f"{num(d['mean'])} [{num(d['min'])}{DASH}{num(d['max'])}]",
-                              f"n={full['runs']}" if full["runs"] else None, INK, MID))
-        rows.append(("Ours · ASP, full budget", cells, "slot"))
+        rows.append((all_names[arm], cells, "ours"))
     return rows
 
 
-def table853(prs, C, budgets, slots):
-    full = slots["asp853_full_budget"]
+def table853(prs, C, budgets, slots, f853):
+    if slots["asp853_full_budget"] != FROM_PC:
+        fail("slots.json asp853_full_budget must be the flag " + repr(FROM_PC) + ": slide 8 reads its November "
+             "row from paper_compare.json, and no number is typed in slots.json")
     s = frame(prs, 8, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 853 · budget "
-                       f"{budgets['00853']:.0f} s", "On 853, the paper's ASP lead did not appear",
-              pending="ONE ROW PENDING" if is_pending(full) else None)
-    y = table(s, 120, 250, 500, 380, table_rows(C, "00853", ("official", "filter_only", "placebo", "frontier_end"),
-                                                 full), {"paper": 62, "ours": 90, "slot": 90})
-    N(s, 120, y + 14, 1680,
-      "Paper: Fig. 4 (left), one run each. Ours: runs that reach that time, shown if at least half do. ASP stops at "
-      "60 m. The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference.", limit=1000)
+                       f"{budgets['00853']:.0f} s", "On 853, November's runs put ASP above frontier, as in the paper")
+    names = {"official": f"Ours · ASP, October ({f853['oct_m']} m)",
+             "official_nov": f"Ours · ASP, November ({f853['nov_m']} m)"}
+    y = table(s, 120, 250, 500, 380,
+              table_rows(C, "00853", ("official", "official_nov", "filter_only", "placebo", "frontier_end"), names),
+              {"paper": 50, "ours": 76})
+    L, PL = f853["leads"], f853["paper_leads"]
+    n100 = f853["ns"]["100"][0]
+    y = P(s, 120, y + 14, 1680,
+          f"At the full budget ASP reads {f853['nov100']} (n={n100}) and our frontier {f853['fr100']} "
+          f"(n={f853['n_fr100']}); the paper has {f853['paper_asp100']} and {f853['paper_fr100']}. The gaps at 10%, "
+          f"50% and 100% are {L['10']}, {L['50']} and {L['100']} points, against the paper's {PL['10']}, {PL['50']} "
+          f"and {PL['100']}.", B, BODY, 1.4, limit=960, tag="slide 8 body")
+    N(s, 120, y + 8, 1680,
+      f"Paper: Fig. 4 (left), one run each. Ours carry n. October's runs led by {f853['oct10']} at 10% and trailed by "
+      f"{abs(f853['oct50'])} at 50%. The two ASP batches differ by {f853['batch50']} points at 50%. At 100% the gap "
+      f"is {f853['hm3d100']} and {sg1(f853['fm100'])} under the other two references. By the rule's letter seed "
+      f"{f853['seed']} loses its 100% value (deviation {DEV_SEED}): that cell then reads {f853['stopped100']}, "
+      f"n={f853['stopped_n']} of {f853['stopped_runs']}.", limit=1000)
 
 
 WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
@@ -621,9 +611,9 @@ def gaps(C, scene, C08=None):
     taken as printed, so the slide's own numbers subtract. Also: the same gap at 0.8 B (the registered sensitivity
     check, from C08), and whether the paper's value lies inside our printed min-max."""
     out = []
-    for arm in ("official", "frontier_end"):
+    for arm in ("official", "official_nov", "frontier_end"):      # official_nov: 853 only
         for f in ("10", "50", "100"):
-            if stat_cell(C, scene, arm, f)[0] is None:
+            if (scene, arm, f) not in C or stat_cell(C, scene, arm, f)[0] is None:
                 continue
             tag = f"{scene} {arm} {f}%"
             c = C[(scene, arm, f)]
@@ -668,13 +658,143 @@ def facts871(C, C08):
             "inside": sum(1 for x in g if x["inside"]), "neg": neg, "arm_lo": min(means), "arm_hi": max(means)}
 
 
-def facts853(C):
-    """The 853 gaps, for the script and README. They must all be below the paper's, as those texts say."""
-    g = gaps(C, "00853")
+FROM_PC = "from paper_compare.json (arm official_nov)"   # slots.json asp853_full_budget: the row has no typed numbers
+DEV_SEED = 64                                           # DEVIATIONS_NOVEMBER.md item 64 (the seed 43 memory dip)
+ASP_OCT_M = 60                                          # October ASP runs stop at this path length (WRITEUP section 2)
+
+
+def lead(a, b):
+    """A lead in points, from the two means as printed (one decimal, half up), as for every other gap in the deck:
+    the numbers on a slide, and in paper_compare.md, subtract to it. (The unrounded difference can differ by 0.1.)"""
+    return rnd(a, 1) - rnd(b, 1)
+
+
+def sg1(d):
+    """A signed difference for slide text, with the deck's minus sign."""
+    return f"{d}".replace("-", MINUS)
+
+
+def facts853(C, slots):
+    """Every number in slide 8's title, body and note, and the figures the script and README repeat. Stops the build
+    if the wording (a lead; smaller than the paper's; October's two signs; the batch gap) would claim more than
+    the cells."""
+    sc = "00853"
+    f3 = ("10", "50", "100")
+
+    def mean(CC, arm, f, what):
+        v = CC[(sc, arm, f)]["stage_value_x100"]["mean"]
+        if v is None:
+            fail(f"slide 8 needs the mean of {what} {arm} {f}%, which is null")
+        return v
+    for f in f3:
+        for arm in ("official_nov", "frontier_end"):
+            if stat_cell(C, sc, arm, f)[0] is None:
+                fail(f"slide 8 needs a shown value for {arm} {f}% on 853, and the table does not show one")
+    nov = {f: mean(C, "official_nov", f, "ours") for f in f3}
+    fr = {f: mean(C, "frontier_end", f, "ours") for f in f3}
+    leads = {f: lead(nov[f], fr[f]) for f in f3}
+    if min(leads.values()) <= 0:
+        fail("slide 8 says November's ASP leads our frontier, but a lead is not positive: " + str(leads))
+    pv = {}
+    for f in f3:
+        pa, pf = C[(sc, "official_nov", f)]["paper_f1_x100"], C[(sc, "frontier_end", f)]["paper_f1_x100"]
+        if pa is None or pf is None:
+            fail(f"slide 8 needs the paper's ASP and frontier values at {f}%, and one is null")
+        pv[f] = rnd(pa, 1) - rnd(pf, 1)
+    if not all(leads[f] < pv[f] for f in f3):
+        fail("slide 8 says November's leads are smaller than the paper's, but not in every cell: ours "
+             + str(leads) + ", the paper's " + str(pv))
+    short = {f: pv[f] - leads[f] for f in f3}
+    if not (short["10"] > short["50"] and short["10"] > short["100"]):
+        fail("the script and README say the shortfall is largest at 10%, but it is not: " + str(short))
+    for f in ("10", "50"):
+        if stat_cell(C, sc, "official", f)[0] is None:
+            fail(f"slide 8 needs a shown October ASP value at {f}%")
+    oct_ = {f: mean(C, "official", f, "ours") for f in ("10", "50")}
+    oct10, oct50 = lead(oct_["10"], fr["10"]), lead(oct_["50"], fr["50"])
+    if not (oct10 > 0 > oct50):
+        fail(f"slide 8 says October led at 10% and trailed at 50%, but the leads are {oct10} and {oct50}")
+    if C[(sc, "official", "100")]["stage_value_x100"]["n"]:
+        fail("slides 8 and 11 say October's ASP runs have no value at 100%, but one has")
+    batch50 = lead(nov["50"], oct_["50"])
+    if batch50 < leads["50"]:
+        fail(f"slides 8 and 11 say the two ASP batches differ by as much as the lead at 50%: {batch50} against "
+             f"{leads['50']}")
+    ns = {f: (C[(sc, "official_nov", f)]["stage_value_x100"]["n"], C[(sc, "official_nov", f)]["n_runs"]) for f in f3}
+    others = {}
+    for ref in ("hm3d", "frontier_made"):
+        Cr = paper_cells(slots, "B", ref)[0]
+        others[ref] = lead(mean(Cr, "official_nov", "100", ref), mean(Cr, "frontier_end", "100", ref))
+        if others[ref] >= leads["100"]:
+            fail(f"slides 8 and 11 say the 100% lead is smaller under {ref} than under apr, but it is "
+                 f"{others[ref]} against {leads['100']}")
+    summ = json.load(open(os.path.join(R1113, "rescore_summary.json")))["nov"]
+    if "alternatives" not in summ:
+        fail("rescore_summary.json nov has no 'alternatives' key (the file's shape changed again): slide 8 reads "
+             "seed 43's readings from nov.alternatives.rows")
+    rows = {r["kind"]: r for r in summ["alternatives"]["rows"]}
+    if set(rows) != {"stopped", "without"}:
+        fail("rescore_summary.json nov.alternatives.rows should hold a 'stopped' and a 'without' row: "
+             + str(sorted(rows)))
+    st, ww = rows["stopped"], rows["without"]
+    seed = re.search(r"_s(\d+)_", st["run"]).group(1)
+    if re.search(r"_s(\d+)_", ww["run"]).group(1) != seed:
+        fail("the 'stopped' and 'without' rows are about different runs")
+    if st["end_s"] >= summ["B_s"]:
+        fail(f"slide 8 says seed {seed} loses its 100% value, but its stop at {st['end_s']:.1f} s is not before B")
+
+    def alt_cells(row):
+        CC = paper_cells(slots, "B", "apr", os.path.join(R1113, row["folder"], "paper_compare.json"))[0]
+        out = {}
+        for f in f3:
+            sv = CC[(sc, "official_nov", f)]["stage_value_x100"]
+            if sv["mean"] is None and f != "100":
+                fail(f"the '{row['kind']}' row has no value at {f}%")
+            out[f] = (sv, CC[(sc, "official_nov", f)]["n_runs"])
+        return out
+    stopped, without = alt_cells(st), alt_cells(ww)
+    for f in ("10", "50"):      # the rule's reading keeps seed 43 at 10% and 50%: those cells must equal the as-run ones
+        a, b = stopped[f][0], C[(sc, "official_nov", f)]["stage_value_x100"]
+        if any(a[k] != b[k] for k in ("mean", "min", "max", "n")):
+            fail(f"the 'stopped' row differs from the as-run row at {f}%, but slide 8 says seed {seed} keeps its "
+                 "10% and 50% values")
+    sv100 = stopped["100"][0]
+    if sv100["mean"] is None or sv100["n"] >= ns["100"][0]:
+        fail(f"slide 8 says seed {seed} loses its 100% value, but the 'stopped' row's 100% n is {sv100['n']} "
+             f"against {ns['100'][0]} as run")
+    dev = open(os.path.join(LP, "DEVIATIONS_NOVEMBER.md"), encoding="utf-8").read()
+    item = re.search(rf"^{DEV_SEED}\. .*$", dev, flags=re.M)
+    if not item or set(re.findall(r"seed (\d+)", item.group(0))) != {seed}:
+        fail(f"slide 8 cites deviation {DEV_SEED} for seed {seed}, but that item does not name that seed alone")
+    alt = {f: (num(without[f][0]["mean"]), without[f][0]["n"]) for f in f3 if without[f][0]["mean"] is not None}
+    if len(alt) != 3:
+        fail(f"the row without seed {seed} has no value at 100%")
+    if min(pv.values()) <= 0:
+        fail("slide 8 says 'as in the paper' (ASP above frontier), but the paper's ASP is not above its frontier "
+             "in every cell: " + str(pv))
+    ends = {int(re.search(r"_(\d+)m$", r["run"]).group(1)) for r in summ["runs"]}
+    if len(ends) != 1:
+        fail("the November runs have different target path lengths: " + str(ends))
+    g = gaps(C, sc)
     if not g or max(x["gap"] for x in g) >= 0:
         fail("the script and README say ours are lower than the paper's on 853, but a gap is not negative")
     d = [abs(x["gap"]) for x in g]
-    return {"lo": min(d), "hi": max(d)}
+    for f in ("50",):           # slide 11: October's random-guess runs read between the two ASP batches at 50%
+        if (sc, "placebo", f) not in C or stat_cell(C, sc, "placebo", f)[0] is None:
+            fail("slide 11 needs a shown value for October's random-guess runs at 50% on 853")
+    plc50 = mean(C, "placebo", "50", "ours")
+    if not rnd(oct_["50"], 1) < rnd(plc50, 1) < rnd(nov["50"], 1):
+        fail("slide 11 says October's random-guess runs read between the two ASP batches at 50%, but "
+             f"{num(plc50)} is not between {num(oct_['50'])} and {num(nov['50'])}")
+    return {"lo": min(d), "hi": max(d), "leads": leads, "paper_leads": pv, "oct10": oct10, "oct50": oct50,
+            "batch50": batch50, "ns": ns, "hm3d100": others["hm3d"], "fm100": others["frontier_made"],
+            "seed": seed, "alt": alt, "nov_m": ends.pop(), "oct_m": ASP_OCT_M,
+            "oct50_mean": num(oct_["50"]), "nov50_mean": num(nov["50"]), "plc50": num(plc50),
+            "nov100": num(nov["100"]), "fr100": num(fr["100"]),
+            "n_fr100": C[(sc, "frontier_end", "100")]["stage_value_x100"]["n"],
+            "paper_asp100": num(C[(sc, "official_nov", "100")]["paper_f1_x100"]),
+            "paper_fr100": num(C[(sc, "frontier_end", "100")]["paper_f1_x100"]),
+            "stopped100": num(sv100["mean"]), "stopped_n": sv100["n"], "stopped_runs": stopped["100"][1]}
 
 
 def need(text, needles, where):
@@ -684,39 +804,87 @@ def need(text, needles, where):
              "edit the text to match them.")
 
 
-def check_text(C, f9, f853):
-    """The script (slide 9) and README finding 3 hold typed figures. Check each against the cells."""
+def spoken(d):
+    """A signed difference as the script says it."""
+    return f"minus {abs(d)}" if d < 0 else f"{d}"
+
+
+def check_text(C, f9, f853, budgets):
+    """The script (slides 1, 8, 9, 11, 22) and README finding 3 hold typed figures. Check each against the cells."""
     md = open(SCRIPT).read()
-    m = re.search(r"^## Slide 9:.*?(?=\n---)", md, flags=re.M | re.S)
-    if not m:
-        fail("ENDSEM_Script.md has no 'Slide 9' section")
+
+    def section(n):
+        m = re.search(rf"^## Slide {n}:.*?(?=\n---)", md, flags=re.M | re.S)
+        if not m:
+            fail(f"ENDSEM_Script.md has no 'Slide {n}' section")
+        return m.group(0)
     k, mm, w = f9["neg"], f9["m"], WORDS
+    L, PL = f853["leads"], f853["paper_leads"]
     ints = (str(rnd(float(f853["lo"]), 0)), str(rnd(float(f853["hi"]), 0)))
-    need(m.group(0), [f"within {f9['max_gap']} points", f"{f9['lo']} to {f9['hi']} higher",
+    alt = f853["alt"]
+    need(section(9), [f"within {f9['max_gap']} points", f"{f9['lo']} to {f9['hi']} higher",
                       f"{w[f9['inside']]} of {w[mm]} cells", f"{w[k]} gaps",
                       f"On 853 ours are {ints[0]} to {ints[1]} points lower",
                       f"{f9['arm_lo']} to {f9['arm_hi']}", "No ASP run of ours reaches 50%"], "script slide 9")
+    n100, nr = f853["ns"]["100"]
+    need(section(8), [f"ASP reads {f853['nov100']} with {w[n100]} runs and our frontier {f853['fr100']} with "
+                      f"{w[f853['n_fr100']]}", f"the paper has {f853['paper_asp100']} and {f853['paper_fr100']}",
+                      f"the gaps are {L['10']}, {L['50']} and {L['100']} points, against the paper's "
+                      f"{PL['10']}, {PL['50']} and {PL['100']}",
+                      f"led by {f853['oct10']} at 10% and trailed by {abs(f853['oct50'])} at 50%",
+                      f"differ by {f853['batch50']} points at 50%",
+                      f"{f853['hm3d100']} and {spoken(f853['fm100'])} under the other two references",
+                      f"seed {f853['seed']} loses its 100% value; that cell reads {f853['stopped100']}, "
+                      f"{w[f853['stopped_n']]} run", "not a test of the paper's claim"], "script slide 8")
+    need(section(11), [f"{f853['plc50']}, between the two"], "script slide 11")
+    banned = ("leads", "does not appear", "did not appear", "beats", "reproduce")
+    for where, txt in (("script slide 8", section(8)), ("script slide 9", section(9)),
+                       ("script slide 11", section(11)), ("script slide 22", section(22))):
+        hit = [b for b in banned if b in txt.lower()]
+        if hit:
+            fail(f"{where} uses wording the data do not carry: {hit}")
+    fr50 = {k_: num(C[("00853", k_, "50")]["stage_value_x100"]["mean"]) for k_ in ("frontier_60m", "frontier_end")}
+    need(section(11), [f"stop at {f853['oct_m']} metres", f"go to {f853['nov_m']}",
+                       f"{w[n100]} of {w[nr]} reach the full budget",
+                       f"{f853['oct50_mean']} and {f853['nov50_mean']}",
+                       f"{fr50['frontier_60m']} and {fr50['frontier_end']}",
+                       f"at {0.1 * budgets['00871']:.0f} seconds",
+                       "On 871 no ASP run reaches half"], "script slide 11")
+    need(section(22), [f"{f853['batch50']} points at 50%"], "script slide 22")
     rd = open(os.path.join(PROJECT, "README.md")).read()
     m = re.search(r"^3\. \*\*November paper-scale.*?(?=^4\. \*\*)", rd, flags=re.M | re.S)
     if not m:
         fail("README.md has no finding 3")
     cells = []
     for sc in ("00853", "00871"):
-        for arm in ("official", "filter_only", "frontier_end"):
+        for arm in ("official", "official_nov", "filter_only", "frontier_end"):
+            if (sc, arm, "10") not in C:
+                continue
             for f in ("10", "50", "100"):
                 main, sub = stat_cell(C, sc, arm, f)
                 if main:
                     cells.append(f"{main.split(' ')[0]} ({sub})")
     need(m.group(0), [f"within {f9['lo']} to {f9['hi']} points of the paper's",
                       f"{w[k]} of the {w[mm]} gaps turn negative at 0.8 B", f"{f9['inside']} of {mm} cells",
-                      f"{f853['lo']} to {f853['hi']} below"] + cells, "README finding 3")
+                      f"{f853['lo']} to {f853['hi']} below",
+                      f"ASP reads {f853['nov100']} (n={n100}) and our frontier {f853['fr100']} (n={f853['n_fr100']})",
+                      f"the paper's {f853['paper_asp100']} and {f853['paper_fr100']}",
+                      f"{L['10']}, {L['50']} and {L['100']} points against the paper's "
+                      f"{PL['10']}, {PL['50']} and {PL['100']}",
+                      f"led by {f853['oct10']} at 10% and trailed by {abs(f853['oct50'])} at 50%",
+                      f"{f853['batch50']} points at 50%", f"read {f853['plc50']} at 50%",
+                      f"{f853['hm3d100']} under", f"{f853['fm100']} under",
+                      f"seed {f853['seed']}", f"which then reads {f853['stopped100']} (n={f853['stopped_n']} of "
+                      f"{f853['stopped_runs']})", f"{alt['10'][0]} / {alt['50'][0]} / {alt['100'][0]}",
+                      "does not test the paper's claim"] + cells, "README finding 3")
+    hit = [b for b in banned if b in m.group(0).lower()]
+    if hit:
+        fail(f"README finding 3 uses wording the data do not carry: {hit}")
 
 
-def table871(prs, C, C08, budgets, slots):
+def table871(prs, C, budgets, slots, f9):
     if not slots["table871_updated"]:
         fail("slots.json table871_updated is not true: the 871 rescore is not marked final")
-    f9, f853 = facts871(C, C08), facts853(C)
-    check_text(C, f9, f853)
     k = f9["neg"]
     neg = f"{k} of the {f9['m']} gaps turn{'s' if k == 1 else ''} negative"
     s = frame(prs, 9, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 871 · budget "
@@ -785,32 +953,39 @@ def limits_reference(prs, checks, f1, frozen):
 
 # ---------------------------------------------------------------- 11. Part 2, limits of the runs
 
-def limits_runs(prs, C, budgets, slots):
+def limits_runs(prs, C, budgets, slots, f853):
     s = frame(prs, 11, "Part 2 · Limits of the runs", "What limits the runs")
-    # The ASP sentence below holds for the October ASP runs. When the full-budget ASP runs land on 853
-    # (slots.json asp853_full_budget), edit the 853 half of it.
-    if slots["asp853_full_budget"]["runs"]:
-        fail("slide 11 says no ASP run reaches 100% of the budget on 853, but slots.json holds full-budget ASP "
-             "runs: edit the 853 half of that sentence")
+    # Guards for the sentences below: October's ASP runs have no value past 60 m (853 at 100%, 871 at 50%), and the
+    # two frontier batches' ranges overlap. (facts853 guards the batch gap and the November row.)
     for sc, f in (("00853", "100"), ("00871", "50")):
         for arm in ASP_ARMS:
             n = C[(sc, arm, f)]["stage_value_x100"]["n"]
             if n:
-                fail(f"slide 11 says no ASP run reaches {f}% of the budget on {sc[-3:]}, but {arm} has n={n}")
+                fail(f"slide 11 says October's ASP runs have no value at {f}% on {sc[-3:]}, but {arm} has n={n}")
+    for f in ("10", "50"):
+        a, b = (C[("00853", arm, f)]["stage_value_x100"] for arm in ("frontier_60m", "frontier_end"))
+        if max(a["min"], b["min"]) > min(a["max"], b["max"]):
+            fail(f"slide 11 says the two frontier batches' ranges overlap at {f}%, but they do not")
+    if C[("00871", "official", "50")]["stage_value_x100"]["n"]:
+        fail("slide 11 says no ASP run reaches 50% of the 871 budget, but one does")
     first_871 = f"{0.1 * budgets['00871']:.0f}"       # 10% of the 871 budget: the one ASP-frontier cell there
 
     def rng(arm, frac):
         sv = C[("00853", arm, frac)]["stage_value_x100"]
         return f"{num(sv['mean'])} [{num(sv['min'])}{DASH}{num(sv['max'])}]"
+    n100, nruns = f853["ns"]["100"]
     L, w = 120, 1680
-    y = P(s, L, 262, w, [("Two batches of one frontier explorer. ", "b"),
-                         (f"On 853 at 50% of the budget: {rng('frontier_60m', '50')} in October (3 runs, cut at 60 m) "
-                          f"and {rng('frontier_end', '50')} in November (5 runs, to the natural end). At 10%: "
-                          f"{rng('frontier_60m', '10')} and {rng('frontier_end', '10')}. The ranges overlap.", "n")],
-          B, BODY, 1.4)
-    y = P(s, L, y + 28, w, [("ASP stops at 60 m. ", "b"),
-                            ("No ASP run reaches 100% of the budget on 853, or 50% on 871. ASP ran in October and "
-                             "frontier in November.", "n")], B, BODY, 1.4)
+    y = P(s, L, 262, w, [("Two batches of ASP. ", "b"),
+                         (f"October's runs stop at {f853['oct_m']} m; November's go to {f853['nov_m']} m, and "
+                          f"{n100} of {nruns} reach 100% of the 853 budget. At 50% on 853 they score "
+                          f"{rng('official', '50')} and {rng('official_nov', '50')}, and October's random-guess runs "
+                          f"{f853['plc50']}, between the two: the batches differ by as much as the gap between "
+                          "ASP and frontier. On 871 no ASP run reaches 50%.", "n")], B, BODY, 1.4)
+    y = P(s, L, y + 28, w, [("Two batches of one frontier explorer. ", "b"),
+                            (f"On 853 at 50% of the budget: {rng('frontier_60m', '50')} in October (3 runs, cut at "
+                             f"60 m) and {rng('frontier_end', '50')} in November (5 runs, to the natural end). At "
+                             f"10%: {rng('frontier_60m', '10')} and {rng('frontier_end', '10')}. The ranges "
+                             "overlap.", "n")], B, BODY, 1.4)
     y = P(s, L, y + 28, w, [("The clocks differ. ", "b"),
                             ("In the host's copy of the code, frontier's clock also counts its waits for a path; "
                              f"ASP's does not. On 871 the only ASP–frontier comparison, at {first_871} s, is on "
@@ -1093,7 +1268,7 @@ def limits(prs, slots):
 
 # ---------------------------------------------------------------- 22. Limits of method
 
-def limits_method(prs, slots):
+def limits_method(prs, slots, f853):
     m = slots["blind"]["members"]
     s = frame(prs, 22, "Limits", "How the test was made")
     items = ["We wrote the scorer after we saw DeepSeek's numbers.",
@@ -1101,7 +1276,8 @@ def limits_method(prs, slots):
              "M2 is provisional: its yardstick failed part of an October check.",
              f"One Haiku member stopped at the token limit and its text did not parse "
              f"({m['haiku']['parsed']} of {m['haiku']['members']} did).",
-             "Part 2 has one open row: ASP to the full budget on 853."]
+             f"Part 2 has no open row. On 853 the two ASP batches differ by {f853['batch50']} points at 50%, as much "
+             "as the gap between ASP and frontier."]
     y = 256
     for t in items:
         y = P(s, 120, y, 1680, t, B, BODY, 1.4, limit=1000) + 26
@@ -1285,6 +1461,8 @@ def main():
     c2, frozen = {sc: v[0] for sc, v in c2d.items()}, {sc: v[1] for sc, v in c2d.items()}
     bf = budget_runs()
     C08 = paper_cells(slots, "0.8B")[0]
+    f9, f853 = facts871(C, C08), facts853(C, slots)
+    check_text(C, f9, f853, budgets)
     prs = Presentation()
     prs.slide_width, prs.slide_height = px(1920), px(1080)
     cover(prs)
@@ -1294,10 +1472,10 @@ def main():
     land(prs, Nn)
     live_limits(prs, Nn)
     paper_rules(prs, budgets, checks, bf)
-    table853(prs, C, budgets, slots)
-    table871(prs, C, C08, budgets, slots)
+    table853(prs, C, budgets, slots, f853)
+    table871(prs, C, budgets, slots, f9)
     limits_reference(prs, checks, c2, frozen)
-    limits_runs(prs, C, budgets, slots)
+    limits_runs(prs, C, budgets, slots, f853)
     defense(prs)
     picture_levels(prs, slots)
     controls(prs, slots)
@@ -1308,7 +1486,7 @@ def main():
     placement_slide(prs, slots)
     factorial(prs, slots)
     limits(prs, slots)
-    limits_method(prs, slots)
+    limits_method(prs, slots, f853)
     answer(prs, slots)
     not_shown(prs, slots)
     room_test(prs, slots)

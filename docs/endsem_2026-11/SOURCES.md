@@ -11,8 +11,9 @@ Short names:
 - `NUM` = `tools/live_policy/results_2026-10-31/numbers.csv`
 - `WRITEUP` = `tools/live_policy/results_2026-10-31/WRITEUP.md`
 - `FH` = `tools/live_policy/results_2026-10-31/frontier_seeds/frontier_holm.json`
-- `PC` = `tools/live_policy/results_paper_compare_1113/paper_compare.json` (final rescore of 17 Nov; its 853 cells equal the 11-12 file's, its 871 cells do not: 102 of 243 are the same, because B moved; `comparison_vs_1112.json`, `N13` items 7 and 8)
-- `B13` = `tools/live_policy/results_paper_compare_1113/budgets_20261117T170055.json`; `C2F` = `tools/live_policy/results_paper_compare_1113/c2_20261117T170055.json`. The builder reads the newest file of each name pattern.
+- `PC` = `tools/live_policy/results_paper_compare_1113/paper_compare.json` (final rescore of 18 Nov; its 853 cells equal the 11-12 file's, plus 27 new cells in the arm `official_nov` (the November ASP row, `N13` item 7); its 871 cells do not: 102 of 243 are the same, because B moved; `comparison_vs_1112.json`, `N13` items 7 and 8)
+- `B13` = `tools/live_policy/results_paper_compare_1113/budgets_20261118T025414.json`; `C2F` = `tools/live_policy/results_paper_compare_1113/c2_20261118T025414.json` (both hold the same values as the 17 Nov files). The builder reads the newest file of each name pattern.
+- `RS` = `tools/live_policy/results_paper_compare_1113/rescore_summary.json` (key `nov`; the readings of one run are in `nov.alternatives`); `ALT_STOP` = `tools/live_policy/results_paper_compare_1113/alt_nov_e8_00853_s43_official_105m_stopped_after_stage_22/paper_compare.json`; `ALT_OUT` = `tools/live_policy/results_paper_compare_1113/alt_nov_without_e8_00853_s43_official_105m/paper_compare.json` (both folders are named in `RS` `nov.alternatives.rows[].folder`); `DEV` = `tools/live_policy/DEVIATIONS_NOVEMBER.md`
 - `CC` = `tools/live_policy/results_paper_compare_1112/c_checks.json`
 - `N12` = `tools/live_policy/results_paper_compare_1112/NOTES.md`; `N13` = `tools/live_policy/results_paper_compare_1113/NOTES.md`
 - `PLAN` = `docs/ENDSEM_PLAN_2026-11-03.md`; `FINAL` = `docs/ENDSEM_FINAL_PLAN_2026-11-13.md`
@@ -20,7 +21,7 @@ Short names:
 
 A number marked **TBD** has no source yet. Part 3 has not run. Its values live in `slots.json` and show as TBD until filled.
 
-Slides 1 and 20 carry no result number. Slide 1 repeats the names and the arXiv id of `docs/checkin_2026-11/build_checkin2_pptx.py`.
+Slide 20 carries no result number. Slide 1 carries none either; its Part 2 line says that on 853 ASP is above frontier in November's runs, by less than in the paper, which is slide 8's reading (guarded by `facts853`).
 
 ## Slide 2: ASP in one picture
 
@@ -110,7 +111,8 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 |---|---|---|
 | 853 · Paper ASP | 34.4 / 60.8 / 66.7 | scene 00853, arm official, `paper_f1_x100` |
 | 853 · Paper frontier | 18.6 / 46.5 / 58.8 | scene 00853, arm frontier_end, `paper_f1_x100` |
-| 853 · Ours ASP | 16.5 [13.8–19.1] n=2 / 38.7 [37.2–40.1] n=2 / none (0 of 2) | scene 00853, arm official, `stage_value_x100` |
+| 853 · Ours ASP, October (60 m) | 16.5 [13.8–19.1] n=2 / 38.7 [37.2–40.1] n=2 / none (0 of 2) | scene 00853, arm official, `stage_value_x100` |
+| 853 · Ours ASP, November (105 m) | 17.2 [13.3–21.2] n=3 / 51.1 [45.7–61.5] n=3 / 61.6 [60.3–62.9] n=2 of 3 | scene 00853, arm official_nov (`PC`), `stage_value_x100`; runs `e8_00853_s42..44_official_105m` (`N13` "November ASP row"; `RS` `nov.runs`). Seed 44 ended at 604.0 s, short of B (632.18 s), so it has no 100% value |
 | 853 · Ours ASP + filter | 14.8 [12.1–18.4] n=3 / 48.3 [40.9–52.2] n=3 / none (0 of 3) | scene 00853, arm filter_only |
 | 853 · Ours random guesses | 13.8 [10.8–16.1] n=3 / 43.9 [39.4–48.2] n=3 / none (0 of 3) | scene 00853, arm placebo |
 | 853 · Ours frontier | 12.4 [10.8–14.7] n=5 / 39.5 [33.9–42.0] n=5 / 55.6 [53.5–59.6] n=3 of 5 | scene 00853, arm frontier_end |
@@ -126,9 +128,20 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | Budget 632 s and 1300 s in the kickers | `PC` `meta.budgets` |
 | Paper lead 15.8 and 14.3 points (script) | Derived from the paper cells: 34.4 − 18.6, 60.8 − 46.5 |
 | Our lead 4.1 and −0.8 points (script) | Derived from the values as shown: 16.5 − 12.4, 38.7 − 39.5 |
-| ASP stops at 60 m | `WRITEUP` §2 |
-| "One row pending": ASP to the full budget on 853: **TBD** | `slots.json` `asp853_full_budget`; optional run, `FINAL` §6 |
-| The wording "did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference" | `FINAL` §5 |
+| Slide 8 title "November's runs put ASP above frontier, as in the paper" | Above: the November mean is above frontier's at 10%, 50% and 100% (the three gaps below are positive). As in the paper: the paper's ASP is above its frontier in the same three cells (15.8, 14.3, 7.9). Both guarded in `facts853` |
+| Body: at the full budget ASP reads 61.6 (n=2) and our frontier 55.6 (n=3); the paper has 66.7 and 58.8 | `PC` apr B, scene 00853, fraction 100: arm official_nov `stage_value_x100.mean` 61.62, `n` 2 (of `n_runs` 3); arm frontier_end 55.57, `n` 3 (of 5); `paper_f1_x100` 66.7 and 58.8 |
+| Body: the gaps at 10%, 50% and 100% are 4.8, 11.6 and 6.0 points | Derived from the cells as printed (`PC` apr B, scene 00853, `stage_value_x100.mean`; the unrounded gaps are 4.78, 11.56, 6.05): official_nov 17.2, 51.1, 61.6 minus frontier_end 12.4, 39.5, 55.6 |
+| Body: against the paper's 15.8, 14.3 and 7.9 | `paper_f1_x100`: 34.4 − 18.6, 60.8 − 46.5, 66.7 − 58.8 |
+| "By less than in the paper" (cover, title area, README) | Shortfall = the paper's gap − ours: 15.8 − 4.8 = 11.0; 14.3 − 11.6 = 2.7; 7.9 − 6.0 = 1.9. The builder stops if a gap is not smaller, or (script and README) if 10% is not the largest shortfall |
+| Note: October's runs led by 4.1 at 10% and trailed by 0.8 at 50% | `PC` apr B, scene 00853, arm official (October) against frontier_end, from the values as printed: 16.5 − 12.4, 38.7 − 39.5 (the "Our lead 4.1 and −0.8" row) |
+| Note: the two ASP batches differ by 12.4 points at 50% | 51.1 (official_nov) − 38.7 (official), `stage_value_x100.mean` at 50%. The ranges [45.7–61.5] and [37.2–40.1] do not overlap. 12.4 is at least the November lead at 50%, 11.6 (guard) |
+| Note: at 100% the gap is 1.5 and −0.2 under the other two references (6.0 under apr) | `PC` cells with `reference` hm3d and frontier_made, `variant` B, scene 00853, fraction 100, `stage_value_x100.mean`: hm3d official_nov 34.4 − frontier_end 32.9 = 1.5; frontier_made 64.3 − 64.5 = −0.2 (unrounded −0.14; the deck subtracts printed values throughout). Both are below 6.0 (guard) |
+| Note: by the rule's letter seed 43 loses its 100% value; that cell then reads 62.9, n=1 of 3 | `ALT_STOP`, reference apr, variant B, scene 00853, arm official_nov, fraction 100: `stage_value_x100.mean` 62.90, `n` 1, `n_runs` 3; `RS` `nov.alternatives.rows[kind=stopped]` (`run` e8_00853_s43_official_105m, `stage` 22, `end_s` 514.16, before B = 632.18). The rule: the Note to Amendment 3 (a run stopped by hand counts as ended before B) with A3.2 (such a run keeps the values it has); `DEV` item 64, paragraph added 11-18 03:14 |
+| The stopped row keeps seed 43 at 10% and 50% | `ALT_STOP` 10%: 17.2 [13.3–21.2] n=3; 50%: 51.1 [45.7–61.5] n=3, equal to the as-run cells in `PC` (guard: the build stops if they differ) |
+| README: with seed 43 left out altogether the row reads 19.1 / 53.6 / 62.9 (n=2, 2, 1), a further sensitivity | `ALT_OUT`, apr B, scene 00853, official_nov: 19.1 [17.1–21.2] n=2; 53.6 [45.7–61.5] n=2; 62.9 [62.9–62.9] n=1 of 2; `RS` `nov.alternatives.rows[kind=without]`; `DEV` item 64. Not quoted on a slide: leaving the run out raises the 10% and 50% means |
+| 105 m; the three runs; never pooled with October's | `PREREG` Amendment 3 (A3.1 target path 105 m, A3.3 the row "ASP + DeepSeek, November", A3.4 not pooled); the run names end in `_105m`. 60 m: `WRITEUP` §2 |
+| Slide 8 has no open row | `N13` "Status of the two scenes": both final; `RS` `nov.runs` (3 of 3 count in the cells); `slots.json` `asp853_full_budget` holds only the flag "from paper_compare.json (arm official_nov)" |
+| "with DeepSeek and a rebuilt reference" (dropped from the slide; the source line on slide 9 keeps DeepSeek and the stand-in) | `FINAL` §5 |
 | Slide 9 title: "within 3.5 points of the paper's" (871) | Derived, the largest gap, ours minus the paper from the values as printed, over the four cells where the table shows a value of ours and the paper has one: ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3. Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end (reference apr, variant B). ASP + filter and random guesses have no paper cell |
 | Slide 9 body: "ours are 1.3–3.5 points higher at our budget" | The smallest and largest of the four gaps above |
 | Slide 9 body: "the paper's value lies inside our range in 3 of 4 cells" | Paper value against `stage_value_x100.min`–`.max`: ASP 10% 30.5 v [30.8–36.4] (outside); frontier 10% 29.2 v [27.8–37.4]; 50% 55.7 v [52.2–67.1]; 100% 65.3 v [64.4–68.3] (inside) |
@@ -165,8 +178,11 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | 45.6 [41.7–52.4] (50%) and 39.5 [33.9–42.0]; 15.3 [12.9–16.9] (10%) and 12.4 [10.8–14.7] | `PC` apr B, scene 00853, arm `frontier_60m` (3 runs, October) and `frontier_end` (5 runs, November), `stage_value_x100` mean, min, max |
 | The ranges overlap | Read from the two ranges above (41.7–52.4 and 33.9–42.0; 12.9–16.9 and 10.8–14.7) |
 | October, November | `WRITEUP` §12 (seeded frontier, 10-30); `PLAN` §B7 (e7 runs, 11-09 to 11-10) |
-| ASP stops at 60 m; ran in October | `WRITEUP` §2; `PC` |
-| No ASP run reaches 100% of the budget on 853, or 50% on 871 | `PC` apr B, arms official and filter_only: scene 00853 fraction 100 and scene 00871 fraction 50, `stage_value_x100.n` = 0. The builder tests it, and stops if `slots.json` `asp853_full_budget.runs` is set (edit the 853 half then) |
+| October's runs stop at 60 m; November's go to 105 m | `WRITEUP` §2; `PREREG` A3.1 (target path 105 m); run names `_105m`. October's official arm has `stage_value_x100.n` = 0 at 100% (853) and 50% (871) (guard) |
+| 2 of 3 November runs reach 100% of the 853 budget | `PC` apr B, scene 00853, arm official_nov, fraction 100: `stage_value_x100.n` 2, `n_runs` 3; seed 44 ended at 604.0 s (`RS` `nov.runs`) |
+| 38.7 [37.2–40.1] and 51.1 [45.7–61.5] at 50% on 853, and October's random-guess runs 43.9, between the two | `PC` apr B, scene 00853, fraction 50, arms official, official_nov and placebo (random guesses, October, no LLM; n=3, 39.4–48.2), `stage_value_x100` mean, min, max. The builder stops if 43.9 is not between the two ASP means |
+| The batches differ by as much as the gap between ASP and frontier | 51.1 − 38.7 = 12.4 against the November gap at 50%, 11.6 (guard in `facts853`) |
+| On 871 no ASP run reaches 50% | `PC` apr B, scene 00871, arms official and filter_only, fraction 50: `stage_value_x100.n` = 0 of 3 (guard) |
 | On 871 the only ASP–frontier comparison is at 130 s | 10% of the 871 budget (`PC` `meta.budgets`, 1,300.25 s). Read: ASP has a value at 10% only on 871 |
 | Frontier's clock counts its waits | `N12` "Frontier clock" (host copy; not checked against the released code) |
 
@@ -306,7 +322,7 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | The L3 margin was set knowing the Gemini–DeepSeek gap | `SEM` §2 (last sentence: "The margin δ at L3 (§10) was set knowing the 9-point gap above") |
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
-| Part 2 has one open row: ASP to the full budget on 853 | slide 8; `slots.json` `asp853_full_budget` (still null). The 871 numbers are final (`N13`) |
+| Part 2 has no open row; the 853 ASP batches differ by 12.4 points at 50%, as much as the gap between ASP and frontier | slides 8 and 11 (rows above); `N13` "Status of the two scenes" (both scenes final) |
 
 ## Slide 23: the answer
 

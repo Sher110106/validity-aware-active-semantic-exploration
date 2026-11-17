@@ -1,27 +1,9 @@
 {
  "_how": "Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. Edit part 2 keys by hand; rerun the script after any result file changes.",
  "paper_compare_json": "tools/live_policy/results_paper_compare_1113/paper_compare.json",
- "_table871": "Slides 7 and 9. Done on 2026-11-17: the 871 reruns finished and the final rescore is filed in results_paper_compare_1113 (budget 1300 s). paper_compare_json points at it. The builder reads the 871 budget, its runs and C2 from that folder, and stops if this flag is not true.",
+ "_table871": "Slides 7 and 9. Done on 2026-11-17: the 871 reruns finished and the final rescore is filed in results_paper_compare_1113 (budget 1300 s). paper_compare_json points at it. The builder reads the 871 budget, its runs and C2 from that folder, and stops if this flag is not true. Slide 8 (853): the November ASP row (arm official_nov, 3 runs to 105 m) is read from paper_compare.json; asp853_full_budget holds only that flag, no numbers. fill_slots_part3.py needs the key to exist.",
  "table871_updated": true,
- "asp853_full_budget": {
-  "_what": "Slide 8, row 'Ours, ASP, full budget'. Per fraction of the budget (10, 50, 100): mean, min and max of F1 x 100 over the new ASP runs; runs is how many. Leave null if the runs are not made.",
-  "runs": null,
-  "10": {
-   "mean": null,
-   "min": null,
-   "max": null
-  },
-  "50": {
-   "mean": null,
-   "min": null,
-   "max": null
-  },
-  "100": {
-   "mean": null,
-   "min": null,
-   "max": null
-  }
- },
+ "asp853_full_budget": "from paper_compare.json (arm official_nov)",
  "outcome": "fails",
  "thesis": "The claim fails",
  "_sources": {
