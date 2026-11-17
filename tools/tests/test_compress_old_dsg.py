@@ -104,6 +104,18 @@ def test_a_second_go_finds_nothing_new(tmp_path):
     assert {k: v for k, v in snapshot(tmp_path).items() if not k.startswith("scratch/")} == after_first
 
 
+def test_a_part_file_left_by_a_killed_run_does_not_block(tmp_path):
+    files = make_tree(tmp_path)
+    rel = "live_campaign/e1_00853_s42_official_60m/stages/3/graph1_dsg.json"
+    (tmp_path / (rel + ".zst.part")).write_bytes(b"half an archive")
+    r = run(tmp_path, "--go")
+    assert r.returncode == 0, r.stderr
+    assert "compressed and checked: 3 files" in r.stdout
+    assert not (tmp_path / (rel + ".zst.part")).exists() and not (tmp_path / rel).exists()
+    back = subprocess.run(["zstd", "-dc", str(tmp_path / (rel + ".zst"))], capture_output=True, check=True).stdout
+    assert back == files[rel]
+
+
 def test_it_wants_a_mode(tmp_path):
     make_tree(tmp_path)
     assert run(tmp_path, "--now").returncode == 2
