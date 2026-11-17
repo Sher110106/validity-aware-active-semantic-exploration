@@ -101,7 +101,6 @@ Offline replay of saved stages (`review_2026-10-29/audit/tables/replay_table.jso
 | 63, 316, 130, 650 s | Derived: 10% and 50% of the two budgets, whole seconds |
 | "Median end of the 5 frontier runs … (612 to 868 s)" on 853 | `B13` `00853.end_times_s` for the runs in `primary_runs`: 611.83 to 867.58 s |
 | "Median end of the 4 frontier runs … (1043 to 1610 s)" on 871 | `B13` `00871.end_times_s` for the runs in `primary_runs` (seeds 42, 43, 45, 46): 1,043.03 (seed 45) to 1,610.48 s (seed 43); median 1,300.25 s |
-| Fallback, reruns replace it with a median | Removed from the slide: the median is now in place |
 
 ## Slides 8 and 9: the paper's table
 
@@ -130,10 +129,16 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | ASP stops at 60 m | `WRITEUP` §2 |
 | "One row pending": ASP to the full budget on 853: **TBD** | `slots.json` `asp853_full_budget`; optional run, `FINAL` §6 |
 | The wording "did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference" | `FINAL` §5 |
-| Slide 9 title and note: "ours are 1.3–3.5 points above the paper's" (871, ASP at 10%; frontier at 10, 50 and 100%) | Derived, ours minus the paper from the values as shown: ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3. Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end. ASP + filter and random guesses have no paper cell |
-| Slide 9 note: at 10% our ASP leads our frontier by 2.0 points (33.9 v 31.9; n=3 v n=5); the paper's lead is 1.3 (30.5 − 29.2); the ranges overlap | Derived from the cells above; ranges [30.8–36.4] and [27.8–37.4] (`stage_value_x100.min`, `.max`) |
-| Slide 9 note: no ASP run of ours reaches 50% or 100% of the budget | Cells scene 00871, arm official, fractions 50 and 100: `stage_value_x100.n` = 0 of 3 (also filter_only, placebo). ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
-| Slide 9 note: the paper's cells are one run each; ours carry n | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5 |
+| Slide 9 title: "within 3.5 points of the paper's" (871) | Derived, the largest gap, ours minus the paper from the values as printed, over the four cells where the table shows a value of ours and the paper has one: ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3. Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end (reference apr, variant B). ASP + filter and random guesses have no paper cell |
+| Slide 9 body: "ours are 1.3–3.5 points higher at our budget" | The smallest and largest of the four gaps above |
+| Slide 9 body: "the paper's value lies inside our range in 3 of 4 cells" | Paper value against `stage_value_x100.min`–`.max`: ASP 10% 30.5 v [30.8–36.4] (outside); frontier 10% 29.2 v [27.8–37.4]; 50% 55.7 v [52.2–67.1]; 100% 65.3 v [64.4–68.3] (inside) |
+| Slide 9 body: "at 0.8 of the budget 2 of the 4 gaps turn negative" | `PC` cells with `variant` "0.8B" (reference apr, scene 00871), the registered sensitivity check (`paper_compare.md`, "Sensitivity"): ASP 10% 32.9 − 30.5 = +2.4; frontier 10% 29.6 − 29.2 = +0.4; 50% 51.3 − 55.7 = −4.4; 100% 65.0 − 65.3 = −0.3. (At 1.2 B the ASP 10% gap is +6.8 and the frontier 100% cell has n=2 of 5, which the table's rule hides; the slide does not use 1.2 B) |
+| Slide 9 body: "At 10% our four arms score 31.7–33.9 and their ranges overlap" | Scene 00871, fraction 10, `stage_value_x100.mean`: official 33.9, filter_only 33.0, placebo 31.7, frontier_end 31.9. The ranges [30.8–36.4], [29.9–37.6], [30.2–32.6], [27.8–37.4] share 30.8–32.6 |
+| Slide 9 body: "No ASP run of ours reaches 50% of the budget" | Scene 00871, arms official and filter_only (placebo too), fractions 50 and 100: `stage_value_x100.n` = 0 of 3. ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
+| Slide 9 source line: the paper's cells are one run each; ours carry n; ASP stops at 60 m | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5; `WRITEUP` §2 |
+| Script slide 9 and README finding 3: "on 853 ours are 3 to 22 points lower" (3.2 to 22.1) | Derived the same way, scene 00853, apr B, arms official and frontier_end: ASP 10% 16.5 − 34.4 = −17.9; ASP 50% 38.7 − 60.8 = −22.1; frontier 12.4 − 18.6 = −6.2; 39.5 − 46.5 = −7.0; 55.6 − 58.8 = −3.2 |
+| README finding 3: n in the tables | The cells' `stage_value_x100.n` (and `n_runs` for "3 of 5"), scenes 00853 and 00871, arms official, filter_only, frontier_end |
+| Guard | The builder computes every figure above, checks that script slide 9 and README finding 3 hold them (`check_text`), and stops with a message if a figure is missing, a gap changes sign, a null cell is needed, or an ASP run reaches 50% |
 
 ## Slide 10: the reference
 
@@ -161,6 +166,8 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | The ranges overlap | Read from the two ranges above (41.7–52.4 and 33.9–42.0; 12.9–16.9 and 10.8–14.7) |
 | October, November | `WRITEUP` §12 (seeded frontier, 10-30); `PLAN` §B7 (e7 runs, 11-09 to 11-10) |
 | ASP stops at 60 m; ran in October | `WRITEUP` §2; `PC` |
+| No ASP run reaches 100% of the budget on 853, or 50% on 871 | `PC` apr B, arms official and filter_only: scene 00853 fraction 100 and scene 00871 fraction 50, `stage_value_x100.n` = 0. The builder tests it, and stops if `slots.json` `asp853_full_budget.runs` is set (edit the 853 half then) |
+| On 871 the only ASP–frontier comparison is at 130 s | 10% of the 871 budget (`PC` `meta.budgets`, 1,300.25 s). Read: ASP has a value at 10% only on 871 |
 | Frontier's clock counts its waits | `N12` "Frontier clock" (host copy; not checked against the released code) |
 
 ## Part 3 short names

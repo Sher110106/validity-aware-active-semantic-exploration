@@ -1,6 +1,6 @@
-# Speaker script: end-sem (24 slides and 4 backup, about 14.5 minutes)
+# Speaker script: end-sem (24 slides and 4 backup, about 15 minutes)
 
-About 1,850 words for the 24 slides. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
+About 1,960 words for the 24 slides; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
 
 ---
 
@@ -66,23 +66,23 @@ Our filter, live: minus 0.003, no detectable difference. It removed 30% of new g
 
 Part 2. We score with the author's own F1 and GED code, on the paper's time axis, against a scripted stand-in for the author's hand-driven tour. Our model is DeepSeek; the paper's is Gemini 2.5 Pro.
 
-The paper gives no budget value. We use the median end of our frontier runs that finished: 632 seconds on 853, from all five; 1300 on 871, from four of five. The fifth hit the 250 metre path cap.
+The paper gives no budget value. We use the median end of our frontier runs that ended on their own: 632 seconds on 853, from all five; 1300 on 871, from four of five. The fifth hit the 250 metre path cap.
 
 ---
 
-## Slide 8: On 853, the paper's ASP lead did not appear (about 50 s)
+## Slide 8: On 853, the paper's ASP lead did not appear (about 40 s)
 
-Object F1 times 100. Each cell shows the mean, the range and the runs that reach that time.
+Object F1 times 100; each cell shows the mean, the range and the runs.
 
-The paper's ASP leads its frontier by 15.8 points at 10% and 14.3 at 50%. Ours: ASP 16.5 and 38.7, from two runs; with our filter 14.8 and 48.3; random 13.8 and 43.9; frontier 12.4 and 39.5. Our ASP lead is 4.1 points at 10% and minus 0.8 at 50%.
+The paper's ASP leads its frontier by 15.8 points at 10% and 14.3 at 50%. Ours: ASP 16.5 and 38.7, from two runs; frontier 12.4 and 39.5. Our ASP lead is 4.1 points at 10% and minus 0.8 at 50%.
 
 The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference. One row is still to come: ASP to the full budget.
 
 ---
 
-## Slide 9: On 871, ours are 1.3–3.5 points above the paper's (about 25 s)
+## Slide 9: On 871, ours are within 3.5 points of the paper's (about 25 s)
 
-On 871, where the paper and we both have a cell, ours are 1.3 to 3.5 points higher. At 10% our ASP leads our frontier by 2.0 points, the paper's by 1.3; the ranges overlap. No ASP run of ours reaches 50% or 100%, so the table cannot compare ASP with frontier there. Paper cells are one run each; ours carry n.
+On 871 our cells are within 3.5 points of the paper's: 1.3 to 3.5 higher. But the paper's value lies inside our range in three of four cells, and at 0.8 of the budget two gaps change sign. On 853 ours are 3 to 22 points lower. At 10% our four arms score 31.7 to 33.9; the ranges overlap. No ASP run of ours reaches 50%.
 
 ---
 
@@ -92,13 +92,13 @@ The reference holds 32% and 21% of the human-labelled objects.
 
 The repeat tour is not frozen in either home. The two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line: the reference moves by more than the paper's margins, with the first tours' damage mixed in.
 
-Check C1: we count 13 and 14 rooms, the paper 6 and 9. The paper's floor area, 208 and 235 square metres, is 2.7 and 4.0 times our walkable floor and within about 7% of the outline of everything labelled. We do not know how the paper measured area.
+Check C1: 13 and 14 rooms; the paper has 6 and 9. The paper's floor area, 208 and 235 square metres, is 2.7 and 4.0 times our walkable floor and within about 7% of the outline of everything labelled. We do not know how the paper measured area.
 
 ---
 
-## Slide 11: What limits the runs (about 25 s)
+## Slide 11: What limits the runs (about 30 s)
 
-Two batches of one frontier explorer differ: on 853 at half the budget, 45.6 in October and 39.5 in November. The ranges overlap. Our ASP runs stop at 60 metres, and ran in October; frontier ran in November. And in the host's copy of the code, frontier's clock counts its waits; ASP's does not. We have not checked that against the released code.
+Two batches of one frontier explorer differ: on 853 at half the budget, 45.6 in October and 39.5 in November. The ranges overlap. Our ASP runs stop at 60 metres and ran in October; frontier ran in November. In the host's copy of the code, frontier's clock counts its waits; ASP's does not, so the one 871 comparison, at 130 seconds, is on clocks that differ. We have not checked that against the released code.
 
 ---
 

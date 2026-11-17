@@ -66,11 +66,17 @@ def numbers():
     return out
 
 
-def paper_cells(slots):
+def fail(msg):
+    """A content guard: the text on a slide would claim more than the data carry. Stop the build. (WARN is for fit.)"""
+    raise SystemExit("BUILD STOPPED: " + msg)
+
+
+def paper_cells(slots, variant="B"):
+    """The apr-reference cells for one budget variant: B (the slides) or 0.8B / 1.2B (the registered sensitivity)."""
     d = json.load(open(os.path.join(PROJECT, slots["paper_compare_json"])))
     cells = {}
     for c in d["cells"]:
-        if c["reference"] == "apr" and c["variant"] == "B":
+        if c["reference"] == "apr" and c["variant"] == variant:
             cells[(c["scene"], c["arm"], c["fraction"])] = c
     return cells, d["meta"]["budgets"]
 
@@ -82,16 +88,17 @@ def newest(pattern):
     return files[-1] if files else None
 
 
-def c2_f1(scene):
-    """C2 for one scene: F1 of the repeat tour against the first. The newest c2_*.json in results_paper_compare_1113
-    holds it; while a rescore is rewriting that folder, the figure quoted in its NOTES.md item 3 stands in."""
+def c2_data(scene):
+    """C2 for one scene: (F1 of the repeat tour against the first, whether that tour is frozen). The newest
+    c2_*.json in results_paper_compare_1113 holds both; while a rescore is rewriting that folder, the F1 quoted in
+    its NOTES.md item 3 stands in and frozen is None (not known)."""
     f = newest("c2_*.json")
     if f:
-        v = json.load(open(f))["scenes"][scene]["f1"]
-        if v is not None:
-            return float(v)
+        s = json.load(open(f))["scenes"][scene]
+        if s["f1"] is not None:
+            return float(s["f1"]), s.get("frozen")
     m = re.search(rf"{scene}: F1 (0\.\d+)", open(os.path.join(R1113, "NOTES.md")).read())
-    return float(m.group(1))
+    return float(m.group(1)), None
 
 
 def budget_runs():
@@ -497,10 +504,8 @@ def paper_rules(prs, budgets, checks, bf):
     a, b = bf["00853"], bf["00871"]
     for sc in bf:
         if abs(bf[sc]["b"] - budgets[sc]) > 0.01 or bf[sc]["n"] + bf[sc]["capped"] != bf[sc]["of"]:
-            WARN.append(f"budgets file and paper_compare.json disagree for {sc}")
-    frontier = (f"Run to its natural end: {a['n']} of {a['of']} runs on 853, {b['n']} of {b['of']} on 871"
-                + (f"; {capped_text(b['capped'])} on 871 stopped at the {PATH_CAP_M} m path cap." if b["capped"]
-                   else "."))
+            fail(f"the budgets file and paper_compare.json disagree for {sc}")
+    frontier = f"Run to its natural end: {a['n']} of {a['of']} runs on 853, {b['n']} of {b['of']} on 871."
     L, w = 120, 780
     blocks = [("Scoring.", "The author's own F1 and GED code, on the paper's time axis."),
               ("Reference.", f"A scripted stand-in for the author's hand-driven tour: navmesh paths, the same mapper "
@@ -528,8 +533,10 @@ def stat_cell(C, scene, arm, frac):
     sv = c["stage_value_x100"]
     if not sv["n"] or sv["n"] * 2 < c["n_runs"]:
         return None, "no run reaches it" if not sv["n"] else f"{sv['n']} of {c['n_runs']} runs"
+    if any(sv[k] is None for k in ("mean", "min", "max")):
+        fail(f"the cell {scene} {arm} {frac}% has n={sv['n']} but a null mean, min or max")
     n = f"n={sv['n']}" if sv["n"] == c["n_runs"] else f"n={sv['n']} of {c['n_runs']}"
-    return f"{sv['mean']:.1f} [{sv['min']:.1f}{DASH}{sv['max']:.1f}]", n
+    return f"{num(sv['mean'])} [{num(sv['min'])}{DASH}{num(sv['max'])}]", n
 
 
 def table(s, x, y, lw, cw, rows, rowh):
@@ -559,7 +566,10 @@ def table(s, x, y, lw, cw, rows, rowh):
 
 def table_rows(C, scene, arms, full=None):
     def paper(arm):
-        return [(f"{C[(scene, arm, f)]['paper_f1_x100']:.1f}", None, INK, MID) for f in ("10", "50", "100")]
+        for f in ("10", "50", "100"):
+            if C[(scene, arm, f)]["paper_f1_x100"] is None:
+                fail(f"the paper's value for {scene} {arm} {f}% is null")
+        return [(num(C[(scene, arm, f)]['paper_f1_x100']), None, INK, MID) for f in ("10", "50", "100")]
     rows = [("Paper · ASP", paper("official"), "paper"), ("Paper · frontier", paper("frontier_end"), "paper")]
     names = {"official": "Ours · ASP", "filter_only": "Ours · ASP + filter", "placebo": "Ours · random guesses",
              "frontier_end": "Ours · frontier"}
@@ -576,7 +586,7 @@ def table_rows(C, scene, arms, full=None):
             if d["mean"] is None:
                 cells.append(("TBD", "may be run", FAINT, MID))
             else:
-                cells.append((f"{d['mean']:.1f} [{d['min']:.1f}{DASH}{d['max']:.1f}]",
+                cells.append((f"{num(d['mean'])} [{num(d['min'])}{DASH}{num(d['max'])}]",
                               f"n={full['runs']}" if full["runs"] else None, INK, MID))
         rows.append(("Ours · ASP, full budget", cells, "slot"))
     return rows
@@ -590,51 +600,149 @@ def table853(prs, C, budgets, slots):
     y = table(s, 120, 250, 500, 380, table_rows(C, "00853", ("official", "filter_only", "placebo", "frontier_end"),
                                                  full), {"paper": 62, "ours": 90, "slot": 90})
     N(s, 120, y + 14, 1680,
-      "Paper: Fig. 4 (left), one run. Ours: runs that reach that time, shown if at least half do. ASP stops at "
+      "Paper: Fig. 4 (left), one run each. Ours: runs that reach that time, shown if at least half do. ASP stops at "
       "60 m. The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference.", limit=1000)
 
 
-def vs_paper(C, scene):
-    """Ours minus the paper, in points of F1 x 100, for each ASP and frontier cell where the table shows a value of
-    ours. Both sides are taken as printed (one decimal), so the slide's own numbers subtract."""
+WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+ASP_ARMS = ("official", "filter_only")      # the arms that run ASP; both stop at 60 m of path
+FOUR_ARMS = ("official", "filter_only", "placebo", "frontier_end")
+
+
+def printed(v, what):
+    """A value as the slide prints it (one decimal, half up). A null stops the build."""
+    if v is None:
+        fail(f"{what} is null, and slide 9 needs it")
+    return rnd(v, 1)
+
+
+def gaps(C, scene, C08=None):
+    """Ours minus the paper, in points of F1 x 100, for each ASP and frontier cell the table shows. Both sides are
+    taken as printed, so the slide's own numbers subtract. Also: the same gap at 0.8 B (the registered sensitivity
+    check, from C08), and whether the paper's value lies inside our printed min-max."""
     out = []
     for arm in ("official", "frontier_end"):
         for f in ("10", "50", "100"):
-            if stat_cell(C, scene, arm, f)[0] is not None:
-                c = C[(scene, arm, f)]
-                out.append((arm, f, rnd(c["stage_value_x100"]["mean"], 1) - rnd(c["paper_f1_x100"], 1)))
+            if stat_cell(C, scene, arm, f)[0] is None:
+                continue
+            tag = f"{scene} {arm} {f}%"
+            c = C[(scene, arm, f)]
+            sv = c["stage_value_x100"]
+            paper = printed(c["paper_f1_x100"], f"the paper's value for {tag}")
+            row = {"arm": arm, "f": f, "gap": printed(sv["mean"], f"the mean of {tag}") - paper,
+                   "inside": printed(sv["min"], f"the minimum of {tag}") <= paper
+                   <= printed(sv["max"], f"the maximum of {tag}"), "gap08": None}
+            if C08 is not None:
+                row["gap08"] = printed(C08[(scene, arm, f)]["stage_value_x100"]["mean"],
+                                       f"the 0.8 B mean of {tag}") - paper
+            out.append(row)
     return out
 
 
-def table871(prs, C, budgets, slots):
-    assert slots["table871_updated"], "slots.json table871_updated must be true once the 871 rescore is final"
-    diffs = vs_paper(C, "00871")
-    lo, hi = min(d for *_, d in diffs), max(d for *_, d in diffs)
-    asp, fr = C[("00871", "official", "10")], C[("00871", "frontier_end", "10")]
-    a, f = asp["stage_value_x100"], fr["stage_value_x100"]
-    lead = rnd(a["mean"], 1) - rnd(f["mean"], 1)
-    paper_lead = rnd(asp["paper_f1_x100"], 1) - rnd(fr["paper_f1_x100"], 1)
-    overlap = a["min"] <= f["max"] and f["min"] <= a["max"]
-    asp_late = any(stat_cell(C, "00871", "official", fr_)[0] is not None for fr_ in ("50", "100"))
-    if lo <= 0 or lead <= 0 or paper_lead <= 0 or not overlap or asp_late:
-        WARN.append("slide 9 wording assumes: ours above the paper's, ASP ahead at 10%, ranges overlap, "
-                    "no ASP value at 50% or 100%")
+def facts871(C, C08):
+    """Every number in slide 9's title and body. Stops the build if the wording would claim more than the cells."""
+    g = gaps(C, "00871", C08)
+    if not g:
+        fail("slide 9: no 871 cell has both a value of ours and the paper's")
+    diffs = [x["gap"] for x in g]
+    if min(diffs) <= 0:
+        fail("slide 9 says ours are higher than the paper's, but a gap is not positive: "
+             + ", ".join(f"{x['arm']} {x['f']}% {x['gap']:+}" for x in g))
+    for arm in ASP_ARMS:
+        for f in ("50", "100"):
+            n = C[("00871", arm, f)]["stage_value_x100"]["n"]
+            if n:
+                fail(f"slide 9 says no ASP run of ours reaches 50% of the budget, but {arm} has n={n} at {f}%")
+    neg = sum(1 for x in g if x["gap08"] < 0)
+    if not neg:
+        fail("slide 9 and the script say some gaps turn negative at 0.8 B, but none does")
+    mins, maxs, means = [], [], []
+    for arm in FOUR_ARMS:
+        sv = C[("00871", arm, "10")]["stage_value_x100"]
+        means.append(printed(sv["mean"], f"the mean of 871 {arm} 10%"))
+        mins.append(printed(sv["min"], f"the minimum of 871 {arm} 10%"))
+        maxs.append(printed(sv["max"], f"the maximum of 871 {arm} 10%"))
+    if max(mins) > min(maxs):
+        fail("slide 9 says the four arms' ranges overlap at 10%, but they do not")
+    return {"lo": min(diffs), "hi": max(diffs), "max_gap": max(abs(d) for d in diffs), "m": len(g),
+            "inside": sum(1 for x in g if x["inside"]), "neg": neg, "arm_lo": min(means), "arm_hi": max(means)}
+
+
+def facts853(C):
+    """The 853 gaps, for the script and README. They must all be below the paper's, as those texts say."""
+    g = gaps(C, "00853")
+    if not g or max(x["gap"] for x in g) >= 0:
+        fail("the script and README say ours are lower than the paper's on 853, but a gap is not negative")
+    d = [abs(x["gap"]) for x in g]
+    return {"lo": min(d), "hi": max(d)}
+
+
+def need(text, needles, where):
+    miss = [n for n in needles if n not in text]
+    if miss:
+        fail(f"{where} lacks " + "; ".join(repr(n) for n in miss) + ". The builder computed these from the cells; "
+             "edit the text to match them.")
+
+
+def check_text(C, f9, f853):
+    """The script (slide 9) and README finding 3 hold typed figures. Check each against the cells."""
+    md = open(SCRIPT).read()
+    m = re.search(r"^## Slide 9:.*?(?=\n---)", md, flags=re.M | re.S)
+    if not m:
+        fail("ENDSEM_Script.md has no 'Slide 9' section")
+    k, mm, w = f9["neg"], f9["m"], WORDS
+    ints = (str(rnd(float(f853["lo"]), 0)), str(rnd(float(f853["hi"]), 0)))
+    need(m.group(0), [f"within {f9['max_gap']} points", f"{f9['lo']} to {f9['hi']} higher",
+                      f"{w[f9['inside']]} of {w[mm]} cells", f"{w[k]} gaps",
+                      f"On 853 ours are {ints[0]} to {ints[1]} points lower",
+                      f"{f9['arm_lo']} to {f9['arm_hi']}", "No ASP run of ours reaches 50%"], "script slide 9")
+    rd = open(os.path.join(PROJECT, "README.md")).read()
+    m = re.search(r"^3\. \*\*November paper-scale.*?(?=^4\. \*\*)", rd, flags=re.M | re.S)
+    if not m:
+        fail("README.md has no finding 3")
+    cells = []
+    for sc in ("00853", "00871"):
+        for arm in ("official", "filter_only", "frontier_end"):
+            for f in ("10", "50", "100"):
+                main, sub = stat_cell(C, sc, arm, f)
+                if main:
+                    cells.append(f"{main.split(' ')[0]} ({sub})")
+    need(m.group(0), [f"within {f9['lo']} to {f9['hi']} points of the paper's",
+                      f"{w[k]} of the {w[mm]} gaps turn negative at 0.8 B", f"{f9['inside']} of {mm} cells",
+                      f"{f853['lo']} to {f853['hi']} below"] + cells, "README finding 3")
+
+
+def table871(prs, C, C08, budgets, slots):
+    if not slots["table871_updated"]:
+        fail("slots.json table871_updated is not true: the 871 rescore is not marked final")
+    f9, f853 = facts871(C, C08), facts853(C)
+    check_text(C, f9, f853)
+    k = f9["neg"]
+    neg = f"{k} of the {f9['m']} gaps turn{'s' if k == 1 else ''} negative"
     s = frame(prs, 9, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 871 · budget "
-                       f"{budgets['00871']:.0f} s", f"On 871, ours are {lo}{DASH}{hi} points above the paper's")
-    y = table(s, 120, 250, 500, 380, table_rows(C, "00871", ("official", "filter_only", "placebo", "frontier_end")),
-              {"paper": 62, "ours": 90, "slot": 90})
-    N(s, 120, y + 14, 1680,
-      f"Paper: Fig. 4 (left), one run each. Ours carry n. Where both have a cell (ASP at 10%; frontier at 10, 50 and "
-      f"100%), ours are {lo}{DASH}{hi} points above the paper's. At 10%, our ASP leads our frontier by {lead} points "
-      f"({num(a['mean'])} v {num(f['mean'])}; n={a['n']} v n={f['n']}); the paper's lead is {paper_lead}. The ranges "
-      f"overlap. No ASP run of ours reaches 50% or 100% of the budget (ASP stops at 60 m), so this slide cannot "
-      f"compare ASP with frontier there. Our LLM is DeepSeek and our reference a scripted stand-in.", limit=1000)
+                       f"{budgets['00871']:.0f} s", f"On 871, ours are within {f9['max_gap']} points of the paper's")
+    y = table(s, 120, 250, 500, 380, table_rows(C, "00871", FOUR_ARMS), {"paper": 62, "ours": 90, "slot": 90})
+    y = P(s, 120, y + 14, 1680,
+          f"Where both have a cell, ours are {f9['lo']}{DASH}{f9['hi']} points higher at our budget. The paper's value "
+          f"lies inside our range in {f9['inside']} of {f9['m']} cells, and at 0.8 of the budget {neg}. At 10% our "
+          f"four arms score {f9['arm_lo']}{DASH}{f9['arm_hi']} and their ranges overlap. No ASP run of ours reaches "
+          f"50% of the budget.", B, BODY, 1.4, limit=960, tag="slide 9 body")
+    N(s, 120, y + 8, 1680,
+      "Paper: Fig. 4 (left), one run each. Ours carry n. Our LLM is DeepSeek; our reference is a scripted "
+      "stand-in. ASP stops at 60 m.", limit=1000)
 
 
 # ---------------------------------------------------------------- 10. Part 2, limits of the reference
 
-def limits_reference(prs, checks, f1):
-    """f1: C2 per scene, {"00853": ..., "00871": ...}."""
+def limits_reference(prs, checks, f1, frozen):
+    """f1: C2 per scene, {"00853": ..., "00871": ...}. frozen: whether each repeat tour is frozen (None: not known)."""
+    if any(v is True for v in frozen.values()):
+        fail("slide 10 says the repeat tour is not frozen in either home, but c2_*.json says it is frozen in "
+             + ", ".join(sc for sc, v in frozen.items() if v is True))
+    if any(v is None for v in frozen.values()):
+        print("NOTE: no c2_*.json value for 'frozen'; slide 10's 'not frozen' is not tested", file=sys.stderr)
+    if max(f1.values()) >= 0.90:
+        fail("slide 10 says both C2 values are below 0.90, but one is not: " + str(f1))
     s = frame(prs, 10, "Part 2 · Limits of the reference", "The reference is rebuilt, and it moves")
     rec = [checks[sc]["C3"]["apr_a_recall_vs_hm3d"] for sc in ("00853", "00871")]
     c1t = json.load(open(C1_TABLE))
@@ -646,8 +754,6 @@ def limits_reference(prs, checks, f1):
                              f"{f1['00871']:.3f} on 871 (C2). Both are below the 0.90 line: the reference itself moves "
                              "by more than the paper's margins. The first tours' damage is mixed in.", "n")],
           B, BODY, 1.4, limit=960)
-    if max(f1.values()) >= 0.90:
-        WARN.append("slide 10 says both C2 values are below 0.90")
     N(s, L, y + 16, w, "Nvblox died partway through both first tours, so each reference lacks about its last 60 s.",
       limit=1000)
     R = 1060
@@ -679,12 +785,23 @@ def limits_reference(prs, checks, f1):
 
 # ---------------------------------------------------------------- 11. Part 2, limits of the runs
 
-def limits_runs(prs, C):
+def limits_runs(prs, C, budgets, slots):
     s = frame(prs, 11, "Part 2 · Limits of the runs", "What limits the runs")
+    # The ASP sentence below holds for the October ASP runs. When the full-budget ASP runs land on 853
+    # (slots.json asp853_full_budget), edit the 853 half of it.
+    if slots["asp853_full_budget"]["runs"]:
+        fail("slide 11 says no ASP run reaches 100% of the budget on 853, but slots.json holds full-budget ASP "
+             "runs: edit the 853 half of that sentence")
+    for sc, f in (("00853", "100"), ("00871", "50")):
+        for arm in ASP_ARMS:
+            n = C[(sc, arm, f)]["stage_value_x100"]["n"]
+            if n:
+                fail(f"slide 11 says no ASP run reaches {f}% of the budget on {sc[-3:]}, but {arm} has n={n}")
+    first_871 = f"{0.1 * budgets['00871']:.0f}"       # 10% of the 871 budget: the one ASP-frontier cell there
 
     def rng(arm, frac):
         sv = C[("00853", arm, frac)]["stage_value_x100"]
-        return f"{sv['mean']:.1f} [{sv['min']:.1f}{DASH}{sv['max']:.1f}]"
+        return f"{num(sv['mean'])} [{num(sv['min'])}{DASH}{num(sv['max'])}]"
     L, w = 120, 1680
     y = P(s, L, 262, w, [("Two batches of one frontier explorer. ", "b"),
                          (f"On 853 at 50% of the budget: {rng('frontier_60m', '50')} in October (3 runs, cut at 60 m) "
@@ -692,11 +809,12 @@ def limits_runs(prs, C):
                           f"{rng('frontier_60m', '10')} and {rng('frontier_end', '10')}. The ranges overlap.", "n")],
           B, BODY, 1.4)
     y = P(s, L, y + 28, w, [("ASP stops at 60 m. ", "b"),
-                            ("No ASP run reaches 100% of the budget. ASP ran in October and frontier in November.",
-                             "n")], B, BODY, 1.4)
+                            ("No ASP run reaches 100% of the budget on 853, or 50% on 871. ASP ran in October and "
+                             "frontier in November.", "n")], B, BODY, 1.4)
     y = P(s, L, y + 28, w, [("The clocks differ. ", "b"),
                             ("In the host's copy of the code, frontier's clock also counts its waits for a path; "
-                             "ASP's does not.", "n")], B, BODY, 1.4)
+                             f"ASP's does not. On 871 the only ASP–frontier comparison, at {first_871} s, is on "
+                             "clocks that differ.", "n")], B, BODY, 1.4)
     N(s, L, y + 12, w, "The clock finding comes from the host's patched copy; we have not checked it against the "
                        "released code.")
     box_bottom(s, "Reading.", "We read the table as a check on scale. It does not test the paper's claim.")
@@ -1163,8 +1281,10 @@ def main():
     slots = json.load(open(SLOTS))
     C, budgets = paper_cells(slots)
     checks = json.load(open(CHECKS))
-    c2 = {sc: c2_f1(sc) for sc in ("00853", "00871")}
+    c2d = {sc: c2_data(sc) for sc in ("00853", "00871")}
+    c2, frozen = {sc: v[0] for sc, v in c2d.items()}, {sc: v[1] for sc, v in c2d.items()}
     bf = budget_runs()
+    C08 = paper_cells(slots, "0.8B")[0]
     prs = Presentation()
     prs.slide_width, prs.slide_height = px(1920), px(1080)
     cover(prs)
@@ -1175,9 +1295,9 @@ def main():
     live_limits(prs, Nn)
     paper_rules(prs, budgets, checks, bf)
     table853(prs, C, budgets, slots)
-    table871(prs, C, budgets, slots)
-    limits_reference(prs, checks, c2)
-    limits_runs(prs, C)
+    table871(prs, C, C08, budgets, slots)
+    limits_reference(prs, checks, c2, frozen)
+    limits_runs(prs, C, budgets, slots)
     defense(prs)
     picture_levels(prs, slots)
     controls(prs, slots)
