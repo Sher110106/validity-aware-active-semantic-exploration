@@ -1,9 +1,9 @@
 {
- "written_at": "2026-11-17T17:04:25+05:30",
- "stamp": "20261117T170055",
+ "written_at": "2026-11-18T02:57:58+05:30",
+ "stamp": "20261118T025414",
  "mode": "final",
- "acceptance_file": "acceptance_20261117T170055.json",
- "c2_file": "c2_20261117T170055.json",
+ "acceptance_file": "acceptance_20261118T025414.json",
+ "c2_file": "c2_20261118T025414.json",
  "scene_state": {
   "00853": {
    "e7_pending": [],
@@ -646,33 +646,7 @@
    ]
   }
  },
- "copy_moves": [
-  {
-   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end",
-   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
-   "why": "its content is attempt 2"
-  },
-  {
-   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_b",
-   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_b_FAILED_ATTEMPT_1020",
-   "why": "its content is attempt 1"
-  },
-  {
-   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end",
-   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
-   "why": "its content is attempt 2"
-  },
-  {
-   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end",
-   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
-   "why": "its content is attempt 2"
-  },
-  {
-   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end",
-   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
-   "why": "its content is attempt 2"
-  }
- ],
+ "copy_moves": [],
  "copy_check": {
   "apr/apr_00853_a": {
    "equals_old_copy_folder": [
@@ -902,7 +876,10 @@
    "frontier_seeds/e7_00871_s42_frontier_end",
    "frontier_seeds/e7_00871_s43_frontier_end",
    "frontier_seeds/e7_00871_s44_frontier_end",
-   "frontier_seeds/e7_00871_s45_frontier_end"
+   "frontier_seeds/e7_00871_s45_frontier_end",
+   "live_campaign/e8_00853_s42_official_105m",
+   "live_campaign/e8_00853_s43_official_105m",
+   "live_campaign/e8_00853_s44_official_105m"
   ],
   "recheck": []
  },
@@ -913,7 +890,197 @@
    "identical_empty": 63,
    "lost_value": [],
    "only_in_1112": [],
-   "only_in_1113": [],
+   "only_in_1113": [
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "0.8B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "0.8B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "0.8B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "1.2B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "1.2B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "1.2B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "apr",
+     "B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "0.8B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "0.8B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "0.8B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "1.2B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "1.2B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "1.2B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "frontier_made",
+     "B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "0.8B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "0.8B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "0.8B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "1.2B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "1.2B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "1.2B",
+     "50"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "B",
+     "10"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "B",
+     "100"
+    ],
+    [
+     "00853",
+     "official_nov",
+     "hm3d",
+     "B",
+     "50"
+    ]
+   ],
    "b_1112_s": 632.1750566959381,
    "b_1113_s": 632.1750566959381,
    "b_changed": false,
@@ -1249,5 +1416,104 @@
  "deviation_sentences": [
   "**11-06: an attempt of e7 00853 seed 42 that made no stage.** The folder `e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom` holds an attempt from before the queue log (11-06) that made no stage graph: its roslaunch.log shows 2 out-of-memory line(s) and 1 line(s) saying nvblox_node died. The queue log has no launch line for it, so it is in no row. Seed 42 of 00853 is scored from its later attempt."
  ],
- "notes_rewritten_at": "2026-11-17T17:24:59+05:30"
+ "nov": {
+  "B_s": 632.1751,
+  "runs": [
+   {
+    "run": "e8_00853_s42_official_105m",
+    "open": false,
+    "reached_b": true,
+    "end_s": 652.1191792488098,
+    "end_stage": 26,
+    "counts_in_cells": true,
+    "reasons": [],
+    "notes": []
+   },
+   {
+    "run": "e8_00853_s43_official_105m",
+    "open": false,
+    "reached_b": true,
+    "end_s": 646.0805835723877,
+    "end_stage": 25,
+    "counts_in_cells": true,
+    "reasons": [],
+    "notes": []
+   },
+   {
+    "run": "e8_00853_s44_official_105m",
+    "open": false,
+    "reached_b": false,
+    "end_s": 604.0303506851196,
+    "end_stage": 26,
+    "counts_in_cells": true,
+    "reasons": [],
+    "notes": [
+     "ended before B (604.0 s): no 100% value, the 10% and 50% values stay"
+    ]
+   }
+  ],
+  "listing": {
+   "runs": [
+    "e8_00853_s42_official_105m",
+    "e8_00853_s43_official_105m",
+    "e8_00853_s44_official_105m"
+   ],
+   "active": [],
+   "excluded": [],
+   "ages_s": {},
+   "stale": []
+  },
+  "never_started": [],
+  "also_without": {
+   "left_out": "e8_00853_s43_official_105m",
+   "scored": true,
+   "folder": "alt_nov_without_e8_00853_s43_official_105m",
+   "with": {
+    "10": {
+     "mean": 17.186073521864785,
+     "min": 13.333333333333334,
+     "max": 21.151716500553707,
+     "n": 3,
+     "n_runs": 3
+    },
+    "100": {
+     "mean": 61.6196160710371,
+     "min": 60.3370786516854,
+     "max": 62.90215349038879,
+     "n": 2,
+     "n_runs": 3
+    },
+    "50": {
+     "mean": 51.10569364244737,
+     "min": 45.660627120046335,
+     "max": 61.45392216172615,
+     "n": 3,
+     "n_runs": 3
+    }
+   },
+   "without": {
+    "10": {
+     "mean": 19.112443616130513,
+     "min": 17.073170731707314,
+     "max": 21.151716500553707,
+     "n": 2,
+     "n_runs": 2
+    },
+    "100": {
+     "mean": 62.90215349038879,
+     "min": 62.90215349038879,
+     "max": 62.90215349038879,
+     "n": 1,
+     "n_runs": 2
+    },
+    "50": {
+     "mean": 53.55727464088624,
+     "min": 45.660627120046335,
+     "max": 61.45392216172615,
+     "n": 2,
+     "n_runs": 2
+    }
+   }
+  }
+ }
 }

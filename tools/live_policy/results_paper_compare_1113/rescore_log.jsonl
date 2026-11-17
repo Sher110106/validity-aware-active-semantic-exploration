@@ -22,3 +22,17 @@
 {"t": "2026-11-17T17:04:25+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
 {"t": "2026-11-17T17:24:59+05:30", "step": "folder_map_hashes_added_after_review", "json_sha256": "862b0f60ffc4c82e8854824c7e5778edfa72546fc3cb2dc6024c8fd29c907805", "md_sha256": "07442a37c1bbedef3e69ba52cd267021619b7a0f178c48b0a3e11f3aa7df8ea7", "note": "the folder_map step of 17:01:05 logged no hash; these are the files as committed in bd5c403"}
 {"t": "2026-11-17T17:24:59+05:30", "step": "notes_rewritten", "why": "review of 11-17: wording of items 7, 8 and carried-over item 7; no score was recomputed and the host was not read", "notes_sha256": "8a7c9d49b99abd7cc5c35349408e622e720305714b9cd31cfbaf2f886b898174"}
+{"t": "2026-11-18T02:54:22+05:30", "step": "acceptance", "file": "acceptance_20261118T025414.json", "sha256": "a3eb5a5a8dbc2988a02b2f0428c3220ce8c6c13c6c1143079fc0f92d4b12480b", "n_runs": 25}
+{"t": "2026-11-18T02:54:22+05:30", "step": "folder_map", "pending": 0, "unmapped": 1, "json_sha256": "49bf71d6d4535769705998ab7c86704d8672b8edd652ab55306c1c302f27a48d", "md_sha256": "07442a37c1bbedef3e69ba52cd267021619b7a0f178c48b0a3e11f3aa7df8ea7"}
+{"t": "2026-11-18T02:54:22+05:30", "step": "rsync", "folders_copied": 0, "files": 0, "moves": 0, "list": "rsync_dryrun_20261118T025414.txt"}
+{"t": "2026-11-18T02:54:31+05:30", "step": "rsync_e8", "runs": 3, "files": 328}
+{"t": "2026-11-18T02:54:33+05:30", "step": "copy_check", "folders": 24, "new_content": 6}
+{"t": "2026-11-18T02:54:33+05:30", "step": "c2", "file": "c2_20261118T025414.json", "sha256": "75f72b379d3095090d5dcfc6e1b34ca431e2d65a21f5b8c092c104de391fccde", "status_00853": "compute", "status_00871": "compute", "f1_00853": 0.751131221719457, "f1_00871": 0.7714285714285715}
+{"t": "2026-11-18T02:54:33+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 1300.2523394823074, "rule_00853": "median", "rule_00871": "median"}
+{"t": "2026-11-18T02:54:33+05:30", "step": "e8", "runs": 3, "counted": 3, "reached_b": 2}
+{"t": "2026-11-18T02:54:34+05:30", "step": "ged_host_start", "n_runs": 7, "runs": ["frontier_seeds/e7_00871_s42_frontier_end", "frontier_seeds/e7_00871_s43_frontier_end", "frontier_seeds/e7_00871_s44_frontier_end", "frontier_seeds/e7_00871_s45_frontier_end", "live_campaign/e8_00853_s42_official_105m", "live_campaign/e8_00853_s43_official_105m", "live_campaign/e8_00853_s44_official_105m"]}
+{"t": "2026-11-18T02:57:02+05:30", "step": "ged_host_done", "n_runs": 7}
+{"t": "2026-11-18T02:57:02+05:30", "step": "ged_file", "reused": 14, "computed": 7, "recheck": "[]"}
+{"t": "2026-11-18T02:57:58+05:30", "step": "score_nov_without", "run": "e8_00853_s43_official_105m", "scored": true}
+{"t": "2026-11-18T02:57:58+05:30", "step": "score", "mode": "final", "cells_diff_00853": 0, "cells_diff_00871": 141, "cells_same_00853": 162, "cells_same_00871": 102}
+{"t": "2026-11-18T02:57:58+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}

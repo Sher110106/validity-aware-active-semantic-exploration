@@ -1,6 +1,6 @@
 <!-- written by rescore_paper.py; the figures are paper_compare.py's own output -->
 
-**Final rescore, written 2026-11-17T17:04:07+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 1300.2523 s (median, n = 4).
+**Final rescore, written 2026-11-18T02:57:21+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 1300.2523 s (median, n = 4).
 - 00853: final.
 - 00871: final.
 
@@ -13,6 +13,7 @@ F1 x 100, stage value at the last stage with navigation time at most t. Each cel
 | Scene | Arm | Paper method | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|---|
 | 00853 | official | Ours(ASP) | 8.0 [6.8-9.3] n=2 | 34.4 | 21.6 [20.5-22.6] n=2 | 60.8 | null (0/2) | 66.7 |
+| 00853 | ASP + DeepSeek, November | Ours(ASP) | 8.1 [6.3-9.7] n=3 | 34.4 | 26.7 [24.5-30.6] n=3 | 60.8 | 34.4 [33.1-35.7] n=2/3 | 66.7 |
 | 00853 | filter_only | Ours(ASP) | 7.6 [5.7-10.3] n=3 | 34.4 | 24.1 [19.3-29.4] n=3 | 60.8 | null (0/3) | 66.7 |
 | 00853 | placebo | none | 6.4 [4.7-7.8] n=3 | - | 23.1 [20.5-25.6] n=3 | - | null (0/3) | - |
 | 00853 | frontier_60m | Frontier | 9.7 [8.8-10.4] n=3 | 18.6 | 26.7 [23.7-29.8] n=3 | 46.5 | null (0/3) | 58.8 |
@@ -33,6 +34,7 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | Scene | Arm | 0.8B 10% | 0.8B 50% | 0.8B 100% | 1.2B 10% | 1.2B 50% | 1.2B 100% |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 7.5 (n=2) | 14.1 (n=2) | - | 8.5 (n=2) | 26.8 (n=1) | - |
+| 00853 | ASP + DeepSeek, November | 8.0 (n=3) | 21.7 (n=3) | 32.7 (n=3) | 9.7 (n=3) | 28.9 (n=3) | - |
 | 00853 | filter_only | 6.6 (n=3) | 19.2 (n=3) | - | 7.6 (n=3) | 27.8 (n=2) | - |
 | 00853 | placebo | 6.1 (n=3) | 19.6 (n=3) | - | 7.3 (n=3) | 25.9 (n=1) | - |
 | 00853 | frontier_60m | 9.7 (n=3) | 22.4 (n=3) | - | 9.8 (n=3) | 28.2 (n=3) | - |
@@ -53,6 +55,7 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | Scene | Arm | Paper method | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|---|
 | 00853 | official | Ours(ASP) | 16.5 [13.8-19.1] n=2 | 34.4 | 38.7 [37.2-40.1] n=2 | 60.8 | null (0/2) | 66.7 |
+| 00853 | ASP + DeepSeek, November | Ours(ASP) | 17.2 [13.3-21.2] n=3 | 34.4 | 51.1 [45.7-61.5] n=3 | 60.8 | 61.6 [60.3-62.9] n=2/3 | 66.7 |
 | 00853 | filter_only | Ours(ASP) | 14.8 [12.1-18.4] n=3 | 34.4 | 48.3 [40.9-52.2] n=3 | 60.8 | null (0/3) | 66.7 |
 | 00853 | placebo | none | 13.8 [10.8-16.1] n=3 | - | 43.9 [39.4-48.2] n=3 | - | null (0/3) | - |
 | 00853 | frontier_60m | Frontier | 15.3 [12.9-16.9] n=3 | 18.6 | 45.6 [41.7-52.4] n=3 | 46.5 | null (0/3) | 58.8 |
@@ -73,6 +76,7 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | Scene | Arm | 0.8B 10% | 0.8B 50% | 0.8B 100% | 1.2B 10% | 1.2B 50% | 1.2B 100% |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 15.8 (n=2) | 26.4 (n=2) | - | 18.3 (n=2) | 47.4 (n=1) | - |
+| 00853 | ASP + DeepSeek, November | 17.0 (n=3) | 43.5 (n=3) | 61.5 (n=3) | 20.8 (n=3) | 55.4 (n=3) | - |
 | 00853 | filter_only | 12.6 (n=3) | 41.1 (n=3) | - | 14.8 (n=3) | 53.0 (n=2) | - |
 | 00853 | placebo | 13.6 (n=3) | 39.5 (n=3) | - | 14.3 (n=3) | 48.4 (n=1) | - |
 | 00853 | frontier_60m | 15.3 (n=3) | 39.7 (n=3) | - | 15.0 (n=3) | 48.8 (n=3) | - |
@@ -95,6 +99,7 @@ This reference comes from the frontier explorer, so it favours frontier arms. Th
 | Scene | Arm | Paper method | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|---|
 | 00853 | official | Ours(ASP) | 17.6 [15.2-20.1] n=2 | 34.4 | 39.9 [39.3-40.5] n=2 | 60.8 | null (0/2) | 66.7 |
+| 00853 | ASP + DeepSeek, November | Ours(ASP) | 18.7 [16.9-21.8] n=3 | 34.4 | 54.7 [52.0-60.0] n=3 | 60.8 | 64.3 [63.5-65.2] n=2/3 | 66.7 |
 | 00853 | filter_only | Ours(ASP) | 19.8 [18.6-21.6] n=3 | 34.4 | 52.6 [51.2-54.3] n=3 | 60.8 | null (0/3) | 66.7 |
 | 00853 | placebo | none | 16.3 [12.2-18.6] n=3 | - | 49.2 [47.2-52.2] n=3 | - | null (0/3) | - |
 | 00853 | frontier_60m | Frontier | 19.7 [18.2-21.5] n=3 | 18.6 | 55.1 [53.6-57.0] n=3 | 46.5 | null (0/3) | 58.8 |
@@ -115,6 +120,7 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | Scene | Arm | 0.8B 10% | 0.8B 50% | 0.8B 100% | 1.2B 10% | 1.2B 50% | 1.2B 100% |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 17.3 (n=2) | 28.0 (n=2) | - | 19.5 (n=2) | 46.4 (n=1) | - |
+| 00853 | ASP + DeepSeek, November | 18.7 (n=3) | 46.2 (n=3) | 62.3 (n=3) | 21.3 (n=3) | 58.5 (n=3) | - |
 | 00853 | filter_only | 18.3 (n=3) | 44.6 (n=3) | - | 19.8 (n=3) | 55.9 (n=2) | - |
 | 00853 | placebo | 16.1 (n=3) | 44.4 (n=3) | - | 17.6 (n=3) | 53.1 (n=1) | - |
 | 00853 | frontier_60m | 19.0 (n=3) | 48.0 (n=3) | - | 20.0 (n=3) | 57.6 (n=3) | - |
@@ -139,6 +145,7 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | Scene | Arm | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 624 [624-625] n=2 | 249.5 | 708 [700-716] n=2 | 147.0 | null | 147.0 |
+| 00853 | ASP + DeepSeek, November | 616 [603-630] n=3 | 249.5 | 750 [734-782] n=3 | 147.0 | 820 [814-826] n=2 | 147.0 |
 | 00853 | filter_only | 620 [612-628] n=3 | 249.5 | 740 [708-774] n=3 | 147.0 | null | 147.0 |
 | 00853 | placebo | 612 [610-616] n=3 | - | 726 [724-728] n=3 | - | null | - |
 | 00853 | frontier_60m | 618 [617-619] n=3 | 279.0 | 745 [727-773] n=3 | 243.4 | null | 177.0 |
@@ -159,6 +166,7 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | Scene | Arm | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 346 [340-351] n=2 | 249.5 | 272 [256-288] n=2 | 147.0 | null | 147.0 |
+| 00853 | ASP + DeepSeek, November | 328 [326-332] n=3 | 249.5 | 246 [230-256] n=3 | 147.0 | 210 [194-226] n=2 | 147.0 |
 | 00853 | filter_only | 345 [338-350] n=3 | 249.5 | 270 [234-291] n=3 | 147.0 | null | 147.0 |
 | 00853 | placebo | 341 [330-350] n=3 | - | 252 [226-272] n=3 | - | null | - |
 | 00853 | frontier_60m | 341 [338-346] n=3 | 279.0 | 257 [228-274] n=3 | 243.4 | null | 177.0 |
@@ -179,6 +187,7 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | Scene | Arm | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|
 | 00853 | official | 284 [283-286] n=2 | 249.5 | 256 [238-273] n=2 | 147.0 | null | 147.0 |
+| 00853 | ASP + DeepSeek, November | 278 [271-283] n=3 | 249.5 | 188 [181-202] n=3 | 147.0 | 185 [170-200] n=2 | 147.0 |
 | 00853 | filter_only | 278 [266-285] n=3 | 249.5 | 193 [166-234] n=3 | 147.0 | null | 147.0 |
 | 00853 | placebo | 275 [263-286] n=3 | - | 211 [188-224] n=3 | - | null | - |
 | 00853 | frontier_60m | 271 [266-276] n=3 | 279.0 | 206 [195-214] n=3 | 243.4 | null | 177.0 |
@@ -201,6 +210,7 @@ Final navigation time over final path length, from each run's last scored stage.
 | Scene | Arm | Runs | s/m mean [min-max] | Final time s (mean) | Final path m (mean) |
 |---|---|---|---|---|---|
 | 00853 | official | 2 | 6.53 [6.37-6.68] | 377.1 | 57.7 |
+| 00853 | ASP + DeepSeek, November | 3 | 5.77 [5.36-6.04] | 634.1 | 109.9 |
 | 00853 | filter_only | 3 | 6.33 [6.10-6.66] | 392.6 | 62.0 |
 | 00853 | placebo | 3 | 5.84 [5.63-6.13] | 381.6 | 65.3 |
 | 00853 | frontier_60m | 3 | 6.80 [6.46-7.09] | 435.0 | 64.0 |
@@ -219,7 +229,7 @@ Final navigation time over final path length, from each run's last scored stage.
 ## Not comparable
 
 - The references differ. The paper scores against a hand-driven full-scene map. We use the HM3D human-label map, the frontier-made map (biased toward frontier), and a coverage-tour map when one exists.
-- ASP runs stop at 60 m of path, which took 289-468 s here. A run has no value at a t past its last stage, so its 100% readout is null, and a 50% readout is null when the run ended sooner.
+- October's ASP runs stop at 60 m of path, which took 289-468 s here. The row "ASP + DeepSeek, November" ran to about 105 m of path (604-652 s). A run has no value at a t past its last stage, so an October run's 100% readout is null, a November run has a 100% value only if it reached B, and a 50% readout is null when the run ended sooner.
 - The e4 frontier runs stop at 60 m too (405-574 s), so their 100% readout is null as well. Only the frontier-to-end runs reach B.
 - Navigation time counts moving time only, so it depends on seconds per metre, which differs by arm.
 - Scenes 00069 and 00573 have no run here; their paper cells stay in the JSON only.
