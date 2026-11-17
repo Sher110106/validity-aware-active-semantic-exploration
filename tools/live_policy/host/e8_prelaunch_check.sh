@@ -12,7 +12,7 @@ RUN_NAME="${1:?give the name of the run to be launched}"
 WS="${ASP_WS:-$HOME/active-semantic-perception-workspace}"
 CAMPAIGN="$WS/runs/live_campaign"
 CONTAINER="${ASP_CONTAINER:-asp-noetic}"
-QUEUE_UNIT="${PAPER_QUEUE_UNIT:-paper-queue-rerun3.scope}"
+QUEUE_UNIT="${PAPER_QUEUE_UNIT:-paper-queue-*.scope}"  # a pattern: the queue has been started under several names
 MIN_GPU_MB=12000
 MIN_MEM_GB=60
 MIN_DISK_GB=20
@@ -28,8 +28,8 @@ check_prefix() {  # <label> <command that prints a hash> <expected prefix>
 
 # 1. The rerun queue has ended. Waiting is not ended: once the GPU frees it would start a run
 #    in the same container.
-state="$(systemctl --user is-active "$QUEUE_UNIT" 2>/dev/null)"
-if [ "$state" = "active" ] || [ "$state" = "activating" ]; then bad "the rerun queue ($QUEUE_UNIT) is $state"
+live="$(systemctl --user list-units "$QUEUE_UNIT" --state=active,activating --no-legend --plain 2>/dev/null | awk '{print $1}')"
+if [ -n "$live" ]; then bad "a rerun queue is still live: $(echo $live)"
 elif pgrep -u "$(id -u)" -f 'paper_queue\.sh' >/dev/null; then bad "a paper_queue.sh process is still running"
 else ok "the rerun queue has ended"; fi
 
