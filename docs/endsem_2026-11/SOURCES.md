@@ -12,7 +12,7 @@ Short names:
 - `WRITEUP` = `tools/live_policy/results_2026-10-31/WRITEUP.md`
 - `FH` = `tools/live_policy/results_2026-10-31/frontier_seeds/frontier_holm.json`
 - `PC` = `tools/live_policy/results_paper_compare_1113/paper_compare.json` (final rescore of 18 Nov; its 853 cells equal the 11-12 file's, plus 27 new cells in the arm `official_nov` (the November ASP row, `N13` item 7); its 871 cells do not: 102 of 243 are the same, because B moved; `comparison_vs_1112.json`, `N13` items 7 and 8)
-- `B13` = `tools/live_policy/results_paper_compare_1113/budgets_20261118T025414.json`; `C2F` = `tools/live_policy/results_paper_compare_1113/c2_20261118T025414.json` (both hold the same values as the 17 Nov files). The builder reads the newest file of each name pattern.
+- `B13` = `tools/live_policy/results_paper_compare_1113/budgets_20261118T031340.json`; `C2F` = `tools/live_policy/results_paper_compare_1113/c2_20261118T031340.json` (both hold the same values as the 17 Nov files and the 18 Nov `T025414` ones). The builder reads the newest file of each name pattern.
 - `RS` = `tools/live_policy/results_paper_compare_1113/rescore_summary.json` (key `nov`; the readings of one run are in `nov.alternatives`); `ALT_STOP` = `tools/live_policy/results_paper_compare_1113/alt_nov_e8_00853_s43_official_105m_stopped_after_stage_22/paper_compare.json`; `ALT_OUT` = `tools/live_policy/results_paper_compare_1113/alt_nov_without_e8_00853_s43_official_105m/paper_compare.json` (both folders are named in `RS` `nov.alternatives.rows[].folder`); `DEV` = `tools/live_policy/DEVIATIONS_NOVEMBER.md`
 - `CC` = `tools/live_policy/results_paper_compare_1112/c_checks.json`
 - `N12` = `tools/live_policy/results_paper_compare_1112/NOTES.md`; `N13` = `tools/live_policy/results_paper_compare_1113/NOTES.md`
@@ -21,7 +21,7 @@ Short names:
 
 A number marked **TBD** has no source yet. Part 3 has not run. Its values live in `slots.json` and show as TBD until filled.
 
-Slide 20 carries no result number. Slide 1 carries none either; its Part 2 line says that on 853 ASP is above frontier in November's runs, by less than in the paper, which is slide 8's reading (guarded by `facts853`).
+Slide 20 carries no result number. Slide 1 carries none either; its Part 2 line says that on 853 November's 3 ASP runs read above frontier, by less than in the paper, which is slide 8's reading (guarded by `facts853`).
 
 ## Slide 2: ASP in one picture
 
@@ -128,12 +128,13 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | Budget 632 s and 1300 s in the kickers | `PC` `meta.budgets` |
 | Paper lead 15.8 and 14.3 points (script) | Derived from the paper cells: 34.4 − 18.6, 60.8 − 46.5 |
 | Our lead 4.1 and −0.8 points (script) | Derived from the values as shown: 16.5 − 12.4, 38.7 − 39.5 |
-| Slide 8 title "November's runs put ASP above frontier, as in the paper" | Above: the November mean is above frontier's at 10%, 50% and 100% (the three gaps below are positive). As in the paper: the paper's ASP is above its frontier in the same three cells (15.8, 14.3, 7.9). Both guarded in `facts853` |
+| Slide 8 title and cover: "November's 3 ASP runs read above frontier" | The 3 is `n_runs` of the official_nov cells (`PC` apr B, scene 00853). Above: the November mean is above frontier's at 10%, 50% and 100% (the gaps below are positive; guard in `facts853`) |
 | Body: at the full budget ASP reads 61.6 (n=2) and our frontier 55.6 (n=3); the paper has 66.7 and 58.8 | `PC` apr B, scene 00853, fraction 100: arm official_nov `stage_value_x100.mean` 61.62, `n` 2 (of `n_runs` 3); arm frontier_end 55.57, `n` 3 (of 5); `paper_f1_x100` 66.7 and 58.8 |
 | Body: the gaps at 10%, 50% and 100% are 4.8, 11.6 and 6.0 points | Derived from the cells as printed (`PC` apr B, scene 00853, `stage_value_x100.mean`; the unrounded gaps are 4.78, 11.56, 6.05): official_nov 17.2, 51.1, 61.6 minus frontier_end 12.4, 39.5, 55.6 |
 | Body: against the paper's 15.8, 14.3 and 7.9 | `paper_f1_x100`: 34.4 − 18.6, 60.8 − 46.5, 66.7 − 58.8 |
 | "By less than in the paper" (cover, title area, README) | Shortfall = the paper's gap − ours: 15.8 − 4.8 = 11.0; 14.3 − 11.6 = 2.7; 7.9 − 6.0 = 1.9. The builder stops if a gap is not smaller, or (script and README) if 10% is not the largest shortfall |
-| Note: October's runs led by 4.1 at 10% and trailed by 0.8 at 50% | `PC` apr B, scene 00853, arm official (October) against frontier_end, from the values as printed: 16.5 − 12.4, 38.7 − 39.5 (the "Our lead 4.1 and −0.8" row) |
+| Note: October's two runs led by 4.1 at 10% and trailed by 0.8 at 50% | `PC` apr B, scene 00853, arm official (October; `n_runs` 2) against frontier_end, from the values as printed: 16.5 − 12.4, 38.7 − 39.5 (the "Our lead 4.1 and −0.8" row) |
+| Note, slide 11, README, script: November's ASP logs 5.8 s per metre (n=3), our frontier 7.0 (n=5); at a given time ASP has gone farther | `PC` `seconds_per_metre`, scene 00853, arm official_nov: `sec_per_m.mean` 5.774, `sec_per_m.n` 3; arm frontier_end: 6.975, n 5; printed to one decimal as 5.8 and 7.0 (`paper_compare.md` "Seconds per metre": 5.77 and 6.98). The builder stops if ASP's value is not below frontier's. Frontier's clock also counts its waits for a path, ASP's does not: `N12` "Frontier clock" (host copy; not checked against the released code) |
 | Note: the two ASP batches differ by 12.4 points at 50% | 51.1 (official_nov) − 38.7 (official), `stage_value_x100.mean` at 50%. The ranges [45.7–61.5] and [37.2–40.1] do not overlap. 12.4 is at least the November lead at 50%, 11.6 (guard) |
 | Note: at 100% the gap is 1.5 and −0.2 under the other two references (6.0 under apr) | `PC` cells with `reference` hm3d and frontier_made, `variant` B, scene 00853, fraction 100, `stage_value_x100.mean`: hm3d official_nov 34.4 − frontier_end 32.9 = 1.5; frontier_made 64.3 − 64.5 = −0.2 (unrounded −0.14; the deck subtracts printed values throughout). Both are below 6.0 (guard) |
 | Note: by the rule's letter seed 43 loses its 100% value; that cell then reads 62.9, n=1 of 3 | `ALT_STOP`, reference apr, variant B, scene 00853, arm official_nov, fraction 100: `stage_value_x100.mean` 62.90, `n` 1, `n_runs` 3; `RS` `nov.alternatives.rows[kind=stopped]` (`run` e8_00853_s43_official_105m, `stage` 22, `end_s` 514.16, before B = 632.18). The rule: the Note to Amendment 3 (a run stopped by hand counts as ended before B) with A3.2 (such a run keeps the values it has); `DEV` item 64, paragraph added 11-18 03:14 |
@@ -148,7 +149,7 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | Slide 9 body: "at 0.8 of the budget 2 of the 4 gaps turn negative" | `PC` cells with `variant` "0.8B" (reference apr, scene 00871), the registered sensitivity check (`paper_compare.md`, "Sensitivity"): ASP 10% 32.9 − 30.5 = +2.4; frontier 10% 29.6 − 29.2 = +0.4; 50% 51.3 − 55.7 = −4.4; 100% 65.0 − 65.3 = −0.3. (At 1.2 B the ASP 10% gap is +6.8 and the frontier 100% cell has n=2 of 5, which the table's rule hides; the slide does not use 1.2 B) |
 | Slide 9 body: "At 10% our four arms score 31.7–33.9 and their ranges overlap" | Scene 00871, fraction 10, `stage_value_x100.mean`: official 33.9, filter_only 33.0, placebo 31.7, frontier_end 31.9. The ranges [30.8–36.4], [29.9–37.6], [30.2–32.6], [27.8–37.4] share 30.8–32.6 |
 | Slide 9 body: "No ASP run of ours reaches 50% of the budget" | Scene 00871, arms official and filter_only (placebo too), fractions 50 and 100: `stage_value_x100.n` = 0 of 3. ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
-| Slide 9 source line: the paper's cells are one run each; ours carry n; ASP stops at 60 m | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5; `WRITEUP` §2 |
+| Slide 9 source line: the paper's cells are one run each; ours carry n; our ASP runs on 871 stop at 60 m | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5; `WRITEUP` §2 |
 | Script slide 9 and README finding 3: "on 853 ours are 3 to 22 points lower" (3.2 to 22.1) | Derived the same way, scene 00853, apr B, arms official and frontier_end: ASP 10% 16.5 − 34.4 = −17.9; ASP 50% 38.7 − 60.8 = −22.1; frontier 12.4 − 18.6 = −6.2; 39.5 − 46.5 = −7.0; 55.6 − 58.8 = −3.2 |
 | README finding 3: n in the tables | The cells' `stage_value_x100.n` (and `n_runs` for "3 of 5"), scenes 00853 and 00871, arms official, filter_only, frontier_end |
 | Guard | The builder computes every figure above, checks that script slide 9 and README finding 3 hold them (`check_text`), and stops with a message if a figure is missing, a gap changes sign, a null cell is needed, or an ASP run reaches 50% |
@@ -322,7 +323,6 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | The L3 margin was set knowing the Gemini–DeepSeek gap | `SEM` §2 (last sentence: "The margin δ at L3 (§10) was set knowing the 9-point gap above") |
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
-| Part 2 has no open row; the 853 ASP batches differ by 12.4 points at 50%, as much as the gap between ASP and frontier | slides 8 and 11 (rows above); `N13` "Status of the two scenes" (both scenes final) |
 
 ## Slide 23: the answer
 

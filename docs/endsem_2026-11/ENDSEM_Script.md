@@ -1,6 +1,6 @@
 # Speaker script: end-sem (24 slides and 4 backup, about 15 minutes)
 
-About 2,000 words for the 24 slides; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
+About 1,970 words for the 24 slides; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files.
 
 ---
 
@@ -70,12 +70,9 @@ The paper gives no budget value. We use the median end of our frontier runs that
 
 ---
 
-## Slide 8: On 853, November's runs put ASP above frontier, as in the paper (about 40 s)
+## Slide 8: On 853, November's 3 ASP runs read above frontier (about 40 s)
 
-At the full budget ASP reads 61.6 with two runs and our frontier 55.6 with three; the paper has 66.7 and 58.8. In November's runs the gaps are 4.8, 11.6 and 6.0 points, against the paper's 15.8, 14.3 and 7.9. October's runs led by 4.1 at 10% and trailed by 0.8 at 50%.
-
-The two ASP batches differ by 12.4 points at 50%. At 100% the gap is 1.5 and minus 0.2 under the other two references. By the rule's letter seed 43 loses its 100% value; that cell reads 62.9, one run. One home, two or three runs: not a test of the paper's claim.
-
+November's three ASP runs sit above our five frontier runs at 10%, 50% and 100%: by 4.8, 11.6 and 6.0 points, against the paper's 15.8, 14.3 and 7.9. At 100% that is two runs against three, and the gap is 1.5 and minus 0.2 under the other two references. October's two runs trailed by 0.8 at 50%; the batches differ by 12.4. And November's ASP logs 5.8 seconds a metre, frontier 7.0. One home, two or three runs: not a test of the paper's claim.
 ---
 
 ## Slide 9: On 871, ours are within 3.5 points of the paper's (about 25 s)
@@ -94,10 +91,9 @@ Check C1: 13 and 14 rooms; the paper has 6 and 9. The paper's floor area, 208 an
 
 ---
 
-## Slide 11: What limits the runs (about 40 s)
+## Slide 11: What limits the runs (about 45 s)
 
-Two batches of ASP: October's stop at 60 metres, November's go to 105, and two of three reach the full budget. At half the budget they score 38.7 and 51.1, and October's random-guess runs 43.9, between the two: as large as the gap between ASP and frontier. Our frontier batches differ too, 45.6 and 39.5; the ranges overlap. On 871 no ASP run reaches half the budget, and the one comparison, at 130 seconds, is on clocks that differ: in the host's copy of the code, frontier's clock counts its waits; ASP's does not. We have not checked that against the released code.
-
+October's ASP runs stop at 60 metres, November's go to 105; two of three reach the full budget. At half the budget they score 38.7 and 51.1, a gap as large as the one between ASP and frontier. October's random-guess runs, with no LLM, read 43.9, between the two. Our frontier batches read 45.6 and 39.5. The clocks differ: frontier's counts its waits for a path; ASP's does not, and on 853 ASP logs 5.8 seconds a metre against frontier's 7.0. On 871 no ASP run reaches half the budget, and the one comparison is at 130 seconds.
 ---
 
 ## Slide 12: The author's defense, in three questions (about 35 s)
@@ -190,9 +186,9 @@ The paper used Gemini 2.5 Pro. We used Claude with the author's prompt and loop.
 
 ---
 
-## Slide 22: How the test was made (about 30 s)
+## Slide 22: How the test was made (about 25 s)
 
-We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did. And part 2 has no open row. Its 853 ASP batches differ by 12.4 points at 50%.
+We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did.
 
 ---
 
