@@ -9,3 +9,14 @@
 {"t": "2026-11-13T19:44:21+05:30", "step": "ged_file", "reused": 14, "computed": 0, "recheck": "[{\"run\": \"frontier_seeds/e7_00871_s45_frontier_end\", \"stages\": 11, \"max_abs_diff\": 0.0}]"}
 {"t": "2026-11-13T19:44:32+05:30", "step": "score", "mode": "interim", "cells_diff_00853": 0, "cells_diff_00871": 0, "cells_same_00853": 162, "cells_same_00871": 243}
 {"t": "2026-11-13T19:44:32+05:30", "step": "done", "mode": "interim", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}
+{"t": "2026-11-17T17:01:05+05:30", "step": "acceptance", "file": "acceptance_20261117T170055.json", "sha256": "a3eb5a5a8dbc2988a02b2f0428c3220ce8c6c13c6c1143079fc0f92d4b12480b", "n_runs": 25}
+{"t": "2026-11-17T17:01:05+05:30", "step": "folder_map", "pending": 0, "unmapped": 1}
+{"t": "2026-11-17T17:01:29+05:30", "step": "rsync", "folders_copied": 5, "files": 1111, "moves": 5, "list": "rsync_dryrun_20261117T170055.txt"}
+{"t": "2026-11-17T17:01:32+05:30", "step": "copy_check", "folders": 24, "new_content": 6}
+{"t": "2026-11-17T17:01:32+05:30", "step": "c2", "file": "c2_20261117T170055.json", "sha256": "b2037f87f47b8ddfa5d57c1ab4c19db993eca5527a208d8591a8f89187ae62a6", "status_00853": "compute", "status_00871": "compute", "f1_00853": 0.751131221719457, "f1_00871": 0.7714285714285715}
+{"t": "2026-11-17T17:01:32+05:30", "step": "budget", "B_00853": 632.1750566959381, "B_00871": 1300.2523394823074, "rule_00853": "median", "rule_00871": "median"}
+{"t": "2026-11-17T17:01:33+05:30", "step": "ged_host_start", "n_runs": 4, "runs": ["frontier_seeds/e7_00871_s42_frontier_end", "frontier_seeds/e7_00871_s43_frontier_end", "frontier_seeds/e7_00871_s44_frontier_end", "frontier_seeds/e7_00871_s45_frontier_end"]}
+{"t": "2026-11-17T17:03:47+05:30", "step": "ged_host_done", "n_runs": 4}
+{"t": "2026-11-17T17:03:47+05:30", "step": "ged_file", "reused": 14, "computed": 4, "recheck": "[]"}
+{"t": "2026-11-17T17:04:25+05:30", "step": "score", "mode": "final", "cells_diff_00853": 0, "cells_diff_00871": 141, "cells_same_00853": 162, "cells_same_00871": 102}
+{"t": "2026-11-17T17:04:25+05:30", "step": "done", "mode": "final", "out": "/Users/sher/project/cvp/project/tools/live_policy/results_paper_compare_1113"}

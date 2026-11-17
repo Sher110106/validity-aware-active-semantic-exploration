@@ -1,9 +1,9 @@
 {
- "written_at": "2026-11-13T19:44:32+05:30",
- "stamp": "20261113T194049",
- "mode": "interim",
- "acceptance_file": "acceptance_20261113T194049.json",
- "c2_file": "c2_20261113T194049.json",
+ "written_at": "2026-11-17T17:04:25+05:30",
+ "stamp": "20261117T170055",
+ "mode": "final",
+ "acceptance_file": "acceptance_20261117T170055.json",
+ "c2_file": "c2_20261117T170055.json",
  "scene_state": {
   "00853": {
    "e7_pending": [],
@@ -11,40 +11,12 @@
    "complete": true
   },
   "00871": {
-   "e7_pending": [
-    "frontier_seeds/e7_00871_s42_frontier_end",
-    "frontier_seeds/e7_00871_s43_frontier_end",
-    "frontier_seeds/e7_00871_s44_frontier_end",
-    "frontier_seeds/e7_00871_s45_frontier_end"
-   ],
-   "tours_pending": [
-    "apr/apr_00871_b"
-   ],
-   "complete": false
+   "e7_pending": [],
+   "tours_pending": [],
+   "complete": true
   }
  },
- "pending": [
-  {
-   "name": "apr/apr_00871_b",
-   "why": "1 of 2 attempts launched"
-  },
-  {
-   "name": "frontier_seeds/e7_00871_s42_frontier_end",
-   "why": "2 of 3 attempts launched"
-  },
-  {
-   "name": "frontier_seeds/e7_00871_s43_frontier_end",
-   "why": "2 of 3 attempts launched"
-  },
-  {
-   "name": "frontier_seeds/e7_00871_s44_frontier_end",
-   "why": "2 of 3 attempts launched"
-  },
-  {
-   "name": "frontier_seeds/e7_00871_s45_frontier_end",
-   "why": "2 of 3 attempts launched"
-  }
- ],
+ "pending": [],
  "budgets": {
   "00853": {
    "scene": "00853",
@@ -75,19 +47,28 @@
   },
   "00871": {
    "scene": "00871",
-   "primary_s": 809.084,
-   "primary_rule": "fallback",
-   "n_primary": 1,
+   "primary_s": 1300.2523394823074,
+   "primary_rule": "median",
+   "n_primary": 4,
    "primary_runs": [
+    "frontier_seeds/e7_00871_s42_frontier_end",
+    "frontier_seeds/e7_00871_s43_frontier_end",
+    "frontier_seeds/e7_00871_s45_frontier_end",
     "frontier_seeds/e7_00871_s46_frontier_end"
    ],
-   "with_capped_s": 809.084,
-   "with_capped_rule": "fallback",
-   "n_with_capped": 1,
-   "capped_runs": [],
+   "with_capped_s": 1337.0148689746857,
+   "with_capped_rule": "median",
+   "n_with_capped": 5,
+   "capped_runs": [
+    "frontier_seeds/e7_00871_s44_frontier_end"
+   ],
    "fallback_s": 809.084,
-   "second_line_differs": false,
+   "second_line_differs": true,
    "end_times_s": {
+    "frontier_seeds/e7_00871_s42_frontier_end": 1337.0148689746857,
+    "frontier_seeds/e7_00871_s43_frontier_end": 1610.4847798347473,
+    "frontier_seeds/e7_00871_s44_frontier_end": 1740.7803149223328,
+    "frontier_seeds/e7_00871_s45_frontier_end": 1043.0289614200592,
     "frontier_seeds/e7_00871_s46_frontier_end": 1263.4898099899292
    },
    "b_1112_s": 809.084
@@ -119,16 +100,26 @@
   },
   "00871": {
    "folder": "apr/apr_00871_b",
-   "attempt": 1,
-   "frozen": true,
+   "attempt": 2,
+   "frozen": false,
    "meets_80_percent_rule": true,
-   "nvblox_died_lines": 1,
-   "timeout_lines": 14,
-   "last_stop_whose_graph_changed": null,
-   "objects_first": 4,
-   "objects_final": 4,
-   "status": "awaiting_rerun",
-   "f1": null
+   "nvblox_died_lines": 0,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 66,
+   "objects_first": 7,
+   "objects_final": 119,
+   "status": "compute",
+   "apr_a_graph": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_a/stages/66/habitat_scene_graph_original_graph0.yaml",
+   "apr_b_graph": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_b/stages/66/habitat_scene_graph_original_graph0.yaml",
+   "apr_a_sha256": "3c229b15606d76b94c395e73a61f4a9df5373eda2310048b3408e7ce1d52157b",
+   "apr_b_sha256": "e4a5b24e3dd8faa86e4b82cb2d1e33a1260ec47bdf7bd4389557d8d284a8c88f",
+   "f1": 0.7714285714285715,
+   "precision": 0.7570093457943925,
+   "recall": 0.7864077669902912,
+   "n_objects_apr_a": 103,
+   "n_objects_apr_b": 107,
+   "below_0_90": true,
+   "reading": "below 0.90: the reference moves by more than the paper's margins (2.7-7.9 points), but this C2 also holds APR-a's damage"
   }
  },
  "tours": {
@@ -204,7 +195,7 @@
    "last_stop_whose_graph_changed": 66,
    "meets_80_percent_rule": true
   },
-  "apr/apr_00871_b": {
+  "apr/apr_00871_b_FAILED_ATTEMPT_1020": {
    "first_stage": 0,
    "final_stage": 66,
    "object_nodes_first": 4,
@@ -220,6 +211,24 @@
    "nvblox_died_lines": 1,
    "timeout_lines": 14,
    "last_stop_whose_graph_changed": null,
+   "meets_80_percent_rule": true
+  },
+  "apr/apr_00871_b": {
+   "first_stage": 0,
+   "final_stage": 66,
+   "object_nodes_first": 7,
+   "object_nodes_final": 119,
+   "f1_objects_first": 7,
+   "f1_objects_final": 107,
+   "frozen_local": false,
+   "attempt": 2,
+   "launch_ts": "2026-11-17T10:20:57+05:30",
+   "waypoints_reached": 66,
+   "waypoints_listed": 66,
+   "checker_frozen": false,
+   "nvblox_died_lines": 0,
+   "timeout_lines": 0,
+   "last_stop_whose_graph_changed": 66,
    "meets_80_percent_rule": true
   }
  },
@@ -352,7 +361,7 @@
      },
      {
       "attempt": 2,
-      "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+      "folder": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
       "status": "finished",
       "finish_reason": "stalled: no new stage for 20 min at 57.67500000000076 m (GPU free 676 MB)",
       "valid": false,
@@ -364,10 +373,22 @@
       ],
       "checker_valid": false,
       "end_navigation_time_s_checker": 494.23
+     },
+     {
+      "attempt": 3,
+      "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 168.14999999999733 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 1337.01
      }
     ],
-    "counted": null,
-    "state": "pending"
+    "counted": 3,
+    "state": "valid"
    },
    {
     "name": "frontier_seeds/e7_00871_s43_frontier_end",
@@ -391,7 +412,7 @@
      },
      {
       "attempt": 2,
-      "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+      "folder": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
       "status": "finished",
       "finish_reason": "stalled: no new stage for 20 min at 27.749999999999826 m (GPU free 574 MB)",
       "valid": false,
@@ -403,10 +424,22 @@
       ],
       "checker_valid": false,
       "end_navigation_time_s_checker": 261.52
+     },
+     {
+      "attempt": 3,
+      "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 223.7249999999889 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 1610.48
      }
     ],
-    "counted": null,
-    "state": "pending"
+    "counted": 3,
+    "state": "valid"
    },
    {
     "name": "frontier_seeds/e7_00871_s44_frontier_end",
@@ -430,7 +463,7 @@
      },
      {
       "attempt": 2,
-      "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+      "folder": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
       "status": "finished",
       "finish_reason": "stalled: no new stage for 20 min at 26.699999999999836 m (GPU free 535 MB)",
       "valid": false,
@@ -442,10 +475,22 @@
       ],
       "checker_valid": false,
       "end_navigation_time_s_checker": 222.8
+     },
+     {
+      "attempt": 3,
+      "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+      "status": "finished",
+      "finish_reason": "path_cap_250m at 255.67499999998407 m",
+      "valid": true,
+      "exploration_complete": false,
+      "capped": true,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 1740.78
      }
     ],
-    "counted": null,
-    "state": "pending"
+    "counted": 3,
+    "state": "valid"
    },
    {
     "name": "frontier_seeds/e7_00871_s45_frontier_end",
@@ -469,7 +514,7 @@
      },
      {
       "attempt": 2,
-      "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+      "folder": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
       "status": "finished",
       "finish_reason": "host_memory_stop at 15.374999999999943 m",
       "valid": false,
@@ -481,10 +526,22 @@
       ],
       "checker_valid": false,
       "end_navigation_time_s_checker": 125.39
+     },
+     {
+      "attempt": 3,
+      "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+      "status": "finished",
+      "finish_reason": "exploration_complete at 138.15000000000188 m",
+      "valid": true,
+      "exploration_complete": true,
+      "capped": false,
+      "why_invalid": [],
+      "checker_valid": true,
+      "end_navigation_time_s_checker": 1043.03
      }
     ],
-    "counted": null,
-    "state": "pending"
+    "counted": 3,
+    "state": "valid"
    },
    {
     "name": "frontier_seeds/e7_00871_s46_frontier_end",
@@ -532,6 +589,22 @@
     ],
     [
      "00871",
+     "frontier_seeds/e7_00871_s42_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s43_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s44_frontier_end"
+    ],
+    [
+     "00871",
+     "frontier_seeds/e7_00871_s45_frontier_end"
+    ],
+    [
+     "00871",
      "frontier_seeds/e7_00871_s46_frontier_end"
     ]
    ],
@@ -556,24 +629,50 @@
    "crashed_frontier_rerun": [
     [
      "00871",
-     "frontier_seeds/e7_00871_s42_frontier_end"
+     "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111"
     ],
     [
      "00871",
-     "frontier_seeds/e7_00871_s43_frontier_end"
+     "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242"
     ],
     [
      "00871",
-     "frontier_seeds/e7_00871_s44_frontier_end"
+     "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427"
     ],
     [
      "00871",
-     "frontier_seeds/e7_00871_s45_frontier_end"
+     "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601"
     ]
    ]
   }
  },
- "copy_moves": [],
+ "copy_moves": [
+  {
+   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end",
+   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
+   "why": "its content is attempt 2"
+  },
+  {
+   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_b",
+   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/apr/apr_00871_b_FAILED_ATTEMPT_1020",
+   "why": "its content is attempt 1"
+  },
+  {
+   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end",
+   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
+   "why": "its content is attempt 2"
+  },
+  {
+   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end",
+   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
+   "why": "its content is attempt 2"
+  },
+  {
+   "from": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end",
+   "to": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
+   "why": "its content is attempt 2"
+  }
+ ],
  "copy_check": {
   "apr/apr_00853_a": {
    "equals_old_copy_folder": [
@@ -594,6 +693,9 @@
    ]
   },
   "apr/apr_00871_b": {
+   "equals_old_copy_folder": []
+  },
+  "apr/apr_00871_b_FAILED_ATTEMPT_1020": {
    "equals_old_copy_folder": [
     "apr_00871_b"
    ]
@@ -624,6 +726,9 @@
    ]
   },
   "frontier_seeds/e7_00871_s42_frontier_end": {
+   "equals_old_copy_folder": []
+  },
+  "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111": {
    "equals_old_copy_folder": [
     "e7_00871_s42_frontier_end"
    ]
@@ -634,6 +739,9 @@
    ]
   },
   "frontier_seeds/e7_00871_s43_frontier_end": {
+   "equals_old_copy_folder": []
+  },
+  "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242": {
    "equals_old_copy_folder": [
     "e7_00871_s43_frontier_end"
    ]
@@ -644,23 +752,29 @@
    ]
   },
   "frontier_seeds/e7_00871_s44_frontier_end": {
-   "equals_old_copy_folder": [
-    "e7_00871_s44_frontier_end"
-   ]
+   "equals_old_copy_folder": []
   },
   "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358": {
    "equals_old_copy_folder": [
     "e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358"
    ]
   },
-  "frontier_seeds/e7_00871_s45_frontier_end": {
+  "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427": {
    "equals_old_copy_folder": [
-    "e7_00871_s45_frontier_end"
+    "e7_00871_s44_frontier_end"
    ]
+  },
+  "frontier_seeds/e7_00871_s45_frontier_end": {
+   "equals_old_copy_folder": []
   },
   "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438": {
    "equals_old_copy_folder": [
     "e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438"
+   ]
+  },
+  "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601": {
+   "equals_old_copy_folder": [
+    "e7_00871_s45_frontier_end"
    ]
   },
   "frontier_seeds/e7_00871_s46_frontier_end": {
@@ -752,46 +866,45 @@
     "same_name": true
    },
    {
-    "folder": "frontier_seeds/e7_00871_s42_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
     "scene": "00871",
-    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
     "arm": "crashed_frontier_rerun",
     "from_entry": "e7_00871_s42_frontier_end",
-    "same_name": true
+    "same_name": false
    },
    {
-    "folder": "frontier_seeds/e7_00871_s43_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
     "scene": "00871",
-    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
     "arm": "crashed_frontier_rerun",
     "from_entry": "e7_00871_s43_frontier_end",
-    "same_name": true
+    "same_name": false
    },
    {
-    "folder": "frontier_seeds/e7_00871_s44_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
     "scene": "00871",
-    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
     "arm": "crashed_frontier_rerun",
     "from_entry": "e7_00871_s44_frontier_end",
-    "same_name": true
+    "same_name": false
    },
    {
-    "folder": "frontier_seeds/e7_00871_s45_frontier_end",
+    "folder": "frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
     "scene": "00871",
-    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end",
+    "path": "/Users/sher/cvp_paper_scale_copy/runs_1113/frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
     "arm": "crashed_frontier_rerun",
     "from_entry": "e7_00871_s45_frontier_end",
-    "same_name": true
+    "same_name": false
    }
   ],
-  "computed": [],
-  "recheck": [
-   {
-    "run": "frontier_seeds/e7_00871_s45_frontier_end",
-    "stages": 11,
-    "max_abs_diff": 0.0
-   }
-  ]
+  "computed": [
+   "frontier_seeds/e7_00871_s42_frontier_end",
+   "frontier_seeds/e7_00871_s43_frontier_end",
+   "frontier_seeds/e7_00871_s44_frontier_end",
+   "frontier_seeds/e7_00871_s45_frontier_end"
+  ],
+  "recheck": []
  },
  "comparison_vs_1112": {
   "00853": {
@@ -806,17 +919,17 @@
   },
   "00871": {
    "compared": 243,
-   "identical": 243,
+   "identical": 102,
    "only_in_1112": [],
    "only_in_1113": [],
    "b_1112_s": 809.084,
-   "b_1113_s": 809.084,
-   "b_changed": false,
-   "n_different": 0
+   "b_1113_s": 1300.2523394823074,
+   "b_changed": true,
+   "n_different": 141
   }
  },
- "alt_B_scored": false,
- "deviation_46_table": "| Run | Attempt 1 | Attempt 2 | Attempt 3 |\n|---|---|---|---|\n| APR-a 00853 | `apr_00853_a` (finished) | none | none |\n| APR-b 00853 | `apr_00853_b_FAILED_ATTEMPT_1707` (finished) | `apr_00853_b` (finished) | none |\n| APR-a 00871 | `apr_00871_a` (finished) | none | none |\n| APR-b 00871 | `apr_00871_b` (finished) | not launched yet (queued) | none |\n| e7 00871 s42 | `e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213` (finished) | `e7_00871_s42_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s43 | `e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313` (finished) | `e7_00871_s43_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s44 | `e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358` (finished) | `e7_00871_s44_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s45 | `e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438` (finished) | `e7_00871_s45_frontier_end` (finished) | not launched yet (queued) |\n| e7 00871 s46 | `e7_00871_s46_frontier_end` (finished) | none | none |",
+ "alt_B_scored": true,
+ "deviation_46_table": "| Run | Attempt 1 | Attempt 2 | Attempt 3 |\n|---|---|---|---|\n| APR-a 00853 | `apr_00853_a` (finished) | none | none |\n| APR-b 00853 | `apr_00853_b_FAILED_ATTEMPT_1707` (finished) | `apr_00853_b` (finished) | none |\n| APR-a 00871 | `apr_00871_a` (finished) | none | none |\n| APR-b 00871 | `apr_00871_b_FAILED_ATTEMPT_1020` (finished) | `apr_00871_b` (finished) | none |\n| e7 00871 s42 | `e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213` (finished) | `e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111` (finished) | `e7_00871_s42_frontier_end` (finished) |\n| e7 00871 s43 | `e7_00871_s43_frontier_end_FAILED_ATTEMPT_1313` (finished) | `e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242` (finished) | `e7_00871_s43_frontier_end` (finished) |\n| e7 00871 s44 | `e7_00871_s44_frontier_end_FAILED_ATTEMPT_1358` (finished) | `e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427` (finished) | `e7_00871_s44_frontier_end` (finished) |\n| e7 00871 s45 | `e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438` (finished) | `e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601` (finished) | `e7_00871_s45_frontier_end` (finished) |\n| e7 00871 s46 | `e7_00871_s46_frontier_end` (finished) | none | none |",
  "unmapped_folders": [
   "frontier_seeds/e7_00853_s42_frontier_end_FAILED_ATTEMPT1_gpu_oom"
  ],

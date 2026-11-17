@@ -1,12 +1,12 @@
 <!-- written by rescore_paper.py; the figures are paper_compare.py's own output -->
 
-**Interim rescore, written 2026-11-13T19:44:32+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 809.0840 s (fallback, n = 1).
+**Final rescore, written 2026-11-17T17:04:07+05:30.** Budget B per scene: 00853 = 632.1751 s (median, n = 5), 00871 = 1300.2523 s (median, n = 4).
 - 00853: final.
-- 00871: interim: awaiting the third attempts.
+- 00871: final.
 
 # Scores on the paper's scale
 
-F1 x 100, stage value at the last stage with navigation time at most t. Each cell reads `mean [min-max] n`; n counts runs with a value at t. The paper column is Fig. 4 (left) of arXiv 2510.05430v2. Budget B: 00853 = 632.1751 s (--budget), 00871 = 809.0840 s (--budget).
+F1 x 100, stage value at the last stage with navigation time at most t. Each cell reads `mean [min-max] n`; n counts runs with a value at t. The paper column is Fig. 4 (left) of arXiv 2510.05430v2. Budget B: 00853 = 632.1751 s (--budget), 00871 = 1300.2523 s (--budget).
 
 ## Reference: hm3d
 
@@ -18,15 +18,15 @@ F1 x 100, stage value at the last stage with navigation time at most t. Each cel
 | 00853 | frontier_60m | Frontier | 9.7 [8.8-10.4] n=3 | 18.6 | 26.7 [23.7-29.8] n=3 | 46.5 | null (0/3) | 58.8 |
 | 00853 | frontier_end_ref | Frontier | null (0/1) | 18.6 | null (0/1) | 46.5 | null (0/1) | 58.8 |
 | 00853 | frontier_end | Frontier | 7.7 [6.3-8.9] n=5 | 18.6 | 21.9 [19.9-23.9] n=5 | 46.5 | 32.9 [30.2-35.6] n=3/5 | 58.8 |
-| 00871 (interim: awaiting the third attempts) | official | Ours(ASP) | 7.6 [6.6-9.2] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | filter_only | Ours(ASP) | 8.4 [7.9-9.2] n=3 | 30.5 | 21.1 [21.1-21.1] n=1/3 | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | placebo | none | 6.3 [6.0-6.7] n=3 | - | 9.8 [9.8-9.8] n=1/3 | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | none | 8.2 [7.7-9.0] n=3 | - | null (0/3) | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | Frontier | 7.1 [6.6-8.2] n=3 | 29.2 | 10.4 [10.1-10.9] n=3 | 55.7 | null (0/3) | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | 24.2 [24.2-24.2] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | Frontier | 6.3 [6.3-6.3] n=1 | 29.2 | 13.7 [13.7-13.7] n=1 | 55.7 | 21.3 [21.3-21.3] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | none | 6.5 [5.5-7.4] n=4 | - | 11.6 [8.0-16.6] n=4 | - | null (0/4) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | none | 7.0 [6.3-7.9] n=4 | - | 11.8 [11.8-11.8] n=1/4 | - | null (0/4) | - |
+| 00871 | official | Ours(ASP) | 8.5 [6.7-9.5] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | filter_only | Ours(ASP) | 10.1 [8.1-13.5] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | placebo | none | 8.1 [7.3-9.6] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | oracle_visible | none | 10.9 [7.7-12.6] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | frontier_60m | Frontier | 8.7 [8.2-9.2] n=3 | 29.2 | null (0/3) | 55.7 | null (0/3) | 65.3 |
+| 00871 | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | null (0/1) | 65.3 |
+| 00871 | frontier_end | Frontier | 9.1 [6.3-11.9] n=5 | 29.2 | 19.8 [17.6-22.9] n=5 | 55.7 | 25.1 [24.0-26.8] n=3/5 | 65.3 |
+| 00871 | crashed_frontier_1st | none | 7.9 [7.0-9.6] n=4 | - | 20.0 [20.0-20.0] n=1/4 | - | null (0/4) | - |
+| 00871 | crashed_frontier_rerun | none | 8.6 [6.6-9.6] n=3/4 | - | null (0/4) | - | null (0/4) | - |
 
 Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` means no run has a value.
 
@@ -38,15 +38,15 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | 00853 | frontier_60m | 9.7 (n=3) | 22.4 (n=3) | - | 9.8 (n=3) | 28.2 (n=3) | - |
 | 00853 | frontier_end_ref | - | - | - | - | - | - |
 | 00853 | frontier_end | 7.5 (n=5) | 20.6 (n=5) | 31.7 (n=5) | 7.8 (n=5) | 26.3 (n=5) | 33.5 (n=1) |
-| 00871 (interim: awaiting the third attempts) | official | 7.2 (n=3) | 18.3 (n=3) | - | 7.8 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | filter_only | 7.7 (n=3) | 13.5 (n=2) | - | 8.7 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | placebo | 5.8 (n=3) | 9.5 (n=2) | - | 6.8 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 7.3 (n=3) | 18.1 (n=3) | - | 9.8 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 7.2 (n=3) | 10.2 (n=3) | - | 7.6 (n=3) | 13.2 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | - | - | - | - | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 5.6 (n=1) | 8.5 (n=1) | 19.5 (n=1) | 6.3 (n=1) | 15.1 (n=1) | 21.9 (n=1) |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 6.3 (n=4) | 11.1 (n=4) | 20.0 (n=1) | 7.0 (n=4) | 12.2 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 6.6 (n=4) | 9.5 (n=1) | - | 7.5 (n=4) | 15.4 (n=1) | - |
+| 00871 | official | 8.0 (n=3) | - | - | 9.5 (n=3) | - | - |
+| 00871 | filter_only | 8.7 (n=3) | - | - | 10.4 (n=3) | - | - |
+| 00871 | placebo | 6.8 (n=3) | - | - | 8.2 (n=3) | - | - |
+| 00871 | oracle_visible | 10.4 (n=3) | - | - | 12.0 (n=3) | - | - |
+| 00871 | frontier_60m | 7.6 (n=3) | 14.9 (n=2) | - | 9.2 (n=3) | - | - |
+| 00871 | frontier_end_ref | - | - | - | - | - | - |
+| 00871 | frontier_end | 8.1 (n=5) | 17.0 (n=5) | 24.1 (n=5) | 9.4 (n=5) | 21.6 (n=5) | 25.6 (n=2) |
+| 00871 | crashed_frontier_1st | 7.0 (n=4) | 13.4 (n=3) | - | 8.3 (n=4) | - | - |
+| 00871 | crashed_frontier_rerun | 7.5 (n=4) | - | - | 8.6 (n=3) | - | - |
 
 ## Reference: apr
 
@@ -58,15 +58,15 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | 00853 | frontier_60m | Frontier | 15.3 [12.9-16.9] n=3 | 18.6 | 45.6 [41.7-52.4] n=3 | 46.5 | null (0/3) | 58.8 |
 | 00853 | frontier_end_ref | Frontier | null (0/1) | 18.6 | null (0/1) | 46.5 | null (0/1) | 58.8 |
 | 00853 | frontier_end | Frontier | 12.4 [10.8-14.7] n=5 | 18.6 | 39.5 [33.9-42.0] n=5 | 46.5 | 55.6 [53.5-59.6] n=3/5 | 58.8 |
-| 00871 (interim: awaiting the third attempts) | official | Ours(ASP) | 32.3 [30.5-35.6] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | filter_only | Ours(ASP) | 30.2 [28.6-32.3] n=3 | 30.5 | 57.7 [57.7-57.7] n=1/3 | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | placebo | none | 27.2 [26.0-28.6] n=3 | - | 35.9 [35.9-35.9] n=1/3 | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | none | 37.6 [31.7-42.8] n=3 | - | null (0/3) | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | Frontier | 28.0 [27.0-28.8] n=3 | 29.2 | 34.5 [31.4-39.3] n=3 | 55.7 | null (0/3) | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | 67.7 [67.7-67.7] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | Frontier | 26.4 [26.4-26.4] n=1 | 29.2 | 43.2 [43.2-43.2] n=1 | 55.7 | 62.8 [62.8-62.8] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | none | 26.1 [23.1-28.5] n=4 | - | 37.2 [30.7-46.7] n=4 | - | null (0/4) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | none | 27.0 [24.9-28.3] n=4 | - | 38.2 [38.2-38.2] n=1/4 | - | null (0/4) | - |
+| 00871 | official | Ours(ASP) | 33.9 [30.8-36.4] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | filter_only | Ours(ASP) | 33.0 [29.9-37.6] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | placebo | none | 31.7 [30.2-32.6] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | oracle_visible | none | 42.8 [31.7-48.6] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | frontier_60m | Frontier | 30.2 [28.8-31.6] n=3 | 29.2 | null (0/3) | 55.7 | null (0/3) | 65.3 |
+| 00871 | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | null (0/1) | 65.3 |
+| 00871 | frontier_end | Frontier | 31.9 [27.8-37.4] n=5 | 29.2 | 59.2 [52.2-67.1] n=5 | 55.7 | 66.6 [64.4-68.3] n=3/5 | 65.3 |
+| 00871 | crashed_frontier_1st | none | 28.9 [25.0-31.8] n=4 | - | 55.4 [55.4-55.4] n=1/4 | - | null (0/4) | - |
+| 00871 | crashed_frontier_rerun | none | 31.7 [28.7-33.4] n=3/4 | - | null (0/4) | - | null (0/4) | - |
 
 Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` means no run has a value.
 
@@ -78,15 +78,15 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | 00853 | frontier_60m | 15.3 (n=3) | 39.7 (n=3) | - | 15.0 (n=3) | 48.8 (n=3) | - |
 | 00853 | frontier_end_ref | - | - | - | - | - | - |
 | 00853 | frontier_end | 12.8 (n=5) | 37.6 (n=5) | 55.6 (n=5) | 12.2 (n=5) | 45.6 (n=5) | 57.7 (n=1) |
-| 00871 (interim: awaiting the third attempts) | official | 31.0 (n=3) | 55.2 (n=3) | - | 32.5 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | filter_only | 29.3 (n=3) | 42.1 (n=2) | - | 31.9 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | placebo | 26.3 (n=3) | 34.7 (n=2) | - | 29.2 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 33.7 (n=3) | 61.1 (n=3) | - | 40.9 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 28.1 (n=3) | 33.1 (n=3) | - | 28.5 (n=3) | 41.1 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | - | - | - | - | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 25.4 (n=1) | 35.7 (n=1) | 60.1 (n=1) | 26.4 (n=1) | 47.0 (n=1) | 62.2 (n=1) |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 26.1 (n=4) | 35.5 (n=4) | 55.4 (n=1) | 27.2 (n=4) | 40.1 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 26.4 (n=4) | 32.9 (n=1) | - | 28.2 (n=4) | 46.8 (n=1) | - |
+| 00871 | official | 32.9 (n=3) | - | - | 37.3 (n=3) | - | - |
+| 00871 | filter_only | 31.9 (n=3) | - | - | 34.0 (n=3) | - | - |
+| 00871 | placebo | 29.2 (n=3) | - | - | 33.6 (n=3) | - | - |
+| 00871 | oracle_visible | 42.1 (n=3) | - | - | 47.2 (n=3) | - | - |
+| 00871 | frontier_60m | 28.5 (n=3) | 44.2 (n=2) | - | 31.3 (n=3) | - | - |
+| 00871 | frontier_end_ref | - | - | - | - | - | - |
+| 00871 | frontier_end | 29.6 (n=5) | 51.3 (n=5) | 65.0 (n=5) | 33.0 (n=5) | 62.9 (n=5) | 67.4 (n=2) |
+| 00871 | crashed_frontier_1st | 27.2 (n=4) | 42.8 (n=3) | - | 29.5 (n=4) | - | - |
+| 00871 | crashed_frontier_rerun | 28.5 (n=4) | - | - | 32.9 (n=3) | - | - |
 
 ## Reference: frontier_made
 
@@ -100,15 +100,15 @@ This reference comes from the frontier explorer, so it favours frontier arms. Th
 | 00853 | frontier_60m | Frontier | 19.7 [18.2-21.5] n=3 | 18.6 | 55.1 [53.6-57.0] n=3 | 46.5 | null (0/3) | 58.8 |
 | 00853 | frontier_end_ref | Frontier | null (0/1) | 18.6 | null (0/1) | 46.5 | null (0/1) | 58.8 |
 | 00853 | frontier_end | Frontier | 17.9 [12.3-21.5] n=5 | 18.6 | 45.0 [37.9-53.3] n=5 | 46.5 | 64.5 [63.6-65.6] n=3/5 | 58.8 |
-| 00871 (interim: awaiting the third attempts) | official | Ours(ASP) | 33.3 [32.0-35.8] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | filter_only | Ours(ASP) | 34.2 [31.2-38.0] n=3 | 30.5 | 61.4 [61.4-61.4] n=1/3 | 62.4 | null (0/3) | 68.0 |
-| 00871 (interim: awaiting the third attempts) | placebo | none | 30.1 [29.7-30.7] n=3 | - | 38.6 [38.6-38.6] n=1/3 | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | none | 39.6 [34.0-44.3] n=3 | - | null (0/3) | - | null (0/3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | Frontier | 37.6 [36.4-39.5] n=3 | 29.2 | 47.1 [43.9-51.9] n=3 | 55.7 | null (0/3) | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | 88.1 [88.1-88.1] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | Frontier | 30.1 [30.1-30.1] n=1 | 29.2 | 51.0 [51.0-51.0] n=1 | 55.7 | 67.0 [67.0-67.0] n=1 | 65.3 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | none | 34.8 [32.7-36.7] n=4 | - | 46.7 [42.0-56.6] n=4 | - | null (0/4) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | none | 33.4 [30.2-36.5] n=4 | - | 48.6 [48.6-48.6] n=1/4 | - | null (0/4) | - |
+| 00871 | official | Ours(ASP) | 35.6 [33.2-39.1] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | filter_only | Ours(ASP) | 38.6 [33.9-44.3] n=3 | 30.5 | null (0/3) | 62.4 | null (0/3) | 68.0 |
+| 00871 | placebo | none | 33.5 [31.6-35.0] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | oracle_visible | none | 46.0 [34.0-53.1] n=3 | - | null (0/3) | - | null (0/3) | - |
+| 00871 | frontier_60m | Frontier | 40.3 [38.6-41.8] n=3 | 29.2 | null (0/3) | 55.7 | null (0/3) | 65.3 |
+| 00871 | frontier_end_ref | Frontier | null (0/1) | 29.2 | null (0/1) | 55.7 | null (0/1) | 65.3 |
+| 00871 | frontier_end | Frontier | 39.4 [31.6-46.5] n=5 | 29.2 | 65.1 [56.8-72.1] n=5 | 55.7 | 69.6 [67.2-71.5] n=3/5 | 65.3 |
+| 00871 | crashed_frontier_1st | none | 37.4 [36.2-39.6] n=4 | - | 67.5 [67.5-67.5] n=1/4 | - | null (0/4) | - |
+| 00871 | crashed_frontier_rerun | none | 38.0 [32.5-41.8] n=3/4 | - | null (0/4) | - | null (0/4) | - |
 
 Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` means no run has a value.
 
@@ -120,15 +120,15 @@ Sensitivity, means only (F1 x 100), at 10/50/100% of 0.8 B and of 1.2 B; `-` mea
 | 00853 | frontier_60m | 19.0 (n=3) | 48.0 (n=3) | - | 20.0 (n=3) | 57.6 (n=3) | - |
 | 00853 | frontier_end_ref | - | - | - | - | - | - |
 | 00853 | frontier_end | 17.5 (n=5) | 42.6 (n=5) | 62.8 (n=5) | 17.9 (n=5) | 52.1 (n=5) | 66.9 (n=1) |
-| 00871 (interim: awaiting the third attempts) | official | 33.1 (n=3) | 59.5 (n=3) | - | 33.6 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | filter_only | 33.2 (n=3) | 47.4 (n=2) | - | 36.5 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | placebo | 29.1 (n=3) | 34.3 (n=2) | - | 30.8 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 34.9 (n=3) | 63.7 (n=3) | - | 44.0 (n=3) | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 37.1 (n=3) | 45.3 (n=3) | - | 38.0 (n=3) | 53.6 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | - | - | - | - | - | - |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 30.0 (n=1) | 42.2 (n=1) | 66.1 (n=1) | 30.1 (n=1) | 53.5 (n=1) | 67.4 (n=1) |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 34.4 (n=4) | 44.5 (n=4) | 67.5 (n=1) | 35.9 (n=4) | 49.6 (n=3) | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 33.4 (n=4) | 43.6 (n=1) | - | 34.6 (n=4) | 60.4 (n=1) | - |
+| 00871 | official | 34.3 (n=3) | - | - | 40.1 (n=3) | - | - |
+| 00871 | filter_only | 36.5 (n=3) | - | - | 39.8 (n=3) | - | - |
+| 00871 | placebo | 30.8 (n=3) | - | - | 33.6 (n=3) | - | - |
+| 00871 | oracle_visible | 44.8 (n=3) | - | - | 50.4 (n=3) | - | - |
+| 00871 | frontier_60m | 38.0 (n=3) | 55.5 (n=2) | - | 41.9 (n=3) | - | - |
+| 00871 | frontier_end_ref | - | - | - | - | - | - |
+| 00871 | frontier_end | 36.7 (n=5) | 56.8 (n=5) | 69.2 (n=5) | 40.0 (n=5) | 68.2 (n=5) | 68.2 (n=2) |
+| 00871 | crashed_frontier_1st | 35.9 (n=4) | 51.9 (n=3) | - | 37.8 (n=4) | - | - |
+| 00871 | crashed_frontier_rerun | 35.2 (n=4) | - | - | 38.9 (n=3) | - | - |
 
 ## GED (the author's own code)
 
@@ -144,15 +144,15 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | 00853 | frontier_60m | 618 [617-619] n=3 | 279.0 | 745 [727-773] n=3 | 243.4 | null | 177.0 |
 | 00853 | frontier_end_ref | null | 279.0 | null | 243.4 | null | 177.0 |
 | 00853 | frontier_end | 611 [600-620] n=5 | 279.0 | 716 [688-748] n=5 | 243.4 | 812 [794-842] n=3 | 177.0 |
-| 00871 (interim: awaiting the third attempts) | official | 823 [814-838] n=3 | 279.0 | null | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | filter_only | 824 [816-841] n=3 | 279.0 | 949 | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | placebo | 807 [802-816] n=3 | - | 856 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 842 [824-862] n=3 | - | null | - | null | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 819 [814-827] n=3 | 292.1 | 866 [860-876] n=3 | 233.0 | null | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | null | 292.1 | null | 233.0 | 1032 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 808 | 292.1 | 919 | 233.0 | 1028 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 812 [801-824] n=4 | - | 874 [844-930] n=4 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 816 [812-819] n=4 | - | 880 | - | null | - |
+| 00871 | official | 825 [804-842] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | filter_only | 836 [824-855] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | placebo | 823 [812-833] n=3 | - | null | - | null | - |
+| 00871 | oracle_visible | 866 [824-888] n=3 | - | null | - | null | - |
+| 00871 | frontier_60m | 825 [817-834] n=3 | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end_ref | null | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end | 834 [814-857] n=5 | 292.1 | 996 [962-1042] n=5 | 233.0 | 1060 [1041-1074] n=3 | 203.5 |
+| 00871 | crashed_frontier_1st | 826 [818-831] n=4 | - | 980 | - | null | - |
+| 00871 | crashed_frontier_rerun | 830 [828-832] n=3 | - | null | - | null | - |
 
 ### Reference: apr
 
@@ -164,15 +164,15 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | 00853 | frontier_60m | 341 [338-346] n=3 | 279.0 | 257 [228-274] n=3 | 243.4 | null | 177.0 |
 | 00853 | frontier_end_ref | null | 279.0 | null | 243.4 | null | 177.0 |
 | 00853 | frontier_end | 346 [341-349] n=5 | 279.0 | 260 [240-273] n=5 | 243.4 | 230 [210-244] n=3 | 177.0 |
-| 00871 (interim: awaiting the third attempts) | official | 308 [292-316] n=3 | 279.0 | null | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | filter_only | 327 [304-344] n=3 | 279.0 | 270 | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | placebo | 312 [305-318] n=3 | - | 323 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 302 [288-321] n=3 | - | null | - | null | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 335 [328-340] n=3 | 292.1 | 335 [332-339] n=3 | 233.0 | null | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | null | 292.1 | null | 233.0 | 220 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 320 | 292.1 | 329 | 233.0 | 226 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 320 [314-328] n=4 | - | 315 [302-323] n=4 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 326 [318-340] n=4 | - | 343 | - | null | - |
+| 00871 | official | 308 [302-320] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | filter_only | 323 [310-342] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | placebo | 313 [308-322] n=3 | - | null | - | null | - |
+| 00871 | oracle_visible | 295 [270-321] n=3 | - | null | - | null | - |
+| 00871 | frontier_60m | 322 [315-327] n=3 | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end_ref | null | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end | 324 [314-330] n=5 | 292.1 | 255 [208-299] n=5 | 233.0 | 216 [206-225] n=3 | 203.5 |
+| 00871 | crashed_frontier_1st | 318 [315-321] n=4 | - | 284 | - | null | - |
+| 00871 | crashed_frontier_rerun | 323 [315-330] n=3 | - | null | - | null | - |
 
 ### Reference: frontier_made
 
@@ -184,15 +184,15 @@ gmatch4py GraphEditDistance(1, 1, 1, 1) with the author's costs, mean over graph
 | 00853 | frontier_60m | 271 [266-276] n=3 | 279.0 | 206 [195-214] n=3 | 243.4 | null | 177.0 |
 | 00853 | frontier_end_ref | null | 279.0 | null | 243.4 | null | 177.0 |
 | 00853 | frontier_end | 270 [264-280] n=5 | 279.0 | 219 [180-242] n=5 | 243.4 | 170 [155-182] n=3 | 177.0 |
-| 00871 (interim: awaiting the third attempts) | official | 270 [264-280] n=3 | 279.0 | null | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | filter_only | 273 [252-292] n=3 | 279.0 | 238 | 204.5 | null | 194.5 |
-| 00871 (interim: awaiting the third attempts) | placebo | 265 [260-268] n=3 | - | 276 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 258 [238-272] n=3 | - | null | - | null | - |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 268 [262-271] n=3 | 292.1 | 253 [249-258] n=3 | 233.0 | null | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | null | 292.1 | null | 233.0 | 96 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 262 | 292.1 | 266 | 233.0 | 174 | 203.5 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 265 [262-268] n=4 | - | 252 [236-261] n=4 | - | null | - |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 268 [252-290] n=4 | - | 262 | - | null | - |
+| 00871 | official | 256 [249-261] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | filter_only | 264 [252-276] n=3 | 279.0 | null | 204.5 | null | 194.5 |
+| 00871 | placebo | 264 [256-268] n=3 | - | null | - | null | - |
+| 00871 | oracle_visible | 248 [236-272] n=3 | - | null | - | null | - |
+| 00871 | frontier_60m | 259 [254-262] n=3 | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end_ref | null | 292.1 | null | 233.0 | null | 203.5 |
+| 00871 | frontier_end | 264 [250-272] n=5 | 292.1 | 211 [160-252] n=5 | 233.0 | 178 [159-198] n=3 | 203.5 |
+| 00871 | crashed_frontier_1st | 265 [260-275] n=4 | - | 197 | - | null | - |
+| 00871 | crashed_frontier_rerun | 260 [246-271] n=3 | - | null | - | null | - |
 
 ## Seconds per metre
 
@@ -206,15 +206,15 @@ Final navigation time over final path length, from each run's last scored stage.
 | 00853 | frontier_60m | 3 | 6.80 [6.46-7.09] | 435.0 | 64.0 |
 | 00853 | frontier_end_ref | 1 | 6.61 [6.61-6.61] | 632.1 | 95.7 |
 | 00853 | frontier_end | 5 | 6.98 [6.40-7.84] | 696.0 | 100.6 |
-| 00871 (interim: awaiting the third attempts) | official | 3 | 6.07 [5.66-6.62] | 378.5 | 62.4 |
-| 00871 (interim: awaiting the third attempts) | filter_only | 3 | 6.23 [5.26-6.97] | 369.6 | 59.0 |
-| 00871 (interim: awaiting the third attempts) | placebo | 3 | 6.25 [5.26-7.58] | 380.0 | 60.7 |
-| 00871 (interim: awaiting the third attempts) | oracle_visible | 3 | 5.52 [5.31-5.78] | 344.6 | 62.4 |
-| 00871 (interim: awaiting the third attempts) | frontier_60m | 3 | 8.67 [7.97-9.18] | 539.0 | 62.1 |
-| 00871 (interim: awaiting the third attempts) | frontier_end_ref | 1 | 6.73 [6.73-6.73] | 809.1 | 120.2 |
-| 00871 (interim: awaiting the third attempts) | frontier_end | 1 | 6.72 [6.72-6.72] | 1263.5 | 188.1 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_1st | 4 | 8.10 [7.97-8.29] | 607.2 | 75.0 |
-| 00871 (interim: awaiting the third attempts) | crashed_frontier_rerun | 4 | 8.62 [8.16-9.42] | 276.0 | 31.9 |
+| 00871 | official | 3 | 6.07 [5.66-6.62] | 378.5 | 62.4 |
+| 00871 | filter_only | 3 | 6.23 [5.26-6.97] | 369.6 | 59.0 |
+| 00871 | placebo | 3 | 6.25 [5.26-7.58] | 380.0 | 60.7 |
+| 00871 | oracle_visible | 3 | 5.52 [5.31-5.78] | 344.6 | 62.4 |
+| 00871 | frontier_60m | 3 | 8.67 [7.97-9.18] | 539.0 | 62.1 |
+| 00871 | frontier_end_ref | 1 | 6.73 [6.73-6.73] | 809.1 | 120.2 |
+| 00871 | frontier_end | 5 | 7.25 [6.72-7.95] | 1399.0 | 194.8 |
+| 00871 | crashed_frontier_1st | 4 | 8.10 [7.97-8.29] | 607.2 | 75.0 |
+| 00871 | crashed_frontier_rerun | 4 | 8.62 [8.16-9.42] | 276.0 | 31.9 |
 
 ## Not comparable
 

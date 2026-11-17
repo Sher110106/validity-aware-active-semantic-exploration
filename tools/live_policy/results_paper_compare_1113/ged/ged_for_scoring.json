@@ -9834,7 +9834,7 @@
    "reused_from": "e7_00871_s45_frontier_end_FAILED_ATTEMPT_1438 (stage list equal)"
   },
   {
-   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s42_frontier_end",
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s42_frontier_end_FAILED_ATTEMPT_1111",
    "scene": "00871",
    "stages": [
     {
@@ -10201,7 +10201,7 @@
    "reused_from": "e7_00871_s42_frontier_end (stage list equal)"
   },
   {
-   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s43_frontier_end",
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s43_frontier_end_FAILED_ATTEMPT_1242",
    "scene": "00871",
    "stages": [
     {
@@ -10397,7 +10397,7 @@
    "reused_from": "e7_00871_s43_frontier_end (stage list equal)"
   },
   {
-   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s44_frontier_end",
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s44_frontier_end_FAILED_ATTEMPT_1427",
    "scene": "00871",
    "stages": [
     {
@@ -10548,7 +10548,7 @@
    "reused_from": "e7_00871_s44_frontier_end (stage list equal)"
   },
   {
-   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s45_frontier_end",
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s45_frontier_end_FAILED_ATTEMPT_1601",
    "scene": "00871",
    "stages": [
     {
@@ -10652,6 +10652,3112 @@
     }
    ],
    "reused_from": "e7_00871_s45_frontier_end (stage list equal)"
+  },
+  {
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s42_frontier_end",
+   "scene": "00871",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0.0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 712.0,
+     "ged_frontier_made": 318.0,
+     "ged_apr": 357.0
+    },
+    {
+     "stage": 1,
+     "path_m": 0.525,
+     "nav_s": 4.314936637878418,
+     "n_graphs": 2,
+     "ged_hm3d": 769.0,
+     "ged_frontier_made": 302.0,
+     "ged_apr": 363.0
+    },
+    {
+     "stage": 2,
+     "path_m": 1.1249999999999998,
+     "nav_s": 6.130603075027466,
+     "n_graphs": 2,
+     "ged_hm3d": 764.5,
+     "ged_frontier_made": 295.5,
+     "ged_apr": 358.5
+    },
+    {
+     "stage": 3,
+     "path_m": 1.5749999999999995,
+     "nav_s": 7.541759252548218,
+     "n_graphs": 2,
+     "ged_hm3d": 767.5,
+     "ged_frontier_made": 296.5,
+     "ged_apr": 363.5
+    },
+    {
+     "stage": 4,
+     "path_m": 1.7999999999999994,
+     "nav_s": 8.356921672821045,
+     "n_graphs": 2,
+     "ged_hm3d": 771.0,
+     "ged_frontier_made": 289.0,
+     "ged_apr": 364.0
+    },
+    {
+     "stage": 5,
+     "path_m": 1.8749999999999993,
+     "nav_s": 8.873756408691406,
+     "n_graphs": 2,
+     "ged_hm3d": 770.0,
+     "ged_frontier_made": 287.0,
+     "ged_apr": 364.0
+    },
+    {
+     "stage": 6,
+     "path_m": 2.0249999999999995,
+     "nav_s": 9.689378499984741,
+     "n_graphs": 2,
+     "ged_hm3d": 774.0,
+     "ged_frontier_made": 287.0,
+     "ged_apr": 366.0
+    },
+    {
+     "stage": 7,
+     "path_m": 5.550000000000008,
+     "nav_s": 34.8088481426239,
+     "n_graphs": 2,
+     "ged_hm3d": 798.0,
+     "ged_frontier_made": 261.0,
+     "ged_apr": 326.0
+    },
+    {
+     "stage": 8,
+     "path_m": 6.000000000000009,
+     "nav_s": 42.02789092063904,
+     "n_graphs": 2,
+     "ged_hm3d": 805.5,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 327.0
+    },
+    {
+     "stage": 9,
+     "path_m": 8.175000000000011,
+     "nav_s": 66.5414137840271,
+     "n_graphs": 2,
+     "ged_hm3d": 807.0,
+     "ged_frontier_made": 265.5,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 10,
+     "path_m": 11.024999999999984,
+     "nav_s": 97.45750498771667,
+     "n_graphs": 2,
+     "ged_hm3d": 820.5,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 330.5
+    },
+    {
+     "stage": 11,
+     "path_m": 14.549999999999951,
+     "nav_s": 128.77483081817627,
+     "n_graphs": 2,
+     "ged_hm3d": 833.0,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 332.0
+    },
+    {
+     "stage": 12,
+     "path_m": 14.69999999999995,
+     "nav_s": 129.70177125930786,
+     "n_graphs": 2,
+     "ged_hm3d": 834.5,
+     "ged_frontier_made": 272.0,
+     "ged_apr": 330.5
+    },
+    {
+     "stage": 13,
+     "path_m": 14.924999999999947,
+     "nav_s": 130.51900243759155,
+     "n_graphs": 2,
+     "ged_hm3d": 838.5,
+     "ged_frontier_made": 270.0,
+     "ged_apr": 326.5
+    },
+    {
+     "stage": 14,
+     "path_m": 15.74999999999994,
+     "nav_s": 136.53321409225464,
+     "n_graphs": 2,
+     "ged_hm3d": 839.0,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 321.5
+    },
+    {
+     "stage": 15,
+     "path_m": 17.69999999999992,
+     "nav_s": 160.7445273399353,
+     "n_graphs": 2,
+     "ged_hm3d": 849.0,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 16,
+     "path_m": 17.92499999999992,
+     "nav_s": 164.15976333618164,
+     "n_graphs": 2,
+     "ged_hm3d": 853.5,
+     "ged_frontier_made": 283.5,
+     "ged_apr": 336.0
+    },
+    {
+     "stage": 17,
+     "path_m": 17.99999999999992,
+     "nav_s": 165.7757568359375,
+     "n_graphs": 2,
+     "ged_hm3d": 856.5,
+     "ged_frontier_made": 279.5,
+     "ged_apr": 331.0
+    },
+    {
+     "stage": 18,
+     "path_m": 17.99999999999992,
+     "nav_s": 166.29067516326904,
+     "n_graphs": 2,
+     "ged_hm3d": 858.5,
+     "ged_frontier_made": 278.0,
+     "ged_apr": 330.0
+    },
+    {
+     "stage": 19,
+     "path_m": 21.97499999999988,
+     "nav_s": 198.50596928596497,
+     "n_graphs": 2,
+     "ged_hm3d": 856.5,
+     "ged_frontier_made": 278.0,
+     "ged_apr": 329.5
+    },
+    {
+     "stage": 20,
+     "path_m": 21.97499999999988,
+     "nav_s": 199.02250051498413,
+     "n_graphs": 2,
+     "ged_hm3d": 858.0,
+     "ged_frontier_made": 275.0,
+     "ged_apr": 333.0
+    },
+    {
+     "stage": 21,
+     "path_m": 25.799999999999844,
+     "nav_s": 230.03774428367615,
+     "n_graphs": 2,
+     "ged_hm3d": 857.5,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 327.5
+    },
+    {
+     "stage": 22,
+     "path_m": 25.799999999999844,
+     "nav_s": 230.35377168655396,
+     "n_graphs": 2,
+     "ged_hm3d": 857.5,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 326.5
+    },
+    {
+     "stage": 23,
+     "path_m": 25.874999999999844,
+     "nav_s": 232.66972303390503,
+     "n_graphs": 2,
+     "ged_hm3d": 843.0,
+     "ged_frontier_made": 261.0,
+     "ged_apr": 329.5
+    },
+    {
+     "stage": 24,
+     "path_m": 29.924999999999805,
+     "nav_s": 267.1858675479889,
+     "n_graphs": 2,
+     "ged_hm3d": 864.0,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 326.0
+    },
+    {
+     "stage": 25,
+     "path_m": 29.924999999999805,
+     "nav_s": 267.7987186908722,
+     "n_graphs": 2,
+     "ged_hm3d": 862.5,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 323.5
+    },
+    {
+     "stage": 26,
+     "path_m": 29.924999999999805,
+     "nav_s": 268.4122793674469,
+     "n_graphs": 2,
+     "ged_hm3d": 864.0,
+     "ged_frontier_made": 270.5,
+     "ged_apr": 324.5
+    },
+    {
+     "stage": 27,
+     "path_m": 30.824999999999797,
+     "nav_s": 283.8281629085541,
+     "n_graphs": 2,
+     "ged_hm3d": 864.5,
+     "ged_frontier_made": 273.0,
+     "ged_apr": 326.0
+    },
+    {
+     "stage": 28,
+     "path_m": 32.17499999999979,
+     "nav_s": 298.84144854545593,
+     "n_graphs": 2,
+     "ged_hm3d": 863.5,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 29,
+     "path_m": 32.17499999999979,
+     "nav_s": 299.1810531616211,
+     "n_graphs": 2,
+     "ged_hm3d": 859.0,
+     "ged_frontier_made": 266.0,
+     "ged_apr": 324.5
+    },
+    {
+     "stage": 30,
+     "path_m": 33.37499999999984,
+     "nav_s": 317.89823842048645,
+     "n_graphs": 2,
+     "ged_hm3d": 861.0,
+     "ged_frontier_made": 265.0,
+     "ged_apr": 326.5
+    },
+    {
+     "stage": 31,
+     "path_m": 34.424999999999876,
+     "nav_s": 326.51546907424927,
+     "n_graphs": 2,
+     "ged_hm3d": 862.0,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 329.0
+    },
+    {
+     "stage": 32,
+     "path_m": 44.400000000000254,
+     "nav_s": 377.23527812957764,
+     "n_graphs": 2,
+     "ged_hm3d": 871.0,
+     "ged_frontier_made": 264.0,
+     "ged_apr": 320.5
+    },
+    {
+     "stage": 33,
+     "path_m": 48.3000000000004,
+     "nav_s": 405.79630637168884,
+     "n_graphs": 2,
+     "ged_hm3d": 878.0,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 333.0
+    },
+    {
+     "stage": 34,
+     "path_m": 49.200000000000436,
+     "nav_s": 415.5170409679413,
+     "n_graphs": 2,
+     "ged_hm3d": 875.5,
+     "ged_frontier_made": 267.5,
+     "ged_apr": 328.5
+    },
+    {
+     "stage": 35,
+     "path_m": 49.87500000000046,
+     "nav_s": 424.13702178001404,
+     "n_graphs": 2,
+     "ged_hm3d": 879.5,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 331.0
+    },
+    {
+     "stage": 36,
+     "path_m": 51.07500000000051,
+     "nav_s": 433.35177755355835,
+     "n_graphs": 2,
+     "ged_hm3d": 898.0,
+     "ged_frontier_made": 252.0,
+     "ged_apr": 314.5
+    },
+    {
+     "stage": 37,
+     "path_m": 51.67500000000053,
+     "nav_s": 439.2665066719055,
+     "n_graphs": 2,
+     "ged_hm3d": 897.5,
+     "ged_frontier_made": 250.5,
+     "ged_apr": 313.0
+    },
+    {
+     "stage": 38,
+     "path_m": 51.825000000000536,
+     "nav_s": 450.1832764148712,
+     "n_graphs": 2,
+     "ged_hm3d": 898.5,
+     "ged_frontier_made": 252.0,
+     "ged_apr": 314.5
+    },
+    {
+     "stage": 39,
+     "path_m": 55.35000000000067,
+     "nav_s": 472.1262962818146,
+     "n_graphs": 2,
+     "ged_hm3d": 911.0,
+     "ged_frontier_made": 252.0,
+     "ged_apr": 309.5
+    },
+    {
+     "stage": 40,
+     "path_m": 56.550000000000715,
+     "nav_s": 477.7672116756439,
+     "n_graphs": 2,
+     "ged_hm3d": 922.0,
+     "ged_frontier_made": 255.5,
+     "ged_apr": 313.0
+    },
+    {
+     "stage": 41,
+     "path_m": 56.550000000000715,
+     "nav_s": 478.3823080062866,
+     "n_graphs": 2,
+     "ged_hm3d": 926.5,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 318.0
+    },
+    {
+     "stage": 42,
+     "path_m": 56.70000000000072,
+     "nav_s": 492.5205156803131,
+     "n_graphs": 2,
+     "ged_hm3d": 926.5,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 318.0
+    },
+    {
+     "stage": 43,
+     "path_m": 56.850000000000726,
+     "nav_s": 493.63056349754333,
+     "n_graphs": 2,
+     "ged_hm3d": 929.5,
+     "ged_frontier_made": 256.5,
+     "ged_apr": 314.0
+    },
+    {
+     "stage": 44,
+     "path_m": 56.850000000000726,
+     "nav_s": 494.3605992794037,
+     "n_graphs": 2,
+     "ged_hm3d": 929.5,
+     "ged_frontier_made": 256.5,
+     "ged_apr": 314.0
+    },
+    {
+     "stage": 45,
+     "path_m": 57.075000000000735,
+     "nav_s": 506.5091757774353,
+     "n_graphs": 2,
+     "ged_hm3d": 931.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 315.0
+    },
+    {
+     "stage": 46,
+     "path_m": 60.37500000000086,
+     "nav_s": 538.4230220317841,
+     "n_graphs": 2,
+     "ged_hm3d": 956.0,
+     "ged_frontier_made": 253.5,
+     "ged_apr": 306.0
+    },
+    {
+     "stage": 47,
+     "path_m": 62.925000000000956,
+     "nav_s": 567.0883982181549,
+     "n_graphs": 2,
+     "ged_hm3d": 957.0,
+     "ged_frontier_made": 250.0,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 48,
+     "path_m": 63.82500000000099,
+     "nav_s": 571.9041039943695,
+     "n_graphs": 2,
+     "ged_hm3d": 952.5,
+     "ged_frontier_made": 244.5,
+     "ged_apr": 299.0
+    },
+    {
+     "stage": 49,
+     "path_m": 63.82500000000099,
+     "nav_s": 572.4163076877594,
+     "n_graphs": 2,
+     "ged_hm3d": 950.5,
+     "ged_frontier_made": 246.5,
+     "ged_apr": 301.0
+    },
+    {
+     "stage": 50,
+     "path_m": 63.975000000000996,
+     "nav_s": 584.7617671489716,
+     "n_graphs": 2,
+     "ged_hm3d": 950.5,
+     "ged_frontier_made": 246.5,
+     "ged_apr": 301.0
+    },
+    {
+     "stage": 51,
+     "path_m": 64.05000000000099,
+     "nav_s": 594.890453338623,
+     "n_graphs": 2,
+     "ged_hm3d": 950.5,
+     "ged_frontier_made": 245.5,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 52,
+     "path_m": 68.17500000000115,
+     "nav_s": 629.2076721191406,
+     "n_graphs": 2,
+     "ged_hm3d": 961.5,
+     "ged_frontier_made": 252.5,
+     "ged_apr": 299.0
+    },
+    {
+     "stage": 53,
+     "path_m": 71.77500000000128,
+     "nav_s": 661.6224882602692,
+     "n_graphs": 2,
+     "ged_hm3d": 967.5,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 306.0
+    },
+    {
+     "stage": 54,
+     "path_m": 71.77500000000128,
+     "nav_s": 661.9753699302673,
+     "n_graphs": 2,
+     "ged_hm3d": 963.0,
+     "ged_frontier_made": 248.5,
+     "ged_apr": 299.0
+    },
+    {
+     "stage": 55,
+     "path_m": 71.77500000000128,
+     "nav_s": 662.5971539020538,
+     "n_graphs": 2,
+     "ged_hm3d": 966.5,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 306.0
+    },
+    {
+     "stage": 56,
+     "path_m": 72.3000000000013,
+     "nav_s": 667.8152194023132,
+     "n_graphs": 2,
+     "ged_hm3d": 967.5,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 306.0
+    },
+    {
+     "stage": 57,
+     "path_m": 77.4000000000015,
+     "nav_s": 707.9293932914734,
+     "n_graphs": 2,
+     "ged_hm3d": 968.5,
+     "ged_frontier_made": 249.5,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 58,
+     "path_m": 81.45000000000165,
+     "nav_s": 731.945663690567,
+     "n_graphs": 2,
+     "ged_hm3d": 980.0,
+     "ged_frontier_made": 192.5,
+     "ged_apr": 247.5
+    },
+    {
+     "stage": 59,
+     "path_m": 81.45000000000165,
+     "nav_s": 732.7779710292816,
+     "n_graphs": 2,
+     "ged_hm3d": 993.5,
+     "ged_frontier_made": 216.5,
+     "ged_apr": 270.0
+    },
+    {
+     "stage": 60,
+     "path_m": 82.50000000000169,
+     "nav_s": 741.1181778907776,
+     "n_graphs": 2,
+     "ged_hm3d": 1009.0,
+     "ged_frontier_made": 188.0,
+     "ged_apr": 249.0
+    },
+    {
+     "stage": 61,
+     "path_m": 82.5750000000017,
+     "nav_s": 743.927401304245,
+     "n_graphs": 2,
+     "ged_hm3d": 1008.5,
+     "ged_frontier_made": 191.5,
+     "ged_apr": 248.0
+    },
+    {
+     "stage": 62,
+     "path_m": 82.8750000000017,
+     "nav_s": 747.0457851886749,
+     "n_graphs": 2,
+     "ged_hm3d": 1013.0,
+     "ged_frontier_made": 201.5,
+     "ged_apr": 258.0
+    },
+    {
+     "stage": 63,
+     "path_m": 84.00000000000175,
+     "nav_s": 752.7589824199677,
+     "n_graphs": 2,
+     "ged_hm3d": 1014.5,
+     "ged_frontier_made": 227.5,
+     "ged_apr": 278.5
+    },
+    {
+     "stage": 64,
+     "path_m": 86.62500000000185,
+     "nav_s": 778.4736833572388,
+     "n_graphs": 2,
+     "ged_hm3d": 1020.5,
+     "ged_frontier_made": 203.0,
+     "ged_apr": 261.5
+    },
+    {
+     "stage": 65,
+     "path_m": 87.00000000000186,
+     "nav_s": 783.556022644043,
+     "n_graphs": 2,
+     "ged_hm3d": 1025.0,
+     "ged_frontier_made": 205.5,
+     "ged_apr": 256.5
+    },
+    {
+     "stage": 66,
+     "path_m": 90.90000000000201,
+     "nav_s": 817.7677645683289,
+     "n_graphs": 2,
+     "ged_hm3d": 1038.5,
+     "ged_frontier_made": 202.5,
+     "ged_apr": 262.5
+    },
+    {
+     "stage": 67,
+     "path_m": 96.67500000000223,
+     "nav_s": 866.3745305538177,
+     "n_graphs": 2,
+     "ged_hm3d": 1053.5,
+     "ged_frontier_made": 199.5,
+     "ged_apr": 260.0
+    },
+    {
+     "stage": 68,
+     "path_m": 96.97500000000224,
+     "nav_s": 870.6237926483154,
+     "n_graphs": 2,
+     "ged_hm3d": 1056.5,
+     "ged_frontier_made": 207.0,
+     "ged_apr": 261.5
+    },
+    {
+     "stage": 69,
+     "path_m": 97.95000000000228,
+     "nav_s": 879.193990945816,
+     "n_graphs": 2,
+     "ged_hm3d": 1056.5,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 253.5
+    },
+    {
+     "stage": 70,
+     "path_m": 97.95000000000228,
+     "nav_s": 879.9123630523682,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.0,
+     "ged_frontier_made": 199.5,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 71,
+     "path_m": 97.95000000000228,
+     "nav_s": 880.5284588336945,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.0,
+     "ged_frontier_made": 199.5,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 72,
+     "path_m": 119.25000000000308,
+     "nav_s": 983.0054829120636,
+     "n_graphs": 2,
+     "ged_hm3d": 1061.5,
+     "ged_frontier_made": 157.0,
+     "ged_apr": 214.0
+    },
+    {
+     "stage": 73,
+     "path_m": 124.9500000000033,
+     "nav_s": 1016.722457408905,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.5,
+     "ged_frontier_made": 161.0,
+     "ged_apr": 216.0
+    },
+    {
+     "stage": 74,
+     "path_m": 128.92500000000328,
+     "nav_s": 1051.853621006012,
+     "n_graphs": 2,
+     "ged_hm3d": 1061.0,
+     "ged_frontier_made": 172.5,
+     "ged_apr": 225.5
+    },
+    {
+     "stage": 75,
+     "path_m": 128.92500000000328,
+     "nav_s": 1052.366048336029,
+     "n_graphs": 2,
+     "ged_hm3d": 1062.5,
+     "ged_frontier_made": 173.5,
+     "ged_apr": 226.5
+    },
+    {
+     "stage": 76,
+     "path_m": 128.92500000000328,
+     "nav_s": 1052.9845223426819,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.5,
+     "ged_frontier_made": 173.5,
+     "ged_apr": 227.0
+    },
+    {
+     "stage": 77,
+     "path_m": 129.82500000000314,
+     "nav_s": 1068.574481010437,
+     "n_graphs": 2,
+     "ged_hm3d": 1060.0,
+     "ged_frontier_made": 164.0,
+     "ged_apr": 215.5
+    },
+    {
+     "stage": 78,
+     "path_m": 131.17500000000294,
+     "nav_s": 1083.889931678772,
+     "n_graphs": 2,
+     "ged_hm3d": 1060.5,
+     "ged_frontier_made": 182.0,
+     "ged_apr": 236.5
+    },
+    {
+     "stage": 79,
+     "path_m": 133.20000000000263,
+     "nav_s": 1107.4049685001373,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.5,
+     "ged_frontier_made": 171.5,
+     "ged_apr": 227.0
+    },
+    {
+     "stage": 80,
+     "path_m": 133.20000000000263,
+     "nav_s": 1108.1213052272797,
+     "n_graphs": 2,
+     "ged_hm3d": 1069.5,
+     "ged_frontier_made": 172.0,
+     "ged_apr": 227.5
+    },
+    {
+     "stage": 81,
+     "path_m": 133.20000000000263,
+     "nav_s": 1108.83646774292,
+     "n_graphs": 2,
+     "ged_hm3d": 1069.5,
+     "ged_frontier_made": 172.0,
+     "ged_apr": 227.5
+    },
+    {
+     "stage": 82,
+     "path_m": 134.0250000000025,
+     "nav_s": 1122.7530937194824,
+     "n_graphs": 2,
+     "ged_hm3d": 1069.0,
+     "ged_frontier_made": 181.5,
+     "ged_apr": 233.5
+    },
+    {
+     "stage": 83,
+     "path_m": 134.85000000000238,
+     "nav_s": 1139.8251931667328,
+     "n_graphs": 2,
+     "ged_hm3d": 1072.5,
+     "ged_frontier_made": 169.5,
+     "ged_apr": 225.0
+    },
+    {
+     "stage": 84,
+     "path_m": 138.6750000000018,
+     "nav_s": 1172.587124824524,
+     "n_graphs": 2,
+     "ged_hm3d": 1067.5,
+     "ged_frontier_made": 180.5,
+     "ged_apr": 232.5
+    },
+    {
+     "stage": 85,
+     "path_m": 138.6750000000018,
+     "nav_s": 1173.300776720047,
+     "n_graphs": 2,
+     "ged_hm3d": 1067.5,
+     "ged_frontier_made": 180.0,
+     "ged_apr": 232.0
+    },
+    {
+     "stage": 86,
+     "path_m": 142.5750000000012,
+     "nav_s": 1207.7140617370605,
+     "n_graphs": 2,
+     "ged_hm3d": 1068.5,
+     "ged_frontier_made": 190.5,
+     "ged_apr": 253.0
+    },
+    {
+     "stage": 87,
+     "path_m": 152.99999999999963,
+     "nav_s": 1264.626116991043,
+     "n_graphs": 2,
+     "ged_hm3d": 1070.5,
+     "ged_frontier_made": 163.0,
+     "ged_apr": 218.0
+    },
+    {
+     "stage": 88,
+     "path_m": 159.0749999999987,
+     "nav_s": 1294.8453118801117,
+     "n_graphs": 2,
+     "ged_hm3d": 1074.5,
+     "ged_frontier_made": 159.0,
+     "ged_apr": 218.5
+    },
+    {
+     "stage": 89,
+     "path_m": 168.14999999999733,
+     "nav_s": 1335.9577934741974,
+     "n_graphs": 2,
+     "ged_hm3d": 1075.0,
+     "ged_frontier_made": 157.5,
+     "ged_apr": 215.0
+    },
+    {
+     "stage": 90,
+     "path_m": 168.14999999999733,
+     "nav_s": 1336.3992280960083,
+     "n_graphs": 2,
+     "ged_hm3d": 1075.0,
+     "ged_frontier_made": 157.5,
+     "ged_apr": 215.0
+    },
+    {
+     "stage": 91,
+     "path_m": 168.14999999999733,
+     "nav_s": 1337.0148689746857,
+     "n_graphs": 2,
+     "ged_hm3d": 1075.0,
+     "ged_frontier_made": 157.5,
+     "ged_apr": 215.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s43_frontier_end",
+   "scene": "00871",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0.0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 712.0,
+     "ged_frontier_made": 318.0,
+     "ged_apr": 357.0
+    },
+    {
+     "stage": 1,
+     "path_m": 0.45,
+     "nav_s": 4.4316487312316895,
+     "n_graphs": 2,
+     "ged_hm3d": 763.5,
+     "ged_frontier_made": 299.0,
+     "ged_apr": 354.0
+    },
+    {
+     "stage": 2,
+     "path_m": 0.7499999999999999,
+     "nav_s": 5.447222471237183,
+     "n_graphs": 2,
+     "ged_hm3d": 771.5,
+     "ged_frontier_made": 303.5,
+     "ged_apr": 360.5
+    },
+    {
+     "stage": 3,
+     "path_m": 0.9749999999999998,
+     "nav_s": 6.460308074951172,
+     "n_graphs": 2,
+     "ged_hm3d": 768.5,
+     "ged_frontier_made": 297.5,
+     "ged_apr": 356.5
+    },
+    {
+     "stage": 4,
+     "path_m": 1.0499999999999998,
+     "nav_s": 7.47418475151062,
+     "n_graphs": 2,
+     "ged_hm3d": 771.0,
+     "ged_frontier_made": 299.5,
+     "ged_apr": 358.5
+    },
+    {
+     "stage": 5,
+     "path_m": 3.7500000000000036,
+     "nav_s": 29.387558937072754,
+     "n_graphs": 2,
+     "ged_hm3d": 793.0,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 333.5
+    },
+    {
+     "stage": 6,
+     "path_m": 4.275000000000005,
+     "nav_s": 37.603156089782715,
+     "n_graphs": 2,
+     "ged_hm3d": 798.0,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 319.0
+    },
+    {
+     "stage": 7,
+     "path_m": 6.45000000000001,
+     "nav_s": 59.31820750236511,
+     "n_graphs": 2,
+     "ged_hm3d": 804.0,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 325.0
+    },
+    {
+     "stage": 8,
+     "path_m": 7.725000000000013,
+     "nav_s": 69.13173532485962,
+     "n_graphs": 2,
+     "ged_hm3d": 810.5,
+     "ged_frontier_made": 273.0,
+     "ged_apr": 325.5
+    },
+    {
+     "stage": 9,
+     "path_m": 7.9500000000000135,
+     "nav_s": 71.44665455818176,
+     "n_graphs": 2,
+     "ged_hm3d": 806.5,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 320.0
+    },
+    {
+     "stage": 10,
+     "path_m": 8.25000000000001,
+     "nav_s": 74.16446161270142,
+     "n_graphs": 2,
+     "ged_hm3d": 809.5,
+     "ged_frontier_made": 268.5,
+     "ged_apr": 322.0
+    },
+    {
+     "stage": 11,
+     "path_m": 8.25000000000001,
+     "nav_s": 74.87534070014954,
+     "n_graphs": 2,
+     "ged_hm3d": 810.5,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 324.0
+    },
+    {
+     "stage": 12,
+     "path_m": 11.999999999999975,
+     "nav_s": 108.49444317817688,
+     "n_graphs": 2,
+     "ged_hm3d": 825.0,
+     "ged_frontier_made": 256.5,
+     "ged_apr": 313.0
+    },
+    {
+     "stage": 13,
+     "path_m": 11.999999999999975,
+     "nav_s": 108.91190886497498,
+     "n_graphs": 2,
+     "ged_hm3d": 827.5,
+     "ged_frontier_made": 254.0,
+     "ged_apr": 312.0
+    },
+    {
+     "stage": 14,
+     "path_m": 11.999999999999975,
+     "nav_s": 109.32271766662598,
+     "n_graphs": 2,
+     "ged_hm3d": 827.0,
+     "ged_frontier_made": 251.0,
+     "ged_apr": 313.5
+    },
+    {
+     "stage": 15,
+     "path_m": 11.999999999999975,
+     "nav_s": 110.03474140167236,
+     "n_graphs": 2,
+     "ged_hm3d": 828.0,
+     "ged_frontier_made": 250.5,
+     "ged_apr": 314.5
+    },
+    {
+     "stage": 16,
+     "path_m": 13.949999999999957,
+     "nav_s": 136.9520444869995,
+     "n_graphs": 2,
+     "ged_hm3d": 837.0,
+     "ged_frontier_made": 254.5,
+     "ged_apr": 323.5
+    },
+    {
+     "stage": 17,
+     "path_m": 15.074999999999946,
+     "nav_s": 158.69613909721375,
+     "n_graphs": 2,
+     "ged_hm3d": 838.5,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 322.5
+    },
+    {
+     "stage": 18,
+     "path_m": 15.074999999999946,
+     "nav_s": 159.04201126098633,
+     "n_graphs": 2,
+     "ged_hm3d": 847.5,
+     "ged_frontier_made": 258.5,
+     "ged_apr": 324.5
+    },
+    {
+     "stage": 19,
+     "path_m": 15.974999999999937,
+     "nav_s": 178.46748876571655,
+     "n_graphs": 2,
+     "ged_hm3d": 840.5,
+     "ged_frontier_made": 257.0,
+     "ged_apr": 320.0
+    },
+    {
+     "stage": 20,
+     "path_m": 15.974999999999937,
+     "nav_s": 178.8956015110016,
+     "n_graphs": 2,
+     "ged_hm3d": 843.0,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 326.5
+    },
+    {
+     "stage": 21,
+     "path_m": 16.049999999999937,
+     "nav_s": 179.41708326339722,
+     "n_graphs": 2,
+     "ged_hm3d": 844.0,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 22,
+     "path_m": 17.399999999999924,
+     "nav_s": 202.5342767238617,
+     "n_graphs": 2,
+     "ged_hm3d": 852.0,
+     "ged_frontier_made": 269.5,
+     "ged_apr": 331.0
+    },
+    {
+     "stage": 23,
+     "path_m": 18.449999999999914,
+     "nav_s": 221.05234217643738,
+     "n_graphs": 2,
+     "ged_hm3d": 840.5,
+     "ged_frontier_made": 265.0,
+     "ged_apr": 335.0
+    },
+    {
+     "stage": 24,
+     "path_m": 26.024999999999842,
+     "nav_s": 261.6732211112976,
+     "n_graphs": 2,
+     "ged_hm3d": 857.5,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 332.5
+    },
+    {
+     "stage": 25,
+     "path_m": 30.224999999999802,
+     "nav_s": 288.1922810077667,
+     "n_graphs": 2,
+     "ged_hm3d": 855.5,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 336.5
+    },
+    {
+     "stage": 26,
+     "path_m": 31.124999999999794,
+     "nav_s": 297.70608830451965,
+     "n_graphs": 2,
+     "ged_hm3d": 858.5,
+     "ged_frontier_made": 261.5,
+     "ged_apr": 340.5
+    },
+    {
+     "stage": 27,
+     "path_m": 31.72499999999979,
+     "nav_s": 306.92502093315125,
+     "n_graphs": 2,
+     "ged_hm3d": 861.0,
+     "ged_frontier_made": 264.0,
+     "ged_apr": 342.5
+    },
+    {
+     "stage": 28,
+     "path_m": 31.799999999999788,
+     "nav_s": 308.043484210968,
+     "n_graphs": 2,
+     "ged_hm3d": 866.0,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 345.5
+    },
+    {
+     "stage": 29,
+     "path_m": 33.14999999999983,
+     "nav_s": 318.1914281845093,
+     "n_graphs": 2,
+     "ged_hm3d": 886.5,
+     "ged_frontier_made": 250.5,
+     "ged_apr": 340.0
+    },
+    {
+     "stage": 30,
+     "path_m": 33.22499999999983,
+     "nav_s": 320.5223503112793,
+     "n_graphs": 2,
+     "ged_hm3d": 885.0,
+     "ged_frontier_made": 252.0,
+     "ged_apr": 337.5
+    },
+    {
+     "stage": 31,
+     "path_m": 33.824999999999854,
+     "nav_s": 324.5739939212799,
+     "n_graphs": 2,
+     "ged_hm3d": 883.5,
+     "ged_frontier_made": 253.5,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 32,
+     "path_m": 34.04999999999986,
+     "nav_s": 338.09184551239014,
+     "n_graphs": 2,
+     "ged_hm3d": 885.0,
+     "ged_frontier_made": 249.5,
+     "ged_apr": 331.0
+    },
+    {
+     "stage": 33,
+     "path_m": 36.224999999999945,
+     "nav_s": 362.11563777923584,
+     "n_graphs": 2,
+     "ged_hm3d": 889.5,
+     "ged_frontier_made": 250.5,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 34,
+     "path_m": 37.87500000000001,
+     "nav_s": 387.48455023765564,
+     "n_graphs": 2,
+     "ged_hm3d": 888.5,
+     "ged_frontier_made": 252.5,
+     "ged_apr": 330.0
+    },
+    {
+     "stage": 35,
+     "path_m": 41.17500000000013,
+     "nav_s": 411.6108543872833,
+     "n_graphs": 2,
+     "ged_hm3d": 912.0,
+     "ged_frontier_made": 233.0,
+     "ged_apr": 309.5
+    },
+    {
+     "stage": 36,
+     "path_m": 42.600000000000186,
+     "nav_s": 419.0291111469269,
+     "n_graphs": 2,
+     "ged_hm3d": 917.5,
+     "ged_frontier_made": 224.0,
+     "ged_apr": 306.5
+    },
+    {
+     "stage": 37,
+     "path_m": 42.600000000000186,
+     "nav_s": 419.7603967189789,
+     "n_graphs": 2,
+     "ged_hm3d": 926.5,
+     "ged_frontier_made": 219.0,
+     "ged_apr": 298.5
+    },
+    {
+     "stage": 38,
+     "path_m": 42.75000000000019,
+     "nav_s": 432.4915690422058,
+     "n_graphs": 2,
+     "ged_hm3d": 927.0,
+     "ged_frontier_made": 220.0,
+     "ged_apr": 297.5
+    },
+    {
+     "stage": 39,
+     "path_m": 42.825000000000195,
+     "nav_s": 433.3097927570343,
+     "n_graphs": 2,
+     "ged_hm3d": 928.5,
+     "ged_frontier_made": 219.0,
+     "ged_apr": 296.5
+    },
+    {
+     "stage": 40,
+     "path_m": 42.9750000000002,
+     "nav_s": 445.32894921302795,
+     "n_graphs": 2,
+     "ged_hm3d": 928.5,
+     "ged_frontier_made": 219.0,
+     "ged_apr": 296.5
+    },
+    {
+     "stage": 41,
+     "path_m": 43.125000000000206,
+     "nav_s": 446.5631630420685,
+     "n_graphs": 2,
+     "ged_hm3d": 928.5,
+     "ged_frontier_made": 221.0,
+     "ged_apr": 298.5
+    },
+    {
+     "stage": 42,
+     "path_m": 46.57500000000034,
+     "nav_s": 478.7793092727661,
+     "n_graphs": 2,
+     "ged_hm3d": 938.0,
+     "ged_frontier_made": 234.0,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 43,
+     "path_m": 47.325000000000365,
+     "nav_s": 482.90040493011475,
+     "n_graphs": 2,
+     "ged_hm3d": 944.0,
+     "ged_frontier_made": 231.0,
+     "ged_apr": 297.5
+    },
+    {
+     "stage": 44,
+     "path_m": 48.1500000000004,
+     "nav_s": 488.2184476852417,
+     "n_graphs": 2,
+     "ged_hm3d": 947.0,
+     "ged_frontier_made": 236.0,
+     "ged_apr": 302.5
+    },
+    {
+     "stage": 45,
+     "path_m": 52.20000000000055,
+     "nav_s": 510.88715744018555,
+     "n_graphs": 2,
+     "ged_hm3d": 955.0,
+     "ged_frontier_made": 208.0,
+     "ged_apr": 269.5
+    },
+    {
+     "stage": 46,
+     "path_m": 52.20000000000055,
+     "nav_s": 511.60357308387756,
+     "n_graphs": 2,
+     "ged_hm3d": 968.0,
+     "ged_frontier_made": 160.0,
+     "ged_apr": 223.5
+    },
+    {
+     "stage": 47,
+     "path_m": 53.400000000000595,
+     "nav_s": 520.2280550003052,
+     "n_graphs": 2,
+     "ged_hm3d": 980.5,
+     "ged_frontier_made": 196.5,
+     "ged_apr": 256.0
+    },
+    {
+     "stage": 48,
+     "path_m": 54.675000000000644,
+     "nav_s": 526.7919449806213,
+     "n_graphs": 2,
+     "ged_hm3d": 980.5,
+     "ged_frontier_made": 183.5,
+     "ged_apr": 237.5
+    },
+    {
+     "stage": 49,
+     "path_m": 54.975000000000655,
+     "nav_s": 537.7086665630341,
+     "n_graphs": 2,
+     "ged_hm3d": 993.5,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 50,
+     "path_m": 57.600000000000755,
+     "nav_s": 557.4670639038086,
+     "n_graphs": 2,
+     "ged_hm3d": 1010.0,
+     "ged_frontier_made": 181.5,
+     "ged_apr": 251.5
+    },
+    {
+     "stage": 51,
+     "path_m": 61.3500000000009,
+     "nav_s": 593.68123960495,
+     "n_graphs": 2,
+     "ged_hm3d": 1010.0,
+     "ged_frontier_made": 187.5,
+     "ged_apr": 244.5
+    },
+    {
+     "stage": 52,
+     "path_m": 65.85000000000106,
+     "nav_s": 633.6984252929688,
+     "n_graphs": 2,
+     "ged_hm3d": 1040.5,
+     "ged_frontier_made": 190.5,
+     "ged_apr": 258.5
+    },
+    {
+     "stage": 53,
+     "path_m": 66.45000000000108,
+     "nav_s": 636.257580280304,
+     "n_graphs": 2,
+     "ged_hm3d": 1041.0,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 257.5
+    },
+    {
+     "stage": 54,
+     "path_m": 67.50000000000112,
+     "nav_s": 644.1734223365784,
+     "n_graphs": 2,
+     "ged_hm3d": 1044.0,
+     "ged_frontier_made": 195.5,
+     "ged_apr": 256.5
+    },
+    {
+     "stage": 55,
+     "path_m": 67.95000000000114,
+     "nav_s": 648.0933728218079,
+     "n_graphs": 2,
+     "ged_hm3d": 1042.5,
+     "ged_frontier_made": 195.0,
+     "ged_apr": 244.0
+    },
+    {
+     "stage": 56,
+     "path_m": 68.40000000000116,
+     "nav_s": 650.7463397979736,
+     "n_graphs": 2,
+     "ged_hm3d": 1034.5,
+     "ged_frontier_made": 191.5,
+     "ged_apr": 267.0
+    },
+    {
+     "stage": 57,
+     "path_m": 68.70000000000117,
+     "nav_s": 664.7976236343384,
+     "n_graphs": 2,
+     "ged_hm3d": 1044.5,
+     "ged_frontier_made": 199.0,
+     "ged_apr": 266.0
+    },
+    {
+     "stage": 58,
+     "path_m": 69.15000000000119,
+     "nav_s": 677.1121664047241,
+     "n_graphs": 2,
+     "ged_hm3d": 1039.0,
+     "ged_frontier_made": 188.0,
+     "ged_apr": 244.0
+    },
+    {
+     "stage": 59,
+     "path_m": 69.15000000000119,
+     "nav_s": 678.0322811603546,
+     "n_graphs": 2,
+     "ged_hm3d": 1046.0,
+     "ged_frontier_made": 185.5,
+     "ged_apr": 256.0
+    },
+    {
+     "stage": 60,
+     "path_m": 69.15000000000119,
+     "nav_s": 678.7574927806854,
+     "n_graphs": 2,
+     "ged_hm3d": 1042.5,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 263.5
+    },
+    {
+     "stage": 61,
+     "path_m": 73.50000000000135,
+     "nav_s": 708.3120028972626,
+     "n_graphs": 2,
+     "ged_hm3d": 1049.0,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 258.0
+    },
+    {
+     "stage": 62,
+     "path_m": 73.57500000000135,
+     "nav_s": 710.4901151657104,
+     "n_graphs": 2,
+     "ged_hm3d": 1052.5,
+     "ged_frontier_made": 197.0,
+     "ged_apr": 246.5
+    },
+    {
+     "stage": 63,
+     "path_m": 84.15000000000175,
+     "nav_s": 766.9107456207275,
+     "n_graphs": 2,
+     "ged_hm3d": 1057.0,
+     "ged_frontier_made": 206.5,
+     "ged_apr": 249.5
+    },
+    {
+     "stage": 64,
+     "path_m": 84.15000000000175,
+     "nav_s": 767.5323965549469,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.5,
+     "ged_frontier_made": 208.0,
+     "ged_apr": 251.0
+    },
+    {
+     "stage": 65,
+     "path_m": 84.67500000000177,
+     "nav_s": 771.0944528579712,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.5,
+     "ged_frontier_made": 208.5,
+     "ged_apr": 251.5
+    },
+    {
+     "stage": 66,
+     "path_m": 84.90000000000178,
+     "nav_s": 785.0080578327179,
+     "n_graphs": 2,
+     "ged_hm3d": 1060.0,
+     "ged_frontier_made": 209.0,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 67,
+     "path_m": 84.90000000000178,
+     "nav_s": 785.8746483325958,
+     "n_graphs": 2,
+     "ged_hm3d": 1060.0,
+     "ged_frontier_made": 209.0,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 68,
+     "path_m": 97.50000000000226,
+     "nav_s": 841.4436113834381,
+     "n_graphs": 2,
+     "ged_hm3d": 1062.5,
+     "ged_frontier_made": 208.0,
+     "ged_apr": 242.5
+    },
+    {
+     "stage": 69,
+     "path_m": 97.50000000000226,
+     "nav_s": 842.1268846988678,
+     "n_graphs": 2,
+     "ged_hm3d": 1064.5,
+     "ged_frontier_made": 208.0,
+     "ged_apr": 246.5
+    },
+    {
+     "stage": 70,
+     "path_m": 109.2750000000027,
+     "nav_s": 898.3784277439117,
+     "n_graphs": 2,
+     "ged_hm3d": 1067.5,
+     "ged_frontier_made": 169.5,
+     "ged_apr": 215.5
+    },
+    {
+     "stage": 71,
+     "path_m": 114.3000000000029,
+     "nav_s": 927.6229496002197,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.0,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 225.5
+    },
+    {
+     "stage": 72,
+     "path_m": 114.3750000000029,
+     "nav_s": 928.4387068748474,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.0,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 225.5
+    },
+    {
+     "stage": 73,
+     "path_m": 128.55000000000334,
+     "nav_s": 999.3499057292938,
+     "n_graphs": 2,
+     "ged_hm3d": 1071.5,
+     "ged_frontier_made": 176.0,
+     "ged_apr": 221.0
+    },
+    {
+     "stage": 74,
+     "path_m": 128.7750000000033,
+     "nav_s": 1001.3642473220825,
+     "n_graphs": 2,
+     "ged_hm3d": 1073.0,
+     "ged_frontier_made": 179.0,
+     "ged_apr": 220.0
+    },
+    {
+     "stage": 75,
+     "path_m": 128.8500000000033,
+     "nav_s": 1002.1841869354248,
+     "n_graphs": 2,
+     "ged_hm3d": 1069.5,
+     "ged_frontier_made": 179.5,
+     "ged_apr": 231.0
+    },
+    {
+     "stage": 76,
+     "path_m": 134.32500000000246,
+     "nav_s": 1035.3373692035675,
+     "n_graphs": 2,
+     "ged_hm3d": 1062.0,
+     "ged_frontier_made": 168.5,
+     "ged_apr": 203.5
+    },
+    {
+     "stage": 77,
+     "path_m": 134.47500000000244,
+     "nav_s": 1037.6555683612823,
+     "n_graphs": 2,
+     "ged_hm3d": 1062.0,
+     "ged_frontier_made": 173.0,
+     "ged_apr": 211.5
+    },
+    {
+     "stage": 78,
+     "path_m": 138.22500000000187,
+     "nav_s": 1073.1713252067566,
+     "n_graphs": 2,
+     "ged_hm3d": 1068.0,
+     "ged_frontier_made": 192.5,
+     "ged_apr": 240.5
+    },
+    {
+     "stage": 79,
+     "path_m": 138.45000000000184,
+     "nav_s": 1074.9905834197998,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.0,
+     "ged_frontier_made": 192.0,
+     "ged_apr": 228.5
+    },
+    {
+     "stage": 80,
+     "path_m": 138.45000000000184,
+     "nav_s": 1075.7150707244873,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.5,
+     "ged_frontier_made": 190.5,
+     "ged_apr": 227.0
+    },
+    {
+     "stage": 81,
+     "path_m": 138.45000000000184,
+     "nav_s": 1076.5928394794464,
+     "n_graphs": 2,
+     "ged_hm3d": 1064.5,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 221.0
+    },
+    {
+     "stage": 82,
+     "path_m": 138.45000000000184,
+     "nav_s": 1077.1126086711884,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.0,
+     "ged_frontier_made": 187.5,
+     "ged_apr": 220.5
+    },
+    {
+     "stage": 83,
+     "path_m": 139.3500000000017,
+     "nav_s": 1091.5313992500305,
+     "n_graphs": 2,
+     "ged_hm3d": 1067.5,
+     "ged_frontier_made": 189.0,
+     "ged_apr": 230.0
+    },
+    {
+     "stage": 84,
+     "path_m": 140.6250000000015,
+     "nav_s": 1105.209647655487,
+     "n_graphs": 2,
+     "ged_hm3d": 1065.0,
+     "ged_frontier_made": 194.5,
+     "ged_apr": 237.0
+    },
+    {
+     "stage": 85,
+     "path_m": 143.62500000000105,
+     "nav_s": 1132.8272223472595,
+     "n_graphs": 2,
+     "ged_hm3d": 1071.5,
+     "ged_frontier_made": 194.0,
+     "ged_apr": 228.5
+    },
+    {
+     "stage": 86,
+     "path_m": 147.45000000000047,
+     "nav_s": 1168.149837732315,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.0,
+     "ged_frontier_made": 193.5,
+     "ged_apr": 237.0
+    },
+    {
+     "stage": 87,
+     "path_m": 151.2749999999999,
+     "nav_s": 1202.06640791893,
+     "n_graphs": 2,
+     "ged_hm3d": 1068.0,
+     "ged_frontier_made": 196.0,
+     "ged_apr": 231.0
+    },
+    {
+     "stage": 88,
+     "path_m": 154.19999999999945,
+     "nav_s": 1229.083683013916,
+     "n_graphs": 2,
+     "ged_hm3d": 1067.5,
+     "ged_frontier_made": 175.5,
+     "ged_apr": 219.0
+    },
+    {
+     "stage": 89,
+     "path_m": 161.0999999999984,
+     "nav_s": 1258.2667179107666,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.0,
+     "ged_frontier_made": 197.0,
+     "ged_apr": 224.0
+    },
+    {
+     "stage": 90,
+     "path_m": 166.72499999999755,
+     "nav_s": 1290.9816057682037,
+     "n_graphs": 2,
+     "ged_hm3d": 1064.0,
+     "ged_frontier_made": 200.0,
+     "ged_apr": 227.0
+    },
+    {
+     "stage": 91,
+     "path_m": 166.72499999999755,
+     "nav_s": 1291.7238447666168,
+     "n_graphs": 2,
+     "ged_hm3d": 1064.0,
+     "ged_frontier_made": 198.0,
+     "ged_apr": 225.0
+    },
+    {
+     "stage": 92,
+     "path_m": 174.8999999999963,
+     "nav_s": 1338.7025666236877,
+     "n_graphs": 2,
+     "ged_hm3d": 1057.0,
+     "ged_frontier_made": 207.5,
+     "ged_apr": 217.0
+    },
+    {
+     "stage": 93,
+     "path_m": 180.59999999999545,
+     "nav_s": 1359.4333939552307,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.5,
+     "ged_frontier_made": 196.0,
+     "ged_apr": 220.5
+    },
+    {
+     "stage": 94,
+     "path_m": 180.67499999999544,
+     "nav_s": 1360.6484944820404,
+     "n_graphs": 2,
+     "ged_hm3d": 1053.5,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 221.0
+    },
+    {
+     "stage": 95,
+     "path_m": 181.34999999999533,
+     "nav_s": 1364.7687048912048,
+     "n_graphs": 2,
+     "ged_hm3d": 1060.5,
+     "ged_frontier_made": 202.5,
+     "ged_apr": 218.5
+    },
+    {
+     "stage": 96,
+     "path_m": 181.34999999999533,
+     "nav_s": 1365.6422696113586,
+     "n_graphs": 2,
+     "ged_hm3d": 1057.0,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 216.5
+    },
+    {
+     "stage": 97,
+     "path_m": 181.4999999999953,
+     "nav_s": 1377.8676850795746,
+     "n_graphs": 2,
+     "ged_hm3d": 1057.0,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 216.5
+    },
+    {
+     "stage": 98,
+     "path_m": 181.5749999999953,
+     "nav_s": 1378.4917213916779,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.5,
+     "ged_frontier_made": 200.0,
+     "ged_apr": 216.0
+    },
+    {
+     "stage": 99,
+     "path_m": 185.99999999999463,
+     "nav_s": 1395.9414296150208,
+     "n_graphs": 2,
+     "ged_hm3d": 1063.5,
+     "ged_frontier_made": 205.0,
+     "ged_apr": 219.0
+    },
+    {
+     "stage": 100,
+     "path_m": 194.1749999999934,
+     "nav_s": 1443.0971024036407,
+     "n_graphs": 2,
+     "ged_hm3d": 1056.0,
+     "ged_frontier_made": 214.5,
+     "ged_apr": 234.0
+    },
+    {
+     "stage": 101,
+     "path_m": 199.72499999999255,
+     "nav_s": 1480.518070936203,
+     "n_graphs": 2,
+     "ged_hm3d": 1057.0,
+     "ged_frontier_made": 204.5,
+     "ged_apr": 228.5
+    },
+    {
+     "stage": 102,
+     "path_m": 199.79999999999254,
+     "nav_s": 1484.136911869049,
+     "n_graphs": 2,
+     "ged_hm3d": 1062.0,
+     "ged_frontier_made": 207.0,
+     "ged_apr": 233.0
+    },
+    {
+     "stage": 103,
+     "path_m": 205.3499999999917,
+     "nav_s": 1520.6811263561249,
+     "n_graphs": 2,
+     "ged_hm3d": 1058.5,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 232.0
+    },
+    {
+     "stage": 104,
+     "path_m": 211.1999999999908,
+     "nav_s": 1562.8933391571045,
+     "n_graphs": 2,
+     "ged_hm3d": 1061.5,
+     "ged_frontier_made": 208.5,
+     "ged_apr": 232.0
+    },
+    {
+     "stage": 105,
+     "path_m": 223.7249999999889,
+     "nav_s": 1610.4847798347473,
+     "n_graphs": 2,
+     "ged_hm3d": 1066.0,
+     "ged_frontier_made": 225.5,
+     "ged_apr": 240.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s44_frontier_end",
+   "scene": "00871",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0.0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 712.0,
+     "ged_frontier_made": 318.0,
+     "ged_apr": 357.0
+    },
+    {
+     "stage": 1,
+     "path_m": 0.8999999999999998,
+     "nav_s": 4.025629758834839,
+     "n_graphs": 2,
+     "ged_hm3d": 757.5,
+     "ged_frontier_made": 285.5,
+     "ged_apr": 346.0
+    },
+    {
+     "stage": 2,
+     "path_m": 3.6750000000000034,
+     "nav_s": 23.941014051437378,
+     "n_graphs": 2,
+     "ged_hm3d": 782.5,
+     "ged_frontier_made": 251.0,
+     "ged_apr": 320.5
+    },
+    {
+     "stage": 3,
+     "path_m": 4.125000000000004,
+     "nav_s": 30.795368671417236,
+     "n_graphs": 2,
+     "ged_hm3d": 787.5,
+     "ged_frontier_made": 256.5,
+     "ged_apr": 318.5
+    },
+    {
+     "stage": 4,
+     "path_m": 6.900000000000011,
+     "nav_s": 48.52311182022095,
+     "n_graphs": 2,
+     "ged_hm3d": 808.5,
+     "ged_frontier_made": 268.5,
+     "ged_apr": 325.5
+    },
+    {
+     "stage": 5,
+     "path_m": 9.524999999999999,
+     "nav_s": 76.53451299667358,
+     "n_graphs": 2,
+     "ged_hm3d": 837.5,
+     "ged_frontier_made": 296.0,
+     "ged_apr": 347.0
+    },
+    {
+     "stage": 6,
+     "path_m": 10.574999999999989,
+     "nav_s": 84.96358847618103,
+     "n_graphs": 2,
+     "ged_hm3d": 839.5,
+     "ged_frontier_made": 298.0,
+     "ged_apr": 349.0
+    },
+    {
+     "stage": 7,
+     "path_m": 11.774999999999977,
+     "nav_s": 100.98141741752625,
+     "n_graphs": 2,
+     "ged_hm3d": 838.0,
+     "ged_frontier_made": 297.0,
+     "ged_apr": 355.5
+    },
+    {
+     "stage": 8,
+     "path_m": 12.899999999999967,
+     "nav_s": 111.79422807693481,
+     "n_graphs": 2,
+     "ged_hm3d": 840.0,
+     "ged_frontier_made": 280.5,
+     "ged_apr": 341.5
+    },
+    {
+     "stage": 9,
+     "path_m": 13.199999999999964,
+     "nav_s": 125.62346720695496,
+     "n_graphs": 2,
+     "ged_hm3d": 837.5,
+     "ged_frontier_made": 266.5,
+     "ged_apr": 330.0
+    },
+    {
+     "stage": 10,
+     "path_m": 14.249999999999954,
+     "nav_s": 143.2571303844452,
+     "n_graphs": 2,
+     "ged_hm3d": 849.5,
+     "ged_frontier_made": 270.5,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 11,
+     "path_m": 14.774999999999949,
+     "nav_s": 147.36995482444763,
+     "n_graphs": 2,
+     "ged_hm3d": 848.5,
+     "ged_frontier_made": 273.0,
+     "ged_apr": 340.0
+    },
+    {
+     "stage": 12,
+     "path_m": 14.849999999999948,
+     "nav_s": 148.10807132720947,
+     "n_graphs": 2,
+     "ged_hm3d": 850.0,
+     "ged_frontier_made": 277.0,
+     "ged_apr": 340.0
+    },
+    {
+     "stage": 13,
+     "path_m": 16.499999999999932,
+     "nav_s": 156.12294340133667,
+     "n_graphs": 2,
+     "ged_hm3d": 862.5,
+     "ged_frontier_made": 279.5,
+     "ged_apr": 342.5
+    },
+    {
+     "stage": 14,
+     "path_m": 17.77499999999992,
+     "nav_s": 162.5440526008606,
+     "n_graphs": 2,
+     "ged_hm3d": 859.5,
+     "ged_frontier_made": 280.5,
+     "ged_apr": 341.5
+    },
+    {
+     "stage": 15,
+     "path_m": 19.7999999999999,
+     "nav_s": 187.4152548313141,
+     "n_graphs": 2,
+     "ged_hm3d": 865.0,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 331.5
+    },
+    {
+     "stage": 16,
+     "path_m": 19.9499999999999,
+     "nav_s": 188.63160634040833,
+     "n_graphs": 2,
+     "ged_hm3d": 865.5,
+     "ged_frontier_made": 282.0,
+     "ged_apr": 341.0
+    },
+    {
+     "stage": 17,
+     "path_m": 23.24999999999987,
+     "nav_s": 211.09154391288757,
+     "n_graphs": 2,
+     "ged_hm3d": 883.5,
+     "ged_frontier_made": 258.5,
+     "ged_apr": 322.5
+    },
+    {
+     "stage": 18,
+     "path_m": 24.599999999999856,
+     "nav_s": 217.63216257095337,
+     "n_graphs": 2,
+     "ged_hm3d": 892.0,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 323.5
+    },
+    {
+     "stage": 19,
+     "path_m": 27.899999999999824,
+     "nav_s": 250.0544469356537,
+     "n_graphs": 2,
+     "ged_hm3d": 909.5,
+     "ged_frontier_made": 255.5,
+     "ged_apr": 313.5
+    },
+    {
+     "stage": 20,
+     "path_m": 31.799999999999788,
+     "nav_s": 271.23123002052307,
+     "n_graphs": 2,
+     "ged_hm3d": 920.5,
+     "ged_frontier_made": 223.0,
+     "ged_apr": 268.5
+    },
+    {
+     "stage": 21,
+     "path_m": 32.92499999999982,
+     "nav_s": 277.9919168949127,
+     "n_graphs": 2,
+     "ged_hm3d": 942.5,
+     "ged_frontier_made": 225.5,
+     "ged_apr": 264.5
+    },
+    {
+     "stage": 22,
+     "path_m": 34.19999999999987,
+     "nav_s": 284.8464846611023,
+     "n_graphs": 2,
+     "ged_hm3d": 946.0,
+     "ged_frontier_made": 222.0,
+     "ged_apr": 270.0
+    },
+    {
+     "stage": 23,
+     "path_m": 38.47500000000003,
+     "nav_s": 319.2705190181732,
+     "n_graphs": 2,
+     "ged_hm3d": 954.5,
+     "ged_frontier_made": 252.5,
+     "ged_apr": 294.5
+    },
+    {
+     "stage": 24,
+     "path_m": 43.0500000000002,
+     "nav_s": 353.6929748058319,
+     "n_graphs": 2,
+     "ged_hm3d": 969.5,
+     "ged_frontier_made": 181.0,
+     "ged_apr": 235.5
+    },
+    {
+     "stage": 25,
+     "path_m": 46.500000000000334,
+     "nav_s": 386.0976586341858,
+     "n_graphs": 2,
+     "ged_hm3d": 983.0,
+     "ged_frontier_made": 224.5,
+     "ged_apr": 284.5
+    },
+    {
+     "stage": 26,
+     "path_m": 47.25000000000036,
+     "nav_s": 389.2209806442261,
+     "n_graphs": 2,
+     "ged_hm3d": 993.5,
+     "ged_frontier_made": 214.0,
+     "ged_apr": 263.5
+    },
+    {
+     "stage": 27,
+     "path_m": 47.25000000000036,
+     "nav_s": 389.951997756958,
+     "n_graphs": 2,
+     "ged_hm3d": 995.0,
+     "ged_frontier_made": 215.0,
+     "ged_apr": 262.0
+    },
+    {
+     "stage": 28,
+     "path_m": 47.25000000000036,
+     "nav_s": 390.8128707408905,
+     "n_graphs": 2,
+     "ged_hm3d": 994.0,
+     "ged_frontier_made": 214.5,
+     "ged_apr": 261.5
+    },
+    {
+     "stage": 29,
+     "path_m": 53.5500000000006,
+     "nav_s": 441.6102614402771,
+     "n_graphs": 2,
+     "ged_hm3d": 986.0,
+     "ged_frontier_made": 239.5,
+     "ged_apr": 279.5
+    },
+    {
+     "stage": 30,
+     "path_m": 53.85000000000061,
+     "nav_s": 448.827689409256,
+     "n_graphs": 2,
+     "ged_hm3d": 996.5,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 283.0
+    },
+    {
+     "stage": 31,
+     "path_m": 54.60000000000064,
+     "nav_s": 453.0046548843384,
+     "n_graphs": 2,
+     "ged_hm3d": 991.5,
+     "ged_frontier_made": 229.0,
+     "ged_apr": 274.5
+    },
+    {
+     "stage": 32,
+     "path_m": 54.675000000000644,
+     "nav_s": 455.85189628601074,
+     "n_graphs": 2,
+     "ged_hm3d": 997.0,
+     "ged_frontier_made": 227.0,
+     "ged_apr": 279.5
+    },
+    {
+     "stage": 33,
+     "path_m": 54.675000000000644,
+     "nav_s": 456.6274697780609,
+     "n_graphs": 2,
+     "ged_hm3d": 996.0,
+     "ged_frontier_made": 239.5,
+     "ged_apr": 291.0
+    },
+    {
+     "stage": 34,
+     "path_m": 54.675000000000644,
+     "nav_s": 457.2862479686737,
+     "n_graphs": 2,
+     "ged_hm3d": 998.5,
+     "ged_frontier_made": 231.5,
+     "ged_apr": 285.0
+    },
+    {
+     "stage": 35,
+     "path_m": 60.225000000000854,
+     "nav_s": 500.76087260246277,
+     "n_graphs": 2,
+     "ged_hm3d": 995.5,
+     "ged_frontier_made": 227.0,
+     "ged_apr": 268.5
+    },
+    {
+     "stage": 36,
+     "path_m": 66.07500000000107,
+     "nav_s": 553.6813926696777,
+     "n_graphs": 2,
+     "ged_hm3d": 998.0,
+     "ged_frontier_made": 230.5,
+     "ged_apr": 267.5
+    },
+    {
+     "stage": 37,
+     "path_m": 66.07500000000107,
+     "nav_s": 556.5750777721405,
+     "n_graphs": 2,
+     "ged_hm3d": 1001.5,
+     "ged_frontier_made": 237.5,
+     "ged_apr": 277.0
+    },
+    {
+     "stage": 38,
+     "path_m": 66.07500000000107,
+     "nav_s": 557.2900080680847,
+     "n_graphs": 2,
+     "ged_hm3d": 999.5,
+     "ged_frontier_made": 232.0,
+     "ged_apr": 266.0
+    },
+    {
+     "stage": 39,
+     "path_m": 69.97500000000122,
+     "nav_s": 581.0047647953033,
+     "n_graphs": 2,
+     "ged_hm3d": 1004.0,
+     "ged_frontier_made": 244.0,
+     "ged_apr": 278.5
+    },
+    {
+     "stage": 40,
+     "path_m": 79.87500000000159,
+     "nav_s": 625.921383857727,
+     "n_graphs": 2,
+     "ged_hm3d": 1007.0,
+     "ged_frontier_made": 239.5,
+     "ged_apr": 276.5
+    },
+    {
+     "stage": 41,
+     "path_m": 81.67500000000166,
+     "nav_s": 650.2416741847992,
+     "n_graphs": 2,
+     "ged_hm3d": 1005.5,
+     "ged_frontier_made": 250.5,
+     "ged_apr": 268.0
+    },
+    {
+     "stage": 42,
+     "path_m": 81.67500000000166,
+     "nav_s": 651.1645317077637,
+     "n_graphs": 2,
+     "ged_hm3d": 1007.0,
+     "ged_frontier_made": 242.0,
+     "ged_apr": 274.0
+    },
+    {
+     "stage": 43,
+     "path_m": 87.07500000000186,
+     "nav_s": 674.2321882247925,
+     "n_graphs": 2,
+     "ged_hm3d": 1015.5,
+     "ged_frontier_made": 248.0,
+     "ged_apr": 262.0
+    },
+    {
+     "stage": 44,
+     "path_m": 93.90000000000212,
+     "nav_s": 713.93408370018,
+     "n_graphs": 2,
+     "ged_hm3d": 1029.5,
+     "ged_frontier_made": 231.0,
+     "ged_apr": 260.5
+    },
+    {
+     "stage": 45,
+     "path_m": 95.25000000000217,
+     "nav_s": 721.0519835948944,
+     "n_graphs": 2,
+     "ged_hm3d": 1028.0,
+     "ged_frontier_made": 231.0,
+     "ged_apr": 253.0
+    },
+    {
+     "stage": 46,
+     "path_m": 96.45000000000222,
+     "nav_s": 744.3892900943756,
+     "n_graphs": 2,
+     "ged_hm3d": 1032.0,
+     "ged_frontier_made": 237.0,
+     "ged_apr": 257.0
+    },
+    {
+     "stage": 47,
+     "path_m": 96.45000000000222,
+     "nav_s": 744.9044404029846,
+     "n_graphs": 2,
+     "ged_hm3d": 1032.0,
+     "ged_frontier_made": 237.0,
+     "ged_apr": 259.0
+    },
+    {
+     "stage": 48,
+     "path_m": 99.15000000000232,
+     "nav_s": 769.8158905506134,
+     "n_graphs": 2,
+     "ged_hm3d": 1028.0,
+     "ged_frontier_made": 224.0,
+     "ged_apr": 250.5
+    },
+    {
+     "stage": 49,
+     "path_m": 99.30000000000233,
+     "nav_s": 771.2754609584808,
+     "n_graphs": 2,
+     "ged_hm3d": 1029.5,
+     "ged_frontier_made": 220.0,
+     "ged_apr": 256.5
+    },
+    {
+     "stage": 50,
+     "path_m": 99.45000000000233,
+     "nav_s": 773.6756966114044,
+     "n_graphs": 2,
+     "ged_hm3d": 1027.0,
+     "ged_frontier_made": 215.5,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 51,
+     "path_m": 103.42500000000248,
+     "nav_s": 807.8924703598022,
+     "n_graphs": 2,
+     "ged_hm3d": 1032.0,
+     "ged_frontier_made": 221.0,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 52,
+     "path_m": 103.42500000000248,
+     "nav_s": 808.6330578327179,
+     "n_graphs": 2,
+     "ged_hm3d": 1033.5,
+     "ged_frontier_made": 217.0,
+     "ged_apr": 259.0
+    },
+    {
+     "stage": 53,
+     "path_m": 103.42500000000248,
+     "nav_s": 809.2533621788025,
+     "n_graphs": 2,
+     "ged_hm3d": 1031.5,
+     "ged_frontier_made": 213.0,
+     "ged_apr": 253.5
+    },
+    {
+     "stage": 54,
+     "path_m": 104.25000000000252,
+     "nav_s": 824.3913187980652,
+     "n_graphs": 2,
+     "ged_hm3d": 1035.5,
+     "ged_frontier_made": 225.5,
+     "ged_apr": 259.0
+    },
+    {
+     "stage": 55,
+     "path_m": 104.25000000000252,
+     "nav_s": 825.0120143890381,
+     "n_graphs": 2,
+     "ged_hm3d": 1031.5,
+     "ged_frontier_made": 213.0,
+     "ged_apr": 253.0
+    },
+    {
+     "stage": 56,
+     "path_m": 105.60000000000257,
+     "nav_s": 839.2325208187103,
+     "n_graphs": 2,
+     "ged_hm3d": 1034.5,
+     "ged_frontier_made": 235.5,
+     "ged_apr": 255.5
+    },
+    {
+     "stage": 57,
+     "path_m": 106.5750000000026,
+     "nav_s": 855.4073090553284,
+     "n_graphs": 2,
+     "ged_hm3d": 1036.0,
+     "ged_frontier_made": 232.0,
+     "ged_apr": 254.0
+    },
+    {
+     "stage": 58,
+     "path_m": 107.77500000000265,
+     "nav_s": 864.8252296447754,
+     "n_graphs": 2,
+     "ged_hm3d": 1039.5,
+     "ged_frontier_made": 237.5,
+     "ged_apr": 257.5
+    },
+    {
+     "stage": 59,
+     "path_m": 107.77500000000265,
+     "nav_s": 865.3386523723602,
+     "n_graphs": 2,
+     "ged_hm3d": 1037.0,
+     "ged_frontier_made": 232.0,
+     "ged_apr": 252.0
+    },
+    {
+     "stage": 60,
+     "path_m": 109.72500000000272,
+     "nav_s": 888.7555506229401,
+     "n_graphs": 2,
+     "ged_hm3d": 1037.0,
+     "ged_frontier_made": 234.0,
+     "ged_apr": 254.0
+    },
+    {
+     "stage": 61,
+     "path_m": 111.52500000000279,
+     "nav_s": 909.077095746994,
+     "n_graphs": 2,
+     "ged_hm3d": 1039.5,
+     "ged_frontier_made": 237.5,
+     "ged_apr": 257.5
+    },
+    {
+     "stage": 62,
+     "path_m": 115.42500000000294,
+     "nav_s": 942.7297554016113,
+     "n_graphs": 2,
+     "ged_hm3d": 1035.5,
+     "ged_frontier_made": 229.0,
+     "ged_apr": 249.0
+    },
+    {
+     "stage": 63,
+     "path_m": 119.40000000000309,
+     "nav_s": 977.8471558094025,
+     "n_graphs": 2,
+     "ged_hm3d": 1039.5,
+     "ged_frontier_made": 234.0,
+     "ged_apr": 254.5
+    },
+    {
+     "stage": 64,
+     "path_m": 119.47500000000309,
+     "nav_s": 978.4617238044739,
+     "n_graphs": 2,
+     "ged_hm3d": 1038.5,
+     "ged_frontier_made": 233.5,
+     "ged_apr": 254.0
+    },
+    {
+     "stage": 65,
+     "path_m": 130.57500000000303,
+     "nav_s": 1042.2160189151764,
+     "n_graphs": 2,
+     "ged_hm3d": 1040.0,
+     "ged_frontier_made": 216.5,
+     "ged_apr": 247.0
+    },
+    {
+     "stage": 66,
+     "path_m": 137.25000000000202,
+     "nav_s": 1076.283870458603,
+     "n_graphs": 2,
+     "ged_hm3d": 1028.5,
+     "ged_frontier_made": 184.0,
+     "ged_apr": 239.0
+    },
+    {
+     "stage": 67,
+     "path_m": 137.47500000000198,
+     "nav_s": 1088.3742201328278,
+     "n_graphs": 2,
+     "ged_hm3d": 1026.5,
+     "ged_frontier_made": 198.5,
+     "ged_apr": 246.0
+    },
+    {
+     "stage": 68,
+     "path_m": 137.47500000000198,
+     "nav_s": 1089.291481256485,
+     "n_graphs": 2,
+     "ged_hm3d": 1031.0,
+     "ged_frontier_made": 199.5,
+     "ged_apr": 245.0
+    },
+    {
+     "stage": 69,
+     "path_m": 137.62500000000196,
+     "nav_s": 1102.2682218551636,
+     "n_graphs": 2,
+     "ged_hm3d": 1034.0,
+     "ged_frontier_made": 201.5,
+     "ged_apr": 245.0
+    },
+    {
+     "stage": 70,
+     "path_m": 137.70000000000195,
+     "nav_s": 1104.455665588379,
+     "n_graphs": 2,
+     "ged_hm3d": 1034.0,
+     "ged_frontier_made": 201.5,
+     "ged_apr": 245.0
+    },
+    {
+     "stage": 71,
+     "path_m": 142.35000000000124,
+     "nav_s": 1135.274326324463,
+     "n_graphs": 2,
+     "ged_hm3d": 1033.0,
+     "ged_frontier_made": 194.0,
+     "ged_apr": 240.0
+    },
+    {
+     "stage": 72,
+     "path_m": 146.17500000000067,
+     "nav_s": 1161.974277496338,
+     "n_graphs": 2,
+     "ged_hm3d": 1036.5,
+     "ged_frontier_made": 190.5,
+     "ged_apr": 243.0
+    },
+    {
+     "stage": 73,
+     "path_m": 146.25000000000065,
+     "nav_s": 1163.1321341991425,
+     "n_graphs": 2,
+     "ged_hm3d": 1038.0,
+     "ged_frontier_made": 191.5,
+     "ged_apr": 244.0
+    },
+    {
+     "stage": 74,
+     "path_m": 158.24999999999883,
+     "nav_s": 1225.1642923355103,
+     "n_graphs": 2,
+     "ged_hm3d": 1046.5,
+     "ged_frontier_made": 172.0,
+     "ged_apr": 210.5
+    },
+    {
+     "stage": 75,
+     "path_m": 158.24999999999883,
+     "nav_s": 1225.8825743198395,
+     "n_graphs": 2,
+     "ged_hm3d": 1041.0,
+     "ged_frontier_made": 176.0,
+     "ged_apr": 206.0
+    },
+    {
+     "stage": 76,
+     "path_m": 158.24999999999883,
+     "nav_s": 1226.4775722026825,
+     "n_graphs": 2,
+     "ged_hm3d": 1041.0,
+     "ged_frontier_made": 176.0,
+     "ged_apr": 206.0
+    },
+    {
+     "stage": 77,
+     "path_m": 179.47499999999562,
+     "nav_s": 1333.5051481723785,
+     "n_graphs": 2,
+     "ged_hm3d": 1033.5,
+     "ged_frontier_made": 189.5,
+     "ged_apr": 197.0
+    },
+    {
+     "stage": 78,
+     "path_m": 183.44999999999501,
+     "nav_s": 1368.6222603321075,
+     "n_graphs": 2,
+     "ged_hm3d": 1035.5,
+     "ged_frontier_made": 204.5,
+     "ged_apr": 225.5
+    },
+    {
+     "stage": 79,
+     "path_m": 196.34999999999306,
+     "nav_s": 1439.2375812530518,
+     "n_graphs": 2,
+     "ged_hm3d": 1038.0,
+     "ged_frontier_made": 202.5,
+     "ged_apr": 210.5
+    },
+    {
+     "stage": 80,
+     "path_m": 202.42499999999214,
+     "nav_s": 1470.5557534694672,
+     "n_graphs": 2,
+     "ged_hm3d": 1042.0,
+     "ged_frontier_made": 214.5,
+     "ged_apr": 218.5
+    },
+    {
+     "stage": 81,
+     "path_m": 208.19999999999126,
+     "nav_s": 1504.7936532497406,
+     "n_graphs": 2,
+     "ged_hm3d": 1046.0,
+     "ged_frontier_made": 202.5,
+     "ged_apr": 204.5
+    },
+    {
+     "stage": 82,
+     "path_m": 216.52499999999,
+     "nav_s": 1550.2136766910553,
+     "n_graphs": 2,
+     "ged_hm3d": 1048.5,
+     "ged_frontier_made": 242.5,
+     "ged_apr": 254.0
+    },
+    {
+     "stage": 83,
+     "path_m": 235.12499999998718,
+     "nav_s": 1636.8411173820496,
+     "n_graphs": 2,
+     "ged_hm3d": 1050.0,
+     "ged_frontier_made": 249.5,
+     "ged_apr": 258.5
+    },
+    {
+     "stage": 84,
+     "path_m": 236.324999999987,
+     "nav_s": 1646.8610410690308,
+     "n_graphs": 2,
+     "ged_hm3d": 1049.5,
+     "ged_frontier_made": 246.5,
+     "ged_apr": 215.0
+    },
+    {
+     "stage": 85,
+     "path_m": 255.67499999998407,
+     "nav_s": 1740.7803149223328,
+     "n_graphs": 2,
+     "ged_hm3d": 1071.5,
+     "ged_frontier_made": 267.5,
+     "ged_apr": 296.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/frontier_seeds/e7_00871_s45_frontier_end",
+   "scene": "00871",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0.0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 712.0,
+     "ged_frontier_made": 318.0,
+     "ged_apr": 357.0
+    },
+    {
+     "stage": 1,
+     "path_m": 0.9749999999999998,
+     "nav_s": 2.020352840423584,
+     "n_graphs": 2,
+     "ged_hm3d": 761.0,
+     "ged_frontier_made": 283.0,
+     "ged_apr": 340.5
+    },
+    {
+     "stage": 2,
+     "path_m": 3.600000000000003,
+     "nav_s": 24.142533779144287,
+     "n_graphs": 2,
+     "ged_hm3d": 799.0,
+     "ged_frontier_made": 270.5,
+     "ged_apr": 327.5
+    },
+    {
+     "stage": 3,
+     "path_m": 3.975000000000004,
+     "nav_s": 29.461369037628174,
+     "n_graphs": 2,
+     "ged_hm3d": 804.5,
+     "ged_frontier_made": 272.0,
+     "ged_apr": 321.5
+    },
+    {
+     "stage": 4,
+     "path_m": 6.6750000000000105,
+     "nav_s": 47.009339809417725,
+     "n_graphs": 2,
+     "ged_hm3d": 810.0,
+     "ged_frontier_made": 272.0,
+     "ged_apr": 327.0
+    },
+    {
+     "stage": 5,
+     "path_m": 9.3,
+     "nav_s": 75.0361967086792,
+     "n_graphs": 2,
+     "ged_hm3d": 834.5,
+     "ged_frontier_made": 291.5,
+     "ged_apr": 347.0
+    },
+    {
+     "stage": 6,
+     "path_m": 9.599999999999998,
+     "nav_s": 83.55931949615479,
+     "n_graphs": 2,
+     "ged_hm3d": 836.5,
+     "ged_frontier_made": 293.0,
+     "ged_apr": 352.0
+    },
+    {
+     "stage": 7,
+     "path_m": 11.624999999999979,
+     "nav_s": 98.87878346443176,
+     "n_graphs": 2,
+     "ged_hm3d": 852.0,
+     "ged_frontier_made": 276.0,
+     "ged_apr": 336.0
+    },
+    {
+     "stage": 8,
+     "path_m": 13.499999999999961,
+     "nav_s": 108.73008346557617,
+     "n_graphs": 2,
+     "ged_hm3d": 849.0,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 327.0
+    },
+    {
+     "stage": 9,
+     "path_m": 13.799999999999958,
+     "nav_s": 115.44381475448608,
+     "n_graphs": 2,
+     "ged_hm3d": 853.5,
+     "ged_frontier_made": 251.0,
+     "ged_apr": 307.0
+    },
+    {
+     "stage": 10,
+     "path_m": 14.774999999999949,
+     "nav_s": 129.4668424129486,
+     "n_graphs": 2,
+     "ged_hm3d": 857.0,
+     "ged_frontier_made": 268.0,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 11,
+     "path_m": 17.099999999999927,
+     "nav_s": 155.6882996559143,
+     "n_graphs": 2,
+     "ged_hm3d": 869.5,
+     "ged_frontier_made": 283.0,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 12,
+     "path_m": 20.399999999999896,
+     "nav_s": 171.41424226760864,
+     "n_graphs": 2,
+     "ged_hm3d": 876.5,
+     "ged_frontier_made": 282.5,
+     "ged_apr": 328.5
+    },
+    {
+     "stage": 13,
+     "path_m": 26.32499999999984,
+     "nav_s": 206.1360957622528,
+     "n_graphs": 2,
+     "ged_hm3d": 882.0,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 334.5
+    },
+    {
+     "stage": 14,
+     "path_m": 27.074999999999832,
+     "nav_s": 210.87177848815918,
+     "n_graphs": 2,
+     "ged_hm3d": 889.5,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 15,
+     "path_m": 28.574999999999818,
+     "nav_s": 227.49876594543457,
+     "n_graphs": 2,
+     "ged_hm3d": 889.5,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 331.5
+    },
+    {
+     "stage": 16,
+     "path_m": 28.874999999999815,
+     "nav_s": 229.31399154663086,
+     "n_graphs": 2,
+     "ged_hm3d": 889.0,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 317.0
+    },
+    {
+     "stage": 17,
+     "path_m": 29.024999999999814,
+     "nav_s": 230.12838983535767,
+     "n_graphs": 2,
+     "ged_hm3d": 890.0,
+     "ged_frontier_made": 273.0,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 18,
+     "path_m": 29.024999999999814,
+     "nav_s": 230.78872895240784,
+     "n_graphs": 2,
+     "ged_hm3d": 885.0,
+     "ged_frontier_made": 273.5,
+     "ged_apr": 328.5
+    },
+    {
+     "stage": 19,
+     "path_m": 33.14999999999983,
+     "nav_s": 267.31420397758484,
+     "n_graphs": 2,
+     "ged_hm3d": 897.0,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 327.5
+    },
+    {
+     "stage": 20,
+     "path_m": 33.14999999999983,
+     "nav_s": 268.2276921272278,
+     "n_graphs": 2,
+     "ged_hm3d": 897.5,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 333.5
+    },
+    {
+     "stage": 21,
+     "path_m": 33.14999999999983,
+     "nav_s": 269.6492919921875,
+     "n_graphs": 2,
+     "ged_hm3d": 901.0,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 336.0
+    },
+    {
+     "stage": 22,
+     "path_m": 34.04999999999986,
+     "nav_s": 284.6038453578949,
+     "n_graphs": 2,
+     "ged_hm3d": 896.0,
+     "ged_frontier_made": 270.0,
+     "ged_apr": 329.0
+    },
+    {
+     "stage": 23,
+     "path_m": 35.174999999999905,
+     "nav_s": 296.0008018016815,
+     "n_graphs": 2,
+     "ged_hm3d": 899.0,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 329.5
+    },
+    {
+     "stage": 24,
+     "path_m": 35.32499999999991,
+     "nav_s": 298.81802916526794,
+     "n_graphs": 2,
+     "ged_hm3d": 900.0,
+     "ged_frontier_made": 266.0,
+     "ged_apr": 332.0
+    },
+    {
+     "stage": 25,
+     "path_m": 38.25000000000002,
+     "nav_s": 325.9386284351349,
+     "n_graphs": 2,
+     "ged_hm3d": 897.5,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 326.0
+    },
+    {
+     "stage": 26,
+     "path_m": 38.25000000000002,
+     "nav_s": 326.872296333313,
+     "n_graphs": 2,
+     "ged_hm3d": 901.0,
+     "ged_frontier_made": 273.0,
+     "ged_apr": 333.5
+    },
+    {
+     "stage": 27,
+     "path_m": 38.25000000000002,
+     "nav_s": 327.5923984050751,
+     "n_graphs": 2,
+     "ged_hm3d": 899.5,
+     "ged_frontier_made": 274.5,
+     "ged_apr": 330.5
+    },
+    {
+     "stage": 28,
+     "path_m": 42.15000000000017,
+     "nav_s": 362.8121585845947,
+     "n_graphs": 2,
+     "ged_hm3d": 902.0,
+     "ged_frontier_made": 269.5,
+     "ged_apr": 332.0
+    },
+    {
+     "stage": 29,
+     "path_m": 42.15000000000017,
+     "nav_s": 364.14404678344727,
+     "n_graphs": 2,
+     "ged_hm3d": 904.5,
+     "ged_frontier_made": 272.0,
+     "ged_apr": 334.5
+    },
+    {
+     "stage": 30,
+     "path_m": 46.05000000000032,
+     "nav_s": 396.36709904670715,
+     "n_graphs": 2,
+     "ged_hm3d": 906.0,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 334.5
+    },
+    {
+     "stage": 31,
+     "path_m": 50.17500000000047,
+     "nav_s": 431.81836342811584,
+     "n_graphs": 2,
+     "ged_hm3d": 905.5,
+     "ged_frontier_made": 270.5,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 32,
+     "path_m": 52.20000000000055,
+     "nav_s": 456.14686584472656,
+     "n_graphs": 2,
+     "ged_hm3d": 907.5,
+     "ged_frontier_made": 270.0,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 33,
+     "path_m": 54.22500000000063,
+     "nav_s": 477.29568552970886,
+     "n_graphs": 2,
+     "ged_hm3d": 902.5,
+     "ged_frontier_made": 267.5,
+     "ged_apr": 335.0
+    },
+    {
+     "stage": 34,
+     "path_m": 58.20000000000078,
+     "nav_s": 510.6709017753601,
+     "n_graphs": 2,
+     "ged_hm3d": 905.0,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 324.0
+    },
+    {
+     "stage": 35,
+     "path_m": 66.52500000000109,
+     "nav_s": 555.690169095993,
+     "n_graphs": 2,
+     "ged_hm3d": 904.5,
+     "ged_frontier_made": 277.5,
+     "ged_apr": 326.5
+    },
+    {
+     "stage": 36,
+     "path_m": 72.52500000000131,
+     "nav_s": 584.709264755249,
+     "n_graphs": 2,
+     "ged_hm3d": 926.5,
+     "ged_frontier_made": 240.5,
+     "ged_apr": 282.0
+    },
+    {
+     "stage": 37,
+     "path_m": 75.90000000000144,
+     "nav_s": 608.1336603164673,
+     "n_graphs": 2,
+     "ged_hm3d": 934.0,
+     "ged_frontier_made": 264.0,
+     "ged_apr": 302.5
+    },
+    {
+     "stage": 38,
+     "path_m": 77.10000000000149,
+     "nav_s": 614.402010679245,
+     "n_graphs": 2,
+     "ged_hm3d": 946.0,
+     "ged_frontier_made": 235.0,
+     "ged_apr": 281.5
+    },
+    {
+     "stage": 39,
+     "path_m": 78.52500000000154,
+     "nav_s": 631.266019821167,
+     "n_graphs": 2,
+     "ged_hm3d": 959.0,
+     "ged_frontier_made": 206.0,
+     "ged_apr": 249.5
+    },
+    {
+     "stage": 40,
+     "path_m": 79.87500000000159,
+     "nav_s": 638.8863577842712,
+     "n_graphs": 2,
+     "ged_hm3d": 963.5,
+     "ged_frontier_made": 207.0,
+     "ged_apr": 245.5
+    },
+    {
+     "stage": 41,
+     "path_m": 84.52500000000177,
+     "nav_s": 673.8697755336761,
+     "n_graphs": 2,
+     "ged_hm3d": 975.0,
+     "ged_frontier_made": 218.0,
+     "ged_apr": 260.5
+    },
+    {
+     "stage": 42,
+     "path_m": 88.50000000000192,
+     "nav_s": 705.4355719089508,
+     "n_graphs": 2,
+     "ged_hm3d": 990.5,
+     "ged_frontier_made": 177.5,
+     "ged_apr": 231.5
+    },
+    {
+     "stage": 43,
+     "path_m": 89.77500000000197,
+     "nav_s": 709.708747625351,
+     "n_graphs": 2,
+     "ged_hm3d": 998.0,
+     "ged_frontier_made": 183.0,
+     "ged_apr": 229.0
+    },
+    {
+     "stage": 44,
+     "path_m": 96.82500000000223,
+     "nav_s": 758.752676486969,
+     "n_graphs": 2,
+     "ged_hm3d": 1013.5,
+     "ged_frontier_made": 203.0,
+     "ged_apr": 235.5
+    },
+    {
+     "stage": 45,
+     "path_m": 96.90000000000224,
+     "nav_s": 763.438791513443,
+     "n_graphs": 2,
+     "ged_hm3d": 1008.5,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 242.5
+    },
+    {
+     "stage": 46,
+     "path_m": 97.42500000000226,
+     "nav_s": 766.5913417339325,
+     "n_graphs": 2,
+     "ged_hm3d": 1009.0,
+     "ged_frontier_made": 187.5,
+     "ged_apr": 244.0
+    },
+    {
+     "stage": 47,
+     "path_m": 97.72500000000227,
+     "nav_s": 779.5349774360657,
+     "n_graphs": 2,
+     "ged_hm3d": 1008.0,
+     "ged_frontier_made": 182.0,
+     "ged_apr": 229.5
+    },
+    {
+     "stage": 48,
+     "path_m": 98.02500000000228,
+     "nav_s": 792.1516056060791,
+     "n_graphs": 2,
+     "ged_hm3d": 1012.0,
+     "ged_frontier_made": 166.5,
+     "ged_apr": 221.5
+    },
+    {
+     "stage": 49,
+     "path_m": 98.17500000000229,
+     "nav_s": 796.347244977951,
+     "n_graphs": 2,
+     "ged_hm3d": 1012.0,
+     "ged_frontier_made": 167.5,
+     "ged_apr": 223.0
+    },
+    {
+     "stage": 50,
+     "path_m": 102.60000000000245,
+     "nav_s": 822.9725022315979,
+     "n_graphs": 2,
+     "ged_hm3d": 1015.0,
+     "ged_frontier_made": 161.5,
+     "ged_apr": 219.0
+    },
+    {
+     "stage": 51,
+     "path_m": 102.67500000000246,
+     "nav_s": 823.6882841587067,
+     "n_graphs": 2,
+     "ged_hm3d": 1015.5,
+     "ged_frontier_made": 169.0,
+     "ged_apr": 213.5
+    },
+    {
+     "stage": 52,
+     "path_m": 102.67500000000246,
+     "nav_s": 824.408313035965,
+     "n_graphs": 2,
+     "ged_hm3d": 1014.5,
+     "ged_frontier_made": 171.0,
+     "ged_apr": 215.0
+    },
+    {
+     "stage": 53,
+     "path_m": 107.25000000000263,
+     "nav_s": 853.380909204483,
+     "n_graphs": 2,
+     "ged_hm3d": 1021.5,
+     "ged_frontier_made": 184.5,
+     "ged_apr": 219.5
+    },
+    {
+     "stage": 54,
+     "path_m": 116.02500000000296,
+     "nav_s": 891.7992880344391,
+     "n_graphs": 2,
+     "ged_hm3d": 1035.0,
+     "ged_frontier_made": 205.5,
+     "ged_apr": 235.5
+    },
+    {
+     "stage": 55,
+     "path_m": 121.95000000000319,
+     "nav_s": 921.4221124649048,
+     "n_graphs": 2,
+     "ged_hm3d": 1041.0,
+     "ged_frontier_made": 193.5,
+     "ged_apr": 223.5
+    },
+    {
+     "stage": 56,
+     "path_m": 125.92500000000334,
+     "nav_s": 945.5028929710388,
+     "n_graphs": 2,
+     "ged_hm3d": 1044.0,
+     "ged_frontier_made": 167.0,
+     "ged_apr": 202.0
+    },
+    {
+     "stage": 57,
+     "path_m": 138.15000000000188,
+     "nav_s": 1043.0289614200592,
+     "n_graphs": 2,
+     "ged_hm3d": 1039.0,
+     "ged_frontier_made": 178.0,
+     "ged_apr": 202.5
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
   }
  ]
 }

@@ -28,6 +28,17 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
     | APR-b 853 | `apr_00853_b_FAILED_ATTEMPT_1707` (frozen) | `apr_00853_b` (rerun, 11-13 17:07) | none |
     | APR-b 871 | plain folder until the queue renames it (frozen) | plain folder after the rerun | none |
 
+    **Completed 11-17 17:01,** from `results_paper_compare_1113/folder_map_20261117T170055.md`, which the rescore wrote before it scored anything. The third attempts ran on 11-17, not 11-13 (items 61 and 63). HHMM in a folder name is the launch time of the attempt that took the plain name.
+
+    | Run | Attempt 1 | Attempt 2 | Attempt 3 |
+    |---|---|---|---|
+    | e7 871 s42 | `e7_00871_s42_frontier_end_FAILED_ATTEMPT_1213` | `…_FAILED_ATTEMPT_1111` | `e7_00871_s42_frontier_end` (11-17 11:11) |
+    | e7 871 s43 | `…_s43_frontier_end_FAILED_ATTEMPT_1313` | `…_FAILED_ATTEMPT_1242` | `e7_00871_s43_frontier_end` (11-17 12:42) |
+    | e7 871 s44 | `…_s44_frontier_end_FAILED_ATTEMPT_1358` | `…_FAILED_ATTEMPT_1427` | `e7_00871_s44_frontier_end` (11-17 14:27) |
+    | e7 871 s45 | `…_s45_frontier_end_FAILED_ATTEMPT_1438` | `…_FAILED_ATTEMPT_1601` | `e7_00871_s45_frontier_end` (11-17 16:01) |
+    | APR-b 853 | `apr_00853_b_FAILED_ATTEMPT_1707` (frozen) | `apr_00853_b` (11-13 17:07) | none |
+    | APR-b 871 | `apr_00871_b_FAILED_ATTEMPT_1020` (frozen) | `apr_00871_b` (11-17 10:20) | none |
+
 47. **11-13: changes to the end-sem plan,** made after five independent reviews of a draft (`docs/ENDSEM_FINAL_PLAN_2026-11-13.md`).
     - E6 (live Claude) is out, by the plan's own rule: M3 had not passed by 11-12 (§8, item 7).
     - M6 and H5 are cut. M2's verdict therefore stays provisional, as registered.
@@ -88,3 +99,6 @@ This file continues `results_2026-10-31/DEVIATIONS.md`, which ends at item 39 an
 
 61. **11-16 18:20: the 871 jobs queued a fourth time.** The third queue waited 72 hours for GPU memory (another user's job held it from 11-13 18:05) and gave up at 18:10 on 11-16, having launched only the 853 APR-b tour. With the student's approval the same queue script (md5 4003ec25…, the reviewed copy, 12 GB check) was started again at 18:20 for the five jobs it never launched: the 871 APR-b tour, then the 871 seeds 42 to 45. Under the Note to Amendment 2 (A2.2) an attempt the queue never launched has not happened, so these are still the rerun of the tour and the third attempts of the seeds. No rule changed.
 
+62. **11-17 17:04: old graph files on the host compressed in place.** Disk was short for Amendment 3's runs: 21 GB was free when the fourth queue ended, the check before each launch needs 20 GB, and a run writes 2 to 3 GB. With the student's approval, given the same day, `host/compress_old_dsg.sh` compressed every raw `*_dsg.json` in `runs/frontier_seeds` and `runs/live_campaign` with zstd, as the queue already does for its own runs. For each file it took the sha256 of the raw bytes, compressed, unpacked again, and removed the raw file only when the unpacked bytes gave the same sha256. It ran from 17:04:48 to 17:05:59, after the queue had ended and the final rescore had finished, with nothing else in the container: 1,478 files, 31.78 GB raw (411 in `frontier_seeds`, 1,067 in `live_campaign`), none skipped, and free disk rose from 20 to 45 GB. The list of hashes is `host/dsg_compress_20261117T170448.sha256` (sha256 e5a8c656…); a second pass unpacked 40 files picked at random and each matched. No file was deleted, renamed out of its folder or copied off the host; `zstd -d` restores each one bit for bit. Any later replay on the host that reads these graphs must unpack them first. No score depends on it: the rescore reads YAML and stats files.
+
+63. **11-17: how the fourth queue's runs went.** The other user's job ended between 10:10 and 10:12, and the queue launched the 871 APR-b tour at 10:20:57 and then the seeds 42 to 45, ending at 17:00:27. The tour and seeds 42, 43 and 45 logged "Exploration complete"; seed 44 stopped at the registered 250 m path cap. No run has an "out of memory" line or a line saying nvblox died. The frontier logs hold two, one, three and two "Timeout! Did not find an updated/stable file" lines (seeds 42 to 45); each run went on after them. From about 14:00 to about 14:23 another user's jobs held 10.8 GB of the GPU and kept it busy; that covers the last 12 minutes of seed 43 and the wait before seed 44. Whether such jobs ran again during seeds 44 and 45 was not recorded: the free memory we logged then (34 GB at its lowest) includes what our own run held. It never came near the 12 GB check. Free disk fell to 15 GB at its lowest, above the queue's 6 GB stop. No old run folder was touched while a run was live. During seed 44 we ran read-only checks on the host and tested the compression script inside the container on a made-up tree of under 1 MB.
