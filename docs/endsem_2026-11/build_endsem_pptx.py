@@ -5,8 +5,8 @@ Type size: the canvas is 1920 px wide and 1 px is 0.5 pt, so body text is 32 px 
 notes, labels and chart text are 24 px (12 pt) or more. The builder warns if its line estimate says a
 text box runs past the slide.
 
-Every chart and table value comes from a result file (numbers.csv, paper_compare.json, c_checks.json,
-frontier_holm.json, figures/stage_numbers.json) or, for part 3, from slots.json. A null in slots.json
+Every chart and table value comes from a result file (numbers.csv, paper_compare.json, budgets_*.json,
+c2_*.json, c_checks.json, frontier_holm.json, figures/stage_numbers.json) or, for part 3, from slots.json. A null in slots.json
 shows TBD and a grey "result pending" mark. SOURCES.md says which file and key stand behind each number.
 
 Usage (from the project root):
@@ -49,6 +49,7 @@ MINUS = "−"
 DASH = "–"
 B, NT = 32, 24          # body and note size in canvas px (16 pt and 12 pt)
 DISTANCE_WEIGHT = "0.2"  # per metre; tools/decision_replay.py:173 (MOVE_COST_LAMBDA)
+PATH_CAP_M = 250         # a frontier run stops at this path length; PREREGISTRATION_PAPER.md section 2a
 WARN = []
 
 
@@ -74,17 +75,35 @@ def paper_cells(slots):
     return cells, d["meta"]["budgets"]
 
 
-def c2_f1_853():
-    """C2 on 853: F1 of the repeat tour against the first. The newest c2_*.json in results_paper_compare_1113
-    holds it; while a rescore is rewriting that folder, the figure quoted in its NOTES.md item 3 stands in."""
+def newest(pattern):
+    """The newest file in results_paper_compare_1113 that matches; the time stamps in the names sort by date."""
     import glob
-    files = sorted(glob.glob(os.path.join(R1113, "c2_*.json")))
-    if files:
-        v = json.load(open(files[-1]))["scenes"]["00853"]["f1"]
+    files = sorted(glob.glob(os.path.join(R1113, pattern)))
+    return files[-1] if files else None
+
+
+def c2_f1(scene):
+    """C2 for one scene: F1 of the repeat tour against the first. The newest c2_*.json in results_paper_compare_1113
+    holds it; while a rescore is rewriting that folder, the figure quoted in its NOTES.md item 3 stands in."""
+    f = newest("c2_*.json")
+    if f:
+        v = json.load(open(f))["scenes"][scene]["f1"]
         if v is not None:
             return float(v)
-    m = re.search(r"00853: F1 (0\.\d+)", open(os.path.join(R1113, "NOTES.md")).read())
+    m = re.search(rf"{scene}: F1 (0\.\d+)", open(os.path.join(R1113, "NOTES.md")).read())
     return float(m.group(1))
+
+
+def budget_runs():
+    """Per scene, from the newest budgets_*.json: B, how many frontier runs set it, how many were run, the range
+    of the end times of those that set it, and how many stopped at the path cap and are left out."""
+    d = json.load(open(newest("budgets_*.json")))
+    out = {}
+    for sc, b in d.items():
+        ends = [b["end_times_s"][r] for r in b["primary_runs"]]
+        out[sc] = {"b": b["primary_s"], "n": b["n_primary"], "of": len(b["end_times_s"]), "lo": min(ends),
+                   "hi": max(ends), "capped": len(b["capped_runs"])}
+    return out
 
 
 def leaves(d):
@@ -219,7 +238,7 @@ def cover(prs):
                          "place but name the right things, and that this is enough. We test that in three parts.",
       B, BODY, 1.45)
     cols = [("Part 1 · Live test", "Do the guesses improve a live map? Done."),
-            ("Part 2 · Paper's scale", "Our scores beside the paper's. The 871 numbers are being rerun."),
+            ("Part 2 · Paper's scale", "Our scores beside the paper's, in both homes. One 853 row is still to come."),
             ("Part 3 · The author's defense", "Is the meaning right? Is it enough? Is it the model?")]
     for i, (name, body) in enumerate(cols):
         x = 160 + i * 552
@@ -450,26 +469,43 @@ def live_limits(prs, Nn):
 
 # ---------------------------------------------------------------- 7. Part 2, rules and budget
 
-def timeline(s, x0, x1, y, budget, mark):
+def timeline(s, x0, x1, y, budget):
     hline(s, x0, y, x1, y, MID, 2)
     for frac in (0.1, 0.5, 1.0):
         xx = x0 + (x1 - x0) * frac
         hline(s, xx, y - 12, xx, y + 12, INK, 2)
         svg_text(s, xx, y - 22, f"{int(round(frac * 100))}%", NT, FAINT, anchor="middle", w=100)
         svg_text(s, xx, y + 50, f"{frac * budget:.0f} s", 28, INK, MONO, anchor="middle", w=140)
-    if mark:
-        text(s, x0, y + 66, 600, 30, [run("TO BE UPDATED", NT, ACCENT, SANS, True, spacing=0.1)])
 
 
-def paper_rules(prs, budgets, checks, slots):
+def capped_text(n):
+    return "1 run" if n == 1 else f"{n} runs"
+
+
+def budget_note(d):
+    txt = (f"Median end of the {d['n']} frontier runs that logged “Exploration complete” "
+           f"({d['lo']:.0f} to {d['hi']:.0f} s).")
+    if d["capped"]:
+        txt += (f" {capped_text(d['capped'])} stopped at the {PATH_CAP_M} m path cap and "
+                f"{'is' if d['capped'] == 1 else 'are'} left out.")
+    return txt
+
+
+def paper_rules(prs, budgets, checks, bf):
     s = frame(prs, 7, "Part 2 · Same rules as the paper", "Same rules as the paper")
-    upd = slots["table871_updated"]
     stops = [checks[sc]["use_rule"]["reached"] for sc in ("00853", "00871")]
+    a, b = bf["00853"], bf["00871"]
+    for sc in bf:
+        if abs(bf[sc]["b"] - budgets[sc]) > 0.01 or bf[sc]["n"] + bf[sc]["capped"] != bf[sc]["of"]:
+            WARN.append(f"budgets file and paper_compare.json disagree for {sc}")
+    frontier = (f"Run to its natural end: {a['n']} of {a['of']} runs on 853, {b['n']} of {b['of']} on 871"
+                + (f"; {capped_text(b['capped'])} on 871 stopped at the {PATH_CAP_M} m path cap." if b["capped"]
+                   else "."))
     L, w = 120, 780
     blocks = [("Scoring.", "The author's own F1 and GED code, on the paper's time axis."),
               ("Reference.", f"A scripted stand-in for the author's hand-driven tour: navmesh paths, the same mapper "
                              f"({stops[0]} and {stops[1]} stops)."),
-              ("Frontier.", "Run to its natural end: 5 of 5 runs on 853, 1 of 5 on 871."),
+              ("Frontier.", frontier),
               ("LLM.", "Ours is DeepSeek. The paper's is Gemini 2.5 Pro.")]
     y = 262
     for head, body in blocks:
@@ -478,11 +514,11 @@ def paper_rules(prs, budgets, checks, slots):
     lab(s, R, 250, 820, "What “budget” means")
     P(s, R, 300, 820, "The paper gives no value for its budget. We set one for each home.", B, BODY, 1.4)
     text(s, R, 478, 150, 40, [run("Home 853", 28, INK, SANS, True)])
-    timeline(s, R + 190, R + 790, 510, budgets["00853"], False)
-    N(s, R, 592, 820, "Median end of 5 frontier runs (612 to 868 s).")
+    timeline(s, R + 190, R + 790, 510, budgets["00853"])
+    N(s, R, 592, 820, budget_note(a))
     text(s, R, 718, 150, 40, [run("Home 871", 28, INK, SANS, True)])
-    timeline(s, R + 190, R + 790, 750, budgets["00871"], not upd)
-    N(s, R, 850, 820, "Fallback: only 1 of 5 frontier runs finished. The reruns replace it with a median.")
+    timeline(s, R + 190, R + 790, 750, budgets["00871"])
+    N(s, R, 850, 820, budget_note(b))
 
 
 # ---------------------------------------------------------------- 8 and 9. Part 2, tables
@@ -521,7 +557,7 @@ def table(s, x, y, lw, cw, rows, rowh):
     return y
 
 
-def table_rows(C, scene, arms, mark, full=None):
+def table_rows(C, scene, arms, full=None):
     def paper(arm):
         return [(f"{C[(scene, arm, f)]['paper_f1_x100']:.1f}", None, INK, MID) for f in ("10", "50", "100")]
     rows = [("Paper · ASP", paper("official"), "paper"), ("Paper · frontier", paper("frontier_end"), "paper")]
@@ -531,11 +567,7 @@ def table_rows(C, scene, arms, mark, full=None):
         cells = []
         for f in ("10", "50", "100"):
             main, sub = stat_cell(C, scene, arm, f)
-            if mark:
-                cells.append((main or "none", (sub + " · to be updated") if main else "to be updated",
-                              FAINT, ACCENT))
-            else:
-                cells.append((main or "none", sub, INK if main else FAINT, MID))
+            cells.append((main or "none", sub, INK if main else FAINT, MID))
         rows.append((names[arm], cells, "ours"))
     if full is not None:
         cells = []
@@ -556,27 +588,53 @@ def table853(prs, C, budgets, slots):
                        f"{budgets['00853']:.0f} s", "On 853, the paper's ASP lead did not appear",
               pending="ONE ROW PENDING" if is_pending(full) else None)
     y = table(s, 120, 250, 500, 380, table_rows(C, "00853", ("official", "filter_only", "placebo", "frontier_end"),
-                                                 False, full), {"paper": 62, "ours": 90, "slot": 90})
+                                                 full), {"paper": 62, "ours": 90, "slot": 90})
     N(s, 120, y + 14, 1680,
       "Paper: Fig. 4 (left), one run. Ours: runs that reach that time, shown if at least half do. ASP stops at "
       "60 m. The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference.", limit=1000)
 
 
+def vs_paper(C, scene):
+    """Ours minus the paper, in points of F1 x 100, for each ASP and frontier cell where the table shows a value of
+    ours. Both sides are taken as printed (one decimal), so the slide's own numbers subtract."""
+    out = []
+    for arm in ("official", "frontier_end"):
+        for f in ("10", "50", "100"):
+            if stat_cell(C, scene, arm, f)[0] is not None:
+                c = C[(scene, arm, f)]
+                out.append((arm, f, rnd(c["stage_value_x100"]["mean"], 1) - rnd(c["paper_f1_x100"], 1)))
+    return out
+
+
 def table871(prs, C, budgets, slots):
-    upd = slots["table871_updated"]
+    assert slots["table871_updated"], "slots.json table871_updated must be true once the 871 rescore is final"
+    diffs = vs_paper(C, "00871")
+    lo, hi = min(d for *_, d in diffs), max(d for *_, d in diffs)
+    asp, fr = C[("00871", "official", "10")], C[("00871", "frontier_end", "10")]
+    a, f = asp["stage_value_x100"], fr["stage_value_x100"]
+    lead = rnd(a["mean"], 1) - rnd(f["mean"], 1)
+    paper_lead = rnd(asp["paper_f1_x100"], 1) - rnd(fr["paper_f1_x100"], 1)
+    overlap = a["min"] <= f["max"] and f["min"] <= a["max"]
+    asp_late = any(stat_cell(C, "00871", "official", fr_)[0] is not None for fr_ in ("50", "100"))
+    if lo <= 0 or lead <= 0 or paper_lead <= 0 or not overlap or asp_late:
+        WARN.append("slide 9 wording assumes: ours above the paper's, ASP ahead at 10%, ranges overlap, "
+                    "no ASP value at 50% or 100%")
     s = frame(prs, 9, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 871 · budget "
-                       f"{budgets['00871']:.0f} s", "On 871, our numbers are to be updated",
-              pending=None if upd else "TO BE UPDATED")
-    y = table(s, 120, 250, 500, 380, table_rows(C, "00871", ("official", "filter_only", "placebo", "frontier_end"),
-                                                 not upd), {"paper": 62, "ours": 90, "slot": 90})
+                       f"{budgets['00871']:.0f} s", f"On 871, ours are {lo}{DASH}{hi} points above the paper's")
+    y = table(s, 120, 250, 500, 380, table_rows(C, "00871", ("official", "filter_only", "placebo", "frontier_end")),
+              {"paper": 62, "ours": 90, "slot": 90})
     N(s, 120, y + 14, 1680,
-      "The paper's cells do not change. Ours will: four frontier runs and the repeat tour are being rerun, and the "
-      "budget moves with them. Do not read these cells yet.", limit=1000)
+      f"Paper: Fig. 4 (left), one run each. Ours carry n. Where both have a cell (ASP at 10%; frontier at 10, 50 and "
+      f"100%), ours are {lo}{DASH}{hi} points above the paper's. At 10%, our ASP leads our frontier by {lead} points "
+      f"({num(a['mean'])} v {num(f['mean'])}; n={a['n']} v n={f['n']}); the paper's lead is {paper_lead}. The ranges "
+      f"overlap. No ASP run of ours reaches 50% or 100% of the budget (ASP stops at 60 m), so this slide cannot "
+      f"compare ASP with frontier there. Our LLM is DeepSeek and our reference a scripted stand-in.", limit=1000)
 
 
 # ---------------------------------------------------------------- 10. Part 2, limits of the reference
 
 def limits_reference(prs, checks, f1):
+    """f1: C2 per scene, {"00853": ..., "00871": ...}."""
     s = frame(prs, 10, "Part 2 · Limits of the reference", "The reference is rebuilt, and it moves")
     rec = [checks[sc]["C3"]["apr_a_recall_vs_hm3d"] for sc in ("00853", "00871")]
     c1t = json.load(open(C1_TABLE))
@@ -584,10 +642,12 @@ def limits_reference(prs, checks, f1):
     y = P(s, L, 262, w, [("Rebuilt. ", "b"), (f"It holds {100 * rec[0]:.0f}% and {100 * rec[1]:.0f}% of the "
                                                 "human-labelled objects (853, 871).", "n")], B, BODY, 1.4)
     y = P(s, L, y + 24, w, [("Repeat tour. ", "b"),
-                            (f"On 853 it is not frozen, and the two tours agree at F1 {f1:.3f} (C2). That is below "
-                             "the 0.90 line: the reference itself moves by more than the paper's margins. The first "
-                             "tour's damage is mixed in. On 871 the repeat tour is pending.", "n")], B, BODY, 1.4,
-          limit=960)
+                            (f"In both homes it is not frozen. The two tours agree at F1 {f1['00853']:.3f} on 853 and "
+                             f"{f1['00871']:.3f} on 871 (C2). Both are below the 0.90 line: the reference itself moves "
+                             "by more than the paper's margins. The first tours' damage is mixed in.", "n")],
+          B, BODY, 1.4, limit=960)
+    if max(f1.values()) >= 0.90:
+        WARN.append("slide 10 says both C2 values are below 0.90")
     N(s, L, y + 16, w, "Nvblox died partway through both first tours, so each reference lacks about its last 60 s.",
       limit=1000)
     R = 1060
@@ -923,7 +983,7 @@ def limits_method(prs, slots):
              "M2 is provisional: its yardstick failed part of an October check.",
              f"One Haiku member stopped at the token limit and its text did not parse "
              f"({m['haiku']['parsed']} of {m['haiku']['members']} did).",
-             "Part 2 is open: the 871 numbers and the 853 full-budget row."]
+             "Part 2 has one open row: ASP to the full budget on 853."]
     y = 256
     for t in items:
         y = P(s, 120, y, 1680, t, B, BODY, 1.4, limit=1000) + 26
@@ -1103,7 +1163,8 @@ def main():
     slots = json.load(open(SLOTS))
     C, budgets = paper_cells(slots)
     checks = json.load(open(CHECKS))
-    c2 = c2_f1_853()
+    c2 = {sc: c2_f1(sc) for sc in ("00853", "00871")}
+    bf = budget_runs()
     prs = Presentation()
     prs.slide_width, prs.slide_height = px(1920), px(1080)
     cover(prs)
@@ -1112,7 +1173,7 @@ def main():
     why(prs, Nn)
     land(prs, Nn)
     live_limits(prs, Nn)
-    paper_rules(prs, budgets, checks, slots)
+    paper_rules(prs, budgets, checks, bf)
     table853(prs, C, budgets, slots)
     table871(prs, C, budgets, slots)
     limits_reference(prs, checks, c2)

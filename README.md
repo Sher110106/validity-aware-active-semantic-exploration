@@ -11,7 +11,7 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
    - E1, LLM guesses minus random guesses: +0.013 F1 AUC to 60 m, 95% interval -0.012 to +0.040, p 0.22. This is a pilot; effects up to +0.040 are not ruled out.
    - Our filter made no detectable difference.
    - E3, exact objects minus random guesses: +0.034 on scene 871, p 0.10. That p is the smallest a 3 v 3 test can give, so it cannot decide either way.
-3. **November paper-scale scores** (author's F1 rules, F1 x 100, reference rebuilt by our tours; `tools/live_policy/results_paper_compare_1112/paper_compare.md`, scene 00853). The paper columns are Fig. 4 of the paper. The paper's 14-16 point ASP lead over frontier on 853 does not appear: our `official` arm leads our frontier by 4.1 at 10% and trails it by 0.8 at 50%.
+3. **November paper-scale scores** (author's F1 rules, F1 x 100, reference rebuilt by our tours; final rescore of 17 Nov in `tools/live_policy/results_paper_compare_1113/paper_compare.md`, scenes 00853 and 00871). The paper columns are Fig. 4 of the paper, one run per cell; ours carry n. The paper's 14-16 point ASP lead over frontier on 853 does not appear: our `official` arm leads our frontier by 4.1 at 10% and trails it by 0.8 at 50%.
 
    | Row | Arm | 10% | 50% | 100% |
    |---|---|---|---|---|
@@ -21,6 +21,17 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
    | ASP | paper | 34.4 | 60.8 | 66.7 |
 
    Our `filter_only` ASP arm scores 14.8 / 48.3 / no value. "No value" means no run reached the stage.
+
+   On 871 (budget 1,300 s: the median end of the 4 frontier runs that logged "Exploration complete"; the fifth stopped at the 250 m path cap and is left out) our ASP runs stop at 60 m, so they have a value at 10% only. There our `official` arm leads our frontier by 2.0 points (33.9 v 31.9; n=3 v n=5) and the paper's ASP leads its frontier by 1.3 (30.5 v 29.2); the ranges overlap. At 50% and 100% no ASP run of ours has a value, so ASP and frontier cannot be compared there. Where the paper and we both have a cell, ours are 1.3 to 3.5 points above the paper's. Our LLM is DeepSeek, the paper's Gemini 2.5 Pro, and our reference is a scripted stand-in for the author's hand-driven tour.
+
+   | Row | Arm | 10% | 50% | 100% |
+   |---|---|---|---|---|
+   | Frontier | ours (`frontier_end`) | 31.9 | 59.2 | 66.6 (3 of 5 runs) |
+   | Frontier | paper | 29.2 | 55.7 | 65.3 |
+   | ASP | ours (`official`) | 33.9 | no value | no value |
+   | ASP | paper | 30.5 | 62.4 | 68.0 |
+
+   Our `filter_only` ASP arm scores 33.0 / no value / no value. The 871 repeat tour is not frozen; the two tours agree at F1 0.771 (853: 0.751), below the 0.90 line, so the reference moves by more than the paper's margins, with the first tour's damage mixed in.
 4. **November semantic test: are the guesses right in meaning?** Source: [tools/live_policy/results_semantic_1113/RESULTS.md](tools/live_policy/results_semantic_1113/RESULTS.md). The test was pre-registered, and blind for the two Claude models: we replayed Claude Opus 5.5 and Haiku 5.5 on 44 saved planner inputs from scenes 853 and 871, with the author's prompt and tool loop, and scored them once with a scorer frozen beforehand. All six hypotheses read Rejected. The registered line is "the claim fails", for the first half of the author's claim (that the guesses are right in meaning), in these two houses.
    - Naming unseen objects, against a prior built from 179 other HM3D houses that makes as many claims: Opus -35.1 points (-41.3 to -29.1), Haiku -24.9 (-31.5 to -18.1).
    - Placing content in the right unseen region, against a trade of region contents: Opus +0.5 points (-1.9 to +2.95), Haiku +0.8 (-0.8 to +2.4), with a margin of 3. Rejected means the interval rules out a gain as large as the margin; a smaller gain is not ruled out.
@@ -33,7 +44,8 @@ Team: Sher Partap Singh, Preesha Katial, Ananya Singla. Course: computer vision 
 
 - Plan, checklist and progress log: [docs/ENDSEM_FINAL_PLAN_2026-11-13.md](docs/ENDSEM_FINAL_PLAN_2026-11-13.md).
 - The end-sem talk: [docs/endsem_2026-11/](docs/endsem_2026-11/) (deck, script and number sources).
-- Open: the 871 reruns for finding 3 and three ASP runs on 853 to the paper's full budget. Both wait for the shared GPU.
+- Done: the 871 reruns and the final rescore for finding 3 (17 Nov; `tools/live_policy/results_paper_compare_1113/NOTES.md`, state final).
+- Open: three ASP runs on 853 to the paper's full budget. They are running.
 - Earlier status: [docs/STATUS_2026-11-12.md](docs/STATUS_2026-11-12.md). The plan the final one grew from: [docs/ENDSEM_PLAN_2026-11-03.md](docs/ENDSEM_PLAN_2026-11-03.md).
 
 ## Doc map

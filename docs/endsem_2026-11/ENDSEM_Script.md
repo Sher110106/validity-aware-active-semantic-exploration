@@ -8,7 +8,7 @@ About 1,850 words for the 24 slides. *Italics* in parentheses are stage directio
 
 ASP asks a language model to guess the rooms and objects a robot has not seen. Its author says the guesses are often in the wrong place but name the right things, and that this is enough. Is that so?
 
-Part 1 is the live test. Part 2 puts our scores on the paper's scale. Part 3 tests the author's defense with Claude. Parts 1 and 2 are final, except the 871 numbers.
+Part 1 is the live test. Part 2 puts our scores on the paper's scale. Part 3 tests the author's defense with Claude. Parts 1 and 2 are final, except one 853 row.
 
 ---
 
@@ -64,9 +64,9 @@ Our filter, live: minus 0.003, no detectable difference. It removed 30% of new g
 
 ## Slide 7: Same rules as the paper (about 35 s)
 
-Part 2. We score with the author's own F1 and GED code, on the paper's time axis. The author never released the reference, so we built a scripted stand-in for the hand-driven tour. Our model is DeepSeek; the paper's is Gemini 2.5 Pro.
+Part 2. We score with the author's own F1 and GED code, on the paper's time axis, against a scripted stand-in for the author's hand-driven tour. Our model is DeepSeek; the paper's is Gemini 2.5 Pro.
 
-The paper gives no budget value. On 853 we use the median end of five frontier runs, 632 seconds. On 871 only one run finished, so we use the registered fallback, 809 seconds. That will change.
+The paper gives no budget value. We use the median end of our frontier runs that finished: 632 seconds on 853, from all five; 1300 on 871, from four of five. The fifth hit the 250 metre path cap.
 
 ---
 
@@ -80,9 +80,9 @@ The paper's lead did not appear on 853 at 10% and 50%, with DeepSeek and a rebui
 
 ---
 
-## Slide 9: On 871, our numbers are to be updated (about 15 s)
+## Slide 9: On 871, ours are 1.3–3.5 points above the paper's (about 25 s)
 
-Same table, 871. Our cells are marked to be updated: four frontier runs and the repeat tour are being rerun, and the budget moves with them. The paper's cells do not change.
+On 871, where the paper and we both have a cell, ours are 1.3 to 3.5 points higher. At 10% our ASP leads our frontier by 2.0 points, the paper's by 1.3; the ranges overlap. No ASP run of ours reaches 50% or 100%, so the table cannot compare ASP with frontier there. Paper cells are one run each; ours carry n.
 
 ---
 
@@ -90,9 +90,9 @@ Same table, 871. Our cells are marked to be updated: four frontier runs and the 
 
 The reference holds 32% and 21% of the human-labelled objects.
 
-On 853 the repeat tour is not frozen; the two tours agree at F1 0.751, below the 0.90 line. So the reference moves by more than the paper's margins, with the first tour's damage mixed in.
+The repeat tour is not frozen in either home. The two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line: the reference moves by more than the paper's margins, with the first tours' damage mixed in.
 
-Check C1: 13 and 14 rooms, against the paper's 6 and 9. The navmesh island covers 77 and 59 square metres; the outline of everything labelled 213 and 253. The paper has 208 and 235: 2.7 and 4.0 times the walkable floor, and within about 7% of the outline. We do not know how the paper measured area.
+Check C1: we count 13 and 14 rooms, the paper 6 and 9. The paper's floor area, 208 and 235 square metres, is 2.7 and 4.0 times our walkable floor and within about 7% of the outline of everything labelled. We do not know how the paper measured area.
 
 ---
 
@@ -194,7 +194,7 @@ The paper used Gemini 2.5 Pro. We used Claude with the author's prompt and loop.
 
 ## Slide 22: How the test was made (about 35 s)
 
-We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did. And part 2 is open: the 871 numbers and the 853 full-budget row are still to come.
+We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude. We set the L3 margin knowing the gap between Gemini and DeepSeek. M2 is provisional: its yardstick failed part of an October check. One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did. And part 2 has one open row: ASP to the full budget on 853.
 
 ---
 

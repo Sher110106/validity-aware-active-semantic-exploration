@@ -1,8 +1,8 @@
 {
  "_how": "Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. Edit part 2 keys by hand; rerun the script after any result file changes.",
  "paper_compare_json": "tools/live_policy/results_paper_compare_1113/paper_compare.json",
- "_table871": "Slides 7 and 9. After the 871 reruns and the rescore, point paper_compare_json at the new file and set table871_updated to true. The 'to be updated' marks then go away and the 871 budget is read from the new file. The 11-13 file holds the same cells as the 11-12 file.",
- "table871_updated": false,
+ "_table871": "Slides 7 and 9. Done on 2026-11-17: the 871 reruns finished and the final rescore is filed in results_paper_compare_1113 (budget 1300 s). paper_compare_json points at it. The builder reads the 871 budget, its runs and C2 from that folder, and stops if this flag is not true.",
+ "table871_updated": true,
  "asp853_full_budget": {
   "_what": "Slide 8, row 'Ours, ASP, full budget'. Per fraction of the budget (10, 50, 100): mean, min and max of F1 x 100 over the new ASP runs; runs is how many. Leave null if the runs are not made.",
   "runs": null,

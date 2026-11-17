@@ -11,7 +11,8 @@ Short names:
 - `NUM` = `tools/live_policy/results_2026-10-31/numbers.csv`
 - `WRITEUP` = `tools/live_policy/results_2026-10-31/WRITEUP.md`
 - `FH` = `tools/live_policy/results_2026-10-31/frontier_seeds/frontier_holm.json`
-- `PC` = `tools/live_policy/results_paper_compare_1113/paper_compare.json` (its 853 and 871 cells equal the 11-12 file's; `comparison_vs_1112.json`)
+- `PC` = `tools/live_policy/results_paper_compare_1113/paper_compare.json` (final rescore of 17 Nov; its 853 cells equal the 11-12 file's, its 871 cells do not: 102 of 243 are the same, because B moved; `comparison_vs_1112.json`, `N13` items 7 and 8)
+- `B13` = `tools/live_policy/results_paper_compare_1113/budgets_20261117T170055.json`; `C2F` = `tools/live_policy/results_paper_compare_1113/c2_20261117T170055.json`. The builder reads the newest file of each name pattern.
 - `CC` = `tools/live_policy/results_paper_compare_1112/c_checks.json`
 - `N12` = `tools/live_policy/results_paper_compare_1112/NOTES.md`; `N13` = `tools/live_policy/results_paper_compare_1113/NOTES.md`
 - `PLAN` = `docs/ENDSEM_PLAN_2026-11-03.md`; `FINAL` = `docs/ENDSEM_FINAL_PLAN_2026-11-13.md`
@@ -92,17 +93,19 @@ Offline replay of saved stages (`review_2026-10-29/audit/tables/replay_table.jso
 |---|---|
 | 85 and 66 stops | `CC` `00853.use_rule.reached`, `00871.use_rule.reached` |
 | Stand-in for the author's hand-driven tour: navmesh paths, same mapper | `PLAN` §B1 (Reference row), §B7 (Amendment 1: the tour moves onto navmesh paths); `PREREG` Amendment 1 |
-| 5 of 5 on 853, 1 of 5 on 871 | `N13` item 2 and "Budgets" (5 and 1 valid runs); `N12` "Command" |
+| 5 of 5 runs on 853, 4 of 5 on 871 ran to their natural end | `B13` `00853.n_primary` (5), `00871.n_primary` (4), and the count of `end_times_s` (5 and 5); `N13` item 2 and "Budgets" |
+| 1 run on 871 stopped at the 250 m path cap and is left out of the median | `B13` `00871.capped_runs` (`e7_00871_s44_frontier_end`, end 1,740.8 s); the cap: `PREREG` §2a and Amendment 2 A2.1, A2.3; `DEVIATIONS_NOVEMBER.md` item 63. The builder's `PATH_CAP_M` holds the 250 |
 | DeepSeek; Gemini 2.5 Pro | `PLAN` §B1 table, LLM row |
 | The paper gives no budget value; 10, 50, 100% | `PLAN` §B1 (Budget row); `PREREG` §1 |
-| 632 s and 809 s | `PC` `meta.budgets` (632.175, 809.084), `meta.budget_sources`; rule in `PREREG` §4 and Amendment 2 A2.3; `N13` "Budgets" |
-| 63, 316, 81, 405 s | Derived: 10% and 50% of the two budgets, whole seconds |
-| 612 to 868 s | `N12` "Budgets": the five end times 611.83 to 867.58 s |
-| Fallback, reruns replace it with a median | `PREREG` §4 and Amendment 2 A2.3 |
+| 632 s and 1300 s | `PC` `meta.budgets` (632.175, 1300.252); `B13` `<scene>.primary_s`, `primary_rule` ("median"); rule in `PREREG` §4 and Amendment 2 A2.3 (primary B = median of the valid runs that logged "Exploration complete"); `N13` "Budgets". The 11-12 value for 871, 809.084 s, was the registered fallback (`B13` `00871.b_1112_s`); it is superseded |
+| 63, 316, 130, 650 s | Derived: 10% and 50% of the two budgets, whole seconds |
+| "Median end of the 5 frontier runs … (612 to 868 s)" on 853 | `B13` `00853.end_times_s` for the runs in `primary_runs`: 611.83 to 867.58 s |
+| "Median end of the 4 frontier runs … (1043 to 1610 s)" on 871 | `B13` `00871.end_times_s` for the runs in `primary_runs` (seeds 42, 43, 45, 46): 1,043.03 (seed 45) to 1,610.48 s (seed 43); median 1,300.25 s |
+| Fallback, reruns replace it with a median | Removed from the slide: the median is now in place |
 
 ## Slides 8 and 9: the paper's table
 
-Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` mean [min–max] and n (`.n`, or `.n of n_runs`); a time shows only if at least half the runs reach it. Every 871 cell of ours is marked "to be updated" until `slots.json` `table871_updated` is true. The paper's own 871 numbers do not change, so they carry no mark. Fig. 4 (left) of arXiv 2510.05430v2: `PC` `meta.paper_fig4_left`, `meta.paper_html_check` (no mismatches).
+Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` mean [min–max] and n (`.n`, or `.n of n_runs`); a time shows only if at least half the runs reach it. The 871 cells are final (`N13`: "00871: final"); the builder stops unless `slots.json` `table871_updated` is true. The paper's cells are one run each. Fig. 4 (left) of arXiv 2510.05430v2: `PC` `meta.paper_fig4_left`, `meta.paper_html_check` (no mismatches).
 
 | Cell (10% / 50% / 100%) | Value | Key |
 |---|---|---|
@@ -114,30 +117,32 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | 853 · Ours frontier | 12.4 [10.8–14.7] n=5 / 39.5 [33.9–42.0] n=5 / 55.6 [53.5–59.6] n=3 of 5 | scene 00853, arm frontier_end |
 | 871 · Paper ASP | 30.5 / 62.4 / 68.0 | scene 00871, arm official, `paper_f1_x100` |
 | 871 · Paper frontier | 29.2 / 55.7 / 65.3 | scene 00871, arm frontier_end, `paper_f1_x100` |
-| 871 · Ours ASP | 32.3 [30.5–35.6] n=3 / none (0 of 3) / none | scene 00871, arm official |
-| 871 · Ours ASP + filter | 30.2 [28.6–32.3] n=3 / none (1 of 3) / none | scene 00871, arm filter_only |
-| 871 · Ours random guesses | 27.2 [26.0–28.6] n=3 / none (1 of 3) / none | scene 00871, arm placebo |
-| 871 · Ours frontier | 26.4 [26.4–26.4] n=1 / 43.2 [43.2–43.2] n=1 / 62.8 [62.8–62.8] n=1 | scene 00871, arm frontier_end |
+| 871 · Ours ASP | 33.9 [30.8–36.4] n=3 / none (0 of 3) / none (0 of 3) | scene 00871, arm official |
+| 871 · Ours ASP + filter | 33.0 [29.9–37.6] n=3 / none (0 of 3) / none (0 of 3) | scene 00871, arm filter_only |
+| 871 · Ours random guesses | 31.7 [30.2–32.6] n=3 / none (0 of 3) / none (0 of 3) | scene 00871, arm placebo |
+| 871 · Ours frontier | 31.9 [27.8–37.4] n=5 / 59.2 [52.2–67.1] n=5 / 66.6 [64.4–68.3] n=3 of 5 | scene 00871, arm frontier_end |
 
 | Number | Source |
 |---|---|
-| Budget 632 s and 809 s in the kickers | `PC` `meta.budgets` |
+| Budget 632 s and 1300 s in the kickers | `PC` `meta.budgets` |
 | Paper lead 15.8 and 14.3 points (script) | Derived from the paper cells: 34.4 − 18.6, 60.8 − 46.5 |
 | Our lead 4.1 and −0.8 points (script) | Derived from the values as shown: 16.5 − 12.4, 38.7 − 39.5 |
 | ASP stops at 60 m | `WRITEUP` §2 |
 | "One row pending": ASP to the full budget on 853: **TBD** | `slots.json` `asp853_full_budget`; optional run, `FINAL` §6 |
 | The wording "did not appear on 853 at 10% and 50%, with DeepSeek and a rebuilt reference" | `FINAL` §5 |
-| 871: four frontier runs and the repeat tour being rerun | `N13` "Status of the two scenes"; `PREREG` Amendment 2 |
+| Slide 9 title and note: "ours are 1.3–3.5 points above the paper's" (871, ASP at 10%; frontier at 10, 50 and 100%) | Derived, ours minus the paper from the values as shown: ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3. Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end. ASP + filter and random guesses have no paper cell |
+| Slide 9 note: at 10% our ASP leads our frontier by 2.0 points (33.9 v 31.9; n=3 v n=5); the paper's lead is 1.3 (30.5 − 29.2); the ranges overlap | Derived from the cells above; ranges [30.8–36.4] and [27.8–37.4] (`stage_value_x100.min`, `.max`) |
+| Slide 9 note: no ASP run of ours reaches 50% or 100% of the budget | Cells scene 00871, arm official, fractions 50 and 100: `stage_value_x100.n` = 0 of 3 (also filter_only, placebo). ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
+| Slide 9 note: the paper's cells are one run each; ours carry n | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5 |
 
 ## Slide 10: the reference
 
 | Number | Source |
 |---|---|
 | 32% and 21% | `CC` `00853.C3.apr_a_recall_vs_hm3d` (0.3222), `00871.C3.apr_a_recall_vs_hm3d` (0.2112) |
-| Repeat tour on 853 not frozen; F1 0.751 (C2) | `N13` item 3 (`c2_20261113T191301.json`: `scenes.00853.f1` 0.7511, `frozen` false). The builder reads the newest `c2_*.json` and falls back to `N13`'s text while a rescore rewrites the folder |
-| Below the 0.90 line; the reference moves by more than the paper's margins (2.7–7.9 points) | `PLAN` §B3 P2 check C2; `PREREG` Amendment 2 A2.5; `N13` item 3 |
+| Repeat tour not frozen in either home; F1 0.751 on 853 and 0.771 on 871 (C2) | `C2F` `scenes.00853.f1` (0.7511) and `scenes.00871.f1` (0.7714), `frozen` false in both; `N13` item 3 and "Tours". The builder reads the newest `c2_*.json` and falls back to `N13`'s text while a rescore rewrites the folder |
+| Below the 0.90 line; the reference moves by more than the paper's margins (2.7–7.9 points) | `C2F` `scenes.<scene>.below_0_90` and `reading`; `PLAN` §B3 P2 check C2; `PREREG` Amendment 2 A2.5; `N13` item 3 |
 | Nvblox died partway through both first tours; each reference lacks about its last 60 s | `N12` disclosures 3 and 4; `N13` "Carried over" |
-| 871 repeat tour pending | `N13` item 3 and "Status of the two scenes" |
 | Rooms 13 and 14, paper 6 and 9 | `CC` `C1.room_nodes`, `C1.paper_rooms` |
 | Navmesh island 77 and 59 m² | `CC` `C1.start_island_area_m2` (77.00, 59.27); `N12` item 9 |
 | Waypoint grid 191 and 149 m² | `CC` `C1.kept_area_estimate_m2` (191.25, 148.5); `N12` item 9 ("about 191 and 149") |
@@ -294,7 +299,7 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | The L3 margin was set knowing the Gemini–DeepSeek gap | `SEM` §2 (last sentence: "The margin δ at L3 (§10) was set knowing the 9-point gap above") |
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
-| Part 2 is open | slides 8 and 9; `slots.json` `asp853_full_budget` (still null) |
+| Part 2 has one open row: ASP to the full budget on 853 | slide 8; `slots.json` `asp853_full_budget` (still null). The 871 numbers are final (`N13`) |
 
 ## Slide 23: the answer
 
