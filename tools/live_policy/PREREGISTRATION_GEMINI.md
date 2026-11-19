@@ -125,3 +125,11 @@ No live Gemini run. No second Gemini model, unless the fallback of §3 applies. 
 **R3. All 36 rows together (exploratory).** So that Gemini 4 Argon can be set beside Gemini 3.8 Flash on the same 36 rows, `gemini_pair.py` contrasts them from the wrapper's records files (round 1 with 4 members a row, rounds 3 and 2 with 2), and Argon with each Claude model the same way. Every line of it is exploratory, because it holds the 12 rows seen before this note, and the slide says so. The wrapper is not run on the 36 rows together.
 
 **R4. Wording.** As Note 3: each sentence names the model and says it is not the paper's. The slide says that round 1 came first and that this check was registered after it.
+
+## Note 5: a correction of fact in Notes 3 and 4 (2026-11-19 20:56 IST, while the run of Note 4 is under way; no rule changes)
+
+Notes 3 and 4 call `gemini-4-argon` "the top model on the public price page on 11-19". That is wrong. The page read at 11:44 that day was an old cached copy, in which Gemini 4 Argon was the only Gemini 4 model and was described as the flagship. A fresh read of the same page at 20:55 lists four Gemini 4 models and describes Gemini 4 Carbon as "our most capable reasoning model" and Gemini 4 Argon as "our efficient Gemini 4 frontier reasoning model", with "lower token spend per turn compared to Gemini 4 Carbon". Press reports of 18 and 19 November say that Carbon was released before that week and Gemini 4 Neon on 18 November.
+
+So Gemini 4 Argon is not Google's top model. It is the second of the Gemini 4 line, at the same list price as Carbon ($2.00 in, $0.10 cached and $10.00 out per million tokens through 30 November; the fresh page confirms the prices the ledgers used, for Argon and for Gemini 3.8 Flash). The reason Note 3 gave for choosing it, "as Gemini 2.5 Pro was the top tier when the paper was written", therefore does not hold as written: the test was put to a strong current model one step below the top, not to the top one.
+
+Nothing else changes. The model, rows, members, caps and tests of Notes 3 and 4 stand, and the run of Note 4 goes on. Every sentence on a slide or in a document that calls Gemini 4 Argon the top model is corrected to say what it is.
