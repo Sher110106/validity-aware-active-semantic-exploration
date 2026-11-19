@@ -1,0 +1,608 @@
+{
+ "readout": "room_test_runs",
+ "n_runs": 20,
+ "source": "results_semantic_1113/claude/room_test.json, live.runs[]",
+ "fields": {
+  "regions that could be predicted": "n_regions_unseen_at_stage0",
+  "predicted before found, eight_member_stages": "predicted_stages_with_8_members_typed",
+  "predicted before found, all_stages": "predicted_all_stages_typed"
+ },
+ "rule": "type matched; at least 2 of 8 members put a new room of that type within 2.5 m of the region centre before the region is first seen (section 11)",
+ "views": {
+  "eight_member_stages": {
+   "field": "predicted_stages_with_8_members_typed",
+   "runs": [
+    {
+     "run": "e1_00853_s42_official_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "official",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 4,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00853_s42_placebo_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 16,
+     "n_stages": 16
+    },
+    {
+     "run": "e1_00853_s43_official_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "official",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 11,
+     "n_stages": 21
+    },
+    {
+     "run": "e1_00853_s43_placebo_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 18,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00853_s44_placebo_60m",
+     "scene": "00853",
+     "seed": 44,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 21,
+     "n_stages": 21
+    },
+    {
+     "run": "e1_00871_s42_official_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "official",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 4,
+     "n_stages": 17
+    },
+    {
+     "run": "e1_00871_s42_placebo_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 15,
+     "n_stages": 15
+    },
+    {
+     "run": "e1_00871_s43_official_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "official",
+     "of": 13,
+     "predicted": 3,
+     "rate": 0.23076923076923078,
+     "n_stages_with_8_members": 10,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00871_s43_placebo_60m_rerun1",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 12,
+     "n_stages": 12
+    },
+    {
+     "run": "e1_00871_s44_official_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "official",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 8,
+     "n_stages": 19
+    },
+    {
+     "run": "e1_00871_s44_placebo_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 1,
+     "rate": 0.07692307692307693,
+     "n_stages_with_8_members": 28,
+     "n_stages": 28
+    },
+    {
+     "run": "e2_00853_s42_filter_only_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 4,
+     "n_stages": 16
+    },
+    {
+     "run": "e2_00853_s43_filter_only_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 6,
+     "n_stages": 19
+    },
+    {
+     "run": "e2_00853_s44_filter_only_60m",
+     "scene": "00853",
+     "seed": 44,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 7,
+     "n_stages": 20
+    },
+    {
+     "run": "e2_00871_s42_filter_only_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 7,
+     "n_stages": 20
+    },
+    {
+     "run": "e2_00871_s43_filter_only_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 2,
+     "n_stages": 16
+    },
+    {
+     "run": "e2_00871_s44_filter_only_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 6,
+     "n_stages": 15
+    },
+    {
+     "run": "e3_00871_s42_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 13,
+     "n_stages": 13
+    },
+    {
+     "run": "e3_00871_s43_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 1,
+     "rate": 0.07692307692307693,
+     "n_stages_with_8_members": 12,
+     "n_stages": 12
+    },
+    {
+     "run": "e3_00871_s44_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 17,
+     "n_stages": 17
+    }
+   ],
+   "pooled": {
+    "filter_only": {
+     "runs": 6,
+     "predicted": 2,
+     "of": 69,
+     "rate": 0.028985507246376812
+    },
+    "official": {
+     "runs": 5,
+     "predicted": 10,
+     "of": 59,
+     "rate": 0.1694915254237288
+    },
+    "oracle_visible": {
+     "runs": 3,
+     "predicted": 5,
+     "of": 39,
+     "rate": 0.1282051282051282
+    },
+    "placebo": {
+     "runs": 6,
+     "predicted": 6,
+     "of": 69,
+     "rate": 0.08695652173913043
+    }
+   },
+   "tests": {
+    "official_vs_placebo": {
+     "arm_a": "official",
+     "arm_b": "placebo",
+     "observed_diff": 0.08253500368459837,
+     "relabelings": 200,
+     "as_extreme": 25,
+     "p_two_sided": 0.125,
+     "per_scene": {
+      "00853": {
+       "runs": 5,
+       "official": 2,
+       "placebo": 3,
+       "relabelings": 10
+      },
+      "00871": {
+       "runs": 6,
+       "official": 3,
+       "placebo": 3,
+       "relabelings": 20
+      }
+     }
+    },
+    "filter_only_vs_placebo": {
+     "arm_a": "filter_only",
+     "arm_b": "placebo",
+     "observed_diff": -0.057971014492753624,
+     "relabelings": 400,
+     "as_extreme": 116,
+     "p_two_sided": 0.29,
+     "per_scene": {
+      "00853": {
+       "runs": 6,
+       "filter_only": 3,
+       "placebo": 3,
+       "relabelings": 20
+      },
+      "00871": {
+       "runs": 6,
+       "filter_only": 3,
+       "placebo": 3,
+       "relabelings": 20
+      }
+     }
+    }
+   }
+  },
+  "all_stages": {
+   "field": "predicted_all_stages_typed",
+   "runs": [
+    {
+     "run": "e1_00853_s42_official_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "official",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 4,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00853_s42_placebo_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 16,
+     "n_stages": 16
+    },
+    {
+     "run": "e1_00853_s43_official_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "official",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 11,
+     "n_stages": 21
+    },
+    {
+     "run": "e1_00853_s43_placebo_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 18,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00853_s44_placebo_60m",
+     "scene": "00853",
+     "seed": 44,
+     "arm": "placebo",
+     "of": 10,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 21,
+     "n_stages": 21
+    },
+    {
+     "run": "e1_00871_s42_official_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "official",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 4,
+     "n_stages": 17
+    },
+    {
+     "run": "e1_00871_s42_placebo_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 15,
+     "n_stages": 15
+    },
+    {
+     "run": "e1_00871_s43_official_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "official",
+     "of": 13,
+     "predicted": 4,
+     "rate": 0.3076923076923077,
+     "n_stages_with_8_members": 10,
+     "n_stages": 18
+    },
+    {
+     "run": "e1_00871_s43_placebo_60m_rerun1",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 12,
+     "n_stages": 12
+    },
+    {
+     "run": "e1_00871_s44_official_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "official",
+     "of": 13,
+     "predicted": 3,
+     "rate": 0.23076923076923078,
+     "n_stages_with_8_members": 8,
+     "n_stages": 19
+    },
+    {
+     "run": "e1_00871_s44_placebo_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "placebo",
+     "of": 13,
+     "predicted": 1,
+     "rate": 0.07692307692307693,
+     "n_stages_with_8_members": 28,
+     "n_stages": 28
+    },
+    {
+     "run": "e2_00853_s42_filter_only_60m",
+     "scene": "00853",
+     "seed": 42,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 4,
+     "n_stages": 16
+    },
+    {
+     "run": "e2_00853_s43_filter_only_60m",
+     "scene": "00853",
+     "seed": 43,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 2,
+     "rate": 0.2,
+     "n_stages_with_8_members": 6,
+     "n_stages": 19
+    },
+    {
+     "run": "e2_00853_s44_filter_only_60m",
+     "scene": "00853",
+     "seed": 44,
+     "arm": "filter_only",
+     "of": 10,
+     "predicted": 1,
+     "rate": 0.1,
+     "n_stages_with_8_members": 7,
+     "n_stages": 20
+    },
+    {
+     "run": "e2_00871_s42_filter_only_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 3,
+     "rate": 0.23076923076923078,
+     "n_stages_with_8_members": 7,
+     "n_stages": 20
+    },
+    {
+     "run": "e2_00871_s43_filter_only_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 2,
+     "n_stages": 16
+    },
+    {
+     "run": "e2_00871_s44_filter_only_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "filter_only",
+     "of": 13,
+     "predicted": 0,
+     "rate": 0.0,
+     "n_stages_with_8_members": 6,
+     "n_stages": 15
+    },
+    {
+     "run": "e3_00871_s42_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 42,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 13,
+     "n_stages": 13
+    },
+    {
+     "run": "e3_00871_s43_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 43,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 1,
+     "rate": 0.07692307692307693,
+     "n_stages_with_8_members": 12,
+     "n_stages": 12
+    },
+    {
+     "run": "e3_00871_s44_oracle_visible_60m",
+     "scene": "00871",
+     "seed": 44,
+     "arm": "oracle_visible",
+     "of": 13,
+     "predicted": 2,
+     "rate": 0.15384615384615385,
+     "n_stages_with_8_members": 17,
+     "n_stages": 17
+    }
+   ],
+   "pooled": {
+    "filter_only": {
+     "runs": 6,
+     "predicted": 7,
+     "of": 69,
+     "rate": 0.10144927536231885
+    },
+    "official": {
+     "runs": 5,
+     "predicted": 13,
+     "of": 59,
+     "rate": 0.22033898305084745
+    },
+    "oracle_visible": {
+     "runs": 3,
+     "predicted": 5,
+     "of": 39,
+     "rate": 0.1282051282051282
+    },
+    "placebo": {
+     "runs": 6,
+     "predicted": 6,
+     "of": 69,
+     "rate": 0.08695652173913043
+    }
+   },
+   "tests": {
+    "official_vs_placebo": {
+     "arm_a": "official",
+     "arm_b": "placebo",
+     "observed_diff": 0.13338246131171702,
+     "relabelings": 200,
+     "as_extreme": 8,
+     "p_two_sided": 0.04,
+     "per_scene": {
+      "00853": {
+       "runs": 5,
+       "official": 2,
+       "placebo": 3,
+       "relabelings": 10
+      },
+      "00871": {
+       "runs": 6,
+       "official": 3,
+       "placebo": 3,
+       "relabelings": 20
+      }
+     }
+    },
+    "filter_only_vs_placebo": {
+     "arm_a": "filter_only",
+     "arm_b": "placebo",
+     "observed_diff": 0.014492753623188406,
+     "relabelings": 400,
+     "as_extreme": 400,
+     "p_two_sided": 1.0,
+     "per_scene": {
+      "00853": {
+       "runs": 6,
+       "filter_only": 3,
+       "placebo": 3,
+       "relabelings": 20
+      },
+      "00871": {
+       "runs": 6,
+       "filter_only": 3,
+       "placebo": 3,
+       "relabelings": 20
+      }
+     }
+    }
+   }
+  }
+ },
+ "banner": "Exploratory; written 2026-11-19 after every result was seen; no verdict rests on it; see DEVIATIONS_NOVEMBER.md"
+}

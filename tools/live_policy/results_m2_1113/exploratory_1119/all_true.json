@@ -1,0 +1,135 @@
+{
+ "readout": "all_true",
+ "arms": {
+  "F1": {
+   "max_ig": 5.25,
+   "at": {
+    "run": "e1_00871_s43_placebo_60m_rerun1",
+    "stage": 4,
+    "candidate": 44
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 32947
+  },
+  "F5a": {
+   "max_ig": 5.35845859334435,
+   "at": {
+    "run": "e1_00871_s43_official_60m",
+    "stage": 2,
+    "candidate": 16
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 44825
+  },
+  "F5b": {
+   "max_ig": 5.5,
+   "at": {
+    "run": "e1_00871_s43_official_60m",
+    "stage": 1,
+    "candidate": 53
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 44505
+  },
+  "F6": {
+   "max_ig": 2.0,
+   "at": {
+    "run": "e1_00853_s42_official_60m",
+    "stage": 6,
+    "candidate": 191
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 0
+  },
+  "F0": {
+   "max_ig": 2.0,
+   "at": {
+    "run": "e1_00853_s42_official_60m",
+    "stage": 6,
+    "candidate": 281
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 0
+  },
+  "F3-deepseek": {
+   "max_ig": 4.75,
+   "at": {
+    "run": "e2_00853_s43_filter_only_60m",
+    "stage": 7,
+    "candidate": 132
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 18977
+  },
+  "F-room": {
+   "max_ig": 5.155639062229566,
+   "at": {
+    "run": "e3_00853_s42_oracle_visible_60m_rerun1",
+    "stage": 5,
+    "candidate": 211
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 13400
+  },
+  "F3-haiku": {
+   "max_ig": 4.836591668108978,
+   "at": {
+    "run": "e1_00853_s44_official_60m",
+    "stage": 1,
+    "candidate": 111
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 20743
+  },
+  "F3-opus": {
+   "max_ig": 5.058878815590207,
+   "at": {
+    "run": "e3_00853_s42_oracle_visible_60m_rerun1",
+    "stage": 4,
+    "candidate": 1
+   },
+   "stages": 384,
+   "n_values": 115200,
+   "above_cap": 16783
+  }
+ },
+ "bits_cap": 2.0,
+ "F0_exceeds_cap": false,
+ "F6_exceeds_cap": false,
+ "spearman": {
+  "pair": [
+   "F0",
+   "F6"
+  ],
+  "score_column": "ig",
+  "n_stages": 384,
+  "n_stages_with_both_arms": 384,
+  "n_used": 382,
+  "n_undefined": 2,
+  "undefined_stages": [
+   [
+    "e1_00853_s42_official_60m",
+    0
+   ],
+   [
+    "e1_00853_s42_official_60m",
+    7
+   ]
+  ],
+  "mean": 0.635014657111032,
+  "median": 0.6759939493700673
+ },
+ "files": {
+  "pass1": "tools/live_policy/results_m2_1113/pass1/factorial_stages.jsonl",
+  "pass2": "tools/live_policy/results_m2_1113/pass2/factorial_stages.jsonl"
+ },
+ "banner": "Exploratory; written 2026-11-19 after every result was seen; no verdict rests on it; see DEVIATIONS_NOVEMBER.md"
+}

@@ -1,0 +1,177 @@
+{
+ "readout": "common_rows",
+ "anchor": "gemini",
+ "sources": [
+  "gemini",
+  "claude-opus-5-5",
+  "claude-haiku-5-5",
+  "deepseek",
+  "placebo"
+ ],
+ "anchor_rows": [
+  "fa1_00853_s42_official_st04",
+  "fa1_00853_s43_official_st01",
+  "fa1_00853_s43_official_st02",
+  "fa1_00853_s43_official_st05",
+  "fa1_00871_s42_official_st02",
+  "fa1_00871_s42_official_st03",
+  "fa1_00871_s42_official_st05",
+  "fa1_00871_s42_official_st06"
+ ],
+ "anchor_rounds": [
+  4
+ ],
+ "levels": {
+  "L1": {
+   "n_rows": 5,
+   "rows": [
+    "fa1_00853_s42_official_st04",
+    "fa1_00853_s43_official_st02",
+    "fa1_00853_s43_official_st05",
+    "fa1_00871_s42_official_st05",
+    "fa1_00871_s42_official_st06"
+   ],
+   "mean_row_score": {
+    "gemini": 1.0,
+    "claude-opus-5-5": 1.0,
+    "claude-haiku-5-5": 1.0,
+    "deepseek": 0.95,
+    "placebo": 1.0
+   },
+   "anchor_vs": {
+    "claude-opus-5-5": {
+     "above": 0,
+     "tie": 5,
+     "below": 0
+    },
+    "claude-haiku-5-5": {
+     "above": 0,
+     "tie": 5,
+     "below": 0
+    },
+    "deepseek": {
+     "above": 1,
+     "tie": 4,
+     "below": 0
+    },
+    "placebo": {
+     "above": 0,
+     "tie": 5,
+     "below": 0
+    }
+   },
+   "b3_score_anchor_members": 1.0,
+   "b3_rows": 5,
+   "anchor_members": 18,
+   "clusters": [
+    "00853_s42_official",
+    "00853_s43_official",
+    "00871_s42_official"
+   ],
+   "n_clusters": 3
+  },
+  "L2": {
+   "n_rows": 8,
+   "rows": [
+    "fa1_00853_s42_official_st04",
+    "fa1_00853_s43_official_st01",
+    "fa1_00853_s43_official_st02",
+    "fa1_00853_s43_official_st05",
+    "fa1_00871_s42_official_st02",
+    "fa1_00871_s42_official_st03",
+    "fa1_00871_s42_official_st05",
+    "fa1_00871_s42_official_st06"
+   ],
+   "mean_row_score": {
+    "gemini": 0.9133230773855774,
+    "claude-opus-5-5": 0.6957589285714285,
+    "claude-haiku-5-5": 0.7054315476190476,
+    "deepseek": 0.7385475635475636,
+    "placebo": 0.6538318452380952
+   },
+   "anchor_vs": {
+    "claude-opus-5-5": {
+     "above": 7,
+     "tie": 0,
+     "below": 1
+    },
+    "claude-haiku-5-5": {
+     "above": 6,
+     "tie": 0,
+     "below": 2
+    },
+    "deepseek": {
+     "above": 8,
+     "tie": 0,
+     "below": 0
+    },
+    "placebo": {
+     "above": 8,
+     "tie": 0,
+     "below": 0
+    }
+   },
+   "b3_score_anchor_members": 0.9883127289377289,
+   "b3_rows": 8,
+   "anchor_members": 29,
+   "clusters": [
+    "00853_s42_official",
+    "00853_s43_official",
+    "00871_s42_official"
+   ],
+   "n_clusters": 3
+  },
+  "L3": {
+   "n_rows": 8,
+   "rows": [
+    "fa1_00853_s42_official_st04",
+    "fa1_00853_s43_official_st01",
+    "fa1_00853_s43_official_st02",
+    "fa1_00853_s43_official_st05",
+    "fa1_00871_s42_official_st02",
+    "fa1_00871_s42_official_st03",
+    "fa1_00871_s42_official_st05",
+    "fa1_00871_s42_official_st06"
+   ],
+   "mean_row_score": {
+    "gemini": 0.13773648226773227,
+    "claude-opus-5-5": 0.056470959595959595,
+    "claude-haiku-5-5": 0.07829861111111111,
+    "deepseek": 0.0763967803030303,
+    "placebo": 0.022581845238095238
+   },
+   "anchor_vs": {
+    "claude-opus-5-5": {
+     "above": 5,
+     "tie": 3,
+     "below": 0
+    },
+    "claude-haiku-5-5": {
+     "above": 4,
+     "tie": 2,
+     "below": 2
+    },
+    "deepseek": {
+     "above": 5,
+     "tie": 2,
+     "below": 1
+    },
+    "placebo": {
+     "above": 5,
+     "tie": 3,
+     "below": 0
+    }
+   },
+   "b3_score_anchor_members": null,
+   "b3_rows": 0,
+   "anchor_members": 29,
+   "clusters": [
+    "00853_s42_official",
+    "00853_s43_official",
+    "00871_s42_official"
+   ],
+   "n_clusters": 3
+  }
+ },
+ "banner": "Exploratory; written 2026-11-19 after every result was seen; no verdict rests on it; see DEVIATIONS_NOVEMBER.md"
+}
