@@ -156,3 +156,11 @@ Nothing else changes. The model, rows, members, caps and tests of Notes 3 and 4 
 - **Exploratory:** Neon minus Gemini 3.8 Flash and minus Gemini 4 Argon, at L2 and L3, on all the rows both models ran, by `gemini_pair.py` (all three ran the author's loop, so these contrasts are of the models alone). L1 and L2 under §10's rule, with the ceiling said beside them. The finished rows of a round that did not finish.
 
 **N3. Wording.** The sentences of §6 for 5b with the model's name; each says it is not the paper's model. Fixed now, for the slide: "Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result was seen. All three are reported; they are not three independent confirmations, and none is the paper's model." A "Supported" for Neon is also given against α = 0.05/3.
+
+## Note 7: one row more for Gemini 4 Neon, so that round 3 is whole (2026-11-20 00:39 IST, before any output of Neon has been scored or read)
+
+The run of Note 6 went from 23:08:44 on 11-19 to 00:38:01 on 11-20 and stopped at its cap, as the note said it would: $27.77 of $28.00 by its ledger, 23 rows done, 46 of 46 members parsed, no failed call. Round 1 is whole (12 rows). Round 3 is one row short: 11 of 12, and the row `e2_00853_s44_filter_st03` did not start because $0.23 could not cover it. By Note 6's rule the confirmatory set would be round 1 alone, and eleven finished rows would count for nothing in the test.
+
+One more row is run: that row, 2 members, about $1, under a cap of $29.50 on the same ledger. This takes the ledgers under this registration to about $123, about $1 over the $122 allotted. The allotment was our own cautious estimate of what the key holds, and the student's word was to use what is left on it.
+
+This is decided on money and row counts alone. When this note was written no output of Gemini 4 Neon had been scored or read by anyone: only the tool's log of costs and of whether members parsed. If the row finishes, round 3 is whole and Note 6's rule makes rounds 1 and 3 the confirmatory set. If it does not finish, the set is round 1 alone, and nothing further is run. Nothing else in Note 6 changes.
