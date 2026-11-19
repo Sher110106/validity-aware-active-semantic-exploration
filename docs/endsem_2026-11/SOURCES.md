@@ -23,7 +23,7 @@ Short names:
 - `PIN` = `slots.json` `pinned`: facts read from files that are not result tables (the proposal's plan, the paper's quotes, the clock lines). Each row below names its file.
 - `REVIEW` = `/Users/sher/project/cvp/REVIEW_FABLE_2026-11-19.md` (the independent review that led to this pass; outside the repo).
 
-The registered runs that are still running (two control arms on 853, `PREREG` Amendment 5; the replay of Gemini 3.8 Flash, `PREREGISTRATION_GEMINI.md` with Note 1) have no number in the deck or the script. `slots.json` `gemini_replay` is `pending`; the builder stops if it holds a result, because slide 19 has no layout for one yet.
+The two control arms on 853 (`PREREG` Amendment 5) and the extension of the Gemini test to one more model (`PREREGISTRATION_GEMINI.md` Note 3) are registered and running; the deck says only that, and no result of either exists. The registered replay of Gemini 3.8 Flash is final: `slots.json` `gemini_replay` is read from its `results.json` (slides 19 and 20; `gemini_facts` guards every sentence).
 
 ## Slide 1: the cover
 
@@ -242,7 +242,7 @@ Not used: the paper's own seconds per metre from its Fig. 4. The repo's files ho
 | Claude Haiku 5.5 and Opus 5.5; blind test, scorer frozen first | `SEM` §2 (last paragraph), §4, §14; `RC` `run_info.freeze_present` (true), `run_info.freeze_sha256` |
 | The claim ("as the author put it to us") and the three questions | The claim: said in person to the student; no written record; the paper's nearest text is in section IV-B (quoted on slide 1's row). It is not in quotation marks on a slide. The questions: `SEM` §1; `M2` §1; `FINAL` §3.2. The slide's note quotes the paper's nearest text: `PIN` `paper.bathroom`, `paper.revisit` |
 | "Not in the paper; it comes from the author's demo and from what the author told the student when they met" | The brief for this pass; `REVIEW` finding 2 ("no source"); no file records the meeting |
-| Is it the model? "Replay Claude on the same 44 saved inputs. Look at Gemini." | `SEM` §3; Gemini's 8 saved October inputs are slide 19 |
+| Is it the model? "Replay Claude on the same 44 saved inputs. Look at Gemini." | `SEM` §3; Gemini's replay on 36 of the 44 inputs is slides 19 and 20; October's 8 saved inputs are exploratory (backup 2) |
 | "Control": a baseline that sees the same map | `SEM` §9 ("Each comparator is given only the row's observed graph") |
 
 ## Slide 14: a hit and a miss, on one real stage
@@ -324,24 +324,31 @@ Exploratory, made on 2026-11-19 after the result (`DEV` item 71 (a)). Points = 1
 | Gains up to 2.95 (Opus) and 2.36 (Haiku) points at L3 not ruled out | upper ends of the L3 intervals against D: `RC` `...levels.L3.comparators.D.ci[1]` (0.029496, 0.023563) × 100 | `c_opus_L3_Dci_hi`, `c_haiku_L3_Dci_hi` |
 | (note) No L3 row; its registered figure is 1.1 points and comes from the random guesses' contrast (B5 − D) | `S1/exploratory/mdd_table.json` `levels.L3.{mdd,contrast}` (0.0109, "B5-D"); `SEM` §10 "Detectable difference"; RESULTS §10 | `mdd_L3_mdd` |
 
-## Slide 19: is it the model?
+## Slides 19 and 20: is it the model? (registered replay of Gemini 3.8 Flash)
 
-Exploratory, from `X19` `common_rows.json` (`DEV` item 71 (b)): the 8 rows that hold October's Gemini 3.8 Flash guesses (`levels.<L>.rows`), where a row score is the mean over a source's members and the mean below is over rows that all five sources have. The slot values come from `fill_slots_part3.py` (`slots.json` `common`).
+Registered: `PREREGISTRATION_GEMINI.md` with Notes 1 and 2 (hashed before any call on a frame row); how it went: `DEV` item 72. Result: `GR` = `tools/live_policy/results_semantic_1113/gemini_1119/results.json` (write-up: `RESULTS_GEMINI.md`). The slot values come from `fill_slots_part3.py` (`slots.json` `gemini_replay`). The model is `gemini-3.8-flash`, the registered fallback, because `gemini-2.5-pro` was refused (Note 1). Every sentence names it and says it is not the paper's model.
 
-| Number | Source (path in `common_rows.json`) |
+The builder stops (`gemini_facts`) unless: the four hypotheses of 5a are found, with Gemini above and Holm p below 0.05, over 12 clusters; the file's first sentence is the "does not carry over" one; the L3 verdict is Rejected against D with the upper end under the margin; Gemini's L3 score is above both Claude models' and below all three controls; at L2 the prior's interval is below 0 and random guesses' above 0; the wrong-house gate passes at L1 and L2 over 6 pairs; the drop rate is under 25%; 4 members a row, rounds 1, 2, 3 finished.
+
+| Statement | Source (path in `GR`) |
 |---|---|
-| Title: "On 8 rows Gemini 3.8 Flash scored above Claude, and still below the prior" | At L2 and L3 Gemini is above Opus and Haiku (guard in `gemini_slide`); at L2 the prior scores 98.8% on Gemini's members, above Gemini's 91.3% (the prior has no L3 score) |
-| L2 (8 rows): Gemini 91.3%, DeepSeek 73.9%, Haiku 70.5%, Opus 69.6%, random guesses 65.4% | `levels.L2.mean_row_score.{gemini,deepseek,claude-haiku-5-5,claude-opus-5-5,placebo}` |
-| L3 (8 rows): Gemini 13.8%, DeepSeek 7.6%, Haiku 7.8%, Opus 5.6%, random guesses 2.3% | `levels.L3.mean_row_score.*` |
-| The other-house prior scores 98.8% at L2 on Gemini's members; none at L3 (no place) | `levels.L2.b3_score_anchor_members`; `levels.L3.b3_score_anchor_members` is null |
-| Gemini is above Opus in 7 of 8 rows at L2 and above random guesses in 8 of 8 | `levels.L2.anchor_vs.{claude-opus-5-5,placebo}.above` and `n_rows` |
-| 8 rows, 3 clusters, 29 members | `anchor_rows` (8 listed); `levels.L2.n_clusters`; `levels.L2.anchor_members` |
-| Rows chosen in October; Gemini 3.8 Flash, not the paper's Gemini 2.5 Pro | `OVERNIGHT_REPORT_2026-10-28.md` (the static Gemini test); `PREREGISTRATION_GEMINI.md` §3 and Note 1 |
-| The paper's own model is no longer offered to new users (HTTP 404, "models/gemini-2.5-pro is no longer available to new users", 11-19) | `PREREGISTRATION_GEMINI.md` Note 1 (2026-11-19 12:00 IST) |
-| A registered replay of Gemini 3.8 Flash on new rows is running | `PREREGISTRATION_GEMINI.md` and Note 1; `DEV` item 70. No result of it is on the slide |
-| The pending slot | `slots.json` `gemini_replay` = `{"status": "pending", "result": null}`. The builder stops if it holds a result or another status: slide 19 has no layout for one, which the second pass adds |
+| 36 inputs (rows), 4 members each, 137 of 144 parsed; drop rate 4.9% (under 25%) | `analysis_set.confirmatory.{rows,members,ok,dropped}`; `analysis_set.all_rows_run.drop_rate`; `members_per_row`; `finished_rounds` |
+| The author's own loop; Claude ran our port of it, so the contrast is of model and loop together | `PREREGISTRATION_GEMINI.md` §3 and §5a (5a's own words) |
+| The paper's Gemini 2.5 Pro is no longer offered to new users (11-19) | Note 1 (HTTP 404, "no longer available to new users") |
+| Confirmatory contrast, 12 clusters, one-sided, Holm over 4: Gemini minus Opus L2 +21.0 [+13.5, +28.8], Holm p 0.0010; L3 +2.7 [−0.3, +5.8], 0.0381; Gemini minus Haiku L2 +10.9 [+1.6, +20.5], 0.0344; L3 +3.1 [+0.4, +6.0], 0.0381 | `confirmatory.5a.family.<model>|<L>.{mean_diff,ci,p_holm,found,n_clusters}`; the two scores in the table are `confirmatory.5a.tables.<model>.<L>.{model_mean,other_mean}` (Gemini 78.3% and 7.5%; Opus 57.2% and 4.8%; Haiku 67.4% and 4.4%, on the rows both have). Points = 100 × the file's value |
+| The registered sentence for this outcome, word for word | `confirmatory.wording[0]`; `PREREGISTRATION_GEMINI.md` §6 (first bullet) |
+| Against Opus at L3 the interval reaches below zero; the lead is found under the one-sided test (Holm p 0.038) | `5a.family.claude-opus-5-5|L3.{ci,p_holm}` (−0.0029 to +0.0576; 0.0381). The independent recompute's note: the sentence is not to be read as more than this |
+| October's lead on 8 rows repeated on 36 new ones | `X19` `common_rows.json` (Gemini above Opus and Haiku at L2 on the 8 rows; guarded) and the four hypotheses above |
+| L3 registered rule: Rejected; Gemini's own score 7.5% beside its three controls: own labels swapped (B5) 8.5%, region trade (D, named) 8.7%, prior's labels at its places (B3L) 11.0%; Gemini minus each −1.0 [−2.0, −0.1], −1.2 [−3.7, +1.4], −3.5 [−5.4, −1.6]; upper end vs D +1.4, margin 3 | `confirmatory.5b.levels.L3.{verdict,named,delta,ci_upper_named,model_own_score}`; `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}`. The D contrast is on D's 35 rows (Gemini's score on them 7.51%) |
+| The Rejected sentence, word for word | `confirmatory.wording[5]`; `PREREGISTRATION_GEMINI.md` §6 |
+| Both hold: Gemini's L3 score (7.5%) is above Claude's (4.8% Opus, 4.4% Haiku) and below the trade's (8.7%); its lead is in the raw rate and does not show that its labels fit their regions | `5a.tables.<claude>.L3.other_mean`; `5b...comparators.D.comparator_own_score`. The reading is the independent recompute's; the rate comparisons are the file's |
+| Exploratory: at L2 Gemini scores 78.3%; the prior from other houses, making as many claims, scores 90.7%, about 12 points above (−12.4 [−18.5, −6.3]); random guesses 59.6% (+18.6 [+12.8, +24.4]) | `5b.levels.L2.model_own_score`; `.comparators.B3.{comparator_own_score,mean_diff,ci}`, `.comparators.B1.*`. Exploratory under `PREREGISTRATION_GEMINI.md` §5b (L1 and L2 are scored by §10's rule as exploratory; the ceiling is said beside them) |
+| Exploratory: the wrong-house check passes at L1 (p 0.031) and L2 (p 0.016), 6 pairs | `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}`; reported, no verdict (§5c) |
+| Gemini also made more guesses per member; 5a does not adjust for that | The independent recompute of the result. No number is given: the file holds only totals on different row sets (`confirmatory.5c.validity.kept_vs_guesses.raw.l2_claims`, 1,270 over 137 members) and per-member counts would have to be computed; the deck does not compute them. `PREREGISTRATION_GEMINI.md` §5a compares hit rates with no matching of claim counts |
+| Saved inputs from two homes; no robot acted; the comparators at L1 and L2 sit at the ceiling | `PREREGISTRATION_GEMINI.md` §6 (last bullet); `confirmatory.wording[6]` |
+| A further extension to one more Gemini model is registered (after this result was seen) and running; no result | `PREREGISTRATION_GEMINI.md` Note 3 (2026-11-19 18:51 IST). No number or name of its result is anywhere in the deck |
 
-## Slide 20: the paper's room test (exploratory)
+## Slide 21: the paper's room test (exploratory)
 
 From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same as `S1/claude/room_test.json`. Type matched; a room counts if at least 2 of 8 members place a room of that type within 2.5 m of the region centre before the region is first seen (`SEM` §11). Unit: the run; exact permutation of arm labels within a scene (`DEV` item 71).
 
@@ -355,7 +362,7 @@ From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same 
 | Opus, replayed: 16.7% of rooms in a fitting unobserved region against 2.7% for random guesses; +13.9 points (+1.4 to +27.1); p 0.016; one contrast, not adjusted | `RC` `models.claude-opus-5-5.extras.l3_rooms.{model_clusters,placebo_clusters,mean_diff,ci,p}`; the table `x_misc` ("L3, rooms only") in `RES` §7. Secondary readout: no verdict rests on it and nothing is corrected for the number of looks |
 | The paper reports 9 of 28 rooms (32%) with no chance rate | `S1/claude/room_test.json` `live.by_arm.paper.{predicted,of}`; the paper (Fig. 4 text) gives no chance rate: `REVIEW` finding 7 |
 
-## Slide 21: M2 varied place, not meaning
+## Slide 22: M2 varied place, not meaning
 
 From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean over 24 runs; 95% interval from the bootstrap over runs). Arm names on the slide, with the registered names: True objects = F1; Room type only = F-room; Moved: DeepSeek / Haiku / Opus = F3 with that model's error sample (DeepSeek's arm is exploratory); Random guesses = F5; No guesses = F6; All true objects = F0 (`M2` §4). The yardstick is `Ucone`, the unmapped objects a candidate could see inside the camera cone, past walls (`M2` §3). The half-of-the-gain rule: `M2` §6.
 
@@ -372,15 +379,16 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | All true objects (exploratory): the gain never passes 2.0 bits, like the no-guess arm's; other arms reach 4.75 to 5.5; the two correlate at 0.64 (382 stages) | `AT` `bits_cap` (2.0), `arms.F0.max_ig` and `arms.F6.max_ig` (2.0 each), `arms.F0.above_cap` and `arms.F6.above_cap` (0), `arms.{F1,F3-*,F5a,F5b,F-room}.max_ig` (4.75 to 5.5), `spearman.{mean,n_used}` (0.635, 382); slot `all_true`. Exploratory (`DEV` item 71 (d)) |
 | "With identical members the score reads mainly where the two observed maps disagree" | The interpretation given for this pass and in `REVIEW` finding 6 (mechanism inferred; `tools/decision_replay_reference/calculate_uncertainty.py:269-333` draws the same perturbation noise for every graph, so equal graphs cancel). `AT` holds the cap and the correlation, not this sentence |
 
-## Slide 22: limits of scope
+## Slide 23: limits of scope
 
 | Number | Source |
 |---|---|
 | Every result holds for 853 and 871 only; truth is a proxy; static replays | `SEM` §16; RESULTS §10 |
-| The paper used Gemini 2.5 Pro, which is no longer offered to new users (11-19, Note 1); Claude with the author's prompt, in our port of the author's tool loop; Gemini's 8 inputs exploratory | `PLAN` §B1 (LLM row); `SEM` §4, §12 (loop: "a direct port of the author's tool loop"; prompt from the run's own config); `PREREGISTRATION_GEMINI.md` Note 1 |
+| The paper used Gemini 2.5 Pro, which is no longer offered to new users (11-19, Note 1); Claude with the author's prompt, in our port of the author's tool loop; Gemini 3.8 Flash in the author's own loop (so the Claude-Gemini contrast has two differences); October's 8 Gemini inputs exploratory | `PLAN` §B1 (LLM row); `SEM` §4, §12 (loop: "a direct port of the author's tool loop"; prompt from the run's own config); `PREREGISTRATION_GEMINI.md` Note 1 |
 | Part 1's live model is small: DeepSeek V4.1 Flash at low reasoning effort; the paper's sentence on smaller LLMs | As slide 4 (`PREREGISTRATION_E1.md` line 9; arXiv 2510.05430v2 §IV footnote; `PIN` `paper.small_model`) |
+| Another Gemini model is registered (after the Flash result was seen) and running; no result | `PREREGISTRATION_GEMINI.md` Note 3 |
 
-## Slide 23: limits of method
+## Slide 24: limits of method
 
 | Number | Source |
 |---|---|
@@ -390,27 +398,27 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
 
-## Slide 24: for Claude, in our port, on saved inputs: no detectable gain over base rates
+## Slide 25: for Claude, in our port, on saved inputs: no detectable gain over base rates
 
 | Number | Source |
 |---|---|
 | In two houses, Claude's guesses carried no detectable information beyond house base rates, and put content in fitting regions no more often than a trade of regions did | Slide 16 (no interval wholly above 0; guard `blind_facts`); `REVIEW` finding 1, "What the talk may say". "House base rates" = the prior built from 179 other houses (B3) |
 | Both models far below the other-house prior at naming objects (L2) | Slide 16, L2 against B3 (−35.1, −24.9 points); `SEM` §16 (two houses) |
 | At L3 a gain under 3 points is not ruled out | Slide 16, L3 (D); slide 18 (upper ends 2.95 and 2.36 points); `SEM` §10 |
-| M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 21; `M2` §6, §7 |
+| M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 22; `M2` §6, §7 |
 | The registered line, second: "The claim fails", for the first half of the claim as the author put it to us (that the guesses are right in meaning) | `RC` `family.thesis`; CSV `thesis`; `SEM` §1, §10 "The thesis"; `FINAL` §5; RESULTS §10. Slide 1's row for the source of the claim |
 | It says less than it seems to: at L1 and L2 no model could have been Supported, so it rests on L3, where Opus's interval ends at 2.95 against a margin of 3 | Slide 18; `X19` `ceiling.json` |
-| Not the paper's model: Claude, in our port of the author's loop. Gemini 3.8 Flash scored above Claude on 8 rows, though below the prior (exploratory) | Slides 19 and 22 |
+| Not the paper's model: Claude, in our port of the author's loop. In the author's loop Gemini 3.8 Flash scored above Claude at L2 and L3, and not above a trade of regions at L3 (registered); the Claude result does not carry over | Slides 19 and 20 (the file's wording); slide 23 |
 | Outcome picked by the rules | `slots.json` `outcome` (written from `RC` `family.thesis`) |
 
-## Slide 25: what the answer does not say
+## Slide 26: what the answer does not say
 
 The list follows RESULTS §10 "What it does not let the talk say".
 
 | Number | Source |
 |---|---|
 | It does not say the guesses carry nothing: no gain was found; at L3 a gain under 3 points is not ruled out; the prior's near-perfect score left little room for a gain at L1 and L2 | Slides 16 and 18; `REVIEW` finding 1 |
-| It does not say the model is not the cause: Gemini 3.8 Flash scored above Claude on 8 rows, though below the prior (exploratory) and a registered replay is running | Slide 19 |
+| It does not carry over to Gemini 3.8 Flash, which in the author's loop scored above Claude at L2 and L3 (registered); not the paper's model; the loops differ | Slides 19 and 20 |
 | It does not say the guesses reach the map or where they sit | `SEM` §16 ("Supported at L3 means … It does not mean the guesses reach the map"); RESULTS §10 |
 | Haiku is 8.2 points above random guesses at L2 (one contrast, not adjusted) | as slide 17 |
 | Nothing about live runs with a strong model or the paper's scale | `SEM` §16; RESULTS §10 |
@@ -421,8 +429,8 @@ The list follows RESULTS §10 "What it does not let the talk say".
 | Number | Source (file, path) | CSV key |
 |---|---|---|
 | p: Opus 0.125 (L1), 1.000 (L2); Haiku 1.000, 0.953; DeepSeek (exploratory) 1.000, 1.000 | `RC` `family.wrong_house_gate.<m>|<L>.p`; `RE` `models.deepseek.exploratory_family.wrong_house_gate` | `gate_<m>_<L>_p` |
-| Pairs: Haiku L1 5, the rest 6; "a pass needs p below 0.05 over 6 pairs"; no model passes (`pass` false for all six) | same, `.n_pairs`, `.pass`; `SEM` §10 "The wrong-house gate" | `gate_haiku_L1_pairs`, `gate_<m>_<L>_pass`, `rule_gate_pairs` |
-| Gemini's 8 rows have no partner | `SEM` §9 (B4) | `gate_gemini_L1_pairs` |
+| Pairs: Haiku L1 5, the rest 6; "a pass needs p below 0.05 over 6 pairs"; no Claude model passes (`pass` false for all six) | same, `.n_pairs`, `.pass`; `SEM` §10 "The wrong-house gate" | `gate_haiku_L1_pairs`, `gate_<m>_<L>_pass`, `rule_gate_pairs` |
+| October's 8 Gemini rows have no partner (`SEM` §9, B4). Gemini 3.8 Flash in the replay passes: L1 p 0.031, L2 p 0.016, 6 pairs each (reported, no verdict) | `SEM` §9 (B4) | `GR` `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}` |
 | Definition: the model's guesses for the other home, scored against this home | `SEM` §9 (B4) |
 
 ## Backup 2: how far a guess is from an object it could name
@@ -439,7 +447,7 @@ A description, and the input to M2's F3 arms (`M2` §4); not a claim about where
 
 ## Backup 3: the paper's room test: other counts, Claude replays, prompt hint
 
-The main counts moved to slide 20. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
+The main counts moved to slide 21. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
 
 | Number | Source (file, path) | CSV key |
 |---|---|---|
@@ -475,7 +483,7 @@ From `M2S` (`tools/live_policy/results_m2_1113/pass2/summary_factorial.json`).
 | True objects in differing subsets: +0.218 above random guesses | `analysis.main.all.differences.A.mean` (0.21809) | `m2_A_mean` |
 | The score counts disagreement between members; registered before the run | `M2` §7 ("The all-true anchor, F0"); `tools/live_policy/live_policy.py:19-22` |
 | The gain is zero for every candidate in only 2 of 384 stages | `counts_all_stages.ig_zero_stage_share.F0.{stages_ig_zero_for_every_candidate,n_stages}` | `m2_f0_ig_zero`, `m2_f0_ig_zero_of` |
-| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as slide 21's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
+| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as slide 22's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
 
 ## Backup 6: the four outcomes
 
@@ -501,6 +509,6 @@ These are not in `numbers_part3.csv`; each has its file and path above.
 ## Not used on a slide, and why
 
 - **The pilot base rates** (88%, 82%, 56%) and room mix: `SEM` §2 lists them as seen before the hash. The deck shows the frozen-rule chance level instead: the random guesses' own scores.
-- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slide 19 shows its scores on the 8 rows, and backup 2 its placement-error median.
+- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slides 19 and 20 show the registered replay instead; backup 2 shows its October placement-error median.
 - **Difference against the random-guess placebo at L3.** The placebo is a registered comparator at L1 and L2 only (`SEM` §9). At L3 the slide shows the model's score beside the placebo's score.
 - **Validity-layer terms** (Brier, vote, τ) stay in `slots.json` and here, not on the main slides.

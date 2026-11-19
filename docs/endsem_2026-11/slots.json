@@ -4,10 +4,6 @@
  "_table871": "Slides 7 and 9. Done on 2026-11-17: the 871 reruns finished and the final rescore is filed in results_paper_compare_1113 (budget 1300 s). paper_compare_json points at it. The builder reads the 871 budget, its runs and C2 from that folder, and stops if this flag is not true. Slide 8 (853): the November ASP row (arm official_nov, 3 runs to 105 m) is read from paper_compare.json; asp853_full_budget holds only that flag, no numbers. fill_slots_part3.py needs the key to exist.",
  "table871_updated": true,
  "asp853_full_budget": "from paper_compare.json (arm official_nov)",
- "gemini_replay": {
-  "status": "pending",
-  "result": null
- },
  "outcome": "fails",
  "thesis": "The claim fails",
  "_sources": {
@@ -27,7 +23,7 @@
   "rooms_fit": "results_semantic_1113/claude/results.json: models.claude-opus-5-5.extras.l3_rooms",
   "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
   "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; the authors' repository at f1ea141b (SOURCES.md)",
-  "gemini_replay": "hand-kept: status 'pending' until the registered replay (PREREGISTRATION_GEMINI.md) is read; the builder stops if result is filled and has no layout for it"
+  "gemini_replay": "results_semantic_1113/gemini_1119/results.json: confirmatory.{5a,5b,5c,wording}, analysis_set (registered replay of Gemini 3.8 Flash)"
  },
  "blind": {
   "models": {
@@ -517,6 +513,253 @@
    "tau1_l3_hits": 0.0,
    "tau1_l3_items": 59
   }
+ },
+ "gemini_replay": {
+  "status": "filled",
+  "model": "gemini-3.8-flash",
+  "confirmatory": true,
+  "rows": 36,
+  "members": 144,
+  "ok": 137,
+  "dropped": 7,
+  "drop_rate": 0.04861111111111111,
+  "drop_rate_above_25": false,
+  "members_per_row": 4,
+  "finished_rounds": [
+   1,
+   2,
+   3
+  ],
+  "clusters": 12,
+  "family": {
+   "claude-haiku-5-5|L2": {
+    "model": "claude-haiku-5-5",
+    "level": "L2",
+    "diff": 0.10855221810082921,
+    "lo": 0.015610122901789574,
+    "hi": 0.20509534832451495,
+    "p": 0.011474609375,
+    "p_holm": 0.034423828125,
+    "found": true,
+    "n_clusters": 12,
+    "gemini": 0.7825684218045329,
+    "other": 0.6740162037037037
+   },
+   "claude-haiku-5-5|L3": {
+    "model": "claude-haiku-5-5",
+    "level": "L3",
+    "diff": 0.031051797699920763,
+    "lo": 0.0036011707161087932,
+    "hi": 0.05965735879951566,
+    "p": 0.01904296875,
+    "p_holm": 0.0380859375,
+    "found": true,
+    "n_clusters": 12,
+    "gemini": 0.07494234002796309,
+    "other": 0.04389054232804233
+   },
+   "claude-opus-5-5|L2": {
+    "model": "claude-opus-5-5",
+    "level": "L2",
+    "diff": 0.21019037546815325,
+    "lo": 0.13534194714750272,
+    "hi": 0.28770232853566186,
+    "p": 0.000244140625,
+    "p_holm": 0.0009765625,
+    "found": true,
+    "n_clusters": 12,
+    "gemini": 0.7825684218045329,
+    "other": 0.5723780463363797
+   },
+   "claude-opus-5-5|L3": {
+    "model": "claude-opus-5-5",
+    "level": "L3",
+    "diff": 0.027289722583678983,
+    "lo": -0.00290594401227141,
+    "hi": 0.05757375024499638,
+    "p": 0.034423828125,
+    "p_holm": 0.0380859375,
+    "found": true,
+    "n_clusters": 12,
+    "gemini": 0.07494234002796309,
+    "other": 0.04765261744428411
+   }
+  },
+  "rule": {
+   "L1": {
+    "verdict": "Rejected",
+    "named": "B3",
+    "delta": 0.05,
+    "upper_named": 0.0,
+    "own": 0.9166666666666666,
+    "confirmatory": false,
+    "n_clusters": 12,
+    "comparators": {
+     "B1": {
+      "own": 0.875,
+      "diff": 0.041666666666666664,
+      "lo": -0.008333333333333335,
+      "hi": 0.09166666666666666,
+      "n_rows": 34
+     },
+     "B2": {
+      "own": 0.811111111111111,
+      "diff": 0.10555555555555556,
+      "lo": 0.02619047619047619,
+      "hi": 0.18333333333333332,
+      "n_rows": 34
+     },
+     "B3": {
+      "own": 0.9166666666666666,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n_rows": 34
+     },
+     "B3_seen": {
+      "own": 0.9340277777777778,
+      "diff": -0.01736111111111111,
+      "lo": -0.041666666666666664,
+      "hi": 0.0,
+      "n_rows": 34
+     },
+     "B3_seen_size": {
+      "own": 0.9722222222222222,
+      "diff": -0.05555555555555555,
+      "lo": -0.15277777777777776,
+      "hi": 0.0,
+      "n_rows": 34
+     },
+     "B3_size": {
+      "own": 0.9166666666666666,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n_rows": 34
+     },
+     "B4": {
+      "own": 0.8310185185185185,
+      "diff": 0.08564814814814814,
+      "lo": null,
+      "hi": null,
+      "n_rows": 34
+     }
+    }
+   },
+   "L2": {
+    "verdict": "Rejected",
+    "named": "B3",
+    "delta": 0.05,
+    "upper_named": -0.06285332465888023,
+    "own": 0.7825684218045329,
+    "confirmatory": false,
+    "n_clusters": 12,
+    "comparators": {
+     "B1": {
+      "own": 0.5962272681022681,
+      "diff": 0.1863411537022648,
+      "lo": 0.1281358944553389,
+      "hi": 0.2440057884502329,
+      "n_rows": 36
+     },
+     "B2": {
+      "own": 0.7259165164995919,
+      "diff": 0.056651905304941075,
+      "lo": 0.010762811033708868,
+      "hi": 0.10217419271856835,
+      "n_rows": 36
+     },
+     "B3": {
+      "own": 0.9067959625251292,
+      "diff": -0.12422754072059627,
+      "lo": -0.1848361052527719,
+      "hi": -0.06285332465888023,
+      "n_rows": 36
+     },
+     "B3_seen": {
+      "own": 0.8856343598531099,
+      "diff": -0.10306593804857694,
+      "lo": -0.16611871924371924,
+      "hi": -0.0389291392763615,
+      "n_rows": 36
+     },
+     "B3_seen_size": {
+      "own": 0.8873816191524525,
+      "diff": -0.10481319734791956,
+      "lo": -0.1545246034829368,
+      "hi": -0.054494014216236446,
+      "n_rows": 36
+     },
+     "B3_size": {
+      "own": 0.8932147135272136,
+      "diff": -0.1106462917226806,
+      "lo": -0.16286090452757118,
+      "hi": -0.05785007816257817,
+      "n_rows": 36
+     },
+     "B4": {
+      "own": 0.7267717236467236,
+      "diff": 0.05579669815780928,
+      "lo": null,
+      "hi": null,
+      "n_rows": 36
+     }
+    }
+   },
+   "L3": {
+    "verdict": "Rejected",
+    "named": "D",
+    "delta": 0.03,
+    "upper_named": 0.013547241899134954,
+    "own": 0.07494234002796309,
+    "confirmatory": true,
+    "n_clusters": 12,
+    "comparators": {
+     "B3L": {
+      "own": 0.11012356675330746,
+      "diff": -0.03518122672534437,
+      "lo": -0.05430924263644852,
+      "hi": -0.015522292023517513,
+      "n_rows": 36
+     },
+     "B5": {
+      "own": 0.08519396569784797,
+      "diff": -0.010251625669884863,
+      "lo": -0.02005188802664322,
+      "hi": -0.0006325269178670484,
+      "n_rows": 36
+     },
+     "D": {
+      "own": 0.08701705591733568,
+      "diff": -0.01189196735136089,
+      "lo": -0.037433303769011494,
+      "hi": 0.013547241899134954,
+      "n_rows": 35
+     }
+    }
+   }
+  },
+  "wrong_house": {
+   "L1": {
+    "p": 0.03125,
+    "n_pairs": 6,
+    "pass": true
+   },
+   "L2": {
+    "p": 0.015625,
+    "n_pairs": 6,
+    "pass": true
+   }
+  },
+  "wording": [
+   "The Claude result does not carry over to Gemini 3.8 Flash: on the same inputs Gemini 3.8 Flash names more of what is there and puts more of it in fitting regions. Gemini 3.8 Flash is not the paper's model.",
+   "Gemini 3.8 Flash minus Opus at L2: +21.0 points, 95% interval [+13.5, +28.8] points, Holm p 0.0010, 12 clusters; above. Gemini 3.8 Flash is not the paper's model.",
+   "Gemini 3.8 Flash minus Opus at L3: +2.7 points, 95% interval [-0.3, +5.8] points, Holm p 0.0381, 12 clusters; above. Gemini 3.8 Flash is not the paper's model.",
+   "Gemini 3.8 Flash minus Haiku at L2: +10.9 points, 95% interval [+1.6, +20.5] points, Holm p 0.0344, 12 clusters; above. Gemini 3.8 Flash is not the paper's model.",
+   "Gemini 3.8 Flash minus Haiku at L3: +3.1 points, 95% interval [+0.4, +6.0] points, Holm p 0.0381, 12 clusters; above. Gemini 3.8 Flash is not the paper's model.",
+   "Gemini 3.8 Flash did not beat a trade of region contents by the 3-point margin. Gemini 3.8 Flash is not the paper's model.",
+   "Saved inputs from two homes; no robot acted on these guesses; the comparators at L1 and L2 sit at the ceiling. Gemini 3.8 Flash is not the paper's model."
+  ]
  },
  "ceiling": {
   "opus": {
