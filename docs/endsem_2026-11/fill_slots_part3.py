@@ -272,6 +272,14 @@ def main():
     new_argon = read_gemini("gemini_argon_1119")
     af = J(RS, "gemini_argon_1119", "argon_minus_flash.json")
     assert af["a"] == "gemini-4-argon" and af["b"] == "gemini-3.8-flash"
+    new_r32 = read_gemini("gemini_argon_r32_1119")
+    new_r32["all36"] = {}
+    for other in ("haiku", "opus", "flash"):
+        a36 = J(RS, "gemini_argon_all36_exploratory", f"argon_minus_{other}.json")
+        assert a36["a"] == "gemini-4-argon"
+        new_r32["all36"][other] = {L: {"rows": v["rows"], "diff": v["diff"], "lo": v["interval"][0],
+                                       "hi": v["interval"][1], "p": v["p_two_sided"], "clusters": v["clusters"]}
+                                   for L, v in a36["levels"].items()}
     new_argon["vs_flash"] = {L: {"rows": v["rows"], "argon": v["a"], "flash": v["b"], "diff": v["diff"],
                                  "lo": v["interval"][0], "hi": v["interval"][1], "p": v["p_two_sided"]}
                              for L, v in af["levels"].items()}
@@ -300,6 +308,7 @@ def main():
     new["validity"] = validity
     new["gemini_replay"] = new_gemini
     new["argon_replay"] = new_argon
+    new["argon_r32"] = new_r32
     new["ceiling"], new["common"], new["room_runs"] = ceiling, common, room_runs
     new["rooms_fit"], new["all_true"], new["pinned"] = rooms_fit, all_true, pinned
     new["_sources"].update({
@@ -310,6 +319,9 @@ def main():
         "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
         "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; "
                   "the authors' repository at f1ea141b (SOURCES.md)",
+        "argon_r32": "results_semantic_1113/gemini_argon_r32_1119/results.json (as gemini_replay; Note 4: the 24 inputs "
+                     "of rounds 3 and 2) and gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json "
+                     "(exploratory, all 36 inputs)",
         "argon_replay": "results_semantic_1113/gemini_argon_1119/results.json (as gemini_replay) and argon_minus_flash.json "
                         "(exploratory): the extension of PREREGISTRATION_GEMINI.md Note 3",
         "gemini_replay": "results_semantic_1113/gemini_1119/results.json: confirmatory.{5a,5b,5c,wording}, "

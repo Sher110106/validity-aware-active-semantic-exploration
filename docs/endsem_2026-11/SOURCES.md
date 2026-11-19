@@ -23,7 +23,7 @@ Short names:
 - `PIN` = `slots.json` `pinned`: facts read from files that are not result tables (the proposal's plan, the paper's quotes, the clock lines). Each row below names its file.
 - `REVIEW` = `/Users/sher/project/cvp/REVIEW_FABLE_2026-11-19.md` (the independent review that led to this pass; outside the repo).
 
-The two control arms on 853 (`PREREG` Amendment 5) are registered and running; the deck says only that, and no result of them exists. The registered replay of Gemini 3.8 Flash and the extension of Note 3 (Gemini 4 Argon) are final: `slots.json` `gemini_replay` is read from its `results.json` (slides 19 and 20; `gemini_facts` guards every sentence), and `argon_replay` from `gemini_argon_1119/results.json` (slide 21; `argon_facts`).
+The two control arms on 853 (`PREREG` Amendment 5) and the last Gemini run (Gemini 4 Neon, `PREREGISTRATION_GEMINI.md` Note 6) are registered and running; the deck says only that, and no result of them exists. The registered replay of Gemini 3.8 Flash and the extension of Note 3 (Gemini 4 Argon, round 1 and the check of Note 4) are final: `slots.json` `gemini_replay` is read from its `results.json` (slides 19 and 20; `gemini_facts` guards every sentence), and `argon_replay` from `gemini_argon_1119/results.json` (slide 21; `argon_facts`), `argon_r32` from `gemini_argon_r32_1119/results.json` and the three exploratory files of `gemini_argon_all36_exploratory/` (slide 22; `argon_check_facts`).
 
 ## Slide 1: the cover
 
@@ -355,17 +355,33 @@ Registered 2026-11-19 18:51 IST, after the Flash result was seen and before any 
 | Statement | Source |
 |---|---|
 | Gemini 4 Argon, the second of Google's Gemini 4 line (its top model is Gemini 4 Carbon), in the author's loop, on the 12 round-1 inputs, 4 members each, 48 of 48 parsed | Note 5 of `PREREGISTRATION_GEMINI.md` (the price page read fresh on 2026-11-19 at 20:55 IST: Carbon "our most capable reasoning model", Argon "our efficient Gemini 4 frontier reasoning model", same price); `DEV` item 74. Notes 3 and 4 said "top model" from an old cached copy of the page and are corrected. Run and rows: Note 3 (E1); `AR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
-| A further run of this model on 24 more inputs is registered (Note 4) and running; no result of it exists | `PREREGISTRATION_GEMINI.md` Note 4 |
+| The check on 24 more inputs (Note 4) is on slide 22 | `PREREGISTRATION_GEMINI.md` Note 4; `DEV` item 75 |
 | Registered after the Flash result was seen | Note 3 ("after the Flash result was seen, before any call on the new model"; E3 asks the slide to say so) |
 | Argon minus Opus L2 +17.5 [+5.0, +30.3], Holm p 0.0205, above; Opus L3 −0.4 [−5.7, +4.9], 0.6445; Haiku L2 +13.6 [−1.4, +28.5], 0.1069; Haiku L3 +1.2 [−4.4, +6.7], 0.6445: not detectably above. 12 clusters of one row each | `AR` `confirmatory.5a.family.<model>|<L>.{mean_diff,ci,p_holm,found}`; scores `5a.tables.<model>.<L>.{model_mean,other_mean}`; the words: `confirmatory.wording[1..4]` (the registration's §6) |
 | Registered rule at L3: Inconclusive; Argon minus the region trade +0.0 [−2.8, +3.1] against a margin of 3; Argon's own L3 score 6.2% beside 5.7% (own labels swapped), 6.2% (the trade), 6.6% (prior's labels at its places) | `AR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}`; `confirmatory.wording[5]` |
-| Exploratory: Argon minus Flash on the same 12 rows, both in the author's loop (the models alone): L2 −2.9 [−9.1, +3.4], L3 −5.4 [−13.1, +2.0] | `AF` `levels.<L>.{diff,interval,p_two_sided,rows}` |
+| (No longer on the slide; slide 22's all-36 lines replace it.) Exploratory: Argon minus Flash on the same 12 rows, both in the author's loop (the models alone): L2 −2.9 [−9.1, +3.4], L3 −5.4 [−13.1, +2.0] | `AF` `levels.<L>.{diff,interval,p_two_sided,rows}` |
 | Exploratory: at L2 Argon scores 79.3%, below the prior (96.5%; −17.2 [−23.9, −10.5]) | `AR` `confirmatory.5b.levels.L2.model_own_score`, `.comparators.B3.{comparator_own_score,mean_diff,ci}` (exploratory under §5b) |
 | Not the paper's model; the intervals are wide | `AR` `confirmatory.wording` (each line says the first); 12 clusters of one row each (Note 3 E2a) |
 | Reported with no verdict, not on the slide: the wrong-house gate does not pass (L1 p 0.25, L2 p 0.75, 6 pairs) | `AR` `confirmatory.5c.wrong_house_gate` |
-| Summary line (slides 26 and 27): two Gemini models scored above Opus at L2 (Flash above Haiku too, Argon not detectably); neither was found to beat a trade of regions at L3 (Flash Rejected, Argon Inconclusive); neither is the paper's model | `GR` and `AR` `confirmatory.5a.family`, `5b.levels.L3.verdict`. "Neither beat" is read as "neither was found to beat": Flash's Rejected rules out a 3-point gain, Argon's Inconclusive does not (its interval reaches +3.1), so the deck does not say Argon was worse |
+| Summary lines (slides 27 and 28): Flash above both Claude models at L2 and L3; Argon above Opus at L2 on round 1 and not detectably above Haiku at L2 on round 1 and again on the new inputs (the new inputs' other three contrasts carry no verdict, Note 4); at L3 neither was found to beat a trade of regions (Flash Rejected; Argon Inconclusive on round 1, Rejected on the new inputs); neither is the paper's model | `GR`, `AR` and `R32` `confirmatory.5a.family`, `5b.levels.L3.verdict`. "Neither beat" is read as "neither was found to beat": Flash's Rejected rules out a 3-point gain, Argon's Inconclusive on round 1 does not (its interval reached +3.1), and Argon's Rejected on the new inputs does (upper end +2.8) |
 
-## Slide 22: the paper's room test (exploratory)
+## Slide 22: Gemini 4 Argon on the 24 inputs it had not seen (Note 4)
+
+Registered 2026-11-19 20:54 IST, after round 1 of Note 3 was seen and before any call on these rows (`PREREGISTRATION_GEMINI.md` Note 4, R1 to R4; `DEV` item 75). `R32` = `tools/live_policy/results_semantic_1113/gemini_argon_r32_1119/results.json` (rounds 3 and 2, 24 rows, 2 members each); `A36` = `.../gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json` (exploratory, R3: computed after the fact, on all 36 inputs, so they hold the 12 seen before Note 4). Slot: `slots.json` `argon_r32` (`fill_slots_part3.py`). The builder stops (`argon_check_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 2 and 3 finished; R2a's one-sided p is not below 0.05 and its interval holds zero (so the registered sentence is the "again not detectably above" one); R2b is Rejected against D with the upper end under the margin; round 1's L3 line was Inconclusive; on all 36 inputs minus Haiku (L2) and minus Flash (L2, L3) hold zero and minus Opus (L2) is above zero.
+
+| Statement | Source |
+|---|---|
+| Round 1 left Argon against Haiku at L2 at +13.6 with an interval from −1.4 to +28.5; the check tests that one contrast on the 24 other stages of the same 12 runs, 2 members each, 48 of 48 parsed; registered after round 1 was seen | Note 4 ("Why", R1, R2a); `AR` `confirmatory.5a.family.claude-haiku-5-5|L2` (round 1); `R32` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
+| R2a: Argon minus Haiku at L2 +5.4 [−2.8, +13.5], one-sided p 0.0906 before Holm; the registered sentence "On the 24 other stages of the same 12 runs Gemini 4 Argon was again not detectably above Haiku at naming objects" | `R32` `confirmatory.5a.tables.claude-haiku-5-5.L2.{mean_diff,ci,p}` (the one-sided p before Holm). Note 4 says R2a ignores the file's `found` flags and its 5a sentences, which apply Holm over four; the deck does too. The sentence is Note 4's (p not below 0.05) |
+| The other three contrasts on the new inputs (Opus L2 +18.7, Opus L3 +1.1, Haiku L3 +0.9), reported with intervals and no verdict | `R32` `confirmatory.5a.tables.<model>.<L>`; Note 4 ("Reported with intervals, no verdict"). Shown in grey; the deck gives them no reading |
+| R2b: the registered rule at L3 reads Rejected; Argon minus the region trade +0.4 [−2.1, +2.8], margin 3; own score 4.9% beside 4.7% (own labels swapped), 4.6% (the trade), 7.2% (prior's labels at its places) | `R32` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}` |
+| Two questions were tested (R2a and R2b), each at α = 0.05 | Note 4 R2 ("the slide says that two were tested") |
+| Round 1's L3 line was Inconclusive; the new inputs give Rejected | `AR` `5b.levels.L3.verdict` (round 1); `R32` as above |
+| Exploratory, all 36 inputs: Argon minus Haiku at L2 +8.1 [−1.3, +17.2]; minus Opus at L2 +18.3 [+11.7, +25.9]; minus Flash −2.7 [−6.7, +1.3] at L2 and −2.1 [−5.1, +1.1] at L3 | `A36` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`). Marked exploratory on the slide, with "which hold the 12 seen before Note 4" (R3) |
+| Argon is the second of Google's Gemini 4 line; not the paper's model | Note 5; `R32` `confirmatory.wording` |
+| One more Gemini run (Gemini 4 Neon, the last) is registered and running; no result | `PREREGISTRATION_GEMINI.md` Note 6 (2026-11-19 21:05 IST); `slots.json` holds none of it. Note 6 N3 fixes a sentence for when its result is shown ("three Gemini models were tried in turn … none is the paper's"); it is not used yet |
+
+## Slide 23: the paper's room test (exploratory)
 
 From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same as `S1/claude/room_test.json`. Type matched; a room counts if at least 2 of 8 members place a room of that type within 2.5 m of the region centre before the region is first seen (`SEM` §11). Unit: the run; exact permutation of arm labels within a scene (`DEV` item 71).
 
@@ -379,7 +395,7 @@ From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same 
 | Opus, replayed: 16.7% of rooms in a fitting unobserved region against 2.7% for random guesses; +13.9 points (+1.4 to +27.1); p 0.016; one contrast, not adjusted | `RC` `models.claude-opus-5-5.extras.l3_rooms.{model_clusters,placebo_clusters,mean_diff,ci,p}`; the table `x_misc` ("L3, rooms only") in `RES` §7. Secondary readout: no verdict rests on it and nothing is corrected for the number of looks |
 | The paper reports 9 of 28 rooms (32%) with no chance rate | `S1/claude/room_test.json` `live.by_arm.paper.{predicted,of}`; the paper (Fig. 4 text) gives no chance rate: `REVIEW` finding 7 |
 
-## Slide 23: M2 varied place, not meaning
+## Slide 24: M2 varied place, not meaning
 
 From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean over 24 runs; 95% interval from the bootstrap over runs). Arm names on the slide, with the registered names: True objects = F1; Room type only = F-room; Moved: DeepSeek / Haiku / Opus = F3 with that model's error sample (DeepSeek's arm is exploratory); Random guesses = F5; No guesses = F6; All true objects = F0 (`M2` §4). The yardstick is `Ucone`, the unmapped objects a candidate could see inside the camera cone, past walls (`M2` §3). The half-of-the-gain rule: `M2` §6.
 
@@ -396,7 +412,7 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | All true objects (exploratory): the gain never passes 2.0 bits, like the no-guess arm's; other arms reach 4.75 to 5.5; the two correlate at 0.64 (382 stages) | `AT` `bits_cap` (2.0), `arms.F0.max_ig` and `arms.F6.max_ig` (2.0 each), `arms.F0.above_cap` and `arms.F6.above_cap` (0), `arms.{F1,F3-*,F5a,F5b,F-room}.max_ig` (4.75 to 5.5), `spearman.{mean,n_used}` (0.635, 382); slot `all_true`. Exploratory (`DEV` item 71 (d)) |
 | "With identical members the score reads mainly where the two observed maps disagree" | The interpretation given for this pass and in `REVIEW` finding 6 (mechanism inferred; `tools/decision_replay_reference/calculate_uncertainty.py:269-333` draws the same perturbation noise for every graph, so equal graphs cancel). `AT` holds the cap and the correlation, not this sentence |
 
-## Slide 24: limits of scope
+## Slide 25: limits of scope
 
 | Number | Source |
 |---|---|
@@ -405,7 +421,7 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | Part 1's live model is small: DeepSeek V4.1 Flash at low reasoning effort; the paper's sentence on smaller LLMs | As slide 4 (`PREREGISTRATION_E1.md` line 9; arXiv 2510.05430v2 §IV footnote; `PIN` `paper.small_model`) |
 | Two Gemini models: Flash (the registered fallback) and Argon (added after the Flash result was seen, on 12 inputs) | `PREREGISTRATION_GEMINI.md` Note 1 and Note 3 |
 
-## Slide 25: limits of method
+## Slide 26: limits of method
 
 | Number | Source |
 |---|---|
@@ -415,20 +431,20 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
 
-## Slide 26: for Claude, in our port, on saved inputs: no detectable gain over base rates
+## Slide 27: for Claude, in our port, on saved inputs: no detectable gain over base rates
 
 | Number | Source |
 |---|---|
 | In two houses, Claude's guesses carried no detectable information beyond house base rates, and put content in fitting regions no more often than a trade of regions did | Slide 16 (no interval wholly above 0; guard `blind_facts`); `REVIEW` finding 1, "What the talk may say". "House base rates" = the prior built from 179 other houses (B3) |
 | Both models far below the other-house prior at naming objects (L2) | Slide 16, L2 against B3 (−35.1, −24.9 points); `SEM` §16 (two houses) |
 | At L3 a gain under 3 points is not ruled out | Slide 16, L3 (D); slide 18 (upper ends 2.95 and 2.36 points); `SEM` §10 |
-| M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 23; `M2` §6, §7 |
+| M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 24; `M2` §6, §7 |
 | The registered line, second: "The claim fails", for the first half of the claim as the author put it to us (that the guesses are right in meaning) | `RC` `family.thesis`; CSV `thesis`; `SEM` §1, §10 "The thesis"; `FINAL` §5; RESULTS §10. Slide 1's row for the source of the claim |
 | It says less than it seems to: at L1 and L2 no model could have been Supported, so it rests on L3, where Opus's interval ends at 2.95 against a margin of 3 | Slide 18; `X19` `ceiling.json` |
 | Not the paper's model: Claude, in our port of the author's loop. In the author's loop two Gemini models scored above Opus at L2 (Flash also above Haiku, Argon not detectably); neither was found to beat a trade of regions at L3: Flash Rejected, Argon Inconclusive; neither is the paper's model | Slides 19, 20 and 21 (the files' wording) |
 | Outcome picked by the rules | `slots.json` `outcome` (written from `RC` `family.thesis`) |
 
-## Slide 27: what the answer does not say
+## Slide 28: what the answer does not say
 
 The list follows RESULTS §10 "What it does not let the talk say".
 
@@ -464,7 +480,7 @@ A description, and the input to M2's F3 arms (`M2` §4); not a claim about where
 
 ## Backup 3: the paper's room test: other counts, Claude replays, prompt hint
 
-The main counts moved to slide 22. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
+The main counts moved to slide 23. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
 
 | Number | Source (file, path) | CSV key |
 |---|---|---|
@@ -500,7 +516,7 @@ From `M2S` (`tools/live_policy/results_m2_1113/pass2/summary_factorial.json`).
 | True objects in differing subsets: +0.218 above random guesses | `analysis.main.all.differences.A.mean` (0.21809) | `m2_A_mean` |
 | The score counts disagreement between members; registered before the run | `M2` §7 ("The all-true anchor, F0"); `tools/live_policy/live_policy.py:19-22` |
 | The gain is zero for every candidate in only 2 of 384 stages | `counts_all_stages.ig_zero_stage_share.F0.{stages_ig_zero_for_every_candidate,n_stages}` | `m2_f0_ig_zero`, `m2_f0_ig_zero_of` |
-| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as slide 23's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
+| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as slide 24's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
 
 ## Backup 6: the four outcomes
 
