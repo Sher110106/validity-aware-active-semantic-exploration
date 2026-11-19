@@ -40,3 +40,15 @@ def test_it_reproduces_the_wrappers_registered_differences():
     assert l2["clusters"] == 12 and l2["rows"] == 36
     assert round(100 * l2["diff"], 1) == 21.0 and round(100 * l3["diff"], 1) == 2.7
     assert [round(100 * x, 1) for x in l2["interval"]] == [13.5, 28.8]
+
+
+def test_one_model_scored_in_two_runs_is_joined_and_a_repeated_row_is_refused(tmp_path):
+    a1 = records(tmp_path / "a1.json", {"r1": ("c1", [1.0, 1.0, 0.5, 0.5])})
+    a2 = records(tmp_path / "a2.json", {"r2": ("c1", [0.5, 0.5]), "r3": ("c2", [0.0, 1.0])})
+    b = gp.row_scores(records(tmp_path / "b.json", {"r1": ("c1", [0.25]), "r2": ("c1", [0.25]), "r3": ("c2", [0.25])}))
+    a = gp.row_scores(a1 + "," + a2)
+    t = gp.contrast(a, b, "L2")
+    assert t["clusters"] == 2 and t["rows"] == 3
+    assert t["a"] == pytest.approx(((0.75 + 0.5) / 2 + 0.5) / 2)        # a row's mean first, then the cluster's
+    with pytest.raises(ValueError, match="two of the files"):
+        gp.row_scores(a1 + "," + a1)

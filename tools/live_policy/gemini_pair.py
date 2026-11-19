@@ -7,6 +7,9 @@ that both models scored, and tests the per-cluster differences with the frozen e
 (two-sided) and its 95% interval.
 
     .venv_offline/bin/python tools/live_policy/gemini_pair.py A_records.json B_records.json OUT.md
+
+Either side may be several records files joined by commas (one model scored in two runs on different
+rows, for example round 1 and then rounds 3 and 2); a row may appear in only one of them.
 """
 import json
 import sys
@@ -19,15 +22,19 @@ from semantic import stats  # noqa: E402
 LEVELS = ("L1", "L2", "L3")
 
 
-def row_scores(path):
-    """{row_id: (cluster, {level: mean over members with a score, or None})}"""
+def row_scores(paths):
+    """{row_id: (cluster, {level: mean over members with a score, or None})}, from one records file or
+    from several joined by commas. A row found in two files is an error."""
     out = {}
-    for rec in json.load(open(path))["records"]:
-        per = {}
-        for lv in LEVELS:
-            vals = [m[lv] for m in rec["model"].values() if isinstance(m, dict) and m.get(lv) is not None]
-            per[lv] = sum(vals) / len(vals) if vals else None
-        out[rec["row_id"]] = (rec["cluster"], per)
+    for path in str(paths).split(","):
+        for rec in json.load(open(path))["records"]:
+            per = {}
+            for lv in LEVELS:
+                vals = [m[lv] for m in rec["model"].values() if isinstance(m, dict) and m.get(lv) is not None]
+                per[lv] = sum(vals) / len(vals) if vals else None
+            if rec["row_id"] in out:
+                raise ValueError("row %s is in two of the files %s" % (rec["row_id"], paths))
+            out[rec["row_id"]] = (rec["cluster"], per)
     return out
 
 
@@ -54,7 +61,7 @@ def contrast(a, b, level):
 def main(argv):
     pa, pb, out = argv
     a, b = row_scores(pa), row_scores(pb)
-    na, nb = Path(pa).stem.replace("records_", ""), Path(pb).stem.replace("records_", "")
+    na, nb = (Path(str(x).split(",")[0]).stem.replace("records_", "") for x in (pa, pb))
     table = {lv: contrast(a, b, lv) for lv in LEVELS}
     pct = lambda x: "n/a" if x is None else "%.1f%%" % (100 * x)
     lines = ["> **Exploratory.** Computed after both results were seen. No verdict rests on it. See `PREREGISTRATION_GEMINI.md`, Note 3.",
