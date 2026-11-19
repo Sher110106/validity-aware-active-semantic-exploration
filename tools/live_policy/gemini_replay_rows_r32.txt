@@ -1,0 +1,27 @@
+# Rows for Note 4 of PREREGISTRATION_GEMINI.md: rounds 3 and 2, in the order of gemini_replay_rows.txt.
+# Round 3
+e1_00853_s42_official_st03
+e2_00871_s42_filter_st03
+e1_00871_s42_official_st03
+e2_00853_s42_filter_st03
+e1_00853_s43_official_st03
+e2_00871_s43_filter_st03
+e1_00871_s43_official_st03
+e2_00853_s43_filter_st03
+e1_00853_s44_official_st03
+e2_00871_s44_filter_st03
+e1_00871_s44_official_st03
+e2_00853_s44_filter_st03
+# Round 2
+e1_00853_s42_official_st13
+e2_00871_s42_filter_st13
+e1_00871_s42_official_st13
+e2_00853_s42_filter_st13
+e1_00853_s43_official_st13
+e2_00871_s43_filter_st13
+e1_00871_s43_official_st13
+e2_00853_s43_filter_st13
+e1_00853_s44_official_st13
+e2_00871_s44_filter_st13
+e1_00871_s44_official_st13
+e2_00853_s44_filter_st13

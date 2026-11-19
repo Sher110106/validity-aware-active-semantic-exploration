@@ -104,3 +104,24 @@ No live Gemini run. No second Gemini model, unless the fallback of §3 applies. 
 - **Exploratory:** the new model minus Gemini 3.8 Flash on the same 12 rows at L2 and at L3. Both ran the author's loop, so this contrast is of the model alone; it is computed after the fact and marked so. L1 and L2 under §10's rule, with the ceiling said beside them.
 
 **E3. Wording.** The sentences of §6 with the model's name; each says it is not the paper's model. The slide says that this extension was registered after the Flash result was seen.
+
+## Note 4: the same model on the rows it has not seen (2026-11-19 20:54 IST, after round 1 of Note 3 was seen, before any call on these rows)
+
+**Why.** On round 1, Gemini 4 Argon minus Haiku at L2 came out at +13.6 points with a 95% interval from -1.4 to +28.5: one-sided p 0.036 by itself, 0.107 after Holm over the four hypotheses of E2a. So the registered reading is "not detectably above", on 12 clusters of one row each. The student asked whether that reading is too cautious, since nearly all of the interval lies above zero. More rows answer that, and rounds 3 and 2 are rows this model has never been given. About $46 of the allotted credit is left.
+
+**What had been seen when this was written.** Everything in Note 3, and the whole round-1 result of Gemini 4 Argon (`results_semantic_1113/gemini_argon_1119/`): above Opus at L2; not detectably above Opus at L3 or Haiku at L2 and L3; Inconclusive at L3 against the region trade (upper end +3.1 against a margin of 3); and, exploratory, not above Gemini 3.8 Flash. Also Gemini 3.8 Flash's scores on rounds 3 and 2, and Claude's. No output of Gemini 4 Argon on any row of rounds 3 or 2.
+
+**Why this one contrast.** It is the only line of E2a that missed with most of its interval above zero. Opus at L2 was already found, and the two L3 lines sat within 1.2 points of zero. The contrast, the level, the rows and the stop rule are all fixed here before any new output, and the test uses new rows only.
+
+**What to expect.** A smaller difference than round 1's. On rounds 3 and 2, Gemini 3.8 Flash minus Haiku at L2 was +8.1 points, and on round 1 Argon scored 2.9 points below Flash. An independent reviewer's simulation from the saved scores put the interval at about ±10 points if both rounds finish, and the chance of finding a true difference at about 0.85 if it is 13.6 points and about 0.5 if it is 8. (It was made for the design as drafted; with 2 members a row the interval may be somewhat wider.) With round 3 alone those chances fall to about 0.6 and 0.3.
+
+**R1. What runs.** Model, loop, inputs, seeds, drops, retries and stops as in Note 3. Rows: rounds 3 and 2, the 24 rows, in the order of `gemini_replay_rows_r32.txt` (sha256 12bb1074e5a131a6…; rounds 3 then 2, rows as in `gemini_replay_rows.txt`), in a new folder with a ledger of its own. Members: 2 a row (members 0 and 1), about $21 by round 1's ledger, so that both rounds fit under the cap. Cap: $46.00, within the $46.38 that Note 3's cap leaves. If the cap still stops the run inside round 2, the whole-rounds rule of §4 applies and round 3 alone is the set.
+
+**R2. Tests, on the new rows only.** Round 1 is left out of every confirmatory line here, because it was seen before this note. The wrapper of Note 2, unchanged, scores the new rows as a set of their own. R2a and R2b are separate questions, each at α = 0.05; the slide says that two were tested.
+- **R2a (confirmatory, one hypothesis):** Gemini 4 Argon minus Haiku at L2, one-sided (Argon above), read from the wrapper's one-sided p for that line before Holm, with that line's interval. R2a ignores the wrapper's "found" column and its sentences for 5a, which apply Holm over four. Wording: p below 0.05, "On the 24 other stages of the same 12 runs Gemini 4 Argon named objects better than Haiku"; otherwise "On the 24 other stages of the same 12 runs Gemini 4 Argon was again not detectably above Haiku at naming objects", with the interval.
+- **R2b (confirmatory, one hypothesis):** the registered rule at L3, as 5b, on the new rows.
+- **Reported with intervals, no verdict:** the other three contrasts with Claude on the new rows.
+
+**R3. All 36 rows together (exploratory).** So that Gemini 4 Argon can be set beside Gemini 3.8 Flash on the same 36 rows, `gemini_pair.py` contrasts them from the wrapper's records files (round 1 with 4 members a row, rounds 3 and 2 with 2), and Argon with each Claude model the same way. Every line of it is exploratory, because it holds the 12 rows seen before this note, and the slide says so. The wrapper is not run on the 36 rows together.
+
+**R4. Wording.** As Note 3: each sentence names the model and says it is not the paper's. The slide says that round 1 came first and that this check was registered after it.
