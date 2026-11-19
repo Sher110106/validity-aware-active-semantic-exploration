@@ -272,6 +272,14 @@ def main():
     new_argon = read_gemini("gemini_argon_1119")
     af = J(RS, "gemini_argon_1119", "argon_minus_flash.json")
     assert af["a"] == "gemini-4-argon" and af["b"] == "gemini-3.8-flash"
+    new_neon = read_gemini("gemini_neon_1119")
+    new_neon["pairs"] = {}
+    for other in ("flash", "argon"):
+        pn = J(RS, "gemini_neon_1119", f"neon_minus_{other}.json")
+        assert pn["a"] == "gemini-4-neon"
+        new_neon["pairs"][other] = {L: {"rows": v["rows"], "diff": v["diff"], "lo": v["interval"][0],
+                                        "hi": v["interval"][1], "p": v["p_two_sided"], "clusters": v["clusters"]}
+                                    for L, v in pn["levels"].items()}
     new_r32 = read_gemini("gemini_argon_r32_1119")
     new_r32["all36"] = {}
     for other in ("haiku", "opus", "flash"):
@@ -309,6 +317,7 @@ def main():
     new["gemini_replay"] = new_gemini
     new["argon_replay"] = new_argon
     new["argon_r32"] = new_r32
+    new["neon_replay"] = new_neon
     new["ceiling"], new["common"], new["room_runs"] = ceiling, common, room_runs
     new["rooms_fit"], new["all_true"], new["pinned"] = rooms_fit, all_true, pinned
     new["_sources"].update({
@@ -319,6 +328,8 @@ def main():
         "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
         "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; "
                   "the authors' repository at f1ea141b (SOURCES.md)",
+        "neon_replay": "results_semantic_1113/gemini_neon_1119/results.json (as gemini_replay; Notes 6 and 7: rounds 1 "
+                       "and 3) and neon_minus_{flash,argon}.json (exploratory)",
         "argon_r32": "results_semantic_1113/gemini_argon_r32_1119/results.json (as gemini_replay; Note 4: the 24 inputs "
                      "of rounds 3 and 2) and gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json "
                      "(exploratory, all 36 inputs)",

@@ -1,14 +1,14 @@
-# Speaker script: end-sem (28 slides and 6 backup, about 15 minutes)
+# Speaker script: end-sem (28 slides and 8 backup, about 15 minutes)
 
-About 2,038 words for the 28 slides, no slide above 2.3 words a second; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide.
+About 2,024 words for the 28 slides, no slide above 2.3 words a second; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide.
 
 ---
 
-## Slide 1: Right in meaning, wrong in place? (about 31 s)
+## Slide 1: Right in meaning, wrong in place? (about 28 s)
 
 ASP asks a language model to guess the rooms and objects a robot has not seen. As the author put it to us, the guesses are often wrong in place but name the right things, and that is enough. We test that in three parts.
 
-Registered scores and tests are final, the Gemini replays so far included. Two control runs and the last Gemini run are registered, running, and not shown.
+Registered scores and tests are final, the Gemini runs included. Two control runs are registered, running, and not shown.
 
 ---
 
@@ -110,11 +110,11 @@ The clocks differ. In the authors' code, frontier's clock starts when planning e
 
 ---
 
-## Slide 13: The author's claim, in three questions (about 34 s)
+## Slide 13: The author's claim, in three questions (about 35 s)
 
 As the author put it to us, the guesses are often wrong in place but right in meaning, and that is enough. It is not in the paper; it comes from the author's demo and what they told the student.
 
-Is the meaning right? Is it enough for ASP? We give ASP true labels, moved by real error. Is it the model? We replay Claude on 44 saved inputs, and two Gemini models on 36 of them.
+Is the meaning right? Is it enough for ASP? We give ASP true labels, moved by real error. Is it the model? We replay Claude on 44 saved inputs, and three Gemini models on up to 36 of them.
 
 ---
 
@@ -162,7 +162,7 @@ So the line rests on L3: Opus's interval ends at 2.95 against a margin of 3; Hai
 
 ---
 
-## Slide 19: Is it the model? In the author's loop Gemini 3.8 Flash scored above Claude (about 43 s)
+## Slide 19: Is it the model? In the author's loop Gemini 3.8 Flash scored above Claude (about 44 s)
 
 Gemini 3.8 Flash, in the author's own loop, on the 36 inputs Claude saw: 137 of 144 members parsed. The paper's Gemini 2.5 Pro is no longer offered to new users.
 
@@ -170,7 +170,7 @@ Gemini minus Opus at L2: plus 21.0 points, from plus 13.5 to plus 28.8; at L3 pl
 
 ---
 
-## Slide 20: At L3 Gemini 3.8 Flash is above Claude, but not above a trade of regions (about 45 s)
+## Slide 20: At L3 Gemini 3.8 Flash is above Claude, but not above a trade of regions (about 46 s)
 
 The registered rule at L3 reads Rejected. Gemini scores 7.5%, below all three controls: 8.5%, 8.7% for the trade, 11.0%; its interval against the trade ends at plus 1.4, under the margin of 3. Both hold: Gemini beats Claude's 4.8% and 4.4% in raw rate, but not the trade's 8.7% for its own guesses. Its lead does not show its labels fit their regions.
 
@@ -178,19 +178,19 @@ Exploratory: at L2 Gemini scores 78.3%, about 12 points below the prior, which m
 
 ---
 
-## Slide 21: Gemini 4 Argon, round 1: above Opus at L2, not detectably above Claude elsewhere (about 40 s)
+## Slide 21: Gemini 4 Neon, the last run: Inconclusive at L3 (about 57 s)
 
-Gemini 4 Argon, the second of Google's Gemini 4 line, in the author's loop, on the 12 round-1 inputs: four members each, 48 of 48 parsed. Registered after the Flash result was seen. Not the paper's model.
+Gemini 4 Neon, released on 18 November, the student's choice for the last run, in the author's loop, on rounds 1 and 3: 24 inputs, two members each, 48 of 48 parsed. Registered after the Flash and Argon results were seen; one input was added so that round 3 was whole. Not the paper's model.
 
-Argon minus Opus at L2: plus 17.5 points, from plus 5.0 to plus 30.3: above. The other three are not detectably above. The rule at L3 reads Inconclusive: minus the trade 0.0, from minus 2.8 to plus 3.1, margin 3. Argon scores 6.2%, beside 5.7, 6.2 and 6.6. Twelve clusters of one row: wide intervals.
+The one registered line, the rule at L3, is Inconclusive: Neon minus the trade plus 2.9 points, from minus 0.4 to plus 6.3, margin 3. It is not Supported: the prior's labels at Neon's own places score higher, minus 1.5, from minus 4.1 to plus 1.3. Neon scores 8.7%, beside 7.6, 5.7 and 10.2. Against Claude: reported, no verdict. Exploratory: at L2 Neon is below Flash, minus 10.1, and Argon, minus 7.3.
 
 ---
 
-## Slide 22: On 24 new inputs Argon is again not detectably above Haiku at L2 (about 50 s)
+## Slide 22: Three Gemini models: at L3 none was found to beat a trade of regions (about 35 s)
 
-Round 1 left Argon against Haiku at L2 at plus 13.6, interval from just below zero. Registered after that, a check on the 24 other stages of the same 12 runs: two members each, 48 of 48 parsed. Two questions were tested. Argon minus Haiku at L2: plus 5.4, from minus 2.8 to plus 13.5, one-sided p 0.0906: again not detectably above. The L3 rule reads Rejected, plus 0.4 from the trade, minus 2.1 to plus 2.8; round 1's was Inconclusive.
+Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result was seen. All three are reported; they are not three independent confirmations, and none is the paper's model.
 
-Exploratory, all 36 inputs, holding the 12 seen first: minus Haiku at L2 plus 8.1, minus Opus plus 18.3, minus Flash minus 2.7 and minus 2.1, holding zero. Not the paper's model.
+At L2 Flash was above both Claude models; Argon above Opus only; for Neon no verdict was registered. At L3 no Gemini model was found to beat a trade of regions by the margin: Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive.
 
 ---
 
@@ -216,7 +216,7 @@ All true objects gives 0.048. Exploratory readout: with identical members, the s
 
 Every result holds for homes 853 and 871 only. Part 1's model is small.
 
-Truth is a proxy. The replays are static. The paper used Gemini 2.5 Pro, no longer offered to new users; we ran Claude in our port of the author's loop and Gemini 3.8 Flash in the author's own. Neither is the paper's model. Argon was added after the Flash result was seen, then checked on new inputs.
+Truth is a proxy. The replays are static. The paper used Gemini 2.5 Pro, no longer offered to new users; we ran Claude in our port of the author's loop and Gemini 3.8 Flash in the author's own. Neither is the paper's model. Argon and Neon were each added after the last result was seen.
 
 ---
 
@@ -226,19 +226,19 @@ We wrote the scorer after we saw DeepSeek's numbers, and froze it before Claude.
 
 ---
 
-## Slide 27: For Claude, in our port, on saved inputs: no detectable gain over base rates (about 55 s)
+## Slide 27: For Claude, in our port, on saved inputs: no detectable gain over base rates (about 51 s)
 
 For Claude, in two houses: no detectable information beyond house base rates, and content in fitting regions not detectably more often than a trade of regions; gains under 3 points not ruled out.
 
 The registered line comes second: the claim fails, as the author put it to us. It says less than it seems to: at L1 no model could have been Supported, and at L2 only a perfect Opus, so it rests on L3.
 
-Flash was above both Claude models at L2 and L3. Argon was above Opus at L2 on round 1, and not detectably above Haiku at L2, twice. At L3 neither was found to beat a trade of regions: Flash Rejected; Argon Inconclusive, then Rejected. Neither is the paper's model.
+Three Gemini models, none the paper's: at L3 none was found to beat a trade of regions by the margin; at L2 Flash was above both Claude models, Argon above Opus only; for Neon no verdict was registered.
 
 ---
 
-## Slide 28: What the answer does not say (about 40 s)
+## Slide 28: What the answer does not say (about 42 s)
 
-It does not say the guesses carry nothing: no gain was found, and at L3 a gain under 3 points is not ruled out. It does not say the models are no better than random guesses: Haiku is 8.2 points above them at L2. It does not carry over to Gemini 3.8 Flash, nor at L2 on round 1 to Gemini 4 Argon. At L3 neither was found to beat a trade. Neither is the paper's model. And it does not show that a language model cannot help exploration. Thank you.
+It does not say the guesses carry nothing: no gain was found, and at L3 a gain under 3 points is not ruled out. It does not say the models are no better than random guesses: Haiku is 8.2 points above them at L2. It does not carry over to Gemini 3.8 Flash, nor at L2 to Argon, above Opus only. At L3 no Gemini model was found to beat a trade by the margin. None is the paper's model. And it does not show that a language model cannot help exploration. Thank you.
 
 ---
 
@@ -285,3 +285,20 @@ The score counts disagreement between members. We registered that before the run
 ## Backup 6: The four outcomes, and the rule that picked one (not timed)
 
 The four pre-written outcomes: holds, mixed, fails, inconclusive. The rows apply in this order. Holds needs a Claude model Supported at L3: neither is. Mixed needs one Supported at L1 or L2 that passes the wrong-house check: none is. Fails needs every Claude model Rejected at L2 and L3: both are. So the line is: the claim fails.
+
+---
+
+## Backup 7: Gemini 4 Argon, round 1: above Opus at L2, not detectably above Claude elsewhere (not timed)
+
+Gemini 4 Argon, the second of Google's Gemini 4 line, in the author's loop, on the 12 round-1 inputs: four members each, 48 of 48 parsed. Registered after the Flash result was seen. Not the paper's model.
+
+Argon minus Opus at L2: plus 17.5 points, from plus 5.0 to plus 30.3: above. The other three are not detectably above. The rule at L3 reads Inconclusive: minus the trade 0.0, from minus 2.8 to plus 3.1, margin 3. Argon scores 6.2%, beside 5.7, 6.2 and 6.6. Twelve clusters of one row: wide intervals.
+
+
+---
+
+## Backup 8: On 24 new inputs Argon is again not detectably above Haiku at L2 (not timed)
+
+Round 1 left Argon against Haiku at L2 at plus 13.6, interval from just below zero. Registered after that, a check on the 24 other stages of the same 12 runs: two members each, 48 of 48 parsed. Two questions were tested. Argon minus Haiku at L2: plus 5.4, from minus 2.8 to plus 13.5, one-sided p 0.0906: again not detectably above. The L3 rule reads Rejected, plus 0.4 from the trade, minus 2.1 to plus 2.8; round 1's was Inconclusive.
+
+Exploratory, all 36 inputs, holding the 12 seen first: minus Haiku at L2 plus 8.1, minus Opus plus 18.3, minus Flash minus 2.7 and minus 2.1, holding zero. Not the paper's model.

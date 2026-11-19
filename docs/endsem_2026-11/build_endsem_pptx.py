@@ -52,7 +52,7 @@ EQUAL_PATH = os.path.join(R1113, "equal_path", "equal_path.json")
 BUDGET_SENS = os.path.join(R1113, "budget_sensitivity", "budget_sensitivity.json")
 SEM_RESULTS_MD = os.path.join(LP, "results_semantic_1113", "RESULTS.md")
 TOTAL = 28              # main slides; the time in the script headings adds to 900 s over these
-BACKUPS = 6
+BACKUPS = 8
 ACCENT = "c2410c"
 MINUS = "−"
 DASH = "–"
@@ -290,8 +290,8 @@ def cover(prs, f853):
         text(s, x, 618, 496, 34, [run(f"{i + 1:02d}", NT, FAINT, MONO)])
         P(s, x, 656, 496, [(name, "b")], B, line=1.3)
         P(s, x, 706, 496, body, B, BODY, 1.35, limit=860)
-    N(s, 160, 872, 1600, "Final: Part 1, and the registered scores and tests, the Gemini replays so far included. Registered, "
-                         "running and not shown: two control arms on 853, and the last Gemini run.", limit=930)
+    N(s, 160, 872, 1600, "Final: Part 1, and the registered scores and tests, the Gemini runs included. Registered, "
+                         "running and not shown: two control arms on 853.", limit=930)
     hline(s, 160, 930, 1760, 930, RULE)
     text(s, 160, 950, 900, 34, [run("Sher Partap Singh · Preesha Katial · Ananya Singla", NT, MID)])
     text(s, 860, 950, 900, 34, [run("Base paper: Tang & Chaudhari, Active Semantic Perception, arXiv:2510.05430",
@@ -971,6 +971,12 @@ def check_text(C, f9, f853, budgets, slots, Nn):
 
     def body(n):
         return section(n).split("\n", 1)[1]
+
+    def backup(n):
+        m_ = re.search(rf"^## Backup {n}:.*?(?=\n---|\Z)", md, flags=re.M | re.S)
+        if not m_:
+            fail(f"ENDSEM_Script.md has no 'Backup {n}' section")
+        return m_.group(0).split("\n", 1)[1]
     k, mm, w = f9["neg"], f9["m"], WORDS
     L, PL = f853["leads"], f853["paper_leads"]
     alt = f853["alt"]
@@ -1075,7 +1081,7 @@ def check_text(C, f9, f853, budgets, slots, Nn):
     af, a3 = ag["family"], ag["rule"]["L3"]
     ao2, ao3, ah2, ah3 = (af["claude-opus-5-5|L2"], af["claude-opus-5-5|L3"], af["claude-haiku-5-5|L2"],
                           af["claude-haiku-5-5|L3"])
-    need(body(21), [f"on the {ag['rows']} round-1 inputs: four members each, {ag['ok']} of {ag['members']} parsed",
+    need(backup(7), [f"on the {ag['rows']} round-1 inputs: four members each, {ag['ok']} of {ag['members']} parsed",
                     "Registered after the Flash result was seen",
                     f"Argon minus Opus at L2: {pm(100 * ao2['diff'], 1)} points, from {pm(100 * ao2['lo'], 1)} to "
                     f"{pm(100 * ao2['hi'], 1)}: above",
@@ -1085,10 +1091,10 @@ def check_text(C, f9, f853, budgets, slots, Nn):
                     f"margin {pct(a3['delta'], 0)}",
                     f"Argon scores {pct(a3['own'])}%, beside {pct(a3['comparators']['B5']['own'])}, "
                     f"{pct(a3['comparators']['D']['own'])} and {pct(a3['comparators']['B3L']['own'])}",
-                    "Twelve clusters of one row"], "script slide 21")
+                    "Twelve clusters of one row"], "script backup 7")
     ar, ar3 = sl["argon_r32"], sl["argon_r32"]["rule"]["L3"]
     rh, v36 = ar["family"]["claude-haiku-5-5|L2"], ar["all36"]
-    need(body(22), [f"Round 1 left Argon against Haiku at L2 at {pm(100 * ah2['diff'], 1)}",
+    need(backup(8), [f"Round 1 left Argon against Haiku at L2 at {pm(100 * ah2['diff'], 1)}",
                     f"the {ar['rows']} other stages of the same 12 runs: two members each, {ar['ok']} of {ar['members']} parsed",
                     "Two questions were tested",
                     f"Argon minus Haiku at L2: {pm(100 * rh['diff'], 1)}, from {pm(100 * rh['lo'], 1)} to "
@@ -1099,7 +1105,24 @@ def check_text(C, f9, f853, budgets, slots, Nn):
                     f"minus Haiku at L2 {pm(100 * v36['haiku']['L2']['diff'], 1)}, minus Opus "
                     f"{pm(100 * v36['opus']['L2']['diff'], 1)}, minus Flash {pm(100 * v36['flash']['L2']['diff'], 1)} "
                     f"and {pm(100 * v36['flash']['L3']['diff'], 1)}, holding zero",
-                    "holding the 12 seen first"], "script slide 22")
+                    "holding the 12 seen first"], "script backup 8")
+    gn = sl["neon_replay"]
+    n3, nd = gn["rule"]["L3"], gn["rule"]["L3"]["comparators"]
+    nl2 = gn["pairs"]
+    need(body(21), [f"{gn['rows']} inputs, two members each, {gn['ok']} of {gn['members']} parsed",
+                    "Registered after the Flash and Argon results were seen", "one input was added so that round 3 was whole",
+                    f"the rule at L3, is {n3['verdict']}: Neon minus the trade {pm(100 * nd['D']['diff'], 1)} points, from "
+                    f"{pm(100 * nd['D']['lo'], 1)} to {pm(100 * nd['D']['hi'], 1)}, margin {pct(n3['delta'], 0)}",
+                    f"the prior's labels at Neon's own places score higher, {pm(100 * nd['B3L']['diff'], 1)}, from "
+                    f"{pm(100 * nd['B3L']['lo'], 1)} to {pm(100 * nd['B3L']['hi'], 1)}",
+                    f"Neon scores {pct(n3['own'])}%, beside {pct(nd['B5']['own'])}, {pct(nd['D']['own'])} and "
+                    f"{pct(nd['B3L']['own'])}", "reported, no verdict",
+                    f"at L2 Neon is below Flash, {pm(100 * nl2['flash']['L2']['diff'], 1)}, and Argon, "
+                    f"{pm(100 * nl2['argon']['L2']['diff'], 1)}"], "script slide 21")
+    need(body(22), [N3_SENTENCE,
+                    "At L2 Flash was above both Claude models; Argon above Opus only; for Neon no verdict was registered",
+                    "At L3 no Gemini model was found to beat a trade of regions by the margin: Flash Rejected; Argon "
+                    "Inconclusive, then Rejected; Neon Inconclusive"], "script slide 22")
     rr, rf, pp = sl["room_runs"], sl["rooms_fit"], sl["room_test"]["paper"]
     e8, ea = rr["eight_member_stages"], rr["all_stages"]
     need(body(23), [f"it predicts {e8['pooled']['official']['predicted']} of {e8['pooled']['official']['of']} "
@@ -1241,8 +1264,7 @@ def check_text(C, f9, f853, budgets, slots, Nn):
         f"interval {pct(a3['comparators']['D']['lo'])} to +{pct(a3['comparators']['D']['hi'])}, against a margin of "
         f"{pct(a3['delta'], 0)}", f"its own L3 score is {pct(a3['own'])}%",
         f"Argon minus Flash on the same 12 rows is {pct(ag['vs_flash']['L2']['diff'])} points at L2",
-        "Flash Rejected; Argon Inconclusive on round 1 and Rejected on the new inputs)",
-        "is registered and running; no result of it exists"]], "README finding 4 (Argon)")
+        ]], "README finding 4 (Argon)")
     ar, ar3 = slots["argon_r32"], slots["argon_r32"]["rule"]["L3"]
     rh, v36 = ar["family"]["claude-haiku-5-5|L2"], ar["all36"]
     need(m4.group(0), [t.replace("−", "-") for t in [
@@ -1254,7 +1276,25 @@ def check_text(C, f9, f853, budgets, slots, Nn):
         f"{pct(ar3['comparators']['D']['own'])}% for the trade, {pct(ar3['comparators']['B3L']['own'])}%)",
         f"Argon minus Haiku at L2 +{pct(v36['haiku']['L2']['diff'])} ({pct(v36['haiku']['L2']['lo'])} to "
         f"+{pct(v36['haiku']['L2']['hi'])}), minus Opus at L2 +{pct(v36['opus']['L2']['diff'])}",
-        "Note 6) is registered and running"]], "README finding 4 (Argon, new inputs)")
+        ]], "README finding 4 (Argon, new inputs)")
+    gnn = slots["neon_replay"]
+    n3, nd, npairs = gnn["rule"]["L3"], gnn["rule"]["L3"]["comparators"], gnn["pairs"]
+    nf = gnn["family"]
+    need(m4.group(0), [t.replace("−", "-") for t in [
+        f"{gnn['ok']} of {gnn['members']} parsed; 12 clusters of two rows",
+        f"reads {n3['verdict']}: Neon minus the region trade +{pct(nd['D']['diff'])} points, interval "
+        f"{pct(nd['D']['lo'])} to +{pct(nd['D']['hi'])}, against a margin of {pct(n3['delta'], 0)}",
+        f"({pct(nd['B3L']['own'])}% against Neon's {pct(n3['own'])}%; Neon minus that control "
+        f"{pct(nd['B3L']['diff'])}, {pct(nd['B3L']['lo'])} to +{pct(nd['B3L']['hi'])})",
+        f"Neon's own score is {pct(n3['own'])}% beside {pct(nd['B5']['own'])}%, {pct(nd['D']['own'])}% (the trade) and "
+        f"{pct(nd['B3L']['own'])}%",
+        f"Neon minus Opus +{pct(nf['claude-opus-5-5|L2']['diff'])} at L2 ({pct(nf['claude-opus-5-5|L2']['lo'])} to "
+        f"+{pct(nf['claude-opus-5-5|L2']['hi'])})",
+        f"Neon minus Flash {pct(npairs['flash']['L2']['diff'])} at L2 ({pct(npairs['flash']['L2']['lo'])} to "
+        f"{pct(npairs['flash']['L2']['hi'])})", N3_SENTENCE,
+        "No Gemini run is left",
+        "At L2 Flash was above both Claude models and Argon above Opus only; for Neon no verdict was registered at L2"]],
+         "README finding 4 (Neon)")
     at = slots["all_true"]
     need(m5.group(0), [f"never passes {num(at['bits_cap'], 1)} bits", f"correlate at {num(at['spearman_mean'], 2)}",
                        "M2 varied place, not meaning"], "README finding 5")
@@ -1477,7 +1517,7 @@ def defense(prs):
                                 f"{pn['bathroom']} a failure that {pn['revisit']}.", B, MID, 1.35, limit=620)
     steps = [("Is the meaning right?", "Beat the controls: baselines that see the same map."),
              ("Is it enough for ASP?", "Give ASP true labels, moved by real error."),
-             ("Is it the model?", "Replay Claude on 44 saved inputs, and two Gemini models on 36 of them.")]
+             ("Is it the model?", "Replay Claude on 44 saved inputs, and three Gemini models on up to 36 of them.")]
     for i, (name, what) in enumerate(steps):
         x = 120 + i * 580
         hline(s, x, 640, x + 520, 640, INK, 2)
@@ -1962,8 +2002,9 @@ def argon_facts(slots):
 def argon_slide(prs, slots):
     g = argon_facts(slots)
     fam, r3 = g["family"], g["rule"]["L3"]
-    s = frame(prs, 21, "Part 3 · Is it the model? · extension of Note 3 · round 1",
-              "Gemini 4 Argon, round 1: above Opus at L2, not detectably above Claude elsewhere", pending="registered")
+    s = frame(prs, 29, "Backup · Gemini 4 Argon · extension of Note 3 · round 1",
+              "Gemini 4 Argon, round 1: above Opus at L2, not detectably above Claude elsewhere", pending="registered",
+              backup=True)
     y = P(s, 120, 252, 1680, [("What ran. ", "b"),
                               (f"Gemini 4 Argon, the second of Google's Gemini 4 line (its top model is Gemini 4 Carbon), "
                                f"in the author's loop, on the {g['rows']} round-1 inputs: {g['members_per_row']} members each, "
@@ -2041,8 +2082,8 @@ def argon_check_slide(prs, slots):
     g = argon_check_facts(slots)
     fam, r3, v = g["family"], g["rule"]["L3"], g["all36"]
     h = fam["claude-haiku-5-5|L2"]
-    s = frame(prs, 22, "Part 3 · Is it the model? · extension of Note 3 · new inputs",
-              "On 24 new inputs Argon is again not detectably above Haiku at L2", pending="registered")
+    s = frame(prs, 30, "Backup · Gemini 4 Argon · extension of Note 3 · new inputs",
+              "On 24 new inputs Argon is again not detectably above Haiku at L2", pending="registered", backup=True)
     y = P(s, 120, 252, 1680, [("Why. ", "b"),
                               (f"Round 1 left Argon against Haiku at L2 at {gpts(slots['argon_replay']['family']['claude-haiku-5-5|L2']['diff'])}, "
                                "with an interval from just below zero. Registered after round 1 was seen, this check "
@@ -2091,8 +2132,154 @@ def argon_check_slide(prs, slots):
                                   f"at L2 and {gpts(v['flash']['L3']['diff'])} "
                                   f"{gint(v['flash']['L3']['lo'], v['flash']['L3']['hi'])} at L3.", "n")],
           NQ, BODY, 1.25, limit=1010)
-    Nq(s, 120, y + 4, 1680, "One more Gemini run (Gemini 4 Neon, the last) is registered and running; no result.",
+    Nq(s, 120, y + 4, 1680, "Gemini 4 Neon, the last run, is on slide 21; the three models are side by side on slide 22.",
        limit=1040)
+
+
+# ---------------------------------------------------------------- 21 and 22. Part 3, Gemini 4 Neon and the three models
+
+PREREG_GEMINI = os.path.join(LP, "PREREGISTRATION_GEMINI.md")
+N3_SENTENCE = ("Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result "
+               "was seen. All three are reported; they are not three independent confirmations, and none is the paper's "
+               "model.")
+
+
+def neon_facts(slots):
+    """Guards for slides 21 and 22, the script, README and docs/RESULTS.md (Notes 6 and 7). One confirmatory
+    hypothesis: the rule at L3, Inconclusive here. The 5a table is reported with no verdict. The sentence of Note 6 N3
+    is checked against the registration itself."""
+    g = slots["neon_replay"]
+    if g.get("status") != "filled" or g["model"] != "gemini-4-neon" or not g["confirmatory"]:
+        fail("slots.json neon_replay is not the filled, confirmatory result of gemini-4-neon")
+    if (g["rows"], g["members"], g["ok"], g["clusters"], g["members_per_row"]) != (24, 48, 48, 12, 2) \
+            or sorted(g["finished_rounds"]) != [1, 3]:
+        fail("slide 21 says rounds 1 and 3, 24 inputs, 2 members each, 48 of 48 parsed, 12 clusters, but the file says "
+             f"{g['rows']}, {g['members']}, {g['ok']}, {g['clusters']}, {g['finished_rounds']}")
+    r3 = g["rule"]["L3"]
+    d = r3["comparators"]
+    if not (r3["confirmatory"] and r3["verdict"] == "Inconclusive" and r3["named"] == "D" and d["D"]["lo"] < 0 < d["D"]["hi"]
+            and r3["upper_named"] >= r3["delta"]):
+        fail("slide 21 says the rule at L3 reads Inconclusive (interval against the trade holds zero and reaches the "
+             "margin), but it does not")
+    if not (d["B3L"]["own"] > r3["own"] and d["B3L"]["diff"] < 0):
+        fail("slide 21 says Neon is not Supported because the prior's labels at its places score higher, but they do not")
+    if not g["wording"][5].startswith("5b at L3: Inconclusive"):
+        fail("slide 21 gives the file's Inconclusive line, but the file's 5b line differs")
+    pr = g["pairs"]
+    if not all(pr[k]["L2"]["hi"] < 0 for k in ("flash", "argon")):
+        fail("slide 21 says Neon is below both Flash and Argon at L2 (exploratory), but an interval reaches 0")
+    r2 = g["rule"]["L2"]["comparators"]
+    if not (r2["B3"]["hi"] < 0 and r2["B1"]["lo"] < 0 < r2["B1"]["hi"]):
+        fail("slide 21 says Neon is below the prior at L2 and that its lead over random guesses holds zero, but not so")
+    text = " ".join(open(PREREG_GEMINI, encoding="utf-8").read().split())
+    if N3_SENTENCE not in text:
+        fail("the sentence of Note 6 N3 on slide 22 is not in PREREGISTRATION_GEMINI.md word for word")
+    return g
+
+
+def neon_slide(prs, slots):
+    g = neon_facts(slots)
+    r3, d, pr = g["rule"]["L3"], g["rule"]["L3"]["comparators"], g["pairs"]
+    s = frame(prs, 21, "Part 3 · Is it the model? · the last run", "Gemini 4 Neon, the last run: Inconclusive at L3",
+              pending="registered")
+    y = P(s, 120, 250, 1680, [("What ran. ", "b"),
+                              (f"Gemini 4 Neon (released 18 November; the student's choice for the last run), in the "
+                               f"author's loop, on rounds 1 and 3 ({g['rows']} inputs): {g['members_per_row']} members "
+                               f"each, {g['ok']} of {g['members']} parsed. Registered after the Flash and Argon results "
+                               "were seen (Note 6); one input was added before any output was scored, so that round 3 "
+                               "was whole (Note 7). Not the paper's model.", "n")], B, BODY, 1.25)
+    y = box(s, 120, y + 8, 1680, f"The one registered line, the rule at L3: {r3['verdict']}.",
+            f"Neon minus the region trade {gpts(d['D']['diff'])} points {gint(d['D']['lo'], d['D']['hi'])}; margin "
+            f"{num(100 * r3['delta'], 0)}. Not Supported: the prior's labels at Neon's own places score higher "
+            f"({num(100 * d['B3L']['own'], 1)}% against Neon's {num(100 * r3['own'], 1)}%; Neon minus that control "
+            f"{gpts(d['B3L']['diff'])} {gint(d['B3L']['lo'], d['B3L']['hi'])}). Own score {num(100 * r3['own'], 1)}% "
+            f"beside {num(100 * d['B5']['own'], 1)}%, {num(100 * d['D']['own'], 1)}% (the trade), "
+            f"{num(100 * d['B3L']['own'], 1)}%.", NQ)
+    fam = g["family"]
+    cws = (440, 150, 150, 170, 290, 480)
+    heads = ("Neon minus Claude", "Neon", "Claude", "Difference", "95% interval", "Reading")
+    y += 8
+    x = 120
+    for hd, w in zip(heads, cws):
+        text(s, x, y, w, 30, [run(hd, NT, MID, SANS, True)])
+        x += w
+    y += 30
+    hline(s, 120, y, 120 + sum(cws), y, LINE)
+    for m, name in G_MODELS:
+        for L in ("L2", "L3"):
+            t = fam[f"{m}|{L}"]
+            vals = (f"{name} · {L}", f"{num(100 * t['gemini'], 1)}%", f"{num(100 * t['other'], 1)}%", gpts(t["diff"]),
+                    gint(t["lo"], t["hi"]), "reported, no verdict")
+            x = 120
+            for j, (val, w) in enumerate(zip(vals, cws)):
+                text(s, x, y + 2, w - 8, 34, [run(val, 24, MID, SANS if j in (0, 5) else MONO)], line=1.2)
+                x += w
+            y += 36
+            hline(s, 120, y, 120 + sum(cws), y, RULE)
+    r2 = g["rule"]["L2"]["comparators"]
+    y = P(s, 120, y + 8, 1680, [("Exploratory. ", "a"),
+                                (f"Neon minus Flash {gpts(pr['flash']['L2']['diff'])} {gint(pr['flash']['L2']['lo'], pr['flash']['L2']['hi'])} "
+                                 f"at L2 and {gpts(pr['flash']['L3']['diff'])} {gint(pr['flash']['L3']['lo'], pr['flash']['L3']['hi'])} "
+                                 f"at L3; minus Argon {gpts(pr['argon']['L2']['diff'])} "
+                                 f"{gint(pr['argon']['L2']['lo'], pr['argon']['L2']['hi'])} at L2 and "
+                                 f"{gpts(pr['argon']['L3']['diff'])} {gint(pr['argon']['L3']['lo'], pr['argon']['L3']['hi'])} "
+                                 f"at L3, on the rows each pair ran. At L2 Neon scores {num(100 * g['rule']['L2']['own'], 1)}%: "
+                                 f"below the prior ({num(100 * r2['B3']['own'], 1)}%; {gpts(r2['B3']['diff'])} "
+                                 f"{gint(r2['B3']['lo'], r2['B3']['hi'])}); random guesses {num(100 * r2['B1']['own'], 1)}% "
+                                 f"({gpts(r2['B1']['diff'])} {gint(r2['B1']['lo'], r2['B1']['hi'])}).", "n")],
+          NQ, BODY, 1.25, limit=1010)
+
+
+def three_models_slide(prs, slots):
+    gf, ga, gr, gn = (slots["gemini_replay"], slots["argon_replay"], slots["argon_r32"], slots["neon_replay"])
+    gemini_facts(slots)
+    argon_facts(slots)
+    argon_check_facts(slots)
+    neon_facts(slots)
+    s = frame(prs, 22, "Part 3 · Is it the model? · the three Gemini models",
+              "Three Gemini models: at L3 none was found to beat a trade of regions")
+
+    def cell(h, word):
+        return f"{gpts(h['diff'])} {gint(h['lo'], h['hi'])}", word
+
+    def l3(g):
+        r = g["rule"]["L3"]
+        return r["verdict"], f"upper end {gpts(r['upper_named'])}; margin {num(100 * r['delta'], 0)}"
+    ff, af, rf, nf = gf["family"], ga["family"], gr["family"], gn["family"]
+    OP, HK = "claude-opus-5-5|L2", "claude-haiku-5-5|L2"
+    rows = [("Gemini 3.8 Flash", f"{gf['rows']} inputs · {gf['members_per_row']} members · {gf['ok']} of {gf['members']} parsed",
+             cell(ff[OP], "above"), cell(ff[HK], "above"), l3(gf)),
+            ("Gemini 4 Argon, round 1", f"{ga['rows']} inputs · {ga['members_per_row']} members · {ga['ok']} of {ga['members']} parsed",
+             cell(af[OP], "above"), cell(af[HK], "not detectably above"), l3(ga)),
+            ("Gemini 4 Argon, new inputs", f"{gr['rows']} inputs · {gr['members_per_row']} members · {gr['ok']} of {gr['members']} parsed",
+             cell(rf[OP], "no verdict registered"), cell(rf[HK], "not detectably above"), l3(gr)),
+            ("Gemini 4 Neon", f"{gn['rows']} inputs · {gn['members_per_row']} members · {gn['ok']} of {gn['members']} parsed",
+             cell(nf[OP], "no verdict registered"), cell(nf[HK], "no verdict registered"), l3(gn))]
+    cws = (500, 360, 360, 460)
+    heads = ("Model and inputs", "L2: minus Opus", "L2: minus Haiku", "L3: rule against the trade")
+    x, y = 120, 246
+    for hd, w in zip(heads, cws):
+        text(s, x, y, w, 30, [run(hd, NT, MID, SANS, True)])
+        x += w
+    y += 34
+    hline(s, 120, y, 120 + sum(cws), y, LINE)
+    for name, inputs, c1, c2, c3 in rows:
+        text(s, 120, y + 4, cws[0] - 10, 34, [run(name, 28, INK, SANS, True)], line=1.2)
+        text(s, 120, y + 38, cws[0] - 10, 30, [run(inputs, 22, MID)], line=1.2)
+        x = 120 + cws[0]
+        for (a, b), w in ((c1, cws[1]), (c2, cws[2])):
+            text(s, x, y + 4, w - 10, 34, [run(a, 26, INK, MONO)], line=1.2)
+            text(s, x, y + 38, w - 10, 30, [run(b, 24, MID)], line=1.2)
+            x += w
+        text(s, x, y + 4, cws[3] - 10, 34, [run(c3[0], 28, INK, SANS, True)], line=1.2)
+        text(s, x, y + 38, cws[3] - 10, 30, [run(c3[1], 24, MID)], line=1.2)
+        y += 74
+        hline(s, 120, y, 120 + sum(cws), y, RULE)
+    y = box(s, 120, y + 14, 1680, "", N3_SENTENCE, B)
+    Nq(s, 120, y + 8, 1680,
+       "“Above” and “not detectably above” are the registration's words for a found and a not found contrast. On the "
+       "new inputs only Haiku at L2 carried a verdict (Note 4), and for Neon only the rule at L3 did (Note 6). Saved "
+       "inputs from two homes; no robot acted on these guesses.", limit=1010)
 
 
 # ---------------------------------------------------------------- 20. Part 3, the paper's room test
@@ -2222,8 +2409,9 @@ def limits(prs, slots):
                                           "result about ASP with a cheap model."),
              ("Proxy truth.", "Human labels stand in for what the camera saw."),
              ("Static replays.", "Claude and Gemini saw saved inputs; no robot acted on their guesses."),
-             ("Two Gemini models.", "Flash was the registered fallback; Argon was added after the Flash result was "
-                                    "seen (Note 3), then checked on 24 more inputs."),
+             ("Three Gemini models.", "Flash was the registered fallback; Argon was added after the Flash result was "
+                                      "seen (Note 3) and Neon after Argon's (Note 6): each chosen after the last "
+                                      "result was seen."),
              ("Not the paper's model.", "The paper used Gemini 2.5 Pro, no longer offered to new users (11-19, "
                                         "Note 1). We ran Claude in our port of the author's loop and Gemini 3.8 Flash "
                                         "in the author's own, so that contrast has two differences.")]
@@ -2267,10 +2455,10 @@ def answer(prs, slots):
                                   "where Opus's interval "
                                   f"ends at {num(100 * b['opus']['L3']['hi'], 2)} against a margin of "
                                   f"{num(100 * b['opus']['L3']['margin'], 0)}.", "n")], B, BODY, 1.4)
-    box(s, 120, y + 24, 1680, "Neither Gemini model is the paper's model:",
-        "in the author's loop Flash was above both Claude models at L2 and L3. Argon was above Opus at L2 on "
-        "round 1, and not detectably above Haiku at L2 on round 1 and again on new inputs. At L3 neither was found "
-        "to beat a trade of regions: Flash Rejected; Argon Inconclusive on round 1, Rejected on new inputs.")
+    box(s, 120, y + 24, 1680, "No Gemini model is the paper's model:",
+        "at L3 none was found to beat a trade of regions by the margin: Flash Rejected; Argon Inconclusive, then "
+        "Rejected; Neon Inconclusive. At L2 Flash was above both Claude models and Argon above Opus only; for Neon no "
+        "verdict was registered at L2.")
 
 
 # ---------------------------------------------------------------- 24. What the answer does not say
@@ -2283,9 +2471,9 @@ def not_shown(prs, slots):
              "is not ruled out, and the prior's near-perfect score left little room for a gain at L1 and L2.",
              f"It does not say the models are no better than random guesses: Haiku is "
              f"{num(100 * hh['diff'], 1)} points above at L2 (one contrast, not adjusted).",
-             "It does not carry over to Gemini 3.8 Flash, which scored above Claude at L2 and L3 (registered), nor, at L2 "
-             "on round 1, to Gemini 4 Argon, which was above Opus. At L3 neither Gemini model was found to beat a trade of "
-             "regions. Neither is the paper's model, and the loops differ.",
+             "It does not carry over to Gemini 3.8 Flash, which scored above Claude at L2 and L3 (registered), nor, at L2, "
+             "to Gemini 4 Argon, which was above Opus. At L3 no Gemini model was found to beat a trade of regions by the "
+             "margin. None is the paper's model, and the loops differ.",
              "It does not say the guesses reach the map, or where they sit. It says nothing about live runs with a "
              "strong model, or the paper's scale.",
              "It does not show that a language model cannot help exploration."]
@@ -2489,8 +2677,8 @@ def main():
     detect(prs, slots)
     gemini_slide(prs, slots)
     gemini_rule_slide(prs, slots)
-    argon_slide(prs, slots)
-    argon_check_slide(prs, slots)
+    neon_slide(prs, slots)
+    three_models_slide(prs, slots)
     room_slide(prs, slots)
     factorial(prs, slots)
     limits(prs, slots)
@@ -2503,6 +2691,8 @@ def main():
     validity(prs, slots)
     f0_slide(prs, slots)
     outcomes(prs, slots)
+    argon_slide(prs, slots)
+    argon_check_slide(prs, slots)
     assert len(prs.slides) == TOTAL + BACKUPS, len(prs.slides)
     notes = speaker_notes()
     assert len(notes) == TOTAL + BACKUPS, len(notes)

@@ -23,14 +23,14 @@ Short names:
 - `PIN` = `slots.json` `pinned`: facts read from files that are not result tables (the proposal's plan, the paper's quotes, the clock lines). Each row below names its file.
 - `REVIEW` = `/Users/sher/project/cvp/REVIEW_FABLE_2026-11-19.md` (the independent review that led to this pass; outside the repo).
 
-The two control arms on 853 (`PREREG` Amendment 5) and the last Gemini run (Gemini 4 Neon, `PREREGISTRATION_GEMINI.md` Note 6) are registered and running; the deck says only that, and no result of them exists. The registered replay of Gemini 3.8 Flash and the extension of Note 3 (Gemini 4 Argon, round 1 and the check of Note 4) are final: `slots.json` `gemini_replay` is read from its `results.json` (slides 19 and 20; `gemini_facts` guards every sentence), and `argon_replay` from `gemini_argon_1119/results.json` (slide 21; `argon_facts`), `argon_r32` from `gemini_argon_r32_1119/results.json` and the three exploratory files of `gemini_argon_all36_exploratory/` (slide 22; `argon_check_facts`).
+The two control arms on 853 (`PREREG` Amendment 5) are registered and running; the deck says only that, and no result of them exists. No Gemini run is left. `slots.json` `gemini_replay` is read from `gemini_1119/results.json` (slides 19 and 20; `gemini_facts` guards every sentence), `neon_replay` from `gemini_neon_1119/results.json` and `neon_minus_{flash,argon}.json` (slide 21; `neon_facts`), and the three models are side by side on slide 22. Gemini 4 Argon (`argon_replay`, `argon_r32`, with the all-36 exploratory files) is on backups 7 and 8 (`argon_facts`, `argon_check_facts`).
 
 ## Slide 1: the cover
 
 | Statement | Source |
 |---|---|
 | "As the author put it to us": the claim that the guesses are often wrong in place but right in meaning, and that this is enough | Said in person to the student; no written record; the paper's nearest text is in section IV-B. The author's demo and the meeting with the student are the only sources. The paper (arXiv 2510.05430v2, section IV-B) calls a "semantically reasonable but physically infeasible bathroom" a failure that "causes the robot to revisit an uninformative region" (`PIN` `paper.bathroom`, `paper.revisit`; text as given for this pass, from the paper). `PLAN` line 325 records the remark's use, not its source; `REVIEW` finding 2 notes that the draft mail to the authors (outside the repo) says the point "names no place". The words are not in quotation marks on a slide |
-| Final: Part 1, and the registered scores and tests; both Gemini replays are final; running and not shown: two control arms on 853 | `DEV` items 66 to 71; `PREREG` Amendment 5; `PREREGISTRATION_GEMINI.md` and Note 1 |
+| Final: Part 1, and the registered scores and tests; the Gemini runs are final; running and not shown: two control arms on 853 | `DEV` items 66 to 76; `PREREG` Amendment 5; `PREREGISTRATION_GEMINI.md` Notes 1 to 7 |
 | Part 2: "ASP reads above frontier by the clock; by the metre, it depends" | Slide 9 (guarded by `facts853` and `facts_equal853`) |
 
 ## Slide 2: what became of the proposal
@@ -346,40 +346,37 @@ The builder stops (`gemini_facts`) unless: the four hypotheses of 5a are found, 
 | Exploratory: the wrong-house check passes at L1 (p 0.031) and L2 (p 0.016), 6 pairs | `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}`; reported, no verdict (§5c) |
 | Gemini also made more guesses per member; 5a does not adjust for that | The independent recompute of the result. No number is given: the file holds only totals on different row sets (`confirmatory.5c.validity.kept_vs_guesses.raw.l2_claims`, 1,270 over 137 members) and per-member counts would have to be computed; the deck does not compute them. `PREREGISTRATION_GEMINI.md` §5a compares hit rates with no matching of claim counts |
 | Saved inputs from two homes; no robot acted; the comparators at L1 and L2 sit at the ceiling | `PREREGISTRATION_GEMINI.md` §6 (last bullet); `confirmatory.wording[6]` |
-| The extension to one more Gemini model (Note 3) is on slide 21 | `PREREGISTRATION_GEMINI.md` Note 3; `DEV` item 73 |
+| The extension to one more Gemini model (Note 3, Gemini 4 Argon) is on backups 7 and 8; the last run (Neon) is on slide 21 | `PREREGISTRATION_GEMINI.md` Notes 3, 4 and 6; `DEV` items 73, 75, 76 |
 
-## Slide 21: Gemini 4 Argon (the extension of Note 3)
+## Slide 21: Gemini 4 Neon, the last run (Notes 6 and 7)
 
-Registered 2026-11-19 18:51 IST, after the Flash result was seen and before any call on the new model (`PREREGISTRATION_GEMINI.md` Note 3; `DEV` item 73). Result: `AR` = `tools/live_policy/results_semantic_1113/gemini_argon_1119/results.json` (write-up `RESULTS_GEMINI.md`); exploratory contrast `AF` = `.../gemini_argon_1119/argon_minus_flash.json` (computed after both results were seen; `AF.md` says so). Slot: `slots.json` `argon_replay` (`fill_slots_part3.py`). The builder stops (`argon_facts`) unless: 12 rows, 4 members, 48 of 48 parsed, 12 clusters, round 1 finished; exactly one of the four contrasts is found (Opus at L2) and the file's lines use "above" for it and "not detectably above" for the other three; the L3 verdict is Inconclusive against D with an interval that holds zero and reaches the margin; Argon minus Flash holds zero at L2 and L3; the prior's interval at L2 is below 0.
-
-| Statement | Source |
-|---|---|
-| Gemini 4 Argon, the second of Google's Gemini 4 line (its top model is Gemini 4 Carbon), in the author's loop, on the 12 round-1 inputs, 4 members each, 48 of 48 parsed | Note 5 of `PREREGISTRATION_GEMINI.md` (the price page read fresh on 2026-11-19 at 20:55 IST: Carbon "our most capable reasoning model", Argon "our efficient Gemini 4 frontier reasoning model", same price); `DEV` item 74. Notes 3 and 4 said "top model" from an old cached copy of the page and are corrected. Run and rows: Note 3 (E1); `AR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
-| The check on 24 more inputs (Note 4) is on slide 22 | `PREREGISTRATION_GEMINI.md` Note 4; `DEV` item 75 |
-| Registered after the Flash result was seen | Note 3 ("after the Flash result was seen, before any call on the new model"; E3 asks the slide to say so) |
-| Argon minus Opus L2 +17.5 [+5.0, +30.3], Holm p 0.0205, above; Opus L3 −0.4 [−5.7, +4.9], 0.6445; Haiku L2 +13.6 [−1.4, +28.5], 0.1069; Haiku L3 +1.2 [−4.4, +6.7], 0.6445: not detectably above. 12 clusters of one row each | `AR` `confirmatory.5a.family.<model>|<L>.{mean_diff,ci,p_holm,found}`; scores `5a.tables.<model>.<L>.{model_mean,other_mean}`; the words: `confirmatory.wording[1..4]` (the registration's §6) |
-| Registered rule at L3: Inconclusive; Argon minus the region trade +0.0 [−2.8, +3.1] against a margin of 3; Argon's own L3 score 6.2% beside 5.7% (own labels swapped), 6.2% (the trade), 6.6% (prior's labels at its places) | `AR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}`; `confirmatory.wording[5]` |
-| (No longer on the slide; slide 22's all-36 lines replace it.) Exploratory: Argon minus Flash on the same 12 rows, both in the author's loop (the models alone): L2 −2.9 [−9.1, +3.4], L3 −5.4 [−13.1, +2.0] | `AF` `levels.<L>.{diff,interval,p_two_sided,rows}` |
-| Exploratory: at L2 Argon scores 79.3%, below the prior (96.5%; −17.2 [−23.9, −10.5]) | `AR` `confirmatory.5b.levels.L2.model_own_score`, `.comparators.B3.{comparator_own_score,mean_diff,ci}` (exploratory under §5b) |
-| Not the paper's model; the intervals are wide | `AR` `confirmatory.wording` (each line says the first); 12 clusters of one row each (Note 3 E2a) |
-| Reported with no verdict, not on the slide: the wrong-house gate does not pass (L1 p 0.25, L2 p 0.75, 6 pairs) | `AR` `confirmatory.5c.wrong_house_gate` |
-| Summary lines (slides 27 and 28): Flash above both Claude models at L2 and L3; Argon above Opus at L2 on round 1 and not detectably above Haiku at L2 on round 1 and again on the new inputs (the new inputs' other three contrasts carry no verdict, Note 4); at L3 neither was found to beat a trade of regions (Flash Rejected; Argon Inconclusive on round 1, Rejected on the new inputs); neither is the paper's model | `GR`, `AR` and `R32` `confirmatory.5a.family`, `5b.levels.L3.verdict`. "Neither beat" is read as "neither was found to beat": Flash's Rejected rules out a 3-point gain, Argon's Inconclusive on round 1 does not (its interval reached +3.1), and Argon's Rejected on the new inputs does (upper end +2.8) |
-
-## Slide 22: Gemini 4 Argon on the 24 inputs it had not seen (Note 4)
-
-Registered 2026-11-19 20:54 IST, after round 1 of Note 3 was seen and before any call on these rows (`PREREGISTRATION_GEMINI.md` Note 4, R1 to R4; `DEV` item 75). `R32` = `tools/live_policy/results_semantic_1113/gemini_argon_r32_1119/results.json` (rounds 3 and 2, 24 rows, 2 members each); `A36` = `.../gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json` (exploratory, R3: computed after the fact, on all 36 inputs, so they hold the 12 seen before Note 4). Slot: `slots.json` `argon_r32` (`fill_slots_part3.py`). The builder stops (`argon_check_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 2 and 3 finished; R2a's one-sided p is not below 0.05 and its interval holds zero (so the registered sentence is the "again not detectably above" one); R2b is Rejected against D with the upper end under the margin; round 1's L3 line was Inconclusive; on all 36 inputs minus Haiku (L2) and minus Flash (L2, L3) hold zero and minus Opus (L2) is above zero.
+Registered 2026-11-19 21:05 IST, after the Flash and Argon results were seen and before any call on this model; Note 7 (2026-11-20 00:39 IST, before any output was scored or read) added one row so that round 3 was whole (`PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76). `NR` = `tools/live_policy/results_semantic_1113/gemini_neon_1119/results.json` (rounds 1 and 3, 24 rows, 2 members each); `NP` = `.../gemini_neon_1119/neon_minus_{flash,argon}.json` (exploratory, on the rows each pair ran). Slot: `slots.json` `neon_replay` (`fill_slots_part3.py`). Note 6 makes the rule at L3 the ONE confirmatory hypothesis; the 5a table is reported with intervals and no verdict, so the deck ignores `NR`'s `found` flags and its 5a sentences. The builder stops (`neon_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 1 and 3 finished; the L3 verdict is Inconclusive against D (interval holds zero and reaches the margin); the prior's labels at Neon's own places (B3L) score above Neon; Neon is below Flash and Argon at L2 (intervals below 0); at L2 Neon is below the prior and its lead over random guesses holds zero; the Note 6 N3 sentence is in the registration word for word.
 
 | Statement | Source |
 |---|---|
-| Round 1 left Argon against Haiku at L2 at +13.6 with an interval from −1.4 to +28.5; the check tests that one contrast on the 24 other stages of the same 12 runs, 2 members each, 48 of 48 parsed; registered after round 1 was seen | Note 4 ("Why", R1, R2a); `AR` `confirmatory.5a.family.claude-haiku-5-5|L2` (round 1); `R32` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
-| R2a: Argon minus Haiku at L2 +5.4 [−2.8, +13.5], one-sided p 0.0906 before Holm; the registered sentence "On the 24 other stages of the same 12 runs Gemini 4 Argon was again not detectably above Haiku at naming objects" | `R32` `confirmatory.5a.tables.claude-haiku-5-5.L2.{mean_diff,ci,p}` (the one-sided p before Holm). Note 4 says R2a ignores the file's `found` flags and its 5a sentences, which apply Holm over four; the deck does too. The sentence is Note 4's (p not below 0.05) |
-| The other three contrasts on the new inputs (Opus L2 +18.7, Opus L3 +1.1, Haiku L3 +0.9), reported with intervals and no verdict | `R32` `confirmatory.5a.tables.<model>.<L>`; Note 4 ("Reported with intervals, no verdict"). Shown in grey; the deck gives them no reading |
-| R2b: the registered rule at L3 reads Rejected; Argon minus the region trade +0.4 [−2.1, +2.8], margin 3; own score 4.9% beside 4.7% (own labels swapped), 4.6% (the trade), 7.2% (prior's labels at its places) | `R32` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}` |
-| Two questions were tested (R2a and R2b), each at α = 0.05 | Note 4 R2 ("the slide says that two were tested") |
-| Round 1's L3 line was Inconclusive; the new inputs give Rejected | `AR` `5b.levels.L3.verdict` (round 1); `R32` as above |
-| Exploratory, all 36 inputs: Argon minus Haiku at L2 +8.1 [−1.3, +17.2]; minus Opus at L2 +18.3 [+11.7, +25.9]; minus Flash −2.7 [−6.7, +1.3] at L2 and −2.1 [−5.1, +1.1] at L3 | `A36` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`). Marked exploratory on the slide, with "which hold the 12 seen before Note 4" (R3) |
-| Argon is the second of Google's Gemini 4 line; not the paper's model | Note 5; `R32` `confirmatory.wording` |
-| One more Gemini run (Gemini 4 Neon, the last) is registered and running; no result | `PREREGISTRATION_GEMINI.md` Note 6 (2026-11-19 21:05 IST); `slots.json` holds none of it. Note 6 N3 fixes a sentence for when its result is shown ("three Gemini models were tried in turn … none is the paper's"); it is not used yet |
+| Gemini 4 Neon, released 18 November; the student's choice for the last run; the author's loop; rounds 1 and 3 (24 inputs), 2 members each, 48 of 48 parsed | Note 6 (Why; N1); `DEV` item 76; `NR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row`, `finished_rounds` |
+| Registered after the Flash and Argon results were seen; one input was added before any output was scored so that round 3 was whole | Note 6 ("What had been seen"); Note 7 |
+| The rule at L3 is Inconclusive: Neon minus the region trade +2.9 [−0.4, +6.3], margin 3 | `NR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named}`, `.comparators.D.{mean_diff,ci}`; `confirmatory.wording[5]` |
+| Not Supported: the prior's labels at Neon's own places score higher (10.2% against Neon's 8.7%); Neon minus that control −1.5 [−4.1, +1.3] | `NR` `5b.levels.L3.comparators.B3L.{comparator_own_score,mean_diff,ci}`, `model_own_score`. Supported needs Neon above all three controls (Note 6 N2) |
+| Own score 8.7% beside 7.6% (own labels swapped), 5.7% (the trade), 10.2% (prior's labels at its places) | `NR` `5b.levels.L3.comparators.{B5,D,B3L}.comparator_own_score` |
+| Neon minus Opus +8.5 [−1.1, +18.0] (L2), +3.3 [−1.4, +8.6] (L3); minus Haiku +0.6 [−10.0, +12.0] (L2), +4.0 [−0.4, +8.5] (L3): reported, no verdict | `NR` `confirmatory.5a.tables.<model>.<L>.{mean_diff,ci,model_mean,other_mean}`; Note 6 N2 |
+| Exploratory: Neon minus Flash −10.1 [−13.1, −7.3] (L2), +1.5 [−1.5, +5.0] (L3); minus Argon −7.3 [−13.0, −1.8] (L2), +3.7 [−1.3, +8.9] (L3) | `NP` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`) |
+| Exploratory: at L2 Neon scores 74.3%, below the prior (92.5%; −18.3 [−21.2, −15.4]); random guesses 67.3% (+6.9 [−0.5, +14.3]) | `NR` `5b.levels.L2.model_own_score`, `.comparators.{B3,B1}.{comparator_own_score,mean_diff,ci}` (exploratory under Note 6 N2) |
+| Not the paper's model | `NR` `confirmatory.wording` (each line says it) |
+| Reported with no verdict, not on the slide: the wrong-house gate at L1 p 0.0625 (no pass) and L2 p 0.0156 (pass), 6 pairs | `NR` `confirmatory.5c.wrong_house_gate` |
+
+## Slide 22: the three Gemini models side by side
+
+Built from `GR`, `AR`, `R32` and `NR` (the four `slots.json` entries, each guarded). Why this slide: the Gemini part would otherwise run to five main slides; the two Argon slides moved to backups 7 and 8, and this slide gives the three models in one table.
+
+| Statement | Source |
+|---|---|
+| Flash: 36 inputs, 4 members, 137 of 144; L2 minus Opus +21.0 [+13.5, +28.8] above, minus Haiku +10.9 [+1.6, +20.5] above; L3 Rejected (upper end +1.4, margin 3) | `GR` `confirmatory.5a.family`, `5b.levels.L3`; the registration's words ("above" for a found hypothesis, §6) |
+| Argon round 1: 12 inputs, 4 members, 48 of 48; minus Opus +17.5 [+5.0, +30.3] above; minus Haiku +13.6 [−1.4, +28.5] not detectably above; L3 Inconclusive (upper end +3.1) | `AR` as above; Note 3 |
+| Argon new inputs: 24 inputs, 2 members, 48 of 48; minus Opus +18.7 [+10.8, +26.7]: no verdict registered; minus Haiku +5.4 [−2.8, +13.5]: not detectably above (R2a); L3 Rejected (upper end +2.8) | `R32` as above; Note 4 (only R2a and R2b carry a verdict) |
+| Neon: 24 inputs, 2 members, 48 of 48; minus Opus +8.5 [−1.1, +18.0] and minus Haiku +0.6 [−10.0, +12.0]: no verdict registered; L3 Inconclusive (upper end +6.3) | `NR` as above; Note 6 N2 |
+| "Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result was seen. All three are reported; they are not three independent confirmations, and none is the paper's model." | Note 6 N3, word for word (the builder checks it against the registration) |
+| At L3 no Gemini model was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive). At L2 Flash was above both Claude models; Argon above Opus only; for Neon no verdict was registered | The four files' `5b.levels.L3.verdict` and `5a.family`; Argon's L2 line against Opus is round 1's (the new inputs' Opus line has no verdict, Note 4). Each clause is what a verdict says: Rejected rules out a 3-point gain, Inconclusive does not |
 
 ## Slide 23: the paper's room test (exploratory)
 
@@ -441,7 +438,7 @@ From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean 
 | M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 24; `M2` §6, §7 |
 | The registered line, second: "The claim fails", for the first half of the claim as the author put it to us (that the guesses are right in meaning) | `RC` `family.thesis`; CSV `thesis`; `SEM` §1, §10 "The thesis"; `FINAL` §5; RESULTS §10. Slide 1's row for the source of the claim |
 | It says less than it seems to: at L1 and L2 no model could have been Supported, so it rests on L3, where Opus's interval ends at 2.95 against a margin of 3 | Slide 18; `X19` `ceiling.json` |
-| Not the paper's model: Claude, in our port of the author's loop. In the author's loop two Gemini models scored above Opus at L2 (Flash also above Haiku, Argon not detectably); neither was found to beat a trade of regions at L3: Flash Rejected, Argon Inconclusive; neither is the paper's model | Slides 19, 20 and 21 (the files' wording) |
+| No Gemini model is the paper's model: at L3 none was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive); at L2 Flash was above both Claude models and Argon above Opus only; for Neon no verdict was registered at L2 | Slides 19 to 22 (the files' wording; slide 22 for the full table) |
 | Outcome picked by the rules | `slots.json` `outcome` (written from `RC` `family.thesis`) |
 
 ## Slide 28: what the answer does not say
@@ -451,7 +448,7 @@ The list follows RESULTS §10 "What it does not let the talk say".
 | Number | Source |
 |---|---|
 | It does not say the guesses carry nothing: no gain was found; at L3 a gain under 3 points is not ruled out; the prior's near-perfect score left little room for a gain at L1 and L2 | Slides 16 and 18; `REVIEW` finding 1 |
-| It does not carry over to Gemini 3.8 Flash (above Claude at L2 and L3, registered) or, at L2, to Gemini 4 Argon (above Opus); neither is the paper's model; the loops differ | Slides 19 to 21 |
+| It does not carry over to Gemini 3.8 Flash (above Claude at L2 and L3, registered), nor, at L2, to Gemini 4 Argon (above Opus only); at L3 no Gemini model was found to beat a trade of regions by the margin; none is the paper's model; the loops differ | Slides 19 to 22 |
 | It does not say the guesses reach the map or where they sit | `SEM` §16 ("Supported at L3 means … It does not mean the guesses reach the map"); RESULTS §10 |
 | Haiku is 8.2 points above random guesses at L2 (one contrast, not adjusted) | as slide 17 |
 | Nothing about live runs with a strong model or the paper's scale | `SEM` §16; RESULTS §10 |
@@ -527,6 +524,39 @@ From `M2S` (`tools/live_policy/results_m2_1113/pass2/summary_factorial.json`).
 | None passes the wrong-house check | backup 1 |
 | Both models Rejected at L2 and L3 | `RC` `family.hypotheses` |
 
+## Backup 7: Gemini 4 Argon, round 1 (the extension of Note 3)
+
+Registered 2026-11-19 18:51 IST, after the Flash result was seen and before any call on the new model (`PREREGISTRATION_GEMINI.md` Note 3; `DEV` item 73). Result: `AR` = `tools/live_policy/results_semantic_1113/gemini_argon_1119/results.json` (write-up `RESULTS_GEMINI.md`); exploratory contrast `AF` = `.../gemini_argon_1119/argon_minus_flash.json` (computed after both results were seen; `AF.md` says so). Slot: `slots.json` `argon_replay` (`fill_slots_part3.py`). The builder stops (`argon_facts`) unless: 12 rows, 4 members, 48 of 48 parsed, 12 clusters, round 1 finished; exactly one of the four contrasts is found (Opus at L2) and the file's lines use "above" for it and "not detectably above" for the other three; the L3 verdict is Inconclusive against D with an interval that holds zero and reaches the margin; Argon minus Flash holds zero at L2 and L3; the prior's interval at L2 is below 0.
+
+| Statement | Source |
+|---|---|
+| Gemini 4 Argon, the second of Google's Gemini 4 line (its top model is Gemini 4 Carbon), in the author's loop, on the 12 round-1 inputs, 4 members each, 48 of 48 parsed | Note 5 of `PREREGISTRATION_GEMINI.md` (the price page read fresh on 2026-11-19 at 20:55 IST: Carbon "our most capable reasoning model", Argon "our efficient Gemini 4 frontier reasoning model", same price); `DEV` item 74. Notes 3 and 4 said "top model" from an old cached copy of the page and are corrected. Run and rows: Note 3 (E1); `AR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
+| The check on 24 more inputs (Note 4) is on backup 8 | `PREREGISTRATION_GEMINI.md` Note 4; `DEV` item 75 |
+| Registered after the Flash result was seen | Note 3 ("after the Flash result was seen, before any call on the new model"; E3 asks the slide to say so) |
+| Argon minus Opus L2 +17.5 [+5.0, +30.3], Holm p 0.0205, above; Opus L3 −0.4 [−5.7, +4.9], 0.6445; Haiku L2 +13.6 [−1.4, +28.5], 0.1069; Haiku L3 +1.2 [−4.4, +6.7], 0.6445: not detectably above. 12 clusters of one row each | `AR` `confirmatory.5a.family.<model>|<L>.{mean_diff,ci,p_holm,found}`; scores `5a.tables.<model>.<L>.{model_mean,other_mean}`; the words: `confirmatory.wording[1..4]` (the registration's §6) |
+| Registered rule at L3: Inconclusive; Argon minus the region trade +0.0 [−2.8, +3.1] against a margin of 3; Argon's own L3 score 6.2% beside 5.7% (own labels swapped), 6.2% (the trade), 6.6% (prior's labels at its places) | `AR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}`; `confirmatory.wording[5]` |
+| (No longer on the slide; backup 8's all-36 lines replace it.) Exploratory: Argon minus Flash on the same 12 rows, both in the author's loop (the models alone): L2 −2.9 [−9.1, +3.4], L3 −5.4 [−13.1, +2.0] | `AF` `levels.<L>.{diff,interval,p_two_sided,rows}` |
+| Exploratory: at L2 Argon scores 79.3%, below the prior (96.5%; −17.2 [−23.9, −10.5]) | `AR` `confirmatory.5b.levels.L2.model_own_score`, `.comparators.B3.{comparator_own_score,mean_diff,ci}` (exploratory under §5b) |
+| Not the paper's model; the intervals are wide | `AR` `confirmatory.wording` (each line says the first); 12 clusters of one row each (Note 3 E2a) |
+| Reported with no verdict, not on the slide: the wrong-house gate does not pass (L1 p 0.25, L2 p 0.75, 6 pairs) | `AR` `confirmatory.5c.wrong_house_gate` |
+| Summary lines (slides 27 and 28; the full table is slide 22): at L3 no Gemini model was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive on round 1, then Rejected on the new inputs; Neon Inconclusive); at L2 Flash was above both Claude models, Argon above Opus only (round 1; the new inputs' Opus line has no verdict, Note 4), for Neon no verdict was registered; none is the paper's model | `GR`, `AR`, `R32` and `NR` `confirmatory.5a.family`, `5b.levels.L3.verdict`. Each clause is what a verdict says: Rejected rules out a 3-point gain, Inconclusive does not |
+
+## Backup 8: Gemini 4 Argon on the 24 inputs it had not seen (Note 4)
+
+Registered 2026-11-19 20:54 IST, after round 1 of Note 3 was seen and before any call on these rows (`PREREGISTRATION_GEMINI.md` Note 4, R1 to R4; `DEV` item 75). `R32` = `tools/live_policy/results_semantic_1113/gemini_argon_r32_1119/results.json` (rounds 3 and 2, 24 rows, 2 members each); `A36` = `.../gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json` (exploratory, R3: computed after the fact, on all 36 inputs, so they hold the 12 seen before Note 4). Slot: `slots.json` `argon_r32` (`fill_slots_part3.py`). The builder stops (`argon_check_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 2 and 3 finished; R2a's one-sided p is not below 0.05 and its interval holds zero (so the registered sentence is the "again not detectably above" one); R2b is Rejected against D with the upper end under the margin; round 1's L3 line was Inconclusive; on all 36 inputs minus Haiku (L2) and minus Flash (L2, L3) hold zero and minus Opus (L2) is above zero.
+
+| Statement | Source |
+|---|---|
+| Round 1 left Argon against Haiku at L2 at +13.6 with an interval from −1.4 to +28.5; the check tests that one contrast on the 24 other stages of the same 12 runs, 2 members each, 48 of 48 parsed; registered after round 1 was seen | Note 4 ("Why", R1, R2a); `AR` `confirmatory.5a.family.claude-haiku-5-5|L2` (round 1); `R32` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row` |
+| R2a: Argon minus Haiku at L2 +5.4 [−2.8, +13.5], one-sided p 0.0906 before Holm; the registered sentence "On the 24 other stages of the same 12 runs Gemini 4 Argon was again not detectably above Haiku at naming objects" | `R32` `confirmatory.5a.tables.claude-haiku-5-5.L2.{mean_diff,ci,p}` (the one-sided p before Holm). Note 4 says R2a ignores the file's `found` flags and its 5a sentences, which apply Holm over four; the deck does too. The sentence is Note 4's (p not below 0.05) |
+| The other three contrasts on the new inputs (Opus L2 +18.7, Opus L3 +1.1, Haiku L3 +0.9), reported with intervals and no verdict | `R32` `confirmatory.5a.tables.<model>.<L>`; Note 4 ("Reported with intervals, no verdict"). Shown in grey; the deck gives them no reading |
+| R2b: the registered rule at L3 reads Rejected; Argon minus the region trade +0.4 [−2.1, +2.8], margin 3; own score 4.9% beside 4.7% (own labels swapped), 4.6% (the trade), 7.2% (prior's labels at its places) | `R32` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named,model_own_score}`, `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}` |
+| Two questions were tested (R2a and R2b), each at α = 0.05 | Note 4 R2 ("the slide says that two were tested") |
+| Round 1's L3 line was Inconclusive; the new inputs give Rejected | `AR` `5b.levels.L3.verdict` (round 1); `R32` as above |
+| Exploratory, all 36 inputs: Argon minus Haiku at L2 +8.1 [−1.3, +17.2]; minus Opus at L2 +18.3 [+11.7, +25.9]; minus Flash −2.7 [−6.7, +1.3] at L2 and −2.1 [−5.1, +1.1] at L3 | `A36` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`). Marked exploratory on the slide, with "which hold the 12 seen before Note 4" (R3) |
+| Argon is the second of Google's Gemini 4 line; not the paper's model | Note 5; `R32` `confirmatory.wording` |
+| Gemini 4 Neon, the last run, is on slide 21 | `PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76. Note 6 N3's sentence is on slide 22 |
+
 ## File properties
 
 The .pptx `author` and `lastModifiedBy` are set to "ASP replication, end-sem" in the build (`prs.core_properties`), so python-pptx's default name does not appear.
@@ -542,6 +572,6 @@ These are not in `numbers_part3.csv`; each has its file and path above.
 ## Not used on a slide, and why
 
 - **The pilot base rates** (88%, 82%, 56%) and room mix: `SEM` §2 lists them as seen before the hash. The deck shows the frozen-rule chance level instead: the random guesses' own scores.
-- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slides 19 and 20 show the registered replay instead; backup 2 shows its October placement-error median.
+- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slides 19 to 22 show the registered runs instead; backup 2 shows its October placement-error median.
 - **Difference against the random-guess placebo at L3.** The placebo is a registered comparator at L1 and L2 only (`SEM` §9). At L3 the slide shows the model's score beside the placebo's score.
 - **Validity-layer terms** (Brier, vote, τ) stay in `slots.json` and here, not on the main slides.
