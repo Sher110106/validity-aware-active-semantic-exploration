@@ -285,3 +285,23 @@ An independent review of Amendment 3 found one false statement and several cases
 **A5.7 Not run.** 00871 (its budget is twice as long, and no ASP run of ours reaches half of it). No new ASP run with the LLM. No new frontier run.
 
 **Not changed.** §1 to §5, Amendments 1 to 4 and their Notes. `official_nov` stays as filed.
+
+## Note to Amendment 5 (2026-11-19 13:26 IST, before any score of its runs has been computed)
+
+When this was written both dry runs had passed (below), the queue of six had been running since 12:43:45, and its first run (seed 42, random guesses) had written 8 stage folders. No run of the six had ended. No score of any of them had been computed or seen by anyone: scoring needs the rescore, which has not been run.
+
+**The scoring code.** `paper_compare.py` (sha256 daeab9be…), `equal_path_check.py` (8d9e85a1…) and `host/rescore_paper.py` (e77d3438…), as committed in 55d68bd. An independent review read the code against this amendment before this note and found three faults, all fixed: a run still in progress would have been copied and scored (the runner leaves no marker for a run that makes no LLM call); the reading would have accepted fewer than the three `official_nov` runs; and a missing log was read more gently for the controls than for `official_nov`.
+
+**Cases the amendment left open, settled here.**
+1. A control run with no `logs/roslaunch.log` is treated as one that holds a line of A5.3.
+2. A run that holds such a line has no value at any time at or past B (1.2 B included) and none at 100 m. Its cells below B (0.8 B included) and at 50, 60 and 80 m stay.
+3. Reach has no tolerance: path at least L, or time at least t, at the last complete stage. A value is read only from a complete stage, for `official_nov` and for the controls alike.
+4. `official_nov` means the three runs `e8_00853_s42_official_105m`, `e8_00853_s43_official_105m` and `e8_00853_s44_official_105m`. Their S values are fixed by the files of 11-18: 53.55, 52.48 and 61.73 against the scripted reference, and 29.05, 28.47 and 30.40 against the human labels. If any of the three lacks S, or a rescore gives other values, the rescore stops and no arm is judged.
+5. A folder with no stage whose launcher started is a run that happened, with no values. Only a run the runner recorded as skipped or as failed to launch may be launched again.
+6. The judging condition and the comparison are read under each reference apart, and S is compared at full precision.
+7. A run has ended when the queue's log says its runner ended, or when neither a runner nor the queue is alive on the host. The reading of A5.6 is the one the final rescore writes after the queue has ended. A rescore made before that is marked interim and gives no statement.
+
+**The dry runs (A5.4), read by hand before the six were queued.**
+- `dryrun_e9_00853_s42_placebo_5m`, 12:01 to 12:17 on 11-19: the runner launched it; 5 stage folders; 4 planning steps, each naming `placebo`; no LLM call logged; waits of 127, 171, 182 and 175 s, as scheduled; 6.15 m; no line of A5.3. Passed.
+- `dryrun_e9_00853_s42_observed_only_5m`, 12:22 to 12:43: the runner launched it; 6 stage folders; 5 planning steps, each naming `observed_only`; zero predicted nodes in each of the 40 members logged; no LLM call logged; 7.35 m; no line of A5.3. Passed.
+- The no-guess arm moved more slowly: 8.5 s of navigation time per metre against 5.7. Its runs will take longer than the 3 to 4 hours of the others.
