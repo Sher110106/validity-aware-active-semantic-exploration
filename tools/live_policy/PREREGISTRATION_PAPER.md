@@ -207,3 +207,26 @@ An independent review of Amendment 3 found one false statement and several cases
 **Projection, on record before the runs.** From October's official runs on 00853, a 105 m run should take 31 to 39 stages, 2,030 to 2,640 calls, 5 to 10 hours, $1.5 to $2.2, and end at 660 to 723 s of navigation time. The reviewer's guess: one run in three ends before B. The likeliest cause is the shared GPU; after it, host memory on a slow night.
 
 **Scoring.** The runs enter the tables as their own arm, `official_nov`, picked by the name pattern `e8_00853_s(42|43|44)_official_105m` (with `_relaunch1` where the rule above gave it), so that no code path can pool them with October's `official` arm.
+
+## Amendment 4 (2026-11-19 11:35 IST, before any reply from the authors is known to us)
+
+**Why.** §4 says: "If the author states his budget before 11-20, his figure replaces B, and the swap is logged." The mail to the authors went out on 11-18, two weeks later than the plan of 11-03 foresaw, so that date leaves them one day. An independent review of the whole project on 11-19 proposed moving the date to the day the talk's numbers freeze, before any reply comes. The student approved it the same day.
+
+**What had been seen when this was written.**
+- Every result in `results_paper_compare_1113/` as filed on 11-18, with B = 632.18 s on 00853 and 1,300.25 s on 00871.
+- The review's reading that B for 00871 may be about twice the paper's. Its figures, which we have not recomputed: at 750 s our frontier reads 26.1, 43.6 and 62.4 against the paper's 29.2, 55.7 and 65.3. So a shorter budget from the authors would most likely move our 871 cells away from the paper's, not toward them.
+- No reply. The student told us on 11-18 that the mail was sent, and had told us of no reply when they approved this change (11-19, about 11:25 IST). The writer of this amendment cannot see the mailbox.
+
+**A4.1 The date.** In §4, "before 11-20" becomes "by 23:59 IST on 2026-11-24", the day the end-sem plan takes as the freeze of the talk's numbers.
+
+**A4.2 If a reply had already come.** If a reply reached the students before the time in this amendment's heading, this amendment does not apply to what that reply holds: §4's own date governs it.
+
+**A4.3 What counts as his budget.**
+- A time in seconds for a scene replaces B for that scene. The tables are rebuilt at his B. The tables at our B are kept beside them and named as ours.
+- One figure given for all scenes replaces B in both.
+- A path length or a number of steps, with no time, does not replace B. A second table is then read at 10%, 50% and 100% of his path length, each at the last stage whose path is at most that length, and the slide shows both.
+- If he says whether Fig. 4 shows the value at that time or the best so far, the rows beside the paper's values use the rule he names. The other rule stays in the tables.
+
+**A4.4 Other files.** The end-sem plan says the authors' files "change part 2 only if they arrive by 11-20". That date moves with A4.1. Reference graphs or a tour path that arrive by 23:59 IST on 11-24 are scored as one more reference, named "author", in every table, and that reference becomes the paper-scale column; APR stays beside it. What arrives later is reported after the talk.
+
+**Not changed.** The rest of §1 to §5, and Amendments 1 to 3 with their Notes.
