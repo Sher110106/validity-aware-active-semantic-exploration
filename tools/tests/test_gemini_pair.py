@@ -52,3 +52,5 @@ def test_one_model_scored_in_two_runs_is_joined_and_a_repeated_row_is_refused(tm
     assert t["a"] == pytest.approx(((0.75 + 0.5) / 2 + 0.5) / 2)        # a row's mean first, then the cluster's
     with pytest.raises(ValueError, match="two of the files"):
         gp.row_scores(a1 + "," + a1)
+    a3 = records(tmp_path / "a3.json", {"r1": ("c1", []), "r4": ("c3", [1.0])})      # r1 listed with no member: skipped
+    assert sorted(gp.row_scores(a1 + "," + a3)) == ["r1", "r4"]

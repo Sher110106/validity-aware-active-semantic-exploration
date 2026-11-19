@@ -32,8 +32,10 @@ def row_scores(paths):
             for lv in LEVELS:
                 vals = [m[lv] for m in rec["model"].values() if isinstance(m, dict) and m.get(lv) is not None]
                 per[lv] = sum(vals) / len(vals) if vals else None
+            if all(v is None for v in per.values()):
+                continue                    # the wrapper lists every frame row; one a run did not hold has no score
             if rec["row_id"] in out:
-                raise ValueError("row %s is in two of the files %s" % (rec["row_id"], paths))
+                raise ValueError("row %s has scores in two of the files %s" % (rec["row_id"], paths))
             out[rec["row_id"]] = (rec["cluster"], per)
     return out
 
