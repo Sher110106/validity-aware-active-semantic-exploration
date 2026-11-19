@@ -6,13 +6,16 @@ notes, labels and chart text are 24 px (12 pt) or more. The builder warns if its
 text box runs past the slide.
 
 Every chart and table value comes from a result file (numbers.csv, paper_compare.json, budgets_*.json,
-c2_*.json, c_checks.json, frontier_holm.json, figures/stage_numbers.json) or, for part 3, from slots.json.
-SOURCES.md says which file and key stand behind each number. A claim in a sentence (a lead, "smaller than the
-paper's", a sign) is guarded: if the cells no longer bear it, the build stops with BUILD STOPPED and a reason. The
-script and README hold typed figures too; check_text stops the build if one is missing.
+c2_*.json, c_checks.json, frontier_holm.json, equal_path.json, budget_sensitivity.json,
+figures/stage_numbers.json) or, for part 3, from slots.json (which fill_slots_part3.py writes from the result files;
+its "pinned" part holds facts from files that are not result tables). SOURCES.md says which file and key stand behind
+each number. A claim in a sentence (a lead, "smaller than the paper's", a sign, "no detectable gain") is guarded: if
+the cells no longer bear it, the build stops with BUILD STOPPED and a reason. The script and README hold typed figures
+too; check_text stops the build if one is missing, and script_times stops it if the times in the script do not add
+to 900 s. Anything not registered is marked exploratory on its slide.
 
 Usage (from the project root):
-    .venv_offline/bin/python docs/endsem_2026-11/figures/make_stage_picture.py   # slide 13, once
+    .venv_offline/bin/python docs/endsem_2026-11/figures/make_stage_picture.py   # slide 14, once
     .venv_offline/bin/python docs/endsem_2026-11/build_endsem_pptx.py
 """
 import csv
@@ -45,7 +48,11 @@ R1113 = os.path.join(LP, "results_paper_compare_1113")
 C1_TABLE = os.path.join(R1113, "c1_area_table.json")
 STAGE_PNG = os.path.join(HERE, "figures", "stage.png")
 STAGE_JSON = os.path.join(HERE, "figures", "stage_numbers.json")
-TOTAL = 24
+EQUAL_PATH = os.path.join(R1113, "equal_path", "equal_path.json")
+BUDGET_SENS = os.path.join(R1113, "budget_sensitivity", "budget_sensitivity.json")
+SEM_RESULTS_MD = os.path.join(LP, "results_semantic_1113", "RESULTS.md")
+TOTAL = 25              # main slides; the time in the script headings adds to 900 s over these
+BACKUPS = 6
 ACCENT = "c2410c"
 MINUS = "−"
 DASH = "–"
@@ -115,6 +122,36 @@ def budget_runs():
     return out
 
 
+def read_equal_path():
+    """equal_path.json (exploratory, 11-19): F1 x 100 at the last stage within L metres of path, per scene, reference
+    (apr = scripted tour, hm3d = human labels, frontier_made), arm and length."""
+    d = json.load(open(EQUAL_PATH))
+    if d.get("registered") is not False:
+        fail("equal_path.json no longer says registered=false: slides 9 and 10 mark it exploratory")
+    return d
+
+
+def read_sensitivity():
+    """budget_sensitivity.json (exploratory, 11-19): F1 x 100 at 10, 50 and 100% of other budgets B."""
+    d = json.load(open(BUDGET_SENS))
+    if d.get("registered") is not False:
+        fail("budget_sensitivity.json no longer says registered=false: slide 10 marks it exploratory")
+    return d
+
+
+def ecell(d, sc, ref, arm, L):
+    """One equal-path cell: {mean, min, max, n, n_runs}."""
+    return d["scenes"][sc]["tables"][ref][arm][str(L)]
+
+
+def cell_str(c):
+    """(text, n text) for an equal-path or sensitivity cell, or (None, 'none') when no run has a value."""
+    if not c["n"]:
+        return None, f"none, 0 of {c['n_runs']}"
+    n = f"n={c['n']}" if c["n"] == c["n_runs"] else f"n={c['n']} of {c['n_runs']}"
+    return f"{num(c['mean'])} [{num(c['min'])}{DASH}{num(c['max'])}]", n
+
+
 def rnd(v, nd):
     """Round half away from zero on the printed decimal, so 0.575 prints 0.58 as WRITEUP.md does."""
     return Decimal(repr(round(v, 10))).quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP)
@@ -170,6 +207,14 @@ def N(s, x, y, w, txt, limit=1000):
     return P(s, x, y, w, txt, NT, MID, 1.4, limit=limit)
 
 
+NQ = 28                  # key qualifiers: 14 pt
+
+
+def Nq(s, x, y, w, txt, limit=1000):
+    """A note that carries a qualifier: 28 px (14 pt), grey."""
+    return P(s, x, y, w, txt, NQ, MID, 1.35, limit=limit)
+
+
 def lab(s, x, y, w, t):
     text(s, x, y, w, 34, [kick(t, NT, 0.14)])
     return y + 40
@@ -204,13 +249,16 @@ def pill(s, x, y, w, h, txt, fill=RULE, color=MID):
 def frame(prs, n, k, title, pending=None, backup=False):
     s = prs.slides.add_slide(prs.slide_layouts[6])
     text(s, 120, 80, 1380, 34, [kick(k, NT, 0.14)])
-    text(s, 120, 123, 1680, 74, [run(title, 56, INK, LIGHT, spacing=-0.02)], line=1.15)
+    # one line only: the title shrinks with its length (56, 46 or 38 px) so it stays above the rule at y=222
+    tsize = 56 if len(title) <= 50 else 46 if len(title) <= 62 else 38 if len(title) <= 84 else 34 if len(title) <= 92 \
+        else 31
+    text(s, 120, 123 + (56 - tsize) / 2, 1680, 74, [run(title, tsize, INK, LIGHT, spacing=-0.02)], line=1.15)
     hline(s, 120, 222, 1800, 222, RULE)
     text(s, 120, 1018, 1200, 30, [run("Right in meaning, wrong in place? · End-sem", NT, FAINT)])
     text(s, 1400, 1018, 400, 30, [run("Backup" if backup else f"{n:02d} / {TOTAL}", NT, FAINT)], PP_ALIGN.RIGHT)
     if pending:
         pill(s, 1500 if len(pending) < 16 else 1380, 76, 300 if len(pending) < 16 else 420, 38, pending)
-    if len(title) > 50:
+    if len(title) > 100:
         WARN.append(f"title may wrap: {title!r}")
     return s
 
@@ -230,25 +278,60 @@ def cover(prs, f853):
     text(s, 160, 180, 1600, 250, [run("Right in meaning,", 112, INK, LIGHT, spacing=-0.03),
                                   run("wrong in place?", 112, INK, LIGHT, spacing=-0.03)], line=1.05)
     P(s, 160, 440, 1560, "ASP asks a language model to guess the rooms and objects a robot has not seen, then "
-                         "drives to where the guesses disagree. Its author says the guesses are often in the wrong "
-                         "place but name the right things, and that this is enough. We test that in three parts.",
+                         "drives to where the guesses disagree. As the author put it to us, the guesses are often "
+                         "wrong in place but name the right things, and that is enough. We test that in three parts.",
       B, BODY, 1.45)
-    cols = [("Part 1 · Live test", "Do the guesses improve a live map? Done."),
-            ("Part 2 · Paper's scale", f"On 853, November's {f853['nov_runs']} ASP runs read above frontier, by less than in the paper."),
-            ("Part 3 · The author's defense", "Is the meaning right? Is it enough? Is it the model?")]
+    cols = [("Part 1 · Live test", "Do the guesses improve a live map? Final."),
+            ("Part 2 · Paper's scale", f"On 853, ASP reads above frontier by the clock; by the metre, it depends."),
+            ("Part 3 · The author's claim", "Is the meaning right? Is it enough? Is it the model?")]
     for i, (name, body) in enumerate(cols):
         x = 160 + i * 552
-        hline(s, x, 650, x + 496, 650, INK, 2)
-        text(s, x, 664, 496, 34, [run(f"{i + 1:02d}", NT, FAINT, MONO)])
-        P(s, x, 704, 496, [(name, "b")], B, line=1.3)
-        P(s, x, 756, 496, body, B, BODY, 1.35, limit=900)
+        hline(s, x, 606, x + 496, 606, INK, 2)
+        text(s, x, 618, 496, 34, [run(f"{i + 1:02d}", NT, FAINT, MONO)])
+        P(s, x, 656, 496, [(name, "b")], B, line=1.3)
+        P(s, x, 706, 496, body, B, BODY, 1.35, limit=860)
+    N(s, 160, 872, 1600, "Final: Part 1, and the registered scores and tests. Registered, running and not shown: "
+                         "two control arms on 853 and a Gemini replay.", limit=930)
     hline(s, 160, 930, 1760, 930, RULE)
     text(s, 160, 950, 900, 34, [run("Sher Partap Singh · Preesha Katial · Ananya Singla", NT, MID)])
     text(s, 860, 950, 900, 34, [run("Base paper: Tang & Chaudhari, Active Semantic Perception, arXiv:2510.05430",
                                     NT, MID)], PP_ALIGN.RIGHT)
 
 
-# ---------------------------------------------------------------- 2. ASP in one picture
+# ---------------------------------------------------------------- 2. What became of the proposal
+
+def proposal(prs, Nn, slots):
+    p = slots["pinned"]["proposal"]
+    lo, hi = -Nn["E2:hm3d:60m:permutation_hi"], -Nn["E2:hm3d:60m:permutation_lo"]    # filter minus LLM, as on slide 4
+    if not lo < 0 < hi:
+        fail("slide 2 says the live validator test showed no detectable difference, but its interval excludes 0")
+    if p["kept"] * 100 >= p["of"]:
+        fail("slide 2 says the filter kept a tiny share of the guesses, but the pinned share is 1% or more")
+    s = frame(prs, 2, "The proposal", "The proposal's question was measured in part")
+    cols = [("Asked",
+             f"Can validation and calibration of ensemble support cut false-positive detours without cutting "
+             f"discovery of unseen rooms? The plan: {p['policies']} policies, {p['scenes']} homes × {p['seeds']} seeds, "
+             f"{p['budget_m']} m."),
+            ("Measured",
+             f"Our validator, live, in 2 homes: {sg(-Nn['E2:hm3d:60m:statistic'])} F1 ({sg(lo)} to {sg(hi)}) against "
+             f"the LLM alone. No detectable difference. The test saw only gains of "
+             f"{num(Nn['E2:hm3d:60m:mde'], 3)} or more."),
+            ("Not measured",
+             "Detours: replays never drove the chosen views, so detours are not identifiable. Collisions: not "
+             "instrumented. Calibration: retired, its Brier score equals the base rate."),
+            ("Withdrawn",
+             f"September's claim that full agreement improves the map. The filter kept {p['kept']} of "
+             f"{p['of']:,} guesses: the gain came from deleting the guesses.")]
+    for i, (head, body) in enumerate(cols):
+        x = 120 + i * 430
+        hline(s, x, 262, x + 390, 262, INK, 2)
+        P(s, x, 278, 390, [(head, "b")], B, line=1.3)
+        P(s, x, 330, 390, body, B, BODY, 1.35, limit=860)
+    box_bottom(s, "Since then:", "the question became whether the guesses carry any value: live (Part 1), at the "
+                                 "paper's scale (Part 2), and in meaning (Part 3).")
+
+
+# ---------------------------------------------------------------- 3. ASP in one picture
 
 OBSERVED = [(0.15, 0.25), (0.45, 0.72), (0.82, 0.30)]
 GUESSES = [[(.62, .80), (.90, .62), (.30, .08)], [(.10, .78), (.70, .90), (.92, .10)],
@@ -274,7 +357,7 @@ def glyph(s, x, y, w, h, member=None, r=6):
 
 
 def asp_picture(prs):
-    s = frame(prs, 2, "ASP in one picture", "ASP scores views by disagreement, not by truth")
+    s = frame(prs, 3, "ASP in one picture", "ASP scores views by disagreement, not by truth")
     top, h = 262, 300
 
     def panel(x, w, head):
@@ -301,7 +384,7 @@ def asp_picture(prs):
 
     text(s, 120, 590, 1680, 60, [run(f"score = gain(objects) + gain(rooms) {MINUS} {DISTANCE_WEIGHT} × distance",
                                      36, INK, MONO)], PP_ALIGN.CENTER, 1.3)
-    cols = [("Gain", "The 8 graphs' disagreement about the view. All agree: zero."),
+    cols = [("Gain", "The 8 graphs' disagreement about the view. If all 8 agree, the gain is zero."),
             ("Truth", "No term asks if a guess is true."),
             ("Unknown space", "No term asks if the space is unexplored.")]
     for i, (head, body) in enumerate(cols):
@@ -315,10 +398,10 @@ def asp_picture(prs):
 # ---------------------------------------------------------------- 3. Part 1, contrasts
 
 def live_test(prs, Nn):
-    s = frame(prs, 3, "Part 1 · Live test · 2 homes, seeds 42-44, human labels",
+    s = frame(prs, 4, "Part 1 · Live test · 2 homes, seeds 42-44, human labels",
               "Live test: no detectable difference")
     L = 120
-    lab(s, L, 250, 1680, "Difference in F1, area under the curve to 60 m; 95% interval")
+    lab(s, L, 244, 1680, "Difference in F1, area under the curve to 60 m; 95% interval")
     fr = json.load(open(FRONTIER))
     # E2 is registered as official minus filter_only; the slide shows filter minus LLM, so its sign flips.
     e2 = (-Nn["E2:hm3d:60m:statistic"], -Nn["E2:hm3d:60m:permutation_hi"], -Nn["E2:hm3d:60m:permutation_lo"])
@@ -333,11 +416,11 @@ def live_test(prs, Nn):
     def dx(v):
         return x0 + (min(max(v, lo), hi) - lo) / (hi - lo) * (x1 - x0)
 
-    top, step = 330, 78
+    top, step = 322, 56
     for v in (-0.05, 0.0, 0.05):
         hline(s, dx(v), top - 24, dx(v), top + step * len(rows) - 34, LINE if v else MID, 1 if v else 2,
               dash=bool(v))
-        svg_text(s, dx(v), top + step * len(rows) + 8, sg(v, 2) if v else "0", NT, FAINT, anchor="middle", w=100)
+        svg_text(s, dx(v), top + step * len(rows) + 4, sg(v, 2) if v else "0", NT, FAINT, anchor="middle", w=100)
     for i, (name, (d, a, b)) in enumerate(rows):
         y = top + i * step + 14
         text(s, L, y - 20, 570, 40, [run(name, 28, INK)], line=1.3)
@@ -351,18 +434,20 @@ def live_test(prs, Nn):
             tail = f"{sg(d)}  ({sg(a)} to {sg(b)})"
         oval(s, dx(d), y, 11, INK, WHITE, 3)
         svg_text(s, x1 + 50, y + 9, tail, 28, INK, MONO, w=600)
-    y = N(s, L, top + step * len(rows) + 40, 1680,
+    y = N(s, L, top + step * len(rows) + 36, 1680,
           "Registered tests, pilot status. The filter row was registered as LLM minus filter; its sign is flipped "
           "here. Exact objects: one house (871), 3 runs against 3, kept under deviation 26; the smallest p such a "
           "test can give is 0.10. Frontier rows: frontier stopped more often on 871, and its paths almost never "
-          "crossed wall cells, so the comparison may tilt in an unknown direction.", limit=900)
-    box_bottom(s, "Registered reading.", "No detectable difference in any contrast.")
+          "crossed wall cells, so the comparison may tilt in an unknown direction.", limit=800)
+    box_bottom(s, "Registered reading.", "No detectable difference in any contrast, for ASP with a small model: "
+                                         "DeepSeek V4.1 Flash at low reasoning effort. The paper (§IV, footnote) "
+                                         f"says “{PINNED['paper']['small_model']}”.")
 
 
 # ---------------------------------------------------------------- 4. Part 1, why
 
 def why(prs, Nn):
-    s = frame(prs, 4, "Part 1 · Why · exploratory, offline replay of saved stages",
+    s = frame(prs, 5, "Part 1 · Why · exploratory, offline replay of saved stages",
               "Why: swapping the guesses barely moves the pick")
     L = 120
     lab(s, L, 250, 840, "Pick move, median m · 121 stages")
@@ -413,7 +498,7 @@ def why(prs, Nn):
 # ---------------------------------------------------------------- 5. Part 1, where the guesses land
 
 def land(prs, Nn):
-    s = frame(prs, 5, "Part 1 · Where the guesses land", "Near a real object, but rarely close")
+    s = frame(prs, 6, "Part 1 · Where the guesses land", "Near a real object, but rarely close")
     lab(s, 120, 250, 1680, "New objects near a real object with the same name: LLM v random guesses")
     for i, m in enumerate(("0.5", "1", "2")):
         x = 120 + i * 580
@@ -436,7 +521,7 @@ def land(prs, Nn):
 # ---------------------------------------------------------------- 6. Part 1, limits
 
 def live_limits(prs, Nn):
-    s = frame(prs, 6, "Part 1 · Limits of the live test", "Live test limits: what it could not rule out")
+    s = frame(prs, 7, "Part 1 · Limits of the live test", "Live test limits: what it could not rule out")
     xs, w = (120, 700, 1280), 520
     cols = [(sg(Nn["E1:hm3d:60m:permutation_hi"]), "top of the interval, LLM − random",
              "A real gain of this size stays possible. The test saw only gains of 0.024 to 0.028 or more."),
@@ -488,9 +573,12 @@ def budget_note(d):
 
 
 def paper_rules(prs, budgets, checks, bf):
-    s = frame(prs, 7, "Part 2 · Same rules as the paper", "Same rules as the paper")
+    s = frame(prs, 8, "Part 2 · Same rules as the paper", "Same rules as the paper")
     stops = [checks[sc]["use_rule"]["reached"] for sc in ("00853", "00871")]
     a, b = bf["00853"], bf["00871"]
+    ratio = budgets["00871"] / budgets["00853"]
+    if not 1.9 < ratio < 2.1:
+        fail(f"slide 8 says 871's budget is about twice 853's, but the ratio is {ratio:.2f}")
     for sc in bf:
         if abs(bf[sc]["b"] - budgets[sc]) > 0.01 or bf[sc]["n"] + bf[sc]["capped"] != bf[sc]["of"]:
             fail(f"the budgets file and paper_compare.json disagree for {sc}")
@@ -506,7 +594,8 @@ def paper_rules(prs, budgets, checks, bf):
         y = P(s, L, y, w, [(head + " ", "b"), (body, "n")], B, BODY, 1.4, limit=960) + 26
     R = 980
     lab(s, R, 250, 820, "What “budget” means")
-    P(s, R, 300, 820, "The paper gives no value for its budget. We set one for each home.", B, BODY, 1.4)
+    P(s, R, 300, 820, "The paper gives no value for its budget. We set one for each home. 871's is about twice "
+                      "853's.", B, BODY, 1.4)
     text(s, R, 478, 150, 40, [run("Home 853", 28, INK, SANS, True)])
     timeline(s, R + 190, R + 790, 510, budgets["00853"])
     N(s, R, 592, 820, budget_note(a))
@@ -534,23 +623,29 @@ def table(s, x, y, lw, cw, rows, rowh):
         svg_text(s, x + lw + j * cw + cw / 2, y + 34, head, 28, MID, SANS, anchor="middle", w=cw)
     y += 46
     hline(s, x, y, x + lw + 3 * cw, y, LINE)
-    for lab_, cells, kind in rows:
+    for row in rows:
+        lab_, cells, kind = row[:3]
+        dim = len(row) > 3 and row[3]          # a row the speaker does not read aloud: grey
         rh = rowh[kind]
-        text(s, x + 8, y + (rh - 40) / 2, lw - 10, 40, [run(lab_, 28, INK if kind == "paper" else BODY)], line=1.2)
+        text(s, x + 8, y + (rh - 40) / 2, lw - 10, 40,
+             [run(lab_, 28, FAINT if dim else INK if kind == "paper" else BODY)], line=1.2)
         for j, (main, sub, mc, sc) in enumerate(cells):
+            if dim:
+                mc = FAINT if mc == INK else mc
             cx = x + lw + j * cw
             if kind == "paper":
-                text(s, cx, y + 12, cw, 40, [run(main, 32, mc, MONO)], PP_ALIGN.CENTER, 1.2)
-            else:
-                text(s, cx, y + 8, cw, 40, [run(main, 32, mc, MONO)], PP_ALIGN.CENTER, 1.2)
+                text(s, cx, y + (rh - 40) / 2, cw, 40, [run(main, 32, mc, MONO)], PP_ALIGN.CENTER, 1.2)
+            else:       # the value, then its n just after it, on one line
+                text(s, cx + 24, y + (rh - 34) / 2, cw - 36, 38, [run(main, 26, mc, MONO)], PP_ALIGN.LEFT, 1.2)
                 if sub:
-                    text(s, cx, y + min(50, rh - 34), cw, 30, [run(sub, NT, sc)], PP_ALIGN.CENTER, 1.2)
+                    text(s, cx + 24 + len(main) * 15.6 + 14, y + (rh - 30) / 2 + 2, 250, 30, [run(sub, NT, sc)],
+                         PP_ALIGN.LEFT, 1.2)
         y += rh
         hline(s, x, y, x + lw + 3 * cw, y, RULE)
     return y
 
 
-def table_rows(C, scene, arms, names=None):
+def table_rows(C, scene, arms, names=None, dimmed=()):
     def paper(arm):
         for f in ("10", "50", "100"):
             if C[(scene, arm, f)]["paper_f1_x100"] is None:
@@ -564,36 +659,72 @@ def table_rows(C, scene, arms, names=None):
         for f in ("10", "50", "100"):
             main, sub = stat_cell(C, scene, arm, f)
             cells.append((main or "none", sub, INK if main else FAINT, MID))
-        rows.append((all_names[arm], cells, "ours"))
+        rows.append((all_names[arm], cells, "ours", arm in dimmed))
     return rows
 
 
-def table853(prs, C, budgets, slots, f853):
+def facts_equal853(ep):
+    """Slide 9's equal-path rows: ASP (November) minus our frontier at 50 m and 100 m, under the scripted reference
+    (apr) and the human labels (hm3d), as printed. The title says the sign depends on the reference: stop if not."""
+    sc, out = "00853", {}
+    for ref in ("apr", "hm3d"):
+        for L in (50, 100):
+            a, f = ecell(ep, sc, ref, "official_nov", L), ecell(ep, sc, ref, "frontier_end", L)
+            if not a["n"] or not f["n"]:
+                fail(f"slide 9 needs equal-path values for ASP and frontier at {L} m under {ref}")
+            out[(ref, L)] = lead(a["mean"], f["mean"])
+    if not (out[("apr", 50)] > 0 and out[("apr", 100)] > 0 and out[("hm3d", 50)] < 0 and out[("hm3d", 100)] < 0):
+        fail("slide 9's title says that by the metre the sign depends on the reference (ASP ahead under the scripted "
+             "reference, frontier ahead under the human labels, at 50 m and 100 m), but the cells say " + str(out))
+    for ref in ("apr", "hm3d"):
+        if ecell(ep, sc, ref, "official_nov", 100)["n"] != 3 or ecell(ep, sc, ref, "frontier_end", 100)["n"] != 2:
+            fail("slide 9 and the script say the 100 m row is 3 ASP runs against 2 of 5 frontier runs; the cells differ")
+    return out
+
+
+def table853(prs, C, budgets, slots, f853, ep):
     if slots["asp853_full_budget"] != FROM_PC:
-        fail("slots.json asp853_full_budget must be the flag " + repr(FROM_PC) + ": slide 8 reads its November "
+        fail("slots.json asp853_full_budget must be the flag " + repr(FROM_PC) + ": slide 9 reads its November "
              "row from paper_compare.json, and no number is typed in slots.json")
-    s = frame(prs, 8, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 853 · budget "
-                       f"{budgets['00853']:.0f} s", f"On 853, November's {f853['nov_runs']} ASP runs read above frontier")
+    feq = f853["equal"]
+    s = frame(prs, 9, f"Part 2 · Home 853 · object F1 × 100, mean [min{DASH}max] · registered budget "
+                       f"{budgets['00853']:.0f} s",
+              "By the clock ASP reads above frontier; by the metre the sign depends on the reference")
     names = {"official": f"Ours · ASP, October ({f853['oct_m']} m)",
              "official_nov": f"Ours · ASP, November ({f853['nov_m']} m)"}
-    y = table(s, 120, 250, 500, 380,
-              table_rows(C, "00853", ("official", "official_nov", "filter_only", "placebo", "frontier_end"), names),
-              {"paper": 50, "ours": 76})
+    y = table(s, 120, 232, 440, 400,
+              table_rows(C, "00853", ("official", "official_nov", "filter_only", "placebo", "frontier_end"), names,
+                         dimmed=("filter_only", "placebo")),
+              {"paper": 40, "ours": 52})
     L, PL = f853["leads"], f853["paper_leads"]
-    n100 = f853["ns"]["100"][0]
-    y = P(s, 120, y + 14, 1680,
-          f"At the full budget ASP reads {f853['nov100']} (n={n100}) and our frontier {f853['fr100']} "
-          f"(n={f853['n_fr100']}); the paper has {f853['paper_asp100']} and {f853['paper_fr100']}. The gaps at 10%, "
-          f"50% and 100% are {L['10']}, {L['50']} and {L['100']} points, against the paper's {PL['10']}, {PL['50']} "
-          f"and {PL['100']}.", B, BODY, 1.4, limit=960, tag="slide 8 body")
-    N(s, 120, y + 8, 1680,
-      f"Paper: Fig. 4 (left), one run each. Ours carry n. October's {WORDS[f853['oct_runs']]} runs led by "
-      f"{f853['oct10']} at 10% and trailed by {abs(f853['oct50'])} at 50%; the batches differ by "
-      f"{f853['batch50']} at 50%. At 100% the gap is {f853['hm3d100']} on the human labels and "
-      f"{sg1(f853['fm100'])} on the frontier-made map. November's ASP logs {f853['spm_asp']} s per metre, "
-      f"frontier {f853['spm_fr']}, so at a given time ASP has gone farther (slide 11). Had seed {f853['seed']} been "
-      f"stopped at its memory dip, as the rule says (deviation {DEV_SEED}), the 100% cell would read "
-      f"{f853['stopped100']}, n={f853['stopped_n']} of {f853['stopped_runs']}; 10% and 50% stay.", limit=1000)
+    y = Nq(s, 120, y + 4, 1680,
+           f"Registered, equal time. Paper: Fig. 4, one run each. ASP's lead: {L['10']}, "
+           f"{L['50']}, {L['100']} points; the paper's {PL['10']}, {PL['50']}, {PL['100']}. October's "
+           f"{WORDS[f853['oct_runs']]} runs trailed by {abs(f853['oct50'])} at 50%; the batches differ by "
+           f"{f853['batch50']}. By the rule seed {f853['seed']} loses its 100% value (dev. {DEV_SEED}): "
+           f"{f853['stopped100']}, n={f853['stopped_n']} of {f853['stopped_runs']}.", limit=760)
+    # exploratory block: equal path
+    heads = ["ASP, Nov · 50 m", "Frontier · 50 m", "ASP, Nov · 100 m", "Frontier · 100 m"]
+    lw, cw = 360, 330
+    y += 10
+    text(s, 120, y, lw, 34, [run("Exploratory · equal path", NT, ACCENT, SANS, True)])
+    for j, hd in enumerate(heads):
+        text(s, 120 + lw + j * cw, y, cw, 34, [run(hd, NT, MID, SANS, True)], PP_ALIGN.CENTER)
+    y += 36
+    hline(s, 120, y, 120 + lw + 4 * cw, y, LINE)
+    for ref, name in (("apr", "Scripted reference"), ("hm3d", "Human labels")):
+        text(s, 128, y + 12, lw - 10, 36, [run(name, 28, INK)], line=1.2)
+        for j, (arm, Lm) in enumerate((("official_nov", 50), ("frontier_end", 50), ("official_nov", 100),
+                                       ("frontier_end", 100))):
+            main, sub = cell_str(ecell(ep, "00853", ref, arm, Lm))
+            cx = 120 + lw + j * cw
+            text(s, cx, y + 2, cw, 40, [run(main, 30, INK, MONO)], PP_ALIGN.CENTER, 1.2)
+            text(s, cx, y + 36, cw, 30, [run(sub, NT, MID)], PP_ALIGN.CENTER, 1.2)
+        y += 68
+        hline(s, 120, y, 120 + lw + 4 * cw, y, RULE)
+    Nq(s, 120, y + 6, 1680,
+       "Not registered. Two control arms that share ASP's clock are registered and running (Amendment 5).",
+       limit=1010)
 
 
 WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
@@ -604,7 +735,7 @@ FOUR_ARMS = ("official", "filter_only", "placebo", "frontier_end")
 def printed(v, what):
     """A value as the slide prints it (one decimal, half up). A null stops the build."""
     if v is None:
-        fail(f"{what} is null, and slide 9 needs it")
+        fail(f"{what} is null, and slide 10 needs it")
     return rnd(v, 1)
 
 
@@ -632,22 +763,22 @@ def gaps(C, scene, C08=None):
 
 
 def facts871(C, C08):
-    """Every number in slide 9's title and body. Stops the build if the wording would claim more than the cells."""
+    """Every number in slide 10's title and body. Stops the build if the wording would claim more than the cells."""
     g = gaps(C, "00871", C08)
     if not g:
-        fail("slide 9: no 871 cell has both a value of ours and the paper's")
+        fail("slide 10: no 871 cell has both a value of ours and the paper's")
     diffs = [x["gap"] for x in g]
     if min(diffs) <= 0:
-        fail("slide 9 says ours are higher than the paper's, but a gap is not positive: "
+        fail("slide 10 says ours are higher than the paper's, but a gap is not positive: "
              + ", ".join(f"{x['arm']} {x['f']}% {x['gap']:+}" for x in g))
     for arm in ASP_ARMS:
         for f in ("50", "100"):
             n = C[("00871", arm, f)]["stage_value_x100"]["n"]
             if n:
-                fail(f"slide 9 says no ASP run of ours reaches 50% of the budget, but {arm} has n={n} at {f}%")
+                fail(f"slide 10 says no ASP run of ours reaches 50% of the budget, but {arm} has n={n} at {f}%")
     neg = sum(1 for x in g if x["gap08"] < 0)
     if not neg:
-        fail("slide 9 and the script say some gaps turn negative at 0.8 B, but none does")
+        fail("slide 10 and the script say some gaps turn negative at 0.8 B, but none does")
     mins, maxs, means = [], [], []
     for arm in FOUR_ARMS:
         sv = C[("00871", arm, "10")]["stage_value_x100"]
@@ -655,7 +786,7 @@ def facts871(C, C08):
         mins.append(printed(sv["min"], f"the minimum of 871 {arm} 10%"))
         maxs.append(printed(sv["max"], f"the maximum of 871 {arm} 10%"))
     if max(mins) > min(maxs):
-        fail("slide 9 says the four arms' ranges overlap at 10%, but they do not")
+        fail("slide 10 says the four arms' ranges overlap at 10%, but they do not")
     return {"lo": min(diffs), "hi": max(diffs), "max_gap": max(abs(d) for d in diffs), "m": len(g),
             "inside": sum(1 for x in g if x["inside"]), "neg": neg, "arm_lo": min(means), "arm_hi": max(means)}
 
@@ -677,7 +808,7 @@ def sg1(d):
 
 
 def facts853(C, slots):
-    """Every number in slide 8's title, body and note, and the figures the script and README repeat. Stops the build
+    """Every number in slide 9's title, body and note, and the figures the script and README repeat. Stops the build
     if the wording (a lead; smaller than the paper's; October's two signs; the batch gap) would claim more than
     the cells."""
     sc = "00853"
@@ -686,41 +817,41 @@ def facts853(C, slots):
     def mean(CC, arm, f, what):
         v = CC[(sc, arm, f)]["stage_value_x100"]["mean"]
         if v is None:
-            fail(f"slide 8 needs the mean of {what} {arm} {f}%, which is null")
+            fail(f"slide 9 needs the mean of {what} {arm} {f}%, which is null")
         return v
     for f in f3:
         for arm in ("official_nov", "frontier_end"):
             if stat_cell(C, sc, arm, f)[0] is None:
-                fail(f"slide 8 needs a shown value for {arm} {f}% on 853, and the table does not show one")
+                fail(f"slide 9 needs a shown value for {arm} {f}% on 853, and the table does not show one")
     nov = {f: mean(C, "official_nov", f, "ours") for f in f3}
     fr = {f: mean(C, "frontier_end", f, "ours") for f in f3}
     leads = {f: lead(nov[f], fr[f]) for f in f3}
     if min(leads.values()) <= 0:
-        fail("slide 8 says November's ASP leads our frontier, but a lead is not positive: " + str(leads))
+        fail("slide 9 says November's ASP leads our frontier, but a lead is not positive: " + str(leads))
     pv = {}
     for f in f3:
         pa, pf = C[(sc, "official_nov", f)]["paper_f1_x100"], C[(sc, "frontier_end", f)]["paper_f1_x100"]
         if pa is None or pf is None:
-            fail(f"slide 8 needs the paper's ASP and frontier values at {f}%, and one is null")
+            fail(f"slide 9 needs the paper's ASP and frontier values at {f}%, and one is null")
         pv[f] = rnd(pa, 1) - rnd(pf, 1)
     if not all(leads[f] < pv[f] for f in f3):
-        fail("slide 8 says November's leads are smaller than the paper's, but not in every cell: ours "
+        fail("slide 9 says November's leads are smaller than the paper's, but not in every cell: ours "
              + str(leads) + ", the paper's " + str(pv))
     short = {f: pv[f] - leads[f] for f in f3}
     if not (short["10"] > short["50"] and short["10"] > short["100"]):
         fail("the script and README say the shortfall is largest at 10%, but it is not: " + str(short))
     for f in ("10", "50"):
         if stat_cell(C, sc, "official", f)[0] is None:
-            fail(f"slide 8 needs a shown October ASP value at {f}%")
+            fail(f"slide 9 needs a shown October ASP value at {f}%")
     oct_ = {f: mean(C, "official", f, "ours") for f in ("10", "50")}
     oct10, oct50 = lead(oct_["10"], fr["10"]), lead(oct_["50"], fr["50"])
     if not (oct10 > 0 > oct50):
-        fail(f"slide 8 says October led at 10% and trailed at 50%, but the leads are {oct10} and {oct50}")
+        fail(f"slide 9 says October led at 10% and trailed at 50%, but the leads are {oct10} and {oct50}")
     if C[(sc, "official", "100")]["stage_value_x100"]["n"]:
-        fail("slides 8 and 11 say October's ASP runs have no value at 100%, but one has")
+        fail("slides 9 and 12 say October's ASP runs have no value at 100%, but one has")
     batch50 = lead(nov["50"], oct_["50"])
     if batch50 < leads["50"]:
-        fail(f"slides 8 and 11 say the two ASP batches differ by as much as the lead at 50%: {batch50} against "
+        fail(f"slides 9 and 12 say the two ASP batches differ by as much as the lead at 50%: {batch50} against "
              f"{leads['50']}")
     ns = {f: (C[(sc, "official_nov", f)]["stage_value_x100"]["n"], C[(sc, "official_nov", f)]["n_runs"]) for f in f3}
     others = {}
@@ -728,11 +859,11 @@ def facts853(C, slots):
         Cr = paper_cells(slots, "B", ref)[0]
         others[ref] = lead(mean(Cr, "official_nov", "100", ref), mean(Cr, "frontier_end", "100", ref))
         if others[ref] >= leads["100"]:
-            fail(f"slides 8 and 11 say the 100% lead is smaller under {ref} than under apr, but it is "
+            fail(f"slides 9 and 12 say the 100% lead is smaller under {ref} than under apr, but it is "
                  f"{others[ref]} against {leads['100']}")
     summ = json.load(open(os.path.join(R1113, "rescore_summary.json")))["nov"]
     if "alternatives" not in summ:
-        fail("rescore_summary.json nov has no 'alternatives' key (the file's shape changed again): slide 8 reads "
+        fail("rescore_summary.json nov has no 'alternatives' key (the file's shape changed again): slide 9 reads "
              "seed 43's readings from nov.alternatives.rows")
     rows = {r["kind"]: r for r in summ["alternatives"]["rows"]}
     if set(rows) != {"stopped", "without"}:
@@ -743,7 +874,7 @@ def facts853(C, slots):
     if re.search(r"_s(\d+)_", ww["run"]).group(1) != seed:
         fail("the 'stopped' and 'without' rows are about different runs")
     if st["end_s"] >= summ["B_s"]:
-        fail(f"slide 8 says seed {seed} loses its 100% value, but its stop at {st['end_s']:.1f} s is not before B")
+        fail(f"slide 9 says seed {seed} loses its 100% value, but its stop at {st['end_s']:.1f} s is not before B")
 
     def alt_cells(row):
         CC = paper_cells(slots, "B", "apr", os.path.join(R1113, row["folder"], "paper_compare.json"))[0]
@@ -758,21 +889,21 @@ def facts853(C, slots):
     for f in ("10", "50"):      # the rule's reading keeps seed 43 at 10% and 50%: those cells must equal the as-run ones
         a, b = stopped[f][0], C[(sc, "official_nov", f)]["stage_value_x100"]
         if any(a[k] != b[k] for k in ("mean", "min", "max", "n")):
-            fail(f"the 'stopped' row differs from the as-run row at {f}%, but slide 8 says seed {seed} keeps its "
+            fail(f"the 'stopped' row differs from the as-run row at {f}%, but slide 9 says seed {seed} keeps its "
                  "10% and 50% values")
     sv100 = stopped["100"][0]
     if sv100["mean"] is None or sv100["n"] >= ns["100"][0]:
-        fail(f"slide 8 says seed {seed} loses its 100% value, but the 'stopped' row's 100% n is {sv100['n']} "
+        fail(f"slide 9 says seed {seed} loses its 100% value, but the 'stopped' row's 100% n is {sv100['n']} "
              f"against {ns['100'][0]} as run")
     dev = open(os.path.join(LP, "DEVIATIONS_NOVEMBER.md"), encoding="utf-8").read()
     item = re.search(rf"^{DEV_SEED}\. .*$", dev, flags=re.M)
     if not item or set(re.findall(r"seed (\d+)", item.group(0))) != {seed}:
-        fail(f"slide 8 cites deviation {DEV_SEED} for seed {seed}, but that item does not name that seed alone")
+        fail(f"slide 9 cites deviation {DEV_SEED} for seed {seed}, but that item does not name that seed alone")
     alt = {f: (num(without[f][0]["mean"]), without[f][0]["n"]) for f in f3 if without[f][0]["mean"] is not None}
     if len(alt) != 3:
         fail(f"the row without seed {seed} has no value at 100%")
     if min(pv.values()) <= 0:
-        fail("slide 8 says 'as in the paper' (ASP above frontier), but the paper's ASP is not above its frontier "
+        fail("slide 9 says 'as in the paper' (ASP above frontier), but the paper's ASP is not above its frontier "
              "in every cell: " + str(pv))
     ends = {int(re.search(r"_(\d+)m$", r["run"]).group(1)) for r in summ["runs"]}
     if len(ends) != 1:
@@ -781,21 +912,21 @@ def facts853(C, slots):
     if not g or max(x["gap"] for x in g) >= 0:
         fail("the script and README say ours are lower than the paper's on 853, but a gap is not negative")
     d = [abs(x["gap"]) for x in g]
-    for f in ("50",):           # slide 11: October's random-guess runs read between the two ASP batches at 50%
+    for f in ("50",):           # slide 12: October's random-guess runs read between the two ASP batches at 50%
         if (sc, "placebo", f) not in C or stat_cell(C, sc, "placebo", f)[0] is None:
-            fail("slide 11 needs a shown value for October's random-guess runs at 50% on 853")
+            fail("slide 12 needs a shown value for October's random-guess runs at 50% on 853")
     spm = {r["arm"]: r for r in json.load(open(os.path.join(PROJECT, slots["paper_compare_json"])))
            ["seconds_per_metre"] if r["scene"] == sc}
     for arm in ("official_nov", "frontier_end"):
         if arm not in spm or spm[arm]["sec_per_m"]["mean"] is None:
-            fail(f"slides 8 and 11 need seconds per metre for {arm} on 853, and paper_compare.json has none")
+            fail(f"slides 9 and 12 need seconds per metre for {arm} on 853, and paper_compare.json has none")
     sp_a, sp_f = spm["official_nov"]["sec_per_m"], spm["frontier_end"]["sec_per_m"]
     if not (sp_a["mean"] < sp_f["mean"] and rnd(sp_a["mean"], 1) < rnd(sp_f["mean"], 1)):
-        fail("slides 8 and 11 say that at a given time November's ASP has gone farther than frontier (fewer "
+        fail("slides 9 and 12 say that at a given time November's ASP has gone farther than frontier (fewer "
              f"seconds per metre), but ASP logs {sp_a['mean']:.2f} against frontier's {sp_f['mean']:.2f}")
     plc50 = mean(C, "placebo", "50", "ours")
     if not rnd(oct_["50"], 1) < rnd(plc50, 1) < rnd(nov["50"], 1):
-        fail("slide 11 says October's random-guess runs read between the two ASP batches at 50%, but "
+        fail("slide 12 says October's random-guess runs read between the two ASP batches at 50%, but "
              f"{num(plc50)} is not between {num(oct_['50'])} and {num(nov['50'])}")
     return {"lo": min(d), "hi": max(d), "leads": leads, "paper_leads": pv, "oct10": oct10, "oct50": oct50,
             "batch50": batch50, "ns": ns, "hm3d100": others["hm3d"], "fm100": others["frontier_made"],
@@ -823,8 +954,13 @@ def spoken(d):
     return f"minus {abs(d)}" if d < 0 else f"{d}"
 
 
-def check_text(C, f9, f853, budgets):
-    """The script (slides 8, 9, 11) and README finding 3 hold typed figures. Check each against the cells."""
+def pm(v, nd=3):
+    """A signed value as the script says it: 'plus 0.013' or 'minus 0.012'."""
+    return f"plus {num(abs(v), nd)}" if rnd(v, nd) >= 0 else f"minus {num(abs(v), nd)}"
+
+
+def check_text(C, f9, f853, budgets, slots, Nn):
+    """The script and README finding 3 hold typed figures. Check each against the cells and the slots."""
     md = open(SCRIPT).read()
 
     def section(n):
@@ -832,41 +968,143 @@ def check_text(C, f9, f853, budgets):
         if not m:
             fail(f"ENDSEM_Script.md has no 'Slide {n}' section")
         return m.group(0)
+
+    def body(n):
+        return section(n).split("\n", 1)[1]
     k, mm, w = f9["neg"], f9["m"], WORDS
     L, PL = f853["leads"], f853["paper_leads"]
-    ints = (str(rnd(float(f853["lo"]), 0)), str(rnd(float(f853["hi"]), 0)))
     alt = f853["alt"]
-    need(section(9), [f"within {f9['max_gap']} points", f"{f9['lo']} to {f9['hi']} higher",
-                      f"{w[f9['inside']]} of {w[mm]} cells", f"{w[k]} gaps",
-                      f"On 853 ours are {ints[0]} to {ints[1]} points lower",
-                      f"{f9['arm_lo']} to {f9['arm_hi']}", "No ASP run of ours reaches 50%"], "script slide 9")
+    eq, sn = f853["equal"], f9["sens"]
     n100, nr = f853["ns"]["100"]
+    b3, b8, sl = slots["blind"]["models"], slots["ceiling"], slots
     if not (f853["hm3d100"] > 0 > f853["fm100"]):
-        fail("slide 8, the script and README give the 100% gap as positive under the human labels and negative "
-             f"under the frontier-made map, but they are {f853['hm3d100']} and {f853['fm100']}")
-    need(section(8), [f"November's {w[f853['nov_runs']]} ASP runs sit above our {w[f853['fr_runs']]} frontier runs "
-                      f"at 10%, 50% and 100%: by {L['10']}, {L['50']} and {L['100']} points, against the paper's "
-                      f"{PL['10']}, {PL['50']} and {PL['100']}",
-                      f"At 100% that is {w[n100]} runs against {w[f853['n_fr100']]}, and the gap is "
-                      f"{f853['hm3d100']} and {spoken(f853['fm100'])} under the other two references",
-                      f"October's {w[f853['oct_runs']]} runs trailed by {abs(f853['oct50'])} at 50%; the batches "
-                      f"differ by {f853['batch50']}",
-                      f"November's ASP logs {f853['spm_asp']} seconds a metre, frontier {f853['spm_fr']}",
-                      "not a test of the paper's claim"], "script slide 8")
-    banned = ("leads", "does not appear", "did not appear", "beats", "reproduce")
-    for where, txt in (("script slide 8", section(8)), ("script slide 9", section(9)),
-                       ("script slide 11", section(11)), ("script slide 22", section(22))):
-        hit = [b for b in banned if b in txt.lower()]
-        if hit:
-            fail(f"{where} uses wording the data do not carry: {hit}")
+        fail("the README gives the 100% gap as positive under the human labels and negative under the "
+             f"frontier-made map, but they are {f853['hm3d100']} and {f853['fm100']}")
+
+    def pct(v, nd=1):
+        return num(100 * v, nd)
+
+    def pct0(v):
+        t = pct(v)
+        return t[:-2] if t.endswith(".0") else t
+    # slide 1: nothing typed. slide 2: the proposal
+    pn, e2 = slots["pinned"]["proposal"], (-Nn["E2:hm3d:60m:statistic"], -Nn["E2:hm3d:60m:permutation_hi"],
+                                          -Nn["E2:hm3d:60m:permutation_lo"])
+    need(body(2), [f"{pm(e2[0])}, from {pm(e2[1])} to {pm(e2[2])}",
+                   f"gains of {num(Nn['E2:hm3d:60m:mde'], 3)} or more", f"{pn['kept']} of {pn['of']:,} guesses"],
+         "script slide 2")
+    need(body(4), [f"{pm(Nn['E1:hm3d:60m:statistic'])}, from {pm(Nn['E1:hm3d:60m:permutation_lo'])} to "
+                   f"{pm(Nn['E1:hm3d:60m:permutation_hi'])}", "DeepSeek V4.1 Flash at low effort"], "script slide 4")
+    need(body(8), [f"{budgets['00853']:.0f} seconds on 853, {budgets['00871']:.0f} on 871", "about twice 853's"],
+         "script slide 8")
+    # slide 9: November's ASP on 853, by the clock and by the metre
+    need(body(9), [f"November's {w[f853['nov_runs']]} ASP runs sit above our {w[f853['fr_runs']]} frontier runs "
+                   f"at 10%, 50% and 100%, by {L['10']}, {L['50']} and {L['100']} points, against the paper's "
+                   f"{PL['10']}, {PL['50']} and {PL['100']}",
+                   f"At 100% that is {w[n100]} runs against {w[f853['n_fr100']]}",
+                   f"October's {w[f853['oct_runs']]} runs trailed by {abs(f853['oct50'])} at 50%; the batches "
+                   f"differ by {f853['batch50']}",
+                   f"at 50 metres ASP is {eq[('apr', 50)]} ahead under the scripted reference and "
+                   f"{abs(eq[('hm3d', 50)])} behind under the human labels. At 100 metres, {eq[('apr', 100)]} ahead "
+                   f"and {abs(eq[('hm3d', 100)])} behind",
+                   "not a test of the paper's claim"], "script slide 9")
+    # slide 10: 871
+    st, pc = PINNED["paper"]["steps"], f853["pc871"]
+    need(body(10), [f"{budgets['00871']:.0f} seconds, ours are {f9['lo']} to {f9['hi']} points above the paper's",
+                    f"{st[0]} to {st[1]} steps", f"{int(SENS_B)} seconds our frontier is {sn['gap_lo']} to "
+                    f"{sn['gap_hi']} points below the paper's",
+                    f"exact objects {pc['oracle_visible']}, ASP {pc['official']}, November's frontier "
+                    f"{pc['frontier_end']}, random guesses {pc['placebo']}, October's frontier {pc['frontier_60m']}",
+                    f"differ by {sn['batch']}", "that budget is twice 853's"], "script slide 10")
+    # slide 12: the runs and the clock
     fr50 = {k_: num(C[("00853", k_, "50")]["stage_value_x100"]["mean"]) for k_ in ("frontier_60m", "frontier_end")}
-    need(section(11), [f"stop at {f853['oct_m']} metres", f"go to {f853['nov_m']}",
-                       f"{w[n100]} of {w[nr]} reach the full budget",
-                       f"{f853['oct50_mean']} and {f853['nov50_mean']}", f"{f853['plc50']}, between the two",
-                       f"frontier batches read {fr50['frontier_60m']} and {fr50['frontier_end']}",
-                       f"ASP logs {f853['spm_asp']} seconds a metre against frontier's {f853['spm_fr']}",
-                       "On 871 no ASP run reaches half",
-                       f"at {0.1 * budgets['00871']:.0f} seconds"], "script slide 11")
+    ck = PINNED["clock"]
+    need(body(12), [f"stop at {f853['oct_m']} metres", f"go to {f853['nov_m']}",
+                    f"{w[n100]} of {w[nr]} reach the full budget",
+                    f"{f853['oct50_mean']} and {f853['nov50_mean']}", f"{f853['plc50']}, between the two",
+                    f"ASP logs {f853['spm_asp']} seconds a metre against frontier's {f853['spm_fr']}",
+                    f"commit {ck['commit']}", "19 November"], "script slide 12")
+    # slide 16: the blind table; slide 17: two facts; slide 18: the ceiling
+    o, h = b3["opus"], b3["haiku"]
+    need(body(16), [f"Opus scores {pct(o['L1']['score'])}% and the prior "
+                    f"{pct(b8['opus']['L1']['B3']['comparator_score'])}%; Haiku {pct(h['L1']['score'])}% and "
+                    f"{pct0(b8['haiku']['L1']['B3']['comparator_score'])}%",
+                    f"At L2, Opus {pct(o['L2']['score'])}% against {pct(b8['opus']['L2']['B3']['comparator_score'])}%; "
+                    f"Haiku {pct(h['L2']['score'])}% against {pct(b8['haiku']['L2']['B3']['comparator_score'])}%",
+                    f"plus {pct(o['L3']['hi'], 2)} points for Opus and {pct(h['L3']['hi'])} for Haiku, under the "
+                    f"{pct(o['L3']['margin'], 0)}-point margin", "The registered line is: the claim fails"],
+         "script slide 16")
+    chk = sl["blind"]["opus_l3_check"]
+    reruns = {15: "fifteen"}.get(chk["runs"])
+    if reruns is None:
+        fail(f"script slide 17 says fifteen reruns, but there are {chk['runs']}")
+    need(body(17), [f"{pct(chk['registered_upper'], 2)} points, the margin {pct(chk['margin'], 0)}",
+                    f"{reruns} times", f"from {pct(chk['rerun_min'], 2)} to {pct(chk['rerun_max'], 2)}",
+                    f"{pct(h['L2']['placebo']['diff'])} points above random guesses, p "
+                    f"{num(h['L2']['placebo']['p'], 3)}"], "script slide 17")
+    c1, c2 = b8["opus"], b8["haiku"]
+    need(body(18), [f"{pct(c1['L1']['B3']['comparator_score'])}% on Opus's L1 rows and "
+                    f"{pct0(c2['L1']['B3']['comparator_score'])}% on Haiku's; at L2, "
+                    f"{pct(c1['L2']['B3']['comparator_score'])}% and {pct(c2['L2']['B3']['comparator_score'])}%",
+                    f"could gain {pct(c1['L1']['B3']['max_gain_perfect_model'])} and "
+                    f"{pct(c2['L1']['B3']['max_gain_perfect_model'])} points at L1, "
+                    f"{pct(c1['L2']['B3']['max_gain_perfect_model'])} and "
+                    f"{pct(c2['L2']['B3']['max_gain_perfect_model'])} at L2",
+                    f"{num(c1['L1']['B3']['perfect']['p_min_holm6'], 3)} and "
+                    f"{num(c2['L1']['B3']['perfect']['p_min_holm6'], 3)} at L1; "
+                    f"{num(c1['L2']['B3']['perfect']['p_min_holm6'], 3)} and "
+                    f"{num(c2['L2']['B3']['perfect']['p_min_holm6'], 3)} at L2",
+                    "at L2 only for Opus",
+                    f"could gain {pct(c1['L3']['D']['max_gain_perfect_model'], 0)} points",
+                    f"ends at {pct(o['L3']['hi'], 2)} against a margin of {pct(o['L3']['margin'], 0)}; Haiku's at "
+                    f"{pct(h['L3']['hi'], 2)}"], "script slide 18")
+    # slide 19: Gemini; slide 20: room test; slide 21: M2; slide 24
+    cm = sl["common"]["levels"]
+    l2, l3 = cm["L2"]["mean_row_score"], cm["L3"]["mean_row_score"]
+    need(body(19), [f"Gemini scores {pct(l2['gemini'])}%, against DeepSeek {pct(l2['deepseek'])}%, Haiku "
+                    f"{pct(l2['claude-haiku-5-5'])}%, Opus {pct(l2['claude-opus-5-5'])}% and random guesses "
+                    f"{pct(l2['placebo'])}%",
+                    f"At L3, {pct(l3['gemini'])}% against {pct(l3['deepseek'])}, {pct(l3['claude-haiku-5-5'])}, "
+                    f"{pct(l3['claude-opus-5-5'])} and {pct(l3['placebo'])}",
+                    f"the prior scores {pct(cm['L2']['b3_score'])}%",
+                    f"{w[sl['common']['anchor_rows']]} rows, {w[cm['L2']['n_clusters']]} clusters, "
+                    f"{cm['L2']['anchor_members']} members", "no longer offered to new users",
+                    "registered replay of Gemini 3.8 Flash on new rows is running"], "script slide 19")
+    rr, rf, pp = sl["room_runs"], sl["rooms_fit"], sl["room_test"]["paper"]
+    e8, ea = rr["eight_member_stages"], rr["all_stages"]
+    need(body(20), [f"{pp['hit']} of {pp['of']} rooms",
+                    f"DeepSeek predicts {e8['pooled']['official']['predicted']} of {e8['pooled']['official']['of']} "
+                    f"rooms, random guesses {e8['pooled']['placebo']['predicted']} of {e8['pooled']['placebo']['of']}",
+                    f"{pct(e8['pooled']['official']['rate'])}% against {pct(e8['pooled']['placebo']['rate'])}%, p "
+                    f"{num(e8['tests']['official_vs_placebo']['p'], 3)}",
+                    f"{ea['pooled']['official']['predicted']} of {ea['pooled']['official']['of']}, "
+                    f"{pct(ea['pooled']['official']['rate'])}%, p {num(ea['tests']['official_vs_placebo']['p'], 3)}",
+                    f"{pct(e8['pooled']['filter_only']['rate'])}% and {pct(ea['pooled']['filter_only']['rate'])}%, "
+                    f"p {num(e8['tests']['filter_only_vs_placebo']['p'], 3)} and "
+                    f"{num(ea['tests']['filter_only_vs_placebo']['p'], 3)}",
+                    "by the count in registration §11",
+                    f"{pct(rf['model'])}% of its rooms land in a fitting unobserved region, against "
+                    f"{pct(rf['placebo'])}% for random guesses; p {num(rf['p'], 3)}"], "script slide 20")
+    m2 = sl["m2"]
+    f3 = [m2["rho"][a]["mean"] for a in ("F3-deepseek", "F3-haiku", "F3-opus")]
+    need(body(21), [f"{m2['n_stages']} stages from {m2['n_runs']} runs",
+                    f"True objects give {num(m2['rho']['F1']['mean'], 3)}, random guesses "
+                    f"{num(m2['rho']['F5']['mean'], 3)}: a gap of {num(m2['diff']['A']['mean'], 3)}, and half is "
+                    f"{num(m2['diff']['A']['mean'] / 2, 3)}",
+                    f"give {num(min(f3), 3)} to {num(max(f3), 3)}", f"gives {num(m2['rho']['F0']['mean'], 3)}",
+                    f"never passes {num(sl['all_true']['bits_cap'], 1)} bits",
+                    f"correlate at {num(sl['all_true']['spearman_mean'], 2)}", "reads mainly where"],
+         "script slide 21")
+    need(body(24), [f"ends at {pct(o['L3']['hi'], 2)} against a margin of {pct(o['L3']['margin'], 0)}",
+                    "not detectably more often than a trade of regions",
+                    "at L1 no model could have been Supported, and at L2 only a perfect Opus"],
+         "script slide 24")
+    need(body(25), [f"{pct(h['L2']['placebo']['diff'])} points above"], "script slide 25")
+    banned = ("leads", "does not appear", "did not appear", "beats", "reproduce")
+    for n in (9, 10, 12, 23):
+        hit = [b_ for b_ in banned if b_ in body(n).lower()]
+        if hit:
+            fail(f"script slide {n} uses wording the data do not carry: {hit}")
     rd = open(os.path.join(PROJECT, "README.md")).read()
     m = re.search(r"^3\. \*\*November paper-scale.*?(?=^4\. \*\*)", rd, flags=re.M | re.S)
     if not m:
@@ -899,24 +1137,162 @@ def check_text(C, f9, f853, budgets):
     hit = [b for b in banned if b in m.group(0).lower()]
     if hit:
         fail(f"README finding 3 uses wording the data do not carry: {hit}")
+    em, pc = f853["eqm"], f853["pc871"]
+    need(m.group(0), [f"at 50 m ASP reads {em[('apr', 50, 'official_nov')]} (n=3) and our frontier "
+                      f"{em[('apr', 50, 'frontier_end')]} (n=5) against the scripted reference, {eq[('apr', 50)]} "
+                      f"ahead, and {em[('hm3d', 50, 'official_nov')]} against {em[('hm3d', 50, 'frontier_end')]} under "
+                      f"the human labels (`hm3d`), {abs(eq[('hm3d', 50)])} behind; at 100 m, "
+                      f"{em[('apr', 100, 'official_nov')]} (n=3) against {em[('apr', 100, 'frontier_end')]} (n=2 of 5), "
+                      f"{eq[('apr', 100)]} ahead, and {em[('hm3d', 100, 'official_nov')]} against "
+                      f"{em[('hm3d', 100, 'frontier_end')]}, {abs(eq[('hm3d', 100)])} behind",
+                      "registered and running",
+                      f"is about twice 853's, {budgets['00853']:.0f} s",
+                      f"our frontier reads {' / '.join(sn['f750'])} against the paper's {' / '.join(sn['paper'])}, "
+                      f"{sn['gap_lo']} to {sn['gap_hi']} points below it",
+                      f"exact objects {pc['oracle_visible']} (n=3), ASP {pc['official']} (n=3), November's frontier "
+                      f"{pc['frontier_end']} (n=5), random guesses {pc['placebo']} (n=3), October's frontier "
+                      f"{pc['frontier_60m']} (n=3)",
+                      f"differ by {sn['batch']}, more than ASP differs from November's frontier ({sn['asp_fr']}) or "
+                      f"from random guesses ({sn['asp_pl']})"], "README finding 3 (equal path, budget)")
+    m4 = re.search(r"^4\. \*\*November semantic test.*?(?=^5\. \*\*)", rd, flags=re.M | re.S)
+    m5 = re.search(r"^5\. \*\*Would right meaning.*?(?=^## )", rd, flags=re.M | re.S)
+    if not m4 or not m5:
+        fail("README.md lacks finding 4 or finding 5")
+    o, h, b8 = slots["blind"]["models"], slots["blind"]["models"]["haiku"], slots["ceiling"]
+    o = o["opus"]
+    cm = slots["common"]["levels"]
+    l2, l3 = cm["L2"]["mean_row_score"], cm["L3"]["mean_row_score"]
+    rr, rf = slots["room_runs"], slots["rooms_fit"]
+    e8, ea = rr["eight_member_stages"], rr["all_stages"]
+    need(m4.group(0), [f"the other-house prior scores {pct(b8['opus']['L1']['B3']['comparator_score'])}% and "
+                       f"{pct(b8['haiku']['L1']['B3']['comparator_score'])}% at L1 and "
+                       f"{pct(b8['opus']['L2']['B3']['comparator_score'])}% and "
+                       f"{pct(b8['haiku']['L2']['B3']['comparator_score'])}% at L2",
+                       f"Opus's interval ends at {pct(o['L3']['hi'], 2)} against a margin of {pct(o['L3']['margin'], 0)}",
+                       "as the author put it to us", "not checked before the test was frozen",
+                       f"Gemini scores {pct(l2['gemini'])}% at L2 against DeepSeek {pct(l2['deepseek'])}%, Haiku "
+                       f"{pct(l2['claude-haiku-5-5'])}%, Opus {pct(l2['claude-opus-5-5'])}% and random guesses "
+                       f"{pct(l2['placebo'])}%, and {pct(l3['gemini'])}% at L3 against {pct(l3['deepseek'])}%, "
+                       f"{pct(l3['claude-haiku-5-5'])}%, {pct(l3['claude-opus-5-5'])}% and {pct(l3['placebo'])}%",
+                       f"DeepSeek's live runs predict {e8['pooled']['official']['predicted']} of "
+                       f"{e8['pooled']['official']['of']} rooms and random guesses {e8['pooled']['placebo']['predicted']} "
+                       f"of {e8['pooled']['placebo']['of']} (p {num(e8['tests']['official_vs_placebo']['p'], 3)}); on "
+                       f"all stages, {ea['pooled']['official']['predicted']} of {ea['pooled']['official']['of']} "
+                       f"(p {num(ea['tests']['official_vs_placebo']['p'], 3)})",
+                       f"{e8['pooled']['filter_only']['predicted']} of {e8['pooled']['filter_only']['of']} (p "
+                       f"{num(e8['tests']['filter_only_vs_placebo']['p'], 3)}) on 8-member stages, "
+                       f"{ea['pooled']['filter_only']['predicted']} of {ea['pooled']['filter_only']['of']} (p "
+                       f"{num(ea['tests']['filter_only_vs_placebo']['p'], 3)}) on all stages",
+                       f"places {pct(rf['model'])}% of its rooms in a fitting unobserved region against "
+                       f"{pct(rf['placebo'])}% for random guesses (p {num(rf['p'], 3)}"], "README finding 4")
+    at = slots["all_true"]
+    need(m5.group(0), [f"never passes {num(at['bits_cap'], 1)} bits", f"correlate at {num(at['spearman_mean'], 2)}",
+                       "M2 varied place, not meaning"], "README finding 5")
 
 
-def table871(prs, C, budgets, slots, f9):
+SENS_B = "750"      # the shorter budget slide 10 shows beside the registered one (a key of budget_sensitivity.json)
+
+
+def sens_cell(bs, sc, arm, bkey, f):
+    return bs["scenes"][sc]["tables"]["apr"][arm][bkey][f]
+
+
+def facts_sens871(bs, ep, C):
+    """Slide 10's second row, the equal-path strip and the sentences about them. Stops the build if the sentences
+    would say more than the cells."""
+    sc = "00871"
+    S = bs["scenes"][sc]
+    reg = S["registered_B_label"]
+    if SENS_B not in S["budgets_s"] or abs(S["registered_B_s"] - BUDGETS_NOW[sc]) > 0.01:
+        fail("budget_sensitivity.json lacks the 750 s budget, or its registered B differs from paper_compare.json")
+    for arm in ("official", "frontier_end"):          # the registered row must equal the registered cells
+        for f in ("10", "50", "100"):
+            a, b = sens_cell(bs, sc, arm, reg, f), C[(sc, arm, f)]["stage_value_x100"]
+            same = (a["mean"] is None and b["mean"] is None) or (
+                a["mean"] is not None and b["mean"] is not None and abs(a["mean"] - b["mean"]) < 1e-6)
+            if not same or a["n"] != b["n"]:
+                fail(f"budget_sensitivity.json's registered row differs from paper_compare.json for {arm} {f}%")
+    gaps750 = []
+    for f in ("10", "50", "100"):
+        c = sens_cell(bs, sc, "frontier_end", SENS_B, f)
+        if not c["n"] or c["n"] != c["n_runs"]:
+            fail(f"slide 10 needs all frontier runs to have a value at {f}% of 750 s")
+        gaps750.append(rnd(c["mean"], 1) - rnd(C[(sc, "frontier_end", f)]["paper_f1_x100"], 1))
+    if max(gaps750) >= 0:
+        fail("slide 10 says our frontier is below the paper's at every fraction of 750 s, but " + str(gaps750))
+    a50 = ecell(ep, sc, "apr", "official", 50)
+    fn, fo = ecell(ep, sc, "apr", "frontier_end", 50), ecell(ep, sc, "apr", "frontier_60m", 50)
+    pl = ecell(ep, sc, "apr", "placebo", 50)
+    if not all(c["n"] for c in (a50, fn, fo, pl)):
+        fail("slide 10 needs equal-path values at 50 m for ASP, both frontier batches and random guesses")
+    batch = lead(fn["mean"], fo["mean"])
+    asp_fr, asp_pl = abs(lead(a50["mean"], fn["mean"])), lead(a50["mean"], pl["mean"])
+    if not (batch > asp_fr and batch > asp_pl):
+        fail("slide 10 says our two frontier batches differ by more than ASP differs from November's frontier or from "
+             f"random guesses at 50 m, but {batch} is not above {asp_fr} and {asp_pl}")
+    return {"gap_lo": min(abs(g) for g in gaps750), "gap_hi": max(abs(g) for g in gaps750), "batch": batch,
+            "asp_fr": asp_fr, "asp_pl": asp_pl, "fn": fn, "fo": fo,
+            "f750": [num(sens_cell(bs, sc, "frontier_end", SENS_B, f)["mean"]) for f in ("10", "50", "100")],
+            "paper": [num(C[(sc, "frontier_end", f)]["paper_f1_x100"]) for f in ("10", "50", "100")]}
+
+
+BUDGETS_NOW = {}     # filled in main(): the registered budgets of paper_compare.json
+PINNED = {}          # filled in main(): slots.json "pinned", facts read from files that are not result tables
+
+
+def sens_row(bs, sc, arm, bkey):
+    """Cells (main, sub, colour, colour) of one budget-sensitivity row, with the table's rule (a time shows only if
+    at least half the runs reach it)."""
+    cells = []
+    for f in ("10", "50", "100"):
+        c = sens_cell(bs, sc, arm, bkey, f)
+        if not c["n"] or c["n"] * 2 < c["n_runs"]:
+            cells.append(("none", "no run reaches it" if not c["n"] else f"{c['n']} of {c['n_runs']} runs", FAINT, MID))
+        else:
+            main, sub = cell_str(c)
+            cells.append((main, sub, INK, MID))
+    return cells
+
+
+def table871(prs, C, budgets, slots, f9, bs, ep):
     if not slots["table871_updated"]:
         fail("slots.json table871_updated is not true: the 871 rescore is not marked final")
-    k = f9["neg"]
-    neg = f"{k} of the {f9['m']} gaps turn{'s' if k == 1 else ''} negative"
-    s = frame(prs, 9, f"Part 2 · Object F1 × 100, mean [min{DASH}max] · home 871 · budget "
-                       f"{budgets['00871']:.0f} s", f"On 871, ours are within {f9['max_gap']} points of the paper's")
-    y = table(s, 120, 250, 500, 380, table_rows(C, "00871", FOUR_ARMS), {"paper": 62, "ours": 90, "slot": 90})
-    y = P(s, 120, y + 14, 1680,
-          f"Where both have a cell, ours are {f9['lo']}{DASH}{f9['hi']} points higher at our budget. The paper's value "
-          f"lies inside our range in {f9['inside']} of {f9['m']} cells, and at 0.8 of the budget {neg}. At 10% our "
-          f"four arms score {f9['arm_lo']}{DASH}{f9['arm_hi']} and their ranges overlap. No ASP run of ours reaches "
-          f"50% of the budget.", B, BODY, 1.4, limit=960, tag="slide 9 body")
-    N(s, 120, y + 8, 1680,
-      "Paper: Fig. 4 (left), one run each. Ours carry n. Our LLM is DeepSeek; our reference is a scripted "
-      "stand-in. Our ASP runs on 871 stop at 60 m.", limit=1000)
+    sn = f9["sens"]
+    s = frame(prs, 10, f"Part 2 · Home 871 · object F1 × 100, mean [min{DASH}max] · registered budget "
+                        f"{budgets['00871']:.0f} s", "How close we are to the paper on 871 depends on the budget")
+    paper_rows = table_rows(C, "00871", ())
+    reg = bs["scenes"]["00871"]["registered_B_label"]
+    rows = paper_rows + [
+        (f"Ours · ASP, {budgets['00871']:,.0f} s", sens_row(bs, "00871", "official", reg), "ours"),
+        (f"Ours · frontier, {budgets['00871']:,.0f} s", sens_row(bs, "00871", "frontier_end", reg), "ours"),
+        ("Exploratory · ASP, 750 s", sens_row(bs, "00871", "official", SENS_B), "ours", True),
+        ("Exploratory · frontier, 750 s", sens_row(bs, "00871", "frontier_end", SENS_B), "ours")]
+    y = table(s, 120, 232, 440, 400, rows, {"paper": 40, "ours": 52})
+    y += 14
+    y = lab(s, 120, y, 1680, f"Exploratory · equal path, 50 m · scripted reference · F1 × 100, mean [min{DASH}max]")
+    grid = [("oracle_visible", "Exact objects"), ("official", "ASP"), ("filter_only", "ASP + filter"),
+            ("placebo", "Random guesses"), ("frontier_end", "Frontier, Nov"), ("frontier_60m", "Frontier, Oct"),
+            ("crashed_frontier_1st", "Frontier, crashed 1st tries"), ("crashed_frontier_rerun", "Frontier, reruns")]
+    for i, (arm, name) in enumerate(grid):
+        main, sub = cell_str(ecell(ep, "00871", "apr", arm, 50))
+        if main is None:
+            fail(f"slide 10's equal-path grid has no value at 50 m for {arm}")
+        gx, gy = 120 + (i % 4) * 420, y + (i // 4) * 66
+        dim = arm in ("filter_only", "crashed_frontier_1st", "crashed_frontier_rerun")   # not read aloud
+        text(s, gx, gy, 410, 30, [run(name, NT, FAINT if dim else MID, SANS, True)], line=1.2)
+        text(s, gx, gy + 28, 410, 34, [run(f"{main} {sub}", 26, MID if dim else INK, MONO)], line=1.2)
+    y += 2 * 66 + 6
+    y = P(s, 120, y, 1680,
+          f"At {budgets['00871']:,.0f} s ours are {f9['lo']}{DASH}{f9['hi']} points above the paper's. At "
+          f"{int(SENS_B)} s our frontier is "
+          f"{sn['gap_lo']}{DASH}{sn['gap_hi']} below it. Our two frontier batches differ by {sn['batch']} at 50 m, "
+          f"more than ASP differs from November's frontier ({sn['asp_fr']}) or from random guesses ({sn['asp_pl']}).",
+          B, BODY, 1.35, limit=960, tag="slide 10 body")
+    st = PINNED["paper"]["steps"]
+    Nq(s, 120, y + 2, 1680,
+       f"{int(SENS_B)} s: the paper says a run has {st[0]} to {st[1]} steps, which suggests a shorter budget than "
+       f"our {budgets['00871']:,.0f} s. Our inference, not its figure. Paper: Fig. 4 (left), one run each.",
+       limit=1012)
 
 
 # ---------------------------------------------------------------- 10. Part 2, limits of the reference
@@ -924,13 +1300,13 @@ def table871(prs, C, budgets, slots, f9):
 def limits_reference(prs, checks, f1, frozen):
     """f1: C2 per scene, {"00853": ..., "00871": ...}. frozen: whether each repeat tour is frozen (None: not known)."""
     if any(v is True for v in frozen.values()):
-        fail("slide 10 says the repeat tour is not frozen in either home, but c2_*.json says it is frozen in "
+        fail("slide 11 says the repeat tour is not frozen in either home, but c2_*.json says it is frozen in "
              + ", ".join(sc for sc, v in frozen.items() if v is True))
     if any(v is None for v in frozen.values()):
-        print("NOTE: no c2_*.json value for 'frozen'; slide 10's 'not frozen' is not tested", file=sys.stderr)
+        print("NOTE: no c2_*.json value for 'frozen'; slide 11's 'not frozen' is not tested", file=sys.stderr)
     if max(f1.values()) >= 0.90:
-        fail("slide 10 says both C2 values are below 0.90, but one is not: " + str(f1))
-    s = frame(prs, 10, "Part 2 · Limits of the reference", "The reference is rebuilt, and it moves")
+        fail("slide 11 says both C2 values are below 0.90, but one is not: " + str(f1))
+    s = frame(prs, 11, "Part 2 · Limits of the reference", "The reference is rebuilt, and it moves")
     rec = [checks[sc]["C3"]["apr_a_recall_vs_hm3d"] for sc in ("00853", "00871")]
     c1t = json.load(open(C1_TABLE))
     L, w = 120, 900
@@ -973,20 +1349,21 @@ def limits_reference(prs, checks, f1, frozen):
 # ---------------------------------------------------------------- 11. Part 2, limits of the runs
 
 def limits_runs(prs, C, budgets, slots, f853):
-    s = frame(prs, 11, "Part 2 · Limits of the runs", "What limits the runs")
+    s = frame(prs, 12, "Part 2 · Limits of the runs", "What limits the runs")
+    ck = PINNED["clock"]
     # Guards for the sentences below: October's ASP runs have no value past 60 m (853 at 100%, 871 at 50%), and the
     # two frontier batches' ranges overlap. (facts853 guards the batch gap and the November row.)
     for sc, f in (("00853", "100"), ("00871", "50")):
         for arm in ASP_ARMS:
             n = C[(sc, arm, f)]["stage_value_x100"]["n"]
             if n:
-                fail(f"slide 11 says October's ASP runs have no value at {f}% on {sc[-3:]}, but {arm} has n={n}")
+                fail(f"slide 12 says October's ASP runs have no value at {f}% on {sc[-3:]}, but {arm} has n={n}")
     for f in ("10", "50"):
         a, b = (C[("00853", arm, f)]["stage_value_x100"] for arm in ("frontier_60m", "frontier_end"))
         if max(a["min"], b["min"]) > min(a["max"], b["max"]):
-            fail(f"slide 11 says the two frontier batches' ranges overlap at {f}%, but they do not")
+            fail(f"slide 12 says the two frontier batches' ranges overlap at {f}%, but they do not")
     if C[("00871", "official", "50")]["stage_value_x100"]["n"]:
-        fail("slide 11 says no ASP run reaches 50% of the 871 budget, but one does")
+        fail("slide 12 says no ASP run reaches 50% of the 871 budget, but one does")
     first_871 = f"{0.1 * budgets['00871']:.0f}"       # 10% of the 871 budget: the one ASP-frontier cell there
 
     def rng(arm, frac):
@@ -999,36 +1376,43 @@ def limits_runs(prs, C, budgets, slots, f853):
                           f"{n100} of {nruns} reach 100% of the 853 budget. At 50% on 853 they score "
                           f"{rng('official', '50')} and {rng('official_nov', '50')}, and October's random-guess runs "
                           f"{f853['plc50']}, between the two: the batches differ by as much as the gap between "
-                          "ASP and frontier. On 871 no ASP run reaches 50%.", "n")], B, BODY, 1.4)
-    y = P(s, L, y + 28, w, [("Two batches of one frontier explorer. ", "b"),
+                          "ASP and frontier.", "n")], B, BODY, 1.3)
+    y = P(s, L, y + 20, w, [("Two batches of one frontier explorer. ", "b"),
                             (f"On 853 at 50% of the budget: {rng('frontier_60m', '50')} in October (3 runs, cut at "
                              f"60 m) and {rng('frontier_end', '50')} in November (5 runs, to the natural end). At "
                              f"10%: {rng('frontier_60m', '10')} and {rng('frontier_end', '10')}. The ranges "
-                             "overlap.", "n")], B, BODY, 1.4)
-    y = P(s, L, y + 28, w, [("The clocks differ. ", "b"),
-                            ("In the host's copy of the code, frontier's clock also counts its waits for a path; "
-                             f"ASP's does not. On 853 November's ASP logs {f853['spm_asp']} s per metre and our "
-                             f"frontier {f853['spm_fr']}, so part of the gaps on slide 8 may come from the clock. "
-                             f"On 871 the only ASP–frontier comparison is at {first_871} s.", "n")], B, BODY, 1.4)
-    N(s, L, y + 12, w, "The clock finding comes from the host's patched copy; we have not checked it against the "
-                       "released code.")
+                             "overlap.", "n")], B, BODY, 1.3)
+    y = P(s, L, y + 20, w, [("The clocks differ. ", "b"),
+                            ("In the authors' code, frontier's clock starts when planning ends, before the path "
+                             "arrives, so it counts the wait for a path; ASP's starts as the robot begins to move. "
+                             f"On 853 November's ASP logs {f853['spm_asp']} s per metre and our frontier "
+                             f"{f853['spm_fr']}, so part of the gaps on slide 9 may come from the clock. "
+                             f"On 871 the only ASP–frontier comparison at the registered budget is at "
+                             f"{first_871} s.", "n")], B, BODY, 1.3)
+    Nq(s, L, y + 8, w, f"Checked on {ck['date']} in the authors' commit {ck['commit']}: {ck['frontier']['file']} "
+                       f"starts the clock at lines {ck['frontier']['start']}, stops it at {ck['frontier']['stop']}; "
+                       f"{ck['asp']['file']} starts it at {ck['asp']['start']}.")
     box_bottom(s, "Reading.", "We read the table as a check on scale. It does not test the paper's claim.")
 
 
 # ---------------------------------------------------------------- 12. Part 3, the defense
 
 def defense(prs):
-    s = frame(prs, 12, "Part 3", "The author's defense, in three questions")
-    P(s, 120, 262, 1680, "The author: often wrong in place, but right in meaning, and that is enough.",
-      B, INK, 1.4)
+    s = frame(prs, 13, "Part 3", "The author's claim, in three questions")
+    pn = PINNED["paper"]
+    y = P(s, 120, 262, 1680, "As the author put it to us, the guesses are often wrong in place but right in "
+                             "meaning, and that is enough.", B, INK, 1.4)
+    y = P(s, 120, y + 10, 1680, "Not in the paper. It comes from the author's demo and from what the author told "
+                                "the student when they met. The paper's nearest text, in section IV-B, calls a "
+                                f"{pn['bathroom']} a failure that {pn['revisit']}.", B, MID, 1.35, limit=620)
     steps = [("Is the meaning right?", "Beat the controls: baselines that see the same map."),
              ("Is it enough for ASP?", "Give ASP true labels, moved by real error."),
-             ("Is it the model?", "Replay Claude on the same 44 saved inputs.")]
+             ("Is it the model?", "Replay Claude on the same 44 saved inputs. Look at Gemini.")]
     for i, (name, what) in enumerate(steps):
         x = 120 + i * 580
-        hline(s, x, 420, x + 520, 420, INK, 2)
-        y = P(s, x, 440, 520, [(name, "b")], B, line=1.3)
-        P(s, x, y + 12, 520, what, B, BODY, 1.35, limit=800)
+        hline(s, x, 640, x + 520, 640, INK, 2)
+        y = P(s, x, 660, 520, [(name, "b")], B, line=1.3)
+        P(s, x, y + 12, 520, what, B, BODY, 1.35, limit=900)
     box_bottom(s, "Blind test:", "the scorer was frozen first.")
 
 
@@ -1037,7 +1421,7 @@ def defense(prs):
 def picture_levels(prs, slots):
     n = json.load(open(STAGE_JSON))
     chance = slots["blind"]["models"]["opus"]
-    s = frame(prs, 13, "Part 3", "A hit and a miss, on one stage")
+    s = frame(prs, 14, "Part 3", "A hit and a miss, on one stage")
     s.shapes.add_picture(STAGE_PNG, px(120), px(250), px(730), px(730))
     X, w = 900, 900
     y = 256
@@ -1085,20 +1469,23 @@ def picture_levels(prs, slots):
 
 def controls(prs, slots):
     mg = slots["blind"]["models"]["opus"]
-    s = frame(prs, 14, "Part 3", "What each guess is compared with")
+    s = frame(prs, 15, "Part 3", "What each guess is compared with")
     mtxt = ", ".join(num(100 * mg[lv]["margin"], 0) for lv in ("L1", "L2", "L3"))
     y = P(s, 120, 252, 1680, f"A control sees the same map. Margin: the gain over it we would count ({mtxt} "
                              "points at L1, L2, L3). Named: the control the verdict uses.", B, BODY, 1.4)
     items = [("Prior from 179 other houses", "L1, L2 · named"), ("Random guesses", "L1, L2"),
              ("Own labels, swapped among guesses", "L3"), ("Regions, trading contents", "L3 · named"),
              ("Prior's labels at the model's places", "L3")]
-    y += 20
+    y += 14
     for txt, lv in items:
         y0 = y
         y = P(s, 120, y, 1280, txt, B, BODY, 1.35)
         text(s, 1400, y0 + 4, 400, 40, [run(lv, 28, MID, MONO)], PP_ALIGN.RIGHT, 1.2)
-        hline(s, 120, y + 12, 1800, y + 12, RULE)
-        y += 30
+        hline(s, 120, y + 8, 1800, y + 8, RULE)
+        y += 20
+    box_bottom(s, "Not checked before the freeze:", "what the comparators themselves score. The power check asked only "
+                                                    "whether “Rejected” was within reach, never whether "
+                                                    "“Supported” was. Slide 18 shows what they score.")
 
 
 # ---------------------------------------------------------------- 15. Part 3, the blind test
@@ -1108,9 +1495,47 @@ def pts(v, nd=1):
     return sg(100 * v, nd)
 
 
+def blind_facts(slots):
+    """Guards for the words on slides 16, 18 and 24: all six registered verdicts Rejected (so the registered line is
+    'The claim fails'), no detectable gain (every interval reaches 0 or below), and the ceiling flags the title,
+    slide 18 and the script rely on."""
+    b, ce = slots["blind"]["models"], slots["ceiling"]
+    for m in ("opus", "haiku"):
+        for lv in ("L1", "L2", "L3"):
+            if b[m][lv]["verdict"] != "Rejected":
+                fail(f"slides 16 and 24 say all six verdicts are Rejected, but {m} {lv} is {b[m][lv]['verdict']}")
+            if b[m][lv]["lo"] > 0:
+                fail(f"slide 16's title says no detectable gain, but {m} {lv} has an interval wholly above 0")
+        if b[m]["L2"]["hi"] >= 0:
+            fail(f"slide 16's title says both models are detectably below the prior at L2, but {m}'s interval "
+                 "reaches 0")
+    if slots["outcome"] != "fails" or slots["thesis"] != "The claim fails":
+        fail("slides 16 and 24 give the registered line as 'The claim fails', but slots.json says "
+             + repr(slots["thesis"]))
+    can = {(m, lv): ce[m][lv]["B3"]["perfect"]["can_reach_alpha"] for m in ("opus", "haiku") for lv in ("L1", "L2")}
+    if can != {("opus", "L1"): False, ("haiku", "L1"): False, ("opus", "L2"): True, ("haiku", "L2"): False}:
+        fail("slides 16 and 18 say a perfect score could not have been Supported at L1 for either model, and at L2 "
+             "only for Opus, but the ceiling file says " + str(can))
+    for m in ("opus", "haiku"):
+        for lv, c in (("L1", "B3"), ("L2", "B3")):
+            if ce[m][lv][c]["comparator_score"] < 0.9:
+                fail(f"slide 18 says the prior scores 90% or more at L1 and L2, but {m} {lv} is "
+                     f"{ce[m][lv][c]['comparator_score']}")
+        for c in ("D",):
+            if ce[m]["L3"][c]["max_gain_perfect_model"] < b[m]["L3"]["margin"]:
+                fail("slide 18 says Supported was within reach at L3, but the region trade scores too high")
+    chk = slots["blind"]["opus_l3_check"]
+    if not (b["opus"]["L3"]["hi"] < b["opus"]["L3"]["margin"] and chk["rerun_max"] < chk["margin"]):
+        fail("slides 16, 17 and 18 say Opus's L3 interval ends just under its margin in the registered run and in "
+             "every rerun, but it does not")
+    return {"c": ce}
+
+
 def blind_table(prs, slots):
     b = slots["blind"]["models"]
-    s = frame(prs, 15, "Part 3 · Blind test", "Blind test: the claim fails")
+    ce = slots["ceiling"]
+    s = frame(prs, 16, "Part 3 · Blind test",
+              "Naming: no detectable gain over base rates, below them at L2. Placing: none over a region trade")
     cols = [("opus", "Opus 5.5", ""), ("haiku", "Haiku 5.5", ""), ("deepseek", "DeepSeek", "exploratory")]
     X, lw, cw = 120, 420, 420
     xs = [X + lw + i * cw for i in range(3)]
@@ -1135,20 +1560,28 @@ def blind_table(prs, slots):
             text(s, x, y + 4, cw - 20, 44, [[run(pts(e["diff"]), 32, INK, MONO),
                                              run("  " + e["verdict"], NT, INK, SANS, True)]], line=1.2)
             text(s, x, y + 44, cw - 20, 32, [run(f"[{pts(e['lo'])}, {hi}]", NT, MID, MONO)], line=1.2)
-            if lv == "L3":
-                tail = f"score {num(100 * e['score'], 1)}% · random {num(100 * e['placebo_score'], 1)}%"
+            own = f"score {num(100 * e['score'], 1)}%"
+            if key in ce:       # the comparator's own score on the same rows (ceiling.json); DeepSeek has none
+                cname = "region trade" if lv == "L3" else "prior"
+                cc = ce[key][lv][e["named"]]
+                # at L3 the model's score on the trade's own rows (43 of 44), so the two scores are on the same rows
+                own = f"score {num(100 * (cc['model_score'] if lv == 'L3' else e['score']), 1)}%"
+                tail = f"{own} · {cname} {num(100 * cc['comparator_score'], 1)}%"
             else:
-                tail = f"score {num(100 * e['score'], 1)}% · v random {pts(e['placebo']['diff'])}"
-            text(s, x, y + 78, cw - 20, 32, [run(tail, NT, MID)], line=1.2)
-        y += 128
+                tail = own
+            text(s, x, y + 76, cw - 20, 32, [run(tail, NT, MID)], line=1.2)
+        y += 118
         hline(s, X, y, X + lw + 3 * cw, y, RULE)
-    N(s, X, y + 8, 1680,
-      "Difference = model minus comparator. Score = hit rate, mean over 12 clusters (home, seed, arm). One run with "
-      "the frozen scorer; no other run is recorded. Opus L3 shows two decimals: its upper end, 2.95, is just under "
-      "the margin, 3.", limit=905)
-    box_bottom(s, "Rejected:", "the interval rules out a gain over the named comparator as large as the margin. It "
-                               "does not say the model is worse. At L2 the interval lies wholly below zero, so both "
-                               "models are worse than the prior.")
+    N(s, X, y + 6, 1680,
+      "Difference = model minus comparator, in points. Score = the share of named room types (L1) or object classes "
+      "(L2) that are there, or L3 hits; mean over 12 clusters (home, seed, arm). Opus and Haiku L3 scores are on the "
+      f"region trade's {ce['opus']['L3']['D']['n_rows']} rows. One run with the frozen scorer; no other run is "
+      "recorded. Opus L3 shows two decimals: its upper end, 2.95, is just under the margin, 3.",
+      limit=905)
+    box_bottom(s, "The registered line,", f"“{slots['thesis']}”, says less than it seems to. Rejected means the "
+                                          "interval rules out a gain as large as the margin. At L1 no model could have "
+                                          "been Supported, and at L2 only a perfect Opus could (slide 18), so the line "
+                                          "rests on L3.")
 
 
 # ---------------------------------------------------------------- 16. Part 3, two facts against the headline
@@ -1157,7 +1590,7 @@ def facts(prs, slots):
     b = slots["blind"]["models"]
     chk = slots["blind"]["opus_l3_check"]
     hh = b["haiku"]["L2"]["placebo"]
-    s = frame(prs, 16, "Part 3", "Two facts")
+    s = frame(prs, 17, "Part 3", "Two facts that cut against the registered line")
     t1 = (f"the top of the interval is {num(100 * chk['registered_upper'], 2)} points, the margin "
           f"{num(100 * chk['margin'], 0)}. {chk['runs']} reruns of the region trade after the result "
           f"(deviation 55): {num(100 * chk['rerun_min'], 2)} to {num(100 * chk['rerun_max'], 2)}.")
@@ -1175,32 +1608,52 @@ def facts(prs, slots):
 def detect(prs, slots):
     m = slots["blind"]["mdd"]
     ops = slots["blind"]["models"]
-    s = frame(prs, 17, "Part 3", "What the test could see")
+    ce = slots["ceiling"]
+    s = frame(prs, 18, "Part 3 · Exploratory, made after the result",
+              "What a perfect score could have shown: a ceiling at L1 and L2")
     L = 120
-    for j, hd in enumerate(("Detectable", "Margin")):
-        text(s, L + 150 + j * 260, 250, 250, 34, [kick(hd, NT, 0.06)])
-    hline(s, L, 288, L + 700, 288, LINE)
-    y = 296
+    heads = [("Prior's own score", 330), ("Most a model could gain", 360), ("Best p after Holm", 300),
+             ("Supported possible?", 300)]
+    x = L + 380
+    for hd, w in heads:
+        text(s, x, 246, w, 34, [run(hd, NT, MID, SANS, True)])
+        x += w
+    hline(s, L, 286, L + 380 + sum(w for _, w in heads), 286, LINE)
+    y = 292
     for lv in ("L1", "L2"):
-        text(s, L, y + 12, 140, 44, [run(lv, 32, INK, MONO)], line=1.2)
-        for j, v in enumerate((100 * m[lv]["mdd"], 100 * m[lv]["margin"])):
-            text(s, L + 150 + j * 260, y + 12, 250, 44, [run(num(v, 1), 32, INK, MONO)], line=1.2)
-        y += 64
-        hline(s, L, y, L + 700, y, RULE)
-    y = P(s, L, y + 20, 1680, "Rejected was within reach at each level. At L1 and L2 a true gain equal to the margin "
-                              "would be found less than 80% of the time.", B, BODY, 1.4)
-    y = P(s, L, y + 16, 1680, f"Gains up to {num(100 * ops['opus']['L3']['hi'], 2)} (Opus) and "
-                              f"{num(100 * ops['haiku']['L3']['hi'], 2)} (Haiku) points at L3 are not ruled out.",
-          B, BODY, 1.4)
-    P(s, L, y + 16, 1680, f"No L3 row: its registered figure, {num(100 * m['L3']['mdd'], 1)} points, comes "
-                          "from the random guesses' contrast.", B, BODY, 1.4, limit=990)
+        for key, name in (("opus", "Opus"), ("haiku", "Haiku")):
+            d = ce[key][lv]["B3"]
+            vals = [f"{num(100 * d['comparator_score'], 1)}%", f"{num(100 * d['max_gain_perfect_model'], 1)} points",
+                    num(d["perfect"]["p_min_holm6"], 3), "yes" if d["perfect"]["can_reach_alpha"] else "no"]
+            text(s, L, y + 10, 370, 40, [run(f"{lv} · {name}", 28, INK, SANS, True)], line=1.2)
+            x = L + 380
+            for (hd, w), v in zip(heads, vals):
+                text(s, x, y + 10, w - 10, 40, [run(v, 30, INK, MONO)], line=1.2)
+                x += w
+            y += 54
+            hline(s, L, y, L + 380 + sum(w for _, w in heads), y, RULE)
+    y = P(s, L, y + 18, 1680, "The prior is the comparator at L1 and L2. A model that scores 100% in every member "
+                              "could have gained only this much over it, with the smallest p the test could return "
+                              "after Holm's correction for six tests.", B, BODY, 1.35, limit=960)
+    y = P(s, L, y + 14, 1680, [("So the registered line rests on L3. ", "b"),
+                               (f"There a perfect model could gain "
+                                f"{num(100 * ce['opus']['L3']['D']['max_gain_perfect_model'], 0)} points over the "
+                                f"region trade, and Opus's "
+                                f"interval ends at {num(100 * ops['opus']['L3']['hi'], 2)} against a margin of "
+                                f"{num(100 * ops['opus']['L3']['margin'], 0)}. For Haiku it ends at "
+                                f"{num(100 * ops['haiku']['L3']['hi'], 2)}.", "n")], B, BODY, 1.35, limit=960)
+    Nq(s, L, y + 8, 1680,
+       f"At L1 and L2 the detectable difference is {num(100 * m['L1']['mdd'], 1)} and {num(100 * m['L2']['mdd'], 1)} "
+      f"points, above the {num(100 * m['L1']['margin'], 0)}-point margin, so a true gain equal to the margin would be "
+      f"found less than 80% of the time; Rejected was within reach. No L3 row: its registered figure, "
+      f"{num(100 * m['L3']['mdd'], 1)} points, comes from the random guesses' contrast.", limit=1012)
 
 
 # ---------------------------------------------------------------- 18. Part 3, the wrong-house check
 
 def wrong_house(prs, slots):
     w = slots["blind"]["wrong_house"]
-    s = frame(prs, 18, "Part 3 · Controls", "The wrong-house check")
+    s = frame(prs, 26, "Backup · Part 3 · Controls", "The wrong-house check", backup=True)
     y = P(s, 120, 252, 1680, "We score the model's guesses for the other home against this home. Right guesses "
                              "should beat them.", B, BODY, 1.4)
     X = 120
@@ -1222,7 +1675,7 @@ def wrong_house(prs, slots):
 
 def placement_slide(prs, slots):
     p = slots["placement"]
-    s = frame(prs, 19, "Part 3", "How far a guess is from an object it could name")
+    s = frame(prs, 27, "Backup · Part 3", "How far a guess is from an object it could name", backup=True)
     text(s, 1330, 250, 470, 30, [run("guesses used / all", NT, MID)], PP_ALIGN.RIGHT)
     order = sorted(p.items(), key=lambda kv: kv[1]["median"])
     names = {"gemini": "Gemini, exploratory", "haiku": "Haiku 5.5", "deepseek": "DeepSeek, exploratory",
@@ -1238,14 +1691,146 @@ def placement_slide(prs, slots):
                             "left out.", limit=900)
 
 
-# ---------------------------------------------------------------- 20. Part 3, M2
+# ---------------------------------------------------------------- 19. Part 3, is it the model?
+
+GEMINI_NAMES = {"gemini": "Gemini 3.8 Flash", "deepseek": "DeepSeek", "claude-haiku-5-5": "Haiku 5.5",
+                "claude-opus-5-5": "Opus 5.5", "placebo": "Random guesses"}
+
+
+def gemini_slide(prs, slots):
+    c, g = slots["common"], slots["gemini_replay"]
+    if g.get("status") != "pending" or g.get("result") is not None:
+        fail("slots.json gemini_replay is not 'pending' with no result: slide 19 has no layout for a result yet "
+             "(that is the second pass); keep it pending until the layout and its guards are added")
+    L2, L3 = c["levels"]["L2"], c["levels"]["L3"]
+    if c["anchor"] != "gemini":
+        fail("common_rows.json is not anchored on Gemini")
+    for name, lv in (("L2", L2), ("L3", L3)):
+        sc = lv["mean_row_score"]
+        if any(sc["gemini"] <= sc[k] for k in ("claude-opus-5-5", "claude-haiku-5-5")):
+            fail(f"slide 19's title says Gemini scored above Claude on these rows, but not at {name}")
+    if L2["b3_score"] <= L2["mean_row_score"]["gemini"]:
+        fail("slide 19's title says the prior still scores above Gemini at L2 on these rows, but it does not")
+    for key in ("claude-opus-5-5", "placebo"):
+        if L2["anchor_vs"][key]["above"] * 2 <= L2["n_rows"]:
+            fail(f"slide 19 and the script say Gemini is above {key} in most L2 rows, but it is not")
+    s = frame(prs, 19, "Part 3 · Is it the model?", "Is it the model? On 8 rows Gemini 3.8 Flash scored above Claude, and still below the prior",
+              pending="exploratory")
+    names = sorted(((k, v) for k, v in L2["mean_row_score"].items()), key=lambda kv: -kv[1])
+    x2, x3 = 520, 1260
+    text(s, x2, 250, 700, 34, [run(f"L2 · object classes that are there (%) · {L2['n_rows']} rows", NT, MID, SANS, True)])
+    text(s, x3, 250, 560, 34, [run(f"L3 · roughly where (%) · {L3['n_rows']} rows", NT, MID, SANS, True)])
+    hline(s, 120, 290, 1800, 290, LINE)
+    rows = [(GEMINI_NAMES[k], v, L3["mean_row_score"][k], k == "gemini") for k, v in names]
+    rows.append(("Other-house prior", L2["b3_score"], L3["b3_score"], False))
+    y = 300
+    for name, v2, v3, hot in rows:
+        text(s, 120, y + 6, 390, 40, [run(name, 28, INK, SANS, hot)], line=1.2)
+        rect(s, x2, y + 10, v2 * 460, 30, INK if hot else MID)
+        svg_text(s, x2 + v2 * 460 + 14, y + 36, f"{num(100 * v2, 1)}", 28, INK, MONO, w=120)
+        if v3 is None:
+            svg_text(s, x3, y + 36, "n/a: the prior names no place", NT, MID, SANS, w=500)
+        else:
+            rect(s, x3, y + 10, v3 / 0.2 * 320, 30, INK if hot else MID)
+            svg_text(s, x3 + v3 / 0.2 * 320 + 14, y + 36, f"{num(100 * v3, 1)}", 28, INK, MONO, w=120)
+        y += 52
+        hline(s, 120, y, 1800, y, RULE)
+    vs = L2["anchor_vs"]
+    y = Nq(s, 120, y + 8, 1680,
+           f"Exploratory. {c['anchor_rows']} rows, {L2['n_clusters']} clusters, {L2['anchor_members']} members, chosen "
+           f"in October; Gemini 3.8 Flash, not the paper's Gemini 2.5 Pro. At L2 Gemini is above Opus in "
+           f"{vs['claude-opus-5-5']['above']} of {L2['n_rows']} rows. The prior's score is on Gemini's members.",
+           limit=900)
+    box(s, 120, y + 10, 1680, "Registered replay of Gemini 3.8 Flash on new rows:",
+        "running; no result yet. The paper's own model, Gemini 2.5 Pro, is no longer offered to new users "
+        "(11-19, PREREGISTRATION_GEMINI.md Note 1).", B, dashed=True)
+
+
+# ---------------------------------------------------------------- 20. Part 3, the paper's room test
+
+def room_slide(prs, slots):
+    rr, rf, pp = slots["room_runs"], slots["rooms_fit"], slots["room_test"]["paper"]
+    e, a = rr["eight_member_stages"], rr["all_stages"]
+    for v in (e, a):
+        if v["pooled"]["official"]["rate"] <= v["pooled"]["placebo"]["rate"]:
+            fail("slide 20 says DeepSeek's room rate is above random guesses' on both counts, but it is not")
+    pe, pa = e["tests"]["official_vs_placebo"]["p"], a["tests"]["official_vs_placebo"]["p"]
+    fe, fa = e["tests"]["filter_only_vs_placebo"], a["tests"]["filter_only_vs_placebo"]
+    if not (pe > 0.05 > pa):
+        fail(f"slide 20 and the script say p is above 0.05 on the 8-member count of registration section 11 ({pe}) and "
+             f"below it on all stages ({pa}), but they do not read so")
+    if min(fe["p"], fa["p"]) <= 0.05 or fe["observed_diff"] >= 0.05 or fa["observed_diff"] >= 0.05:
+        fail("slide 20 says the filter arm is not ahead of random guesses (p above 0.05 on both counts), but it reads "
+             "otherwise")
+    if not (rf["lo"] > 0):
+        fail("slide 20 says Opus places rooms in fitting regions above random guesses, but its interval reaches 0")
+    s = frame(prs, 20, "Part 3 · The paper's room test · exploratory",
+              f"Paper's room test: ahead of random guesses; p is {num(pe, 3)} on the §11 count")
+    X, cws = 120, (460, 330, 330, 330, 230)
+    heads = ("Count", f"DeepSeek ({e['pooled']['official']['runs']} runs)",
+             f"+ filter ({e['pooled']['filter_only']['runs']} runs)", f"Random ({e['pooled']['placebo']['runs']} runs)",
+             "p v random")
+    x = X
+    for hd, w in zip(heads, cws):
+        text(s, x, 246, w, 34, [run(hd, NT, MID, SANS, True)])
+        x += w
+    hline(s, X, 286, X + sum(cws), 286, LINE)
+    y = 292
+    for name, sub, v in (("8-member stages", "the rule of registration §11", e), ("All stages", "", a)):
+        text(s, X, y + 6, cws[0] - 10, 40, [run(name, 28, INK, SANS, True)], line=1.2)
+        if sub:
+            text(s, X, y + 42, cws[0] - 10, 30, [run(sub, NT, MID)], line=1.2)
+        x = X + cws[0]
+        for arm in ("official", "filter_only", "placebo"):
+            d = v["pooled"][arm]
+            text(s, x, y + 16, cws[1] - 10, 40, [run(f"{d['predicted']} of {d['of']} · {num(100 * d['rate'], 1)}%", 28,
+                                                  INK, MONO)], line=1.2)
+            x += cws[1]
+        t = v["tests"]
+        text(s, x, y + 16, cws[4], 40, [run(f"{num(t['official_vs_placebo']['p'], 3)} · "
+                                            f"{num(t['filter_only_vs_placebo']['p'], 3)}", 28, INK, MONO)], line=1.2)
+        y += 80
+        hline(s, X, y, X + sum(cws), y, RULE)
+    lo8, hi8 = e["official_stages_8"]
+    n_lo, n_hi = e["official_stages"]
+    y = P(s, X, y + 22, 1680, [("Caution. ", "b"), (f"DeepSeek's runs hold {lo8} to {hi8} stages with 8 members, out of "
+                                                   f"{n_lo} to {n_hi}; the random runs hold all theirs. Under the "
+                                                   "8-member rule the arms do not have equal chances.", "n")],
+          B, BODY, 1.3)
+    y = P(s, X, y + 8, 1680, [("Filter arm. ", "b"),
+                              ("Also built from DeepSeek's guesses, it is not ahead of random guesses: "
+                               f"{sg(100 * fe['observed_diff'], 1)} points on 8-member stages (p {num(fe['p'], 3)}), "
+                               f"{sg(100 * fa['observed_diff'], 1)} on all stages (p {num(fa['p'], 3)}).", "n")],
+          B, BODY, 1.3)
+    y = P(s, X, y + 8, 1680, [("Opus, replayed. ", "b"),
+                               (f"Rooms placed in a fitting unobserved region: {num(100 * rf['model'], 1)}% against "
+                                f"{num(100 * rf['placebo'], 1)}% for random guesses, {sg(100 * rf['diff'], 1)} points "
+                                f"({sg(100 * rf['lo'], 1)} to {sg(100 * rf['hi'], 1)}), p {num(rf['p'], 3)}; one "
+                                "contrast, not adjusted.", "n")], B, BODY, 1.3)
+    y = P(s, X, y + 8, 1680, [("The paper ", "b"),
+                               (f"reports {pp['hit']} of {pp['of']} rooms ({num(100 * pp['hit'] / pp['of'], 0)}%) with "
+                                "no chance rate. Random guesses give one.", "n")], B, BODY, 1.3)
+    nrel = e["tests"]["official_vs_placebo"]["relabelings"]
+    N(s, X, y + 6, 1680,
+      f"Exploratory. The unit is the run. A room counts if at least 2 of 8 members place one of its type within 2.5 m "
+      f"before the region is seen. p: exact permutation of arm labels within a scene, {nrel} relabelings; DeepSeek, "
+      f"then the filter arm.", limit=1012)
+
+
+# ---------------------------------------------------------------- 21. Part 3, M2
 
 def factorial(prs, slots):
     m = slots["m2"]
     rho, dif = m["rho"], m["diff"]
-    s = frame(prs, 20, "Part 3", "Right meaning: not shown enough")
+    at = slots["all_true"]
+    if at["F0_above_cap"] or at["F6_above_cap"]:
+        fail("slide 21 and backup 5 say the all-true arm's gain never passes 2.0, like the no-guess arm's, but one does")
+    if not all(dif[d]["lo"] < 0 for d in ("B_deepseek", "B_haiku", "B_opus")):
+        fail("slide 21's title says moved true objects show no detectable gain over random guesses, but one does")
+    s = frame(prs, 21, "Part 3 · M2 · offline, provisional yardstick",
+              "M2 varied place, not meaning: moved true objects show no detectable gain")
     R, W = 120, 1680
-    lab(s, R, 250, W, "Spearman rho: ASP's view score vs unmapped objects in view (the yardstick)")
+    lab(s, R, 244, W, "Spearman rho: ASP's view score vs unmapped objects in view (the yardstick)")
     x0, x1, lo, hi = R + 560, R + 1400, -0.1, 0.35
 
     def dx(v):
@@ -1255,11 +1840,11 @@ def factorial(prs, slots):
             ("Moved: DeepSeek (expl.)", rho["F3-deepseek"]), ("Moved: Haiku", rho["F3-haiku"]),
             ("Moved: Opus", rho["F3-opus"]), ("Random guesses", rho["F5"]), ("No guesses", rho["F6"]),
             ("All true objects", rho["F0"])]
-    top, step = 312, 50
+    top, step = 296, 42
     for v in (0.0, 0.1, 0.2, 0.3):
         hline(s, dx(v), top - 14, dx(v), top + step * len(rows) - 18, MID if v == 0 else LINE, 2 if v == 0 else 1,
               dash=bool(v))
-        svg_text(s, dx(v), top + step * len(rows) + 14, num(v, 1), NT, FAINT, anchor="middle", w=80)
+        svg_text(s, dx(v), top + step * len(rows) + 8, num(v, 1), NT, FAINT, anchor="middle", w=80)
     for i, (name, d) in enumerate(rows):
         yy = top + i * step + 12
         text(s, R, yy - 18, 530, 36, [run(name, 28, BODY)], line=1.2)
@@ -1267,32 +1852,43 @@ def factorial(prs, slots):
         oval(s, dx(d["mean"]), yy, 10, INK, WHITE, 3)
         svg_text(s, x1 + 40, yy + 8, sg(d["mean"], 3), NT, INK, MONO, w=120)
     A = dif["A"]
-    P(s, R, 748, W, f"True objects beat random guesses by {num(A['mean'], 3)}. Enough: keep half of that, "
-                    f"{num(A['mean'] / 2, 3)}. No arm does. Not shown sufficient; yardstick provisional.",
-      B, BODY, 1.35, limit=960)
+    y = P(s, R, top + step * len(rows) + 44, W,
+          f"True objects beat random guesses by {num(A['mean'], 3)}. Enough: keep half of that, "
+          f"{num(A['mean'] / 2, 3)}. No arm does. Not shown sufficient; yardstick provisional.",
+          B, BODY, 1.35, limit=900)
+    box(s, R, y + 12, W, "All true objects (exploratory):",
+        f"every member holds every true object, so the score reads mainly where the two observed maps disagree. This "
+        f"arm's gain never passes {num(at['bits_cap'], 1)} bits, like the no-guess arm's, where other arms reach "
+        f"{num(at['F3_max_lo'], 2)} to {num(at['F5_max'], 1)}; the two correlate at "
+        f"{num(at['spearman_mean'], 2)} ({at['spearman_stages']} stages).", NQ)
 
 
 # ---------------------------------------------------------------- 21. Limits of scope
 
 def limits(prs, slots):
-    s = frame(prs, 21, "Limits", "What this talk cannot show")
+    s = frame(prs, 22, "Limits", "What this talk cannot show")
     items = [("Two houses.", "Every result holds for 853 and 871 only, not other houses."),
+             ("A small model in Part 1.", "The live arm is DeepSeek V4.1 Flash at low reasoning effort. The paper "
+                                          f"(§IV) says “{PINNED['paper']['small_model']}”. Part 1's null is a "
+                                          "result about ASP with a cheap model."),
              ("Proxy truth.", "Human labels stand in for what the camera saw."),
              ("Static replays.", "Claude saw saved inputs; no robot acted on its guesses."),
-             ("Claude, not Gemini.", "The paper used Gemini 2.5 Pro. We used Claude with the author's prompt and "
-                                     "loop. A Claude result does not speak for Gemini.")]
-    y = 256
+             ("Claude, not Gemini.", "The paper used Gemini 2.5 Pro, which is no longer offered to new users (11-19, Note 1). We used Claude "
+                                     "with the author's prompt, in our port of the author's loop. A Claude result "
+                                     "does not speak for Gemini.")]
+    y = 250
     for head, body in items:
-        y = P(s, 120, y, 1680, [(head + " ", "b"), (body, "n")], B, BODY, 1.4, limit=1000) + 28
+        y = P(s, 120, y, 1680, [(head + " ", "b"), (body, "n")], B, BODY, 1.35, limit=1000) + 18
 
 
 # ---------------------------------------------------------------- 22. Limits of method
 
 def limits_method(prs, slots):
     m = slots["blind"]["members"]
-    s = frame(prs, 22, "Limits", "How the test was made")
+    s = frame(prs, 23, "Limits", "How the test was made")
     items = ["We wrote the scorer after we saw DeepSeek's numbers.",
              "We set the L3 margin knowing the Gemini–DeepSeek gap.",
+             "We did not check what the comparators themselves score before freezing the test.",
              "M2 is provisional: its yardstick failed part of an October check.",
              f"One Haiku member stopped at the token limit and its text did not parse "
              f"({m['haiku']['parsed']} of {m['haiku']['members']} did)."]
@@ -1304,26 +1900,41 @@ def limits_method(prs, slots):
 # ---------------------------------------------------------------- 23. The answer
 
 def answer(prs, slots):
-    s = frame(prs, 23, "Answer", "The answer to the author")
-    P(s, 120, 252, 1680, [(slots["thesis"] + ".", "b")], 44, INK, 1.2)
-    y = P(s, 120, 330, 1680, "The registered line for the first half of the claim (that the guesses are right in "
-                             "meaning).", B, BODY, 1.4)
-    y = P(s, 120, y + 20, 1680, "In these two houses, both Claude models scored far below the other-house prior at "
-                                "naming objects. Neither beat a trade of region contents by the 3-point margin; a "
-                                "smaller gain is not ruled out.", B, BODY, 1.4)
-    box(s, 120, y + 30, 1680, "M2 (offline, provisional):",
-        "right labels moved by each model's error were not shown sufficient.")
+    ce, b = slots["ceiling"], slots["blind"]["models"]
+    s = frame(prs, 24, "Answer", "For Claude, in our port, on saved inputs: no detectable gain over base rates")
+    y = P(s, 120, 252, 1680, [("In two houses, Claude's guesses carried no detectable information beyond house base "
+                               "rates, and put content in fitting regions not detectably more often than a "
+                               "trade of regions (gains under 3 points not ruled out).", "b")], 40, INK, 1.2)
+    y = P(s, 120, y + 18, 1680, f"Both models scored far below the other-house prior at naming objects. At L3 a gain "
+                                f"under {num(100 * b['opus']['L3']['margin'], 0)} points is not ruled out. M2, "
+                                "offline: true objects moved by a model's error showed no detectable gain.",
+          B, BODY, 1.4)
+    y = P(s, 120, y + 18, 1680, [("The registered line, second: ", "b"),
+                                 (f"“{slots['thesis']}”, for the first half of the claim as the author put it to us "
+                                  "(that the guesses are right in meaning). It says less than it seems to: at L1 no "
+                                  "model could have been Supported, and at L2 only a perfect Opus, so it rests on L3, "
+                                  "where Opus's interval "
+                                  f"ends at {num(100 * b['opus']['L3']['hi'], 2)} against a margin of "
+                                  f"{num(100 * b['opus']['L3']['margin'], 0)}.", "n")], B, BODY, 1.4)
+    box(s, 120, y + 24, 1680, "Not the paper's model:",
+        "Claude, in our port of the author's loop. Gemini 3.8 Flash scored above Claude on 8 rows, though below the "
+        "prior (exploratory).")
 
 
 # ---------------------------------------------------------------- 24. What the answer does not say
 
 def not_shown(prs, slots):
     hh = slots["blind"]["models"]["haiku"]["L2"]["placebo"]
-    s = frame(prs, 24, "The answer", "What the answer does not say")
-    items = ["It does not say the guesses reach the map, or where they sit.",
+    s = frame(prs, 25, "The answer", "What the answer does not say")
+    mg = num(100 * slots["blind"]["models"]["opus"]["L3"]["margin"], 0)
+    items = [f"It does not say the guesses carry nothing: it says no gain was found. At L3 a gain under {mg} points "
+             "is not ruled out, and the prior's near-perfect score left little room for a gain at L1 and L2.",
              f"It does not say the models are no better than random guesses: Haiku is "
              f"{num(100 * hh['diff'], 1)} points above at L2 (one contrast, not adjusted).",
-             "It says nothing about live runs, other models or the paper's scale.",
+             "It does not say the model is not the cause. Gemini 3.8 Flash scored above Claude on 8 rows, though below the "
+             "prior (exploratory), and a registered replay is running.",
+             "It does not say the guesses reach the map, or where they sit. It says nothing about live runs with a "
+             "strong model, or the paper's scale.",
              "It does not show that a language model cannot help exploration."]
     y = 256
     for t in items:
@@ -1334,24 +1945,16 @@ def not_shown(prs, slots):
 
 def room_test(prs, slots):
     rt, h = slots["room_test"], slots["hint"]
-    s = frame(prs, 25, "Backup · The paper's room test",
-              "The paper's room test, on DeepSeek's live runs", backup=True)
-    X, lw, cw = 120, 480, 300
-    heads = ["Type matched", "No type", "Type matched", "No type"]
-    text(s, X + lw, 246, 2 * cw, 30, [run("All stages", NT, MID, SANS, True)])
-    text(s, X + lw + 2 * cw, 246, 2 * cw, 30, [run("8-member stages", NT, MID, SANS, True)])
-    for j, hd in enumerate(heads):
-        text(s, X + lw + j * cw, 278, cw - 10, 30, [run(hd, NT, MID)])
-    hline(s, X, 314, X + lw + 4 * cw, 314, LINE)
-    y = 322
-    for key, name in (("llm", "DeepSeek, expl."), ("filter", "DeepSeek + filter"), ("placebo", "Random: chance")):
-        d = rt["live"][key]
-        text(s, X, y + 16, lw - 10, 40, [run(name, 28, INK, SANS, True)], line=1.2)
-        for j, k in enumerate(("typed_all", "untyped_all", "typed_8", "untyped_8")):
-            text(s, X + lw + j * cw, y + 16, cw - 10, 40,
-                 [run(f"{d[k]} / {d['of']} · {num(100 * d[k] / d['of'], 0)}%", 28, INK, MONO)], line=1.2)
-        y += 70
-        hline(s, X, y, X + lw + 4 * cw, y, RULE)
+    s = frame(prs, 28, "Backup · The paper's room test",
+              "The paper's room test: other counts, Claude replays, prompt hint", backup=True)
+    X = 120
+    lv = rt["live"]
+    y = P(s, X, 262, 1680, [("DeepSeek's live runs, other counts (slide 20 has the main two): ", "b"),
+                            (f"with no type match, {lv['llm']['untyped_all']} of {lv['llm']['of']} rooms on all stages "
+                             f"and {lv['llm']['untyped_8']} on 8-member stages, against {lv['placebo']['untyped_all']} "
+                             f"and {lv['placebo']['untyped_8']} of {lv['placebo']['of']} for random guesses; with our "
+                             f"filter, type matched, {lv['filter']['typed_all']} of {lv['filter']['of']} on all stages "
+                             f"and {lv['filter']['typed_8']} on 8-member stages. Exploratory.", "n")], B, BODY, 1.3)
     pp = rt["paper"]
     y = P(s, X, y + 18, 1680, [("The paper: ", "b"), (f"{pp['hit']} of {pp['of']} rooms "
                                                       f"({num(100 * pp['hit'] / pp['of'], 0)}%); a room counts if at "
@@ -1373,7 +1976,7 @@ def room_test(prs, slots):
 
 def validity(prs, slots):
     v = slots["validity"]
-    s = frame(prs, 26, "Backup · Our filter and vote", "Do the filter and the vote keep right guesses?",
+    s = frame(prs, 29, "Backup · Our filter and vote", "Do the filter and the vote keep right guesses?",
               backup=True)
     X, lw = 120, 460
     cws = [240, 340, 600]
@@ -1406,8 +2009,10 @@ def validity(prs, slots):
 def f0_slide(prs, slots):
     m = slots["m2"]
     d, a = m["diff"]["F0-F5"], m["diff"]["A"]
-    z = m["f0_ig_zero"]
-    s = frame(prs, 27, "Backup · A likely question", "Why does ASP not gain from all true objects?",
+    z, at = m["f0_ig_zero"], slots["all_true"]
+    if at["F0_above_cap"] or at["F6_above_cap"]:
+        fail("backup 5 says the all-true arm's gain never passes 2.0, like the no-guess arm's, but one does")
+    s = frame(prs, 30, "Backup · A likely question", "Why does ASP not gain from all true objects?",
               backup=True)
     y = P(s, 120, 256, 1680, "If every member holds every true object, why does ASP's score not rise?", B, INK, 1.4)
     y = P(s, 120, y + 24, 1680, [("What we found: ", "b"),
@@ -1417,8 +2022,12 @@ def f0_slide(prs, slots):
     y = P(s, 120, y + 24, 1680, [("Why it should not rise: ", "b"),
                                  ("the score counts disagreement between members. We registered that before the "
                                   "run (M2, section 7).", "n")], B, BODY, 1.4)
-    P(s, 120, y + 24, 1680, [("What we cannot explain: ", "b"),
-                             (f"why it falls below random guesses. The gain is zero for every candidate in only "
+    P(s, 120, y + 24, 1680, [("What the saved arrays show (exploratory): ", "b"),
+                             (f"with identical members the score reads mainly where the two observed maps disagree. "
+                              f"This arm's gain never passes {num(at['bits_cap'], 1)} bits over {z['of']} stages, like "
+                              f"the no-guess arm's, where other arms reach {num(at['F3_max_lo'], 2)} to "
+                              f"{num(at['F5_max'], 1)}. The two correlate at {num(at['spearman_mean'], 2)} "
+                              f"({at['spearman_stages']} stages). The gain is zero for every candidate in only "
                               f"{z['stages']} of {z['of']} stages.", "n")], B, BODY, 1.4, limit=990)
 
 
@@ -1426,7 +2035,7 @@ def f0_slide(prs, slots):
 
 def outcomes(prs, slots):
     h = slots["blind"]["models"]
-    s = frame(prs, 28, "Backup · The four outcomes", "The four outcomes, and the rule that picked one",
+    s = frame(prs, 31, "Backup · The four outcomes", "The four outcomes, and the rule that picked one",
               backup=True)
     pick = slots["outcome"]
     cx = (120, 400, 1080)
@@ -1470,28 +2079,53 @@ def speaker_notes():
     return out
 
 
+def script_times():
+    """The times in the slide headings of ENDSEM_Script.md: one per main slide, and they must add to 900 s."""
+    md = open(SCRIPT).read()
+    ts = [int(t) for t in re.findall(r"^## Slide \d+:.*\(about (\d+) s\)$", md, flags=re.M)]
+    if len(ts) != TOTAL:
+        fail(f"ENDSEM_Script.md has {len(ts)} timed main slides, not {TOTAL}")
+    if sum(ts) != 900:
+        fail(f"the times in ENDSEM_Script.md add to {sum(ts)} s, not 900")
+    nback = len(re.findall(r"^## Backup \d+:", md, flags=re.M))
+    if nback != BACKUPS:
+        fail(f"ENDSEM_Script.md has {nback} backup sections, not {BACKUPS}")
+
+
 def main():
     Nn = numbers()
     slots = json.load(open(SLOTS))
+    PINNED.update(slots["pinned"])
     C, budgets = paper_cells(slots)
+    BUDGETS_NOW.update(budgets)
     checks = json.load(open(CHECKS))
     c2d = {sc: c2_data(sc) for sc in ("00853", "00871")}
     c2, frozen = {sc: v[0] for sc, v in c2d.items()}, {sc: v[1] for sc, v in c2d.items()}
     bf = budget_runs()
     C08 = paper_cells(slots, "0.8B")[0]
+    ep, bs = read_equal_path(), read_sensitivity()
     f9, f853 = facts871(C, C08), facts853(C, slots)
-    check_text(C, f9, f853, budgets)
+    f853["equal"] = facts_equal853(ep)
+    f9["sens"] = facts_sens871(bs, ep, C)
+    f853["pc871"] = {arm: num(ecell(ep, "00871", "apr", arm, 50)["mean"])
+                     for arm in ("oracle_visible", "official", "frontier_end", "placebo", "frontier_60m")}
+    f853["eqm"] = {(ref, Lm, arm): num(ecell(ep, "00853", ref, arm, Lm)["mean"])
+                   for ref in ("apr", "hm3d") for Lm in (50, 100) for arm in ("official_nov", "frontier_end")}
+    blind_facts(slots)
+    script_times()
+    check_text(C, f9, f853, budgets, slots, Nn)
     prs = Presentation()
     prs.slide_width, prs.slide_height = px(1920), px(1080)
     cover(prs, f853)
+    proposal(prs, Nn, slots)
     asp_picture(prs)
     live_test(prs, Nn)
     why(prs, Nn)
     land(prs, Nn)
     live_limits(prs, Nn)
     paper_rules(prs, budgets, checks, bf)
-    table853(prs, C, budgets, slots, f853)
-    table871(prs, C, budgets, slots, f9)
+    table853(prs, C, budgets, slots, f853, ep)
+    table871(prs, C, budgets, slots, f9, bs, ep)
     limits_reference(prs, checks, c2, frozen)
     limits_runs(prs, C, budgets, slots, f853)
     defense(prs)
@@ -1500,27 +2134,29 @@ def main():
     blind_table(prs, slots)
     facts(prs, slots)
     detect(prs, slots)
-    wrong_house(prs, slots)
-    placement_slide(prs, slots)
+    gemini_slide(prs, slots)
+    room_slide(prs, slots)
     factorial(prs, slots)
     limits(prs, slots)
     limits_method(prs, slots)
     answer(prs, slots)
     not_shown(prs, slots)
+    wrong_house(prs, slots)
+    placement_slide(prs, slots)
     room_test(prs, slots)
     validity(prs, slots)
     f0_slide(prs, slots)
     outcomes(prs, slots)
-    assert len(prs.slides) == TOTAL + 4, len(prs.slides)
+    assert len(prs.slides) == TOTAL + BACKUPS, len(prs.slides)
     notes = speaker_notes()
-    assert len(notes) == TOTAL + 4, len(notes)
+    assert len(notes) == TOTAL + BACKUPS, len(notes)
     for slide, n in zip(prs.slides, notes):
         slide.notes_slide.notes_text_frame.text = n
     prs.core_properties.title = "Right in meaning, wrong in place?"
     prs.core_properties.author = "ASP replication, end-sem"
     prs.core_properties.last_modified_by = "ASP replication, end-sem"
     prs.save(OUT)
-    print(OUT, len(prs.slides), "slides (", TOTAL, "main + 4 backup )")
+    print(OUT, len(prs.slides), "slides (", TOTAL, "main +", BACKUPS, "backup )")
     for w in WARN:
         print("FIT WARNING:", w)
 

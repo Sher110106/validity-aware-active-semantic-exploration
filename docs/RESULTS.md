@@ -9,6 +9,7 @@ Read the [Errata](#errata) before quoting any September number.
 | September | Replication, DeepSeek 120 m matrix, Phase 13, Gemini campaign | sections below, from "Run families" |
 | October | Live placebo-controlled campaign (E1-E3, steps 6-8) | [October live campaign](#october-live-campaign) |
 | November | Scores on the paper's scale | [November paper-scale scores](#november-paper-scale-scores) |
+| November | Is the guesses' meaning right? (Part 3) | [Part 3](#part-3-is-the-meaning-right-november-13-and-19-nov) |
 
 ## Run families (September)
 
@@ -114,26 +115,48 @@ Run under three pre-registrations frozen before any result (`PREREGISTRATION_BEN
 Scores on the scale of the paper's Fig. 4 (arXiv 2510.05430v2): F1 x 100 at 10%, 50% and 100% of a time budget B, scored with the author's matching rules, plus GED from the author's gmatch4py code.
 
 Read these:
-- [paper_compare.md](../tools/live_policy/results_paper_compare_1112/paper_compare.md): the current scores (12 Nov).
-- [NOTES.md](../tools/live_policy/results_paper_compare_1112/NOTES.md): the command, budgets, independent check, and nine disclosures.
-- `tools/live_policy/results_paper_compare/` holds the superseded 6 Nov scores. Its `ged/` folder still feeds the 12 Nov run.
-- Current status and open items: [STATUS_2026-11-12.md](STATUS_2026-11-12.md). Plan: [ENDSEM_PLAN_2026-11-03.md](ENDSEM_PLAN_2026-11-03.md).
+- [paper_compare.md](../tools/live_policy/results_paper_compare_1113/paper_compare.md): the current scores (final rescore, 18 Nov; budgets 632.1751 s on 853 and 1300.2523 s on 871).
+- [NOTES.md](../tools/live_policy/results_paper_compare_1113/NOTES.md): the command, budgets, checks and disclosures. The 12 Nov files in `results_paper_compare_1112/` and the 6 Nov files in `results_paper_compare/` are superseded; the `ged/` folder of the latter still feeds the rescore.
+- Exploratory readouts of 19 Nov, on no registered table: [equal_path.md](../tools/live_policy/results_paper_compare_1113/equal_path/equal_path.md) (F1 at equal path length) and [budget_sensitivity.md](../tools/live_policy/results_paper_compare_1113/budget_sensitivity/budget_sensitivity.md) (other budgets); `tools/live_policy/DEVIATIONS_NOVEMBER.md`, items 66 and 71.
+- Current status and open items: the README, "Where things stand". Plan: [ENDSEM_PLAN_2026-11-03.md](ENDSEM_PLAN_2026-11-03.md).
 
-Headline: scene 00853, APR reference (the coverage-tour map). Cells are F1 x 100 at 10% / 50% / 100% of B (cells are means; budget B = 632.1751 s). The 100% cell is null for runs that ended before B. Source: paper_compare.md, "Reference: apr".
+Headline: APR reference (the coverage-tour map). Cells are F1 x 100 at 10% / 50% / 100% of B (cells are means; "none" means no run reached the stage). Source: paper_compare.md, "Reference: apr".
+
+Scene 00853, B = 632.1751 s:
 
 | Row | Our arm | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
 |---|---|---|---|---|---|---|---|
-| Frontier | `frontier_end` (5 runs to the end of exploration) | 12.4 | 18.6 | 39.5 | 46.5 | 55.6 (3 of 5 runs) | 58.8 |
-| ASP | `official` (2 runs, stop at 60 m) | 16.5 | 34.4 | 38.7 | 60.8 | null | 66.7 |
-| ASP | `filter_only` (3 runs, stop at 60 m) | 14.8 | 34.4 | 48.3 | 60.8 | null | 66.7 |
+| Frontier | `frontier_end` (5 runs to the end of exploration) | 12.4 (n=5) | 18.6 | 39.5 (n=5) | 46.5 | 55.6 (n=3 of 5) | 58.8 |
+| ASP, October | `official` (2 runs, stop at 60 m) | 16.5 (n=2) | 34.4 | 38.7 (n=2) | 60.8 | none | 66.7 |
+| ASP, November | `official_nov` (3 runs, to 105 m) | 17.2 (n=3) | 34.4 | 51.1 (n=3) | 60.8 | 61.6 (n=2 of 3) | 66.7 |
+| ASP + filter | `filter_only` (3 runs, stop at 60 m) | 14.8 (n=3) | 34.4 | 48.3 (n=3) | 60.8 | none | 66.7 |
+
+Scene 00871, B = 1300.2523 s (final; the 12 Nov scores for 871 were read at B = 809.084 s and are superseded):
+
+| Row | Our arm | 10% ours | 10% paper | 50% ours | 50% paper | 100% ours | 100% paper |
+|---|---|---|---|---|---|---|---|
+| Frontier | `frontier_end` (5 runs; B is the median of the 4 that logged "Exploration complete") | 31.9 (n=5) | 29.2 | 59.2 (n=5) | 55.7 | 66.6 (n=3 of 5) | 65.3 |
+| ASP | `official` (3 runs, stop at 60 m) | 33.9 (n=3) | 30.5 | none | 62.4 | none | 68.0 |
+| ASP + filter | `filter_only` (3 runs, stop at 60 m) | 33.0 (n=3) | 30.5 | none | 62.4 | none | 68.0 |
+| Random guesses | `placebo` (3 runs, stop at 60 m) | 31.7 (n=3) | none | none | none | none | none |
 
 Reading:
-- Our frontier row sits below the paper's frontier row at 10% and 50% and is close at 100% (55.6 against 58.8).
-- Our ASP rows sit far below the paper's ASP row (16.5 / 38.7 against 34.4 / 60.8). Our `official` ASP row (38.7 at 50%) is level with our own frontier row (39.5). `filter_only` leads it by 8.8 at 50%, but E2 found no detectable difference between the two ASP arms, and n is 2-3. The paper's 14.3-point lead for ASP at 50% does not appear for `official`.
-- These are not like-for-like. The paper scores against a hand-driven full-scene map. We use a coverage-tour map. ASP runs stop at 60 m of path, so the 100% cell is null. Scenes 00069 and 00573 have no run here. Paper_compare.md, "Not comparable", lists every difference.
-- Scene 00871 has one finished frontier run. Its APR cells are 26.4 / 43.2 / 62.8 against the paper's 29.2 / 55.7 / 65.3.
-- Treat the cells as descriptive. n is 1-5 per cell and NOTES.md lists nine disclosures (for example, the check C2 is not valid and the APR floor area differs from the paper's).
+- On 853, by the clock, November's ASP row sits above our frontier at 10%, 50% and 100%, by less than the paper's gaps (README, finding 3). By the metre the sign depends on the reference (`equal_path.md`, exploratory). The 11-12 reading that the paper's lead "does not appear" was for October's shorter runs and is superseded. Our ASP rows are still below the paper's ASP row.
+- On 871 our cells are 1.3 to 3.5 points above the paper's where both have a cell, at a budget about twice 853's. At 750 s (`budget_sensitivity.md`, exploratory) our frontier reads 26.1 / 43.6 / 62.4, below the paper's 29.2 / 55.7 / 65.3. No ASP run of ours reaches 50% of 1300 s.
+- These are not like-for-like. The paper scores against a hand-driven full-scene map. We use a coverage-tour map. ASP runs stop at 60 m of path (105 m for November's 853 runs), so late cells are none. Scenes 00069 and 00573 have no run here. paper_compare.md, "Not comparable", lists every difference.
+- Treat the cells as descriptive. n is 1-5 per cell and NOTES.md lists the disclosures (for example, the repeat tour is not frozen, and the APR floor area differs from the paper's).
 - The F1 readout is the stage value at the last stage at or before t; the running maximum (the author's plot rule) is reported beside it in the JSON.
+
+## Part 3: is the meaning right? (November, 13 and 19 Nov)
+
+Source and limits: [results_semantic_1113/RESULTS.md](../tools/live_policy/results_semantic_1113/RESULTS.md). A pre-registered, blind replay of Claude Opus 5.5 and Haiku 5.5 on 44 saved planner inputs from scenes 853 and 871, scored once by a scorer frozen beforehand, with a prior built from 179 other houses and four other comparators.
+
+- **Registered line: "the claim fails".** All six hypotheses read Rejected, for the first half of the claim as the author put it to us (that the guesses are right in meaning), in these two houses. Opus against the other-house prior: -35.1 points at L2 (-41.3 to -29.1); against a trade of region contents at L3: +0.5 (-1.9 to +2.95), margin 3. Haiku: -24.9 at L2 (-31.5 to -18.1); +0.8 at L3 (-0.8 to +2.4).
+- **What the data show.** No detectable gain over house base rates at naming, or over a region trade at placing.
+- **The ceiling (exploratory, 19 Nov; `results_semantic_1113/exploratory_1119/ceiling.md`).** The prior scores 91.2% (Opus's L1 rows), 100.0% (Haiku's), 93.4% and 93.7% (L2). A perfect score could not have been Supported at L1 for either model, and at L2 only for Opus (best p after Holm 0.047); the line rests on L3, where Opus's interval ends at 2.95 against the margin of 3. The comparators' own scores were not checked before the test was frozen.
+- **Gemini and the room test (exploratory).** `exploratory_1119/common_rows.md` and `exploratory_1119/room_test_runs.md`: see README, finding 4 (including the filter arm, which is not ahead of random guesses on either count).
+- **M2 (offline, provisional yardstick).** True objects moved by each model's error show no detectable gain over random guesses; M2 varied place, not meaning (`results_semantic_1113/RESULTS.md` section 8; `results_m2_1113/exploratory_1119/all_true.md`).
+- **Registered and running, no result here:** two control arms on 853 and a replay of Gemini 3.8 Flash (README, "Where things stand").
 
 ## Errata
 

@@ -164,7 +164,76 @@ def main():
     validity = {"opus": val("claude", "claude-opus-5-5"), "haiku": val("claude", "claude-haiku-5-5"),
                 "deepseek": val("exploratory", "deepseek"), "random": val("exploratory", "placebo")}
 
+    # --- readouts of 2026-11-19 (all exploratory; DEVIATIONS_NOVEMBER.md items 66, 68, 70, 71)
+    X19 = os.path.join(RS, "exploratory_1119")
+    ce = J(X19, "ceiling.json")
+    ceiling = {}
+    for key, name in (("opus", "claude-opus-5-5"), ("haiku", "claude-haiku-5-5")):
+        ceiling[key] = {}
+        for L, comps in (("L1", ("B3", "B1")), ("L2", ("B3", "B1")), ("L3", ("D", "B3L"))):
+            ceiling[key][L] = {}
+            for c in comps:
+                d = ce["models"][name][L]["comparators"][c]
+                e = {k: d[k] for k in ("n_rows", "model_score", "comparator_score", "max_gain_perfect_model",
+                                       "comparator_rows_at_1", "comparator_clusters_at_1", "n_clusters")}
+                assert d["check"]["matches"]
+                if "perfect_model" in d:
+                    e["perfect"] = {k: d["perfect_model"][k] for k in ("p_min", "p_min_holm6", "can_reach_alpha",
+                                                                     "n_zero_clusters")}
+                ceiling[key][L][c] = e
+
+    cr = J(X19, "common_rows.json")
+    common = {"anchor": cr["anchor"], "anchor_rows": len(cr["anchor_rows"]), "levels": {}}
+    for L, lv in cr["levels"].items():
+        common["levels"][L] = {"n_rows": lv["n_rows"], "mean_row_score": lv["mean_row_score"],
+                               "anchor_vs": lv["anchor_vs"], "b3_score": lv["b3_score_anchor_members"],
+                               "anchor_members": lv["anchor_members"], "n_clusters": lv["n_clusters"]}
+
+    rr = J(X19, "room_test_runs.json")
+    room_runs = {}
+    for view, v in rr["views"].items():
+        off = [r for r in v["runs"] if r["arm"] == "official"]
+        room_runs[view] = {"pooled": v["pooled"],
+                           "tests": {k: {"observed_diff": t["observed_diff"], "p": t["p_two_sided"] if "p_two_sided" in t
+                                         else t["p"], "relabelings": t["relabelings"]} for k, t in v["tests"].items()},
+                           "official_stages_8": [min(r["n_stages_with_8_members"] for r in off),
+                                                 max(r["n_stages_with_8_members"] for r in off)],
+                           "official_stages": [min(r["n_stages"] for r in off), max(r["n_stages"] for r in off)]}
+
+    ex_op = cl["models"]["claude-opus-5-5"]["extras"]["l3_rooms"]
+    rooms_fit = {"model": cluster_mean(ex_op["model_clusters"]), "placebo": cluster_mean(ex_op["placebo_clusters"]),
+                 "diff": ex_op["mean_diff"], "lo": ex_op["ci"][0], "hi": ex_op["ci"][1], "p": ex_op["p"]}
+
+    at = J(LP, "results_m2_1113", "exploratory_1119", "all_true.json")
+    all_true = {"bits_cap": at["bits_cap"], "F0_max": at["arms"]["F0"]["max_ig"], "F6_max": at["arms"]["F6"]["max_ig"],
+                "F0_above_cap": at["arms"]["F0"]["above_cap"], "F6_above_cap": at["arms"]["F6"]["above_cap"],
+                "F1_max": at["arms"]["F1"]["max_ig"], "F3_max_lo": min(at["arms"][a]["max_ig"] for a in
+                                                                         ("F3-deepseek", "F3-haiku", "F3-opus")),
+                "F3_max_hi": max(at["arms"][a]["max_ig"] for a in ("F3-deepseek", "F3-haiku", "F3-opus")),
+                "F5_max": max(at["arms"][a]["max_ig"] for a in ("F5a", "F5b")),
+                "spearman_mean": at["spearman"]["mean"], "spearman_stages": at["spearman"]["n_used"]}
+
+    # --- facts pinned from files that are not result tables (file and path in SOURCES.md)
+    csv_row = [ln for ln in open(os.path.join(LP, "results_2026-10-31", "numbers.csv"), encoding="utf-8")
+               if ln.startswith("sept:unanimity_kept_of_predicted,")][0]
+    assert '"19 of 8,943"' in csv_row
+    plan = open(os.path.join(PROJECT, "docs", "archive", "IMPLEMENTATION_RESEARCH.md"), encoding="utf-8").read()
+    assert "4 scenes × seeds **42, 43, 44** = 12 runs" in plan and "**120 m path budget**" in plan
+    pinned = {"proposal": {"question": "Can whole-graph validation and held-out calibration of ensemble support "
+                                        "reduce false-positive detours without reducing discovery of unseen rooms?",
+                           "scenes": 4, "seeds": 3, "runs": 12, "budget_m": 120, "policies": 5,
+                           "kept": 19, "of": 8943},
+              "paper": {"steps": [25, 30],
+                        "small_model": "smaller, less expensive LLMs do not yet provide consistent enough performance "
+                                       "to support a fully autonomous robot",
+                        "bathroom": "semantically reasonable but physically infeasible bathroom",
+                        "revisit": "causes the robot to revisit an uninformative region"},
+              "clock": {"commit": "f1ea141b", "date": "2026-11-19",
+                        "frontier": {"file": "frontier_baseline.py", "start": "637-638", "stop": "664-665"},
+                        "asp": {"file": "exploration_pipeline.py", "start": "714-715"}}}
+
     new = {k: old[k] for k in ("_how", "paper_compare_json", "_table871", "table871_updated", "asp853_full_budget")}
+    new["gemini_replay"] = old.get("gemini_replay", {"status": "pending", "result": None})
     new["_how"] = ("Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. "
                    "Edit part 2 keys by hand; rerun the script after any result file changes.")
     new["outcome"] = {"The claim holds": "works", "Mixed": "mixed", "The claim fails": "fails",
@@ -188,6 +257,18 @@ def main():
     new["hint"] = hint
     new["m2"] = m2_out
     new["validity"] = validity
+    new["ceiling"], new["common"], new["room_runs"] = ceiling, common, room_runs
+    new["rooms_fit"], new["all_true"], new["pinned"] = rooms_fit, all_true, pinned
+    new["_sources"].update({
+        "ceiling": "results_semantic_1113/exploratory_1119/ceiling.json: models.<m>.<L>.comparators.<c>",
+        "common": "results_semantic_1113/exploratory_1119/common_rows.json: levels.<L>",
+        "room_runs": "results_semantic_1113/exploratory_1119/room_test_runs.json: views.<view>.{pooled,tests,runs}",
+        "rooms_fit": "results_semantic_1113/claude/results.json: models.claude-opus-5-5.extras.l3_rooms",
+        "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
+        "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; "
+                  "the authors' repository at f1ea141b (SOURCES.md)",
+        "gemini_replay": "hand-kept: status 'pending' until the registered replay (PREREGISTRATION_GEMINI.md) is "
+                         "read; the builder stops if result is filled and has no layout for it"})
     json.dump(new, open(SLOTS, "w"), indent=1)
     print("wrote", SLOTS, "outcome:", new["outcome"], "|", new["thesis"])
 

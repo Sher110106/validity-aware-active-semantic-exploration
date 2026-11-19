@@ -4,6 +4,10 @@
  "_table871": "Slides 7 and 9. Done on 2026-11-17: the 871 reruns finished and the final rescore is filed in results_paper_compare_1113 (budget 1300 s). paper_compare_json points at it. The builder reads the 871 budget, its runs and C2 from that folder, and stops if this flag is not true. Slide 8 (853): the November ASP row (arm official_nov, 3 runs to 105 m) is read from paper_compare.json; asp853_full_budget holds only that flag, no numbers. fill_slots_part3.py needs the key to exist.",
  "table871_updated": true,
  "asp853_full_budget": "from paper_compare.json (arm official_nov)",
+ "gemini_replay": {
+  "status": "pending",
+  "result": null
+ },
  "outcome": "fails",
  "thesis": "The claim fails",
  "_sources": {
@@ -16,7 +20,14 @@
   "hint": "results_semantic_1113/{claude,nohint_haiku}/records_claude-haiku-5-5.json: records[round 1].model.<member>.counts",
   "m2": "results_m2_1113/pass2/summary_factorial.json: analysis.main.all",
   "validity": "results_semantic_1113/{claude,exploratory}/validity.json",
-  "members": "results_semantic_1113/claude/results.json: models.<m>.status; cost $35.78 from docs/ENDSEM_FINAL_PLAN_2026-11-13.md (progress log 11-13 20:38)"
+  "members": "results_semantic_1113/claude/results.json: models.<m>.status; cost $35.78 from docs/ENDSEM_FINAL_PLAN_2026-11-13.md (progress log 11-13 20:38)",
+  "ceiling": "results_semantic_1113/exploratory_1119/ceiling.json: models.<m>.<L>.comparators.<c>",
+  "common": "results_semantic_1113/exploratory_1119/common_rows.json: levels.<L>",
+  "room_runs": "results_semantic_1113/exploratory_1119/room_test_runs.json: views.<view>.{pooled,tests,runs}",
+  "rooms_fit": "results_semantic_1113/claude/results.json: models.claude-opus-5-5.extras.l3_rooms",
+  "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
+  "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; the authors' repository at f1ea141b (SOURCES.md)",
+  "gemini_replay": "hand-kept: status 'pending' until the registered replay (PREREGISTRATION_GEMINI.md) is read; the builder stops if result is filled and has no layout for it"
  },
  "blind": {
   "models": {
@@ -505,6 +516,420 @@
    "brier": 0.13230561277033986,
    "tau1_l3_hits": 0.0,
    "tau1_l3_items": 59
+  }
+ },
+ "ceiling": {
+  "opus": {
+   "L1": {
+    "B3": {
+     "n_rows": 41,
+     "model_score": 0.8543981481481482,
+     "comparator_score": 0.9120370370370371,
+     "max_gain_perfect_model": 0.08796296296296291,
+     "comparator_rows_at_1": 37,
+     "comparator_clusters_at_1": 9,
+     "n_clusters": 12,
+     "perfect": {
+      "p_min": 0.125,
+      "p_min_holm6": 0.75,
+      "can_reach_alpha": false,
+      "n_zero_clusters": 9
+     }
+    },
+    "B1": {
+     "n_rows": 41,
+     "model_score": 0.8543981481481482,
+     "comparator_score": 0.875,
+     "max_gain_perfect_model": 0.125,
+     "comparator_rows_at_1": 31,
+     "comparator_clusters_at_1": 5,
+     "n_clusters": 12
+    }
+   },
+   "L2": {
+    "B3": {
+     "n_rows": 44,
+     "model_score": 0.5831637842426532,
+     "comparator_score": 0.9343529541446208,
+     "max_gain_perfect_model": 0.06564704585537917,
+     "comparator_rows_at_1": 37,
+     "comparator_clusters_at_1": 5,
+     "n_clusters": 12,
+     "perfect": {
+      "p_min": 0.0078125,
+      "p_min_holm6": 0.046875,
+      "can_reach_alpha": true,
+      "n_zero_clusters": 5
+     }
+    },
+    "B1": {
+     "n_rows": 44,
+     "model_score": 0.5831637842426532,
+     "comparator_score": 0.6060697810511798,
+     "max_gain_perfect_model": 0.3939302189488202,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    }
+   },
+   "L3": {
+    "D": {
+     "n_rows": 43,
+     "model_score": 0.04279188211479878,
+     "comparator_score": 0.0374710128316899,
+     "max_gain_perfect_model": 0.9625289871683101,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    },
+    "B3L": {
+     "n_rows": 44,
+     "model_score": 0.04201063211479878,
+     "comparator_score": 0.10493332381353214,
+     "max_gain_perfect_model": 0.8950666761864678,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    }
+   }
+  },
+  "haiku": {
+   "L1": {
+    "B3": {
+     "n_rows": 24,
+     "model_score": 0.8958333333333334,
+     "comparator_score": 1.0,
+     "max_gain_perfect_model": 0.0,
+     "comparator_rows_at_1": 24,
+     "comparator_clusters_at_1": 12,
+     "n_clusters": 12,
+     "perfect": {
+      "p_min": 1.0,
+      "p_min_holm6": 1.0,
+      "can_reach_alpha": false,
+      "n_zero_clusters": 12
+     }
+    },
+    "B1": {
+     "n_rows": 24,
+     "model_score": 0.8958333333333334,
+     "comparator_score": 0.9479166666666666,
+     "max_gain_perfect_model": 0.05208333333333337,
+     "comparator_rows_at_1": 19,
+     "comparator_clusters_at_1": 7,
+     "n_clusters": 12
+    }
+   },
+   "L2": {
+    "B3": {
+     "n_rows": 44,
+     "model_score": 0.6881720049130764,
+     "comparator_score": 0.9367063492063492,
+     "max_gain_perfect_model": 0.06329365079365079,
+     "comparator_rows_at_1": 39,
+     "comparator_clusters_at_1": 7,
+     "n_clusters": 12,
+     "perfect": {
+      "p_min": 0.03125,
+      "p_min_holm6": 0.1875,
+      "can_reach_alpha": false,
+      "n_zero_clusters": 7
+     }
+    },
+    "B1": {
+     "n_rows": 44,
+     "model_score": 0.6881720049130764,
+     "comparator_score": 0.6060697810511798,
+     "max_gain_perfect_model": 0.3939302189488202,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    }
+   },
+   "L3": {
+    "D": {
+     "n_rows": 43,
+     "model_score": 0.04404230442176871,
+     "comparator_score": 0.03633223792989418,
+     "max_gain_perfect_model": 0.9636677620701058,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    },
+    "B3L": {
+     "n_rows": 44,
+     "model_score": 0.04404230442176871,
+     "comparator_score": 0.10203648589065256,
+     "max_gain_perfect_model": 0.8979635141093474,
+     "comparator_rows_at_1": 0,
+     "comparator_clusters_at_1": 0,
+     "n_clusters": 12
+    }
+   }
+  }
+ },
+ "common": {
+  "anchor": "gemini",
+  "anchor_rows": 8,
+  "levels": {
+   "L1": {
+    "n_rows": 5,
+    "mean_row_score": {
+     "gemini": 1.0,
+     "claude-opus-5-5": 1.0,
+     "claude-haiku-5-5": 1.0,
+     "deepseek": 0.95,
+     "placebo": 1.0
+    },
+    "anchor_vs": {
+     "claude-opus-5-5": {
+      "above": 0,
+      "tie": 5,
+      "below": 0
+     },
+     "claude-haiku-5-5": {
+      "above": 0,
+      "tie": 5,
+      "below": 0
+     },
+     "deepseek": {
+      "above": 1,
+      "tie": 4,
+      "below": 0
+     },
+     "placebo": {
+      "above": 0,
+      "tie": 5,
+      "below": 0
+     }
+    },
+    "b3_score": 1.0,
+    "anchor_members": 18,
+    "n_clusters": 3
+   },
+   "L2": {
+    "n_rows": 8,
+    "mean_row_score": {
+     "gemini": 0.9133230773855774,
+     "claude-opus-5-5": 0.6957589285714285,
+     "claude-haiku-5-5": 0.7054315476190476,
+     "deepseek": 0.7385475635475636,
+     "placebo": 0.6538318452380952
+    },
+    "anchor_vs": {
+     "claude-opus-5-5": {
+      "above": 7,
+      "tie": 0,
+      "below": 1
+     },
+     "claude-haiku-5-5": {
+      "above": 6,
+      "tie": 0,
+      "below": 2
+     },
+     "deepseek": {
+      "above": 8,
+      "tie": 0,
+      "below": 0
+     },
+     "placebo": {
+      "above": 8,
+      "tie": 0,
+      "below": 0
+     }
+    },
+    "b3_score": 0.9883127289377289,
+    "anchor_members": 29,
+    "n_clusters": 3
+   },
+   "L3": {
+    "n_rows": 8,
+    "mean_row_score": {
+     "gemini": 0.13773648226773227,
+     "claude-opus-5-5": 0.056470959595959595,
+     "claude-haiku-5-5": 0.07829861111111111,
+     "deepseek": 0.0763967803030303,
+     "placebo": 0.022581845238095238
+    },
+    "anchor_vs": {
+     "claude-opus-5-5": {
+      "above": 5,
+      "tie": 3,
+      "below": 0
+     },
+     "claude-haiku-5-5": {
+      "above": 4,
+      "tie": 2,
+      "below": 2
+     },
+     "deepseek": {
+      "above": 5,
+      "tie": 2,
+      "below": 1
+     },
+     "placebo": {
+      "above": 5,
+      "tie": 3,
+      "below": 0
+     }
+    },
+    "b3_score": null,
+    "anchor_members": 29,
+    "n_clusters": 3
+   }
+  }
+ },
+ "room_runs": {
+  "eight_member_stages": {
+   "pooled": {
+    "filter_only": {
+     "runs": 6,
+     "predicted": 2,
+     "of": 69,
+     "rate": 0.028985507246376812
+    },
+    "official": {
+     "runs": 5,
+     "predicted": 10,
+     "of": 59,
+     "rate": 0.1694915254237288
+    },
+    "oracle_visible": {
+     "runs": 3,
+     "predicted": 5,
+     "of": 39,
+     "rate": 0.1282051282051282
+    },
+    "placebo": {
+     "runs": 6,
+     "predicted": 6,
+     "of": 69,
+     "rate": 0.08695652173913043
+    }
+   },
+   "tests": {
+    "official_vs_placebo": {
+     "observed_diff": 0.08253500368459837,
+     "p": 0.125,
+     "relabelings": 200
+    },
+    "filter_only_vs_placebo": {
+     "observed_diff": -0.057971014492753624,
+     "p": 0.29,
+     "relabelings": 400
+    }
+   },
+   "official_stages_8": [
+    4,
+    11
+   ],
+   "official_stages": [
+    17,
+    21
+   ]
+  },
+  "all_stages": {
+   "pooled": {
+    "filter_only": {
+     "runs": 6,
+     "predicted": 7,
+     "of": 69,
+     "rate": 0.10144927536231885
+    },
+    "official": {
+     "runs": 5,
+     "predicted": 13,
+     "of": 59,
+     "rate": 0.22033898305084745
+    },
+    "oracle_visible": {
+     "runs": 3,
+     "predicted": 5,
+     "of": 39,
+     "rate": 0.1282051282051282
+    },
+    "placebo": {
+     "runs": 6,
+     "predicted": 6,
+     "of": 69,
+     "rate": 0.08695652173913043
+    }
+   },
+   "tests": {
+    "official_vs_placebo": {
+     "observed_diff": 0.13338246131171702,
+     "p": 0.04,
+     "relabelings": 200
+    },
+    "filter_only_vs_placebo": {
+     "observed_diff": 0.014492753623188406,
+     "p": 1.0,
+     "relabelings": 400
+    }
+   },
+   "official_stages_8": [
+    4,
+    11
+   ],
+   "official_stages": [
+    17,
+    21
+   ]
+  }
+ },
+ "rooms_fit": {
+  "model": 0.1673611111111111,
+  "placebo": 0.027281746031746032,
+  "diff": 0.1388888888888889,
+  "lo": 0.013888888888888888,
+  "hi": 0.2708333333333333,
+  "p": 0.015625
+ },
+ "all_true": {
+  "bits_cap": 2.0,
+  "F0_max": 2.0,
+  "F6_max": 2.0,
+  "F0_above_cap": 0,
+  "F6_above_cap": 0,
+  "F1_max": 5.25,
+  "F3_max_lo": 4.75,
+  "F3_max_hi": 5.058878815590207,
+  "F5_max": 5.5,
+  "spearman_mean": 0.635014657111032,
+  "spearman_stages": 382
+ },
+ "pinned": {
+  "proposal": {
+   "question": "Can whole-graph validation and held-out calibration of ensemble support reduce false-positive detours without reducing discovery of unseen rooms?",
+   "scenes": 4,
+   "seeds": 3,
+   "runs": 12,
+   "budget_m": 120,
+   "policies": 5,
+   "kept": 19,
+   "of": 8943
+  },
+  "paper": {
+   "steps": [
+    25,
+    30
+   ],
+   "small_model": "smaller, less expensive LLMs do not yet provide consistent enough performance to support a fully autonomous robot",
+   "bathroom": "semantically reasonable but physically infeasible bathroom",
+   "revisit": "causes the robot to revisit an uninformative region"
+  },
+  "clock": {
+   "commit": "f1ea141b",
+   "date": "2026-11-19",
+   "frontier": {
+    "file": "frontier_baseline.py",
+    "start": "637-638",
+    "stop": "664-665"
+   },
+   "asp": {
+    "file": "exploration_pipeline.py",
+    "start": "714-715"
+   }
   }
  }
 }
