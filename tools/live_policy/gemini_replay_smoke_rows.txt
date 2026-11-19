@@ -1,0 +1,2 @@
+# Smoke test input, outside the frame
+smoke_00871_s44_official_st17

@@ -1,0 +1,41 @@
+# Rows for the Gemini replay (PREREGISTRATION_GEMINI.md, section 4): rounds 1, 3 and 2 of sample_frame.txt, in that order.
+# Within a round: seed by seed, and within a seed 853 official, 871 filter, 871 official, 853 filter.
+# Round 1
+e1_00853_s42_official_st08
+e2_00871_s42_filter_st08
+e1_00871_s42_official_st08
+e2_00853_s42_filter_st08
+e1_00853_s43_official_st08
+e2_00871_s43_filter_st08
+e1_00871_s43_official_st08
+e2_00853_s43_filter_st08
+e1_00853_s44_official_st08
+e2_00871_s44_filter_st08
+e1_00871_s44_official_st08
+e2_00853_s44_filter_st08
+# Round 3
+e1_00853_s42_official_st03
+e2_00871_s42_filter_st03
+e1_00871_s42_official_st03
+e2_00853_s42_filter_st03
+e1_00853_s43_official_st03
+e2_00871_s43_filter_st03
+e1_00871_s43_official_st03
+e2_00853_s43_filter_st03
+e1_00853_s44_official_st03
+e2_00871_s44_filter_st03
+e1_00871_s44_official_st03
+e2_00853_s44_filter_st03
+# Round 2
+e1_00853_s42_official_st13
+e2_00871_s42_filter_st13
+e1_00871_s42_official_st13
+e2_00853_s42_filter_st13
+e1_00853_s43_official_st13
+e2_00871_s43_filter_st13
+e1_00871_s43_official_st13
+e2_00853_s43_filter_st13
+e1_00853_s44_official_st13
+e2_00871_s44_filter_st13
+e1_00871_s44_official_st13
+e2_00853_s44_filter_st13
