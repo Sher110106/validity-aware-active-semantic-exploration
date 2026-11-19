@@ -230,3 +230,58 @@ An independent review of Amendment 3 found one false statement and several cases
 **A4.4 Other files.** The end-sem plan says the authors' files "change part 2 only if they arrive by 11-20". That date moves with A4.1. Reference graphs or a tour path that arrive by 23:59 IST on 11-24 are scored as one more reference, named "author", in every table, and that reference becomes the paper-scale column; APR stays beside it. What arrives later is reported after the talk.
 
 **Not changed.** The rest of §1 to §5, and Amendments 1 to 3 with their Notes.
+
+## Amendment 5 (2026-11-19 11:55 IST, before any run below, the dry runs included, has started)
+
+**Why.** On 00853, November's three ASP runs (`official_nov`) read above our frontier runs at equal time: by 4.8, 11.6 and 6.0 points at 10%, 50% and 100% of B, against APR. But frontier is another explorer with another clock, and at equal path the gap is 0.6 to 3.8 points against APR and has the other sign against the HM3D labels (deviation 66 and `equal_path/equal_path.md`). So that gap cannot say whether the LLM's guesses did anything. Two control arms run ASP's own pipeline, with its clock, its candidate views, its 360° scans and its travel cost, and differ from `official_nov` only in what stands in for the LLM's guesses. An independent review of the whole project asked for them on 11-19, and the student approved them the same day. They are descriptive, like the rest of this file.
+
+**What had been seen when this was written.**
+- Every result filed through 11-18: the three `official_nov` runs with all their readouts, at equal time and (deviation 66, exploratory) at equal path under all three references; the frontier runs; October's three placebo runs on 00853 to 60 m (against APR: 43.9 at 50% of B, and 42.7 at 50 m of path, where `official_nov` reads 51.1 and 48.2).
+- No run of this amendment and no dry run has started. `observed_only` has never been run live on any scene.
+
+**A5.1 Arms.**
+- `placebo`: no LLM call. Each member gets the observed graph plus random rooms and objects, drawn with the measured shape statistics of the LLM's guesses (`live_policy.placebo_graph`; calibration file md5 e9af890b…).
+- `observed_only`: no LLM call. Every member's completion is a copy of the observed graph of its track: no guesses at all. The members of a track are then identical, so the score sees only where the two tracks disagree, and unexplored space scores zero (the arm's own note in `live_policy.py`). It may explore little. That is the arm, not a fault.
+
+**A5.2 Runs.** `e9_00853_s<seed>_placebo_115m` and `e9_00853_s<seed>_observed_only_115m`, seeds 42, 43 and 44: six runs, one at a time in container asp-noetic, in this order: s42 placebo, s42 observed_only, s43 observed_only, s43 placebo, s44 placebo, s44 observed_only. So a loss of the host part-way leaves the arms as even as it can.
+- Files as they stand on the host, the same as for Amendment 3's runs (md5): `live_policy.py` eaf477c5…, `run_live_run.sh` 68aeef7e…, `live_runner.py` 35206d54…, `run_pipeline_with_policy.py` 215ad8ca…, `exploration_pipeline.py` 223ed036…, `calculate_uncertainty.py` 9cec96c6…. The quiet-wait option stays unset.
+- Pacing. A no-LLM arm sleeps at each planning step, so that the mapping stack gets the catch-up time the LLM arm gets while it waits. The schedule is the per-stage median of `llm_wait_s` over the three `official_nov` runs (`host/pacing_update.py`, without the 500 s it adds at the end, so the last measured value repeats): `127,171,182,175,176,287,355,342,318,259,301,232,288,275,259,308,274,407,373,366,324,385,384,420,361,429,439`. It was computed on 11-19 from the three runs' `stages/*/live_policy.jsonl` files (md5 of each run's files joined in stage order: f3a44a92…, 75ae35d3…, 366d339f…).
+- Target path 115 m, not 105 m. The reading of A5.6 needs 100 m. Seed 44 of `official_nov` went 112.7 m and still ended 28 s before B, and October's placebo runs moved at 5.6 to 6.1 s per metre, so 115 m should also fill most cells at 100% of B; those cells decide nothing. Every readout below is taken at a fixed time or a fixed path length, so a longer run changes no cell it shares with a shorter one.
+- Limits: 12 h per run; no call is made, so the cost is $0 (the runner's cost check stays on).
+- A queue script on the host starts the runs with no help from outside (`host/e9_queue.sh`, md5 7a669f0a…). Before each launch it waits until the checks of the Note to Amendment 3 pass twice, five minutes apart (`host/e8_prelaunch_check.sh`, md5 e4f8a0d6…): no runner or rerun queue of ours is live; the container holds no live process but its first; at least 12 GB of GPU memory, 60 GB of host memory and 20 GB of disk are free; the file hashes still match. If the checks have not passed after 48 hours of waiting in all, the queue ends and what is left is not run. After each run it compresses that run's raw graph files with the checked script of deviation 62 (`host/compress_old_dsg.sh`, md5 239c5a96…), so that disk does not run short.
+
+**A5.3 Which runs count.** The rules of A3.2 and its Note, less the two about LLM calls.
+- A run has a value at time t, or at path L, only if it reached it: the last stage that holds `navigation_stats.json` and both graph files shows at least that time, or that path.
+- A run whose `logs/roslaunch.log` holds an "out of memory" line or a line saying `nvblox_node` has died (case ignored) has no value at 100% of B and none at 100 m; its other cells are reported and marked.
+- There is no rerun of any kind: not for a run killed because another user's job took the GPU's memory, not for a run the runner stopped, not for a run stopped by hand. Only a run the runner skipped or failed to launch has not happened, and may be launched once later (with `_relaunch1` added if a folder was left).
+- The queue script checks every 30 s and asks the runner to stop the run when its log shows one of the two lines above, or when two readings of free host memory 15 s apart are both under 20 GB (the rule deviation 64 set). No one decides by hand. A run stopped this way ends at its last full stage.
+
+**A5.4 Dry runs.** One 5 m run per arm (`dryrun_e9_00853_s42_placebo_5m`, `dryrun_e9_00853_s42_observed_only_5m`) with the same schedule, through the same queue script. We read them by hand before the six runs are queued. A dry run passes if the runner launches it, it writes at least two stages, every line of its `live_policy.jsonl` names the arm's policy, no LLM call is logged, and its `roslaunch.log` holds neither line of A5.3. For `observed_only`, every member in those lines must also show zero predicted nodes. A dry run is never scored and never repeated (one the runner skipped or failed to launch may be launched once more). If an arm's dry run fails, that arm's three runs are not started, the other arm's go on, and this is reported.
+
+**A5.5 Readouts.**
+1. §4's, at 10%, 50% and 100% of B = 632.18 s: F1 as the stage value and as the running maximum, and GED with the author's code, against all three references. Two rows, `placebo_nov` and `observed_only_nov`, picked by the name patterns above, each with mean, min, max and n. They are never pooled with October's placebo runs.
+2. F1 (stage value) at equal path: 50, 60, 80 and 100 m, each at the last stage whose path is at most L, against all three references, for `official_nov`, `placebo_nov`, `observed_only_nov` and `frontier_end`. For the two new arms this readout is registered here. For `official_nov` and `frontier_end` it was first made after their results were seen (deviation 66) and stays marked so.
+3. Seconds of navigation time per metre, per arm.
+
+**A5.6 The reading, fixed now.** The question: on 00853, do ASP's runs with the LLM's guesses read above the same pipeline with random guesses, or with none?
+- For each run, S is the mean of its F1 at 50, 60, 80 and 100 m of path. It is taken twice: against APR, and against the HM3D labels. A run that did not reach 100 m has no S. Path, not time, because the three arms share one clock and the paper's own Fig. 3 is drawn against path. The equal-time cells of readout 1 are shown beside it and decide nothing.
+- `official_nov` is the three runs as they ran, seed 43 included. The other readings of seed 43 (deviation 64) are shown beside it and decide nothing.
+- A control arm is judged only if every `official_nov` run and at least 3 of its own runs have S. Otherwise that arm gets "no statement", and its S values are listed.
+- For a judged arm, against each of the two references:
+  - **separated above:** every `official_nov` run has a higher S than every run of the control. With three runs a side, chance alone gives this 1 time in 20 if the arms do not differ.
+  - **not above:** the mean S of `official_nov` is not higher than the control's mean.
+  - **above on average, not separated:** anything else.
+- The statement for a judged arm:
+  - "reads above" if separated above under both references;
+  - "does not read above" if not above under both references;
+  - "in between" otherwise, with what each reference gave.
+- The slide sentence names only the arms that were judged:
+  - reads above every judged arm: "With [random guesses / no guesses / random guesses, or none], the same pipeline reads lower on this home: here the LLM's guesses add to ASP's score."
+  - does not read above any judged arm: "With [the same], the same pipeline reads as high: November's lead over frontier is not shown to come from the LLM's guesses."
+  - anything else: the slide gives both S tables and the statements as they fall.
+  - If no arm was judged, the slide shows the S tables only.
+- What this cannot show. Three runs a side in one home. No p-value is reported. "Not shown to come from the guesses" is not "the guesses do nothing": a gain smaller than the spread between runs stays hidden. The controls differ from `official_nov` in more than the guesses: they run two days later, under whatever load other users put on the GPU then (during November's ASP runs another user's jobs held 24.5 to 31.5 GB of its memory); `official_nov` lost 7% to 10% of its members to dropped replies, and the controls lose none; the sleep stands in for the LLM's wait but is a median, not the wait itself. And the placebo's draws differ from the LLM's guesses in more than truth: in October its members agreed with each other far less often (4.4% against 29.4% of guesses).
+
+**A5.7 Not run.** 00871 (its budget is twice as long, and no ASP run of ours reaches half of it). No new ASP run with the LLM. No new frontier run.
+
+**Not changed.** §1 to §5, Amendments 1 to 4 and their Notes. `official_nov` stays as filed.
