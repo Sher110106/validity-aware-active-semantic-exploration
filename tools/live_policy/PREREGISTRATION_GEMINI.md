@@ -58,3 +58,15 @@ Scores, truth, labels, comparators, the unit (the cluster) and the exact sign-fl
 ## 7. Not done
 
 No live Gemini run. No second Gemini model, unless the fallback of §3 applies. No replay of round 4. No change to the Claude results or to §10's thesis line.
+
+## Note 1 (2026-11-19 12:00 IST, before any generation call has returned an output)
+
+**The smoke test on `gemini-2.5-pro` was refused.** At 11:58:35 IST on 11-19 the first call of each of the two members came back with HTTP 404: "This model models/gemini-2.5-pro is no longer available to new users." No output was produced; the ledger charges the two calls at the reserve, $0.16 in all. `models.get` lists the model for our key, but the key may not generate with it. So §3's fallback applies: the replay runs on `gemini-3.8-flash`, and every sentence about its result names that model and says it is not the paper's.
+
+**What follows from it, fixed here before any output exists.**
+- The smoke test is run again on `gemini-3.8-flash`: the same input, two members. Its mean cost per member sets the number of members per row, as §3 says. The refused attempt's folder is kept under another name.
+- Prices for the cap: $0.75 in, $0.075 cached and $3.75 out per million tokens (the public price page, read on 11-19).
+- A fault of the set-up must not use up rows. As the tool stood, the 404 above would have marked every row done with all its members dropped. So a call that fails for a reason other than those of §3 and §4, before its member has had one good call, stops the replay. The fault is then fixed and the replay is started again, once for each such fault; rows already done are not run again, and the row in flight is run afresh.
+- A timeout or a broken connection is retried like a 5xx reply, as §12 retried them for Claude.
+- The tool is now `gemini_replay.py` with sha256 3ec7cbba60144604… (it was fd102a14602b2cd7…). The rows file is unchanged.
+- The wrapper's hash follows in a second note, before any frame row is called.

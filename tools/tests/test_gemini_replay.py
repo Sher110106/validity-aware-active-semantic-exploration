@@ -190,11 +190,28 @@ def test_a_member_that_does_not_parse_is_dropped_and_the_row_is_done(dirs):
 def test_an_error_that_is_not_about_billing_drops_the_member_only(dirs):
     inputs, out = dirs
     meter = gr.Meter(str(out), 100.0)
-    lc = make_lc(meter, calls_per_member=1, fail_only=(4,), error=ValueError("bad reply"))
-    s = gr.replay(lc, meter, str(inputs), str(out), ["row_a"], 4, 0.0)
-    ends = sorted(m["end"] for m in s["rows"][0]["members"])
-    assert ends == ["dropped_error", "ok", "ok", "ok"] and s["rows"][0]["done"] and s["stop"] is None
+    lc = make_lc(meter, calls_per_member=3, fail_only=(2,), error=ValueError("bad reply"))
+    s = gr.replay(lc, meter, str(inputs), str(out), ["row_a", "row_b"], 1, 0.0)    # one member, so the order is fixed
+    assert [m["end"] for m in s["rows"][0]["members"]] == ["dropped_error"] and s["rows"][0]["done"]
+    assert s["stop"] is None and s["rows"][1]["done"] and s["rows"][1]["members"][0]["end"] == "ok"
     assert [l for l in ledger_lines(out) if "error" in l][0]["cost"] == gr.RESERVE_USD
+
+
+def test_a_refusal_before_any_good_call_stops_the_replay(dirs):
+    inputs, out = dirs
+    meter = gr.Meter(str(out), 100.0)
+    lc = make_lc(meter, fail_at=1, error=ApiError(404, "This model is no longer available to new users"))
+    s = gr.replay(lc, meter, str(inputs), str(out), ["row_a", "row_b", "row_c"], 2, 0.0)
+    assert s["stop"] == "setup" and s["rows"][0]["done"] is False and s["not_started"] == ["row_b", "row_c"]
+    assert [m["end"] for m in s["rows"][0]["members"]] == ["stopped", "stopped"] and lc.count["n"] <= 2
+
+
+def test_a_timeout_is_retried_like_a_server_error(dirs):
+    inputs, out = dirs
+    meter = gr.Meter(str(out), 100.0)
+    lc = make_lc(meter, fail_only=(1,), error=TimeoutError("timed out"))
+    s = gr.replay(lc, meter, str(inputs), str(out), ["row_a"], 1, 0.0)
+    assert s["stop"] is None and s["rows"][0]["members"][0]["end"] == "ok" and lc.count["n"] == 4
 
 
 def test_a_rate_limit_is_retried_and_the_member_goes_on(dirs):
@@ -236,6 +253,9 @@ def test_failed_calls_are_classified_by_code_first():
     assert gr.classify(RuntimeError("Your prepayment credits are depleted")) == "stop"
     assert gr.classify(ApiError(403, "billing is not enabled for this project")) == "stop"
     assert gr.classify(ApiError(400, "invalid argument")) == "drop"
+    assert gr.classify(ApiError(404, "model is no longer available to new users")) == "drop"
+    assert gr.classify(TimeoutError("timed out")) == "retry" and gr.classify(ConnectionError("Connection reset by peer")) == "retry"
+    assert gr.classify(ApiError(400, "request timeout field is invalid")) == "drop"       # a coded error is not a network fault
     assert gr.classify(ValueError("could not parse the 4020 nodes")) == "drop"
 
 

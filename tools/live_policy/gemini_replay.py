@@ -23,9 +23,11 @@ The cap is enforced before every call, from the usage the API reports, at the li
 reports as cached are billed at the cache price. The key is read from
 /workspace/.cvp-secrets/gemini-auth-key by this process and is never printed.
 
-A call that fails with HTTP 429 or a 5xx code is tried again after 60 s, up to 3 times. The replay
-stops for good, and no call is made after it, on HTTP 402, on any other reply that names prepaid
-credit or billing, and when one call has failed its third retry.
+A call that fails with HTTP 429, a 5xx code, a timeout or a broken connection is tried again after
+60 s, up to 3 times. The replay stops, and no call is made after it, on HTTP 402, on any other reply
+that names prepaid credit or billing, when one call has failed its third retry, and when a member's
+call fails for another reason before that member has had one good call (a fault of the set-up, such
+as a model the key may not use: it would otherwise mark every row done with all its members dropped).
 """
 import argparse
 import hashlib
@@ -47,6 +49,8 @@ PRICES = {
 RESERVE_USD = 0.08
 OBSERVED = "habitat_scene_graph_original_graph0.yaml"
 BILLING_WORDS = ("billing", "credit", "prepay", "payment required", "payment_required")
+NETWORK_WORDS = ("timeout", "timedout", "connecterror", "connectionerror", "readerror", "writeerror",
+                 "remoteprotocolerror", "connection reset", "connection aborted", "temporarily unavailable")
 RETRIES = 3
 RETRY_WAIT_S = 60
 
@@ -64,15 +68,19 @@ def sha256_file(path):
 
 
 def classify(exc):
-    """What a failed call means: "stop" (the credit is used up), "retry" (HTTP 429 or 5xx) or "drop".
-    The HTTP code decides first: a rate limit's text also names billing."""
+    """What a failed call means: "stop" (the credit is used up), "retry" (HTTP 429 or 5xx, a timeout
+    or a broken connection) or "drop". The HTTP code decides first: a rate limit's text also names
+    billing."""
     code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
     if code == 402:
         return "stop"
     if code == 429 or (isinstance(code, int) and 500 <= code <= 599):
         return "retry"
-    if any(w in repr(exc).lower() for w in BILLING_WORDS):
+    text = (type(exc).__name__ + " " + repr(exc)).lower()
+    if any(w in text for w in BILLING_WORDS):
         return "stop"
+    if not isinstance(code, int) and any(w in text for w in NETWORK_WORDS):
+        return "retry"
     return "drop"
 
 
@@ -129,8 +137,9 @@ class Meter:
         self.spent = 0.0
         self.calls = 0
         self.reserved = 0.0
-        self.stopped = None            # None, "cap" or "billing"
+        self.stopped = None            # None, "cap", "billing", "retries" or "setup"
         self.by_member = {}            # (row, member) -> [cost, calls]
+        self.good = {}                 # (row, member) -> calls that returned
         if os.path.exists(self.path):
             with open(self.path) as f:
                 for line in f:
@@ -172,6 +181,8 @@ class Meter:
                 if um is not None:
                     cost = call_cost(meter.model, p, ca, c, th)
                 rec.update({"latency_s": round(time.time() - t0, 2), "prompt": p, "cached": ca, "candidates": c, "thoughts": th})
+                with meter.lock:
+                    meter.good[key] = meter.good.get(key, 0) + 1
             except Exception as e:
                 err = e
                 rec["error"] = repr(e)[:300]
@@ -202,9 +213,13 @@ class Meter:
                     retry += 1
                     time.sleep(RETRY_WAIT_S)
                     continue
-                if what in ("stop", "retry"):          # the credit is used up, or the third retry failed
-                    with meter.lock:
-                        meter.stopped = meter.stopped or ("billing" if what == "stop" else "retries")
+                with meter.lock:
+                    if what == "stop":                 # the credit is used up
+                        meter.stopped = meter.stopped or "billing"
+                    elif what == "retry":              # the third retry failed
+                        meter.stopped = meter.stopped or "retries"
+                    elif not meter.good.get(key):      # refused before this member had one good call
+                        meter.stopped = meter.stopped or "setup"
                 raise err
 
         return capped
