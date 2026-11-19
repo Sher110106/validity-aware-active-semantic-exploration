@@ -46,6 +46,7 @@ PRICES = {
     "gemini-2.5-pro": {"small": (1.25, 0.125, 10.0), "large": (2.50, 0.25, 15.0), "large_over": 200000},
     "gemini-3.8-flash": {"small": (0.75, 0.075, 3.75)},
     "gemini-4-argon": {"small": (2.00, 0.10, 10.0)},      # through 2026-11-30
+    "gemini-4-neon": {"small": (3.00, 0.15, 15.0)},
 }
 RESERVE_USD = 0.08
 OBSERVED = "habitat_scene_graph_original_graph0.yaml"

@@ -1946,8 +1946,8 @@ def argon_slide(prs, slots):
     s = frame(prs, 21, "Part 3 · Is it the model? · extension of Note 3",
               "Gemini 4 Argon is above Opus at L2, and not detectably above Claude elsewhere", pending="registered")
     y = P(s, 120, 252, 1680, [("What ran. ", "b"),
-                              (f"Gemini 4 Argon, the top model on Google's price page on 19 November, in the author's "
-                               f"loop, on the {g['rows']} round-1 inputs: {g['members_per_row']} members each, "
+                              (f"Gemini 4 Argon, the second of Google's Gemini 4 line (its top model is Gemini 4 Carbon), "
+                               f"in the author's loop, on the {g['rows']} round-1 inputs: {g['members_per_row']} members each, "
                                f"{g['ok']} of {g['members']} parsed. Registered after the Flash result was seen "
                                "(Note 3). Not the paper's model.", "n")], B, BODY, 1.25)
     cws = (370, 150, 150, 170, 290, 170, 380)
@@ -1985,6 +1985,8 @@ def argon_slide(prs, slots):
                               f"scores {num(100 * g['rule']['L2']['own'], 1)}%, below the prior "
                               f"({num(100 * b3['own'], 1)}%; {gpts(b3['diff'])} {gint(b3['lo'], b3['hi'])}).", "n")],
       NQ, BODY, 1.3, limit=1010)
+    Nq(s, 120, 930, 1680, "A further run of this model on 24 more inputs is registered (Note 4) and running; no "
+                          "result of it exists.", limit=1010)
 
 
 # ---------------------------------------------------------------- 20. Part 3, the paper's room test

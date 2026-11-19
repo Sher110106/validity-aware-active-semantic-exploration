@@ -180,7 +180,7 @@ Exploratory: at L2 Gemini scores 78.3%, below the prior's 90.7%, about 12 points
 
 ## Slide 21: Gemini 4 Argon is above Opus at L2, and not detectably above Claude elsewhere (about 53 s)
 
-Gemini 4 Argon, the top model on Google's price page on 19 November, in the author's loop, on the 12 round-1 inputs: four members each, 48 of 48 parsed. Registered after the Flash result was seen. Not the paper's model.
+Gemini 4 Argon, the second of Google's Gemini 4 line (its top is Carbon), in the author's loop, on the 12 round-1 inputs: four members each, 48 of 48 parsed. Registered after the Flash result was seen. Not the paper's model.
 
 Argon minus Opus at L2: plus 17.5 points, from plus 5.0 to plus 30.3, Holm p 0.0205: above. The other three are not detectably above. The rule at L3 reads Inconclusive: Argon minus the trade 0.0, from minus 2.8 to plus 3.1, against a margin of 3. Argon scores 6.2%, beside 5.7, 6.2 and 6.6.
 
