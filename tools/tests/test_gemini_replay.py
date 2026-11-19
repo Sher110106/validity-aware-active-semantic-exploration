@@ -271,6 +271,7 @@ def test_call_cost_uses_the_cache_price_and_the_large_prompt_tier():
     assert gr.call_cost("gemini-2.5-pro", 250000, 0, 1000, 0) == pytest.approx(250000 * 2.5e-6 + 1000 * 15e-6)
     assert gr.call_cost("gemini-3.8-flash", 1000000, 0, 0, 1000000) == pytest.approx(0.75 + 3.75)
     assert gr.call_cost("gemini-3.8-flash", 1000, 5000, 0, 0) == pytest.approx(1000 * 0.075e-6)   # cached never above the prompt
+    assert gr.call_cost("gemini-4-argon", 100000, 90000, 1000, 2000) == pytest.approx((10000 * 2.0 + 90000 * 0.10 + 3000 * 10.0) / 1e6)
 
 
 def test_the_flash_model_is_metered_at_its_own_prices(dirs):

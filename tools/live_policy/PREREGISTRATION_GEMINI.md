@@ -83,3 +83,24 @@ No live Gemini run. No second Gemini model, unless the fallback of §3 applies. 
 - A member marked ok whose graph cannot be read counts as dropped.
 - With fewer than 7 clusters, 5a gives its numbers and no sentence.
 - The drop-rate flag of §3 is read on all rows run. Sentences of §6 are written for the confirmatory set only.
+
+## Note 3: one more model on round 1 (2026-11-19 18:51 IST, after the Flash result was seen, before any call on the new model)
+
+**Why.** The replay used $56.83 of the $122 cap, and the student's word was to use what credit is left on this question. The registered result is for Gemini 3.8 Flash, the small tier. The paper says of its own choice of model that "smaller, less expensive LLMs do not yet provide consistent enough performance" (section IV), and its model is closed to our key. `gemini-4-argon` is the top model on the public price page on 11-19 and is listed for our key, as Gemini 2.5 Pro was the top tier when the paper was written. So the same test is put to it, on round 1.
+
+**What had been seen when this was written.** Everything in §2, and the whole Flash result (`results_semantic_1113/gemini_1119/`): above both Claude models at L2 and at L3; Rejected at L3 against the region trade; its own L3 score of 7.5% beside 8.5%, 8.7% and 11.0% for its three controls. No output of `gemini-4-argon` on any input of ours. §7 said that no second Gemini model would be run. This note changes that after a result was seen, and the slide says so.
+
+**E1. What runs.**
+- Model `gemini-4-argon`, with no fallback: if the smoke test cannot get a member through, nothing more is run.
+- Loop, inputs, seeds, drops, retries and stops as in §3, §4 and Note 1.
+- Rows: round 1 only, the 12 stage-8 rows, in the order of the rows file (`gemini_replay_rows_round1.txt`, sha256 5625603c06e1055a…).
+- Smoke test first: two members on the same input outside the frame.
+- Members: 4 a row if 48 times the smoke test's mean cost per member fits in what the cap leaves after it; 2 a row (members 0 and 1) if 24 times fits; otherwise it is not run.
+- Cap: $65.00 for this extension, the smoke test included, on a ledger of its own. Prices read on 11-19: $2.00 in, $0.10 cached and $10.00 out per million tokens. The tool is `gemini_replay.py` with those prices added (sha256 cd332f07ed7f8d7b…); nothing else in it changed.
+
+**E2. Tests.** The wrapper of Note 2, unchanged, scores it on an output folder of its own. The confirmatory set is round 1 if all 12 rows finish; if they do not, everything is exploratory.
+- **E2a (confirmatory):** the new model minus Opus and minus Haiku, at L2 and at L3, exactly as 5a: four hypotheses, Holm, α = 0.05, one-sided, with intervals. A cluster has one row here.
+- **E2b (confirmatory):** the registered rule at L3, exactly as 5b: one hypothesis.
+- **Exploratory:** the new model minus Gemini 3.8 Flash on the same 12 rows at L2 and at L3. Both ran the author's loop, so this contrast is of the model alone; it is computed after the fact and marked so. L1 and L2 under §10's rule, with the ceiling said beside them.
+
+**E3. Wording.** The sentences of §6 with the model's name; each says it is not the paper's model. The slide says that this extension was registered after the Flash result was seen.
