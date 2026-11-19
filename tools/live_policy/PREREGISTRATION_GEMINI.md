@@ -70,3 +70,16 @@ No live Gemini run. No second Gemini model, unless the fallback of §3 applies. 
 - A timeout or a broken connection is retried like a 5xx reply, as §12 retried them for Claude.
 - The tool is now `gemini_replay.py` with sha256 3ec7cbba60144604… (it was fd102a14602b2cd7…). The rows file is unchanged.
 - The wrapper's hash follows in a second note, before any frame row is called.
+
+## Note 2 (2026-11-19 12:17 IST, before any call on a frame row)
+
+**The smoke test on `gemini-3.8-flash`.** It ran from 12:01 to 12:07 IST on 11-19: two members on the input outside the frame, both parsed, with 45 and 24 calls, at $0.41 and $0.31 (mean $0.36). The API billed 85% of the input at the cached price. 48 members at that mean come to $17.3, well under the $121.12 the cap leaves, so rows get 4 members (§3). The ledger stood at $0.88 when this note was written: the two refused calls at the reserve, and the smoke test. The smoke test's two graphs were read with the frozen reader to check that they load; nothing was scored.
+
+**The wrapper.** `tools/live_policy/semantic_gemini.py`, sha256 4d6852e00715fac6fa8c3cc3421f4c0797c1092b5025fc2e4337a3c39a7ccc4b, with its tests in `tools/tests/test_semantic_gemini.py`. An independent review read it against §5 before this hash and found three faults, all fixed: the row list could be shortened after the scores were seen (it is now the committed rows file, checked by its sha256); the check of this registration took the file and its hash from the caller (it now checks this file against `PREREGISTRATION_GEMINI.sha256`); and a member whose graph cannot be read was left out of the drop rate (it now counts as dropped). Its tests show that it scores a member file exactly as the frozen code scored Claude's (16 rows, 64 members, 1,042 scores equal to the filed Haiku records) and that it reads the author's own output format as the frozen code does (29 of October's Gemini members).
+
+**Points §5 left open, settled here before any frame row.**
+- The exploratory lines at L1 and L2 (5b) are given unadjusted, each alone.
+- A comparator's own score is taken on the rows it shares with Gemini.
+- A member marked ok whose graph cannot be read counts as dropped.
+- With fewer than 7 clusters, 5a gives its numbers and no sentence.
+- The drop-rate flag of §3 is read on all rows run. Sentences of §6 are written for the confirmatory set only.
