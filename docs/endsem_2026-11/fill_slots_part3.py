@@ -38,6 +38,40 @@ def cluster_mean(d):
     return sum(v) / len(v)
 
 
+def read_gemini(folder):
+    """One registered Gemini replay (PREREGISTRATION_GEMINI.md): results.json of its folder under results_semantic_1113."""
+    gr = J(RS, folder, "results.json")
+    c5, a5, b5 = gr["confirmatory"], gr["confirmatory"]["5a"], gr["confirmatory"]["5b"]
+    fam = {}
+    for k, v in a5["family"].items():
+        m, L = k.split("|")
+        t = a5["tables"][m][L]
+        fam[k] = {"model": m, "level": L, "diff": v["mean_diff"], "lo": v["ci"][0], "hi": v["ci"][1], "p": v["p"],
+                  "p_holm": v["p_holm"], "found": v["found"], "n_clusters": v["n_clusters"],
+                  "gemini": t["model_mean"], "other": t["other_mean"]}
+    lv = b5["levels"]
+    comp = {}
+    for L in ("L1", "L2", "L3"):
+        comp[L] = {"verdict": lv[L]["verdict"], "named": lv[L]["named"], "delta": lv[L]["delta"],
+                   "upper_named": lv[L]["ci_upper_named"], "own": lv[L]["model_own_score"],
+                   "confirmatory": lv[L]["confirmatory"], "n_clusters": lv[L]["n_clusters"],
+                   "comparators": {k: {"own": v["comparator_own_score"], "diff": v["mean_diff"],
+                                       "lo": None if v["ci"] is None else v["ci"][0],
+                                       "hi": None if v["ci"] is None else v["ci"][1], "n_rows": v["n_rows"]}
+                                   for k, v in lv[L]["comparators"].items()}}
+    asr, wh = gr["analysis_set"], c5["5c"]["wrong_house_gate"]
+    new_gemini = {"status": "filled", "model": gr["model"], "confirmatory": c5["confirmatory"],
+                  "rows": asr["confirmatory"]["rows"], "members": asr["confirmatory"]["members"],
+                  "ok": asr["confirmatory"]["ok"], "dropped": asr["confirmatory"]["dropped"],
+                  "drop_rate": asr["all_rows_run"]["drop_rate"], "drop_rate_above_25": asr["all_rows_run"]["drop_rate_above_25_percent"],
+                  "members_per_row": asr["members_per_row"], "finished_rounds": asr["finished_rounds"],
+                  "clusters": c5["clusters"], "family": fam, "rule": comp,
+                  "wrong_house": {L: {"p": wh[L]["p"], "n_pairs": wh[L]["n_pairs"], "pass": wh[L]["pass"]}
+                                  for L in ("L1", "L2")},
+                  "wording": c5["wording"]}
+    return new_gemini
+
+
 def main():
     old = J(SLOTS)
     cl, ex = J(RS, "claude", "results.json"), J(RS, "exploratory", "results.json")
@@ -234,35 +268,13 @@ def main():
 
     new = {k: old[k] for k in ("_how", "paper_compare_json", "_table871", "table871_updated", "asp853_full_budget")}
     # --- the registered Gemini replay (PREREGISTRATION_GEMINI.md; DEVIATIONS_NOVEMBER.md item 72)
-    gr = J(RS, "gemini_1119", "results.json")
-    c5, a5, b5 = gr["confirmatory"], gr["confirmatory"]["5a"], gr["confirmatory"]["5b"]
-    fam = {}
-    for k, v in a5["family"].items():
-        m, L = k.split("|")
-        t = a5["tables"][m][L]
-        fam[k] = {"model": m, "level": L, "diff": v["mean_diff"], "lo": v["ci"][0], "hi": v["ci"][1], "p": v["p"],
-                  "p_holm": v["p_holm"], "found": v["found"], "n_clusters": v["n_clusters"],
-                  "gemini": t["model_mean"], "other": t["other_mean"]}
-    lv = b5["levels"]
-    comp = {}
-    for L in ("L1", "L2", "L3"):
-        comp[L] = {"verdict": lv[L]["verdict"], "named": lv[L]["named"], "delta": lv[L]["delta"],
-                   "upper_named": lv[L]["ci_upper_named"], "own": lv[L]["model_own_score"],
-                   "confirmatory": lv[L]["confirmatory"], "n_clusters": lv[L]["n_clusters"],
-                   "comparators": {k: {"own": v["comparator_own_score"], "diff": v["mean_diff"],
-                                       "lo": None if v["ci"] is None else v["ci"][0],
-                                       "hi": None if v["ci"] is None else v["ci"][1], "n_rows": v["n_rows"]}
-                                   for k, v in lv[L]["comparators"].items()}}
-    asr, wh = gr["analysis_set"], c5["5c"]["wrong_house_gate"]
-    new_gemini = {"status": "filled", "model": gr["model"], "confirmatory": c5["confirmatory"],
-                  "rows": asr["confirmatory"]["rows"], "members": asr["confirmatory"]["members"],
-                  "ok": asr["confirmatory"]["ok"], "dropped": asr["confirmatory"]["dropped"],
-                  "drop_rate": asr["all_rows_run"]["drop_rate"], "drop_rate_above_25": asr["all_rows_run"]["drop_rate_above_25_percent"],
-                  "members_per_row": asr["members_per_row"], "finished_rounds": asr["finished_rounds"],
-                  "clusters": c5["clusters"], "family": fam, "rule": comp,
-                  "wrong_house": {L: {"p": wh[L]["p"], "n_pairs": wh[L]["n_pairs"], "pass": wh[L]["pass"]}
-                                  for L in ("L1", "L2")},
-                  "wording": c5["wording"]}
+    new_gemini = read_gemini("gemini_1119")
+    new_argon = read_gemini("gemini_argon_1119")
+    af = J(RS, "gemini_argon_1119", "argon_minus_flash.json")
+    assert af["a"] == "gemini-4-argon" and af["b"] == "gemini-3.8-flash"
+    new_argon["vs_flash"] = {L: {"rows": v["rows"], "argon": v["a"], "flash": v["b"], "diff": v["diff"],
+                                 "lo": v["interval"][0], "hi": v["interval"][1], "p": v["p_two_sided"]}
+                             for L, v in af["levels"].items()}
     new["_how"] = ("Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. "
                    "Edit part 2 keys by hand; rerun the script after any result file changes.")
     new["outcome"] = {"The claim holds": "works", "Mixed": "mixed", "The claim fails": "fails",
@@ -287,6 +299,7 @@ def main():
     new["m2"] = m2_out
     new["validity"] = validity
     new["gemini_replay"] = new_gemini
+    new["argon_replay"] = new_argon
     new["ceiling"], new["common"], new["room_runs"] = ceiling, common, room_runs
     new["rooms_fit"], new["all_true"], new["pinned"] = rooms_fit, all_true, pinned
     new["_sources"].update({
@@ -297,6 +310,8 @@ def main():
         "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
         "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; "
                   "the authors' repository at f1ea141b (SOURCES.md)",
+        "argon_replay": "results_semantic_1113/gemini_argon_1119/results.json (as gemini_replay) and argon_minus_flash.json "
+                        "(exploratory): the extension of PREREGISTRATION_GEMINI.md Note 3",
         "gemini_replay": "results_semantic_1113/gemini_1119/results.json: confirmatory.{5a,5b,5c,wording}, "
                          "analysis_set (registered replay of Gemini 3.8 Flash)"})
     json.dump(new, open(SLOTS, "w"), indent=1)

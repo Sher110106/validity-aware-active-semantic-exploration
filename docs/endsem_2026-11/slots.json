@@ -23,6 +23,7 @@
   "rooms_fit": "results_semantic_1113/claude/results.json: models.claude-opus-5-5.extras.l3_rooms",
   "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
   "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; the authors' repository at f1ea141b (SOURCES.md)",
+  "argon_replay": "results_semantic_1113/gemini_argon_1119/results.json (as gemini_replay) and argon_minus_flash.json (exploratory): the extension of PREREGISTRATION_GEMINI.md Note 3",
   "gemini_replay": "results_semantic_1113/gemini_1119/results.json: confirmatory.{5a,5b,5c,wording}, analysis_set (registered replay of Gemini 3.8 Flash)"
  },
  "blind": {
@@ -760,6 +761,280 @@
    "Gemini 3.8 Flash did not beat a trade of region contents by the 3-point margin. Gemini 3.8 Flash is not the paper's model.",
    "Saved inputs from two homes; no robot acted on these guesses; the comparators at L1 and L2 sit at the ceiling. Gemini 3.8 Flash is not the paper's model."
   ]
+ },
+ "argon_replay": {
+  "status": "filled",
+  "model": "gemini-4-argon",
+  "confirmatory": true,
+  "rows": 12,
+  "members": 48,
+  "ok": 48,
+  "dropped": 0,
+  "drop_rate": 0.0,
+  "drop_rate_above_25": false,
+  "members_per_row": 4,
+  "finished_rounds": [
+   1
+  ],
+  "clusters": 12,
+  "family": {
+   "claude-haiku-5-5|L2": {
+    "model": "claude-haiku-5-5",
+    "level": "L2",
+    "diff": 0.135653878392849,
+    "lo": -0.014100006747065538,
+    "hi": 0.2854980667480667,
+    "p": 0.03564453125,
+    "p_holm": 0.10693359375,
+    "found": false,
+    "n_clusters": 12,
+    "gemini": 0.7925983228372934,
+    "other": 0.6569444444444444
+   },
+   "claude-haiku-5-5|L3": {
+    "model": "claude-haiku-5-5",
+    "level": "L3",
+    "diff": 0.012222042677226756,
+    "lo": -0.043864326640440515,
+    "hi": 0.06651329965184455,
+    "p": 0.322265625,
+    "p_holm": 0.64453125,
+    "found": false,
+    "n_clusters": 12,
+    "gemini": 0.06222204267722675,
+    "other": 0.049999999999999996
+   },
+   "claude-opus-5-5|L2": {
+    "model": "claude-opus-5-5",
+    "level": "L2",
+    "diff": 0.1745547922937629,
+    "lo": 0.04966505716505717,
+    "hi": 0.30320138195138185,
+    "p": 0.005126953125,
+    "p_holm": 0.0205078125,
+    "found": true,
+    "n_clusters": 12,
+    "gemini": 0.7925983228372934,
+    "other": 0.6180435305435306
+   },
+   "claude-opus-5-5|L3": {
+    "model": "claude-opus-5-5",
+    "level": "L3",
+    "diff": -0.004064332984148906,
+    "lo": -0.05728384239337934,
+    "hi": 0.04855042016806723,
+    "p": 0.5615234375,
+    "p_holm": 0.64453125,
+    "found": false,
+    "n_clusters": 12,
+    "gemini": 0.06222204267722675,
+    "other": 0.06628637566137566
+   }
+  },
+  "rule": {
+   "L1": {
+    "verdict": "Rejected",
+    "named": "B3",
+    "delta": 0.05,
+    "upper_named": 0.0,
+    "own": 0.9895833333333334,
+    "confirmatory": false,
+    "n_clusters": 12,
+    "comparators": {
+     "B1": {
+      "own": 0.9375,
+      "diff": 0.052083333333333336,
+      "lo": -0.025,
+      "hi": 0.125,
+      "n_rows": 12
+     },
+     "B2": {
+      "own": 0.7708333333333334,
+      "diff": 0.21875,
+      "lo": 0.0625,
+      "hi": 0.38333333333333336,
+      "n_rows": 12
+     },
+     "B3": {
+      "own": 0.9895833333333334,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n_rows": 12
+     },
+     "B3_seen": {
+      "own": 1.0,
+      "diff": -0.010416666666666666,
+      "lo": -0.03125,
+      "hi": 0.0,
+      "n_rows": 12
+     },
+     "B3_seen_size": {
+      "own": 1.0,
+      "diff": -0.010416666666666666,
+      "lo": -0.03125,
+      "hi": 0.0,
+      "n_rows": 12
+     },
+     "B3_size": {
+      "own": 0.9895833333333334,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n_rows": 12
+     },
+     "B4": {
+      "own": 0.9479166666666666,
+      "diff": 0.041666666666666664,
+      "lo": null,
+      "hi": null,
+      "n_rows": 12
+     }
+    }
+   },
+   "L2": {
+    "verdict": "Rejected",
+    "named": "B3",
+    "delta": 0.05,
+    "upper_named": -0.10499007936507938,
+    "own": 0.7925983228372934,
+    "confirmatory": false,
+    "n_clusters": 12,
+    "comparators": {
+     "B1": {
+      "own": 0.6468873718873719,
+      "diff": 0.14571095094992156,
+      "lo": 0.034827903577903586,
+      "hi": 0.25835622710622713,
+      "n_rows": 12
+     },
+     "B2": {
+      "own": 0.7503506705712587,
+      "diff": 0.042247652266034615,
+      "lo": -0.04228009735362674,
+      "hi": 0.12622279681103213,
+      "n_rows": 12
+     },
+     "B3": {
+      "own": 0.9645042576568312,
+      "diff": -0.17190593481953775,
+      "lo": -0.23922605172605177,
+      "hi": -0.10499007936507938,
+      "n_rows": 12
+     },
+     "B3_seen": {
+      "own": 0.9193480079969051,
+      "diff": -0.12674968515961163,
+      "lo": -0.19790544422897363,
+      "hi": -0.05732742883478176,
+      "n_rows": 12
+     },
+     "B3_seen_size": {
+      "own": 0.9337446441766294,
+      "diff": -0.14114632133933605,
+      "lo": -0.20234675047175044,
+      "hi": -0.07998003154253154,
+      "n_rows": 12
+     },
+     "B3_size": {
+      "own": 0.9517893105668841,
+      "diff": -0.15919098772959067,
+      "lo": -0.21633505383505383,
+      "hi": -0.10225451631701633,
+      "n_rows": 12
+     },
+     "B4": {
+      "own": 0.8061009745292833,
+      "diff": -0.013502651691989906,
+      "lo": null,
+      "hi": null,
+      "n_rows": 12
+     }
+    }
+   },
+   "L3": {
+    "verdict": "Inconclusive",
+    "named": "D",
+    "delta": 0.03,
+    "upper_named": 0.030603177334053405,
+    "own": 0.06222204267722675,
+    "confirmatory": true,
+    "n_clusters": 12,
+    "comparators": {
+     "B3L": {
+      "own": 0.0662462421977498,
+      "diff": -0.00402419952052305,
+      "lo": -0.02686593155128624,
+      "hi": 0.014991204615817622,
+      "n_rows": 12
+     },
+     "B5": {
+      "own": 0.05740983195461291,
+      "diff": 0.00481221072261384,
+      "lo": -0.014681611116543591,
+      "hi": 0.02313992854772178,
+      "n_rows": 12
+     },
+     "D": {
+      "own": 0.06176971988088208,
+      "diff": 0.0004523227963446759,
+      "lo": -0.0283298092007415,
+      "hi": 0.030603177334053405,
+      "n_rows": 12
+     }
+    }
+   }
+  },
+  "wrong_house": {
+   "L1": {
+    "p": 0.25,
+    "n_pairs": 6,
+    "pass": false
+   },
+   "L2": {
+    "p": 0.75,
+    "n_pairs": 6,
+    "pass": false
+   }
+  },
+  "wording": [
+   "5a, some hypotheses found and some not: the four lines as they fall. Gemini 4 Argon is not the paper's model.",
+   "Gemini 4 Argon minus Opus at L2: +17.5 points, 95% interval [+5.0, +30.3] points, Holm p 0.0205, 12 clusters; above. Gemini 4 Argon is not the paper's model.",
+   "Gemini 4 Argon minus Opus at L3: -0.4 points, 95% interval [-5.7, +4.9] points, Holm p 0.6445, 12 clusters; not detectably above. Gemini 4 Argon is not the paper's model.",
+   "Gemini 4 Argon minus Haiku at L2: +13.6 points, 95% interval [-1.4, +28.5] points, Holm p 0.1069, 12 clusters; not detectably above. Gemini 4 Argon is not the paper's model.",
+   "Gemini 4 Argon minus Haiku at L3: +1.2 points, 95% interval [-4.4, +6.7] points, Holm p 0.6445, 12 clusters; not detectably above. Gemini 4 Argon is not the paper's model.",
+   "5b at L3: Inconclusive, Gemini 4 Argon minus D +0.0 points, 95% interval [-2.8, +3.1] points. Gemini 4 Argon is not the paper's model.",
+   "Saved inputs from two homes; no robot acted on these guesses; the comparators at L1 and L2 sit at the ceiling. Gemini 4 Argon is not the paper's model."
+  ],
+  "vs_flash": {
+   "L1": {
+    "rows": 12,
+    "argon": 0.9895833333333334,
+    "flash": 0.96875,
+    "diff": 0.020833333333333332,
+    "lo": 0.0,
+    "hi": 0.0625,
+    "p": 1.0
+   },
+   "L2": {
+    "rows": 12,
+    "argon": 0.7925983228372934,
+    "flash": 0.8212205040330041,
+    "diff": -0.028622181195710594,
+    "lo": -0.09059855177502232,
+    "hi": 0.034020424020424,
+    "p": 0.32275390625
+   },
+   "L3": {
+    "rows": 12,
+    "argon": 0.06222204267722675,
+    "flash": 0.11608529463599122,
+    "diff": -0.05386325195876448,
+    "lo": -0.13107684754503807,
+    "hi": 0.02048386182362828,
+    "p": 0.171875
+   }
+  }
  },
  "ceiling": {
   "opus": {
