@@ -74,6 +74,9 @@ ALLOWED_FILES = re.compile(r"^(habitat_scene_graph_original_graph\d*\.yaml|navig
 # The November ASP runs (Amendment 3 and its Note). Their files come from runs/live_campaign/.
 ALLOWED_E8 = re.compile(r"^(habitat_scene_graph_original_graph\d*\.yaml|navigation_stats\.json|live_policy\.jsonl|usage\.jsonl|"
                         r"roslaunch\.log|EXCLUDED_e8_00853_s(42|43|44)_official_105m(_relaunch1)?\.json)$")
+# The control runs (Amendment 5). Also under runs/live_campaign/. The scoring needs the stats, the graphs and roslaunch.log
+# only: the arms make no LLM call, so there is no usage.jsonl to check and no policy log to count.
+ALLOWED_E9 = re.compile(r"^(habitat_scene_graph_original_graph\d*\.yaml|navigation_stats\.json|roslaunch\.log)$")
 NOV_SCENE = "00853"
 # A3.3 fixes B for the November runs at 632.1751 s, the figure of 11-12 (the pipeline's own B is 632.17505669...,
 # which rounds to it). The pipeline's B must agree to 1e-4: a B that moved stops the November row.
@@ -787,17 +790,16 @@ def reconcile_local_copy(attempt_map: dict, stamp: str) -> list:
 # The November ASP runs (Amendment 3, its Note): listing, copy, validity
 # --------------------------------------------------------------------------
 
-def parse_e8_listing(text: str) -> dict:
-    """The e8 runs, running-markers and EXCLUDED markers in runs/live_campaign/, picked only by the
-    anchored name pattern. A dry run (dryrun_e8_...) matches nothing. After an `=====AGES=====` line the
+def parse_campaign_listing(text: str, is_run) -> dict:
+    """The runs, running-markers and EXCLUDED markers in runs/live_campaign/ whose names `is_run` takes (an anchored
+    name pattern, nothing wider). A dry run matches nothing. After an `=====AGES=====` line the
     host's clock and each marker's modification time give the marker's age on the host's own clock."""
-    import paper_compare as pc
     text, _, ages_text = text.partition("=====AGES=====\n")
     names = [l.strip() for l in text.splitlines() if l.strip()]
-    runs = sorted({n for n in names if pc.NOV_RE.match(n)})
-    active = sorted({n[len(".active_"):] for n in names if n.startswith(".active_") and pc.NOV_RE.match(n[len(".active_"):])})
+    runs = sorted({n for n in names if is_run(n)})
+    active = sorted({n[len(".active_"):] for n in names if n.startswith(".active_") and is_run(n[len(".active_"):])})
     excluded = sorted({n[len("EXCLUDED_"):-len(".json")] for n in names
-                       if n.startswith("EXCLUDED_") and n.endswith(".json") and pc.NOV_RE.match(n[len("EXCLUDED_"):-len(".json")])})
+                       if n.startswith("EXCLUDED_") and n.endswith(".json") and is_run(n[len("EXCLUDED_"):-len(".json")])})
     ages = {}
     lines = [l.split() for l in ages_text.splitlines() if l.strip()]
     if lines and len(lines[0]) == 1 and lines[0][0].isdigit():
@@ -807,6 +809,57 @@ def parse_e8_listing(text: str) -> dict:
                 ages[w[0][len(".active_"):]] = now - int(w[1])
     return {"runs": runs, "active": active, "excluded": excluded, "ages_s": ages,
             "stale": sorted(n for n, a in ages.items() if a > STALE_MARKER_S)}
+
+
+def parse_e8_listing(text: str) -> dict:
+    """The e8 runs of the November arm (anchored pattern); a dry run (dryrun_e8_...) matches nothing."""
+    import paper_compare as pc
+    return parse_campaign_listing(text, lambda n: bool(pc.NOV_RE.match(n)))
+
+
+E9_SECTION_RE = re.compile(r"^(=====[A-Z_]+=====)\n", re.M)
+QUEUE_ENDED_RE = re.compile(r"^\S+ \S+ (\S+): runner ended")
+RUNNER_OUT_RE = re.compile(r"^runner_\S+?\.out:.*\] finished (\S+): (\S+)\s*$")
+STATUS_OUT_RE = re.compile(r"^status_" + re.escape(CONTAINER) + r"\.(.+)\.json:\s*\"outcome\":\s*\"([^\"]+)\"")
+
+
+def parse_e9_listing(text: str) -> dict:
+    """The e9 runs of the two control arms (anchored patterns), and what says whether each has finished.
+
+    live_runner.py writes `.active_<name>` only for runs that make LLM calls, so the control runs have no marker. A run is
+    finished only if e9_queue.log holds `<name>: runner ended`, or neither a runner (`pgrep live_runner.py` of the user)
+    nor an `e9-queue-*.scope` unit is alive. A check that failed counts as alive. `active` lists the runs not finished: they
+    are neither copied nor scored. `final` is True only when no runner and no queue unit is alive: the A5.6 reading is
+    final only then. `outcomes` maps a run name to the outcome the runner recorded (runner_<name>.out, else the status copy)."""
+    import paper_compare as pc
+    parts = E9_SECTION_RE.split(text)
+    head, sections = parts[0], {parts[i]: parts[i + 1] for i in range(1, len(parts) - 1, 2)}
+    out = parse_campaign_listing(head, lambda n: pc.ctrl_arm_of(n) is not None)
+    out.update(excluded=[], ages_s={}, stale=[])
+    ended = sorted({m.group(1) for l in sections.get("=====QUEUELOG=====", "").splitlines() if (m := QUEUE_ENDED_RE.match(l.strip()))})
+    rc = next((l.split()[1] for l in sections.get("=====RUNNER_RC=====", "").splitlines() if l.startswith("RC ") and len(l.split()) == 2), None)
+    runner_alive = None if rc is None or not rc.isdigit() else (True if rc == "0" else False if rc == "1" else None)
+    unit_lines = [l.strip() for l in sections.get("=====UNITS=====", "").splitlines() if l.strip()]
+    unit_alive = (None if not unit_lines or unit_lines[0] != "UNITS_OK" else bool(unit_lines[1:]))
+    outcomes = {}
+    for l in sections.get("=====OUTCOMES=====", "").splitlines():
+        m = STATUS_OUT_RE.match(l.strip())
+        if m:
+            outcomes.setdefault(m.group(1), m.group(2))
+    for l in sections.get("=====OUTCOMES=====", "").splitlines():
+        m = RUNNER_OUT_RE.match(l.strip())
+        if m:
+            outcomes[m.group(1)] = m.group(2)           # the runner's own line wins over the status copy
+    nobody = runner_alive is False and unit_alive is False
+    out.update(queue_ended=ended, runner_alive=runner_alive, queue_unit_alive=unit_alive, final=nobody, outcomes=outcomes,
+               active=[r for r in out["runs"] if not (r in ended or nobody)])
+    return out
+
+
+def e9_state(listing: dict) -> tuple:
+    """The e9 listing as the (events, existing) pair that state_key compares: the runs, which of them still run, and
+    whether the reading is final. A run that finishes during a copy changes it."""
+    return ([], frozenset(listing["runs"]) | {"running:" + a for a in listing["active"]} | ({"final"} if listing.get("final") else set()))
 
 
 def e8_state(listing: dict) -> tuple:
@@ -835,12 +888,43 @@ def e8_rsync_rules(folders: list, excluded: list) -> list:
     return rules
 
 
-def fetch_e8_listing() -> dict:
-    p = ssh(f"cd {WS}/runs/live_campaign && (ls -1A | grep e8_ ; true) && echo '=====AGES=====' && date +%s "
-            f"&& (stat -c '%n %Y' .active_e8_* 2>/dev/null ; true)")
+def e9_rsync_rules(folders: list) -> list:
+    """The include list for e9 runs: stats, graphs and roslaunch.log. Never a dsg file, never a prompt or policy log."""
+    rules = ["--include=/live_campaign/"]
+    for f in sorted(folders):
+        for suffix in ("/", "/stages/", "/stages/*/", "/stages/*/habitat_scene_graph_original_graph*.yaml",
+                       "/stages/*/navigation_stats.json", "/logs/", "/logs/roslaunch.log"):
+            rules.append(f"--include=/{f}{suffix}")
+    rules.append("--exclude=*")
+    return rules
+
+
+def _fetch_listing(tag: str, parse) -> dict:
+    p = ssh(f"cd {WS}/runs/live_campaign && (ls -1A | grep {tag}_ ; true) && echo '=====AGES=====' && date +%s "
+            f"&& (stat -c '%n %Y' .active_{tag}_* 2>/dev/null ; true)")
     if p.returncode != 0:
         raise HostError("cannot list runs/live_campaign: " + p.stderr[:300])
-    return parse_e8_listing(p.stdout)
+    return parse(p.stdout)
+
+
+def fetch_e8_listing() -> dict:
+    return _fetch_listing("e8", parse_e8_listing)
+
+
+def fetch_e9_listing() -> dict:
+    """One ssh call: the e9 names in runs/live_campaign/, the text of e9_queue.log, whether a live_runner.py process of the
+    user runs, whether an e9-queue-*.scope user unit is active, and the outcomes the runner recorded per run."""
+    cmd = (f"cd {WS}/runs/live_campaign && (ls -1A | grep e9_ ; true) "
+           "&& echo '=====QUEUELOG=====' && (cat e9_queue.log 2>/dev/null ; true) "
+           "&& echo '=====RUNNER_RC=====' && (pgrep -u \"$(id -u)\" -f 'live_runner\\.py' >/dev/null ; echo RC $?) "
+           "&& echo '=====UNITS=====' && (if o=$(XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user list-units --state=active --plain "
+           "--no-legend 'e9-queue-*.scope' 2>/dev/null) ; then echo UNITS_OK ; echo \"$o\" ; else echo UNITS_UNKNOWN ; fi) "
+           "&& echo '=====OUTCOMES=====' && (grep -H -E '\\] finished e9_[^ ]+: ' runner_e9_*.out 2>/dev/null ; "
+           "grep -H '\"outcome\"' status_" + CONTAINER + ".e9_*.json 2>/dev/null ; true)")
+    p = ssh(cmd)
+    if p.returncode != 0:
+        raise HostError("cannot list runs/live_campaign: " + p.stderr[:300])
+    return parse_e9_listing(p.stdout)
 
 
 def check_nov_b(pipeline_b: float) -> None:
@@ -876,17 +960,91 @@ def e8_runs_to_assess(camp_dir: Path, listing: dict) -> tuple:
     return names, [r for r in listing["runs"] if r not in names]
 
 
+def e9_runs_to_assess(camp_dir: Path, listing: dict) -> tuple:
+    """(names to assess, originals dropped for a relaunch) for the control arms: one folder per arm and seed. A relaunch is
+    accepted only if the runner recorded its original as skipped or launch_failed (`listing["outcomes"]`); a folder with no
+    stage whose launcher started is a run that happened, with no values."""
+    import paper_compare as pc
+    try:
+        kept = pc.check_ctrl_pairs([Path(camp_dir) / r for r in listing["runs"]], listing.get("outcomes") or {})
+    except ValueError as e:
+        raise HostError(str(e))
+    names = [p.name for p in kept]
+    return names, [r for r in listing["runs"] if r not in names]
+
+
+def _fill_reach(res: dict, run_dir: Path) -> list:
+    """A3.2 and A5.3, reach: the last stage that holds navigation_stats.json and both graph files. Fills end_s, end_stage
+    and reached_b (at least B, no slack) and the note for a run that ended before B. Returns the stages that hold both graphs."""
+    import paper_compare as pc
+    stages, _, _ = pc.load_stages(run_dir, [])
+    full = [s for s in stages if len(s["graphs"]) == 2]
+    if full:
+        res["end_s"], res["end_stage"] = full[-1]["time_s"], full[-1]["stage"]
+    res["reached_b"] = bool(full and res["end_s"] >= NOV_B_S)      # "at least 632.1751 s": no slack
+    if not res["reached_b"]:
+        res["notes"].append("ended before B" + (f" ({res['end_s']:.1f} s)" if res["end_s"] is not None else "")
+                            + ": no 100% value, the 10% and 50% values stay")
+    return full
+
+
+def assess_control(run_dir: Path, B: float, active: bool = False) -> dict:
+    """One control run under A5.3: the rules of A3.2 less the two about LLM calls.
+
+    The reach checks are assess_e8's (`_fill_reach`) and the GPU lines are read by paper_compare.roslaunch_lines, the
+    same function the scorer uses. A run that ended before B has no 100% value. A run with an "out of memory" line or a
+    line saying nvblox_node has died has no value at 100% of B or later and none at 100 m: it still counts in the cells,
+    which are reported, and it is marked (`no_final_value`). So is a run with no logs/roslaunch.log, as `official_nov` would
+    be left out for it. There is no EXCLUDED marker and no provider check for these arms."""
+    import paper_compare as pc
+    check_nov_b(B)
+    run_dir = Path(run_dir)
+    res = {"run": run_dir.name, "arm": pc.ctrl_arm_of(run_dir.name), "open": bool(active), "reached_b": False, "end_s": None,
+           "end_stage": None, "end_path_m": None, "reached_100m": False, "counts_in_cells": False, "no_final_value": False,
+           "reasons": [], "notes": []}
+    if active:
+        res["notes"].append("this run has not finished on the host (a runner or queue unit is alive, and the queue log does not say it ended): not copied, not scored")
+        return res
+    if not run_dir.is_dir():
+        res["reasons"].append("the run folder is not in the local copy")
+        return res
+    full = _fill_reach(res, run_dir)
+    if full:
+        res["end_path_m"] = full[-1]["path_m"]
+    res["reached_100m"] = bool(full and res["end_path_m"] >= pc.VOID_FROM_M)
+    if not res["reached_100m"]:
+        res["notes"].append("ended before 100 m" + (f" ({res['end_path_m']:.1f} m)" if res["end_path_m"] is not None else "")
+                            + ": no value at 100 m, so no S")
+    gpu = pc.roslaunch_lines(run_dir)
+    oom, died = gpu["out_of_memory_lines"], gpu["nvblox_died_lines"]
+    res["evidence"] = {"out_of_memory_lines": oom, "nvblox_died_lines": died}
+    if oom is None or died is None:
+        res["no_final_value"] = True
+        res["notes"].append("no logs/roslaunch.log: the check of A5.3 cannot be made, so the run is read as one with a line of A5.3 "
+                            "(as official_nov is left out for it); marked: no value at 100% of B or later and none at 100 m; "
+                            "its other cells are reported")
+    else:
+        if oom:
+            res["notes"].append(f"roslaunch.log holds {oom} 'out of memory' line(s)")
+        if died:
+            res["notes"].append(f"roslaunch.log holds {died} line(s) saying nvblox_node has died")
+        if pc.is_void(gpu):
+            res["no_final_value"] = True
+            res["notes"].append("marked: no value at 100% of B or later and none at 100 m; its other cells are reported")
+    res["counts_in_cells"] = True
+    return res
+
+
 def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active: bool = False) -> dict:
     """One November run under A3.2 and its Note.
 
     reached_b: the last stage that holds navigation_stats.json and both graph files shows a navigation time
     of at least B (B is the caller's; the pipeline holds it). A run that did not reach B keeps its 10% and 50%
     values. A run that fails (b) or (c) is left out of every cell and listed with the reason:
-    (b) roslaunch.log holds no 'out of memory' line and no 'nvblox_node has died' line (the e7 check's own
-    grep_count); (c) no EXCLUDED marker (in the run, or in the campaign folder as the runner writes it), every
+    (b) roslaunch.log holds no 'out of memory' line and no 'nvblox_node has died' line (paper_compare.roslaunch_lines,
+    the e7 check's own rule); (c) no EXCLUDED marker (in the run, or in the campaign folder as the runner writes it), every
     call served by DeepInfra with the pinned model, not more than half the ensemble members dropped (the
     runner's own gates, imported)."""
-    import check_paper_runs as cpr
     import paper_compare as pc
     check_nov_b(B)
     run_dir = Path(run_dir)
@@ -898,17 +1056,9 @@ def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active:
     if not run_dir.is_dir():
         res["reasons"].append("the run folder is not in the local copy")
         return res
-    stages, _, _ = pc.load_stages(run_dir, [])
-    full = [s for s in stages if len(s["graphs"]) == 2]
-    if full:
-        res["end_s"], res["end_stage"] = full[-1]["time_s"], full[-1]["stage"]
-    res["reached_b"] = bool(full and res["end_s"] >= NOV_B_S)      # "at least 632.1751 s": no slack
-    if not res["reached_b"]:
-        res["notes"].append("ended before B" + (f" ({res['end_s']:.1f} s)" if res["end_s"] is not None else "")
-                            + ": no 100% value, the 10% and 50% values stay")
-    rl = str(run_dir / "logs" / "roslaunch.log")
-    oom = cpr.grep_count(rl, r"out of memory")
-    died = cpr.grep_count(rl, r"nvblox_node.*(process has died|has died)")
+    _fill_reach(res, run_dir)
+    gpu = pc.roslaunch_lines(run_dir)
+    oom, died = gpu["out_of_memory_lines"], gpu["nvblox_died_lines"]
     ev = res["evidence"] = {"out_of_memory_lines": oom, "nvblox_died_lines": died, "calls": None,
                             "calls_by_another_provider_or_model": None, "members_dropped_pct": None}
     if oom is None:
@@ -965,8 +1115,11 @@ def assess_e8(run_dir: Path, B: float, campaign_dir: Path | None = None, active:
     return res
 
 
-def build_score_argv(out_dir: Path, rows: dict, budgets: dict, budget_key: str, ged_file: Path, nov_paths: list) -> list:
-    """The paper_compare.py command. With no November run on the host it is the command written before the arm."""
+def build_score_argv(out_dir: Path, rows: dict, budgets: dict, budget_key: str, ged_file: Path, nov_paths: list,
+                     ctl_paths: list = ()) -> list:
+    """The paper_compare.py command. With no November run and no control run on the host it is the command written before
+    the arms. A control run's arm comes from its name alone."""
+    import paper_compare as pc
     argv = [sys.executable, str(LIVE / "paper_compare.py"), "--out-dir", str(out_dir)]
     first = ("frontier_end", "crashed_frontier_1st", "crashed_frontier_rerun", "crashed_frontier_3rd")
     for arm in first:
@@ -977,6 +1130,8 @@ def build_score_argv(out_dir: Path, rows: dict, budgets: dict, budget_key: str, 
             argv += ["--add-run", f"{arm}={scene}={NEW_COPY / folder}"]
     for p in nov_paths:
         argv += ["--add-run", f"official_nov={NOV_SCENE}={p}"]
+    for p in ctl_paths:
+        argv += ["--add-run", f"{pc.ctrl_arm_of(Path(p).name)}={NOV_SCENE}={p}"]
     for scene in SCENES:
         argv += ["--apr", f"{scene}={NEW_COPY / 'apr' / f'apr_{scene}_a'}", "--budget", f"{scene}={budgets[scene][budget_key]!r}"]
     return argv + ["--ged-json", str(ged_file)]
@@ -995,11 +1150,12 @@ def nov_without(run: str, nov_paths: list) -> list | None:
     return keep if keep and len(keep) < len(nov_paths) else None
 
 
-def nov_readouts(pc_json: dict) -> dict:
-    """A3.3's readouts for the November row at B: reference -> fraction -> stage value, running maximum, GED."""
+def nov_readouts(pc_json: dict, arm: str = "official_nov") -> dict:
+    """A3.3's readouts for the November row at B (A5.5 readout 1 for a control arm, with `arm` given on scene 00853):
+    reference -> fraction -> stage value, running maximum, GED."""
     out = {}
     for c in pc_json["cells"]:
-        if c["arm"] == "official_nov" and c["variant"] == "B":
+        if c["arm"] == arm and c["variant"] == "B" and (arm == "official_nov" or c["scene"] == NOV_SCENE):
             out.setdefault(c["reference"], {})[c["fraction"]] = {
                 "stage": c["stage_value_x100"], "runmax": c["running_max_x100"], "ged": c["ged"], "n_runs": c["n_runs"]}
     return out
@@ -1078,6 +1234,129 @@ def score_nov_alternatives(plan: dict, nov: dict, nov_paths: list, out: Path, sc
         rows.append({"kind": "without", "run": run, "folder": folder.name,
                      "cells": nov_cells(json.loads((folder / "paper_compare.json").read_text()))})
     nov["alternatives"] = {"as_run": nov_cells(main_json), "rows": rows}
+
+
+# --------------------------------------------------------------------------
+# The control arms (Amendment 5): assessment, readouts, the reading
+# --------------------------------------------------------------------------
+
+CTRL_SEEDS = (42, 43, 44)
+
+
+def check_pinned_official_s(s: dict) -> None:
+    """The controls are read against the S of the three official_nov runs as filed. If the S computed now differs from the
+    pinned figures (paper_compare.OFFICIAL_NOV_S_PINNED), or a run is missing or has none, the rescore stops."""
+    import paper_compare as pc
+    bad = []
+    for ref, runs in pc.OFFICIAL_NOV_S_PINNED.items():
+        got = s.get(ref, {}).get("official_nov", {})
+        for run, want in runs.items():
+            v = got.get(run)
+            if v is None or abs(v - want) > pc.OFFICIAL_NOV_S_TOL:
+                bad.append(f"{ref} {run}: now {v!r}, pinned {want!r}")
+    if bad:
+        raise HostError("S of official_nov differs from the pinned figures, so the control arms are not read: " + "; ".join(bad))
+
+
+def assess_controls(camp_dir: Path, listing: dict, B: float) -> tuple:
+    """The control runs of a listing, assessed under A5.3. Returns (the block the notes and the summary hold, the
+    folders that count in the cells). A running run (.active marker) is held back like a November run."""
+    names, never = e9_runs_to_assess(camp_dir, listing)
+    runs = [assess_control(Path(camp_dir) / r, B, active=(r in listing["active"])) for r in names]
+    ctl = {"B_s": NOV_B_S, "runs": runs, "listing": listing, "never_started": never}
+    return ctl, [Path(camp_dir) / a["run"] for a in runs if a["counts_in_cells"]]
+
+
+def evidence_rows(ctl: dict) -> list:
+    """The evidence table of A5.3, like A3.2's without the columns about LLM calls: one row per control run."""
+    stale = ctl.get("listing", {}).get("stale", [])
+    out = []
+    for a in ctl["runs"]:
+        ev = a.get("evidence") or {}
+        out.append({"run": a["run"], "arm": a.get("arm"),
+                    "state": ("running (stale marker: check by hand)" if a["run"] in stale else "running") if a["open"] else "finished",
+                    "end_s": a["end_s"], "end_path_m": a.get("end_path_m"), "reached_b": a["reached_b"],
+                    "reached_100m": a.get("reached_100m", False), "in_the_cells": a["counts_in_cells"],
+                    "out_of_memory_lines": ev.get("out_of_memory_lines"), "nvblox_died_lines": ev.get("nvblox_died_lines"),
+                    "marked_no_value_at_100pct_of_B_and_100m": a.get("no_final_value", False),
+                    "left_out_because": list(a["reasons"]), "notes": list(a["notes"])})
+    return out
+
+
+def _mean(vals: list):
+    vals = [v for v in vals if v is not None]
+    return sum(vals) / len(vals) if vals else None
+
+
+def controls_block(ctl: dict, pc_json: dict, alt_readings: list = (), nov_counted: list = ()) -> dict:
+    """Everything A5.5 and A5.6 register, from one scored paper_compare.json (`pc_json`) and the assessments `ctl`.
+
+    `alt_readings` are the other readings of seed 43 that the pipeline already scores: dicts with kind, run, folder,
+    stage (or None) and `pc_json`, the paper_compare.json of that reading. Their S values are shown and decide nothing.
+    `nov_counted` are the official_nov runs that count in the cells (an official_nov run with no scored record has no S)."""
+    import equal_path_check as ep
+    import paper_compare as pc
+    arms = pc.CTRL_ARMS
+    s = ep.s_values(pc_json)
+    check_pinned_official_s(s)
+    for ref in s:                       # a counted run with no scored record has no S: it must not vanish from the table
+        for a in ctl["runs"]:
+            if a["counts_in_cells"] and a.get("arm"):
+                s[ref].setdefault(a["arm"], {}).setdefault(a["run"], None)
+        for name in nov_counted:
+            s[ref].setdefault("official_nov", {}).setdefault(name, None)
+    listing = ctl.get("listing") or {}
+    interim_reasons = []
+    if listing.get("runner_alive") is not False:
+        interim_reasons.append("a live_runner.py process is alive on the host" if listing.get("runner_alive") else "whether a runner is alive could not be checked")
+    if listing.get("queue_unit_alive") is not False:
+        interim_reasons.append("an e9-queue-*.scope unit is active on the host" if listing.get("queue_unit_alive") else "whether a queue unit is active could not be checked")
+    interim = bool(interim_reasons)
+    decision = pc.decide_controls(s)
+    if interim:                         # no statement and no slide sentence while anything may still run
+        why = "interim: " + "; ".join(interim_reasons)
+        decision = {"arms": {a: {"judged": False, "statement": pc.NO_STATEMENT, "per_reference": {}, "why_no_statement": why,
+                                 "S": decision["arms"][a]["S"], "interim": True} for a in arms},
+                    "slide": {"kind": "interim", "sentence": None, "judged_arms": [],
+                              "text": "Interim: no statement and no slide sentence; the S tables stand as they are so far."}}
+    readings = []
+    for alt in alt_readings:
+        alt_s = ep.s_values(alt["pc_json"])
+        readings.append({"kind": alt["kind"], "run": alt["run"], "stage": alt.get("stage"), "folder": alt["folder"],
+                         "official_nov_S": {ref: alt_s.get(ref, {}).get("official_nov", {}) for ref in pc.S_REFERENCES},
+                         "official_nov_mean_S": {ref: _mean(list(alt_s.get(ref, {}).get("official_nov", {}).values())) for ref in pc.S_REFERENCES},
+                         "decides": "nothing"})
+    seen = {(a["arm"], int(pc.CTRL_RE[a["arm"]].match(a["run"]).group(1))) for a in ctl["runs"] if a.get("arm")}
+    seen |= {(pc.ctrl_arm_of(n), int(pc.CTRL_RE[pc.ctrl_arm_of(n)].match(n).group(1))) for n in ctl.get("never_started", [])}
+    parts = {
+        "amendment": 5, "B_s": ctl["B_s"], "scene": ep.S_SCENE,
+        "interim": interim, "interim_reasons": interim_reasons, "still_running": list(listing.get("active", [])),
+        "runs": ctl["runs"], "listing": ctl.get("listing"), "never_started": ctl.get("never_started", []),
+        "absent": [{"arm": arm, "seed": seed} for arm in arms for seed in CTRL_SEEDS if (arm, seed) not in seen],
+        "evidence_table": evidence_rows(ctl),
+        "readout1_cells": {arm: nov_readouts(pc_json, arm) for arm in arms},
+        "readout2_equal_path": ep.readout2(pc_json),
+        "readout3_sec_per_m": ep.sec_per_m(pc_json, ep.S_SCENE),
+        "S_lengths_m": list(ep.REG_LENGTHS),
+        "S": s,
+        "per_reference": {arm: decision["arms"][arm]["per_reference"] for arm in arms},
+        "statements": {arm: decision["arms"][arm]["statement"] for arm in arms},
+        "decision": decision,
+        "slide_sentence": decision["slide"]["sentence"],
+        "slide": decision["slide"],
+        "other_readings_of_seed_43": readings,
+    }
+    parts["labels"] = {k: ("interim" if interim else "final") for k in parts
+                       if k in ("runs", "evidence_table", "readout1_cells", "readout2_equal_path", "readout3_sec_per_m", "S",
+                                "per_reference", "statements", "decision", "slide", "slide_sentence", "other_readings_of_seed_43")}
+    return parts
+
+
+def control_alt_readings(nov: dict | None, out: Path) -> list:
+    """The alternatives that score_nov_alternatives filed, as the inputs of controls_block."""
+    rows = (nov or {}).get("alternatives", {}).get("rows", [])
+    return [{"kind": r["kind"], "run": r["run"], "stage": r.get("stage"), "folder": r["folder"],
+             "pc_json": json.loads((Path(out) / r["folder"] / "paper_compare.json").read_text())} for r in rows]
 
 
 # --------------------------------------------------------------------------
@@ -1299,6 +1578,14 @@ def run_pipeline(args) -> int:
                               rules_fn=lambda fs: e8_rsync_rules(fs, e8_list["excluded"]), allowed=ALLOWED_E8)
         (out / f"rsync_dryrun_e8_{stamp}.txt").write_text("\n".join(files8) + ("\n" if files8 else ""))
         log("rsync_e8", runs=len(f8), files=len(files8))
+    # the control runs (Amendment 5): listed and copied only if there are any
+    e9_list = fetch_e9_listing()
+    if e9_list["runs"] and not args.no_copy:
+        f9 = e8_copy_folders(e9_list)                  # the same rule: a run not finished (e9_list["active"]) is never copied
+        files9 = copy_settled(f9, None, stamp + "_e9", e9_state(e9_list), lambda: e9_state(fetch_e9_listing()),
+                              rules_fn=e9_rsync_rules, allowed=ALLOWED_E9)
+        (out / f"rsync_dryrun_e9_{stamp}.txt").write_text("\n".join(files9) + ("\n" if files9 else ""))
+        log("rsync_e9", runs=len(f9), files=len(files9))
     old_fp = {d.name: tree_fingerprint(d) for g in ("apr", "frontier_seeds") if (OLD_COPY / g).is_dir()
               for d in (OLD_COPY / g).iterdir() if d.is_dir()}
     copy_check = {}
@@ -1376,6 +1663,12 @@ def run_pipeline(args) -> int:
         log("e8", runs=len(assessed), counted=sum(a["counts_in_cells"] for a in assessed),
             reached_b=sum(a["reached_b"] for a in assessed))
     nov_paths = [NEW_COPY / "live_campaign" / a["run"] for a in (nov["runs"] if nov else []) if a["counts_in_cells"]]
+    ctl, ctl_paths = None, []
+    if e9_list["runs"]:
+        ctl, ctl_paths = assess_controls(NEW_COPY / "live_campaign", e9_list, budgets[NOV_SCENE]["primary_s"])
+        log("e9", runs=len(ctl["runs"]), running=len(e9_list["active"]), final=e9_list["final"],
+            counted=sum(a["counts_in_cells"] for a in ctl["runs"]),
+            marked=sum(a["no_final_value"] for a in ctl["runs"]))
     nov_plan = plan_nov_alternatives(args, nov, nov_paths, lambda p_: {
         st["stage"]: st["time_s"] for st in pc.load_stages(Path(p_), [])[0] if len(st["graphs"]) == 2})
 
@@ -1396,6 +1689,8 @@ def run_pipeline(args) -> int:
             wanted.append({"folder": folder, "scene": scene, "path": NEW_COPY / folder, "arm": arm})
     for p_ in nov_paths:
         wanted.append({"folder": f"live_campaign/{p_.name}", "scene": NOV_SCENE, "path": p_, "arm": "official_nov"})
+    for p_ in ctl_paths:
+        wanted.append({"folder": f"live_campaign/{p_.name}", "scene": NOV_SCENE, "path": p_, "arm": pc.ctrl_arm_of(p_.name)})
     pool = load_ged_pool(OLD_GED_FILES)
     reuse, compute = plan_ged(wanted, pool, stage_rows_local)
     no_stage = [w["folder"] for w in wanted if not stage_rows_local(w["path"])]
@@ -1437,7 +1732,8 @@ def run_pipeline(args) -> int:
 
     # 7 score
     def score(out_dir: Path, budget_key: str, nov_use: list | None = None) -> None:
-        argv = build_score_argv(out_dir, cls["rows"], budgets, budget_key, ged_file, nov_paths if nov_use is None else nov_use)
+        argv = build_score_argv(out_dir, cls["rows"], budgets, budget_key, ged_file, nov_paths if nov_use is None else nov_use,
+                                ctl_paths)
         r = subprocess.run(argv, capture_output=True, text=True, env={**os.environ, "PYTHONPATH": str(LIVE.parent)})
         if r.returncode != 0:
             raise HostError("paper_compare.py failed: " + r.stderr[-800:])
@@ -1447,6 +1743,9 @@ def run_pipeline(args) -> int:
     shutil.rmtree(raw, ignore_errors=True)
     score(raw, "primary_s")
     new_json = json.loads((raw / "paper_compare.json").read_text())
+    if ctl:
+        import equal_path_check as ep
+        check_pinned_official_s(ep.s_values(new_json))        # stops before the scored tables replace the filed ones
     (out / "paper_compare.json").write_text((raw / "paper_compare.json").read_text())
     md = (raw / "paper_compare.md").read_text()
     shutil.rmtree(raw)
@@ -1474,6 +1773,10 @@ def run_pipeline(args) -> int:
     if nov_plan:
         score_nov_alternatives(nov_plan, nov, nov_paths, out, score, new_json)
         log("score_nov_alternatives", **{r["kind"]: r["folder"] for r in nov["alternatives"]["rows"]})
+    if ctl:
+        blk = controls_block(ctl, new_json, control_alt_readings(nov, out),
+                             [a["run"] for a in (nov["runs"] if nov else []) if a["counts_in_cells"]])
+        log("controls", **{f"statement_{arm}": st for arm, st in blk["statements"].items()})
     comparison = compare_cells(old_json, new_json, SCENES)
     for s in SCENES:
         comparison[s]["b_1112_s"], comparison[s]["b_1113_s"] = old_budgets.get(s), budgets[s]["primary_s"]
@@ -1493,6 +1796,8 @@ def run_pipeline(args) -> int:
                "pre_queue": pre_queue, "deviation_sentences": [deviation_sentence(p_) for p_ in pre_queue]}
     if nov:
         summary["nov"] = nov
+    if ctl:
+        summary["nov_controls"] = blk
     (out / "rescore_summary.json").write_text(json.dumps(summary, indent=1, default=str))
     (out / "NOTES.md").write_text(write_notes(summary, comparison, old_budgets, pc))
     log("done", mode=mode, out=str(out))
@@ -1501,7 +1806,8 @@ def run_pipeline(args) -> int:
 
 
 def archive_previous(out: Path, stamp: str) -> None:
-    """Keep the last run's unstamped outputs before they are overwritten."""
+    """Keep the last run's unstamped outputs, the alternative readings, and the filed equal_path/ and budget_sensitivity/
+    folders before they are overwritten."""
     names = ["paper_compare.json", "paper_compare.md", "NOTES.md", "rescore_summary.json", "comparison_vs_1112.json"]
     have = [out / n for n in names if (out / n).exists()]
     if have:
@@ -1509,7 +1815,9 @@ def archive_previous(out: Path, stamp: str) -> None:
         dest.mkdir(exist_ok=True)
         for p in have:
             shutil.copy2(p, dest / p.name)
-        for alt in [out / "alt_B_with_capped"] + sorted(out.glob("alt_nov_*")):
+        # equal_path/ and budget_sensitivity/ are written by equal_path_check.py from this folder's paper_compare.json: they go
+        # aside too, so a rewritten table never sits beside the figures of an older scoring
+        for alt in [out / "alt_B_with_capped", out / "equal_path", out / "budget_sensitivity"] + sorted(out.glob("alt_nov_*")):
             if alt.exists():
                 shutil.copytree(alt, dest / alt.name, dirs_exist_ok=True)
                 shutil.rmtree(alt)
@@ -1583,6 +1891,15 @@ def scene_vs_1112(sc: str, cmp_: dict, budgets: dict, rows: dict) -> str:
     return txt
 
 
+def _cell(d: dict | None, nd: int = 1, n_runs: int | None = None) -> str:
+    """`mean [min-max] n=k` (or `n=k of m`), or `none (0 of m)`."""
+    total = n_runs if n_runs is not None else (d or {}).get("n_runs", 0)
+    if not d or not d.get("n"):
+        return f"none (0 of {total})"
+    n = f"n={d['n']}" if d["n"] == total else f"n={d['n']} of {total}"
+    return f"{d['mean']:.{nd}f} [{d['min']:.{nd}f}-{d['max']:.{nd}f}] {n}"
+
+
 def nov_notes(nov: dict) -> list:
     """The section on the November ASP row (Amendment 3). Written only when the host holds an e8 run."""
     runs = nov["runs"]
@@ -1620,12 +1937,7 @@ def nov_notes(nov: dict) -> list:
     if nov.get("never_started"):
         L += ["", "A relaunch replaces an original that never started (the Note to Amendment 3): "
               + ", ".join(f"`{n}`" for n in nov["never_started"]) + " holds no stage and is not scored."]
-    def cell(d: dict | None, nd: int = 1, n_runs: int | None = None) -> str:
-        total = n_runs if n_runs is not None else (d or {}).get("n_runs", 0)
-        if not d or not d.get("n"):
-            return f"none (0 of {total})"
-        n = f"n={d['n']}" if d["n"] == total else f"n={d['n']} of {total}"
-        return f"{d['mean']:.{nd}f} [{d['min']:.{nd}f}-{d['max']:.{nd}f}] {n}"
+    cell = _cell
     ro = nov.get("readouts")
     if ro:
         L += ["", "**The readouts A3.3 asks for,** at 10%, 50% and 100% of B: object F1 x 100 as the stage value and as the running "
@@ -1651,6 +1963,126 @@ def nov_notes(nov: dict) -> list:
     return L
 
 
+def _seed_tag(run: str) -> str:
+    m = re.search(r"_s(\d+)_", run)
+    return f"s{m.group(1)}" if m else run
+
+
+def control_notes(blk: dict) -> list:
+    """The section on the control arms (Amendment 5). Written only when the host holds an e9 run."""
+    import paper_compare as pc
+    runs = blk["runs"]
+    counted = [a for a in runs if a["counts_in_cells"]]
+    L = ["", "## Control arms (Amendment 5)", "",
+         "The rows `placebo_nov` and `observed_only_nov` hold `e9_00853_s42..44_placebo_115m` and `e9_00853_s42..44_observed_only_115m` "
+         "(a `_relaunch1` name where the rule gave one). Each run is picked by its own anchored name pattern. They are never pooled "
+         "with October's `placebo` arm or any other, and a `dryrun_e9_` folder is never scored. "
+         f"B for 853 is {blk['B_s']:.4f} s, the same B as above. {len(counted)} of 6 runs count in the cells ({len(runs)} are on the host). "
+         "A run has a value at a time or a path only if its last stage with stats and both graph files reaches it. A run with an "
+         "\"out of memory\" line or a line saying nvblox_node has died has no value at 100% of B or later and none at 100 m; its other "
+         "cells are reported and marked. A run with no `logs/roslaunch.log` is read the same way, as `official_nov` is left out "
+         "for it. There is no rerun of any kind (A5.3).", ""]
+    tag = " (interim)" if blk.get("interim") else ""
+    if blk.get("interim"):
+        L += ["**INTERIM: " + "; ".join(blk["interim_reasons"]) + ".** Every table below is interim, and no statement and no slide "
+              "sentence is written until no runner and no queue unit is alive on the host.", ""]
+    for n in blk.get("still_running", []):
+        L.append(f"- Still running (not copied, not scored): `{n}`.")
+    if blk.get("still_running"):
+        L.append("")
+    for x in blk.get("absent", []):
+        L.append(f"- Not on the host: `{x['arm']}` seed {x['seed']}. It has no S.")
+    if blk.get("absent"):
+        L.append("")
+    stale = blk.get("listing", {}).get("stale", [])
+    ages = blk.get("listing", {}).get("ages_s", {})
+    if runs:
+        L += ["| Run | State | Navigation time at its last full stage (s) | Path at its last full stage (m) | Reached B | Reached 100 m | "
+              "In the cells | Marked: no value at 100% of B and at 100 m | Note |", "|---|---|---|---|---|---|---|---|---|"]
+        for r in blk["evidence_table"]:
+            L.append(f"| `{r['run']}` | {r['state']} | {'n/a' if r['end_s'] is None else format(r['end_s'], '.1f')} | "
+                     f"{'n/a' if r['end_path_m'] is None else format(r['end_path_m'], '.1f')} | {'yes' if r['reached_b'] else 'no'} | "
+                     f"{'yes' if r['reached_100m'] else 'no'} | {'yes' if r['in_the_cells'] else 'no'} | "
+                     f"{'yes' if r['marked_no_value_at_100pct_of_B_and_100m'] else 'no'} | "
+                     f"{'; '.join(r['left_out_because'] + r['notes']) or '-'} |")
+        show = lambda v: "-" if v is None else str(v)
+        L += ["", "What the A5.3 checks read in each run's files:", "", "| Run | \"out of memory\" lines | nvblox-died lines |", "|---|---|---|"]
+        for r in blk["evidence_table"]:
+            L.append(f"| `{r['run']}` | {show(r['out_of_memory_lines'])} | {show(r['nvblox_died_lines'])} |")
+    for n in stale:
+        L += ["", f"stale marker: check by hand: `.active_{n}` is {ages.get(n, 0) / 3600:.1f} h old on the host's clock "
+                  f"(over {STALE_MARKER_S // 3600} h). The run stays unscored until the marker is gone."]
+    if blk.get("never_started"):
+        oc = (blk.get("listing") or {}).get("outcomes", {})
+        L += ["", "A relaunch replaces an original that the runner recorded as skipped or launch_failed (A5.3): "
+              + ", ".join(f"`{n}` ({oc.get(n)})" for n in blk["never_started"]) + " is not scored."]
+    L += ["", f"**Readout 1 (A5.5){tag},** at 10%, 50% and 100% of B: object F1 x 100 as the stage value and as the running maximum, and GED "
+              "with the author's code (lower is better), against all three references. Mean [min-max] and n. No p-value.", ""]
+    for arm in pc.CTRL_ARMS:
+        ro = blk["readout1_cells"].get(arm) or {}
+        L += [f"`{arm}`:", "", "| Reference | Readout | 10% | 50% | 100% |", "|---|---|---|---|---|"]
+        for ref in sorted(ro):
+            for key, name in (("stage", "F1, stage value"), ("runmax", "F1, running maximum"), ("ged", "GED")):
+                L.append(f"| {ref} | {name} | " + " | ".join(
+                    _cell(ro[ref].get(f, {}).get(key), 1, ro[ref].get(f, {}).get("n_runs", 0)) for f in ("10", "50", "100")) + " |")
+        L.append("")
+    r2 = blk["readout2_equal_path"]
+    L += [f"**Readout 2 (A5.5){tag},** object F1 x 100 (stage value) at equal path: at each length the last stage whose path is at most L, "
+          "all three references. Mean [min-max] and n (\"n=k of m\" when some of the m runs have no value).", ""]
+    for arm in r2["arms"]:
+        L.append(f"- `{arm}`: {r2['labels'][arm]}.")
+    for ref, t in r2["tables"].items():
+        L += ["", f"Reference {ref}:", "", "| Arm | " + " | ".join(f"{x} m" for x in r2["lengths_m"]) + " |", "|---|" + "---|" * len(r2["lengths_m"])]
+        for arm in r2["arms"]:
+            L.append(f"| `{arm}` | " + " | ".join(_cell(t[arm][str(x)], 1, t[arm][str(x)]["n_runs"]) for x in r2["lengths_m"]) + " |")
+    L += ["", f"**Readout 3 (A5.5){tag},** seconds of navigation time per metre, from each run's last scored stage:", ""]
+    for arm, v in sorted(blk["readout3_sec_per_m"].items(), key=lambda kv: pc._arm_key(kv[0])):
+        if v["n"]:
+            L.append(f"- `{arm}`: {v['mean']:.2f} s/m [{v['min']:.2f}-{v['max']:.2f}], n={v['n']}")
+    L += ["", f"**The reading (A5.6){tag}.** S is the mean of a run's F1 x 100 at 50, 60, 80 and 100 m of path, once against APR and once "
+              "against the HM3D labels. A run that did not reach 100 m has no S. `official_nov` is the three runs "
+              "`e8_00853_s42..44_official_105m` as they ran, each with S. The equal-time cells of readout 1 above are shown beside "
+              "it and decide nothing. The tables print S to one decimal; every comparison of S is made at full precision, "
+              "never on the rounded figures.", ""]
+    for ref in pc.S_REFERENCES:
+        L += [f"S against {ref}:", "", "| Arm | Run | S | Reached 100 m |", "|---|---|---|---|"]
+        reach = {a["run"]: a for a in runs}
+        for arm in ("official_nov",) + pc.CTRL_ARMS:
+            for run, v in sorted(blk["S"].get(ref, {}).get(arm, {}).items()):
+                a = reach.get(run)
+                L.append(f"| `{arm}` | `{run}` | {'none' if v is None else format(v, '.1f')} | "
+                         f"{('yes' if a['reached_100m'] else 'no') if a else '-'}"
+                         + (" (marked)" if a and a.get("no_final_value") else "") + " |")
+        L.append("")
+    for arm in pc.CTRL_ARMS:
+        d = blk["decision"]["arms"][arm]
+        if d.get("interim"):
+            L.append(f"- `{arm}`: no statement ({d['why_no_statement']}).")
+        elif not d["judged"]:
+            vals = "; ".join(f"{ref}: " + (", ".join(f"{r} {'none' if v is None else format(v, '.1f')}" for r, v in sorted(d["S"][ref].items())) or "no run")
+                             for ref in pc.S_REFERENCES)
+            L.append(f"- `{arm}`: **no statement.** {d['why_no_statement']}. Its S values: {vals}.")
+        else:
+            per = ", ".join(f"{ref}: {d['per_reference'][ref]}" for ref in pc.S_REFERENCES)
+            L.append(f"- `{arm}`: {per}. Statement: **{d['statement']}**.")
+    slide = blk["slide"]
+    L += ["", "Slide: " + (f"\"{slide['sentence']}\"" if slide["sentence"] else slide["text"])]
+    L += ["", "What this cannot show: three runs a side in one home, no p-value. \"Not shown to come from the guesses\" is not \"the guesses "
+              "do nothing\". The controls ran two days later, under another load on the GPU, lose no members to dropped replies, and "
+              "sleep for a median wait, not the wait itself (A5.6)."]
+    alts = blk.get("other_readings_of_seed_43") or []
+    if alts:
+        L += ["", "**S of `official_nov` under the other readings of one run.** `DEVIATIONS_NOVEMBER.md` says why. They decide nothing.", "",
+              "| Reading | Run | S apr (mean) | S hm3d (mean) | Folder |", "|---|---|---|---|---|"]
+        fmt = lambda per, m: (", ".join(f"{_seed_tag(r)}: {'none' if v is None else format(v, '.1f')}" for r, v in sorted(per.items()))
+                              + ("" if m is None else f" (mean {m:.1f})"))
+        for a in alts:
+            what = (f"stopped after stage {a['stage']}" if a["kind"] == "stopped" else "without the run")
+            L.append(f"| {what} | `{a['run']}` | {fmt(a['official_nov_S']['apr'], a['official_nov_mean_S']['apr'])} | "
+                     f"{fmt(a['official_nov_S']['hm3d'], a['official_nov_mean_S']['hm3d'])} | `{a['folder']}/` |")
+    return L
+
+
 def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
     """NOTES.md. Every sentence that depends on the state of the runs is generated from that state."""
     b = s["budgets"]
@@ -1662,7 +2094,8 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
     L = ["# Notes on the 13 Nov paper-scale rescore", ""]
     L.append(f"**State: {s['mode']}.** Written {s['written_at']}. Rerun with `bash tools/live_policy/host/rescore_paper.sh`. "
              "The rules are `PREREGISTRATION_PAPER.md`, Amendment 2 and its Note"
-             + (", and for the November ASP row Amendment 3 and its Note" if s.get("nov") else "") + ". Tables: `paper_compare.md` and `.json`. "
+             + (", and for the November ASP row Amendment 3 and its Note" if s.get("nov") else "")
+             + (", and for the control arms Amendment 5" if s.get("nov_controls") else "") + ". Tables: `paper_compare.md` and `.json`. "
              "Evidence: `acceptance_*.json`, `folder_map_*`, `c2_*.json`, `budgets_*.json`, `comparison_vs_1112.json`, `rescore_summary.json`.")
     L += ["", "## What changed against 11-12, and why", ""]
     valid = [(x["name"], x["counted"]) for x in s["classification"]["seeds"] if x["counted"]]
@@ -1700,6 +2133,8 @@ def write_notes(s: dict, cmp_: dict, old_budgets: dict, pc) -> str:
         L.append(f"| {sc} | {b[sc]['primary_s']:.4f} | {b[sc]['primary_rule']} | {b[sc]['n_primary']} | {b[sc]['with_capped_s']:.4f} | {old_budgets[sc]:.4f} |")
     if s.get("nov"):
         L += nov_notes(s["nov"])
+    if s.get("nov_controls"):
+        L += control_notes(s["nov_controls"])
     L += ["", "## Tours (A2.4)", "",
           "Object nodes count every object node, doors included, as the frozen test counts them (the F1 count, which leaves out doors, is in `c2_*.json`). "
           "Frozen means the final graph0 holds the same object nodes as stage 0.", "", tour_table(s["tours"])]

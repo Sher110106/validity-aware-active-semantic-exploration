@@ -88,12 +88,71 @@ def value_at(stages: list, length_m: float, reference: str):
     return at[-1]["scores"][reference]["f1"] if at else None
 
 
+def complete_end_path(stages: list):
+    """Path length at the last stage that holds stats and both graph files (A5.3), or None."""
+    full = [s for s in stages if s.get("n_graphs") == 2]
+    return full[-1]["path_m"] if full else None
+
+
+def complete_run_stages(stages: list) -> list:
+    return [s for s in stages if s.get("n_graphs") == 2]
+
+
+def run_value(run: dict, length_m: float, reference: str):
+    """One run's F1 at L metres. Every arm but `official_nov` and the control arms: `value_at`, as filed on 11-18.
+
+    `official_nov` and the control arms (A3.2, A5.3), one rule: the run has a value at L only if its last stage with stats and
+    both graph files shows a path of at least L, and the value is read at the last such complete stage whose path is at most L.
+    A control run marked under A5.3 (`no_final_value`: a roslaunch line of A5.3, or no log) has none at 100 m."""
+    if run["arm"] not in pc.STRICT_ARMS:
+        return value_at(run["stages"], length_m, reference)
+    if run["arm"] in pc.CTRL_ARMS and run.get("no_final_value") and length_m >= pc.VOID_FROM_M:
+        return None
+    full = complete_run_stages(run["stages"])
+    if not full or full[-1]["path_m"] < length_m:
+        return None
+    return value_at(full, length_m, reference)
+
+
 def table(pc_json: dict, scene: str, reference: str, arms=ARMS, lengths=LENGTHS) -> dict:
     out = {}
     for arm in arms:
         runs = scored_runs(pc_json, scene, arm)
-        out[arm] = {str(length): path_cell([value_at(r["stages"], length, reference) for r in runs], len(runs)) for length in lengths}
+        out[arm] = {str(length): path_cell([run_value(r, length, reference) for r in runs], len(runs)) for length in lengths}
     return out
+
+
+# --------------------------------------------------------------------------
+# Amendment 5: readout 2 (registered for the control arms) and S (A5.6)
+# --------------------------------------------------------------------------
+
+REG_LENGTHS = (50, 60, 80, 100)                         # A5.5 readout 2 and A5.6
+READOUT2_ARMS = ("official_nov", "placebo_nov", "observed_only_nov", "frontier_end")
+READOUT2_LABELS = {"placebo_nov": "registered (A5.5)", "observed_only_nov": "registered (A5.5)",
+                   "official_nov": "first made after the results were seen (deviation 66)",
+                   "frontier_end": "first made after the results were seen (deviation 66)"}
+S_SCENE = "00853"
+
+
+def readout2(pc_json: dict, scene: str = S_SCENE) -> dict:
+    """A5.5 readout 2: F1 x 100 at 50, 60, 80 and 100 m for the four arms, against all three references.
+    An arm with no scored run in the scene is left out."""
+    arms = [a for a in READOUT2_ARMS if scored_runs(pc_json, scene, a)]
+    tables = {ref: table(pc_json, scene, ref, arms, REG_LENGTHS) for ref in REFS}
+    return {"scene": scene, "lengths_m": list(REG_LENGTHS), "arms": arms,
+            "labels": {a: READOUT2_LABELS[a] for a in arms}, "registered": {a: a in pc.CTRL_ARMS for a in arms}, "tables": tables}
+
+
+def run_s(run: dict, reference: str):
+    """A5.6: S = mean of the run's F1 x 100 at 50, 60, 80 and 100 m of path; None if it has no value at one of them."""
+    vals = [run_value(run, length, reference) for length in REG_LENGTHS]
+    return None if any(v is None for v in vals) else 100 * sum(vals) / len(vals)
+
+
+def s_values(pc_json: dict, scene: str = S_SCENE) -> dict:
+    """{reference: {arm: {run: S or None}}} for official_nov and the two control arms, against APR and the HM3D labels."""
+    return {ref: {arm: {r["run"]: run_s(r, ref) for r in scored_runs(pc_json, scene, arm)}
+                  for arm in ("official_nov",) + pc.CTRL_ARMS if scored_runs(pc_json, scene, arm)} for ref in pc.S_REFERENCES}
 
 
 def sec_per_m(pc_json: dict, scene: str) -> dict:
@@ -128,6 +187,12 @@ def equal_path_doc(pc_json: dict) -> tuple:
         spm = sec_per_m(pc_json, scene)
         scenes[scene] = {"lengths": list(lengths), "arms": arms, "tables": tables, "sec_per_m": spm}
         md.append(equal_path_md(tables, scene, lengths, spm))
+    ctrl = sorted({r["arm"] for r in pc_json["runs"] if r["arm"] in pc.CTRL_ARMS and "error" not in r}, key=pc._arm_key)
+    if ctrl:
+        md.insert(6, f"The rows {', '.join('`' + a + '`' for a in ctrl)} are the control arms of Amendment 5. At 50, 60, 80 and 100 m "
+                     "they are registered readout 2 (A5.5), read with A5.3: a value at L needs the last stage with stats and both graph "
+                     "files to show at least L, and a run with an out-of-memory or nvblox-died line has none at 100 m. Every other length "
+                     "here, and every other row, is exploratory as above.\n")
     doc = {"registered": False, "banner": BANNER, "rule": PATH_RULE, "scenes": scenes}
     return doc, "\n".join(md)
 
@@ -136,12 +201,15 @@ def equal_path_doc(pc_json: dict) -> tuple:
 # 2. Budget sensitivity
 # --------------------------------------------------------------------------
 
-def run_stages(run: dict) -> tuple:
+def run_stages(run: dict, budget: float | None = None) -> tuple:
     """A run's stages as paper_compare.readout wants them: it reads `graphs` (complete_end_s counts them) and `ged`,
-    and the JSON keeps n_graphs and drops ged."""
+    and the JSON keeps n_graphs and drops ged. `budget` is the registered B, which a control run with a line of A5.3
+    needs for its cut reach (without it that cut is not made)."""
     stages = [{**s, "graphs": dict.fromkeys(range(s["n_graphs"])), "scores": {r: {**sc, "ged": None} for r, sc in s["scores"].items()}}
               for s in run["stages"]]
-    return stages, (pc.complete_end_s(stages) if run["arm"] == pc.NOV_ARM else None)
+    end_s = (pc.complete_end_s(stages) if run["arm"] in pc.STRICT_ARMS else None) if budget is None else \
+        pc.reach_end_s(run["arm"], stages, budget, bool(run.get("no_final_value")))
+    return (pc.complete_stages(stages) if run["arm"] in pc.STRICT_ARMS else stages), end_s
 
 
 def budget_table(pc_json: dict, scene: str, reference: str, arms: list, budgets: dict) -> dict:
@@ -149,7 +217,7 @@ def budget_table(pc_json: dict, scene: str, reference: str, arms: list, budgets:
     tol = pc_json["meta"]["time_tol_s"]
     out = {}
     for arm in arms:
-        runs = [run_stages(r) for r in scored_runs(pc_json, scene, arm)]
+        runs = [run_stages(r, pc_json["meta"]["budgets"][scene]) for r in scored_runs(pc_json, scene, arm)]
         out[arm] = {}
         for label, b in budgets.items():
             out[arm][label] = {fl: cell([pc.readout(st, reference, b * frac, tol, end_s)["f1"] for st, end_s in runs], len(runs))
@@ -222,22 +290,30 @@ def budget_doc(pc_json: dict) -> tuple:
 
 # --------------------------------------------------------------------------
 
-def write(folder: str, doc: dict, md: str) -> None:
-    out = RESULTS / folder
-    out.mkdir(exist_ok=True)
+def write(folder: str, doc: dict, md: str, root: Path | None = None) -> None:
+    out = Path(root or RESULTS) / folder
+    out.mkdir(parents=True, exist_ok=True)
     (out / f"{folder}.json").write_text(json.dumps(doc, indent=1) + "\n")
     (out / f"{folder}.md").write_text(md)
     print(f"wrote {out / (folder + '.json')} and {folder}.md")
 
 
-def main() -> int:
-    pc_json = json.loads((RESULTS / "paper_compare.json").read_text())
+def main(argv=None) -> int:
+    """Reads paper_compare.json from the output root when it holds one (else from the filed folder) and writes the two
+    folders under the output root. The default root is the filed folder; a trial run names another and writes nothing there."""
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--out-root", type=Path, default=RESULTS,
+                    help="folder that receives equal_path/ and budget_sensitivity/ (default: the filed folder)")
+    args = ap.parse_args(argv)
+    src = args.out_root / "paper_compare.json"
+    pc_json = json.loads((src if src.exists() else RESULTS / "paper_compare.json").read_text())
     try:
         budget = budget_doc(pc_json)
     except ValueError as e:
         sys.exit(f"error: {e}")
-    write("equal_path", *equal_path_doc(pc_json))
-    write("budget_sensitivity", *budget)
+    write("equal_path", *equal_path_doc(pc_json), root=args.out_root)
+    write("budget_sensitivity", *budget, root=args.out_root)
     return 0
 
 

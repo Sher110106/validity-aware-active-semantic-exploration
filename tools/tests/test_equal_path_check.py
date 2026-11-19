@@ -19,7 +19,7 @@ needs_real = pytest.mark.skipif(not REAL.exists(), reason="paper_compare.json no
 
 
 def stages(*pairs):
-    return [{"stage": i, "path_m": p, "time_s": 6.0 * p, "scores": {"apr": {"f1": f}}} for i, (p, f) in enumerate(pairs)]
+    return [{"stage": i, "path_m": p, "time_s": 6.0 * p, "n_graphs": 2, "scores": {"apr": {"f1": f}}} for i, (p, f) in enumerate(pairs)]
 
 
 def make_run(scene, arm, pts, name=None):

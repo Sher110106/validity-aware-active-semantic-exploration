@@ -44,6 +44,7 @@ import ast
 import csv
 import glob
 import json
+import math
 import re
 import statistics
 import sys
@@ -70,16 +71,33 @@ FRACTIONS = (("10", 0.1), ("50", 0.5), ("100", 1.0))
 VARIANTS = (("B", 1.0), ("0.8B", 0.8), ("1.2B", 1.2))
 PRIMARY = "B"
 COUNTED_ARMS = ("official", "placebo", "filter_only", "oracle_visible")
-ARM_ORDER = ("official", "official_nov", "filter_only", "placebo", "oracle_visible", "frontier_60m",
-             "frontier_end_ref", "frontier_end")
+ARM_ORDER = ("official", "official_nov", "placebo_nov", "observed_only_nov", "filter_only", "placebo", "oracle_visible",
+             "frontier_60m", "frontier_end_ref", "frontier_end")
 # Amendment 3 and its Note: the November ASP runs on 00853 are their own arm. Only this anchored
 # name pattern picks them, and no code path pools them with October's `official` arm.
 NOV_ARM = "official_nov"
 NOV_RE = re.compile(r"^e8_00853_s(42|43|44)_official_105m(_relaunch1)?$")
-ARM_LABELS = {NOV_ARM: "ASP + DeepSeek, November"}
 NOV_SCENE = "00853"
 # Every e8 name, and its dry run, belongs to the November arm or to nothing.
 EIGHT_RE = re.compile(r"^(dryrun_)?e8_")
+# Amendment 5 (A5.1, A5.2): two control arms on 00853, each picked only by its own anchored name pattern.
+# They are never pooled with October's `placebo` arm (names e1_..._placebo_60m) or any other arm.
+PLACEBO_NOV_ARM = "placebo_nov"
+OBSERVED_NOV_ARM = "observed_only_nov"
+CTRL_ARMS = (PLACEBO_NOV_ARM, OBSERVED_NOV_ARM)
+CTRL_RE = {PLACEBO_NOV_ARM: re.compile(r"^e9_00853_s(42|43|44)_placebo_115m(_relaunch1)?$"),
+           OBSERVED_NOV_ARM: re.compile(r"^e9_00853_s(42|43|44)_observed_only_115m(_relaunch1)?$")}
+# Every e9 name, and its dry run, belongs to a control arm or to nothing.
+NINE_RE = re.compile(r"^(dryrun_)?e9_")
+# Arms whose reach is read strictly (A3.2, A5.3): the last stage with stats and both graphs must show at least t.
+STRICT_ARMS = (NOV_ARM,) + CTRL_ARMS
+ARM_LABELS = {NOV_ARM: "ASP + DeepSeek, November",
+              PLACEBO_NOV_ARM: "ASP + random guesses (control), November",
+              OBSERVED_NOV_ARM: "ASP + no guesses (control), November"}
+# A5.3: a run with one of these lines in logs/roslaunch.log has no value at 100% of B and none at 100 m.
+OOM_PATTERN = r"out of memory"
+DIED_PATTERN = r"nvblox_node.*(process has died|has died)"
+VOID_FROM_M = 100
 REF_ORDER = ("hm3d", "apr", "frontier_made")
 
 # Pre-registered fallback: end of the frontier-made reference run (seconds).
@@ -313,6 +331,52 @@ def complete_end_s(stages: list):
     return max(ends) if ends else float("-inf")
 
 
+def count_lines(path, pattern: str):
+    """Lines of a text file that match `pattern`, case ignored; None when there is no such file.
+    The rule of the e7 check's grep_count, kept here so that the host side and the scorer read one rule."""
+    p = Path(path)
+    if not p.is_file():
+        return None
+    rx = re.compile(pattern, re.I)
+    with open(p, errors="replace") as f:
+        return sum(1 for line in f if rx.search(line))
+
+
+def roslaunch_lines(run_dir) -> dict:
+    """The two GPU lines of A3.2 and A5.3 in one run's logs/roslaunch.log (None for both when there is no log)."""
+    log = Path(run_dir) / "logs" / "roslaunch.log"
+    return {"out_of_memory_lines": count_lines(log, OOM_PATTERN), "nvblox_died_lines": count_lines(log, DIED_PATTERN)}
+
+
+def is_void(lines: dict | None) -> bool:
+    """A5.3 for a control run: a line of A5.3 in logs/roslaunch.log, or no such log (the check cannot be made, and the run
+    is read as it is for `official_nov`: no value at 100% of B or later, and none at 100 m)."""
+    if not lines:
+        return False
+    oom, died = lines["out_of_memory_lines"], lines["nvblox_died_lines"]
+    return oom is None or died is None or bool(oom or died)
+
+
+def complete_stages(stages: list) -> list:
+    """The stages that hold navigation_stats.json and both graph files (A3.2, A5.3). A strict arm reads its values from
+    these only, as it reads its reach from them."""
+    return [s for s in stages if len(s["graphs"]) == 2]
+
+
+def reach_end_s(arm: str, stages: list, budget: float, void: bool = False):
+    """The time a run counts as having reached, for the arms whose reach is strict; None for every other arm.
+
+    A3.2 and A5.3: the last stage that holds stats and both graph files. A control run with a line of A5.3 has no
+    value at 100% of B: its reach is cut to the float just under B, so every readout at t >= B is null and every
+    readout before B stays."""
+    if arm not in STRICT_ARMS:
+        return None
+    end = complete_end_s(stages)
+    if void and arm in CTRL_ARMS:
+        end = min(end, math.nextafter(float(budget), -math.inf))
+    return end
+
+
 def readout(stages: list, ref_name: str, t: float, tol: float = TIME_TOL, end_s=None) -> dict:
     eligible, reason = pick_stages(stages, t, tol)
     if eligible is not None and end_s is not None and end_s < t:      # "at least B": no tolerance
@@ -356,6 +420,11 @@ def score_run(spec: RunSpec, refs: dict, budgets: dict, fallback_roots, tol: flo
     for s in stages:
         s["scores"] = stage_scores(s, refs_for_scene, cache)
     last = stages[-1] if stages else None
+    lines = roslaunch_lines(spec.path) if spec.arm in CTRL_ARMS else None
+    void = is_void(lines)
+    end_s = reach_end_s(spec.arm, stages, budgets[spec.scene], void)
+    # a strict arm reads its values only from complete stages, as its reach: a stage with one graph file gives no value
+    read_stages = complete_stages(stages) if spec.arm in STRICT_ARMS else stages
     record.update({
         "n_stages_scored": len(stages),
         "skipped_stages": skipped,
@@ -369,13 +438,17 @@ def score_run(spec: RunSpec, refs: dict, budgets: dict, fallback_roots, tol: flo
                     "n_graphs": len(s["graphs"]), "sources": s["sources"],
                     "scores": {r: {k: v for k, v in sc.items() if k != "ged"}
                                for r, sc in s["scores"].items()}} for s in stages],
-        "readouts": build_readouts(stages, refs_for_scene, budgets[spec.scene], tol,
-                                   complete_end_s(stages) if spec.arm == NOV_ARM else None),
+        "readouts": build_readouts(read_stages, refs_for_scene, budgets[spec.scene], tol, end_s),
     })
-    if spec.arm == NOV_ARM:
+    if spec.arm in STRICT_ARMS:
         end = complete_end_s(stages)
         record["reached_end_s"] = None if end == float("-inf") else end
         record["reached_b"] = bool(end >= budgets[spec.scene])
+    if spec.arm in CTRL_ARMS:
+        full = [s for s in stages if len(s["graphs"]) == 2]
+        record["reached_end_path_m"] = full[-1]["path_m"] if full else None
+        record["roslaunch"] = lines
+        record["no_final_value"] = void
     return record
 
 
@@ -408,11 +481,23 @@ def check_arm_name(arm: str, name: str, scene=None) -> None:
     the two ASP rows apart whatever calls the code."""
     if arm == NOV_ARM:
         ok = bool(NOV_RE.match(name)) and (scene is None or scene == NOV_SCENE)
+    elif arm in CTRL_ARMS:
+        ok = bool(CTRL_RE[arm].match(name)) and (scene is None or scene == NOV_SCENE)
     else:
-        ok = not EIGHT_RE.match(name)
+        ok = not EIGHT_RE.match(name) and not NINE_RE.match(name)
     if not ok:
         raise ValueError(f"run {name!r} in arm {arm!r} (scene {scene!r}): names starting e8_ or dryrun_e8_ belong to the arm "
-                         f"{NOV_ARM!r} or to none; that arm takes only {NOV_RE.pattern} on scene {NOV_SCENE}")
+                         f"{NOV_ARM!r} or to none; that arm takes only {NOV_RE.pattern} on scene {NOV_SCENE}. Names starting e9_ or "
+                         f"dryrun_e9_ belong to a control arm or to none: {PLACEBO_NOV_ARM!r} takes only {CTRL_RE[PLACEBO_NOV_ARM].pattern}, "
+                         f"{OBSERVED_NOV_ARM!r} takes only {CTRL_RE[OBSERVED_NOV_ARM].pattern}, on scene {NOV_SCENE}")
+
+
+def ctrl_arm_of(name: str):
+    """The control arm a run folder name belongs to, or None. Only the anchored patterns pick a run."""
+    for arm, rx in CTRL_RE.items():
+        if rx.match(name):
+            return arm
+    return None
 
 
 def _has_stage(run: Path) -> bool:
@@ -442,6 +527,51 @@ def check_nov_pairs(paths: list) -> list:
                 raise ValueError(f"seed {seed}: {orig[0].name} and {relaunch[0].name} both exist and {orig[0].name} holds a stage; "
                                  f"a relaunch is allowed only when the first never started, and no seed counts twice")
             drop.add(str(orig[0]))
+    return [p for p in paths if str(p) not in drop]
+
+
+RELAUNCH_OK = ("skipped_exists", "skipped_campaign_cap", "skipped_host_memory", "launch_failed")
+RELAUNCH_SUFFIX = "_relaunch1"
+
+
+def check_ctrl_pairs(paths: list, outcomes: dict | None = None) -> list:
+    """The rule for the control arms (A5.3): one folder per (arm, seed), and a relaunch only for a run that has not happened.
+
+    `outcomes` maps a run name to the outcome the runner recorded for it (`skipped_exists`, `skipped_campaign_cap`,
+    `skipped_host_memory`, `launch_failed`, or any other outcome of a run that happened). A relaunch beside its original is
+    accepted, and the original dropped, only if the original's recorded outcome is one of RELAUNCH_OK, whether or not the
+    original holds a stage. A folder with no stage whose launcher started is a run that happened, with no values. With
+    `outcomes` None a relaunch beside its original is an error (nothing says the original did not happen). With `outcomes`
+    given, a relaunch whose original is not on the list is checked too. The same folder twice is an error."""
+    paths = [Path(p) for p in paths]
+    if len({str(p) for p in paths}) != len(paths):
+        raise ValueError("the same control run folder was given twice")
+    groups = {}
+    for p in paths:
+        arm = ctrl_arm_of(p.name)
+        if arm is None:
+            raise ValueError(f"{p.name!r} is not a control run name")
+        groups.setdefault((arm, CTRL_RE[arm].match(p.name).group(1)), []).append(p)
+    drop = set()
+    for (arm, seed), group in groups.items():
+        if len(group) > 1:
+            orig = [p for p in group if not p.name.endswith("_relaunch1")]
+            relaunch = [p for p in group if p.name.endswith("_relaunch1")]
+            if len(orig) != 1 or len(relaunch) != 1:
+                raise ValueError(f"{arm} seed {seed}: more than one folder: {', '.join(p.name for p in group)}")
+            got = (outcomes or {}).get(orig[0].name)
+            if got not in RELAUNCH_OK:
+                raise ValueError(f"{arm} seed {seed}: {orig[0].name} and {relaunch[0].name} both exist, and the runner's record of "
+                                 f"{orig[0].name} is {got!r}; a relaunch is allowed only when the runner recorded the first as one of "
+                                 f"{', '.join(RELAUNCH_OK)}, and no seed counts twice")
+            drop.add(str(orig[0]))
+    if outcomes is not None:
+        for p in paths:
+            if p.name.endswith(RELAUNCH_SUFFIX) and str(p) not in drop:
+                orig = p.name[:-len(RELAUNCH_SUFFIX)]
+                if outcomes.get(orig) not in RELAUNCH_OK:
+                    raise ValueError(f"{p.name}: the runner's record of {orig} is {outcomes.get(orig)!r}; a relaunch is allowed only "
+                                     f"when the runner recorded the first as one of {', '.join(RELAUNCH_OK)}")
     return [p for p in paths if str(p) not in drop]
 
 
@@ -484,6 +614,98 @@ def seconds_per_metre(records: list) -> list:
                     "final_time_s": summarise([r.get("final_time_s") for r in recs]),
                     "final_path_m": summarise([r.get("final_path_m") for r in recs])})
     return out
+
+
+# --------------------------------------------------------------------------
+# The reading of Amendment 5 (A5.6)
+# --------------------------------------------------------------------------
+
+S_LENGTHS = (50, 60, 80, 100)
+S_REFERENCES = ("apr", "hm3d")
+MIN_CONTROL_RUNS = 3
+# A5.6: "official_nov is the three runs as they ran, seed 43 included". Named, so that no other set can stand for them.
+OFFICIAL_NOV_RUNS = tuple(f"e8_00853_s{seed}_official_105m" for seed in (42, 43, 44))
+# S of the three official_nov runs, from the filed results_paper_compare_1113/paper_compare.json (11-19), at full precision.
+# The rescore stops with an error if the S it computes for these runs differs: the controls are read against these numbers.
+OFFICIAL_NOV_S_PINNED = {
+    "apr": {"e8_00853_s42_official_105m": 53.55291686668735, "e8_00853_s43_official_105m": 52.48222944405994,
+            "e8_00853_s44_official_105m": 61.725399191409466},
+    "hm3d": {"e8_00853_s42_official_105m": 29.045779047403908, "e8_00853_s43_official_105m": 28.467900509194806,
+             "e8_00853_s44_official_105m": 30.39810010214091}}
+OFFICIAL_NOV_S_TOL = 1e-9
+SEPARATED, NOT_ABOVE, ABOVE_AVG = "separated above", "not above", "above on average, not separated"
+READS_ABOVE, DOES_NOT_READ_ABOVE, IN_BETWEEN, NO_STATEMENT = "reads above", "does not read above", "in between", "no statement"
+GUESSES = {(PLACEBO_NOV_ARM,): "random guesses", (OBSERVED_NOV_ARM,): "no guesses",
+           (PLACEBO_NOV_ARM, OBSERVED_NOV_ARM): "random guesses, or none"}
+SLIDE_ABOVE = "With {what}, the same pipeline reads lower on this home: here the LLM's guesses add to ASP's score."
+SLIDE_NOT_ABOVE = "With {what}, the same pipeline reads as high: November's lead over frontier is not shown to come from the LLM's guesses."
+
+
+def compare_s(official: list, control: list) -> str:
+    """A5.6, one control arm against `official_nov`, under one reference. Both lists hold S values only.
+
+    separated above: every official_nov run has a higher S than every run of the control (strictly: a tie is not higher).
+    not above: the mean S of official_nov is not higher than the control's mean.
+    above on average, not separated: anything else."""
+    if min(official) > max(control):
+        return SEPARATED
+    if not statistics.mean(official) > statistics.mean(control):
+        return NOT_ABOVE
+    return ABOVE_AVG
+
+
+def decide_controls(s: dict) -> dict:
+    """The decision of A5.6, a pure function of the S values.
+
+    `s` is {reference: {arm: {run name: S or None}}} for the references "apr" and "hm3d" and the arms "official_nov",
+    "placebo_nov" and "observed_only_nov". S is None for a run that did not reach 100 m. An arm missing from `s` holds no run.
+
+    A control arm is judged only if each of the three named official_nov runs (OFFICIAL_NOV_RUNS) is present and has S, and at
+    least 3 of its own runs have S, under each reference. S is compared at full precision, never rounded. Otherwise its statement is "no statement" and its S values are listed. A judged arm
+    gets one label per reference, then the statement: "reads above" (separated above under both), "does not read above"
+    (not above under both), else "in between". The slide sentence names only the judged arms."""
+    have = lambda ref, arm: {r: v for r, v in s.get(ref, {}).get(arm, {}).items()}
+    arms = {}
+    for arm in CTRL_ARMS:
+        entry = {"judged": False, "statement": NO_STATEMENT, "per_reference": {}, "why_no_statement": None,
+                 "S": {ref: have(ref, arm) for ref in S_REFERENCES}}
+        problems = []
+        for ref in S_REFERENCES:
+            off, ctl = have(ref, NOV_ARM), have(ref, arm)
+            absent = [r for r in OFFICIAL_NOV_RUNS if r not in off]
+            nones = [r for r in OFFICIAL_NOV_RUNS if r in off and off[r] is None]
+            if absent:
+                problems.append(f"{ref}: official_nov run(s) missing: {', '.join(absent)}")
+            if nones:
+                problems.append(f"{ref}: an official_nov run has no S ({', '.join(nones)})")
+            if sum(v is not None for v in ctl.values()) < MIN_CONTROL_RUNS:
+                problems.append(f"{ref}: {sum(v is not None for v in ctl.values())} of its runs have S, and {MIN_CONTROL_RUNS} are needed")
+        if problems:
+            entry["why_no_statement"] = "; ".join(problems)
+        else:
+            entry["judged"] = True
+            for ref in S_REFERENCES:
+                entry["per_reference"][ref] = compare_s([have(ref, NOV_ARM)[r] for r in OFFICIAL_NOV_RUNS],
+                                                        [v for v in have(ref, arm).values() if v is not None])
+            labels = [entry["per_reference"][ref] for ref in S_REFERENCES]
+            entry["statement"] = (READS_ABOVE if all(x == SEPARATED for x in labels) else
+                                  DOES_NOT_READ_ABOVE if all(x == NOT_ABOVE for x in labels) else IN_BETWEEN)
+            if entry["statement"] == IN_BETWEEN:
+                entry["in_between"] = "; ".join(f"{ref}: {entry['per_reference'][ref]}" for ref in S_REFERENCES)
+        arms[arm] = entry
+    judged = tuple(a for a in CTRL_ARMS if arms[a]["judged"])
+    if not judged:
+        slide = {"kind": "tables_only", "sentence": None,
+                 "text": "No arm was judged: the slide shows the S tables only."}
+    elif all(arms[a]["statement"] == READS_ABOVE for a in judged):
+        slide = {"kind": "reads_above_every_judged_arm", "sentence": SLIDE_ABOVE.format(what=GUESSES[judged])}
+    elif all(arms[a]["statement"] == DOES_NOT_READ_ABOVE for a in judged):
+        slide = {"kind": "does_not_read_above_any_judged_arm", "sentence": SLIDE_NOT_ABOVE.format(what=GUESSES[judged])}
+    else:
+        slide = {"kind": "both_tables_and_statements", "sentence": None,
+                 "text": "The slide gives both S tables and the statements as they fall."}
+    slide["judged_arms"] = list(judged)
+    return {"arms": arms, "slide": slide}
 
 
 # --------------------------------------------------------------------------
@@ -548,6 +770,18 @@ def nov_runs(root: Path) -> list:
     return out
 
 
+def ctrl_runs(root: Path) -> list:
+    """The control runs in a campaign copy, picked only by the anchored name patterns."""
+    camp = root / "runs" / "live_campaign"
+    out = []
+    if camp.is_dir():
+        for d in sorted(camp.iterdir()):
+            arm = ctrl_arm_of(d.name)
+            if arm and d.is_dir():
+                out.append(RunSpec(d.name, arm, NOV_SCENE, d, int(CTRL_RE[arm].match(d.name).group(1))))
+    return out
+
+
 def default_runs(root: Path, run_table: Path, nov: bool = True) -> list:
     """October's counted runs, the e4 runs and the reference runs. `nov` is kept for old callers and does nothing:
     a November run enters only through --add-run, built by rescore_paper.py after its A3.2 checks."""
@@ -557,6 +791,9 @@ def default_runs(root: Path, run_table: Path, nov: bool = True) -> list:
             name = row["run"]
             if EIGHT_RE.match(name):
                 raise ValueError(f"run table row {name!r}: an e8 run is scored as the arm {NOV_ARM!r} through "
+                                 f"--add-run, never from the run table")
+            if NINE_RE.match(name):
+                raise ValueError(f"run table row {name!r}: an e9 run is scored as a control arm ({', '.join(CTRL_ARMS)}) through "
                                  f"--add-run, never from the run table")
             if row["status"].strip() != "counted" or row["arm"] not in COUNTED_ARMS or name in seen:
                 continue
@@ -727,11 +964,27 @@ def build_markdown(result: dict) -> str:
         asp_note = ("- ASP runs stop at 60 m of path" + (f", which took {asp} here" if asp else "")
                     + ". A run has no value at a t past its last stage, so its 100% readout is null, "
                     "and a 50% readout is null when the run ended sooner.")
+    ctrl_note = []
+    if any(r["arm"] in CTRL_ARMS for r in result["seconds_per_metre"]):
+        ctrl_note.append("- The rows \"" + "\" and \"".join(ARM_LABELS[a] for a in CTRL_ARMS if any(r["arm"] == a for r in result["seconds_per_metre"]))
+                         + "\" are Amendment 5's control arms: ASP's own pipeline with random guesses or none, no LLM call. "
+                         "They are never pooled with October's `placebo` row or any other. A control run that ended before B has no "
+                         "100% value; one whose roslaunch.log holds an out-of-memory line or says nvblox_node has died has none at 100% of B "
+                         "and none at 100 m, and its other cells stay.")
+        for rec in result["runs"]:
+            if rec.get("no_final_value"):
+                lines_ = rec.get("roslaunch") or {}
+                if lines_.get("out_of_memory_lines") is None or lines_.get("nvblox_died_lines") is None:
+                    ctrl_note.append(f"- Marked: `{rec['run']}` has no logs/roslaunch.log, so the check of A5.3 cannot be made and it is read "
+                                     "as a run with a line of A5.3: no value at 100% of B or later, and none at 100 m.")
+                else:
+                    ctrl_note.append(f"- Marked: `{rec['run']}` has {lines_.get('out_of_memory_lines')} out-of-memory line(s) and "
+                                     f"{lines_.get('nvblox_died_lines')} line(s) saying nvblox_node has died, so it has no value at 100% of B.")
     lines += ["", "## Not comparable", "",
               "- The references differ. The paper scores against a hand-driven full-scene map. "
               "We use the HM3D human-label map, the frontier-made map (biased toward frontier), "
               "and a coverage-tour map when one exists.",
-              asp_note,
+              asp_note, *ctrl_note,
               "- The e4 frontier runs stop at 60 m too" + (f" ({frontier})" if frontier else "")
               + ", so their 100% readout is null as well. Only the frontier-to-end runs reach B.",
               "- Navigation time counts moving time only, so it depends on seconds per metre, which differs by arm.",
@@ -812,6 +1065,9 @@ def main(argv=None) -> int:
         if arm == NOV_ARM:
             specs.append(RunSpec(name, arm, scene, Path(path), int(NOV_RE.match(name).group(1))))
             continue
+        if arm in CTRL_ARMS:
+            specs.append(RunSpec(name, arm, scene, Path(path), int(CTRL_RE[arm].match(name).group(1))))
+            continue
         specs.append(RunSpec(name, arm, scene, Path(path)))
     nov_specs = [sp for sp in specs if sp.arm == NOV_ARM]
     if nov_specs:
@@ -820,9 +1076,19 @@ def main(argv=None) -> int:
         except ValueError as e:
             sys.exit(f"--add-run: {e}")
         specs = [sp for sp in specs if sp.arm != NOV_ARM or str(sp.path) in kept]
+    ctrl_specs = [sp for sp in specs if sp.arm in CTRL_ARMS]
+    if ctrl_specs:
+        try:
+            kept = {str(p) for p in check_ctrl_pairs([sp.path for sp in ctrl_specs])}
+        except ValueError as e:
+            sys.exit(f"--add-run: {e}")
+        specs = [sp for sp in specs if sp.arm not in CTRL_ARMS or str(sp.path) in kept]
     left = [sp.name for sp in nov_runs(args.root) if sp.name not in {x.name for x in specs}]
     if left:
         print("not scored here: November runs are assessed by rescore_paper.py: " + ", ".join(left), file=sys.stderr)
+    left = [sp.name for sp in ctrl_runs(args.root) if sp.name not in {x.name for x in specs}]
+    if left:
+        print("not scored here: control runs are assessed by rescore_paper.py: " + ", ".join(left), file=sys.stderr)
     if not specs:
         sys.exit("no runs to score")
     no_budget = sorted({s.scene for s in specs} - set(budgets))
