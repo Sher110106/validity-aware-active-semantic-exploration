@@ -2076,6 +2076,23 @@
     "file": "exploration_pipeline.py",
     "start": "714-715"
    }
+  },
+  "houses": 179,
+  "paper_versions": {
+   "frontier": [
+    48.3,
+    58.8
+   ],
+   "asp": [
+    59.0,
+    66.7
+   ],
+   "file": "docs/checkin/review_2026-10-29/REVIEW_B_paper_field.md"
+  },
+  "gemini_calls": {
+   "argon": 4,
+   "flash": 34,
+   "file": "tools/live_policy/DEVIATIONS_NOVEMBER.md item 73"
   }
  }
 }

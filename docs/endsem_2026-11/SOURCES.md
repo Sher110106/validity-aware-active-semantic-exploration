@@ -2,7 +2,7 @@
 
 Build, from the project root:
 0. `.venv_offline/bin/python docs/endsem_2026-11/fill_slots_part3.py` (writes the part 3 values of `slots.json` from the result files)
-1. `.venv_offline/bin/python docs/endsem_2026-11/figures/make_stage_picture.py` (slide 14; draws the stage and writes `figures/stage_numbers.json`)
+1. `.venv_offline/bin/python docs/endsem_2026-11/figures/make_stage_picture.py` (backup 12; draws the stage and writes `figures/stage_numbers.json`)
 2. `.venv_offline/bin/python docs/endsem_2026-11/build_endsem_pptx.py`
 
 The builder reads the values below from the result files and `slots.json`, and writes `ASP_Endsem.pptx` with `ENDSEM_Script.md` as speaker notes. Render check: `soffice --headless --convert-to pdf ASP_Endsem.pptx`, then `pdftoppm -png`. A PDF of the last build is in `render/ASP_Endsem.pdf`; rebuild it whenever the deck changes. Type size: body 32 px and notes 24 px on a 1920 px canvas, which is 16 pt and 12 pt as projected.
@@ -23,15 +23,19 @@ Short names:
 - `PIN` = `slots.json` `pinned`: facts read from files that are not result tables (the proposal's plan, the paper's quotes, the clock lines). Each row below names its file.
 - `REVIEW` = `/Users/sher/project/cvp/REVIEW_FABLE_2026-11-19.md` (the independent review that led to this pass; outside the repo).
 
-The two control arms on 853 (`PREREG` Amendment 5) are registered and running; the deck says only that, and no result of them exists. No Gemini run is left. `slots.json` `gemini_replay` is read from `gemini_1119/results.json` (slides 19 and 20; `gemini_facts` guards every sentence), `neon_replay` from `gemini_neon_1119/results.json` and `neon_minus_{flash,argon}.json` (slide 21; `neon_facts`), and the three models are side by side on slide 22. Gemini 4 Argon (`argon_replay`, `argon_r32`, with the all-36 exploratory files) is on backups 7 and 8 (`argon_facts`, `argon_check_facts`).
+The main deck has 19 slides (the cover to the closing slide) and the backup has 17; every slide moved out of the main deck in pass 3 is still built, in builder order (`BACKUP_ORDER`). Slide numbers below are the deck's. No table or note on a main slide is below 12 pt as projected; titles are one size.
+
+The two control arms on 853 (`PREREG` Amendment 5) are registered and running; the deck says only that, and no result of them exists. No Gemini run is left. `slots.json` `gemini_replay` is read from `gemini_1119/results.json` (slides 13 and 14; `gemini_facts` guards every sentence), `neon_replay` from `gemini_neon_1119/results.json` and `neon_minus_{flash,argon}.json` (backup 15; `neon_facts`), and the three models are side by side on slide 15. Gemini 4 Argon (`argon_replay`, `argon_r32`, with the all-36 exploratory files) is on backups 7 and 8 (`argon_facts`, `argon_check_facts`).
 
 ## Slide 1: the cover
 
 | Statement | Source |
 |---|---|
 | "As the author put it to us": the claim that the guesses are often wrong in place but right in meaning, and that this is enough | Said in person to the student; no written record; the paper's nearest text is in section IV-B. The author's demo and the meeting with the student are the only sources. The paper (arXiv 2510.05430v2, section IV-B) calls a "semantically reasonable but physically infeasible bathroom" a failure that "causes the robot to revisit an uninformative region" (`PIN` `paper.bathroom`, `paper.revisit`; text as given for this pass, from the paper). `PLAN` line 325 records the remark's use, not its source; `REVIEW` finding 2 notes that the draft mail to the authors (outside the repo) says the point "names no place". The words are not in quotation marks on a slide |
-| Final: Part 1, and the registered scores and tests; the Gemini runs are final; running and not shown: two control arms on 853 | `DEV` items 66 to 76; `PREREG` Amendment 5; `PREREGISTRATION_GEMINI.md` Notes 1 to 7 |
-| Part 2: "ASP reads above frontier by the clock; by the metre, it depends" | Slide 9 (guarded by `facts853` and `facts_equal853`) |
+| "Registered scores and tests are final, the Gemini runs included. Registered, running and not shown: two control arms on 853" | `DEV` items 66 to 76; `PREREG` Amendment 5; `PREREGISTRATION_GEMINI.md` Notes 1 to 7 |
+| Part 1, short form: "With a small model: no detectable difference; a gain up to 0.04 F1 is not ruled out" | `NUM` `E1:hm3d:60m:permutation_hi` (0.04 to two places); no live interval is off 0 (slide 4's rows). Guard: `findings_facts` (sentence 1) |
+| Part 2, short form: "On 853 ASP leads frontier by the clock, not clearly by distance" | Slide 7: the three leads are positive (`facts853`); at 50 m and 100 m the equal-path sign is positive under the scripted reference and negative under human labels (`facts_equal853`). Guard: `findings_facts` (sentence 2) |
+| Part 3, short form: "No model was found to beat a trade of regions; a prior from 179 other houses named objects better" | Slides 12 and 15 (L3 verdicts, none Supported; every L3 lower end against D below 0; every L2 upper end against the prior below 0); 179 houses `SEM` §9 (`PIN` `houses`). Guard: `findings_facts` (sentence 3) |
 
 ## Slide 2: what became of the proposal
 
@@ -88,17 +92,7 @@ Offline replay of saved stages (`review_2026-10-29/audit/tables/replay_table.jso
 | +0.07 over a random set, 73 of 119 stages | `NUM` `cf:paired_actual_minus_placebo_median:official` (0.0679); "73 of 119 stages, p 0.008" from `WRITEUP` §4 notes under the ρ table |
 | Exact objects high in part by construction | `WRITEUP` §4 notes under the ρ table |
 
-## Slide 6: where the guesses land
-
-| Number | Source |
-|---|---|
-| 3.0% v 0.5%, 10.1% v 2.0%, 23.8% v 6.3% | `NUM` `precision_pooled:official:final:{0.5,1,2}m`, `precision_pooled:placebo:final:{0.5,1,2}m` (0.0304, 0.0052; 0.1007, 0.0203; 0.2383, 0.0628); `WRITEUP` §4 "Precision and agreement" |
-| About 6 times | `WRITEUP` §3 "Precision" (3.0% against 0.5%, 6 times) |
-| 97% miss by more than 0.5 m | Derived: 1 − 0.0304 |
-| 853: 1.4% v 0.6%; 871: 4.2% v 0.4% | `NUM` `precision05:official:00853:final` (0.0139), `precision05:placebo:00853:final` (0.0062), `precision05:official:00871:final` (0.0416), `precision05:placebo:00871:final` (0.0040); `WRITEUP` §3 "Precision" |
-| Counted runs, per (stage, member) guess | `WRITEUP` §8 "Counting" |
-
-## Slide 7: live test limits
+## Slide 6: live test limits
 
 | Number | Source |
 |---|---|
@@ -111,24 +105,9 @@ Offline replay of saved stages (`review_2026-10-29/audit/tables/replay_table.jso
 | Filter live: −0.003 (−0.047 to +0.037) | as slide 4 |
 | 30%, 2,573 of 8,465 | `NUM` `validator:removed_share:all` (0.304), `validator:removed_new:all`, `validator:raw_new:all` |
 | 3.1% v 2.8% | `NUM` `validator:precision_kept_0.5:all` (0.0305), `validator:precision_raw_0.5:all` (0.0278); `WRITEUP` §3 E2 "What the validator did" |
+| Reading box: new objects land within 0.5 m of a real one 3.0% of the time, random guesses 0.5%; 97% miss by more than 0.5 m (moved here from the "where the guesses land" slide, now backup 9) | As backup 9: `NUM` `precision_pooled:official:final:0.5m` (0.0304) and `precision_pooled:placebo:final:0.5m` (0.0052); 97% = 1 − 0.0304, derived |
 
-## Slide 8: same rules as the paper
-
-| Number | Source |
-|---|---|
-| 85 and 66 stops | `CC` `00853.use_rule.reached`, `00871.use_rule.reached` |
-| Stand-in for the author's hand-driven tour: navmesh paths, same mapper | `PLAN` §B1 (Reference row), §B7 (Amendment 1: the tour moves onto navmesh paths); `PREREG` Amendment 1 |
-| 5 of 5 runs on 853, 4 of 5 on 871 ran to their natural end | `B13` `00853.n_primary` (5), `00871.n_primary` (4), and the count of `end_times_s` (5 and 5); `N13` item 2 and "Budgets" |
-| 1 run on 871 stopped at the 250 m path cap and is left out of the median | `B13` `00871.capped_runs` (`e7_00871_s44_frontier_end`, end 1,740.8 s); the cap: `PREREG` §2a and Amendment 2 A2.1, A2.3; `DEVIATIONS_NOVEMBER.md` item 63. The builder's `PATH_CAP_M` holds the 250 |
-| DeepSeek; Gemini 2.5 Pro | `PLAN` §B1 table, LLM row |
-| The paper gives no budget value; 10, 50, 100% | `PLAN` §B1 (Budget row); `PREREG` §1 |
-| 632 s and 1300 s | `PC` `meta.budgets` (632.175, 1300.252); `B13` `<scene>.primary_s`, `primary_rule` ("median"); rule in `PREREG` §4 and Amendment 2 A2.3 (primary B = median of the valid runs that logged "Exploration complete"); `N13` "Budgets". The 11-12 value for 871, 809.084 s, was the registered fallback (`B13` `00871.b_1112_s`); it is superseded |
-| 63, 316, 130, 650 s | Derived: 10% and 50% of the two budgets, whole seconds |
-| 871's budget is about twice 853's | Derived: 1300.2523 ÷ 632.1751 = 2.06; the builder stops if the ratio is outside 1.9 to 2.1 (`PC` `meta.budgets`) |
-| "Median end of the 5 frontier runs … (612 to 868 s)" on 853 | `B13` `00853.end_times_s` for the runs in `primary_runs`: 611.83 to 867.58 s |
-| "Median end of the 4 frontier runs … (1043 to 1610 s)" on 871 | `B13` `00871.end_times_s` for the runs in `primary_runs` (seeds 42, 43, 45, 46): 1,043.03 (seed 45) to 1,610.48 s (seed 43); median 1,300.25 s |
-
-## Slides 9 and 10: the paper's table
+## Slides 7 and 8: the paper's table
 
 Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` mean [min–max] and n (`.n`, or `.n of n_runs`); a time shows only if at least half the runs reach it. The 871 cells are final (`N13`: "00871: final"); the builder stops unless `slots.json` `table871_updated` is true. The paper's cells are one run each. Fig. 4 (left) of arXiv 2510.05430v2: `PC` `meta.paper_fig4_left`, `meta.paper_html_check` (no mismatches).
 
@@ -151,61 +130,46 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | Number | Source |
 |---|---|
 | Budget 632 s and 1300 s in the kickers | `PC` `meta.budgets` |
+| Slide 7 footnote: "Budget 632 s: the median end of our five frontier runs; the paper gives none" (the budget slide, "Same rules as the paper", is now backup 10) | `B13` `00853.primary_s` (632.175), `primary_rule` "median", `n_primary` 5; `PLAN` §B1 (Budget row); `PREREG` §4 and Amendment 2 A2.3. The builder reads the value from `PC` `meta.budgets` |
+| Slide 7 footnote: "The paper's own 853 values moved between versions: at the full budget frontier 48.3 (v1) to 58.8 (v2), ASP 59.0 to 66.7" | `PIN` `paper_versions`, from `docs/checkin/review_2026-10-29/REVIEW_B_paper_field.md` line 130 ("00853 at 100% time, frontier 48.3 → 58.8, ASP 59.0 → 66.7"); the v2 numbers equal `PC` `paper_f1_x100` for 853 at 100% (58.8, 66.7). The builder takes the four numbers from the pinned slot, and the script and README needles check them |
+| ASP + filter and random guesses (October) are not rows on slide 7 now; their cells (14.8 / 48.3 / none; 13.8 / 43.9 / none) are one line on backup 10 | The two rows below (scene 00853, arms filter_only, placebo) |
 | Paper lead 15.8 and 14.3 points (script) | Derived from the paper cells: 34.4 − 18.6, 60.8 − 46.5 |
 | Our lead 4.1 and −0.8 points (script) | Derived from the values as shown: 16.5 − 12.4, 38.7 − 39.5 |
-| Slide 9 title: "By the clock ASP reads above frontier; by the metre the sign depends on the reference" | The first half: the November mean is above frontier's at 10%, 50% and 100% of the registered budget (the gaps below are positive; guard in `facts853`). The second half: at equal path, ASP is ahead under the scripted reference (apr) and behind under the human labels (hm3d), at 50 m and at 100 m (guard in `facts_equal853`; rows below). The cover says "ASP reads above frontier by the clock; by the metre, it depends" |
-| Slide 9, exploratory block: ASP (November) and our frontier at 50 m and 100 m of path, scripted reference and human labels: 48.2 [43.4–55.6] n=3 and 47.4 [42.3–56.1] n=5; 62.5 [60.7–65.6] n=3 and 58.7 [57.7–59.7] n=2 of 5 (apr); 25.4 [23.7–28.1] n=3 and 27.3 [25.1–30.2] n=5; 32.5 [30.9–33.4] n=3 and 34.1 [33.5–34.8] n=2 of 5 (hm3d) | `EQ` `scenes.00853.tables.{apr,hm3d}.{official_nov,frontier_end}.{50,100}.{mean,min,max,n,n_runs}` (the last stage whose path is at most L metres; no value past a run's last stage). Not registered: `EQ` `registered` is false and `DEV` items 66 and 71 say so; the slide labels the block "Exploratory · equal path" |
-| Script slide 9, README finding 3: at 50 m ASP is 0.8 ahead (apr) and 1.9 behind (hm3d); at 100 m 3.8 ahead and 1.6 behind | Derived from the printed means above (48.2 − 47.4; 25.4 − 27.3; 62.5 − 58.7; 32.5 − 34.1). `DEV` item 66 quotes the apr half as 0.7 to 3.8 at its lengths (unrounded 0.77 at 50 m); the deck subtracts printed values throughout |
+| Slide 7 title: "By the clock ASP reads above frontier; by the metre the sign depends on the reference" | The first half: the November mean is above frontier's at 10%, 50% and 100% of the registered budget (the gaps below are positive; guard in `facts853`). The second half: at equal path, ASP is ahead under the scripted reference (apr) and behind under the human labels (hm3d), at 50 m and at 100 m (guard in `facts_equal853`; rows below). The cover says "ASP reads above frontier by the clock; by the metre, it depends" |
+| Slide 7, exploratory block: ASP (November) and our frontier at 50 m and 100 m of path, scripted reference and human labels: 48.2 [43.4–55.6] n=3 and 47.4 [42.3–56.1] n=5; 62.5 [60.7–65.6] n=3 and 58.7 [57.7–59.7] n=2 of 5 (apr); 25.4 [23.7–28.1] n=3 and 27.3 [25.1–30.2] n=5; 32.5 [30.9–33.4] n=3 and 34.1 [33.5–34.8] n=2 of 5 (hm3d) | `EQ` `scenes.00853.tables.{apr,hm3d}.{official_nov,frontier_end}.{50,100}.{mean,min,max,n,n_runs}` (the last stage whose path is at most L metres; no value past a run's last stage). Not registered: `EQ` `registered` is false and `DEV` items 66 and 71 say so; the slide labels the block "Exploratory · equal path" |
+| Script slide 7, README finding 3: at 50 m ASP is 0.8 ahead (apr) and 1.9 behind (hm3d); at 100 m 3.8 ahead and 1.6 behind | Derived from the printed means above (48.2 − 47.4; 25.4 − 27.3; 62.5 − 58.7; 32.5 − 34.1). `DEV` item 66 quotes the apr half as 0.7 to 3.8 at its lengths (unrounded 0.77 at 50 m); the deck subtracts printed values throughout |
 | Two control arms that share ASP's clock (random guesses, no guesses) are registered and running | `PREREG` Amendment 5; `DEV` item 68. No result of theirs appears anywhere in the deck, script or README |
 | Body: at the full budget ASP reads 61.6 (n=2) and our frontier 55.6 (n=3); the paper has 66.7 and 58.8 | `PC` apr B, scene 00853, fraction 100: arm official_nov `stage_value_x100.mean` 61.62, `n` 2 (of `n_runs` 3); arm frontier_end 55.57, `n` 3 (of 5); `paper_f1_x100` 66.7 and 58.8 |
 | Body: the gaps at 10%, 50% and 100% are 4.8, 11.6 and 6.0 points | Derived from the cells as printed (`PC` apr B, scene 00853, `stage_value_x100.mean`; the unrounded gaps are 4.78, 11.56, 6.05): official_nov 17.2, 51.1, 61.6 minus frontier_end 12.4, 39.5, 55.6 |
 | Body: against the paper's 15.8, 14.3 and 7.9 | `paper_f1_x100`: 34.4 − 18.6, 60.8 − 46.5, 66.7 − 58.8 |
 | "By less than in the paper" (cover, title area, README) | Shortfall = the paper's gap − ours: 15.8 − 4.8 = 11.0; 14.3 − 11.6 = 2.7; 7.9 − 6.0 = 1.9. The builder stops if a gap is not smaller, or (script and README) if 10% is not the largest shortfall |
 | Note: October's two runs led by 4.1 at 10% and trailed by 0.8 at 50% | `PC` apr B, scene 00853, arm official (October; `n_runs` 2) against frontier_end, from the values as printed: 16.5 − 12.4, 38.7 − 39.5 (the "Our lead 4.1 and −0.8" row) |
-| Note, slide 12, README, script: November's ASP logs 5.8 s per metre (n=3), our frontier 7.0 (n=5); at a given time ASP has gone farther | `PC` `seconds_per_metre`, scene 00853, arm official_nov: `sec_per_m.mean` 5.774, `sec_per_m.n` 3; arm frontier_end: 6.975, n 5; printed to one decimal as 5.8 and 7.0 (`paper_compare.md` "Seconds per metre": 5.77 and 6.98). The builder stops if ASP's value is not below frontier's. Frontier's clock also counts its waits for a path, ASP's does not: read from the authors' repository at f1ea141b on 2026-11-19 (see slide 12); first found in the host's copy (`N12` "Frontier clock") |
+| Note, slide 9, README, script: November's ASP logs 5.8 s per metre (n=3), our frontier 7.0 (n=5); at a given time ASP has gone farther | `PC` `seconds_per_metre`, scene 00853, arm official_nov: `sec_per_m.mean` 5.774, `sec_per_m.n` 3; arm frontier_end: 6.975, n 5; printed to one decimal as 5.8 and 7.0 (`paper_compare.md` "Seconds per metre": 5.77 and 6.98). The builder stops if ASP's value is not below frontier's. Frontier's clock also counts its waits for a path, ASP's does not: read from the authors' repository at f1ea141b on 2026-11-19 (see slide 9); first found in the host's copy (`N12` "Frontier clock") |
 | Note: the two ASP batches differ by 12.4 points at 50% | 51.1 (official_nov) − 38.7 (official), `stage_value_x100.mean` at 50%. The ranges [45.7–61.5] and [37.2–40.1] do not overlap. 12.4 is at least the November lead at 50%, 11.6 (guard) |
 | Note: at 100% the gap is 1.5 and −0.2 under the other two references (6.0 under apr) | `PC` cells with `reference` hm3d and frontier_made, `variant` B, scene 00853, fraction 100, `stage_value_x100.mean`: hm3d official_nov 34.4 − frontier_end 32.9 = 1.5; frontier_made 64.3 − 64.5 = −0.2 (unrounded −0.14; the deck subtracts printed values throughout). Both are below 6.0 (guard) |
 | Note: by the rule's letter seed 43 loses its 100% value; that cell then reads 62.9, n=1 of 3 | `ALT_STOP`, reference apr, variant B, scene 00853, arm official_nov, fraction 100: `stage_value_x100.mean` 62.90, `n` 1, `n_runs` 3; `RS` `nov.alternatives.rows[kind=stopped]` (`run` e8_00853_s43_official_105m, `stage` 22, `end_s` 514.16, before B = 632.18). The rule: the Note to Amendment 3 (a run stopped by hand counts as ended before B) with A3.2 (such a run keeps the values it has); `DEV` item 64, paragraph added 11-18 03:14 |
 | The stopped row keeps seed 43 at 10% and 50% | `ALT_STOP` 10%: 17.2 [13.3–21.2] n=3; 50%: 51.1 [45.7–61.5] n=3, equal to the as-run cells in `PC` (guard: the build stops if they differ) |
 | README: with seed 43 left out altogether the row reads 19.1 / 53.6 / 62.9 (n=2, 2, 1), a further sensitivity | `ALT_OUT`, apr B, scene 00853, official_nov: 19.1 [17.1–21.2] n=2; 53.6 [45.7–61.5] n=2; 62.9 [62.9–62.9] n=1 of 2; `RS` `nov.alternatives.rows[kind=without]`; `DEV` item 64. Not quoted on a slide: leaving the run out raises the 10% and 50% means |
 | 105 m; the three runs; never pooled with October's | `PREREG` Amendment 3 (A3.1 target path 105 m, A3.3 the row "ASP + DeepSeek, November", A3.4 not pooled); the run names end in `_105m`. 60 m: `WRITEUP` §2 |
-| Slide 9 has no open row | `N13` "Status of the two scenes": both final; `RS` `nov.runs` (3 of 3 count in the cells); `slots.json` `asp853_full_budget` holds only the flag "from paper_compare.json (arm official_nov)" |
-| "with DeepSeek and a rebuilt reference" (dropped from the slide; the source line on slide 10 keeps DeepSeek and the stand-in) | `FINAL` §5 |
-| Slide 10 title: "How close we are to the paper on 871 depends on the budget" | The registered budget (1,300 s) puts ours 1.3 to 3.5 points above the paper's; at 750 s our frontier is 2.9 to 12.1 points below it (rows below; guards `facts871`, `facts_sens871`) |
-| Slide 10, table: ours at the registered budget and at 750 s | `BS` `scenes.00871.tables.apr.{official,frontier_end}.{1300.25,750}.{10,50,100}.{mean,min,max,n,n_runs}`. At 1300.25 s the cells equal `PC`'s (the builder stops if they differ). ASP, 750 s: 32.3 [30.5–35.6] n=3 / 56.3 [55.8–56.8] n=2 of 3 / none. Frontier, 750 s: 26.1 [25.3–27.6] / 43.6 [33.9–57.6] / 62.4 [57.7–67.7], n=5 each. Not registered (`BS` `registered` false; `DEV` item 71): the 750 s rows are labelled "Exploratory" |
+| Slide 7 has no open row | `N13` "Status of the two scenes": both final; `RS` `nov.runs` (3 of 3 count in the cells); `slots.json` `asp853_full_budget` holds only the flag "from paper_compare.json (arm official_nov)" |
+| "with DeepSeek and a rebuilt reference" (dropped from the slide; the source line on slide 8 keeps DeepSeek and the stand-in) | `FINAL` §5 |
+| Slide 8 title: "How close we are to the paper on 871 depends on the budget" | The registered budget (1,300 s) puts ours 1.3 to 3.5 points above the paper's; at 750 s our frontier is 2.9 to 12.1 points below it (rows below; guards `facts871`, `facts_sens871`) |
+| Slide 8, table: ours at the registered budget and at 750 s | `BS` `scenes.00871.tables.apr.{official,frontier_end}.{1300.25,750}.{10,50,100}.{mean,min,max,n,n_runs}`. At 1300.25 s the cells equal `PC`'s (the builder stops if they differ). ASP, 750 s: 32.3 [30.5–35.6] n=3 / 56.3 [55.8–56.8] n=2 of 3 / none. Frontier, 750 s: 26.1 [25.3–27.6] / 43.6 [33.9–57.6] / 62.4 [57.7–67.7], n=5 each. Not registered (`BS` `registered` false; `DEV` item 71): the 750 s rows are labelled "Exploratory" |
 | Why 750 s: the paper says a run has 25 to 30 steps, which suggests a shorter budget than 1,300 s. Our inference, not the paper's figure | arXiv 2510.05430v2 §IV ("a full experiment has 25-30 steps"), read by the independent review on 2026-11-19 (`REVIEW` finding 4: v1's Fig. 3 gives 4.6 m a step, so about 115 to 140 m, against about 195 m of frontier path at 1,300 s); `PIN` `paper.steps` |
-| Slide 10, equal path, 50 m, scripted reference (apr): exact objects 57.8 [53.5–62.1] n=3; ASP 52.6 [47.2–55.7] n=3; ASP + filter 39.7 [32.2–52.6] n=3; random guesses 42.1 [35.9–52.1] n=3; frontier Nov 49.2 [40.8–62.2] n=5; frontier Oct 36.3 [31.4–44.4] n=3; frontier crashed first tries 37.7 [30.7–46.7] n=4; frontier reruns 42.4 [42.4–42.4] n=1 of 4 | `EQ` `scenes.00871.tables.apr.{oracle_visible,official,filter_only,placebo,frontier_end,frontier_60m,crashed_frontier_1st,crashed_frontier_rerun}.50`. Every arm that has a value at 50 m is shown (`frontier_end_ref` has none). Exploratory |
+| Slide 8, equal path, 50 m, scripted reference (apr): exact objects 57.8 [53.5–62.1] n=3; ASP 52.6 [47.2–55.7] n=3; ASP + filter 39.7 [32.2–52.6] n=3; random guesses 42.1 [35.9–52.1] n=3; frontier Nov 49.2 [40.8–62.2] n=5; frontier Oct 36.3 [31.4–44.4] n=3; frontier crashed first tries 37.7 [30.7–46.7] n=4; frontier reruns 42.4 [42.4–42.4] n=1 of 4 | `EQ` `scenes.00871.tables.apr.{oracle_visible,official,filter_only,placebo,frontier_end,frontier_60m,crashed_frontier_1st,crashed_frontier_rerun}.50`. Every arm that has a value at 50 m is shown (`frontier_end_ref` has none). Exploratory |
 | Our two frontier batches differ by 12.9 at 50 m, more than ASP differs from November's frontier (3.4) or from random guesses (10.5) | Derived from the printed means: 49.2 − 36.3; 52.6 − 49.2; 52.6 − 42.1 (guard in `facts_sens871`). Not true of every pair of arms: exact objects − random guesses is 15.7 and ASP − ASP + filter is 12.9, so the slide names the two pairs it compares |
-| Slide 10 body: "At 1,300 s ours are 1.3–3.5 points above the paper's" | The smallest and largest of the four gaps below (ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3). Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end (reference apr, variant B). ASP + filter and random guesses have no paper cell |
-| Slide 10 body: "At 750 s our frontier is 2.9–12.1 below it" | `BS` frontier_end at 750 s against `paper_f1_x100`: 26.1 − 29.2 = −3.1; 43.6 − 55.7 = −12.1; 62.4 − 65.3 = −2.9 |
-| Slide 10 body: "the paper's value lies inside our range in 3 of 4 cells" | Paper value against `stage_value_x100.min`–`.max`: ASP 10% 30.5 v [30.8–36.4] (outside); frontier 10% 29.2 v [27.8–37.4]; 50% 55.7 v [52.2–67.1]; 100% 65.3 v [64.4–68.3] (inside) |
-| Slide 10 body: "at 0.8 of the budget 2 of the 4 gaps turn negative" | `PC` cells with `variant` "0.8B" (reference apr, scene 00871), the registered sensitivity check (`paper_compare.md`, "Sensitivity"): ASP 10% 32.9 − 30.5 = +2.4; frontier 10% 29.6 − 29.2 = +0.4; 50% 51.3 − 55.7 = −4.4; 100% 65.0 − 65.3 = −0.3. (At 1.2 B the ASP 10% gap is +6.8 and the frontier 100% cell has n=2 of 5, which the table's rule hides; the slide does not use 1.2 B) |
-| Slide 10 body: "At 10% our four arms score 31.7–33.9 and their ranges overlap" | Scene 00871, fraction 10, `stage_value_x100.mean`: official 33.9, filter_only 33.0, placebo 31.7, frontier_end 31.9. The ranges [30.8–36.4], [29.9–37.6], [30.2–32.6], [27.8–37.4] share 30.8–32.6 |
-| Slide 10 body: "No ASP run of ours reaches 50% of the budget" | Scene 00871, arms official and filter_only (placebo too), fractions 50 and 100: `stage_value_x100.n` = 0 of 3. ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
-| Slide 10 source line: the paper's cells are one run each; ours carry n; our ASP runs on 871 stop at 60 m | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5; `WRITEUP` §2 |
-| Script slide 10 and README finding 3: "on 853 ours are 3 to 22 points lower" (3.2 to 22.1) | Derived the same way, scene 00853, apr B, arms official and frontier_end: ASP 10% 16.5 − 34.4 = −17.9; ASP 50% 38.7 − 60.8 = −22.1; frontier 12.4 − 18.6 = −6.2; 39.5 − 46.5 = −7.0; 55.6 − 58.8 = −3.2 |
+| Slide 8 body: "At 1,300 s ours are 1.3–3.5 points above the paper's" | The smallest and largest of the four gaps below (ASP 10% 33.9 − 30.5 = 3.4; frontier 10% 31.9 − 29.2 = 2.7; 50% 59.2 − 55.7 = 3.5; 100% 66.6 − 65.3 = 1.3). Keys: `stage_value_x100.mean`, `paper_f1_x100`, scene 00871, arms official and frontier_end (reference apr, variant B). ASP + filter and random guesses have no paper cell |
+| Slide 8 body: "At 750 s our frontier is 2.9–12.1 below it" | `BS` frontier_end at 750 s against `paper_f1_x100`: 26.1 − 29.2 = −3.1; 43.6 − 55.7 = −12.1; 62.4 − 65.3 = −2.9 |
+| Slide 8 body: "the paper's value lies inside our range in 3 of 4 cells" | Paper value against `stage_value_x100.min`–`.max`: ASP 10% 30.5 v [30.8–36.4] (outside); frontier 10% 29.2 v [27.8–37.4]; 50% 55.7 v [52.2–67.1]; 100% 65.3 v [64.4–68.3] (inside) |
+| Slide 8 body: "at 0.8 of the budget 2 of the 4 gaps turn negative" | `PC` cells with `variant` "0.8B" (reference apr, scene 00871), the registered sensitivity check (`paper_compare.md`, "Sensitivity"): ASP 10% 32.9 − 30.5 = +2.4; frontier 10% 29.6 − 29.2 = +0.4; 50% 51.3 − 55.7 = −4.4; 100% 65.0 − 65.3 = −0.3. (At 1.2 B the ASP 10% gap is +6.8 and the frontier 100% cell has n=2 of 5, which the table's rule hides; the slide does not use 1.2 B) |
+| Slide 8 body: "At 10% our four arms score 31.7–33.9 and their ranges overlap" | Scene 00871, fraction 10, `stage_value_x100.mean`: official 33.9, filter_only 33.0, placebo 31.7, frontier_end 31.9. The ranges [30.8–36.4], [29.9–37.6], [30.2–32.6], [27.8–37.4] share 30.8–32.6 |
+| Slide 8 body: "No ASP run of ours reaches 50% of the budget" | Scene 00871, arms official and filter_only (placebo too), fractions 50 and 100: `stage_value_x100.n` = 0 of 3. ASP stops at 60 m, which took 289–468 s here; 50% of 1,300 s is 650 s (`paper_compare.md` "Not comparable"; `WRITEUP` §2) |
+| Slide 8 source line: the paper's cells are one run each; ours carry n; our ASP runs on 871 stop at 60 m | Fig. 4 (left), `PC` `meta.paper_fig4_left`; `FINAL` §5; `WRITEUP` §2 |
+| Script slide 8 and README finding 3: "on 853 ours are 3 to 22 points lower" (3.2 to 22.1) | Derived the same way, scene 00853, apr B, arms official and frontier_end: ASP 10% 16.5 − 34.4 = −17.9; ASP 50% 38.7 − 60.8 = −22.1; frontier 12.4 − 18.6 = −6.2; 39.5 − 46.5 = −7.0; 55.6 − 58.8 = −3.2 |
 | README finding 3: n in the tables | The cells' `stage_value_x100.n` (and `n_runs` for "3 of 5"), scenes 00853 and 00871, arms official, filter_only, frontier_end |
-| Guard | The builder computes every figure above, checks that script slide 10 and README finding 3 hold them (`check_text`), and stops with a message if a figure is missing, a gap changes sign, a null cell is needed, or an ASP run reaches 50% |
+| Guard | The builder computes every figure above, checks that script slide 8 and README finding 3 hold them (`check_text`), and stops with a message if a figure is missing, a gap changes sign, a null cell is needed, or an ASP run reaches 50% |
 
-## Slide 11: the reference
-
-| Number | Source |
-|---|---|
-| 32% and 21% | `CC` `00853.C3.apr_a_recall_vs_hm3d` (0.3222), `00871.C3.apr_a_recall_vs_hm3d` (0.2112) |
-| Repeat tour not frozen in either home; F1 0.751 on 853 and 0.771 on 871 (C2) | `C2F` `scenes.00853.f1` (0.7511) and `scenes.00871.f1` (0.7714), `frozen` false in both; `N13` item 3 and "Tours". The builder reads the newest `c2_*.json` and falls back to `N13`'s text while a rescore rewrites the folder |
-| Below the 0.90 line; the reference moves by more than the paper's margins (2.7–7.9 points) | `C2F` `scenes.<scene>.below_0_90` and `reading`; `PLAN` §B3 P2 check C2; `PREREG` Amendment 2 A2.5; `N13` item 3 |
-| Nvblox died partway through both first tours; each reference lacks about its last 60 s | `N12` disclosures 3 and 4; `N13` "Carried over" |
-| Rooms 13 and 14, paper 6 and 9 | `CC` `C1.room_nodes`, `C1.paper_rooms` |
-| Navmesh island 77 and 59 m² | `CC` `C1.start_island_area_m2` (77.00, 59.27); `N12` item 9 |
-| Waypoint grid 191 and 149 m² | `CC` `C1.kept_area_estimate_m2` (191.25, 148.5); `N12` item 9 ("about 191 and 149") |
-| Paper 208 and 235 m² | `CC` `C1.paper_area_m2` (207.63, 235.03) |
-| Labelled floor 102 and 105 m² | `C1T` = `tools/live_policy/results_paper_compare_1113/c1_area_table.json` `<scene>.labelled_floor_m2` (102.42, 104.89) |
-| Outline of all labelled geometry 213 and 253 m² | `C1T` `<scene>.footprint_hull_m2` (213.21, 252.92) |
-| The paper's figure is 2.7 and 4.0 times the walkable floor | Derived: `C1T` `<scene>.paper_m2` ÷ `<scene>.navmesh_start_island_m2` (207.63 ÷ 77.00 = 2.70; 235.03 ÷ 59.27 = 3.97) |
-| Within about 7% of the outline | Derived: the larger of \|paper − `footprint_hull_m2`\| ÷ `footprint_hull_m2` over the two homes (2.6% and 7.07%), rounded to a whole per cent; the slide says "about" because 7.07 is just over 7 |
-| "We do not know how the paper measured area" | `N12` item 9; `PREREG` §3 (check C1) |
-
-## Slide 12: the runs
+## Slide 9: the runs
 
 | Number | Source |
 |---|---|
@@ -219,9 +183,10 @@ Cells from `PC` (reference apr, variant B). Each cell shows `stage_value_x100` m
 | On 871 no ASP run reaches 50% | `PC` apr B, scene 00871, arms official and filter_only, fraction 50: `stage_value_x100.n` = 0 of 3 (guard) |
 | On 871 the only ASP–frontier comparison is at 130 s | 10% of the 871 budget (`PC` `meta.budgets`, 1,300.25 s). Read: ASP has a value at 10% only on 871 |
 | Frontier's clock starts at the end of planning, before the path arrives (lines 637-638 of `frontier_baseline.py`) and stops on arrival (664-665); ASP's clock (`exploration_pipeline.py`) starts as the robot begins to move (lines 714-715) | Read on 2026-11-19 from the authors' repository at commit f1ea141b (`git show` on the host's checkout): frontier_baseline.py lines 637-638 and 664-665; exploration_pipeline.py lines 714-715. The independent review found the same (`REVIEW` finding 8, which gave 638 and 715 for the two starts). `PIN` `clock`. First found in the host's copy: `N12` "Frontier clock" |
-| 871: the only ASP–frontier comparison at the registered budget is at 130 s | As the row above for 10% of 1300 s; the slide's wording is "at the registered budget" because slide 10's exploratory rows add equal-path and 750 s comparisons |
+| "The reference moves": the two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line, more than the paper's margins (one line; the full slide is backup 11) | `C2F` `scenes.00853.f1` (0.7511) and `scenes.00871.f1` (0.7714), `below_0_90`; `N13` item 3; as backup 11's row. The builder reads the newest `c2_*.json` |
+| 871: the only ASP–frontier comparison at the registered budget is at 130 s | As the row above for 10% of 1300 s; the slide's wording is "at the registered budget" because slide 8's exploratory rows add equal-path and 750 s comparisons |
 
-Not used: the paper's own seconds per metre from its Fig. 4. The repo's files hold the paper's F1 and GED values for Fig. 4 (`PC` `meta.paper_fig4_left`) but not its times or path lengths, so slide 12 gives only our own seconds per metre.
+Not used: the paper's own seconds per metre from its Fig. 4. The repo's files hold the paper's F1 and GED values for Fig. 4 (`PC` `meta.paper_fig4_left`) but not its times or path lengths, so slide 9 gives only our own seconds per metre.
 
 ## Part 3 short names
 
@@ -234,7 +199,7 @@ Not used: the paper's own seconds per metre from its Fig. 4. The repo's files ho
 - Model names in paths: `claude-opus-5-5`, `claude-haiku-5-5` in `RC`; `deepseek`, `gemini`, `placebo` in `RE`.
 - Scores are fractions (0 to 1). "Score" is the mean over the 12 run clusters of `models.<m>.analysis.levels.<L>.model_cluster_scores`; a difference is the contrast's own `mean_diff`, over the rows where both sides have a score.
 
-## Slide 13: the author's claim, in three questions
+## Slide 10: the author's claim, in three questions
 
 | Number | Source |
 |---|---|
@@ -242,22 +207,10 @@ Not used: the paper's own seconds per metre from its Fig. 4. The repo's files ho
 | Claude Haiku 5.5 and Opus 5.5; blind test, scorer frozen first | `SEM` §2 (last paragraph), §4, §14; `RC` `run_info.freeze_present` (true), `run_info.freeze_sha256` |
 | The claim ("as the author put it to us") and the three questions | The claim: said in person to the student; no written record; the paper's nearest text is in section IV-B (quoted on slide 1's row). It is not in quotation marks on a slide. The questions: `SEM` §1; `M2` §1; `FINAL` §3.2. The slide's note quotes the paper's nearest text: `PIN` `paper.bathroom`, `paper.revisit` |
 | "Not in the paper; it comes from the author's demo and from what the author told the student when they met" | The brief for this pass; `REVIEW` finding 2 ("no source"); no file records the meeting |
-| Is it the model? "Replay Claude on the same 44 saved inputs. Look at Gemini." | `SEM` §3; Gemini's replay on 36 of the 44 inputs is slides 19 and 20; October's 8 saved inputs are exploratory (backup 2) |
+| Is it the model? "Replay Claude on the same 44 saved inputs. Look at Gemini." | `SEM` §3; Gemini's replay on 36 of the 44 inputs is slides 13 and 14; October's 8 saved inputs are exploratory (backup 2) |
 | "Control": a baseline that sees the same map | `SEM` §9 ("Each comparator is given only the row's observed graph") |
 
-## Slide 14: a hit and a miss, on one real stage
-
-From `figures/stage_numbers.json`, made by `figures/make_stage_picture.py` from the row's observed graph, the robot's path, `tools/live_policy/semantic/truth/00871_*` and one saved Claude member. The 2 m scale bar is drawn in the figure.
-
-| Number | Source |
-|---|---|
-| Run `e1_00871_s42_official`, stage 8 (script: bathroom and bedroom open; 65 open classes) | `semantic/sample_frame.txt` (round 1, row `e1_00871_s42_official_st08`); `stage_numbers.json` `run`, `stage`, `open_types`, `open_classes`; rules `SEM` §5.5 |
-| The guesses: Opus member 0, a "bed" at (6.3, −3.4) that hits and a "toilet" at (−4.3, 8.5) that misses | `/Users/sher/project/cvp/replay_outputs/m4/claude-opus-5-5/effort_medium/e1_00871_s42_official_st08/member_0/parsed_graph.yaml` (outside the repo, as the CSV's `mem_*` rows cite `replay_outputs/m4`); read with `semantic/extract_preds.py` `members_for`; the hit or miss is the scorer's own `semantic/score_levels.py` `l3_hit` (the script asserts it); `stage_numbers.json` `guess_hit`, `guess_miss`. The two guesses were picked by hand from that member's L3 items (it has 2 hits among 9) |
-| 0.5 m reach | `SEM` §5.1; `stage_numbers.json` `reach_m` |
-| L1, L2, L3 and what a hit needs; L4 secondary | `SEM` §1, §5.5, §8, §11 |
-| Base rate: random guesses score 87.5%, 60.6%, 1.7% (L1, L2, L3) | `RE` `models.placebo.analysis.levels.<L>.model_cluster_scores` (mean of 12); CSV `e_placebo_L1_score`, `e_placebo_L2_score`, `e_placebo_L3_score` |
-
-## Slide 15: controls
+## Slide 11: controls
 
 | Number | Source |
 |---|---|
@@ -267,7 +220,7 @@ From `figures/stage_numbers.json`, made by `figures/make_stage_picture.py` from 
 | Margin 5, 5, 3 points | `RC` `family.hypotheses.<m>|<L>.delta` (0.05, 0.05, 0.03) × 100; CSV `c_opus_L1_margin`, `c_opus_L3_margin` |
 | The comparators' own scores were not checked before the freeze; the power check asked only whether Rejected was within reach | `SEM` §10 "Detectable difference" (the interval half-width shows whether Rejected is within reach; no step asks what a comparator scores); `REVIEW` finding 1. Note: `SEM` §2 lists pilot counts under cruder rules, among them that random room types "exist unexplored" at 0.95; that is the random guesses' L1 level, not the other-house prior's score, which was not looked at |
 
-## Slide 16: the blind test
+## Slide 12: the blind test
 
 All differences and margins in points (×100 of the file's value), one decimal; Opus L3's upper end (0.029496 → 2.95) has two because the verdict turns on it (the margin is 3); the slide says so. Scores are hit rates in % (×100). Cell = difference [95% interval] verdict, then the model's own score and the comparator's own score (Opus and Haiku, from `X19` `ceiling.json`; DeepSeek has none).
 
@@ -279,13 +232,14 @@ All differences and margins in points (×100 of the file's value), one decimal; 
 | Haiku L3: +0.8 [−0.8, +2.4] | `RC` `...levels.L3.comparators.D` | `c_haiku_L3_D_diff`, `c_haiku_L3_Dci_*` |
 | DeepSeek (exploratory) L1 / L2 / L3: −1.7 [−5.2, 0.0]; −26.3 [−33.2, −19.4]; −0.6 [−1.9, +0.6] | `RE` `models.deepseek.analysis.levels.<L>.comparators.{B3,B3,D}` | `e_deepseek_L1_B3_diff`, `e_deepseek_L3_D_diff`, `e_deepseek_L3_Dci_*` |
 | Scores: Opus 85.4, 58.3, 4.2%; Haiku 89.6, 68.8, 4.4%; DeepSeek 89.2, 66.4, 4.8% | mean of `...levels.<L>.model_cluster_scores` in `RC` / `RE` | `c_opus_L1_score`, `c_haiku_L2_score`, `e_deepseek_L3_score`, … |
-| Difference from random guesses at L1 and L2, points: Opus −2.1, −2.3; Haiku −5.2, +8.2; DeepSeek +1.7, +5.8 (Haiku's +8.2 is on slide 17; the slide 16 cells no longer show these) | `RC`/`RE` `...levels.{L1,L2}.comparators.B1.mean_diff` (interval in `.ci`; p in `.p`) | `c_<m>_<L>_B1_diff`, `e_deepseek_<L>_B1_diff` |
+| Difference from random guesses at L1 and L2, points: Opus −2.1, −2.3; Haiku −5.2, +8.2; DeepSeek +1.7, +5.8 (Haiku's +8.2 is on backup 13; the slide 12 cells no longer show these) | `RC`/`RE` `...levels.{L1,L2}.comparators.B1.mean_diff` (interval in `.ci`; p in `.p`) | `c_<m>_<L>_B1_diff`, `e_deepseek_<L>_B1_diff` |
 | The comparator's own score: prior (B3) at L1: Opus 91.2%, Haiku 100.0%; at L2: 93.4%, 93.7%; region trade (D) at L3: 3.7%, 3.6% | `X19` `ceiling.json` `models.<m>.<L>.comparators.<B3 or D>.comparator_score` (exploratory; every model-minus-comparator mean in it was checked against `RC` and matches). The model's own score beside it is the slot's, from `RC` as above (Opus L3: 4.2% on 44 rows; the D contrast uses 43 rows) |
-| Title: "Naming: no detectable gain over base rates, below them at L2. Placing: none over a region trade" | No interval lies wholly above 0 (the L3 lower bounds are −1.9 and −0.8); at L2 both upper ends are below 0 (−29.1, −18.1); the builder stops otherwise (`blind_facts`). Naming = L1 and L2 against the prior; placing = L3 against the region trade |
+| Title: "Naming: no detectable gain over the other-house prior, and below it at L2. Placing: none over a region trade" ("base rates" removed everywhere; the prior is built from 179 other houses) | No interval lies wholly above 0 (the L3 lower bounds are −1.9 and −0.8); at L2 both upper ends are below 0 (−29.1, −18.1); the builder stops otherwise (`blind_facts`). Naming = L1 and L2 against the prior; placing = L3 against the region trade |
 | L3 scores beside the region trade: Opus 4.3%, Haiku 4.4% against 3.7%, 3.6% | `X19` `ceiling.json` `models.<m>.L3.comparators.D.{model_score,comparator_score}` (43 rows: the trade's own rows); the slide's note says so |
-| "The registered line … at L1 no model could have been Supported, and at L2 only a perfect Opus could (slide 18), so the line rests on L3" | Slide 18 and `X19` `ceiling.json` (`perfect_model.can_reach_alpha`: L1 false for both, L2 true for Opus only); guards in `blind_facts` |
+| "The registered line … at L1 no model could have been Supported, and at L2 only a perfect Opus could (backup 14), so the line rests on L3" | Backup 14 and `X19` `ceiling.json` (`perfect_model.can_reach_alpha`: L1 false for both, L2 true for Opus only); guards in `blind_facts` |
 | Random score at L3: 1.7% | `RE` `models.placebo.analysis.levels.L3.model_cluster_scores` (mean) | `e_placebo_L3_score` |
 | Margins 5, 5, 3 | `RC` `family.hypotheses.<m>|<L>.delta` | `c_opus_L1_margin`, `c_opus_L3_margin` |
+| Note: "15 reruns of the trade after the result (deviation 55) kept [Opus L3's upper end] between 2.83 and 2.98" | As backup 13's row: `S1/independent_recompute/margin_summary.json` `summary.claude-opus-5-5|200` and `|5000` (`ci_high_min` 0.028349, `ci_high_max` 0.029792; 10 and 5 runs); `DEV` item 55 | `rc_opus_hi_min`, `rc_opus_hi_max` |
 | All six Rejected; DeepSeek's three Rejected (exploratory) | `RC` `family.hypotheses.<m>|<L>.verdict`; `RE` `models.deepseek.exploratory_family.hypotheses` | `c_opus_L1_verdict`, `e_deepseek_L3_verdict` |
 | "The claim fails" | `RC` `family.thesis`; rule `SEM` §10 "The thesis" | `thesis` |
 | "Rejected: the interval rules out a gain over the named comparator as large as the margin" | `SEM` §10 "Verdict for a hypothesis" (upper end below δ) |
@@ -293,38 +247,9 @@ All differences and margins in points (×100 of the file's value), one decimal; 
 | 12 clusters (home, seed, arm) | `SEM` §3; `RC` `mdd_table.L1.n_clusters` |
 | One run with the frozen scorer; no other run is recorded | `RC` `run_info` (one run, `rounds_argument` auto, `freeze_present` true); `SEM` §14. The absence of other runs is the lead's statement; no file counts scoring runs |
 
-## Slide 17: two facts that cut against the registered line
+## Slides 13 and 14: is it the model? (registered replay of Gemini 3.8 Flash)
 
-| Number | Source (file, path) | CSV key |
-|---|---|---|
-| Opus at L3: the top of the interval 2.95 points; margin 3 | `RC` `family.hypotheses.claude-opus-5-5|L3.ci_upper_named` (0.029496) × 100, `.delta` × 100 | `c_opus_L3_Dci_hi`, `c_opus_L3_margin` |
-| 15 reruns of the region trade (D), made after the result: 2.83 to 2.98 points | `S1/independent_recompute/margin_summary.json` `summary.claude-opus-5-5|200` (10 runs, `ci_high_min` 0.028349, `ci_high_max` 0.029792) and `|5000` (5 runs, 0.028866 to 0.029105), `below_0.03`; `DEVIATIONS_NOVEMBER.md` item 55 (D is the randomised control; "deviation 55") | `rc_opus_hi_min`, `rc_opus_hi_max`, `rc_opus_below`, `rc_opus_runs200`, `rc_opus_runs5000` |
-| Haiku at L2: 8.2 points above random guesses, p 0.014; one contrast, not adjusted | `RC` `models.claude-haiku-5-5.analysis.levels.L2.comparators.B1.{mean_diff,p}` (0.0821 × 100; interval [+1.1, +14.9]); the p is that contrast's own, not Holm-adjusted | `c_haiku_L2_B1_diff`, `c_haiku_L2_B1_p` |
-| "A prior from 179 other houses, making as many claims as the model, scored above both models at naming objects (L2)" | The L2 contrasts against B3 on slide 16, both models, intervals wholly below zero; B3 "making as many claims as the member did": `SEM` §9 (B3 row and "Claims"); 179 houses `SEM` §9 | CSV `rule_houses` |
-
-## Slide 18: what a perfect score could have shown: a ceiling at L1 and L2
-
-Exploratory, made on 2026-11-19 after the result (`DEV` item 71 (a)). Points = 100 × the value in the file. The slide's table is `X19` `ceiling.json`, `models.<m>.<L>.comparators.B3`.
-
-| Number | Source (file, path) | CSV key |
-|---|---|---|
-| The prior's own score: Opus L1 91.2%, Haiku L1 100.0%, Opus L2 93.4%, Haiku L2 93.7% | `comparator_score` | |
-| The most a perfect model could gain: 8.8, 0.0, 6.6, 6.3 points | `max_gain_perfect_model` (100 minus the comparator's score) | |
-| The best p after Holm for six tests: 0.750, 1.000 (L1); 0.047, 0.188 (L2) | `perfect_model.p_min_holm6` (the smallest p the exact one-sided sign-flip test could return for a model at 1.0 in every member, `semantic/stats.py`, times 6) | |
-| Supported possible: no, no, yes, no | `perfect_model.can_reach_alpha` (guard `blind_facts`: L1 false for both, L2 true for Opus only) | |
-| At L3 a perfect model could gain 96 points over the region trade; Opus's interval ends at 2.95 against a margin of 3; Haiku's at 2.36 | `X19` `ceiling.json` `models.<m>.L3.comparators.D.max_gain_perfect_model` (0.9625, 0.9637); `RC` `...L3.comparators.D.ci[1]` | `c_opus_L3_Dci_hi` |
-
-| Number | Source (file, path) | CSV key |
-|---|---|---|
-| Detectable difference 5.7 (L1), 5.2 (L2) | `S1/exploratory/mdd_table.json` `levels.{L1,L2}.mdd` (0.0571, 0.0524) | `mdd_L1_mdd`, `mdd_L2_mdd` |
-| Margin 5.0 | same file, `levels.<L>.delta` (0.05) | `mdd_L1_delta`, `mdd_L2_delta` |
-| 80% power | same file, `power` (0.8) | |
-| "A true gain equal to the margin would be found less than 80% of the time at L1 and L2" | Read from the two rows above: detectable difference (5.7, 5.2) above the margin (5.0) |
-| "Rejected was within reach at each level" | `SEM` §10 "Detectable difference" (the interval half-width shows whether Rejected is within reach); half-widths 0.0375, 0.0357, 0.0071 below the margins 0.05, 0.05, 0.03: same file, `levels.<L>.half_width` | `mdd_<L>_hw` |
-| Gains up to 2.95 (Opus) and 2.36 (Haiku) points at L3 not ruled out | upper ends of the L3 intervals against D: `RC` `...levels.L3.comparators.D.ci[1]` (0.029496, 0.023563) × 100 | `c_opus_L3_Dci_hi`, `c_haiku_L3_Dci_hi` |
-| (note) No L3 row; its registered figure is 1.1 points and comes from the random guesses' contrast (B5 − D) | `S1/exploratory/mdd_table.json` `levels.L3.{mdd,contrast}` (0.0109, "B5-D"); `SEM` §10 "Detectable difference"; RESULTS §10 | `mdd_L3_mdd` |
-
-## Slides 19 and 20: is it the model? (registered replay of Gemini 3.8 Flash)
+Pass 3 cut these two slides to a table and one registered sentence each, plus a note. The exploratory lines (the prior and random guesses at L2, the wrong-house check, the claim counts) are backup 17 (`flash_extra_slide`); the rows below say where each one went.
 
 Registered: `PREREGISTRATION_GEMINI.md` with Notes 1 and 2 (hashed before any call on a frame row); how it went: `DEV` item 72. Result: `GR` = `tools/live_policy/results_semantic_1113/gemini_1119/results.json` (write-up: `RESULTS_GEMINI.md`). The slot values come from `fill_slots_part3.py` (`slots.json` `gemini_replay`). The model is `gemini-3.8-flash`, the registered fallback, because `gemini-2.5-pro` was refused (Note 1). Every sentence names it and says it is not the paper's model.
 
@@ -341,33 +266,17 @@ The builder stops (`gemini_facts`) unless: the four hypotheses of 5a are found, 
 | October's lead on 8 rows repeated on 36 new ones | `X19` `common_rows.json` (Gemini above Opus and Haiku at L2 on the 8 rows; guarded) and the four hypotheses above |
 | L3 registered rule: Rejected; Gemini's own score 7.5% beside its three controls: own labels swapped (B5) 8.5%, region trade (D, named) 8.7%, prior's labels at its places (B3L) 11.0%; Gemini minus each −1.0 [−2.0, −0.1], −1.2 [−3.7, +1.4], −3.5 [−5.4, −1.6]; upper end vs D +1.4, margin 3 | `confirmatory.5b.levels.L3.{verdict,named,delta,ci_upper_named,model_own_score}`; `.comparators.{B5,D,B3L}.{comparator_own_score,mean_diff,ci}`. The D contrast is on D's 35 rows (Gemini's score on them 7.51%) |
 | The Rejected sentence, word for word | `confirmatory.wording[5]`; `PREREGISTRATION_GEMINI.md` §6 |
+| Slide 13 note: "Gemini ran the author's loop and Claude our port of it, so this compares model and loop together" | `PREREGISTRATION_GEMINI.md` §3 and §5a, as the row above |
 | Both hold: Gemini's L3 score (7.5%) is above Claude's (4.8% Opus, 4.4% Haiku) and below the trade's (8.7%); its lead is in the raw rate and does not show that its labels fit their regions | `5a.tables.<claude>.L3.other_mean`; `5b...comparators.D.comparator_own_score`. The reading is the independent recompute's; the rate comparisons are the file's |
-| Exploratory: at L2 Gemini scores 78.3%; the prior from other houses, making as many claims, scores 90.7%, about 12 points above (−12.4 [−18.5, −6.3]); random guesses 59.6% (+18.6 [+12.8, +24.4]) | `5b.levels.L2.model_own_score`; `.comparators.B3.{comparator_own_score,mean_diff,ci}`, `.comparators.B1.*`. Exploratory under `PREREGISTRATION_GEMINI.md` §5b (L1 and L2 are scored by §10's rule as exploratory; the ceiling is said beside them) |
-| Exploratory: the wrong-house check passes at L1 (p 0.031) and L2 (p 0.016), 6 pairs | `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}`; reported, no verdict (§5c) |
-| Gemini also made more guesses per member; 5a does not adjust for that | The independent recompute of the result. No number is given: the file holds only totals on different row sets (`confirmatory.5c.validity.kept_vs_guesses.raw.l2_claims`, 1,270 over 137 members) and per-member counts would have to be computed; the deck does not compute them. `PREREGISTRATION_GEMINI.md` §5a compares hit rates with no matching of claim counts |
+| Backup 17, exploratory: at L2 Gemini scores 78.3%; the prior from other houses, making as many claims, scores 90.7%, about 12 points above (−12.4 [−18.5, −6.3]); random guesses 59.6% (+18.6 [+12.8, +24.4]) | `5b.levels.L2.model_own_score`; `.comparators.B3.{comparator_own_score,mean_diff,ci}`, `.comparators.B1.*`. Exploratory under `PREREGISTRATION_GEMINI.md` §5b (L1 and L2 are scored by §10's rule as exploratory; the ceiling is said beside them) |
+| Backup 17 and backup 1, exploratory: the wrong-house check passes at L1 (p 0.031) and L2 (p 0.016), 6 pairs | `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}`; reported, no verdict (§5c) |
+| Slide 13 note and backup 17: Gemini also made more guesses per member; 5a does not adjust for that | The independent recompute of the result. No number is given: the file holds only totals on different row sets (`confirmatory.5c.validity.kept_vs_guesses.raw.l2_claims`, 1,270 over 137 members) and per-member counts would have to be computed; the deck does not compute them. `PREREGISTRATION_GEMINI.md` §5a compares hit rates with no matching of claim counts |
 | Saved inputs from two homes; no robot acted; the comparators at L1 and L2 sit at the ceiling | `PREREGISTRATION_GEMINI.md` §6 (last bullet); `confirmatory.wording[6]` |
-| The extension to one more Gemini model (Note 3, Gemini 4 Argon) is on backups 7 and 8; the last run (Neon) is on slide 21 | `PREREGISTRATION_GEMINI.md` Notes 3, 4 and 6; `DEV` items 73, 75, 76 |
+| The extension to one more Gemini model (Note 3, Gemini 4 Argon) is on backups 7 and 8; the last run (Neon) is on backup 15 | `PREREGISTRATION_GEMINI.md` Notes 3, 4 and 6; `DEV` items 73, 75, 76 |
 
-## Slide 21: Gemini 4 Neon, the last run (Notes 6 and 7)
+## Slide 15: the three Gemini models side by side
 
-Registered 2026-11-19 21:05 IST, after the Flash and Argon results were seen and before any call on this model; Note 7 (2026-11-20 00:39 IST, before any output was scored or read) added one row so that round 3 was whole (`PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76). `NR` = `tools/live_policy/results_semantic_1113/gemini_neon_1119/results.json` (rounds 1 and 3, 24 rows, 2 members each); `NP` = `.../gemini_neon_1119/neon_minus_{flash,argon}.json` (exploratory, on the rows each pair ran). Slot: `slots.json` `neon_replay` (`fill_slots_part3.py`). Note 6 makes the rule at L3 the ONE confirmatory hypothesis; the 5a table is reported with intervals and no verdict, so the deck ignores `NR`'s `found` flags and its 5a sentences. The builder stops (`neon_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 1 and 3 finished; the L3 verdict is Inconclusive against D (interval holds zero and reaches the margin); the prior's labels at Neon's own places (B3L) score above Neon; Neon is below Flash and Argon at L2 (intervals below 0); at L2 Neon is below the prior and its lead over random guesses holds zero; the Note 6 N3 sentence is in the registration word for word.
-
-| Statement | Source |
-|---|---|
-| Gemini 4 Neon, released 18 November; the student's choice for the last run; the author's loop; rounds 1 and 3 (24 inputs), 2 members each, 48 of 48 parsed | Note 6 (Why; N1); `DEV` item 76; `NR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row`, `finished_rounds` |
-| Registered after the Flash and Argon results were seen; one input was added before any output was scored so that round 3 was whole | Note 6 ("What had been seen"); Note 7 |
-| The rule at L3 is Inconclusive: Neon minus the region trade +2.9 [−0.4, +6.3], margin 3 | `NR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named}`, `.comparators.D.{mean_diff,ci}`; `confirmatory.wording[5]` |
-| Not Supported: the prior's labels at Neon's own places score higher (10.2% against Neon's 8.7%); Neon minus that control −1.5 [−4.1, +1.3] | `NR` `5b.levels.L3.comparators.B3L.{comparator_own_score,mean_diff,ci}`, `model_own_score`. Supported needs Neon above all three controls (Note 6 N2) |
-| Own score 8.7% beside 7.6% (own labels swapped), 5.7% (the trade), 10.2% (prior's labels at its places) | `NR` `5b.levels.L3.comparators.{B5,D,B3L}.comparator_own_score` |
-| Neon minus Opus +8.5 [−1.1, +18.0] (L2), +3.3 [−1.4, +8.6] (L3); minus Haiku +0.6 [−10.0, +12.0] (L2), +4.0 [−0.4, +8.5] (L3): reported, no verdict | `NR` `confirmatory.5a.tables.<model>.<L>.{mean_diff,ci,model_mean,other_mean}`; Note 6 N2 |
-| Exploratory: Neon minus Flash −10.1 [−13.1, −7.3] (L2), +1.5 [−1.5, +5.0] (L3); minus Argon −7.3 [−13.0, −1.8] (L2), +3.7 [−1.3, +8.9] (L3) | `NP` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`) |
-| Exploratory: at L2 Neon scores 74.3%, below the prior (92.5%; −18.3 [−21.2, −15.4]); random guesses 67.3% (+6.9 [−0.5, +14.3]) | `NR` `5b.levels.L2.model_own_score`, `.comparators.{B3,B1}.{comparator_own_score,mean_diff,ci}` (exploratory under Note 6 N2) |
-| Not the paper's model | `NR` `confirmatory.wording` (each line says it) |
-| Reported with no verdict, not on the slide: the wrong-house gate at L1 p 0.0625 (no pass) and L2 p 0.0156 (pass), 6 pairs | `NR` `confirmatory.5c.wrong_house_gate` |
-
-## Slide 22: the three Gemini models side by side
-
-Built from `GR`, `AR`, `R32` and `NR` (the four `slots.json` entries, each guarded). Why this slide: the Gemini part would otherwise run to five main slides; the two Argon slides moved to backups 7 and 8, and this slide gives the three models in one table.
+Built from `GR`, `AR`, `R32` and `NR` (the four `slots.json` entries, each guarded). Why this slide: the Gemini part would otherwise run to five main slides; the two Argon slides moved to backups 7 and 8 and Neon to backup 15, and this slide gives the three models in one table. The inputs and the registration words use 24 px, the smallest size on a main slide.
 
 | Statement | Source |
 |---|---|
@@ -378,7 +287,9 @@ Built from `GR`, `AR`, `R32` and `NR` (the four `slots.json` entries, each guard
 | "Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result was seen. All three are reported; they are not three independent confirmations, and none is the paper's model." | Note 6 N3, word for word (the builder checks it against the registration) |
 | At L3 no Gemini model was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive). At L2 Flash was above both Claude models; Argon above Opus only; for Neon no verdict was registered | The four files' `5b.levels.L3.verdict` and `5a.family`; Argon's L2 line against Opus is round 1's (the new inputs' Opus line has no verdict, Note 4). Each clause is what a verdict says: Rejected rules out a 3-point gain, Inconclusive does not |
 
-## Slide 23: the paper's room test (exploratory)
+## Slide 16: the paper's room test (exploratory)
+
+Title: "DeepSeek ahead of random guesses in count; not detectable on the rule of §11 (p 0.125)". "Ahead in count" is 10 of 59 against 6 of 69 (16.9% against 8.7%); "not detectable on the rule of §11" is the 8-member-stage p of 0.125 below (above 0.05).
 
 From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same as `S1/claude/room_test.json`. Type matched; a room counts if at least 2 of 8 members place a room of that type within 2.5 m of the region centre before the region is first seen (`SEM` §11). Unit: the run; exact permutation of arm labels within a scene (`DEV` item 71).
 
@@ -392,67 +303,61 @@ From `X19` `room_test_runs.json` (`DEV` item 71 (c)); its live part is the same 
 | Opus, replayed: 16.7% of rooms in a fitting unobserved region against 2.7% for random guesses; +13.9 points (+1.4 to +27.1); p 0.016; one contrast, not adjusted | `RC` `models.claude-opus-5-5.extras.l3_rooms.{model_clusters,placebo_clusters,mean_diff,ci,p}`; the table `x_misc` ("L3, rooms only") in `RES` §7. Secondary readout: no verdict rests on it and nothing is corrected for the number of looks |
 | The paper reports 9 of 28 rooms (32%) with no chance rate | `S1/claude/room_test.json` `live.by_arm.paper.{predicted,of}`; the paper (Fig. 4 text) gives no chance rate: `REVIEW` finding 7 |
 
-## Slide 24: M2 varied place, not meaning
+## Slide 17: what this talk cannot show, and how the test was made
 
-From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean over 24 runs; 95% interval from the bootstrap over runs). Arm names on the slide, with the registered names: True objects = F1; Room type only = F-room; Moved: DeepSeek / Haiku / Opus = F3 with that model's error sample (DeepSeek's arm is exploratory); Random guesses = F5; No guesses = F6; All true objects = F0 (`M2` §4). The yardstick is `Ucone`, the unmapped objects a candidate could see inside the camera cone, past walls (`M2` §3). The half-of-the-gain rule: `M2` §6.
-
-| Number | Source (path in `M2S`) | CSV key |
-|---|---|---|
-| ρ: True objects +0.284; Room type only +0.089; Moved (DeepSeek, Haiku, Opus) +0.046, +0.060, +0.036; Random +0.065; No guesses −0.028; All true objects +0.048; with intervals | `analysis.main.all.arm_mean_rho.<arm>.{mean,lo,hi}` | `m2_<arm>_mean`, `_lo`, `_hi` |
-| True objects beat random guesses by 0.218; half is 0.109 | `analysis.main.all.differences.A.mean`; half = A ÷ 2 (derived) | `m2_A_mean` |
-| "Not shown sufficient, on a provisional yardstick" (all four arms: three F3, F-room); "no arm does" | `analysis.main.all.reading.verdicts`; `reading.A_separates` true; rule `M2` §6 | |
-| (script) 384 stages, 24 runs | `counts_all_stages.n_stages`; `analysis.main.all.n_runs` | `m2_f0_ig_zero_of`, `m2_runs` |
-| (script) Each move drawn from the model's error sample | `M2` §4 (F3-m: "a distance drawn with replacement from the sample") |
-| (script) Moved arms 0.036 to 0.060: no detectable gain over random guesses; room type only 0.089 | `analysis.main.all.differences.{B_deepseek,B_haiku,B_opus}` (intervals reach +0.009 for Haiku and below for the others); `C` |
-| (backup 5) All true objects −0.017 (−0.031 to −0.004) against random guesses | `analysis.main.all.differences.F0-F5.{mean,lo,hi}`; `M2` §7 | `m2_F0F5_mean` |
-| Title: M2 varied place, not meaning; moved true objects show no detectable gain | `M2` §3 (the yardstick counts unmapped objects in view whatever their label, `PREREGISTRATION_M2.md:31`) and the cut arms F2 and F4 and the error sweep (`PREREGISTRATION_M2.md:91`), as `REVIEW` finding 6; the three moved arms' differences from random guesses (`differences.B_*`) have lower bounds below 0 (guard in `factorial`) |
-| All true objects (exploratory): the gain never passes 2.0 bits, like the no-guess arm's; other arms reach 4.75 to 5.5; the two correlate at 0.64 (382 stages) | `AT` `bits_cap` (2.0), `arms.F0.max_ig` and `arms.F6.max_ig` (2.0 each), `arms.F0.above_cap` and `arms.F6.above_cap` (0), `arms.{F1,F3-*,F5a,F5b,F-room}.max_ig` (4.75 to 5.5), `spearman.{mean,n_used}` (0.635, 382); slot `all_true`. Exploratory (`DEV` item 71 (d)) |
-| "With identical members the score reads mainly where the two observed maps disagree" | The interpretation given for this pass and in `REVIEW` finding 6 (mechanism inferred; `tools/decision_replay_reference/calculate_uncertainty.py:269-333` draws the same perturbation noise for every graph, so equal graphs cancel). `AT` holds the cap and the correlation, not this sentence |
-
-## Slide 25: limits of scope
+Two slides merged in pass 3 (the scope slide and the method slide). Five paragraphs: two houses; a small model in Part 1; static replays, not the paper's model; how the test was made; not done.
 
 | Number | Source |
 |---|---|
 | Every result holds for 853 and 871 only; truth is a proxy; static replays | `SEM` §16; RESULTS §10 |
-| The paper used Gemini 2.5 Pro, which is no longer offered to new users (11-19, Note 1); Claude with the author's prompt, in our port of the author's tool loop; Gemini 3.8 Flash in the author's own loop (so the Claude-Gemini contrast has two differences); October's 8 Gemini inputs exploratory | `PLAN` §B1 (LLM row); `SEM` §4, §12 (loop: "a direct port of the author's tool loop"; prompt from the run's own config); `PREREGISTRATION_GEMINI.md` Note 1 |
+| The paper used Gemini 2.5 Pro, which is no longer offered to new users (11-19, Note 1); we ran Claude in our port of the author's loop and all three Gemini models in the author's own, so each Gemini-Claude contrast has two differences (model and loop); Argon and Neon were each added after the last result was seen | `PLAN` §B1 (LLM row); `SEM` §4, §12 (loop: "a direct port of the author's tool loop"; prompt from the run's own config); `PREREGISTRATION_GEMINI.md` Note 1 |
 | Part 1's live model is small: DeepSeek V4.1 Flash at low reasoning effort; the paper's sentence on smaller LLMs | As slide 4 (`PREREGISTRATION_E1.md` line 9; arXiv 2510.05430v2 §IV footnote; `PIN` `paper.small_model`) |
-| Two Gemini models: Flash (the registered fallback) and Argon (added after the Flash result was seen, on 12 inputs) | `PREREGISTRATION_GEMINI.md` Note 1 and Note 3 |
+| Argon and Neon were each added after the last result was seen | `PREREGISTRATION_GEMINI.md` Notes 3, 5, 6 (what had been seen) |
+| "Not done: a live run with a strong model" | `SEM` §16; RESULTS §10 ("What it does not let the talk say"). Part 1's live model was DeepSeek V4.1 Flash; no live run with Claude or Gemini was made |
 
-## Slide 26: limits of method
 
 | Number | Source |
 |---|---|
 | The scorer was written after DeepSeek's numbers were seen; frozen before Claude | `SEM` §2 (last paragraph), §14 |
-| The comparators' own scores were not checked before the freeze | As slide 15 |
+| The comparators' own scores were not checked before the freeze | As slide 11 |
 | The L3 margin was set knowing the Gemini–DeepSeek gap | `SEM` §2 (last sentence: "The margin δ at L3 (§10) was set knowing the 9-point gap above") |
 | M2 is provisional: its yardstick failed part of an October check | `M2` §2, §7; `DEVIATIONS_NOVEMBER.md` item 54 |
 | One Haiku member stopped at the token limit and its text did not parse; 175 of 176 did | `RC` `models.claude-haiku-5-5.status` (one member `dropped`: row `e2_00871_s43_filter_st03`, member 3); CSV `status_haiku_ok`, `mem_haiku_parse_fail`, `mem_haiku_n`. The stop: `/Users/sher/project/cvp/replay_outputs/m4/claude-haiku-5-5/effort_medium/e2_00871_s43_filter_st03/member_3/record.json` `stop_reasons` ends `["tool_use", "max_tokens"]` (outside the repo); the unparsed text: `…/member_3/parse.json` (`ok` false) |
 
-## Slide 27: for Claude, in our port, on saved inputs: no detectable gain over base rates
+## Slide 18: for Claude, in our port, on saved inputs: no better than a prior from other houses
+
+Bold sentence: "In two houses, Claude named rooms and objects no better than a prior from 179 other houses (worse at objects), and put its guesses in fitting regions no more often than a trade of regions (a gain under 3 points is not ruled out)." This replaces the older "no detectable information beyond house base rates" claim everywhere (script, README, RESULTS, the closing slide).
 
 | Number | Source |
 |---|---|
-| In two houses, Claude's guesses carried no detectable information beyond house base rates, and put content in fitting regions no more often than a trade of regions did | Slide 16 (no interval wholly above 0; guard `blind_facts`); `REVIEW` finding 1, "What the talk may say". "House base rates" = the prior built from 179 other houses (B3) |
-| Both models far below the other-house prior at naming objects (L2) | Slide 16, L2 against B3 (−35.1, −24.9 points); `SEM` §16 (two houses) |
-| At L3 a gain under 3 points is not ruled out | Slide 16, L3 (D); slide 18 (upper ends 2.95 and 2.36 points); `SEM` §10 |
-| M2 (offline): true objects moved by a model's error showed no detectable gain | Slide 24; `M2` §6, §7 |
+| Named rooms (L1) no better than the prior: both Claude intervals end at 0.0 or below (Opus [−12.2, 0.0], Haiku [−20.8, 0.0]) | Slide 12, L1 against B3 (`RC` `...levels.L1.comparators.B3.ci`); guard `findings_facts` (L1 upper ends not above 0). "The prior" = the one built from 179 other houses (B3) |
+| Worse at objects (L2): both models far below the prior (−35.1, −24.9 points; upper ends −29.1, −18.1) | Slide 12, L2 against B3; `SEM` §16 (two houses) |
+| Placed its guesses in fitting regions no more often than a trade of regions: no L3 interval wholly above 0 (lower ends −1.9, −0.8) | Slide 12, L3 against D; guard `blind_facts` |
+| "A gain under 3 points is not ruled out" | Slide 12, L3 (D); backup 14 (upper ends 2.95 and 2.36 points); `SEM` §10 |
+| M2 (offline): true objects moved by a model's error showed no detectable gain | Backup 16; `M2` §6, §7 |
 | The registered line, second: "The claim fails", for the first half of the claim as the author put it to us (that the guesses are right in meaning) | `RC` `family.thesis`; CSV `thesis`; `SEM` §1, §10 "The thesis"; `FINAL` §5; RESULTS §10. Slide 1's row for the source of the claim |
-| It says less than it seems to: at L1 and L2 no model could have been Supported, so it rests on L3, where Opus's interval ends at 2.95 against a margin of 3 | Slide 18; `X19` `ceiling.json` |
-| No Gemini model is the paper's model: at L3 none was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive); at L2 Flash was above both Claude models and Argon above Opus only; for Neon no verdict was registered at L2 | Slides 19 to 22 (the files' wording; slide 22 for the full table) |
+| It says less than it seems to: at L1 no model could have been Supported, and at L2 only a perfect Opus, so it rests on L3, where Opus's interval ends at 2.95 against a margin of 3 | Backup 14; `X19` `ceiling.json` |
+| "Gemini:" box, two sentences. No Gemini model is the paper's model. At L3 none was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive); at L2 Flash was above both Claude models and Argon above Opus only; for Neon no verdict was registered at L2 | Slide 15 (the files' wording); `GR`, `AR`, `R32`, `NR` `confirmatory.5a.family`, `5b.levels.L3.verdict` |
 | Outcome picked by the rules | `slots.json` `outcome` (written from `RC` `family.thesis`) |
 
-## Slide 28: what the answer does not say
+## Slide 19: the talk in three sentences, and what it does not say
 
-The list follows RESULTS §10 "What it does not let the talk say".
+The three sentences stand in full here (36 px) and in short form on the cover (one under each part). `findings_facts` checks every clause against the result files and stops the build if one fails; the script and README carry the same sentences (needles in `check_text`).
+
+| Sentence | Source and guard |
+|---|---|
+| 1. "Live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to 0.04 F1 is not ruled out." | `NUM` `E1:hm3d:60m:permutation_lo/hi` (−0.012, +0.040; 0.04 to two places), E2 and the frontier-seed intervals (`FH` `official/ci60`, `placebo/ci60`) all hold 0, E3's p above 0.05. Guard: `findings_facts` |
+| 2. "At the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. The control arms that would show whether the guesses cause that lead are registered and running." | The leads at 10%, 50% and 100% are positive (`facts853`, slide 7); at equal path the sign is positive under the scripted reference and negative under human labels at 50 m and 100 m (`facts_equal853`; `EQ`, exploratory); `PREREG` Amendment 5 is in the file. Guard: `findings_facts` |
+| 3. "On saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting regions more often than a trade of regions, and a prior from 179 other houses named objects better than every one of them." | Six L3 verdicts (Opus, Haiku, Flash, Argon round 1, Argon new inputs, Neon): none Supported, Opus and Haiku Rejected; every L3 interval against D has a lower end below 0; every L2 interval against the prior (all five models, Argon's two runs) has an upper end below 0 (`RC`, `GR`, `AR`, `R32`, `NR`). Guard: `findings_facts` |
+
+The list below it follows RESULTS §10 "What it does not let the talk say".
 
 | Number | Source |
 |---|---|
-| It does not say the guesses carry nothing: no gain was found; at L3 a gain under 3 points is not ruled out; the prior's near-perfect score left little room for a gain at L1 and L2 | Slides 16 and 18; `REVIEW` finding 1 |
-| It does not carry over to Gemini 3.8 Flash (above Claude at L2 and L3, registered), nor, at L2, to Gemini 4 Argon (above Opus only); at L3 no Gemini model was found to beat a trade of regions by the margin; none is the paper's model; the loops differ | Slides 19 to 22 |
-| It does not say the guesses reach the map or where they sit | `SEM` §16 ("Supported at L3 means … It does not mean the guesses reach the map"); RESULTS §10 |
-| Haiku is 8.2 points above random guesses at L2 (one contrast, not adjusted) | as slide 17 |
-| Nothing about live runs with a strong model or the paper's scale | `SEM` §16; RESULTS §10 |
-| It does not show that a language model cannot help exploration | RESULTS §10 (the line the write-up is gaining); scope of a static, two-house test |
+| It does not say the guesses carry nothing: no gain was found; at L3 a gain under 3 points is not ruled out; the prior's near-perfect score left little room for a gain at L1 and L2 | Slides 12 and 18; backup 14; `REVIEW` finding 1 |
+| It does not say the models are no better than random guesses: Haiku is 8.2 points above them at L2 (one contrast, not adjusted, exploratory) | `RC` `models.claude-haiku-5-5.analysis.levels.L2.comparators.B1.{mean_diff,p}` (0.0821; p 0.014); as backup 13. Labelled exploratory: no verdict rests on it (the named comparator at L2 is the prior, `SEM` §10) |
+| It does not say that a language model cannot help exploration | RESULTS §10 (the line the write-up is gaining); scope of a static, two-house test |
+| (Slides 17 and 15 hold the rest: the paper's model, the loops, live runs with a strong model) | Slides 15 and 17 |
 
 ## Backup 1: the wrong-house check
 
@@ -461,6 +366,7 @@ The list follows RESULTS §10 "What it does not let the talk say".
 | p: Opus 0.125 (L1), 1.000 (L2); Haiku 1.000, 0.953; DeepSeek (exploratory) 1.000, 1.000 | `RC` `family.wrong_house_gate.<m>|<L>.p`; `RE` `models.deepseek.exploratory_family.wrong_house_gate` | `gate_<m>_<L>_p` |
 | Pairs: Haiku L1 5, the rest 6; "a pass needs p below 0.05 over 6 pairs"; no Claude model passes (`pass` false for all six) | same, `.n_pairs`, `.pass`; `SEM` §10 "The wrong-house gate" | `gate_haiku_L1_pairs`, `gate_<m>_<L>_pass`, `rule_gate_pairs` |
 | October's 8 Gemini rows have no partner (`SEM` §9, B4). Gemini 3.8 Flash in the replay passes: L1 p 0.031, L2 p 0.016, 6 pairs each (reported, no verdict) | `SEM` §9 (B4) | `GR` `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}` |
+| Argon round 1: L1 p 0.25, L2 p 0.75; Argon on the new inputs: L1 p 0.625, L2 p 0.8125; Neon: L1 p 0.0625, L2 p 0.0156 (passes at L2 only). 6 pairs each. Reported with no verdict. Argon passes at neither level in either run | `AR`, `R32`, `NR` `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs,pass}`. Guard in `wrong_house`: Flash passes at L1 and L2, Neon at L2 only, Argon at neither |
 | Definition: the model's guesses for the other home, scored against this home | `SEM` §9 (B4) |
 
 ## Backup 2: how far a guess is from an object it could name
@@ -477,7 +383,7 @@ A description, and the input to M2's F3 arms (`M2` §4); not a claim about where
 
 ## Backup 3: the paper's room test: other counts, Claude replays, prompt hint
 
-The main counts moved to slide 23. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
+The main counts moved to slide 16. This slide keeps the untyped counts, the filter arm, the Claude replays and the prompt hint. From `S1/claude/room_test.json` (its live block equals `S1/exploratory/room_test.json`; checked by `fill_slots_part3.py`). The rows are DeepSeek's October live arms, exploratory: `official` = "DeepSeek, expl.", `filter_only` = "DeepSeek + filter", `placebo` = random guesses.
 
 | Number | Source (file, path) | CSV key |
 |---|---|---|
@@ -513,7 +419,7 @@ From `M2S` (`tools/live_policy/results_m2_1113/pass2/summary_factorial.json`).
 | True objects in differing subsets: +0.218 above random guesses | `analysis.main.all.differences.A.mean` (0.21809) | `m2_A_mean` |
 | The score counts disagreement between members; registered before the run | `M2` §7 ("The all-true anchor, F0"); `tools/live_policy/live_policy.py:19-22` |
 | The gain is zero for every candidate in only 2 of 384 stages | `counts_all_stages.ig_zero_stage_share.F0.{stages_ig_zero_for_every_candidate,n_stages}` | `m2_f0_ig_zero`, `m2_f0_ig_zero_of` |
-| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as slide 24's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
+| The saved arrays (exploratory): with identical members the score reads mainly where the two observed maps disagree; the gain never passes 2.0 bits over 384 stages, like the no-guess arm's, where other arms reach 4.75 to 5.5; the two correlate at 0.64 over 382 stages | `AT` (as backup 16's row); `M2` §7 (F0 "is a property of the score, shown as such"); `NOTES` of `results_m2_1113` "F0, the all-true anchor". The "we cannot explain" line is gone |
 
 ## Backup 6: the four outcomes
 
@@ -539,7 +445,7 @@ Registered 2026-11-19 18:51 IST, after the Flash result was seen and before any 
 | Exploratory: at L2 Argon scores 79.3%, below the prior (96.5%; −17.2 [−23.9, −10.5]) | `AR` `confirmatory.5b.levels.L2.model_own_score`, `.comparators.B3.{comparator_own_score,mean_diff,ci}` (exploratory under §5b) |
 | Not the paper's model; the intervals are wide | `AR` `confirmatory.wording` (each line says the first); 12 clusters of one row each (Note 3 E2a) |
 | Reported with no verdict, not on the slide: the wrong-house gate does not pass (L1 p 0.25, L2 p 0.75, 6 pairs) | `AR` `confirmatory.5c.wrong_house_gate` |
-| Summary lines (slides 27 and 28; the full table is slide 22): at L3 no Gemini model was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive on round 1, then Rejected on the new inputs; Neon Inconclusive); at L2 Flash was above both Claude models, Argon above Opus only (round 1; the new inputs' Opus line has no verdict, Note 4), for Neon no verdict was registered; none is the paper's model | `GR`, `AR`, `R32` and `NR` `confirmatory.5a.family`, `5b.levels.L3.verdict`. Each clause is what a verdict says: Rejected rules out a 3-point gain, Inconclusive does not |
+| Summary lines (slides 18 and 19; the full table is slide 15): at L3 no Gemini model was found to beat a trade of regions by the margin (Flash Rejected; Argon Inconclusive on round 1, then Rejected on the new inputs; Neon Inconclusive); at L2 Flash was above both Claude models, Argon above Opus only (round 1; the new inputs' Opus line has no verdict, Note 4), for Neon no verdict was registered; none is the paper's model | `GR`, `AR`, `R32` and `NR` `confirmatory.5a.family`, `5b.levels.L3.verdict`. Each clause is what a verdict says: Rejected rules out a 3-point gain, Inconclusive does not |
 
 ## Backup 8: Gemini 4 Argon on the 24 inputs it had not seen (Note 4)
 
@@ -554,8 +460,143 @@ Registered 2026-11-19 20:54 IST, after round 1 of Note 3 was seen and before any
 | Two questions were tested (R2a and R2b), each at α = 0.05 | Note 4 R2 ("the slide says that two were tested") |
 | Round 1's L3 line was Inconclusive; the new inputs give Rejected | `AR` `5b.levels.L3.verdict` (round 1); `R32` as above |
 | Exploratory, all 36 inputs: Argon minus Haiku at L2 +8.1 [−1.3, +17.2]; minus Opus at L2 +18.3 [+11.7, +25.9]; minus Flash −2.7 [−6.7, +1.3] at L2 and −2.1 [−5.1, +1.1] at L3 | `A36` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`). Marked exploratory on the slide, with "which hold the 12 seen before Note 4" (R3) |
+| The fixed sentence of R2b: "Gemini 4 Argon did not beat a trade of region contents by the 3-point margin." | `R32` `confirmatory.wording[5]`; Note 4 R2b. The builder checks the file's line (`argon_check_facts`) |
+| All three Gemini models ran the author's loop, but it behaved very differently: about 4 calls a member for Argon, 34 for Flash | `DEV` item 73 ("about four calls a member, where Flash took about 34"); `PIN` `gemini_calls` |
 | Argon is the second of Google's Gemini 4 line; not the paper's model | Note 5; `R32` `confirmatory.wording` |
-| Gemini 4 Neon, the last run, is on slide 21 | `PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76. Note 6 N3's sentence is on slide 22 |
+| Gemini 4 Neon, the last run, is on backup 15 | `PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76. Note 6 N3's sentence is on slide 15 |
+
+## Backup 9: where the guesses land
+
+| Number | Source |
+|---|---|
+| 3.0% v 0.5%, 10.1% v 2.0%, 23.8% v 6.3% | `NUM` `precision_pooled:official:final:{0.5,1,2}m`, `precision_pooled:placebo:final:{0.5,1,2}m` (0.0304, 0.0052; 0.1007, 0.0203; 0.2383, 0.0628); `WRITEUP` §4 "Precision and agreement" |
+| About 6 times | `WRITEUP` §3 "Precision" (3.0% against 0.5%, 6 times) |
+| 97% miss by more than 0.5 m | Derived: 1 − 0.0304 |
+| 853: 1.4% v 0.6%; 871: 4.2% v 0.4% | `NUM` `precision05:official:00853:final` (0.0139), `precision05:placebo:00853:final` (0.0062), `precision05:official:00871:final` (0.0416), `precision05:placebo:00871:final` (0.0040); `WRITEUP` §3 "Precision" |
+| Counted runs, per (stage, member) guess | `WRITEUP` §8 "Counting" |
+
+## Backup 10: same rules as the paper
+
+| Number | Source |
+|---|---|
+| 85 and 66 stops | `CC` `00853.use_rule.reached`, `00871.use_rule.reached` |
+| October's other arms on 853 at 10%, 50%, 100%: ASP + filter 14.8, 48.3, none; random guesses 13.8, 43.9, none (a line moved here from slide 7's grey rows) | `PC` apr B, scene 00853, arms filter_only and placebo, `stage_value_x100.mean`; none = 0 of 3 runs reach 100% (rows under "Slides 7 and 8") |
+| Stand-in for the author's hand-driven tour: navmesh paths, same mapper | `PLAN` §B1 (Reference row), §B7 (Amendment 1: the tour moves onto navmesh paths); `PREREG` Amendment 1 |
+| 5 of 5 runs on 853, 4 of 5 on 871 ran to their natural end | `B13` `00853.n_primary` (5), `00871.n_primary` (4), and the count of `end_times_s` (5 and 5); `N13` item 2 and "Budgets" |
+| 1 run on 871 stopped at the 250 m path cap and is left out of the median | `B13` `00871.capped_runs` (`e7_00871_s44_frontier_end`, end 1,740.8 s); the cap: `PREREG` §2a and Amendment 2 A2.1, A2.3; `DEVIATIONS_NOVEMBER.md` item 63. The builder's `PATH_CAP_M` holds the 250 |
+| DeepSeek; Gemini 2.5 Pro | `PLAN` §B1 table, LLM row |
+| The paper gives no budget value; 10, 50, 100% | `PLAN` §B1 (Budget row); `PREREG` §1 |
+| 632 s and 1300 s | `PC` `meta.budgets` (632.175, 1300.252); `B13` `<scene>.primary_s`, `primary_rule` ("median"); rule in `PREREG` §4 and Amendment 2 A2.3 (primary B = median of the valid runs that logged "Exploration complete"); `N13` "Budgets". The 11-12 value for 871, 809.084 s, was the registered fallback (`B13` `00871.b_1112_s`); it is superseded |
+| 63, 316, 130, 650 s | Derived: 10% and 50% of the two budgets, whole seconds |
+| 871's budget is about twice 853's | Derived: 1300.2523 ÷ 632.1751 = 2.06; the builder stops if the ratio is outside 1.9 to 2.1 (`PC` `meta.budgets`) |
+| "Median end of the 5 frontier runs … (612 to 868 s)" on 853 | `B13` `00853.end_times_s` for the runs in `primary_runs`: 611.83 to 867.58 s |
+| "Median end of the 4 frontier runs … (1043 to 1610 s)" on 871 | `B13` `00871.end_times_s` for the runs in `primary_runs` (seeds 42, 43, 45, 46): 1,043.03 (seed 45) to 1,610.48 s (seed 43); median 1,300.25 s |
+
+## Backup 11: the reference
+
+| Number | Source |
+|---|---|
+| 32% and 21% | `CC` `00853.C3.apr_a_recall_vs_hm3d` (0.3222), `00871.C3.apr_a_recall_vs_hm3d` (0.2112) |
+| Repeat tour not frozen in either home; F1 0.751 on 853 and 0.771 on 871 (C2) | `C2F` `scenes.00853.f1` (0.7511) and `scenes.00871.f1` (0.7714), `frozen` false in both; `N13` item 3 and "Tours". The builder reads the newest `c2_*.json` and falls back to `N13`'s text while a rescore rewrites the folder |
+| Below the 0.90 line; the reference moves by more than the paper's margins (2.7–7.9 points) | `C2F` `scenes.<scene>.below_0_90` and `reading`; `PLAN` §B3 P2 check C2; `PREREG` Amendment 2 A2.5; `N13` item 3 |
+| Nvblox died partway through both first tours; each reference lacks about its last 60 s | `N12` disclosures 3 and 4; `N13` "Carried over" |
+| Rooms 13 and 14, paper 6 and 9 | `CC` `C1.room_nodes`, `C1.paper_rooms` |
+| Navmesh island 77 and 59 m² | `CC` `C1.start_island_area_m2` (77.00, 59.27); `N12` item 9 |
+| Waypoint grid 191 and 149 m² | `CC` `C1.kept_area_estimate_m2` (191.25, 148.5); `N12` item 9 ("about 191 and 149") |
+| Paper 208 and 235 m² | `CC` `C1.paper_area_m2` (207.63, 235.03) |
+| Labelled floor 102 and 105 m² | `C1T` = `tools/live_policy/results_paper_compare_1113/c1_area_table.json` `<scene>.labelled_floor_m2` (102.42, 104.89) |
+| Outline of all labelled geometry 213 and 253 m² | `C1T` `<scene>.footprint_hull_m2` (213.21, 252.92) |
+| The paper's figure is 2.7 and 4.0 times the walkable floor | Derived: `C1T` `<scene>.paper_m2` ÷ `<scene>.navmesh_start_island_m2` (207.63 ÷ 77.00 = 2.70; 235.03 ÷ 59.27 = 3.97) |
+| Within about 7% of the outline | Derived: the larger of \|paper − `footprint_hull_m2`\| ÷ `footprint_hull_m2` over the two homes (2.6% and 7.07%), rounded to a whole per cent; the slide says "about" because 7.07 is just over 7 |
+| "We do not know how the paper measured area" | `N12` item 9; `PREREG` §3 (check C1) |
+
+## Backup 12: a hit and a miss, on one real stage
+
+From `figures/stage_numbers.json`, made by `figures/make_stage_picture.py` from the row's observed graph, the robot's path, `tools/live_policy/semantic/truth/00871_*` and one saved Claude member. The 2 m scale bar is drawn in the figure.
+
+| Number | Source |
+|---|---|
+| Run `e1_00871_s42_official`, stage 8 (script: bathroom and bedroom open; 65 open classes) | `semantic/sample_frame.txt` (round 1, row `e1_00871_s42_official_st08`); `stage_numbers.json` `run`, `stage`, `open_types`, `open_classes`; rules `SEM` §5.5 |
+| The guesses: Opus member 0, a "bed" at (6.3, −3.4) that hits and a "toilet" at (−4.3, 8.5) that misses | `/Users/sher/project/cvp/replay_outputs/m4/claude-opus-5-5/effort_medium/e1_00871_s42_official_st08/member_0/parsed_graph.yaml` (outside the repo, as the CSV's `mem_*` rows cite `replay_outputs/m4`); read with `semantic/extract_preds.py` `members_for`; the hit or miss is the scorer's own `semantic/score_levels.py` `l3_hit` (the script asserts it); `stage_numbers.json` `guess_hit`, `guess_miss`. The two guesses were picked by hand from that member's L3 items (it has 2 hits among 9) |
+| 0.5 m reach | `SEM` §5.1; `stage_numbers.json` `reach_m` |
+| L1, L2, L3 and what a hit needs; L4 secondary | `SEM` §1, §5.5, §8, §11 |
+| Base rate: random guesses score 87.5%, 60.6%, 1.7% (L1, L2, L3) | `RE` `models.placebo.analysis.levels.<L>.model_cluster_scores` (mean of 12); CSV `e_placebo_L1_score`, `e_placebo_L2_score`, `e_placebo_L3_score` |
+
+## Backup 13: two facts that cut against the registered line
+
+| Number | Source (file, path) | CSV key |
+|---|---|---|
+| Opus at L3: the top of the interval 2.95 points; margin 3 | `RC` `family.hypotheses.claude-opus-5-5|L3.ci_upper_named` (0.029496) × 100, `.delta` × 100 | `c_opus_L3_Dci_hi`, `c_opus_L3_margin` |
+| 15 reruns of the region trade (D), made after the result: 2.83 to 2.98 points | `S1/independent_recompute/margin_summary.json` `summary.claude-opus-5-5|200` (10 runs, `ci_high_min` 0.028349, `ci_high_max` 0.029792) and `|5000` (5 runs, 0.028866 to 0.029105), `below_0.03`; `DEVIATIONS_NOVEMBER.md` item 55 (D is the randomised control; "deviation 55") | `rc_opus_hi_min`, `rc_opus_hi_max`, `rc_opus_below`, `rc_opus_runs200`, `rc_opus_runs5000` |
+| Haiku at L2: 8.2 points above random guesses, p 0.014; one contrast, not adjusted, exploratory (no verdict rests on it; the closing slide says the same) | `RC` `models.claude-haiku-5-5.analysis.levels.L2.comparators.B1.{mean_diff,p}` (0.0821 × 100; interval [+1.1, +14.9]); the p is that contrast's own, not Holm-adjusted | `c_haiku_L2_B1_diff`, `c_haiku_L2_B1_p` |
+| "A prior from 179 other houses, making as many claims as the model, scored above both models at naming objects (L2)" | The L2 contrasts against B3 on slide 12, both models, intervals wholly below zero; B3 "making as many claims as the member did": `SEM` §9 (B3 row and "Claims"); 179 houses `SEM` §9 | CSV `rule_houses` |
+
+## Backup 14: what a perfect score could have shown: a ceiling at L1 and L2
+
+Exploratory, made on 2026-11-19 after the result (`DEV` item 71 (a)). Points = 100 × the value in the file. The slide's table is `X19` `ceiling.json`, `models.<m>.<L>.comparators.B3`.
+
+| Number | Source (file, path) | CSV key |
+|---|---|---|
+| The prior's own score: Opus L1 91.2%, Haiku L1 100.0%, Opus L2 93.4%, Haiku L2 93.7% | `comparator_score` | |
+| The most a perfect model could gain: 8.8, 0.0, 6.6, 6.3 points | `max_gain_perfect_model` (100 minus the comparator's score) | |
+| The best p after Holm for six tests: 0.750, 1.000 (L1); 0.047, 0.188 (L2) | `perfect_model.p_min_holm6` (the smallest p the exact one-sided sign-flip test could return for a model at 1.0 in every member, `semantic/stats.py`, times 6) | |
+| Supported possible: no, no, yes, no | `perfect_model.can_reach_alpha` (guard `blind_facts`: L1 false for both, L2 true for Opus only) | |
+| At L3 a perfect model could gain 96 points over the region trade; Opus's interval ends at 2.95 against a margin of 3; Haiku's at 2.36 | `X19` `ceiling.json` `models.<m>.L3.comparators.D.max_gain_perfect_model` (0.9625, 0.9637); `RC` `...L3.comparators.D.ci[1]` | `c_opus_L3_Dci_hi` |
+
+| Number | Source (file, path) | CSV key |
+|---|---|---|
+| Detectable difference 5.7 (L1), 5.2 (L2) | `S1/exploratory/mdd_table.json` `levels.{L1,L2}.mdd` (0.0571, 0.0524) | `mdd_L1_mdd`, `mdd_L2_mdd` |
+| Margin 5.0 | same file, `levels.<L>.delta` (0.05) | `mdd_L1_delta`, `mdd_L2_delta` |
+| 80% power | same file, `power` (0.8) | |
+| "A true gain equal to the margin would be found less than 80% of the time at L1 and L2" | Read from the two rows above: detectable difference (5.7, 5.2) above the margin (5.0) |
+| "Rejected was within reach at each level" | `SEM` §10 "Detectable difference" (the interval half-width shows whether Rejected is within reach); half-widths 0.0375, 0.0357, 0.0071 below the margins 0.05, 0.05, 0.03: same file, `levels.<L>.half_width` | `mdd_<L>_hw` |
+| Gains up to 2.95 (Opus) and 2.36 (Haiku) points at L3 not ruled out | upper ends of the L3 intervals against D: `RC` `...levels.L3.comparators.D.ci[1]` (0.029496, 0.023563) × 100 | `c_opus_L3_Dci_hi`, `c_haiku_L3_Dci_hi` |
+| (note) No L3 row; its registered figure is 1.1 points and comes from the random guesses' contrast (B5 − D) | `S1/exploratory/mdd_table.json` `levels.L3.{mdd,contrast}` (0.0109, "B5-D"); `SEM` §10 "Detectable difference"; RESULTS §10 | `mdd_L3_mdd` |
+
+## Backup 15: Gemini 4 Neon, the last run (Notes 6 and 7)
+
+Registered 2026-11-19 21:05 IST, after the Flash and Argon results were seen and before any call on this model; Note 7 (2026-11-20 00:39 IST, before any output was scored or read) added one row so that round 3 was whole (`PREREGISTRATION_GEMINI.md` Notes 6 and 7; `DEV` item 76). `NR` = `tools/live_policy/results_semantic_1113/gemini_neon_1119/results.json` (rounds 1 and 3, 24 rows, 2 members each); `NP` = `.../gemini_neon_1119/neon_minus_{flash,argon}.json` (exploratory, on the rows each pair ran). Slot: `slots.json` `neon_replay` (`fill_slots_part3.py`). Note 6 makes the rule at L3 the ONE confirmatory hypothesis; the 5a table is reported with intervals and no verdict, so the deck ignores `NR`'s `found` flags and its 5a sentences. The builder stops (`neon_facts`) unless: 24 rows, 48 of 48 parsed, 12 clusters, 2 members, rounds 1 and 3 finished; the L3 verdict is Inconclusive against D (interval holds zero and reaches the margin); the prior's labels at Neon's own places (B3L) score above Neon; Neon is below Flash and Argon at L2 (intervals below 0); at L2 Neon is below the prior and its lead over random guesses holds zero; the Note 6 N3 sentence is in the registration word for word.
+
+| Statement | Source |
+|---|---|
+| Gemini 4 Neon, released 18 November; the student's choice for the last run; the author's loop; rounds 1 and 3 (24 inputs), 2 members each, 48 of 48 parsed | Note 6 (Why; N1); `DEV` item 76; `NR` `analysis_set.confirmatory.{rows,members,ok}`, `members_per_row`, `finished_rounds` |
+| "Registered after the Flash result and Argon's round-1 result were seen, while Argon's second run was under way and unscored" (Note 6); one input was added before any output was scored, so that round 3 was whole (Note 7) | Note 6 ("What had been seen": the Flash and Argon round-1 results seen, Argon's new-input run under way and unscored); Note 7; `DEV` item 76 |
+| All three models ran the author's loop, but it behaved very differently: about 4 calls a member for Argon, 34 for Flash (in the exploratory Neon-minus-Flash and Neon-minus-Argon note) | `DEV` item 73; `PIN` `gemini_calls` |
+| The rule at L3 is Inconclusive: Neon minus the region trade +2.9 [−0.4, +6.3], margin 3 | `NR` `confirmatory.5b.levels.L3.{verdict,delta,ci_upper_named}`, `.comparators.D.{mean_diff,ci}`; `confirmatory.wording[5]` |
+| Not Supported: the prior's labels at Neon's own places score higher (10.2% against Neon's 8.7%); Neon minus that control −1.5 [−4.1, +1.3] | `NR` `5b.levels.L3.comparators.B3L.{comparator_own_score,mean_diff,ci}`, `model_own_score`. Supported needs Neon above all three controls (Note 6 N2) |
+| Own score 8.7% beside 7.6% (own labels swapped), 5.7% (the trade), 10.2% (prior's labels at its places) | `NR` `5b.levels.L3.comparators.{B5,D,B3L}.comparator_own_score` |
+| Neon minus Opus +8.5 [−1.1, +18.0] (L2), +3.3 [−1.4, +8.6] (L3); minus Haiku +0.6 [−10.0, +12.0] (L2), +4.0 [−0.4, +8.5] (L3): reported, no verdict | `NR` `confirmatory.5a.tables.<model>.<L>.{mean_diff,ci,model_mean,other_mean}`; Note 6 N2 |
+| Exploratory: Neon minus Flash −10.1 [−13.1, −7.3] (L2), +1.5 [−1.5, +5.0] (L3); minus Argon −7.3 [−13.0, −1.8] (L2), +3.7 [−1.3, +8.9] (L3) | `NP` `levels.<L>.{diff,interval,rows}` (all three ran the author's loop; two-sided exact test; `gemini_pair.py`) |
+| Exploratory: at L2 Neon scores 74.3%, below the prior (92.5%; −18.3 [−21.2, −15.4]); random guesses 67.3% (+6.9 [−0.5, +14.3]) | `NR` `5b.levels.L2.model_own_score`, `.comparators.{B3,B1}.{comparator_own_score,mean_diff,ci}` (exploratory under Note 6 N2) |
+| Not the paper's model | `NR` `confirmatory.wording` (each line says it) |
+| Reported with no verdict, not on the slide: the wrong-house gate at L1 p 0.0625 (no pass) and L2 p 0.0156 (pass), 6 pairs | `NR` `confirmatory.5c.wrong_house_gate` |
+
+## Backup 16: M2 varied place, not meaning
+
+From `M2S` `analysis.main.all` (score `ig − 0.2·d`; Spearman per stage; mean over 24 runs; 95% interval from the bootstrap over runs). Arm names on the slide, with the registered names: True objects = F1; Room type only = F-room; Moved: DeepSeek / Haiku / Opus = F3 with that model's error sample (DeepSeek's arm is exploratory); Random guesses = F5; No guesses = F6; All true objects = F0 (`M2` §4). The yardstick is `Ucone`, the unmapped objects a candidate could see inside the camera cone, past walls (`M2` §3). The half-of-the-gain rule: `M2` §6.
+
+| Number | Source (path in `M2S`) | CSV key |
+|---|---|---|
+| ρ: True objects +0.284; Room type only +0.089; Moved (DeepSeek, Haiku, Opus) +0.046, +0.060, +0.036; Random +0.065; No guesses −0.028; All true objects +0.048; with intervals | `analysis.main.all.arm_mean_rho.<arm>.{mean,lo,hi}` | `m2_<arm>_mean`, `_lo`, `_hi` |
+| True objects beat random guesses by 0.218; half is 0.109 | `analysis.main.all.differences.A.mean`; half = A ÷ 2 (derived) | `m2_A_mean` |
+| "Not shown sufficient, on a provisional yardstick" (all four arms: three F3, F-room); "no arm does" | `analysis.main.all.reading.verdicts`; `reading.A_separates` true; rule `M2` §6 | |
+| (script) 384 stages, 24 runs | `counts_all_stages.n_stages`; `analysis.main.all.n_runs` | `m2_f0_ig_zero_of`, `m2_runs` |
+| (script) Each move drawn from the model's error sample | `M2` §4 (F3-m: "a distance drawn with replacement from the sample") |
+| (script) Moved arms 0.036 to 0.060: no detectable gain over random guesses; room type only 0.089 | `analysis.main.all.differences.{B_deepseek,B_haiku,B_opus}` (intervals reach +0.009 for Haiku and below for the others); `C` |
+| (backup 5) All true objects −0.017 (−0.031 to −0.004) against random guesses | `analysis.main.all.differences.F0-F5.{mean,lo,hi}`; `M2` §7 | `m2_F0F5_mean` |
+| Title: M2 varied place, not meaning; moved true objects show no detectable gain | `M2` §3 (the yardstick counts unmapped objects in view whatever their label, `PREREGISTRATION_M2.md:31`) and the cut arms F2 and F4 and the error sweep (`PREREGISTRATION_M2.md:91`), as `REVIEW` finding 6; the three moved arms' differences from random guesses (`differences.B_*`) have lower bounds below 0 (guard in `factorial`) |
+| All true objects (exploratory): the gain never passes 2.0 bits, like the no-guess arm's; other arms reach 4.75 to 5.5; the two correlate at 0.64 (382 stages) | `AT` `bits_cap` (2.0), `arms.F0.max_ig` and `arms.F6.max_ig` (2.0 each), `arms.F0.above_cap` and `arms.F6.above_cap` (0), `arms.{F1,F3-*,F5a,F5b,F-room}.max_ig` (4.75 to 5.5), `spearman.{mean,n_used}` (0.635, 382); slot `all_true`. Exploratory (`DEV` item 71 (d)) |
+| "With identical members the score reads mainly where the two observed maps disagree" | The interpretation given for this pass and in `REVIEW` finding 6 (mechanism inferred; `tools/decision_replay_reference/calculate_uncertainty.py:269-333` draws the same perturbation noise for every graph, so equal graphs cancel). `AT` holds the cap and the correlation, not this sentence |
+
+## Backup 17: Gemini 3.8 Flash, the exploratory lines
+
+Moved from slides 13 and 14 in pass 3 (`flash_extra_slide`); built from `GR` through `gemini_facts`. Every line is exploratory: the registered result is on slides 13 and 14.
+
+| Statement | Source (path in `GR`) |
+|---|---|
+| At L2 Gemini scores 78.3%; the prior, making as many claims, 90.7% (−12.4 [−18.5, −6.3]), about 12 points above; random guesses 59.6% (+18.6 [+12.8, +24.4]) | `confirmatory.5b.levels.L2.{model_own_score}`, `.comparators.{B3,B1}.{comparator_own_score,mean_diff,ci}`; exploratory under `PREREGISTRATION_GEMINI.md` §5b (as the row on slides 13 and 14) |
+| It passes the wrong-house check at L1 (p 0.031) and L2 (p 0.016), 6 pairs | `confirmatory.5c.wrong_house_gate.{L1,L2}.{p,n_pairs}`; backup 1 |
+| Gemini also made more guesses per member; 5a does not adjust for that. Same limits as slide 13. At L1 and L2 the prior sits at the ceiling | As the slide 13 row; `PREREGISTRATION_GEMINI.md` §5a, §6 (last bullet) |
 
 ## File properties
 
@@ -567,11 +608,11 @@ These are not in `numbers_part3.csv`; each has its file and path above.
 - Placement "used / all" sums (349, 894, 1,859, 1,348, 1,660) are derived; the left-out counts match `err_<m>_left`.
 - Hint, object counts (150 of 230, 146 of 219): `records_*.json` as on backup 3.
 - Random-guess validity block (68.9%, −0.2 points): `S1/exploratory/validity.json` `placebo`. The CSV has no placebo validity rows.
-- Points figures (8.2, 5.7, 5.2, 5.0, 2.95, 2.36, 2.83, 2.98, and the slide 16 cells) are 100 × a CSV value.
+- Points figures (8.2, 5.7, 5.2, 5.0, 2.95, 2.36, 2.83, 2.98, and the slide 12 cells) are 100 × a CSV value.
 
 ## Not used on a slide, and why
 
 - **The pilot base rates** (88%, 82%, 56%) and room mix: `SEM` §2 lists them as seen before the hash. The deck shows the frozen-rule chance level instead: the random guesses' own scores.
-- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slides 19 to 22 show the registered runs instead; backup 2 shows its October placement-error median.
+- **Gemini's verdicts** (exploratory, 8 rows): "Inconclusive" at all three levels; not shown. Slides 13 to 15 show the registered runs instead; backup 2 shows its October placement-error median.
 - **Difference against the random-guess placebo at L3.** The placebo is a registered comparator at L1 and L2 only (`SEM` §9). At L3 the slide shows the model's score beside the placebo's score.
 - **Validity-layer terms** (Brier, vote, τ) stay in `slots.json` and here, not on the main slides.

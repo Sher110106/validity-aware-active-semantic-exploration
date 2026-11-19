@@ -266,6 +266,20 @@ def main():
                         "frontier": {"file": "frontier_baseline.py", "start": "637-638", "stop": "664-665"},
                         "asp": {"file": "exploration_pipeline.py", "start": "714-715"}}}
 
+    # --- three more pinned facts, each read from the file named in SOURCES.md and checked here
+    csvp = os.path.join(RS, "numbers_part3.csv")
+    houses = [ln for ln in open(csvp, encoding="utf-8") if ln.startswith("rule_houses,")][0].split(",")
+    assert houses[1] == "179", houses
+    review_b = open(os.path.join(PROJECT, "docs", "checkin", "review_2026-10-29", "REVIEW_B_paper_field.md"),
+                    encoding="utf-8").read()
+    assert "frontier 48.3 → 58.8, ASP 59.0 → 66.7" in review_b
+    dev = open(os.path.join(LP, "DEVIATIONS_NOVEMBER.md"), encoding="utf-8").read()
+    assert "about four calls a member, where Flash took about 34" in dev
+    pinned["houses"] = 179
+    pinned["paper_versions"] = {"frontier": [48.3, 58.8], "asp": [59.0, 66.7],
+                                "file": "docs/checkin/review_2026-10-29/REVIEW_B_paper_field.md"}
+    pinned["gemini_calls"] = {"argon": 4, "flash": 34, "file": "tools/live_policy/DEVIATIONS_NOVEMBER.md item 73"}
+
     new = {k: old[k] for k in ("_how", "paper_compare_json", "_table871", "table871_updated", "asp853_full_budget")}
     # --- the registered Gemini replay (PREREGISTRATION_GEMINI.md; DEVIATIONS_NOVEMBER.md item 72)
     new_gemini = read_gemini("gemini_1119")
