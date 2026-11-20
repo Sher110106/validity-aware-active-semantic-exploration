@@ -305,6 +305,39 @@ def main():
     new_argon["vs_flash"] = {L: {"rows": v["rows"], "argon": v["a"], "flash": v["b"], "diff": v["diff"],
                                  "lo": v["interval"][0], "hi": v["interval"][1], "p": v["p_two_sided"]}
                              for L, v in af["levels"].items()}
+    # --- the two control arms on 853 (PREREGISTRATION_PAPER.md Amendment 5), final rescore: rescore_summary.json nov_controls
+    rsj = J(LP, "results_paper_compare_1113", "rescore_summary.json")
+    nc = rsj["nov_controls"]
+    assert nc["listing"]["final"] is True and nc["interim"] is False and not nc["still_running"] \
+        and not nc["never_started"] and not nc["listing"]["runner_alive"] and not nc["listing"]["queue_unit_alive"]
+    assert nc["decision"]["slide"]["kind"] == "both_tables_and_statements" and nc["slide_sentence"] is None
+    assert set(nc["statements"]) == {"placebo_nov", "observed_only_nov"}
+    assert all(o["counts_in_cells"] and o["reached_100m"] and not o["no_final_value"] for o in nc["runs"])
+    new_controls = {
+        "arms": ["official_nov", "placebo_nov", "observed_only_nov"],
+        "B_s": nc["B_s"], "lengths_m": nc["S_lengths_m"],
+        "S": nc["S"], "per_reference": nc["per_reference"], "statements": nc["statements"],
+        "slide_kind": nc["decision"]["slide"]["kind"], "final": nc["listing"]["final"], "interim": nc["interim"],
+        "runs": {o["run"]: {"arm": o["arm"], "end_s": o["end_s"], "end_stage": o["end_stage"],
+                            "end_path_m": o["end_path_m"], "reached_b": o["reached_b"],
+                            "reached_100m": o["reached_100m"], "oom": o["evidence"]["out_of_memory_lines"],
+                            "nvblox": o["evidence"]["nvblox_died_lines"]} for o in nc["runs"]},
+        "readout1": {arm: {ref: {f: nc["readout1_cells"][arm][ref][f]["stage"] for f in ("10", "50", "100")}
+                           for ref in ("apr", "hm3d")} for arm in ("placebo_nov", "observed_only_nov")},
+        "equal_path": {ref: {arm: {L: nc["readout2_equal_path"]["tables"][ref][arm][L]
+                                   for L in ("50", "60", "80", "100")}
+                             for arm in nc["readout2_equal_path"]["arms"]} for ref in ("apr", "hm3d")},
+        "equal_path_labels": nc["readout2_equal_path"]["labels"],
+        "sec_per_m": nc["readout3_sec_per_m"],
+        "dropped_pct_official_nov": [r["evidence"]["members_dropped_pct"] for r in rsj["nov"]["runs"]],
+        "other_seed43": {o["kind"]: o["official_nov_mean_S"] for o in nc["other_readings_of_seed_43"]}}
+    lpy = open(os.path.join(LP, "live_policy.py"), encoding="utf-8").read()
+    note = " ".join(" ".join(lpy.splitlines()[14:22]).split())
+    assert "A $0 control, but not \"ASP without predictions\"" in note and "unexplored space scores zero" in note
+    new_controls["code_note"] = {"file": "tools/live_policy/live_policy.py lines 19-22",
+                                 "text": "A $0 control, but not \"ASP without predictions\": with identical members the "
+                                         "information gain only sees graph0/graph1 disagreement, so unexplored space "
+                                         "scores zero."}
     new["_how"] = ("Part 3 values below come from the result files named in _sources, written by fill_slots_part3.py. "
                    "Edit part 2 keys by hand; rerun the script after any result file changes.")
     new["outcome"] = {"The claim holds": "works", "Mixed": "mixed", "The claim fails": "fails",
@@ -332,6 +365,7 @@ def main():
     new["argon_replay"] = new_argon
     new["argon_r32"] = new_r32
     new["neon_replay"] = new_neon
+    new["controls853"] = new_controls
     new["ceiling"], new["common"], new["room_runs"] = ceiling, common, room_runs
     new["rooms_fit"], new["all_true"], new["pinned"] = rooms_fit, all_true, pinned
     new["_sources"].update({
@@ -342,6 +376,9 @@ def main():
         "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
         "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; "
                   "the authors' repository at f1ea141b (SOURCES.md)",
+        "controls853": "results_paper_compare_1113/rescore_summary.json: nov_controls.{S,per_reference,statements,"
+                       "readout1_cells,readout2_equal_path,readout3_sec_per_m,runs}; nov.runs[].evidence.members_dropped_pct; "
+                       "live_policy.py lines 19-22 (Amendment 5, final rescore)",
         "neon_replay": "results_semantic_1113/gemini_neon_1119/results.json (as gemini_replay; Notes 6 and 7: rounds 1 "
                        "and 3) and neon_minus_{flash,argon}.json (exploratory)",
         "argon_r32": "results_semantic_1113/gemini_argon_r32_1119/results.json (as gemini_replay; Note 4: the 24 inputs "

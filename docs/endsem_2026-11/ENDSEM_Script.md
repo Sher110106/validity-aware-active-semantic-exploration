@@ -1,14 +1,12 @@
-# Speaker script: end-sem (19 slides and 17 backup, about 15 minutes)
+# Speaker script: end-sem (20 slides and 18 backup, about 15 minutes)
 
-About 1,755 words for the 19 slides, 117 words a minute; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide. Slides that moved to the backup keep their text here, in the order the builder puts them.
+About 1,796 words for the 20 slides, 120 words a minute; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide. Slides that moved to the backup keep their text here, in the order the builder puts them.
 
 ---
 
-## Slide 1: Right in meaning, wrong in place? (about 57 s)
+## Slide 1: Right in meaning, wrong in place? (about 31 s)
 
-ASP asks a language model to guess the rooms and objects a robot has not seen. As the author put it to us, the guesses are often wrong in place but name the right things, and that is enough. We test that in three parts.
-
-Part 1, live, with a small model: no detectable difference; a gain up to 0.04 F1 is not ruled out. Part 2, on 853: ASP leads frontier by the clock, not clearly by distance. Part 3, on saved inputs: no model was found to beat a trade of regions; a prior from 179 other houses named objects better. Two control runs are registered, running, and not shown.
+ASP asks a language model to guess the rooms and objects a robot has not seen. As the author put it to us, the guesses are often wrong in place but name the right things, and that is enough. We test that in three parts: live, at the paper's scale, and on saved inputs. The last slide gives the findings in full.
 
 ---
 
@@ -24,7 +22,7 @@ September's claim is withdrawn: the filter kept 19 of 8,943 guesses, so the gain
 
 ---
 
-## Slide 3: ASP scores views by disagreement, not by truth (about 30 s)
+## Slide 3: ASP scores views by disagreement, not by truth (about 29 s)
 
 The model guesses what lies beyond the mapped part: eight graphs, in two tracks of four. ASP scores each candidate view by how far the graphs differ about it.
 
@@ -32,21 +30,21 @@ No term asks whether a guess is true. If all eight graphs agree, the gain is zer
 
 ---
 
-## Slide 4: Live test: no detectable difference (about 45 s)
+## Slide 4: Live test: no detectable difference (about 34 s)
 
-Live runs in two homes, scored against human labels. LLM guesses against random guesses: plus 0.013, from minus 0.012 to plus 0.040. The other four contrasts on the slide read the same way: no detectable difference. Cautions: exact objects stand on one house; frontier stopped more often on 871 and almost never crossed wall cells.
+Live runs in two homes, scored against human labels. LLM guesses against random guesses: plus 0.013, from minus 0.012 to plus 0.040. The other four contrasts on the slide read the same way: no detectable difference.
 
 The live model is small: DeepSeek V4.1 Flash at low effort. The paper says such models do not give consistent enough performance. So this null is about ASP with a cheap model.
 
 ---
 
-## Slide 5: Why: swapping the guesses barely moves the pick (about 28 s)
+## Slide 5: Why: swapping the guesses barely moves the pick (about 27 s)
 
 An exploratory replay of saved stages. Swap the LLM's guesses for a random set, and the top view moves 2.28 metres; swap one random set for another, 2.19. The LLM's guesses rank views a little better, plus 0.07 in 73 of 119 stages, but do not move the pick more than a redraw does.
 
 ---
 
-## Slide 6: Live test limits: what it could not rule out (about 49 s)
+## Slide 6: Live test limits: what it could not rule out (about 48 s)
 
 First, the interval reaches plus 0.040; the test saw only gains of 0.024 to 0.028 or more. Second, the placebo differed in pacing in all five pairs, and members agreed on 29.4% of the LLM's guesses against 4.4% of random ones. Third, F1 at 60 metres favours the LLM: plus 0.043, p 0.015, or 0.09 after correction.
 
@@ -54,9 +52,9 @@ Our filter: no detectable difference. That is not proof of no effect. The LLM's 
 
 ---
 
-## Slide 7: By the clock ASP reads above frontier; by the metre the sign depends on the reference (about 69 s)
+## Slide 7: By the clock ASP reads above frontier; by the metre the sign depends on the reference (about 61 s)
 
-Part 2. We score with the author's F1 and GED code, on the paper's time axis, against a scripted stand-in for the hand-driven tour. The paper gives no budget; we use the median end of our frontier runs, 632 seconds on 853.
+Part 2. The author's F1 and GED code, a scripted reference. The paper gives no budget; we use the median end of our frontier runs, 632 seconds on 853.
 
 By the clock, registered: November's three ASP runs sit above our five frontier runs at 10%, 50% and 100%, by 4.8, 11.6 and 6.0 points. October's two runs trailed by 0.8 at 50%; the batches differ by 12.4. By the metre, exploratory: at 50 metres ASP is 0.8 ahead under the scripted reference and 1.9 behind under the human labels. At 100 metres, 3.8 ahead and 1.6 behind.
 
@@ -64,7 +62,15 @@ The paper's own 853 values moved between versions: frontier 48.3 to 58.8, ASP 59
 
 ---
 
-## Slide 8: How close we are to the paper on 871 depends on the budget (about 33 s)
+## Slide 8: Against no guesses ASP reads above; against random guesses, in between (about 61 s)
+
+Two registered control arms run ASP's own pipeline and clock: random guesses in place of the LLM's, and no guesses. S is the mean F1 at 50 to 100 metres of path; each run's S is in the table.
+
+No guesses: reads above, in every run. But with none the planner has nothing that values unexplored space, so the pipeline needs some guess to explore; that is not knowledge. Random guesses: in between. Higher on average, not separated: two random-guess runs beat two LLM runs, and one low run makes the gap. Chance alone gives full separation 1 time in 20. Three runs a side, one home, no p-value. This does not show that guesses help, or that the LLM's guesses beat random ones.
+
+---
+
+## Slide 9: How close we are to the paper on 871 depends on the budget (about 32 s)
 
 At our budget, 1300 seconds, ours are 1.3 to 3.5 points above the paper's. But that budget is twice 853's. The paper's 25 to 30 steps a run suggest a shorter budget; our inference. At 750 seconds our frontier is 2.9 to 12.1 points below the paper's.
 
@@ -72,13 +78,13 @@ At 50 metres, exploratory, the two frontier batches differ by 12.9, more than AS
 
 ---
 
-## Slide 9: What limits the runs (about 44 s)
+## Slide 10: What limits the runs (about 42 s)
 
-October's ASP runs stop at 60 metres, November's go to 105; two of three reach the full budget. The clocks differ. In the authors' code, frontier's clock starts when planning ends, before the path arrives, so it counts the wait; ASP's starts as the robot moves. On 853 ASP logs 5.8 seconds a metre against frontier's 7.0. The reference moves too: the two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line, so by more than the paper's margins.
+October's ASP runs stop at 60 metres, November's go to 105; two of three reach the full budget. The clocks differ. In the authors' code, frontier's clock starts when planning ends, so it counts the wait for a path; ASP's starts as the robot moves. On 853 ASP logs 5.8 seconds a metre against frontier's 7.0. The reference moves too: the two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line, so by more than the paper's margins.
 
 ---
 
-## Slide 10: The author's claim, in three questions (about 43 s)
+## Slide 11: The author's claim, in three questions (about 42 s)
 
 As the author put it to us, the guesses are often wrong in place but right in meaning, and that is enough. It is not in the paper; it comes from the author's demo and what they told the student.
 
@@ -86,7 +92,7 @@ Is the meaning right? Is it enough for ASP? We give ASP true labels, moved by re
 
 ---
 
-## Slide 11: What each guess is compared with (about 32 s)
+## Slide 12: What each guess is compared with (about 32 s)
 
 A control sees the same map. The margin is the gain over it we would still count: 5 points at L1 and L2, 3 at L3. Named: the prior from 179 other houses at L1 and L2, the region trade at L3.
 
@@ -94,7 +100,7 @@ We did not check what the comparators score before the freeze; the power check a
 
 ---
 
-## Slide 12: Naming: no detectable gain over the other-house prior, and below it at L2. Placing: none over a region trade (about 51 s)
+## Slide 13: Naming: no detectable gain over the other-house prior, and below it at L2. Placing: none over a region trade (about 50 s)
 
 Each cell is the model minus the named comparator, in points. At L1, Opus scores 85.4% and the prior 91.2%; Haiku 89.6% and 100%. At L2, Opus 58.3% against 93.4%; Haiku 68.8% against 93.7%: detectably below. At L3 the intervals end at plus 2.95 points for Opus and 2.4 for Haiku, under the 3-point margin; fifteen reruns after the result kept Opus's top between 2.83 and 2.98.
 
@@ -102,7 +108,7 @@ The registered line is: the claim fails. All six are Rejected, but at L1 no mode
 
 ---
 
-## Slide 13: Is it the model? In the author's loop Gemini 3.8 Flash scored above Claude (about 58 s)
+## Slide 14: Is it the model? In the author's loop Gemini 3.8 Flash scored above Claude (about 57 s)
 
 Registered replay: Gemini 3.8 Flash, in the author's own loop, on the 36 inputs Claude saw: 137 of 144 members parsed. The paper's Gemini 2.5 Pro is no longer offered to new users.
 
@@ -110,43 +116,43 @@ Gemini minus Opus at L2: plus 21.0 points, from plus 13.5 to plus 28.8; at L3 pl
 
 ---
 
-## Slide 14: At L3 Gemini 3.8 Flash is above Claude, but not above a trade of regions (about 32 s)
+## Slide 15: At L3 Gemini 3.8 Flash is above Claude, but not above a trade of regions (about 31 s)
 
 The registered rule at L3 reads Rejected. Gemini scores 7.5%, below all three controls: 8.5%, 8.7% for the trade, 11.0%; its interval against the trade ends at plus 1.4, under the margin of 3. Gemini beats Claude's 4.8% and 4.4% in raw rate, but not the trade's 8.7% for its own guesses. Its lead does not show its labels fit their regions.
 
 ---
 
-## Slide 15: Three Gemini models: at L3 none was found to beat a trade of regions (about 55 s)
+## Slide 16: Three Gemini models: at L3 none was found to beat a trade of regions (about 42 s)
 
 Three Gemini models were tried in turn (3.8 Flash, 4 Argon, 4 Neon), each chosen after the last result was seen. All three are reported; they are not three independent confirmations, and none is the paper's model.
 
-At L2 Flash was above both Claude models; Argon above Opus only; for Neon no verdict was registered. At L3 no Gemini model was found to beat a trade of regions by the margin: Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive. Neon, the student's choice for the last run, was registered after the Flash result and Argon's round-1 result were seen, while Argon's second run was under way and unscored.
+At L3 no Gemini model was found to beat a trade of regions by the margin: Flash Rejected; Argon Inconclusive, then Rejected; Neon Inconclusive. Neon was registered after the Flash result and Argon's round-1 result were seen, while Argon's second run was under way and unscored.
 
 ---
 
-## Slide 16: DeepSeek ahead of random guesses in count; not detectable on the rule of §11 (p 0.125) (about 44 s)
+## Slide 17: DeepSeek ahead of random guesses in count; not detectable on the rule of §11 (p 0.125) (about 43 s)
 
 DeepSeek's live runs, exploratory, by the count in registration §11: it predicts 10 of 59 rooms, random guesses 6 of 69: 16.9% against 8.7%, p 0.125, not detectable. On all stages, 13 of 59, 22.0%, p 0.040. Our filter arm, built from the same guesses, is not ahead: 2.9% and 10.1%, p 0.290 and 1.000. Opus, replayed: 16.7% of rooms in a fitting region, against 2.7% for random guesses; p 0.016, unadjusted. The paper reports a count with no chance rate; random guesses give one.
 
 ---
 
-## Slide 17: What this talk cannot show, and how the test was made (about 55 s)
+## Slide 18: What this talk cannot show, and how the test was made (about 54 s)
 
 Every result holds for two homes only, and Part 1's model is small. Truth is a proxy and the replays are static: no robot acted on Claude's or Gemini's guesses. The paper used Gemini 2.5 Pro, no longer offered to new users. We ran Claude in our port of the author's loop and all three Gemini models in the author's own, so each Gemini-Claude contrast has two differences. We wrote the scorer after seeing DeepSeek's numbers, set the L3 margin knowing the Gemini-DeepSeek gap, and did not check the comparators' own scores before the freeze. M2 is provisional. Not done: a live run with a strong model.
 
 ---
 
-## Slide 18: For Claude, in our port, on saved inputs: no better than a prior from other houses (about 62 s)
+## Slide 19: For Claude, in our port, on saved inputs: no better than a prior from other houses (about 61 s)
 
 For Claude, in two houses: it named rooms and objects no better than a prior from 179 other houses, worse at objects, and put its guesses in fitting regions no more often than a trade of regions; a gain under 3 points is not ruled out. The registered line is: the claim fails, as the author put it to us. It says less than it seems to: at L1 no model could have been Supported, and at L2 only a perfect Opus, so it rests on L3. M2, offline: true objects moved by a model's error showed no detectable gain. No Gemini model is the paper's model. At L3 none was found to beat a trade of regions by the margin.
 
 ---
 
-## Slide 19: What the talk found, and what it does not say (about 75 s)
+## Slide 20: What the talk found, and what it does not say (about 85 s)
 
-Part 1: live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to 0.04 F1 is not ruled out. Part 2: at the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. The control arms that would show whether the guesses cause that lead are registered and running. Part 3: on saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting regions more often than a trade of regions, and a prior from 179 other houses named objects better than every one of them.
+Part 1: live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to 0.04 F1 is not ruled out. Part 2: at the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. Against the same pipeline with random guesses it is higher on average but not separated; with no guesses the pipeline's map barely grows with distance. Part 3: on saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting regions more often than a trade of regions, and a prior from 179 other houses named objects better than every one of them.
 
-It does not say that the guesses carry nothing; that the models are no better than random guesses, since Haiku is 8.2 points above them at L2, one contrast, not adjusted, exploratory; or that a language model cannot help exploration. Thank you.
+It does not say that the guesses carry nothing; that the models are no better than random guesses, since Haiku is 8.2 points above them at L2, one contrast, not adjusted, exploratory; that guesses of any kind help this pipeline, or that the LLM's guesses beat random ones; or that a language model cannot help exploration. Thank you.
 
 ---
 
@@ -283,3 +289,9 @@ All true objects gives 0.048. Exploratory readout: with identical members, the s
 ## Backup 17: Gemini 3.8 Flash: the exploratory lines (not timed)
 
 Exploratory: at L2 Gemini scores 78.3%, about 12 points below the prior, which makes as many claims, and above random guesses. It passes the wrong-house check at L1 and L2. Gemini also made more guesses per member; 5a does not adjust for that.
+
+---
+
+## Backup 18: Control arms: equal-time cells and seconds per metre, with no verdict (not timed)
+
+The control arms' other cells decide nothing; the reading is on S. At 50% and 100% of the budget, F1 against the scripted reference and the human labels, for ASP with the LLM's guesses, random guesses and no guesses: on the slide. Seconds per metre: ASP 5.8, random guesses 5.9, no guesses 7.1, as slowly as our frontier's 7.0. Seed 43 of the LLM arm, read other ways, decides nothing: without it the statements stand.

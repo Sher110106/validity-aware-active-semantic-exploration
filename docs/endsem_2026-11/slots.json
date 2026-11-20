@@ -23,6 +23,7 @@
   "rooms_fit": "results_semantic_1113/claude/results.json: models.claude-opus-5-5.extras.l3_rooms",
   "all_true": "results_m2_1113/exploratory_1119/all_true.json: arms.<arm>, spearman",
   "pinned": "numbers.csv sept:unanimity_kept_of_predicted; docs/archive/IMPLEMENTATION_RESEARCH.md 4.5; the authors' repository at f1ea141b (SOURCES.md)",
+  "controls853": "results_paper_compare_1113/rescore_summary.json: nov_controls.{S,per_reference,statements,readout1_cells,readout2_equal_path,readout3_sec_per_m,runs}; nov.runs[].evidence.members_dropped_pct; live_policy.py lines 19-22 (Amendment 5, final rescore)",
   "neon_replay": "results_semantic_1113/gemini_neon_1119/results.json (as gemini_replay; Notes 6 and 7: rounds 1 and 3) and neon_minus_{flash,argon}.json (exploratory)",
   "argon_r32": "results_semantic_1113/gemini_argon_r32_1119/results.json (as gemini_replay; Note 4: the 24 inputs of rounds 3 and 2) and gemini_argon_all36_exploratory/argon_minus_{haiku,opus,flash}.json (exploratory, all 36 inputs)",
   "argon_replay": "results_semantic_1113/gemini_argon_1119/results.json (as gemini_replay) and argon_minus_flash.json (exploratory): the extension of PREREGISTRATION_GEMINI.md Note 3",
@@ -1662,6 +1663,557 @@
      "clusters": 12
     }
    }
+  }
+ },
+ "controls853": {
+  "arms": [
+   "official_nov",
+   "placebo_nov",
+   "observed_only_nov"
+  ],
+  "B_s": 632.1751,
+  "lengths_m": [
+   50,
+   60,
+   80,
+   100
+  ],
+  "S": {
+   "apr": {
+    "official_nov": {
+     "e8_00853_s42_official_105m": 53.55291686668735,
+     "e8_00853_s43_official_105m": 52.48222944405994,
+     "e8_00853_s44_official_105m": 61.725399191409466
+    },
+    "placebo_nov": {
+     "e9_00853_s42_placebo_115m": 58.11959327226403,
+     "e9_00853_s43_placebo_115m": 56.91200742213134,
+     "e9_00853_s44_placebo_115m": 33.594013195573645
+    },
+    "observed_only_nov": {
+     "e9_00853_s42_observed_only_115m": 37.3653314731508,
+     "e9_00853_s43_observed_only_115m": 44.530957661647335,
+     "e9_00853_s44_observed_only_115m": 18.55763026699617
+    }
+   },
+   "hm3d": {
+    "official_nov": {
+     "e8_00853_s42_official_105m": 29.045779047403908,
+     "e8_00853_s43_official_105m": 28.467900509194806,
+     "e8_00853_s44_official_105m": 30.39810010214091
+    },
+    "placebo_nov": {
+     "e9_00853_s42_placebo_115m": 30.446504271871223,
+     "e9_00853_s43_placebo_115m": 27.716259521324666,
+     "e9_00853_s44_placebo_115m": 17.713457642431557
+    },
+    "observed_only_nov": {
+     "e9_00853_s42_observed_only_115m": 14.382931515142106,
+     "e9_00853_s43_observed_only_115m": 20.75687112959819,
+     "e9_00853_s44_observed_only_115m": 10.436414076458513
+    }
+   }
+  },
+  "per_reference": {
+   "placebo_nov": {
+    "apr": "above on average, not separated",
+    "hm3d": "above on average, not separated"
+   },
+   "observed_only_nov": {
+    "apr": "separated above",
+    "hm3d": "separated above"
+   }
+  },
+  "statements": {
+   "placebo_nov": "in between",
+   "observed_only_nov": "reads above"
+  },
+  "slide_kind": "both_tables_and_statements",
+  "final": true,
+  "interim": false,
+  "runs": {
+   "e9_00853_s42_observed_only_115m": {
+    "arm": "observed_only_nov",
+    "end_s": 857.8928654193878,
+    "end_stage": 40,
+    "end_path_m": 116.25000000000297,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   },
+   "e9_00853_s42_placebo_115m": {
+    "arm": "placebo_nov",
+    "end_s": 647.3342459201813,
+    "end_stage": 30,
+    "end_path_m": 115.87500000000296,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   },
+   "e9_00853_s43_observed_only_115m": {
+    "arm": "observed_only_nov",
+    "end_s": 824.2424285411835,
+    "end_stage": 43,
+    "end_path_m": 117.30000000000301,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   },
+   "e9_00853_s43_placebo_115m": {
+    "arm": "placebo_nov",
+    "end_s": 689.4988515377045,
+    "end_stage": 25,
+    "end_path_m": 115.05000000000292,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   },
+   "e9_00853_s44_observed_only_115m": {
+    "arm": "observed_only_nov",
+    "end_s": 815.1859772205353,
+    "end_stage": 39,
+    "end_path_m": 116.47500000000298,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   },
+   "e9_00853_s44_placebo_115m": {
+    "arm": "placebo_nov",
+    "end_s": 724.5369174480438,
+    "end_stage": 29,
+    "end_path_m": 119.02500000000308,
+    "reached_b": true,
+    "reached_100m": true,
+    "oom": 0,
+    "nvblox": 0
+   }
+  },
+  "readout1": {
+   "placebo_nov": {
+    "apr": {
+     "10": {
+      "mean": 15.89556779438762,
+      "min": 14.634146341463413,
+      "max": 17.670967741935485,
+      "n": 3
+     },
+     "50": {
+      "mean": 43.2386461999342,
+      "min": 27.079816734989148,
+      "max": 52.32937339855579,
+      "n": 3
+     },
+     "100": {
+      "mean": 58.20837752769944,
+      "min": 41.46341463414634,
+      "max": 66.84397163120566,
+      "n": 3
+     }
+    },
+    "hm3d": {
+     "10": {
+      "mean": 6.744811604911894,
+      "min": 6.231109671848014,
+      "max": 7.753325142887668,
+      "n": 3
+     },
+     "50": {
+      "mean": 20.992700508243654,
+      "min": 13.141421266090635,
+      "max": 25.26771474139895,
+      "n": 3
+     },
+     "100": {
+      "mean": 30.832849360065158,
+      "min": 23.17596566523605,
+      "max": 34.951588091575424,
+      "n": 3
+     }
+    }
+   },
+   "observed_only_nov": {
+    "apr": {
+     "10": {
+      "mean": 17.443710114520503,
+      "min": 15.317073170731707,
+      "max": 18.543089430894312,
+      "n": 3
+     },
+     "50": {
+      "mean": 30.869705972741716,
+      "min": 18.812553011026296,
+      "max": 37.43115019671372,
+      "n": 3
+     },
+     "100": {
+      "mean": 35.69217824635781,
+      "min": 19.316674038036265,
+      "max": 49.11764705882353,
+      "n": 3
+     }
+    },
+    "hm3d": {
+     "10": {
+      "mean": 8.45231365252331,
+      "min": 6.733247422680414,
+      "max": 10.333315528016666,
+      "n": 3
+     },
+     "50": {
+      "mean": 13.752306418725324,
+      "min": 10.892156862745098,
+      "max": 16.217954214181603,
+      "n": 3
+     },
+     "100": {
+      "mean": 16.63018149429796,
+      "min": 10.316348708041536,
+      "max": 24.795649947919426,
+      "n": 3
+     }
+    }
+   }
+  },
+  "equal_path": {
+   "apr": {
+    "official_nov": {
+     "50": {
+      "mean": 48.2058028618956,
+      "min": 43.36349924585219,
+      "max": 55.59328221978825,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 53.22819354823824,
+      "min": 47.16981132075471,
+      "max": 61.45392216172615,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 59.739352978314294,
+      "min": 56.21388801344679,
+      "max": 64.28463605349756,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 62.50737794776088,
+      "min": 60.676072341634324,
+      "max": 65.56975633062589,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "placebo_nov": {
+     "50": {
+      "mean": 43.23864619993421,
+      "min": 27.079816734989148,
+      "max": 52.32937339855579,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 44.92387637225034,
+      "min": 29.248426508700486,
+      "max": 54.16504269567375,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 52.64063903388983,
+      "min": 36.5843949044586,
+      "max": 60.93817154786025,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 57.36432358055097,
+      "min": 41.46341463414634,
+      "max": 65.58460634547592,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "observed_only_nov": {
+     "50": {
+      "mean": 30.80313919059188,
+      "min": 18.737373737373737,
+      "max": 37.43115019671372,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 33.533477409714166,
+      "min": 17.911445279866335,
+      "max": 45.0206782464847,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 34.785861356695776,
+      "min": 18.581379920389207,
+      "max": 47.133990507484484,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 34.816081245390585,
+      "min": 19.000322130355418,
+      "max": 48.538011695906434,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "frontier_end": {
+     "50": {
+      "mean": 47.4439445339703,
+      "min": 42.29299363057324,
+      "max": 56.074578989574974,
+      "n": 5,
+      "n_runs": 5
+     },
+     "60": {
+      "mean": 52.50907065321286,
+      "min": 48.837209302325576,
+      "max": 57.71943573667713,
+      "n": 5,
+      "n_runs": 5
+     },
+     "80": {
+      "mean": 56.129499654443144,
+      "min": 53.507936507936506,
+      "max": 59.598311293226544,
+      "n": 5,
+      "n_runs": 5
+     },
+     "100": {
+      "mean": 58.67947230816559,
+      "min": 57.697068502249195,
+      "max": 59.661876114082006,
+      "n": 2,
+      "n_runs": 5
+     }
+    }
+   },
+   "hm3d": {
+    "official_nov": {
+     "50": {
+      "mean": 25.447350867165284,
+      "min": 23.71171171171171,
+      "max": 28.14329878159665,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 27.89909746127862,
+      "min": 25.438596491228072,
+      "max": 30.632716049382715,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 31.355498747101212,
+      "min": 30.670903954802263,
+      "max": 31.866666666666667,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 32.51375913610771,
+      "min": 30.949718910917596,
+      "max": 33.39919028340081,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "placebo_nov": {
+     "50": {
+      "mean": 20.992700508243654,
+      "min": 13.141421266090635,
+      "max": 25.26771474139895,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 22.29335683150111,
+      "min": 13.884899796377665,
+      "max": 28.688933200398804,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 27.67258267974601,
+      "min": 20.651543842021873,
+      "max": 32.719973235195724,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 30.20965522801249,
+      "min": 23.17596566523605,
+      "max": 35.10939591049143,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "observed_only_nov": {
+     "50": {
+      "mean": 13.731484832304396,
+      "min": 10.864793678665496,
+      "max": 16.217954214181603,
+      "n": 3,
+      "n_runs": 3
+     },
+     "60": {
+      "mean": 15.09161351705037,
+      "min": 10.347505338769171,
+      "max": 20.047619047619047,
+      "n": 3,
+      "n_runs": 3
+     },
+     "80": {
+      "mean": 15.922840654394577,
+      "min": 10.811398212992032,
+      "max": 22.178577923258775,
+      "n": 3,
+      "n_runs": 3
+     },
+     "100": {
+      "mean": 16.02234995784907,
+      "min": 9.721959075407351,
+      "max": 24.583333333333336,
+      "n": 3,
+      "n_runs": 3
+     }
+    },
+    "frontier_end": {
+     "50": {
+      "mean": 27.331825881475375,
+      "min": 25.05893264288751,
+      "max": 30.151460512080774,
+      "n": 5,
+      "n_runs": 5
+     },
+     "60": {
+      "mean": 30.148107580254464,
+      "min": 28.68537245406637,
+      "max": 31.319083650057532,
+      "n": 5,
+      "n_runs": 5
+     },
+     "80": {
+      "mean": 31.93907645712148,
+      "min": 30.243918760665167,
+      "max": 33.46666666666667,
+      "n": 5,
+      "n_runs": 5
+     },
+     "100": {
+      "mean": 34.14206520251779,
+      "min": 33.457142857142856,
+      "max": 34.82698754789272,
+      "n": 2,
+      "n_runs": 5
+     }
+    }
+   }
+  },
+  "equal_path_labels": {
+   "official_nov": "first made after the results were seen (deviation 66)",
+   "placebo_nov": "registered (A5.5)",
+   "observed_only_nov": "registered (A5.5)",
+   "frontier_end": "first made after the results were seen (deviation 66)"
+  },
+  "sec_per_m": {
+   "filter_only": {
+    "mean": 6.332919662930448,
+    "min": 6.102716068870388,
+    "max": 6.661402565876258,
+    "n": 3,
+    "n_runs": 3
+   },
+   "frontier_60m": {
+    "mean": 6.7982104943845805,
+    "min": 6.4553470072257255,
+    "max": 7.087422550588314,
+    "n": 3,
+    "n_runs": 3
+   },
+   "frontier_end": {
+    "mean": 6.975234660455097,
+    "min": 6.400059229367576,
+    "max": 7.840930935763416,
+    "n": 5,
+    "n_runs": 5
+   },
+   "frontier_end_ref": {
+    "mean": 6.6052833819213435,
+    "min": 6.6052833819213435,
+    "max": 6.6052833819213435,
+    "n": 1,
+    "n_runs": 1
+   },
+   "observed_only_nov": {
+    "mean": 7.135106553639753,
+    "min": 6.9988064152866665,
+    "max": 7.379723573499922,
+    "n": 3,
+    "n_runs": 3
+   },
+   "official": {
+    "mean": 6.52581455174481,
+    "min": 6.371868398747098,
+    "max": 6.679760704742522,
+    "n": 2,
+    "n_runs": 2
+   },
+   "official_nov": {
+    "mean": 5.773736474116063,
+    "min": 5.358441789178127,
+    "max": 6.038140548599943,
+    "n": 3,
+    "n_runs": 3
+   },
+   "placebo": {
+    "mean": 5.84340663971722,
+    "min": 5.631296596576622,
+    "max": 6.128856323461514,
+    "n": 3,
+    "n_runs": 3
+   },
+   "placebo_nov": {
+    "mean": 5.888930255215984,
+    "min": 5.586487559181573,
+    "max": 6.087266687233985,
+    "n": 3,
+    "n_runs": 3
+   }
+  },
+  "dropped_pct_official_nov": [
+   7.3,
+   9.6,
+   7.4
+  ],
+  "other_seed43": {
+   "stopped": {
+    "apr": 57.6391580290484,
+    "hm3d": 29.721939574772406
+   },
+   "without": {
+    "apr": 57.6391580290484,
+    "hm3d": 29.721939574772406
+   }
+  },
+  "code_note": {
+   "file": "tools/live_policy/live_policy.py lines 19-22",
+   "text": "A $0 control, but not \"ASP without predictions\": with identical members the information gain only sees graph0/graph1 disagreement, so unexplored space scores zero."
   }
  },
  "ceiling": {
