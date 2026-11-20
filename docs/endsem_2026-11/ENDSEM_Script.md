@@ -1,6 +1,6 @@
 # Speaker script: end-sem (20 slides and 18 backup, about 15 minutes)
 
-About 1,796 words for the 20 slides, 120 words a minute; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide. Slides that moved to the backup keep their text here, in the order the builder puts them.
+About 1,776 words for the 20 slides, 118 words a minute; the times in the slide headings add to 900 s. *Italics* in parentheses are stage directions; the builder drops them from the notes. Every number comes from the result files; `SOURCES.md` names the file and the path. Part 3 is filled from `slots.json`, which `fill_slots_part3.py` writes from the result files. Anything not registered is called exploratory on its slide. Slides that moved to the backup keep their text here, in the order the builder puts them.
 
 ---
 
@@ -38,9 +38,9 @@ The live model is small: DeepSeek V4.1 Flash at low effort. The paper says such 
 
 ---
 
-## Slide 5: Why: swapping the guesses barely moves the pick (about 27 s)
+## Slide 5: Why: swapping the guesses barely moves the pick (about 30 s)
 
-An exploratory replay of saved stages. Swap the LLM's guesses for a random set, and the top view moves 2.28 metres; swap one random set for another, 2.19. The LLM's guesses rank views a little better, plus 0.07 in 73 of 119 stages, but do not move the pick more than a redraw does.
+An exploratory, offline replay of saved stages. Swap the LLM's guesses for a random set, and the top view moves 2.28 metres; swap one random set for another, 2.19. The LLM's guesses rank views a little better, plus 0.07 in 73 of 119 stages: ranking, not map score. They do not move the pick more than a redraw does.
 
 ---
 
@@ -52,7 +52,7 @@ Our filter: no detectable difference. That is not proof of no effect. The LLM's 
 
 ---
 
-## Slide 7: By the clock ASP reads above frontier; by the metre the sign depends on the reference (about 61 s)
+## Slide 7: By the clock ASP reads above frontier; by the metre the sign depends on the reference (about 63 s)
 
 Part 2. The author's F1 and GED code, a scripted reference. The paper gives no budget; we use the median end of our frontier runs, 632 seconds on 853.
 
@@ -62,11 +62,13 @@ The paper's own 853 values moved between versions: frontier 48.3 to 58.8, ASP 59
 
 ---
 
-## Slide 8: Against no guesses ASP reads above; against random guesses, in between (about 61 s)
+## Slide 8: Against no guesses ASP reads above; against random guesses, in between (about 48 s)
 
 Two registered control arms run ASP's own pipeline and clock: random guesses in place of the LLM's, and no guesses. S is the mean F1 at 50 to 100 metres of path; each run's S is in the table.
 
-No guesses: reads above, in every run. But with none the planner has nothing that values unexplored space, so the pipeline needs some guess to explore; that is not knowledge. Random guesses: in between. Higher on average, not separated: two random-guess runs beat two LLM runs, and one low run makes the gap. Chance alone gives full separation 1 time in 20. Three runs a side, one home, no p-value. This does not show that guesses help, or that the LLM's guesses beat random ones.
+No guesses: reads above, in every run. But the code gives unexplored space no value here, so this arm differs from ASP in more than what the guesses know. Random guesses: in between: higher on average, not separated. Three runs a side, one home, no p-value. Neither arm shows that the LLM's guesses beat random ones.
+
+*(Seed 43 of the no-guess arm keeps growing: its F1 rises 11.1 from 50 metres to 100 against the scripted reference and 8.4 against the human labels, as the LLM runs' does; barely grows is the arm's mean and seeds 42 and 44. The rest is on backup 18.)*
 
 ---
 
@@ -78,13 +80,13 @@ At 50 metres, exploratory, the two frontier batches differ by 12.9, more than AS
 
 ---
 
-## Slide 10: What limits the runs (about 42 s)
+## Slide 10: What limits the runs (about 46 s)
 
-October's ASP runs stop at 60 metres, November's go to 105; two of three reach the full budget. The clocks differ. In the authors' code, frontier's clock starts when planning ends, so it counts the wait for a path; ASP's starts as the robot moves. On 853 ASP logs 5.8 seconds a metre against frontier's 7.0. The reference moves too: the two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line, so by more than the paper's margins.
+October's ASP runs stop at 60 metres, November's go to 105; two of three reach the full budget. The clocks differ. In the authors' code, frontier's clock starts when planning ends, so it counts the wait for a path; ASP's starts as the robot moves. On 853 ASP logs 5.8 seconds a metre against frontier's 7.0; slide 8's arms share ASP's clock. The reference moves too: the two tours agree at F1 0.751 on 853 and 0.771 on 871, below the 0.90 line, so by more than the paper's margins.
 
 ---
 
-## Slide 11: The author's claim, in three questions (about 42 s)
+## Slide 11: The author's claim, in three questions (about 43 s)
 
 As the author put it to us, the guesses are often wrong in place but right in meaning, and that is enough. It is not in the paper; it comes from the author's demo and what they told the student.
 
@@ -100,7 +102,7 @@ We did not check what the comparators score before the freeze; the power check a
 
 ---
 
-## Slide 13: Naming: no detectable gain over the other-house prior, and below it at L2. Placing: none over a region trade (about 50 s)
+## Slide 13: Naming: no detectable gain over the other-house prior, and below it at L2. Placing: none over a region trade (about 51 s)
 
 Each cell is the model minus the named comparator, in points. At L1, Opus scores 85.4% and the prior 91.2%; Haiku 89.6% and 100%. At L2, Opus 58.3% against 93.4%; Haiku 68.8% against 93.7%: detectably below. At L3 the intervals end at plus 2.95 points for Opus and 2.4 for Haiku, under the 3-point margin; fifteen reruns after the result kept Opus's top between 2.83 and 2.98.
 
@@ -148,11 +150,11 @@ For Claude, in two houses: it named rooms and objects no better than a prior fro
 
 ---
 
-## Slide 20: What the talk found, and what it does not say (about 85 s)
+## Slide 20: What the talk found, and what it does not say (about 87 s)
 
-Part 1: live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to 0.04 F1 is not ruled out. Part 2: at the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. Against the same pipeline with random guesses it is higher on average but not separated; with no guesses the pipeline's map barely grows with distance. Part 3: on saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting regions more often than a trade of regions, and a prior from 179 other houses named objects better than every one of them.
+Part 1: live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to 0.04 F1 is not ruled out. Part 2: at the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. Against the same pipeline with random guesses it is higher on average but not separated; against no guesses it reads above, and with none the score barely grows with distance on average. Part 3: on saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting regions more often than a trade of regions, and a prior from 179 other houses named objects better than every one of them.
 
-It does not say that the guesses carry nothing; that the models are no better than random guesses, since Haiku is 8.2 points above them at L2, one contrast, not adjusted, exploratory; that guesses of any kind help this pipeline, or that the LLM's guesses beat random ones; or that a language model cannot help exploration. Thank you.
+It does not say that the guesses carry nothing; that the models are no better than random guesses, since Haiku is 8.2 points above them at L2, one contrast, not adjusted, exploratory; that the LLM's guesses beat random ones; or that a language model cannot help exploration. Thank you.
 
 ---
 
@@ -294,4 +296,8 @@ Exploratory: at L2 Gemini scores 78.3%, about 12 points below the prior, which m
 
 ## Backup 18: Control arms: equal-time cells and seconds per metre, with no verdict (not timed)
 
-The control arms' other cells decide nothing; the reading is on S. At 50% and 100% of the budget, F1 against the scripted reference and the human labels, for ASP with the LLM's guesses, random guesses and no guesses: on the slide. Seconds per metre: ASP 5.8, random guesses 5.9, no guesses 7.1, as slowly as our frontier's 7.0. Seed 43 of the LLM arm, read other ways, decides nothing: without it the statements stand.
+The control arms' other cells decide nothing; the reading is on S. At 50% and 100% of the budget, F1 against the scripted reference and the human labels, for ASP with the LLM's guesses, random guesses and no guesses: on the slide.
+
+What slide 8 leaves out. Chance alone gives full separation 1 time in 20 with three runs a side. Against random guesses, two random-guess runs beat two LLM runs against the scripted reference; against the human labels the best random-guess run ties the best LLM run, 30.4; and the gap in the means comes from one low random-guess run. The controls ran from 11-19, after the LLM runs of 11-17 and 11-18, under a different GPU load; the sleep is a median wait; the LLM runs lost 7% to 10% of members to dropped replies, the controls none; random-guess members agree with each other less than the LLM's, 4.4% against 29.4% in October.
+
+Seconds per metre: ASP 5.8, random guesses 5.9, no guesses 7.1, as slowly as our frontier's 7.0. The no-guess score barely grows with distance on average, but seed 43 keeps growing. Seed 43 of the LLM arm, read other ways, decides nothing: without it the statements stand.

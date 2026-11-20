@@ -290,7 +290,7 @@ def stat(s, x, y, w, value, label, size=56, label_lines=2):
 # ---------------------------------------------------------------- 1. Cover
 
 COVER2 = ("On 853 ASP leads frontier by the clock, not clearly by distance. Over random guesses it is higher on "
-          "average, not separated.")
+          "average, not separated; over no guesses it reads above.")
 
 
 def cover(prs, f853, Nn):
@@ -312,7 +312,7 @@ def cover(prs, f853, Nn):
         hline(s, x, 604, x + 496, 604, INK, 2)
         text(s, x, 614, 496, 34, [run(f"{i + 1:02d}", NT, FAINT, MONO)])
         P(s, x, 650, 496, [(name, "b")], B, line=1.3)
-        P(s, x, 698, 496, body, 28, BODY, 1.3, limit=900)
+        P(s, x, 698, 496, body, 26, BODY, 1.3, limit=900)
     N(s, 160, 888, 1600, "Registered scores and tests are final, the Gemini runs and the two control arms on 853 "
                          "included.", limit=930)
     hline(s, 160, 930, 1760, 930, RULE)
@@ -514,8 +514,8 @@ def why(prs, Nn):
     N(s, R, 720, 800,
       f"The LLM's guesses add {sg(Nn['cf:paired_actual_minus_placebo_median:official'], 2)} over a random set "
       "(paired median, 73 of 119 stages). Exact objects score high in part by construction.")
-    box_bottom(s, "Reading.", "The LLM's guesses add a little ranking over random ones, but do not move the pick "
-                              "more than a redraw does.")
+    box_bottom(s, "Reading.", "The LLM's guesses add a little ranking over random ones (exploratory, offline; "
+                              "ranking, not map score), but do not move the pick more than a redraw does.")
 
 
 # ---------------------------------------------------------------- 5. Part 1, where the guesses land
@@ -1269,28 +1269,37 @@ def check_text(C, f9, f853, budgets, slots, Nn, c2s):
         "no guesses, \"reads above\" (every ASP run above every no-guess run, under both references); random guesses, "
         "\"in between\" (higher on average, not separated, under both references)",
         "Chance alone gives full separation 1 time in 20 with three runs a side",
-        "Two random-guess runs score above two ASP runs against the scripted reference, the best run against the human "
-        "labels is a random-guess run, and the gap in the means comes from one low random-guess run",
-        "has nothing that values unexplored space here",
-        "this arm shows the pipeline needs some guess to explore, not that guesses add knowledge",
-        f"it moves at {num(sp_['none'])} s per metre, as slowly as frontier ({num(sp_['frontier'])}), against "
+        "Two random-guess runs score above two ASP runs against the scripted reference, the best random-guess run ties "
+        "the best ASP run against the human labels (30.4), and the gap in the means comes from one low random-guess run",
+        "The code gives unexplored space no value here (`tools/live_policy/live_policy.py`, lines 19 to 22), so the "
+        "no-guess arm differs from ASP in more than what the guesses know",
+        f"With no guesses the score barely grows with distance on average (F1 from 50 m to 100 m, scripted reference / "
+        f"human labels: +{num(cf['grow']['apr']['observed_only_nov'])} / +{num(cf['grow']['hm3d']['observed_only_nov'])} "
+        f"against +{num(cf['grow']['apr']['official_nov'])} / +{num(cf['grow']['hm3d']['official_nov'])} for ASP; seed 43 "
+        f"of that arm keeps growing, +{num(cf['seed43']['apr'])} / +{num(cf['seed43']['hm3d'])})",
+        f"the arm moves at {num(sp_['none'])} s per metre, as slowly as frontier ({num(sp_['frontier'])}), against "
         f"{num(sp_['asp'])} for ASP and {num(sp_['random'])} for random guesses",
         "three runs per arm in one home, no p-value; the controls ran from 19 Nov, after ASP's runs of 17 and 18 Nov, "
         "under a different GPU load; they lose no members to dropped replies (the LLM runs lost 7% to 10%); the sleep "
         "is a median wait; random-guess members agree with each other less than the LLM's (4.4% against 29.4% of "
         "guesses, in October)",
-        "This does not show that guesses help this pipeline, or that the LLM's guesses beat random ones"]
+        "Neither arm shows that the LLM's guesses beat random ones"]
     need(body(8), ["Two registered control arms run ASP's own pipeline and clock: random guesses in place of the LLM's, "
                    "and no guesses", "S is the mean F1 at 50 to 100 metres of path",
                    "No guesses: reads above, in every run",
-                   "the planner has nothing that values unexplored space, so the pipeline needs some guess to explore; "
-                   "that is not knowledge", "Random guesses: in between. Higher on average, not separated: two "
-                   "random-guess runs beat two LLM runs, and one low run makes the gap",
-                   "Chance alone gives full separation 1 time in 20. Three runs a side, one home, no p-value",
-                   "This does not show that guesses help, or that the LLM's guesses beat random ones"],
+                   "the code gives unexplored space no value here, so this arm differs from ASP in more than what the "
+                   "guesses know", "Random guesses: in between: higher on average, not separated",
+                   "Three runs a side, one home, no p-value",
+                   "Neither arm shows that the LLM's guesses beat random ones",
+                   f"Seed 43 of the no-guess arm keeps growing: its F1 rises {num(cf['seed43']['apr'])} from 50 metres to "
+                   f"100 against the scripted reference and {num(cf['seed43']['hm3d'])} against the human labels, as the "
+                   "LLM runs' does; barely grows is the arm's mean and seeds 42 and 44"],
          "script slide 8")
     need(backup(18), [f"ASP {num(sp_['asp'])}, random guesses {num(sp_['random'])}, no guesses {num(sp_['none'])}, as "
-                      f"slowly as our frontier's {num(sp_['frontier'])}", "decides nothing"], "script backup 18")
+                      f"slowly as our frontier's {num(sp_['frontier'])}", "decides nothing",
+                      "1 time in 20", "two random-guess runs beat two LLM runs",
+                      "the best random-guess run ties the best LLM run, 30.4", "one low random-guess run",
+                      "from 11-19", "4.4% against 29.4%"], "script backup 18")
     for what, txt in (("ENDSEM_Script.md", md), ("README.md", rd),
                       ("docs/RESULTS.md", open(os.path.join(PROJECT, "docs", "RESULTS.md"), encoding="utf-8").read())):
         no_overclaim(txt, what)
@@ -1602,7 +1611,8 @@ def limits_runs(prs, C, budgets, slots, f853, c2):
                             ("In the authors' code, frontier's clock starts when planning ends, before the path "
                              "arrives, so it counts the wait for a path; ASP's starts as the robot begins to move. "
                              f"On 853 November's ASP logs {f853['spm_asp']} s per metre and our frontier "
-                             f"{f853['spm_fr']}, so part of the gaps on slide {MN['t853']} may come from the clock. "
+                             f"{f853['spm_fr']}, so part of the gaps on slide {MN['t853']} may come from the clock; the "
+                             f"arms on slide {MN['arms']} share ASP's clock. "
                              f"On 871 the only ASP–frontier comparison is at {first_871} s.", "n")], B, BODY, 1.3)
     y = P(s, L, y + 8, w, [("The reference moves. ", "b"),
                             (f"The two tours agree at F1 {c2['00853']:.3f} on 853 and {c2['00871']:.3f} on 871, below "
@@ -2474,9 +2484,10 @@ def controls_facts(slots, C, Chm, ep):
     po, pp = vals["apr"]["official_nov"], vals["apr"]["placebo_nov"]
     if sum(1 for v in pp if sum(v > o for o in po) >= 2) != 2:
         fail("the slide says two random-guess runs score above two LLM runs against the scripted reference")
-    if max(vals["hm3d"]["placebo_nov"]) <= max(vals["hm3d"]["official_nov"]) or \
-            max(vals["hm3d"]["placebo_nov"]) <= max(vals["hm3d"]["observed_only_nov"]):
-        fail("the slide says the best run against the human labels is a random-guess run")
+    bp, bo = max(vals["hm3d"]["placebo_nov"]), max(vals["hm3d"]["official_nov"])
+    if not (bp >= bo and rnd(bp, 1) == rnd(bo, 1) == Decimal("30.4")):
+        fail("the backup says that against the human labels the best random-guess run ties the best LLM run (30.4), "
+             f"but they read {bp:.4f} and {bo:.4f}")
     low = {ref: min(runs[ref]["placebo_nov"], key=lambda kv: kv[1])[0] for ref in runs}
     if len(set(low.values())) != 1:
         fail("the slide says the gap in the means comes from one low random-guess run, but the lowest run differs "
@@ -2505,6 +2516,30 @@ def controls_facts(slots, C, Chm, ep):
             fail(f"the slides say that with no guesses the map barely grows with distance, but under {ref} its F1 "
                  f"rises {g['observed_only_nov']:.1f} from 50 m to 100 m against {g['official_nov']:.1f}")
         grow[ref] = g
+    # per run: seeds 42 and 44 of the no-guess arm do not grow from 50 m to 100 m; seed 43 grows as much as the LLM runs
+    pcj = json.load(open(os.path.join(PROJECT, slots["paper_compare_json"])))
+
+    def f1_at(rr, ref, L):
+        best = None
+        for st in rr["stages"]:
+            sc = st.get("scores", {}).get(ref, {}).get("f1")
+            if st["path_m"] <= L and sc is not None:
+                best = sc
+        if best is None:
+            fail(f"{rr['run']} has no F1 at {L} m against {ref}")
+        return 100 * best
+    seed_grow = {}
+    for rr in pcj["runs"]:
+        if rr["scene"] == "00853" and rr["arm"] in ("official_nov", "observed_only_nov"):
+            seed_grow[(rr["arm"], rr["seed"])] = {ref: f1_at(rr, ref, 100) - f1_at(rr, ref, 50)
+                                                  for ref in ("apr", "hm3d")}
+    for ref in ("apr", "hm3d"):
+        llm = [seed_grow[("official_nov", sd)][ref] for sd in (42, 43, 44)]
+        ng = {sd: seed_grow[("observed_only_nov", sd)][ref] for sd in (42, 43, 44)}
+        if not (max(ng[42], ng[44]) < 2 and ng[43] >= min(llm)):
+            fail(f"the script says the no-guess arm's score barely grows in seeds 42 and 44 while seed 43 grows as "
+                 f"much as the LLM runs, but under {ref} the growths are {ng} against {llm}")
+    seed43 = {ref: seed_grow[("observed_only_nov", 43)][ref] for ref in ("apr", "hm3d")}
     # S against the equal-path cells: the mean of S is the mean of the four lengths' means
     for ref in ("apr", "hm3d"):
         for arm in c["arms"]:
@@ -2542,7 +2577,7 @@ def controls_facts(slots, C, Chm, ep):
         if not (min(o2) <= max(pl) and min(o2) > max(ob)):
             fail(f"the backup says the statements hold without seed 43, but under {ref} they change")
     out = {"S": runs, "mean": mean, "reading": reading, "spm": {"asp": so, "random": sp, "none": sa, "frontier": sf},
-           "grow": grow, "low": low, "nov_alt": nov}
+           "grow": grow, "seed43": seed43, "low": low, "nov_alt": nov}
     return out
 
 
@@ -2578,27 +2613,17 @@ def controls_slide(prs, slots, cf):
                               "first made after the results were seen for ASP with the LLM's guesses (deviation 66). "
                               "The statements are the registration's (A5.6).", limit=1000)
     sa = num(cf["spm"]["none"])
-    sf = num(cf["spm"]["frontier"])
+    so = num(cf["spm"]["asp"])
     y0 = y + 12
-    y1 = P(s, 120, y0, 820, [("No guesses: reads above. ", "b"),
-                             ("Every run with the LLM's guesses scores above every no-guess run, under both "
-                              "references. Without any guesses, ASP's planner has nothing that values unexplored space "
-                              "here: this arm shows the pipeline needs some guess to explore, not that guesses add "
-                              f"knowledge. It moves at {sa} s per metre, as slowly as frontier ({sf}).", "n")],
-           26, BODY, 1.3)
+    y1 = P(s, 120, y0, 820, [("No guesses: reads above, ", "b"),
+                             ("under both references. The code gives unexplored space no value here "
+                              "(live_policy.py, lines 19 to 22), so this arm differs from ASP in more than what the "
+                              "guesses know.", "n")], 28, BODY, 1.3)
     y2 = P(s, 980, y0, 820, [("Random guesses: in between. ", "b"),
-                             ("Higher on average, not separated, under both references. Two random-guess runs score "
-                              "above two LLM runs against the scripted reference, the best run against the human "
-                              "labels is a random-guess run, and the gap in the means comes from one low "
-                              "random-guess run.", "n")], 26, BODY, 1.3)
-    dp = c["dropped_pct_official_nov"]
-    N(s, 120, max(y1, y2) + 10, 1680,
-      "Chance alone gives full separation 1 time in 20 with three runs a side. Limits: three runs per arm in one home, "
-      "no p-value; the controls ran from 11-19, after the LLM runs of 11-17 and 11-18, under a different GPU load; "
-      f"they lose no members to dropped replies (the LLM runs lost {round(min(dp))}% to {round(max(dp))}%); the sleep "
-      "is a median wait; random-guess members agree with each other less than the LLM's (4.4% against 29.4%, "
-      "October). Neither arm shows that guesses help this pipeline, or that the LLM's guesses beat random ones.",
-      limit=1005)
+                             ("Higher on average, not separated, under both references.", "n")], 28, BODY, 1.3)
+    N(s, 120, max(y1, y2) + 14, 1680,
+      f"Three runs a side, one home, no p-value; the controls ran later, lost no members, and the no-guess arm moves "
+      f"at {sa} s per metre against {so}. Neither arm shows that the LLM's guesses beat random ones.", limit=1005)
 
 
 def controls_extra_slide(prs, slots, C, Chm, ep, cf):
@@ -2627,29 +2652,39 @@ def controls_extra_slide(prs, slots, C, Chm, ep, cf):
             cx = 120 + lw + j * cw
             text(s, cx, y + 2, cw, 38, [run(main, 26, INK, MONO)], PP_ALIGN.CENTER, 1.2)
             text(s, cx, y + 36, cw, 30, [run(sub, NT, MID)], PP_ALIGN.CENTER, 1.2)
-        y += 70
+        y += 66
         hline(s, 120, y, 120 + lw + 4 * cw, y, RULE)
-    y = lab(s, 120, y + 24, 1680, "Seconds of navigation time per metre, mean [min–max]")
+    y = lab(s, 120, y + 14, 1680, "Seconds of navigation time per metre, mean [min–max]")
     spm = c["sec_per_m"]
     names = [("official_nov", ARM_NAME["official_nov"]), ("placebo_nov", ARM_NAME["placebo_nov"]),
              ("observed_only_nov", ARM_NAME["observed_only_nov"]), ("frontier_end", "Our frontier")]
     for j, (arm, name) in enumerate(names):
         v = spm[arm]
-        x = 120 + (j % 2) * 840
-        yy = y + (j // 2) * 56
-        text(s, x, yy, 400, 40, [run(name, 28, INK, SANS, True)], line=1.2)
-        text(s, x + 400, yy, 440, 40, [run(f"{num(v['mean'], 2)} [{num(v['min'], 2)}{DASH}{num(v['max'], 2)}] "
-                                           f"n={v['n']}", 26, INK, MONO)], line=1.2)
-    y += 2 * 56 + 14
-    y = N(s, 120, y, 1680, "The equal-time cells (readout 1) and the seconds per metre (readout 3) decide nothing: A5.6 "
-                           "fixes the reading on S. Equal-path F1 (readout 2, the input to S) is registered for the "
-                           "two new arms and was first made after the results were seen for ASP with the LLM's "
-                           "guesses and for frontier. The new arms are never pooled with October's random-guess runs.",
-          limit=1000)
+        x = 120 + j * 420
+        text(s, x, y, 410, 34, [run(name, 26, INK, SANS, True)], line=1.2)
+        text(s, x, y + 34, 410, 34, [run(f"{num(v['mean'], 2)} [{num(v['min'], 2)}{DASH}{num(v['max'], 2)}] "
+                                         f"n={v['n']}", 24, INK, MONO)], line=1.2)
+    y += 76
     nv = cf["nov_alt"]
-    N(s, 120, y + 6, 1680, "Seed 43 of the LLM arm read other ways (deviation 64) decides nothing: without it the arm's "
-                           f"mean S is {num(nv['without']['apr'])} and {num(nv['without']['hm3d'])}, and both "
-                           "statements stand.", limit=1010)
+    y = N(s, 120, y, 1680, "Readouts 1 and 3 decide nothing (A5.6). Readout 2, the input to S, is registered for the "
+                           "new arms and was first made after the results were seen for ASP with the LLM's guesses and "
+                           "for frontier. Never pooled with October's random-guess runs. Seed 43 of the LLM arm read "
+                           f"other ways (deviation 64) decides nothing: without it the mean S is {num(nv['without']['apr'])} "
+                           f"and {num(nv['without']['hm3d'])}, and both statements stand.", limit=1000)
+    g, g43, so = cf["grow"], cf["seed43"], cf["spm"]
+    dp = c["dropped_pct_official_nov"]
+    N(s, 120, y + 8, 1680,
+      "From slide 8. Chance alone gives full separation 1 time in 20 with three runs a side. Against random guesses, "
+      "two random-guess runs score above two LLM runs against the scripted reference, the best random-guess run ties "
+      "the best LLM run against the human labels (30.4), and the gap in the means comes from one low random-guess run. "
+      "The controls ran from 11-19, after the LLM runs of 11-17 and 11-18, under a different GPU load; the sleep is a "
+      f"median wait; the LLM runs lost {round(min(dp))}% to {round(max(dp))}% of members to dropped replies, the "
+      "controls none; random-guess members agree with each other less than the LLM's (4.4% against 29.4%, October). "
+      f"The no-guess arm moves at {num(so['none'])} s per metre, as slowly as frontier ({num(so['frontier'])}). Its "
+      "score barely grows with distance on average (F1 from 50 m to 100 m, scripted reference / human labels: "
+      f"+{num(g['apr']['observed_only_nov'])} / +{num(g['hm3d']['observed_only_nov'])} against "
+      f"+{num(g['apr']['official_nov'])} / +{num(g['hm3d']['official_nov'])} for ASP); seed 43 keeps growing "
+      f"(+{num(g43['apr'])} / +{num(g43['hm3d'])}).", limit=1010)
 
 
 # ---------------------------------------------------------------- 20. Part 3, the paper's room test
@@ -2855,7 +2890,8 @@ def findings_facts(slots, Nn, f853):
     return {"hi": rnd(hi, 2)}
 
 
-OVERCLAIMS = ("guesses help", "guesses add to", "guesses add knowledge", "LLM's guesses beat random",
+OVERCLAIMS = ("guesses help", "guesses add to", "guesses add knowledge", "needs some guess to explore",
+              "LLM's guesses beat random",
               "LLM's guesses add to ASP", "guesses cause that lead", "here the LLM's guesses add",
               "registered and running", "registered, running", "no result of them", "are registered and running")
 
@@ -2896,8 +2932,8 @@ def answer(prs, slots):
 SENTENCES = {1: "Live, with a small model, ASP's guesses made no detectable difference to the map; a gain up to {hi} F1 "
                 "is not ruled out.",
              2: "At the paper's scale on 853, ASP leads frontier by the clock but not clearly by distance. Against the "
-                "same pipeline with random guesses it is higher on average but not separated; with no guesses the "
-                "pipeline's map barely grows with distance.",
+                "same pipeline with random guesses it is higher on average but not separated; against no guesses it "
+                "reads above, and with none the score barely grows with distance on average.",
              3: "On saved inputs, none of five models (two Claude, three Gemini) was found to put its guesses in fitting "
                 "regions more often than a trade of regions, and a prior from {houses} other houses named objects "
                 "better than every one of them."}
@@ -2913,9 +2949,8 @@ def closing(prs, slots, Nn, ff):
     y = P(s, 120, y + 4, 1680, [("It does not say ", "b"),
                                 (f"that the guesses carry nothing; that the models are no better than random guesses "
                                  f"(Haiku is {num(100 * hh['diff'], 1)} points above them at L2: one contrast, not "
-                                 f"adjusted, exploratory); that guesses of any kind help this pipeline, or that the "
-                                 "LLM's guesses beat random ones; or that a language model cannot help exploration. "
-                                 "Thank you.", "n")], B, BODY, 1.3, limit=1010)
+                                 f"adjusted, exploratory); that the LLM's guesses beat random ones; or that a language "
+                                 "model cannot help exploration. Thank you.", "n")], B, BODY, 1.3, limit=1010)
 
 
 # ---------------------------------------------------------------- Backup 1. The paper's room test
