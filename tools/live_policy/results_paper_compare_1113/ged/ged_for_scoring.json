@@ -14499,6 +14499,1956 @@
     }
    ],
    "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s42_observed_only_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 4.125000000000004,
+     "nav_s": 33.52428960800171,
+     "n_graphs": 2,
+     "ged_hm3d": 600.5,
+     "ged_frontier_made": 283.0,
+     "ged_apr": 346.5
+    },
+    {
+     "stage": 2,
+     "path_m": 8.32500000000001,
+     "nav_s": 56.21717715263367,
+     "n_graphs": 2,
+     "ged_hm3d": 619.5,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 308.0
+    },
+    {
+     "stage": 3,
+     "path_m": 9.150000000000002,
+     "nav_s": 69.60239553451538,
+     "n_graphs": 2,
+     "ged_hm3d": 629.5,
+     "ged_frontier_made": 292.5,
+     "ged_apr": 299.5
+    },
+    {
+     "stage": 4,
+     "path_m": 11.39999999999998,
+     "nav_s": 86.20323443412781,
+     "n_graphs": 2,
+     "ged_hm3d": 622.5,
+     "ged_frontier_made": 271.5,
+     "ged_apr": 299.0
+    },
+    {
+     "stage": 5,
+     "path_m": 13.64999999999996,
+     "nav_s": 97.30581331253052,
+     "n_graphs": 2,
+     "ged_hm3d": 623.0,
+     "ged_frontier_made": 262.0,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 6,
+     "path_m": 15.149999999999945,
+     "nav_s": 105.29143643379211,
+     "n_graphs": 2,
+     "ged_hm3d": 630.5,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 296.5
+    },
+    {
+     "stage": 7,
+     "path_m": 17.174999999999926,
+     "nav_s": 113.30157566070557,
+     "n_graphs": 2,
+     "ged_hm3d": 636.0,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 293.5
+    },
+    {
+     "stage": 8,
+     "path_m": 26.774999999999835,
+     "nav_s": 160.50376868247986,
+     "n_graphs": 2,
+     "ged_hm3d": 644.5,
+     "ged_frontier_made": 240.0,
+     "ged_apr": 284.0
+    },
+    {
+     "stage": 9,
+     "path_m": 29.999999999999805,
+     "nav_s": 179.68020701408386,
+     "n_graphs": 2,
+     "ged_hm3d": 653.5,
+     "ged_frontier_made": 244.0,
+     "ged_apr": 284.5
+    },
+    {
+     "stage": 10,
+     "path_m": 31.049999999999795,
+     "nav_s": 193.6393973827362,
+     "n_graphs": 2,
+     "ged_hm3d": 656.0,
+     "ged_frontier_made": 247.5,
+     "ged_apr": 286.5
+    },
+    {
+     "stage": 11,
+     "path_m": 33.824999999999854,
+     "nav_s": 202.24913144111633,
+     "n_graphs": 2,
+     "ged_hm3d": 654.5,
+     "ged_frontier_made": 250.0,
+     "ged_apr": 282.0
+    },
+    {
+     "stage": 12,
+     "path_m": 34.949999999999896,
+     "nav_s": 210.08225989341736,
+     "n_graphs": 2,
+     "ged_hm3d": 660.5,
+     "ged_frontier_made": 249.0,
+     "ged_apr": 285.0
+    },
+    {
+     "stage": 13,
+     "path_m": 35.54999999999992,
+     "nav_s": 220.9787380695343,
+     "n_graphs": 2,
+     "ged_hm3d": 661.5,
+     "ged_frontier_made": 254.0,
+     "ged_apr": 285.5
+    },
+    {
+     "stage": 14,
+     "path_m": 38.02500000000001,
+     "nav_s": 240.92151045799255,
+     "n_graphs": 2,
+     "ged_hm3d": 667.0,
+     "ged_frontier_made": 249.0,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 15,
+     "path_m": 39.00000000000005,
+     "nav_s": 254.54874682426453,
+     "n_graphs": 2,
+     "ged_hm3d": 665.5,
+     "ged_frontier_made": 249.5,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 16,
+     "path_m": 40.425000000000104,
+     "nav_s": 267.7666554450989,
+     "n_graphs": 2,
+     "ged_hm3d": 671.0,
+     "ged_frontier_made": 248.0,
+     "ged_apr": 301.0
+    },
+    {
+     "stage": 17,
+     "path_m": 42.9750000000002,
+     "nav_s": 291.36547350883484,
+     "n_graphs": 2,
+     "ged_hm3d": 669.0,
+     "ged_frontier_made": 244.0,
+     "ged_apr": 301.5
+    },
+    {
+     "stage": 18,
+     "path_m": 46.12500000000032,
+     "nav_s": 336.3775100708008,
+     "n_graphs": 2,
+     "ged_hm3d": 670.0,
+     "ged_frontier_made": 244.0,
+     "ged_apr": 301.5
+    },
+    {
+     "stage": 19,
+     "path_m": 53.100000000000584,
+     "nav_s": 380.0434126853943,
+     "n_graphs": 2,
+     "ged_hm3d": 677.5,
+     "ged_frontier_made": 258.0,
+     "ged_apr": 283.0
+    },
+    {
+     "stage": 20,
+     "path_m": 54.30000000000063,
+     "nav_s": 396.28058910369873,
+     "n_graphs": 2,
+     "ged_hm3d": 676.0,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 291.0
+    },
+    {
+     "stage": 21,
+     "path_m": 58.50000000000079,
+     "nav_s": 419.7738742828369,
+     "n_graphs": 2,
+     "ged_hm3d": 677.5,
+     "ged_frontier_made": 259.0,
+     "ged_apr": 289.5
+    },
+    {
+     "stage": 22,
+     "path_m": 58.8750000000008,
+     "nav_s": 431.4419093132019,
+     "n_graphs": 2,
+     "ged_hm3d": 676.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 288.0
+    },
+    {
+     "stage": 23,
+     "path_m": 59.175000000000814,
+     "nav_s": 441.67696738243103,
+     "n_graphs": 2,
+     "ged_hm3d": 677.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 282.0
+    },
+    {
+     "stage": 24,
+     "path_m": 59.77500000000084,
+     "nav_s": 443.74512100219727,
+     "n_graphs": 2,
+     "ged_hm3d": 677.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 286.0
+    },
+    {
+     "stage": 25,
+     "path_m": 65.40000000000104,
+     "nav_s": 484.61742210388184,
+     "n_graphs": 2,
+     "ged_hm3d": 676.5,
+     "ged_frontier_made": 257.0,
+     "ged_apr": 281.5
+    },
+    {
+     "stage": 26,
+     "path_m": 73.87500000000136,
+     "nav_s": 539.0605852603912,
+     "n_graphs": 2,
+     "ged_hm3d": 682.5,
+     "ged_frontier_made": 253.0,
+     "ged_apr": 295.0
+    },
+    {
+     "stage": 27,
+     "path_m": 79.12500000000156,
+     "nav_s": 584.4283595085144,
+     "n_graphs": 2,
+     "ged_hm3d": 683.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 295.5
+    },
+    {
+     "stage": 28,
+     "path_m": 83.02500000000171,
+     "nav_s": 605.1292245388031,
+     "n_graphs": 2,
+     "ged_hm3d": 683.0,
+     "ged_frontier_made": 256.5,
+     "ged_apr": 302.0
+    },
+    {
+     "stage": 29,
+     "path_m": 87.67500000000189,
+     "nav_s": 636.1148428916931,
+     "n_graphs": 2,
+     "ged_hm3d": 689.5,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 292.5
+    },
+    {
+     "stage": 30,
+     "path_m": 87.67500000000189,
+     "nav_s": 636.1673245429993,
+     "n_graphs": 2,
+     "ged_hm3d": 690.0,
+     "ged_frontier_made": 264.0,
+     "ged_apr": 280.0
+    },
+    {
+     "stage": 31,
+     "path_m": 87.67500000000189,
+     "nav_s": 636.3324203491211,
+     "n_graphs": 2,
+     "ged_hm3d": 690.0,
+     "ged_frontier_made": 263.5,
+     "ged_apr": 280.0
+    },
+    {
+     "stage": 32,
+     "path_m": 88.87500000000193,
+     "nav_s": 648.6165270805359,
+     "n_graphs": 2,
+     "ged_hm3d": 688.0,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 33,
+     "path_m": 97.12500000000225,
+     "nav_s": 692.7568809986115,
+     "n_graphs": 2,
+     "ged_hm3d": 686.5,
+     "ged_frontier_made": 258.0,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 34,
+     "path_m": 102.30000000000244,
+     "nav_s": 737.4954130649567,
+     "n_graphs": 2,
+     "ged_hm3d": 694.5,
+     "ged_frontier_made": 270.5,
+     "ged_apr": 311.0
+    },
+    {
+     "stage": 35,
+     "path_m": 104.47500000000252,
+     "nav_s": 762.9927840232849,
+     "n_graphs": 2,
+     "ged_hm3d": 690.0,
+     "ged_frontier_made": 262.5,
+     "ged_apr": 304.5
+    },
+    {
+     "stage": 36,
+     "path_m": 106.27500000000259,
+     "nav_s": 786.2825784683228,
+     "n_graphs": 2,
+     "ged_hm3d": 696.0,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 311.0
+    },
+    {
+     "stage": 37,
+     "path_m": 110.17500000000274,
+     "nav_s": 817.6016755104065,
+     "n_graphs": 2,
+     "ged_hm3d": 693.5,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 309.0
+    },
+    {
+     "stage": 38,
+     "path_m": 112.72500000000284,
+     "nav_s": 835.4984211921692,
+     "n_graphs": 2,
+     "ged_hm3d": 697.5,
+     "ged_frontier_made": 266.0,
+     "ged_apr": 310.0
+    },
+    {
+     "stage": 39,
+     "path_m": 114.2250000000029,
+     "nav_s": 849.1296741962433,
+     "n_graphs": 2,
+     "ged_hm3d": 692.5,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 308.5
+    },
+    {
+     "stage": 40,
+     "path_m": 116.25000000000297,
+     "nav_s": 857.8928654193878,
+     "n_graphs": 2,
+     "ged_hm3d": 696.5,
+     "ged_frontier_made": 266.5,
+     "ged_apr": 310.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s42_placebo_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 2.9250000000000016,
+     "nav_s": 11.299034595489502,
+     "n_graphs": 2,
+     "ged_hm3d": 604.5,
+     "ged_frontier_made": 267.0,
+     "ged_apr": 339.0
+    },
+    {
+     "stage": 2,
+     "path_m": 3.8250000000000037,
+     "nav_s": 21.687745332717896,
+     "n_graphs": 2,
+     "ged_hm3d": 616.0,
+     "ged_frontier_made": 271.0,
+     "ged_apr": 344.0
+    },
+    {
+     "stage": 3,
+     "path_m": 4.875000000000006,
+     "nav_s": 35.19052076339722,
+     "n_graphs": 2,
+     "ged_hm3d": 620.5,
+     "ged_frontier_made": 276.5,
+     "ged_apr": 347.0
+    },
+    {
+     "stage": 4,
+     "path_m": 4.950000000000006,
+     "nav_s": 35.600257396698,
+     "n_graphs": 2,
+     "ged_hm3d": 619.5,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 347.5
+    },
+    {
+     "stage": 5,
+     "path_m": 8.625000000000007,
+     "nav_s": 55.196991205215454,
+     "n_graphs": 2,
+     "ged_hm3d": 619.0,
+     "ged_frontier_made": 280.5,
+     "ged_apr": 342.5
+    },
+    {
+     "stage": 6,
+     "path_m": 16.049999999999937,
+     "nav_s": 97.40052342414856,
+     "n_graphs": 2,
+     "ged_hm3d": 638.5,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 279.5
+    },
+    {
+     "stage": 7,
+     "path_m": 17.099999999999927,
+     "nav_s": 108.32736420631409,
+     "n_graphs": 2,
+     "ged_hm3d": 651.0,
+     "ged_frontier_made": 230.5,
+     "ged_apr": 297.0
+    },
+    {
+     "stage": 8,
+     "path_m": 20.99999999999989,
+     "nav_s": 128.16390299797058,
+     "n_graphs": 2,
+     "ged_hm3d": 669.0,
+     "ged_frontier_made": 207.5,
+     "ged_apr": 292.0
+    },
+    {
+     "stage": 9,
+     "path_m": 29.774999999999807,
+     "nav_s": 162.61530375480652,
+     "n_graphs": 2,
+     "ged_hm3d": 677.5,
+     "ged_frontier_made": 214.0,
+     "ged_apr": 267.5
+    },
+    {
+     "stage": 10,
+     "path_m": 37.12499999999998,
+     "nav_s": 211.19418263435364,
+     "n_graphs": 2,
+     "ged_hm3d": 692.5,
+     "ged_frontier_made": 208.5,
+     "ged_apr": 265.5
+    },
+    {
+     "stage": 11,
+     "path_m": 38.40000000000003,
+     "nav_s": 218.4791021347046,
+     "n_graphs": 2,
+     "ged_hm3d": 716.0,
+     "ged_frontier_made": 201.5,
+     "ged_apr": 276.0
+    },
+    {
+     "stage": 12,
+     "path_m": 41.47500000000014,
+     "nav_s": 235.07589149475098,
+     "n_graphs": 2,
+     "ged_hm3d": 730.5,
+     "ged_frontier_made": 214.0,
+     "ged_apr": 283.5
+    },
+    {
+     "stage": 13,
+     "path_m": 42.9000000000002,
+     "nav_s": 242.57364082336426,
+     "n_graphs": 2,
+     "ged_hm3d": 735.0,
+     "ged_frontier_made": 218.5,
+     "ged_apr": 290.0
+    },
+    {
+     "stage": 14,
+     "path_m": 43.875000000000234,
+     "nav_s": 254.5344386100769,
+     "n_graphs": 2,
+     "ged_hm3d": 739.5,
+     "ged_frontier_made": 221.5,
+     "ged_apr": 286.0
+    },
+    {
+     "stage": 15,
+     "path_m": 47.10000000000036,
+     "nav_s": 282.31151604652405,
+     "n_graphs": 2,
+     "ged_hm3d": 739.0,
+     "ged_frontier_made": 224.0,
+     "ged_apr": 281.0
+    },
+    {
+     "stage": 16,
+     "path_m": 53.32500000000059,
+     "nav_s": 319.022287607193,
+     "n_graphs": 2,
+     "ged_hm3d": 756.0,
+     "ged_frontier_made": 213.0,
+     "ged_apr": 262.0
+    },
+    {
+     "stage": 17,
+     "path_m": 59.85000000000084,
+     "nav_s": 357.427072763443,
+     "n_graphs": 2,
+     "ged_hm3d": 767.5,
+     "ged_frontier_made": 206.0,
+     "ged_apr": 279.0
+    },
+    {
+     "stage": 18,
+     "path_m": 65.40000000000104,
+     "nav_s": 387.75678420066833,
+     "n_graphs": 2,
+     "ged_hm3d": 761.5,
+     "ged_frontier_made": 197.5,
+     "ged_apr": 280.0
+    },
+    {
+     "stage": 19,
+     "path_m": 66.8250000000011,
+     "nav_s": 392.90839767456055,
+     "n_graphs": 2,
+     "ged_hm3d": 764.5,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 278.5
+    },
+    {
+     "stage": 20,
+     "path_m": 69.3750000000012,
+     "nav_s": 411.5760381221771,
+     "n_graphs": 2,
+     "ged_hm3d": 767.0,
+     "ged_frontier_made": 198.5,
+     "ged_apr": 272.0
+    },
+    {
+     "stage": 21,
+     "path_m": 75.67500000000143,
+     "nav_s": 441.0605854988098,
+     "n_graphs": 2,
+     "ged_hm3d": 793.0,
+     "ged_frontier_made": 162.0,
+     "ged_apr": 214.0
+    },
+    {
+     "stage": 22,
+     "path_m": 79.20000000000157,
+     "nav_s": 457.887482881546,
+     "n_graphs": 2,
+     "ged_hm3d": 806.0,
+     "ged_frontier_made": 172.0,
+     "ged_apr": 236.5
+    },
+    {
+     "stage": 23,
+     "path_m": 83.77500000000174,
+     "nav_s": 487.6559867858887,
+     "n_graphs": 2,
+     "ged_hm3d": 801.5,
+     "ged_frontier_made": 169.0,
+     "ged_apr": 229.0
+    },
+    {
+     "stage": 24,
+     "path_m": 85.87500000000182,
+     "nav_s": 497.18955159187317,
+     "n_graphs": 2,
+     "ged_hm3d": 811.5,
+     "ged_frontier_made": 170.0,
+     "ged_apr": 212.5
+    },
+    {
+     "stage": 25,
+     "path_m": 89.40000000000195,
+     "nav_s": 523.3978028297424,
+     "n_graphs": 2,
+     "ged_hm3d": 812.0,
+     "ged_frontier_made": 181.5,
+     "ged_apr": 234.0
+    },
+    {
+     "stage": 26,
+     "path_m": 91.57500000000203,
+     "nav_s": 530.6194794178009,
+     "n_graphs": 2,
+     "ged_hm3d": 821.5,
+     "ged_frontier_made": 177.0,
+     "ged_apr": 222.0
+    },
+    {
+     "stage": 27,
+     "path_m": 96.0750000000022,
+     "nav_s": 551.3211824893951,
+     "n_graphs": 2,
+     "ged_hm3d": 824.0,
+     "ged_frontier_made": 180.0,
+     "ged_apr": 220.0
+    },
+    {
+     "stage": 28,
+     "path_m": 104.17500000000251,
+     "nav_s": 588.5784177780151,
+     "n_graphs": 2,
+     "ged_hm3d": 838.0,
+     "ged_frontier_made": 178.0,
+     "ged_apr": 224.0
+    },
+    {
+     "stage": 29,
+     "path_m": 106.5750000000026,
+     "nav_s": 600.7099905014038,
+     "n_graphs": 2,
+     "ged_hm3d": 843.0,
+     "ged_frontier_made": 183.5,
+     "ged_apr": 228.5
+    },
+    {
+     "stage": 30,
+     "path_m": 115.87500000000296,
+     "nav_s": 647.3342459201813,
+     "n_graphs": 2,
+     "ged_hm3d": 850.5,
+     "ged_frontier_made": 175.5,
+     "ged_apr": 216.5
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s43_observed_only_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 1.4999999999999996,
+     "nav_s": 7.8627307415008545,
+     "n_graphs": 2,
+     "ged_hm3d": 606.5,
+     "ged_frontier_made": 270.0,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 2,
+     "path_m": 5.100000000000007,
+     "nav_s": 27.7901713848114,
+     "n_graphs": 2,
+     "ged_hm3d": 616.5,
+     "ged_frontier_made": 270.0,
+     "ged_apr": 324.5
+    },
+    {
+     "stage": 3,
+     "path_m": 6.975000000000011,
+     "nav_s": 42.56594729423523,
+     "n_graphs": 2,
+     "ged_hm3d": 617.5,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 328.5
+    },
+    {
+     "stage": 4,
+     "path_m": 8.850000000000005,
+     "nav_s": 60.128350496292114,
+     "n_graphs": 2,
+     "ged_hm3d": 618.5,
+     "ged_frontier_made": 262.0,
+     "ged_apr": 324.0
+    },
+    {
+     "stage": 5,
+     "path_m": 8.925000000000004,
+     "nav_s": 61.56904578208923,
+     "n_graphs": 2,
+     "ged_hm3d": 622.0,
+     "ged_frontier_made": 262.0,
+     "ged_apr": 325.0
+    },
+    {
+     "stage": 6,
+     "path_m": 10.049999999999994,
+     "nav_s": 76.6156325340271,
+     "n_graphs": 2,
+     "ged_hm3d": 617.0,
+     "ged_frontier_made": 259.5,
+     "ged_apr": 321.5
+    },
+    {
+     "stage": 7,
+     "path_m": 11.699999999999978,
+     "nav_s": 83.51036071777344,
+     "n_graphs": 2,
+     "ged_hm3d": 629.0,
+     "ged_frontier_made": 272.0,
+     "ged_apr": 277.0
+    },
+    {
+     "stage": 8,
+     "path_m": 12.44999999999997,
+     "nav_s": 87.16742181777954,
+     "n_graphs": 2,
+     "ged_hm3d": 635.0,
+     "ged_frontier_made": 274.5,
+     "ged_apr": 283.5
+    },
+    {
+     "stage": 9,
+     "path_m": 13.274999999999963,
+     "nav_s": 93.56432723999023,
+     "n_graphs": 2,
+     "ged_hm3d": 624.0,
+     "ged_frontier_made": 257.0,
+     "ged_apr": 277.0
+    },
+    {
+     "stage": 10,
+     "path_m": 14.024999999999956,
+     "nav_s": 105.95090579986572,
+     "n_graphs": 2,
+     "ged_hm3d": 631.5,
+     "ged_frontier_made": 260.0,
+     "ged_apr": 285.0
+    },
+    {
+     "stage": 11,
+     "path_m": 14.399999999999952,
+     "nav_s": 117.57109117507935,
+     "n_graphs": 2,
+     "ged_hm3d": 630.0,
+     "ged_frontier_made": 261.0,
+     "ged_apr": 279.5
+    },
+    {
+     "stage": 12,
+     "path_m": 14.774999999999949,
+     "nav_s": 122.07113027572632,
+     "n_graphs": 2,
+     "ged_hm3d": 626.5,
+     "ged_frontier_made": 273.5,
+     "ged_apr": 277.5
+    },
+    {
+     "stage": 13,
+     "path_m": 15.449999999999942,
+     "nav_s": 123.77589988708496,
+     "n_graphs": 2,
+     "ged_hm3d": 626.5,
+     "ged_frontier_made": 258.0,
+     "ged_apr": 279.0
+    },
+    {
+     "stage": 14,
+     "path_m": 18.299999999999915,
+     "nav_s": 138.9443347454071,
+     "n_graphs": 2,
+     "ged_hm3d": 628.5,
+     "ged_frontier_made": 251.0,
+     "ged_apr": 279.0
+    },
+    {
+     "stage": 15,
+     "path_m": 19.7999999999999,
+     "nav_s": 152.95120549201965,
+     "n_graphs": 2,
+     "ged_hm3d": 630.5,
+     "ged_frontier_made": 269.0,
+     "ged_apr": 284.5
+    },
+    {
+     "stage": 16,
+     "path_m": 22.349999999999877,
+     "nav_s": 162.74899673461914,
+     "n_graphs": 2,
+     "ged_hm3d": 632.0,
+     "ged_frontier_made": 261.5,
+     "ged_apr": 285.0
+    },
+    {
+     "stage": 17,
+     "path_m": 23.474999999999866,
+     "nav_s": 166.8046510219574,
+     "n_graphs": 2,
+     "ged_hm3d": 648.5,
+     "ged_frontier_made": 240.0,
+     "ged_apr": 282.0
+    },
+    {
+     "stage": 18,
+     "path_m": 24.29999999999986,
+     "nav_s": 176.20356225967407,
+     "n_graphs": 2,
+     "ged_hm3d": 661.0,
+     "ged_frontier_made": 229.5,
+     "ged_apr": 293.5
+    },
+    {
+     "stage": 19,
+     "path_m": 27.674999999999827,
+     "nav_s": 189.08577179908752,
+     "n_graphs": 2,
+     "ged_hm3d": 673.5,
+     "ged_frontier_made": 234.5,
+     "ged_apr": 285.5
+    },
+    {
+     "stage": 20,
+     "path_m": 36.29999999999995,
+     "nav_s": 240.88222861289978,
+     "n_graphs": 2,
+     "ged_hm3d": 677.5,
+     "ged_frontier_made": 233.5,
+     "ged_apr": 290.0
+    },
+    {
+     "stage": 21,
+     "path_m": 40.12500000000009,
+     "nav_s": 261.98288559913635,
+     "n_graphs": 2,
+     "ged_hm3d": 677.0,
+     "ged_frontier_made": 232.0,
+     "ged_apr": 292.5
+    },
+    {
+     "stage": 22,
+     "path_m": 51.15000000000051,
+     "nav_s": 332.65563106536865,
+     "n_graphs": 2,
+     "ged_hm3d": 681.0,
+     "ged_frontier_made": 230.0,
+     "ged_apr": 290.0
+    },
+    {
+     "stage": 23,
+     "path_m": 57.45000000000075,
+     "nav_s": 367.62642550468445,
+     "n_graphs": 2,
+     "ged_hm3d": 698.0,
+     "ged_frontier_made": 221.5,
+     "ged_apr": 295.5
+    },
+    {
+     "stage": 24,
+     "path_m": 58.425000000000786,
+     "nav_s": 375.0182182788849,
+     "n_graphs": 2,
+     "ged_hm3d": 701.0,
+     "ged_frontier_made": 221.5,
+     "ged_apr": 294.5
+    },
+    {
+     "stage": 25,
+     "path_m": 62.625000000000945,
+     "nav_s": 408.4986352920532,
+     "n_graphs": 2,
+     "ged_hm3d": 700.0,
+     "ged_frontier_made": 230.0,
+     "ged_apr": 273.5
+    },
+    {
+     "stage": 26,
+     "path_m": 66.22500000000107,
+     "nav_s": 433.68118262290955,
+     "n_graphs": 2,
+     "ged_hm3d": 707.5,
+     "ged_frontier_made": 228.0,
+     "ged_apr": 284.5
+    },
+    {
+     "stage": 27,
+     "path_m": 67.12500000000111,
+     "nav_s": 440.57770895957947,
+     "n_graphs": 2,
+     "ged_hm3d": 712.5,
+     "ged_frontier_made": 228.0,
+     "ged_apr": 302.5
+    },
+    {
+     "stage": 28,
+     "path_m": 68.77500000000117,
+     "nav_s": 450.03609347343445,
+     "n_graphs": 2,
+     "ged_hm3d": 717.0,
+     "ged_frontier_made": 227.0,
+     "ged_apr": 294.5
+    },
+    {
+     "stage": 29,
+     "path_m": 70.27500000000123,
+     "nav_s": 465.8362307548523,
+     "n_graphs": 2,
+     "ged_hm3d": 719.0,
+     "ged_frontier_made": 228.5,
+     "ged_apr": 302.0
+    },
+    {
+     "stage": 30,
+     "path_m": 74.7750000000014,
+     "nav_s": 514.2941720485687,
+     "n_graphs": 2,
+     "ged_hm3d": 742.5,
+     "ged_frontier_made": 219.5,
+     "ged_apr": 270.5
+    },
+    {
+     "stage": 31,
+     "path_m": 76.57500000000147,
+     "nav_s": 531.1156115531921,
+     "n_graphs": 2,
+     "ged_hm3d": 739.0,
+     "ged_frontier_made": 220.5,
+     "ged_apr": 274.0
+    },
+    {
+     "stage": 32,
+     "path_m": 79.12500000000156,
+     "nav_s": 545.463841676712,
+     "n_graphs": 2,
+     "ged_hm3d": 746.5,
+     "ged_frontier_made": 221.5,
+     "ged_apr": 264.5
+    },
+    {
+     "stage": 33,
+     "path_m": 81.30000000000165,
+     "nav_s": 559.9287095069885,
+     "n_graphs": 2,
+     "ged_hm3d": 751.5,
+     "ged_frontier_made": 186.0,
+     "ged_apr": 272.0
+    },
+    {
+     "stage": 34,
+     "path_m": 83.32500000000172,
+     "nav_s": 576.2553825378418,
+     "n_graphs": 2,
+     "ged_hm3d": 761.5,
+     "ged_frontier_made": 193.0,
+     "ged_apr": 263.5
+    },
+    {
+     "stage": 35,
+     "path_m": 85.72500000000181,
+     "nav_s": 611.4568207263947,
+     "n_graphs": 2,
+     "ged_hm3d": 757.5,
+     "ged_frontier_made": 186.5,
+     "ged_apr": 270.0
+    },
+    {
+     "stage": 36,
+     "path_m": 86.70000000000185,
+     "nav_s": 618.3546533584595,
+     "n_graphs": 2,
+     "ged_hm3d": 759.5,
+     "ged_frontier_made": 191.0,
+     "ged_apr": 270.0
+    },
+    {
+     "stage": 37,
+     "path_m": 91.50000000000203,
+     "nav_s": 646.3300385475159,
+     "n_graphs": 2,
+     "ged_hm3d": 761.0,
+     "ged_frontier_made": 199.5,
+     "ged_apr": 260.5
+    },
+    {
+     "stage": 38,
+     "path_m": 93.00000000000209,
+     "nav_s": 658.5257003307343,
+     "n_graphs": 2,
+     "ged_hm3d": 764.5,
+     "ged_frontier_made": 198.0,
+     "ged_apr": 264.5
+    },
+    {
+     "stage": 39,
+     "path_m": 98.25000000000229,
+     "nav_s": 708.3066792488098,
+     "n_graphs": 2,
+     "ged_hm3d": 770.0,
+     "ged_frontier_made": 196.5,
+     "ged_apr": 274.5
+    },
+    {
+     "stage": 40,
+     "path_m": 102.60000000000245,
+     "nav_s": 741.0099422931671,
+     "n_graphs": 2,
+     "ged_hm3d": 781.5,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 255.0
+    },
+    {
+     "stage": 41,
+     "path_m": 108.52500000000268,
+     "nav_s": 780.0258767604828,
+     "n_graphs": 2,
+     "ged_hm3d": 785.0,
+     "ged_frontier_made": 188.5,
+     "ged_apr": 251.0
+    },
+    {
+     "stage": 42,
+     "path_m": 111.97500000000281,
+     "nav_s": 805.8006711006165,
+     "n_graphs": 2,
+     "ged_hm3d": 791.5,
+     "ged_frontier_made": 200.5,
+     "ged_apr": 255.0
+    },
+    {
+     "stage": 43,
+     "path_m": 117.30000000000301,
+     "nav_s": 824.2424285411835,
+     "n_graphs": 2,
+     "ged_hm3d": 792.0,
+     "ged_frontier_made": 183.0,
+     "ged_apr": 260.5
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s43_placebo_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 3.600000000000003,
+     "nav_s": 15.711054801940918,
+     "n_graphs": 2,
+     "ged_hm3d": 606.0,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 342.5
+    },
+    {
+     "stage": 2,
+     "path_m": 4.650000000000006,
+     "nav_s": 29.080966234207153,
+     "n_graphs": 2,
+     "ged_hm3d": 614.5,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 3,
+     "path_m": 6.750000000000011,
+     "nav_s": 45.88448214530945,
+     "n_graphs": 2,
+     "ged_hm3d": 617.0,
+     "ged_frontier_made": 276.5,
+     "ged_apr": 333.0
+    },
+    {
+     "stage": 4,
+     "path_m": 10.34999999999999,
+     "nav_s": 71.45790481567383,
+     "n_graphs": 2,
+     "ged_hm3d": 623.5,
+     "ged_frontier_made": 280.5,
+     "ged_apr": 337.0
+    },
+    {
+     "stage": 5,
+     "path_m": 11.249999999999982,
+     "nav_s": 79.42232322692871,
+     "n_graphs": 2,
+     "ged_hm3d": 618.0,
+     "ged_frontier_made": 275.5,
+     "ged_apr": 332.0
+    },
+    {
+     "stage": 6,
+     "path_m": 16.124999999999936,
+     "nav_s": 121.4898579120636,
+     "n_graphs": 2,
+     "ged_hm3d": 623.5,
+     "ged_frontier_made": 276.0,
+     "ged_apr": 325.0
+    },
+    {
+     "stage": 7,
+     "path_m": 22.499999999999876,
+     "nav_s": 167.35134506225586,
+     "n_graphs": 2,
+     "ged_hm3d": 621.0,
+     "ged_frontier_made": 277.5,
+     "ged_apr": 318.0
+    },
+    {
+     "stage": 8,
+     "path_m": 22.94999999999987,
+     "nav_s": 172.3453516960144,
+     "n_graphs": 2,
+     "ged_hm3d": 627.0,
+     "ged_frontier_made": 279.5,
+     "ged_apr": 322.0
+    },
+    {
+     "stage": 9,
+     "path_m": 26.549999999999837,
+     "nav_s": 198.86038994789124,
+     "n_graphs": 2,
+     "ged_hm3d": 657.5,
+     "ged_frontier_made": 262.0,
+     "ged_apr": 277.5
+    },
+    {
+     "stage": 10,
+     "path_m": 29.774999999999807,
+     "nav_s": 217.29880547523499,
+     "n_graphs": 2,
+     "ged_hm3d": 656.0,
+     "ged_frontier_made": 236.5,
+     "ged_apr": 297.5
+    },
+    {
+     "stage": 11,
+     "path_m": 35.0999999999999,
+     "nav_s": 244.14617156982422,
+     "n_graphs": 2,
+     "ged_hm3d": 684.0,
+     "ged_frontier_made": 230.0,
+     "ged_apr": 266.0
+    },
+    {
+     "stage": 12,
+     "path_m": 36.67499999999996,
+     "nav_s": 258.80294251441956,
+     "n_graphs": 2,
+     "ged_hm3d": 700.5,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 286.0
+    },
+    {
+     "stage": 13,
+     "path_m": 40.50000000000011,
+     "nav_s": 278.9426031112671,
+     "n_graphs": 2,
+     "ged_hm3d": 727.0,
+     "ged_frontier_made": 191.5,
+     "ged_apr": 241.5
+    },
+    {
+     "stage": 14,
+     "path_m": 42.67500000000019,
+     "nav_s": 287.56779861450195,
+     "n_graphs": 2,
+     "ged_hm3d": 735.0,
+     "ged_frontier_made": 204.0,
+     "ged_apr": 231.5
+    },
+    {
+     "stage": 15,
+     "path_m": 48.675000000000416,
+     "nav_s": 309.5552010536194,
+     "n_graphs": 2,
+     "ged_hm3d": 749.0,
+     "ged_frontier_made": 173.0,
+     "ged_apr": 247.5
+    },
+    {
+     "stage": 16,
+     "path_m": 58.50000000000079,
+     "nav_s": 363.1900062561035,
+     "n_graphs": 2,
+     "ged_hm3d": 759.5,
+     "ged_frontier_made": 184.0,
+     "ged_apr": 250.0
+    },
+    {
+     "stage": 17,
+     "path_m": 63.975000000000996,
+     "nav_s": 393.58188009262085,
+     "n_graphs": 2,
+     "ged_hm3d": 777.0,
+     "ged_frontier_made": 188.0,
+     "ged_apr": 246.0
+    },
+    {
+     "stage": 18,
+     "path_m": 73.95000000000137,
+     "nav_s": 470.01948404312134,
+     "n_graphs": 2,
+     "ged_hm3d": 807.5,
+     "ged_frontier_made": 179.5,
+     "ged_apr": 244.0
+    },
+    {
+     "stage": 19,
+     "path_m": 77.77500000000151,
+     "nav_s": 494.4798331260681,
+     "n_graphs": 2,
+     "ged_hm3d": 805.0,
+     "ged_frontier_made": 174.0,
+     "ged_apr": 244.5
+    },
+    {
+     "stage": 20,
+     "path_m": 84.97500000000178,
+     "nav_s": 530.4729351997375,
+     "n_graphs": 2,
+     "ged_hm3d": 806.0,
+     "ged_frontier_made": 169.0,
+     "ged_apr": 216.0
+    },
+    {
+     "stage": 21,
+     "path_m": 90.45000000000199,
+     "nav_s": 556.5436954498291,
+     "n_graphs": 2,
+     "ged_hm3d": 813.5,
+     "ged_frontier_made": 164.5,
+     "ged_apr": 229.5
+    },
+    {
+     "stage": 22,
+     "path_m": 95.7750000000022,
+     "nav_s": 582.0126025676727,
+     "n_graphs": 2,
+     "ged_hm3d": 814.0,
+     "ged_frontier_made": 154.5,
+     "ged_apr": 203.0
+    },
+    {
+     "stage": 23,
+     "path_m": 104.92500000000254,
+     "nav_s": 628.7353508472443,
+     "n_graphs": 2,
+     "ged_hm3d": 821.5,
+     "ged_frontier_made": 161.5,
+     "ged_apr": 202.0
+    },
+    {
+     "stage": 24,
+     "path_m": 113.70000000000287,
+     "nav_s": 675.2632255554199,
+     "n_graphs": 2,
+     "ged_hm3d": 831.0,
+     "ged_frontier_made": 173.5,
+     "ged_apr": 196.0
+    },
+    {
+     "stage": 25,
+     "path_m": 115.05000000000292,
+     "nav_s": 689.4988515377045,
+     "n_graphs": 2,
+     "ged_hm3d": 830.0,
+     "ged_frontier_made": 183.0,
+     "ged_apr": 191.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s44_observed_only_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 1.3499999999999996,
+     "nav_s": 14.887814998626709,
+     "n_graphs": 2,
+     "ged_hm3d": 591.5,
+     "ged_frontier_made": 282.5,
+     "ged_apr": 358.5
+    },
+    {
+     "stage": 2,
+     "path_m": 3.525000000000003,
+     "nav_s": 36.03866696357727,
+     "n_graphs": 2,
+     "ged_hm3d": 587.5,
+     "ged_frontier_made": 278.0,
+     "ged_apr": 350.0
+    },
+    {
+     "stage": 3,
+     "path_m": 6.30000000000001,
+     "nav_s": 52.70013976097107,
+     "n_graphs": 2,
+     "ged_hm3d": 602.0,
+     "ged_frontier_made": 278.5,
+     "ged_apr": 330.0
+    },
+    {
+     "stage": 4,
+     "path_m": 7.875000000000013,
+     "nav_s": 63.66515493392944,
+     "n_graphs": 2,
+     "ged_hm3d": 616.5,
+     "ged_frontier_made": 278.0,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 5,
+     "path_m": 10.49999999999999,
+     "nav_s": 89.4499146938324,
+     "n_graphs": 2,
+     "ged_hm3d": 620.0,
+     "ged_frontier_made": 272.5,
+     "ged_apr": 334.0
+    },
+    {
+     "stage": 6,
+     "path_m": 12.074999999999974,
+     "nav_s": 102.45003247261047,
+     "n_graphs": 2,
+     "ged_hm3d": 620.0,
+     "ged_frontier_made": 276.5,
+     "ged_apr": 338.0
+    },
+    {
+     "stage": 7,
+     "path_m": 13.199999999999964,
+     "nav_s": 115.14405107498169,
+     "n_graphs": 2,
+     "ged_hm3d": 621.5,
+     "ged_frontier_made": 277.0,
+     "ged_apr": 338.5
+    },
+    {
+     "stage": 8,
+     "path_m": 14.474999999999952,
+     "nav_s": 126.60892057418823,
+     "n_graphs": 2,
+     "ged_hm3d": 621.5,
+     "ged_frontier_made": 281.5,
+     "ged_apr": 335.5
+    },
+    {
+     "stage": 9,
+     "path_m": 16.87499999999993,
+     "nav_s": 143.68285512924194,
+     "n_graphs": 2,
+     "ged_hm3d": 635.5,
+     "ged_frontier_made": 283.5,
+     "ged_apr": 344.5
+    },
+    {
+     "stage": 10,
+     "path_m": 21.14999999999989,
+     "nav_s": 169.05178380012512,
+     "n_graphs": 2,
+     "ged_hm3d": 629.5,
+     "ged_frontier_made": 284.0,
+     "ged_apr": 340.5
+    },
+    {
+     "stage": 11,
+     "path_m": 24.524999999999856,
+     "nav_s": 200.31364607810974,
+     "n_graphs": 2,
+     "ged_hm3d": 630.5,
+     "ged_frontier_made": 286.5,
+     "ged_apr": 339.0
+    },
+    {
+     "stage": 12,
+     "path_m": 30.3749999999998,
+     "nav_s": 244.84297347068787,
+     "n_graphs": 2,
+     "ged_hm3d": 637.5,
+     "ged_frontier_made": 287.0,
+     "ged_apr": 328.0
+    },
+    {
+     "stage": 13,
+     "path_m": 31.274999999999793,
+     "nav_s": 250.9092047214508,
+     "n_graphs": 2,
+     "ged_hm3d": 644.0,
+     "ged_frontier_made": 291.5,
+     "ged_apr": 333.5
+    },
+    {
+     "stage": 14,
+     "path_m": 35.84999999999993,
+     "nav_s": 279.7807984352112,
+     "n_graphs": 2,
+     "ged_hm3d": 633.0,
+     "ged_frontier_made": 285.5,
+     "ged_apr": 333.5
+    },
+    {
+     "stage": 15,
+     "path_m": 38.850000000000044,
+     "nav_s": 292.12664437294006,
+     "n_graphs": 2,
+     "ged_hm3d": 632.0,
+     "ged_frontier_made": 280.5,
+     "ged_apr": 331.5
+    },
+    {
+     "stage": 16,
+     "path_m": 40.725000000000115,
+     "nav_s": 303.2952196598053,
+     "n_graphs": 2,
+     "ged_hm3d": 633.5,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 332.5
+    },
+    {
+     "stage": 17,
+     "path_m": 49.12500000000043,
+     "nav_s": 357.3257009983063,
+     "n_graphs": 2,
+     "ged_hm3d": 640.0,
+     "ged_frontier_made": 292.5,
+     "ged_apr": 350.0
+    },
+    {
+     "stage": 18,
+     "path_m": 49.12500000000043,
+     "nav_s": 357.4277675151825,
+     "n_graphs": 2,
+     "ged_hm3d": 638.0,
+     "ged_frontier_made": 286.0,
+     "ged_apr": 347.5
+    },
+    {
+     "stage": 19,
+     "path_m": 55.800000000000686,
+     "nav_s": 397.66192269325256,
+     "n_graphs": 2,
+     "ged_hm3d": 637.5,
+     "ged_frontier_made": 291.0,
+     "ged_apr": 350.5
+    },
+    {
+     "stage": 20,
+     "path_m": 56.70000000000072,
+     "nav_s": 406.4431576728821,
+     "n_graphs": 2,
+     "ged_hm3d": 644.5,
+     "ged_frontier_made": 293.5,
+     "ged_apr": 352.5
+    },
+    {
+     "stage": 21,
+     "path_m": 58.8750000000008,
+     "nav_s": 418.41900849342346,
+     "n_graphs": 2,
+     "ged_hm3d": 645.0,
+     "ged_frontier_made": 293.5,
+     "ged_apr": 353.5
+    },
+    {
+     "stage": 22,
+     "path_m": 63.75000000000099,
+     "nav_s": 439.7883529663086,
+     "n_graphs": 2,
+     "ged_hm3d": 645.0,
+     "ged_frontier_made": 296.0,
+     "ged_apr": 351.5
+    },
+    {
+     "stage": 23,
+     "path_m": 69.30000000000119,
+     "nav_s": 480.3070557117462,
+     "n_graphs": 2,
+     "ged_hm3d": 642.0,
+     "ged_frontier_made": 289.0,
+     "ged_apr": 350.0
+    },
+    {
+     "stage": 24,
+     "path_m": 69.6000000000012,
+     "nav_s": 486.29354214668274,
+     "n_graphs": 2,
+     "ged_hm3d": 643.5,
+     "ged_frontier_made": 290.0,
+     "ged_apr": 351.0
+    },
+    {
+     "stage": 25,
+     "path_m": 75.37500000000142,
+     "nav_s": 526.2977855205536,
+     "n_graphs": 2,
+     "ged_hm3d": 651.0,
+     "ged_frontier_made": 292.5,
+     "ged_apr": 353.5
+    },
+    {
+     "stage": 26,
+     "path_m": 75.37500000000142,
+     "nav_s": 526.3655033111572,
+     "n_graphs": 2,
+     "ged_hm3d": 645.5,
+     "ged_frontier_made": 288.0,
+     "ged_apr": 349.0
+    },
+    {
+     "stage": 27,
+     "path_m": 80.62500000000162,
+     "nav_s": 564.8315110206604,
+     "n_graphs": 2,
+     "ged_hm3d": 641.5,
+     "ged_frontier_made": 290.5,
+     "ged_apr": 348.5
+    },
+    {
+     "stage": 28,
+     "path_m": 85.95000000000182,
+     "nav_s": 602.0494656562805,
+     "n_graphs": 2,
+     "ged_hm3d": 644.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 350.0
+    },
+    {
+     "stage": 29,
+     "path_m": 88.95000000000194,
+     "nav_s": 623.5177698135376,
+     "n_graphs": 2,
+     "ged_hm3d": 648.5,
+     "ged_frontier_made": 286.0,
+     "ged_apr": 357.5
+    },
+    {
+     "stage": 30,
+     "path_m": 91.95000000000205,
+     "nav_s": 644.187023639679,
+     "n_graphs": 2,
+     "ged_hm3d": 649.5,
+     "ged_frontier_made": 289.5,
+     "ged_apr": 354.5
+    },
+    {
+     "stage": 31,
+     "path_m": 93.2250000000021,
+     "nav_s": 657.4635519981384,
+     "n_graphs": 2,
+     "ged_hm3d": 642.5,
+     "ged_frontier_made": 292.5,
+     "ged_apr": 354.5
+    },
+    {
+     "stage": 32,
+     "path_m": 97.27500000000225,
+     "nav_s": 682.3017365932465,
+     "n_graphs": 2,
+     "ged_hm3d": 650.5,
+     "ged_frontier_made": 297.5,
+     "ged_apr": 360.0
+    },
+    {
+     "stage": 33,
+     "path_m": 99.67500000000234,
+     "nav_s": 699.5606789588928,
+     "n_graphs": 2,
+     "ged_hm3d": 650.5,
+     "ged_frontier_made": 300.5,
+     "ged_apr": 357.0
+    },
+    {
+     "stage": 34,
+     "path_m": 101.92500000000243,
+     "nav_s": 716.6262452602386,
+     "n_graphs": 2,
+     "ged_hm3d": 653.0,
+     "ged_frontier_made": 303.0,
+     "ged_apr": 360.0
+    },
+    {
+     "stage": 35,
+     "path_m": 106.5750000000026,
+     "nav_s": 744.5414614677429,
+     "n_graphs": 2,
+     "ged_hm3d": 643.5,
+     "ged_frontier_made": 299.0,
+     "ged_apr": 347.5
+    },
+    {
+     "stage": 36,
+     "path_m": 111.07500000000277,
+     "nav_s": 777.7713251113892,
+     "n_graphs": 2,
+     "ged_hm3d": 647.5,
+     "ged_frontier_made": 303.5,
+     "ged_apr": 349.5
+    },
+    {
+     "stage": 37,
+     "path_m": 111.22500000000278,
+     "nav_s": 778.9870793819427,
+     "n_graphs": 2,
+     "ged_hm3d": 641.5,
+     "ged_frontier_made": 300.5,
+     "ged_apr": 346.5
+    },
+    {
+     "stage": 38,
+     "path_m": 113.62500000000287,
+     "nav_s": 794.2704725265503,
+     "n_graphs": 2,
+     "ged_hm3d": 643.0,
+     "ged_frontier_made": 299.5,
+     "ged_apr": 343.5
+    },
+    {
+     "stage": 39,
+     "path_m": 116.47500000000298,
+     "nav_s": 815.1859772205353,
+     "n_graphs": 2,
+     "ged_hm3d": 652.0,
+     "ged_frontier_made": 300.5,
+     "ged_apr": 348.5
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
+  },
+  {
+   "run_dir": "/workspace/runs/live_campaign/e9_00853_s44_placebo_115m",
+   "scene": "00853",
+   "stages": [
+    {
+     "stage": 0,
+     "path_m": 0,
+     "nav_s": 0.0,
+     "n_graphs": 2,
+     "ged_hm3d": 552.0,
+     "ged_frontier_made": 285.0,
+     "ged_apr": 376.0
+    },
+    {
+     "stage": 1,
+     "path_m": 2.5500000000000007,
+     "nav_s": 14.67370319366455,
+     "n_graphs": 2,
+     "ged_hm3d": 593.5,
+     "ged_frontier_made": 265.5,
+     "ged_apr": 342.0
+    },
+    {
+     "stage": 2,
+     "path_m": 5.100000000000007,
+     "nav_s": 30.038361072540283,
+     "n_graphs": 2,
+     "ged_hm3d": 612.5,
+     "ged_frontier_made": 274.0,
+     "ged_apr": 351.0
+    },
+    {
+     "stage": 3,
+     "path_m": 6.52500000000001,
+     "nav_s": 46.72672772407532,
+     "n_graphs": 2,
+     "ged_hm3d": 616.0,
+     "ged_frontier_made": 276.0,
+     "ged_apr": 352.5
+    },
+    {
+     "stage": 4,
+     "path_m": 7.425000000000012,
+     "nav_s": 51.10367393493652,
+     "n_graphs": 2,
+     "ged_hm3d": 623.5,
+     "ged_frontier_made": 283.5,
+     "ged_apr": 350.0
+    },
+    {
+     "stage": 5,
+     "path_m": 8.32500000000001,
+     "nav_s": 61.854175329208374,
+     "n_graphs": 2,
+     "ged_hm3d": 623.5,
+     "ged_frontier_made": 282.0,
+     "ged_apr": 347.5
+    },
+    {
+     "stage": 6,
+     "path_m": 9.375,
+     "nav_s": 65.3500337600708,
+     "n_graphs": 2,
+     "ged_hm3d": 638.5,
+     "ged_frontier_made": 278.0,
+     "ged_apr": 361.5
+    },
+    {
+     "stage": 7,
+     "path_m": 10.42499999999999,
+     "nav_s": 68.32243299484253,
+     "n_graphs": 2,
+     "ged_hm3d": 633.5,
+     "ged_frontier_made": 283.5,
+     "ged_apr": 359.0
+    },
+    {
+     "stage": 8,
+     "path_m": 17.249999999999925,
+     "nav_s": 119.91654968261719,
+     "n_graphs": 2,
+     "ged_hm3d": 626.0,
+     "ged_frontier_made": 263.0,
+     "ged_apr": 352.0
+    },
+    {
+     "stage": 9,
+     "path_m": 17.249999999999925,
+     "nav_s": 120.01711630821228,
+     "n_graphs": 2,
+     "ged_hm3d": 622.0,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 348.0
+    },
+    {
+     "stage": 10,
+     "path_m": 17.324999999999925,
+     "nav_s": 120.30246949195862,
+     "n_graphs": 2,
+     "ged_hm3d": 619.0,
+     "ged_frontier_made": 257.5,
+     "ged_apr": 345.5
+    },
+    {
+     "stage": 11,
+     "path_m": 22.274999999999878,
+     "nav_s": 146.36845684051514,
+     "n_graphs": 2,
+     "ged_hm3d": 640.0,
+     "ged_frontier_made": 260.5,
+     "ged_apr": 292.5
+    },
+    {
+     "stage": 12,
+     "path_m": 24.14999999999986,
+     "nav_s": 156.35593271255493,
+     "n_graphs": 2,
+     "ged_hm3d": 650.0,
+     "ged_frontier_made": 246.0,
+     "ged_apr": 318.0
+    },
+    {
+     "stage": 13,
+     "path_m": 28.799999999999816,
+     "nav_s": 177.14574193954468,
+     "n_graphs": 2,
+     "ged_hm3d": 666.0,
+     "ged_frontier_made": 249.0,
+     "ged_apr": 296.0
+    },
+    {
+     "stage": 14,
+     "path_m": 33.824999999999854,
+     "nav_s": 213.38093543052673,
+     "n_graphs": 2,
+     "ged_hm3d": 668.0,
+     "ged_frontier_made": 246.0,
+     "ged_apr": 314.5
+    },
+    {
+     "stage": 15,
+     "path_m": 37.87500000000001,
+     "nav_s": 249.36317658424377,
+     "n_graphs": 2,
+     "ged_hm3d": 672.5,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 293.5
+    },
+    {
+     "stage": 16,
+     "path_m": 39.60000000000007,
+     "nav_s": 274.75496459007263,
+     "n_graphs": 2,
+     "ged_hm3d": 671.0,
+     "ged_frontier_made": 264.5,
+     "ged_apr": 294.5
+    },
+    {
+     "stage": 17,
+     "path_m": 42.825000000000195,
+     "nav_s": 283.1830770969391,
+     "n_graphs": 2,
+     "ged_hm3d": 668.5,
+     "ged_frontier_made": 262.0,
+     "ged_apr": 300.5
+    },
+    {
+     "stage": 18,
+     "path_m": 46.72500000000034,
+     "nav_s": 304.81010603904724,
+     "n_graphs": 2,
+     "ged_hm3d": 674.0,
+     "ged_frontier_made": 259.0,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 19,
+     "path_m": 47.62500000000038,
+     "nav_s": 314.20324325561523,
+     "n_graphs": 2,
+     "ged_hm3d": 674.0,
+     "ged_frontier_made": 259.0,
+     "ged_apr": 300.0
+    },
+    {
+     "stage": 20,
+     "path_m": 53.4750000000006,
+     "nav_s": 357.5189998149872,
+     "n_graphs": 2,
+     "ged_hm3d": 680.5,
+     "ged_frontier_made": 271.0,
+     "ged_apr": 294.0
+    },
+    {
+     "stage": 21,
+     "path_m": 59.40000000000082,
+     "nav_s": 404.3053390979767,
+     "n_graphs": 2,
+     "ged_hm3d": 683.5,
+     "ged_frontier_made": 268.0,
+     "ged_apr": 292.5
+    },
+    {
+     "stage": 22,
+     "path_m": 72.37500000000131,
+     "nav_s": 479.6347568035126,
+     "n_graphs": 2,
+     "ged_hm3d": 702.0,
+     "ged_frontier_made": 238.5,
+     "ged_apr": 284.0
+    },
+    {
+     "stage": 23,
+     "path_m": 75.82500000000144,
+     "nav_s": 500.5910334587097,
+     "n_graphs": 2,
+     "ged_hm3d": 705.0,
+     "ged_frontier_made": 239.0,
+     "ged_apr": 287.0
+    },
+    {
+     "stage": 24,
+     "path_m": 78.97500000000156,
+     "nav_s": 512.0151946544647,
+     "n_graphs": 2,
+     "ged_hm3d": 727.5,
+     "ged_frontier_made": 226.0,
+     "ged_apr": 272.5
+    },
+    {
+     "stage": 25,
+     "path_m": 82.42500000000169,
+     "nav_s": 539.194661617279,
+     "n_graphs": 2,
+     "ged_hm3d": 745.5,
+     "ged_frontier_made": 238.0,
+     "ged_apr": 286.5
+    },
+    {
+     "stage": 26,
+     "path_m": 93.97500000000213,
+     "nav_s": 589.6761271953583,
+     "n_graphs": 2,
+     "ged_hm3d": 759.0,
+     "ged_frontier_made": 240.5,
+     "ged_apr": 286.0
+    },
+    {
+     "stage": 27,
+     "path_m": 104.62500000000253,
+     "nav_s": 649.4546141624451,
+     "n_graphs": 2,
+     "ged_hm3d": 754.5,
+     "ged_frontier_made": 254.0,
+     "ged_apr": 288.0
+    },
+    {
+     "stage": 28,
+     "path_m": 112.87500000000284,
+     "nav_s": 692.1631765365601,
+     "n_graphs": 2,
+     "ged_hm3d": 767.5,
+     "ged_frontier_made": 222.0,
+     "ged_apr": 289.0
+    },
+    {
+     "stage": 29,
+     "path_m": 119.02500000000308,
+     "nav_s": 724.5369174480438,
+     "n_graphs": 2,
+     "ged_hm3d": 774.0,
+     "ged_frontier_made": 231.0,
+     "ged_apr": 282.0
+    }
+   ],
+   "computed": "paper_ged.py on the host, 1113"
   }
  ]
 }

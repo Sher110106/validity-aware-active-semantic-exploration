@@ -189,12 +189,41 @@ def test_the_filed_equal_path_and_budget_outputs_are_reproduced_exactly():
     assert bmd == (ep.RESULTS / "budget_sensitivity" / "budget_sensitivity.md").read_text()
 
 
+PRE = ep.RESULTS / "previous_20261121T025004"        # the filing before the control runs existed, archived by the final rescore
+needs_pre = pytest.mark.skipif(not (PRE / "paper_compare.json").exists(), reason="the archived pre-run filing is not present")
+
+
 @needs_real
-def test_readout_2_for_the_two_old_arms_equals_their_filed_equal_path_cells():
+def test_readout_2_has_four_arms_and_every_cell_equals_the_filed_equal_path_cell():
+    """The filing as it now stands: all four arms of readout 2, old and new, equal the filed equal-path cells."""
     real = json.loads(REAL.read_text())
     filed = json.loads((ep.RESULTS / "equal_path" / "equal_path.json").read_text())["scenes"]["00853"]["tables"]
     r = ep.readout2(real)
-    assert r["arms"] == ["official_nov", "frontier_end"]
+    assert r["arms"] == ["official_nov", "placebo_nov", "observed_only_nov", "frontier_end"]
+    assert r["registered"] == {"official_nov": False, "placebo_nov": True, "observed_only_nov": True, "frontier_end": False}
+    for ref in ep.REFS:
+        for arm in ("official_nov", "frontier_end"):                       # the two old arms
+            for length in ("50", "60", "80", "100"):
+                assert r["tables"][ref][arm][length] == filed[ref][arm][length]
+        for arm in ("placebo_nov", "observed_only_nov"):                   # the two new arms
+            for length in ("50", "60", "80", "100"):
+                assert r["tables"][ref][arm][length] == filed[ref][arm][length]
+                assert r["tables"][ref][arm][length]["n_runs"] == 3
+
+
+@needs_pre
+def test_pre_run_filing_the_equal_path_and_budget_outputs_are_reproduced_exactly_with_two_arms():
+    """The pre-run filing (previous_20261121T025004/): code run on its paper_compare.json gives its equal_path and budget files."""
+    real = json.loads((PRE / "paper_compare.json").read_text())
+    doc, md = ep.equal_path_doc(real)
+    assert json.loads(json.dumps(doc)) == json.loads((PRE / "equal_path" / "equal_path.json").read_text())
+    assert md == (PRE / "equal_path" / "equal_path.md").read_text()
+    bdoc, bmd = ep.budget_doc(real)
+    assert json.loads(json.dumps(bdoc)) == json.loads((PRE / "budget_sensitivity" / "budget_sensitivity.json").read_text())
+    assert bmd == (PRE / "budget_sensitivity" / "budget_sensitivity.md").read_text()
+    r = ep.readout2(real)
+    assert r["arms"] == ["official_nov", "frontier_end"]                    # no control run then: two arms
+    filed = json.loads((PRE / "equal_path" / "equal_path.json").read_text())["scenes"]["00853"]["tables"]
     for ref in ep.REFS:
         for arm in r["arms"]:
             for length in ("50", "60", "80", "100"):

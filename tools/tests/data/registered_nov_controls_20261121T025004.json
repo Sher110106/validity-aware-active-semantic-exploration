@@ -1,0 +1,55 @@
+{
+ "filing": "results_paper_compare_1113, stamp 20261121T025004 (the final rescore of Amendment 5)",
+ "read_from": "rescore_summary.json nov_controls, when this file was made",
+ "S": {
+  "apr": {
+   "official_nov": {
+    "e8_00853_s42_official_105m": 53.55291686668735,
+    "e8_00853_s43_official_105m": 52.48222944405994,
+    "e8_00853_s44_official_105m": 61.725399191409466
+   },
+   "placebo_nov": {
+    "e9_00853_s42_placebo_115m": 58.11959327226403,
+    "e9_00853_s43_placebo_115m": 56.91200742213134,
+    "e9_00853_s44_placebo_115m": 33.594013195573645
+   },
+   "observed_only_nov": {
+    "e9_00853_s42_observed_only_115m": 37.3653314731508,
+    "e9_00853_s43_observed_only_115m": 44.530957661647335,
+    "e9_00853_s44_observed_only_115m": 18.55763026699617
+   }
+  },
+  "hm3d": {
+   "official_nov": {
+    "e8_00853_s42_official_105m": 29.045779047403908,
+    "e8_00853_s43_official_105m": 28.467900509194806,
+    "e8_00853_s44_official_105m": 30.39810010214091
+   },
+   "placebo_nov": {
+    "e9_00853_s42_placebo_115m": 30.446504271871223,
+    "e9_00853_s43_placebo_115m": 27.716259521324666,
+    "e9_00853_s44_placebo_115m": 17.713457642431557
+   },
+   "observed_only_nov": {
+    "e9_00853_s42_observed_only_115m": 14.382931515142106,
+    "e9_00853_s43_observed_only_115m": 20.75687112959819,
+    "e9_00853_s44_observed_only_115m": 10.436414076458513
+   }
+  }
+ },
+ "per_reference": {
+  "placebo_nov": {
+   "apr": "above on average, not separated",
+   "hm3d": "above on average, not separated"
+  },
+  "observed_only_nov": {
+   "apr": "separated above",
+   "hm3d": "separated above"
+  }
+ },
+ "statements": {
+  "placebo_nov": "in between",
+  "observed_only_nov": "reads above"
+ },
+ "slide_sentence": null
+}

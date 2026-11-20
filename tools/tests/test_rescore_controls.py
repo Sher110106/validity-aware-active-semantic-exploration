@@ -724,27 +724,112 @@ def test_archive_previous_with_nothing_filed_does_nothing(tmp_path):
 
 # --- nothing moves without an e9 folder ---------------------------------------------------------------------------------
 
-@needs_filed
-def test_without_any_e9_folder_the_filed_notes_are_reproduced_byte_for_byte():
-    s = json.loads((FILED / "rescore_summary.json").read_text())
+PRE = FILED / "previous_20261121T025004"          # the filing as it stood before the control runs existed (archived by the final rescore)
+needs_pre = pytest.mark.skipif(not (PRE / "rescore_summary.json").exists(), reason="the archived pre-run filing is not present")
+PIN = Path(__file__).resolve().parent / "data" / "registered_nov_controls_20261121T025004.json"
+
+
+@needs_pre
+def test_pre_run_filing_without_any_e9_folder_the_notes_are_reproduced_byte_for_byte():
+    """The pre-run filing (previous_20261121T025004/): the code, given a summary with no control block, still writes its NOTES.md."""
+    s = json.loads((PRE / "rescore_summary.json").read_text())
     assert "nov_controls" not in s
-    cmp_ = json.loads((FILED / "comparison_vs_1112.json").read_text())
+    cmp_ = json.loads((PRE / "comparison_vs_1112.json").read_text())
     old = json.loads((rp.OLD_OUT / "paper_compare.json").read_text())["meta"]["budgets"]
-    assert rp.write_notes(s, cmp_, old, pc) == (FILED / "NOTES.md").read_text()
-    assert "Amendment 5" not in (FILED / "NOTES.md").read_text()
+    assert rp.write_notes(s, cmp_, old, pc) == (PRE / "NOTES.md").read_text()
+    assert "Amendment 5" not in (PRE / "NOTES.md").read_text()
 
 
-@needs_filed
-def test_without_any_e9_folder_the_filed_tables_are_reproduced_by_the_scorers_code():
-    j = json.loads((FILED / "paper_compare.json").read_text())
+@needs_pre
+def test_pre_run_filing_without_any_e9_folder_the_tables_are_reproduced_by_the_scorers_code():
+    """The pre-run filing (previous_20261121T025004/): its tables and cells come out of the code unchanged, with no control arm."""
+    j = json.loads((PRE / "paper_compare.json").read_text())
     scored = [r for r in j["runs"] if "error" not in r]
     assert pc.aggregate(scored) == j["cells"] and pc.seconds_per_metre(scored) == j["seconds_per_metre"]
-    assert (FILED / "paper_compare.md").read_text().endswith(pc.build_markdown(j))
+    assert (PRE / "paper_compare.md").read_text().endswith(pc.build_markdown(j))
     assert not [r for r in j["runs"] if r["arm"] in pc.CTRL_ARMS] and not [c for c in j["cells"] if c["arm"] in pc.CTRL_ARMS]
     assert not [r for r in j["runs"] if "no_final_value" in r or "roslaunch" in r]
     ro = rp.nov_readouts(j)
     assert ro == rp.nov_readouts(j, "official_nov") and sorted(ro) == ["apr", "frontier_made", "hm3d"]
     assert rp.nov_readouts(j, "placebo_nov") == {} and rp.nov_readouts(j, "observed_only_nov") == {}
+
+
+@needs_pre
+def test_pre_run_filing_the_old_arms_cells_are_the_same_in_the_filing_as_it_now_stands():
+    """Adding the control runs moved no cell of any arm that the pre-run filing holds."""
+    old = json.loads((PRE / "paper_compare.json").read_text())
+    new = json.loads((FILED / "paper_compare.json").read_text())
+    key = lambda c: (c["scene"], c["arm"], c["reference"], c["variant"], c["fraction"])
+    now = {key(c): c for c in new["cells"]}
+    assert old["cells"] and all(now[key(c)] == c for c in old["cells"])
+    assert {key(c) for c in new["cells"]} - {key(c) for c in old["cells"]} == {key(c) for c in new["cells"] if c["arm"] in pc.CTRL_ARMS}
+    assert old["seconds_per_metre"] == [r for r in new["seconds_per_metre"] if r["arm"] not in pc.CTRL_ARMS]
+
+
+# --- the filing as it now stands (the final rescore, stamp 20261121T025004) -------------------------------------------------
+
+def filed_summary():
+    return json.loads((FILED / "rescore_summary.json").read_text())
+
+
+@needs_filed
+def test_the_filed_notes_and_summary_block_are_reproduced_by_the_code_from_the_filed_json():
+    s = filed_summary()
+    blk = s["nov_controls"]
+    cmp_ = json.loads((FILED / "comparison_vs_1112.json").read_text())
+    old = json.loads((rp.OLD_OUT / "paper_compare.json").read_text())["meta"]["budgets"]
+    notes = (FILED / "NOTES.md").read_text()
+    assert rp.write_notes(s, cmp_, old, pc) == notes and "## Control arms (Amendment 5)" in notes
+    pj = json.loads((FILED / "paper_compare.json").read_text())
+    ctl = {k: blk[k] for k in ("B_s", "runs", "listing", "never_started")}
+    again = rp.controls_block(ctl, pj, rp.control_alt_readings(s["nov"], FILED), [a["run"] for a in s["nov"]["runs"] if a["counts_in_cells"]])
+    assert json.loads(json.dumps(again)) == blk
+
+
+@needs_filed
+def test_the_filed_block_is_final_all_six_runs_count_and_none_is_marked_or_running():
+    blk = filed_summary()["nov_controls"]
+    assert blk["interim"] is False and blk["interim_reasons"] == [] and blk["still_running"] == [] and blk["absent"] == []
+    assert set(blk["labels"].values()) == {"final"}
+    assert sorted(a["run"] for a in blk["runs"]) == sorted(f.format(s) for f in (PLC, OBS) for s in (42, 43, 44))
+    assert all(a["counts_in_cells"] and not a["open"] and not a["no_final_value"] and not a["reasons"] for a in blk["runs"])
+    assert not [r for r in blk["evidence_table"] if r["marked_no_value_at_100pct_of_B_and_100m"]]
+    assert all(r["out_of_memory_lines"] == 0 and r["nvblox_died_lines"] == 0 for r in blk["evidence_table"])
+    assert blk["listing"]["final"] is True and blk["listing"]["active"] == []
+
+
+@needs_filed
+def test_the_filed_official_nov_s_values_are_the_pinned_ones_and_the_six_control_s_values_come_from_the_filed_json():
+    blk = filed_summary()["nov_controls"]
+    pj = json.loads((FILED / "paper_compare.json").read_text())
+    assert ep.s_values(pj) == blk["S"]                                          # the block holds what the scored JSON gives
+    for ref in ("apr", "hm3d"):
+        assert [blk["S"][ref]["official_nov"][r] for r in pc.OFFICIAL_NOV_RUNS] == [pc.OFFICIAL_NOV_S_PINNED[ref][r] for r in pc.OFFICIAL_NOV_RUNS]
+        for arm in pc.CTRL_ARMS:
+            assert len(blk["S"][ref][arm]) == 3 and all(v is not None for v in blk["S"][ref][arm].values())
+    rec = pc.decide_controls(blk["S"])
+    assert {a: rec["arms"][a]["per_reference"] for a in pc.CTRL_ARMS} == blk["per_reference"]
+    assert {a: rec["arms"][a]["statement"] for a in pc.CTRL_ARMS} == blk["statements"]
+
+
+@needs_filed
+def test_the_registered_outcome_is_pinned_s_of_the_six_runs_the_per_reference_results_and_the_statements():
+    """A later change to a filed number is caught here. The pin file was written from the filed files (not typed): its S values,
+    per-reference results, statements and slide sentence must equal the filed block, and the filed JSON's own S values."""
+    pin = json.loads(PIN.read_text())
+    blk = filed_summary()["nov_controls"]
+    assert blk["S"] == pin["S"] and blk["per_reference"] == pin["per_reference"]
+    assert blk["statements"] == pin["statements"] and blk["slide_sentence"] == pin["slide_sentence"]
+    pj = json.loads((FILED / "paper_compare.json").read_text())
+    assert ep.s_values(pj) == pin["S"]
+    out = pc.decide_controls(pin["S"])
+    assert {a: out["arms"][a]["per_reference"] for a in pc.CTRL_ARMS} == pin["per_reference"]
+    assert {a: out["arms"][a]["statement"] for a in pc.CTRL_ARMS} == pin["statements"]
+    assert set(pin["statements"]) == set(pc.CTRL_ARMS) and all(len(pin["S"][r][a]) == 3 for r in ("apr", "hm3d") for a in pc.CTRL_ARMS)
+    assert set(v for per in pin["per_reference"].values() for v in per.values()) <= {pc.SEPARATED, pc.NOT_ABOVE, pc.ABOVE_AVG}
+    notes = (FILED / "NOTES.md").read_text()
+    for arm in pc.CTRL_ARMS:
+        assert f"`{arm}`: " in notes and pin["statements"][arm] in notes
 
 
 @needs_filed
